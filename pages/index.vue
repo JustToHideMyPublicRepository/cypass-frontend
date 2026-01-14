@@ -3,8 +3,10 @@
       <HomeBackground />
       <HomeHero />
       <HomePartners />
+      <HomeHowItWorks />
       <HomeFeatures />
       <HomeStats />
+      <HomeFaq />
       <HomeCta />
    </div>
 </template>

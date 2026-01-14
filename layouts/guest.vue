@@ -219,7 +219,6 @@ const colorMode = useColorMode()
 
 // -- Navigation Constants --
 const NavHeader = [
-  { label: 'Accueil', path: '/', isButton: false },
   { label: 'Services', path: '/#features', isButton: false },
   { label: 'Documentation', path: '/docs', isButton: false },
   { label: 'Support', path: '/support', isButton: false },
@@ -228,7 +227,6 @@ const NavHeader = [
 
 const NavFooter = {
   links: [
-    { label: 'Accueil', path: '/' },
     { label: 'À propos', path: '/about' },
     { label: 'Nos Services', path: '/services' },
     { label: 'Partenaires', path: '/partners' },
