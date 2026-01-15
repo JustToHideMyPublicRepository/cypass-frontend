@@ -1,6 +1,19 @@
 <template>
   <div class="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 min-h-screen bg-slate-50 dark:bg-slate-950 font-sans">
-    <div class="max-w-7xl mx-auto space-y-16">
+    <!-- Background Decor -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none -z-10">
+      <div
+        class="absolute top-0 right-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03] dark:opacity-[0.05]">
+      </div>
+      <div
+        class="absolute top-[20%] right-[-5%] w-[600px] h-[600px] bg-purple-500/10 rounded-full blur-[120px] animate-pulse-slow">
+      </div>
+      <div
+        class="absolute bottom-[10%] left-[-10%] w-[500px] h-[500px] bg-cypass-blue/10 rounded-full blur-[100px] animate-pulse-slower">
+      </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto space-y-20 relative z-10">
 
       <div class="text-center space-y-4 animate-fade-up">
         <span class="badge badge-blue">Catalogue de Services</span>
@@ -22,8 +35,9 @@
               class="absolute inset-0 bg-gradient-to-br from-cypass-blue/20 to-purple-500/20 rounded-3xl blur-xl opacity-0 transition-opacity duration-500"
               :class="{ 'group-hover:opacity-100': service.status === 'available' }"></div>
 
-            <div class="relative glass-panel p-8 rounded-3xl h-full flex flex-col transition-transform duration-300"
-              :class="{ 'hover:-translate-y-2': service.status === 'available', 'grayscale opacity-80': service.status !== 'available' }">
+            <div
+              class="relative glass-panel p-8 rounded-3xl h-full flex flex-col transition-all duration-300 border border-slate-200/50 dark:border-slate-800/50 hover:border-cypass-blue/30 dark:hover:border-cypass-blue/30"
+              :class="{ 'hover:-translate-y-2 hover:shadow-2xl hover:shadow-cypass-blue/10': service.status === 'available', 'grayscale opacity-70': service.status !== 'available' }">
               <div class="flex justify-between items-start mb-6">
                 <div
                   class="w-14 h-14 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-cypass-blue transition-colors"

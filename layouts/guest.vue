@@ -185,11 +185,6 @@
             <p class="text-sm text-slate-500 dark:text-slate-500">
               &copy; {{ new Date().getFullYear() }} CYPASS. Tous droits réservés.
             </p>
-            <div class="hidden md:flex gap-4">
-              <a href="#" class="text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">Plan du site</a>
-              <a href="#"
-                class="text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">Accessibilité</a>
-            </div>
           </div>
 
           <div class="flex items-center gap-2 opacity-70">

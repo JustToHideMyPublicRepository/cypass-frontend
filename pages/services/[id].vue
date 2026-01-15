@@ -1,7 +1,17 @@
 <template>
     <div class="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 min-h-screen bg-slate-50 dark:bg-slate-950 font-sans">
 
-        <div v-if="service" class="max-w-7xl mx-auto">
+        <!-- Background Decor -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none -z-10">
+            <div
+                class="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] bg-cypass-blue/10 rounded-full blur-[120px]">
+            </div>
+            <div
+                class="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-[100px]">
+            </div>
+        </div>
+
+        <div v-if="service" class="max-w-7xl mx-auto relative z-10">
             <!-- Hero -->
             <div class="grid lg:grid-cols-2 gap-16 items-center mb-24">
                 <div class="space-y-6 animate-fade-right">
@@ -24,8 +34,10 @@
                             Disponible</button>
                     </div>
                 </div>
-                <div class="relative h-[400px] rounded-3xl overflow-hidden glass-panel p-2 animate-fade-left">
-                    <div class="absolute inset-0 bg-gradient-to-br from-cypass-blue/10 to-transparent"></div>
+                <div
+                    class="relative h-[400px] rounded-3xl overflow-hidden glass-panel p-2 animate-fade-left shadow-2xl shadow-cypass-blue/10">
+                    <div class="absolute inset-0 bg-gradient-to-br from-cypass-blue/20 via-transparent to-transparent">
+                    </div>
                     <!-- Placeholder for dynamic service image/illustration -->
                     <div
                         class="w-full h-full bg-slate-200 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-slate-400">
@@ -36,10 +48,15 @@
 
             <!-- Benefits -->
             <div class="grid md:grid-cols-3 gap-8">
-                <div v-for="(benefit, index) in service.benefits" :key="index" class="card animate-fade-up"
+                <div v-for="(benefit, index) in service.benefits" :key="index"
+                    class="glass-panel p-8 rounded-2xl animate-fade-up hover:-translate-y-1 transition-transform duration-300 border border-slate-200/50 dark:border-slate-800/50"
                     :style="{ animationDelay: `${index * 100}ms` }">
+                    <div
+                        class="w-12 h-12 rounded-xl bg-cypass-blue/10 flex items-center justify-center mb-4 text-cypass-blue">
+                        <IconCheck class="w-6 h-6" />
+                    </div>
                     <h3 class="font-bold text-xl text-slate-900 dark:text-white mb-2">{{ benefit.title }}</h3>
-                    <p class="text-slate-600 dark:text-slate-400 text-sm">{{ benefit.qty }}</p>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">{{ benefit.qty }}</p>
                 </div>
             </div>
 
@@ -57,7 +74,7 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
 import { computed } from 'vue'
-import { IconScanEye, IconCertificate, IconRadar2, IconEye } from '@tabler/icons-vue'
+import { IconScanEye, IconCertificate, IconRadar2, IconEye, IconCheck } from '@tabler/icons-vue'
 
 const route = useRoute()
 const serviceId = route.params.id
