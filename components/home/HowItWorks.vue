@@ -2,7 +2,7 @@
     <section class="py-24 relative overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
-            <div class="text-center max-w-3xl mx-auto mb-20" data-aos="fade-up">
+            <div class="text-center max-w-3xl mx-auto mb-20 animate-fade-up">
                 <span class="badge badge-blue mb-4">Processus Simplifié</span>
                 <h2 class="text-3xl md:text-5xl font-bold text-slate-900 dark:text-white mb-6">
                     Comment sécuriser votre organisation ?
@@ -20,7 +20,7 @@
                 </div>
 
                 <!-- Step 1 -->
-                <div class="relative group" data-aos="fade-up" data-aos-delay="100">
+                <div class="relative group animate-fade-up" style="animation-delay: 100ms">
                     <div
                         class="glass-panel p-8 rounded-3xl text-center hover:-translate-y-2 transition-transform duration-500 h-full">
                         <div
@@ -36,7 +36,7 @@
                 </div>
 
                 <!-- Step 2 -->
-                <div class="relative group" data-aos="fade-up" data-aos-delay="200">
+                <div class="relative group animate-fade-up" style="animation-delay: 200ms">
                     <div
                         class="glass-panel p-8 rounded-3xl text-center hover:-translate-y-2 transition-transform duration-500 h-full">
                         <div
@@ -52,7 +52,7 @@
                 </div>
 
                 <!-- Step 3 -->
-                <div class="relative group" data-aos="fade-up" data-aos-delay="300">
+                <div class="relative group animate-fade-up" style="animation-delay: 300ms">
                     <div
                         class="glass-panel p-8 rounded-3xl text-center hover:-translate-y-2 transition-transform duration-500 h-full">
                         <div

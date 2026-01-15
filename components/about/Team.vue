@@ -29,7 +29,7 @@
                   </a>
                   <a href="#"
                     class="p-2 bg-white/20 hover:bg-white/40 rounded-full backdrop-blur-sm transition-colors text-white">
-                    <IconBrandTwitter class="w-4 h-4" />
+                    <IconBrandX class="w-4 h-4" />
                   </a>
                 </div>
               </div>
@@ -45,7 +45,7 @@
 </template>
 
 <script setup lang="ts">
-import { IconArrowRight, IconBrandLinkedin, IconBrandTwitter } from '@tabler/icons-vue'
+import { IconArrowRight, IconBrandLinkedin, IconBrandX } from '@tabler/icons-vue'
 
 const team = [
   {

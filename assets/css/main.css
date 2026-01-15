@@ -7,27 +7,49 @@
     /* Color Palette - Premium Slate & Electric Blue/Green */
     --color-bg-primary: #ffffff;
     --color-bg-secondary: #f8fafc;
-    /* slate-50 */
     --color-text-primary: #0f172a;
-    /* slate-900 */
     --color-text-secondary: #475569;
-    /* slate-600 */
     --color-border: #e2e8f0;
-    /* slate-200 */
     --color-accent-blue: #2563eb;
     --color-accent-green: #10b981;
+    /* ok */
+    --color-primary: #0072FF;
+    --color-secondary: #02358B;
+    --color-text: #323C4F;
+    --color-danger: #ff0000;
+    --color-dangerAct: #dc2626;
+    --color-background: #CCE3FF;
+    --color-WtB: #FFFFFF;
+    --color-WtBAct: #f1f5f9;
+    --color-BtW: #000000;
+    --color-BtWAct: #333232;
+    --color-ash: #f3f4f6;
+    --color-ashAct: #d1d5db;
+    --color-hsa: #374151;
+    --color-hsaAct: #111827;
   }
 
   .dark {
     --color-bg-primary: #020617;
-    /* slate-950 */
     --color-bg-secondary: #0f172a;
-    /* slate-900 */
     --color-text-primary: #ffffff;
     --color-text-secondary: #94a3b8;
-    /* slate-400 */
     --color-border: #1e293b;
-    /* slate-800 */
+    /* ok */
+    --color-primary: #FFEA00;
+    --color-secondary: #c2b30c;
+    --color-text: #d8d6d6;
+    --color-danger: #ef4444;
+    --color-dangerAct: #b91c1c;
+    --color-background: #051cac;
+    --color-WtB: #111827;
+    --color-WtBAct: #1F2937;
+    --color-BtW: #FFFFFF;
+    --color-BtWAct: #cfcdcd;
+    --color-ash: #374151;
+    --color-ashAct: #111827;
+    --color-hsa: #f3f4f6;
+    --color-hsaAct: #d1d5db;
   }
 
   body {

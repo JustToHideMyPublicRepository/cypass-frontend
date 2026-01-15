@@ -11,7 +11,7 @@
                 class="grid lg:grid-cols-2 gap-20 items-center group">
 
                 <!-- Text Content -->
-                <div :class="['space-y-8', index % 2 === 1 ? 'lg:order-1' : 'lg:order-2']" data-aos="fade-up">
+                <div :class="['space-y-8', index % 2 === 1 ? 'lg:order-1' : 'lg:order-2']" class="animate-fade-up">
                     <span class="badge"
                         :class="service.status === 'available' ? (service.theme === 'blue' ? 'badge-blue' : 'badge-green') : 'bg-slate-100 text-slate-500 border-slate-200'">
                         {{ service.status === 'available' ? service.badge : 'Bientôt Disponible' }}

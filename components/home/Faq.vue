@@ -2,7 +2,7 @@
     <section class="py-24 relative">
         <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
-            <div class="text-center mb-16" data-aos="fade-up">
+            <div class="text-center mb-16 animate-fade-up">
                 <h2 class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-4">Questions Fréquentes</h2>
                 <p class="text-slate-500 dark:text-slate-400">Tout ce que vous devez savoir sur la plateforme CYPASS.
                 </p>
@@ -10,9 +10,9 @@
 
             <div class="space-y-4">
                 <div v-for="(item, index) in faqItems" :key="index"
-                    class="glass-panel rounded-2xl overflow-hidden transition-all duration-300"
-                    :class="{ 'ring-2 ring-cypass-blue/50': activeIndex === index }" data-aos="fade-up"
-                    :data-aos-delay="index * 100">
+                    class="glass-panel rounded-2xl overflow-hidden transition-all duration-300 animate-fade-up"
+                    :class="{ 'ring-2 ring-cypass-blue/50': activeIndex === index }"
+                    :style="{ animationDelay: `${index * 100}ms` }">
                     <button @click="toggle(index)"
                         class="w-full flex items-center justify-between p-6 text-left focus:outline-none">
                         <span class="font-bold text-slate-900 dark:text-white text-lg">{{ item.question }}</span>
