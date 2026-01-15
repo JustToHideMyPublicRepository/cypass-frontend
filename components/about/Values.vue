@@ -2,7 +2,7 @@
     <section class="py-20 bg-slate-50 dark:bg-slate-900/50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-            <div class="text-center max-w-3xl mx-auto mb-16" data-aos="fade-up">
+            <div class="text-center max-w-3xl mx-auto mb-16 animate-fade-up">
                 <h2 class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-4">Nos Valeurs Fondatrices
                 </h2>
                 <p class="text-slate-600 dark:text-slate-400">Ce qui guide nos décisions et façonne notre technologie.
@@ -11,8 +11,8 @@
 
             <div class="grid md:grid-cols-3 gap-8">
                 <!-- Value 1 -->
-                <div class="card p-8 hover:-translate-y-2 transition-transform duration-300" data-aos="fade-up"
-                    data-aos-delay="0">
+                <div class="card p-8 hover:-translate-y-2 transition-transform duration-300 animate-fade-up"
+                    style="animation-delay: 0ms">
                     <div
                         class="w-14 h-14 rounded-xl bg-blue-100 dark:bg-blue-900/30 text-cypass-blue flex items-center justify-center mb-6">
                         <IconLock class="w-7 h-7" />
@@ -25,8 +25,8 @@
                 </div>
 
                 <!-- Value 2 -->
-                <div class="card p-8 hover:-translate-y-2 transition-transform duration-300" data-aos="fade-up"
-                    data-aos-delay="100">
+                <div class="card p-8 hover:-translate-y-2 transition-transform duration-300 animate-fade-up"
+                    style="animation-delay: 100ms">
                     <div
                         class="w-14 h-14 rounded-xl bg-green-100 dark:bg-green-900/30 text-cypass-green flex items-center justify-center mb-6">
                         <IconShieldCheck class="w-7 h-7" />
@@ -39,8 +39,8 @@
                 </div>
 
                 <!-- Value 3 -->
-                <div class="card p-8 hover:-translate-y-2 transition-transform duration-300" data-aos="fade-up"
-                    data-aos-delay="200">
+                <div class="card p-8 hover:-translate-y-2 transition-transform duration-300 animate-fade-up"
+                    style="animation-delay: 200ms">
                     <div
                         class="w-14 h-14 rounded-xl bg-purple-100 dark:bg-purple-900/30 text-purple-600 flex items-center justify-center mb-6">
                         <IconBulb class="w-7 h-7" />

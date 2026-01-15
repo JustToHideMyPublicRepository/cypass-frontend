@@ -4,7 +4,7 @@
         <div v-if="service" class="max-w-7xl mx-auto">
             <!-- Hero -->
             <div class="grid lg:grid-cols-2 gap-16 items-center mb-24">
-                <div class="space-y-6" data-aos="fade-right">
+                <div class="space-y-6 animate-fade-right">
                     <div
                         class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-cypass-blue text-xs font-bold uppercase tracking-wider">
                         Service {{ service.status === 'available' ? 'Certifié' : 'En développement' }}
@@ -24,7 +24,7 @@
                             Disponible</button>
                     </div>
                 </div>
-                <div class="relative h-[400px] rounded-3xl overflow-hidden glass-panel p-2" data-aos="fade-left">
+                <div class="relative h-[400px] rounded-3xl overflow-hidden glass-panel p-2 animate-fade-left">
                     <div class="absolute inset-0 bg-gradient-to-br from-cypass-blue/10 to-transparent"></div>
                     <!-- Placeholder for dynamic service image/illustration -->
                     <div
@@ -36,8 +36,8 @@
 
             <!-- Benefits -->
             <div class="grid md:grid-cols-3 gap-8">
-                <div v-for="(benefit, index) in service.benefits" :key="index" class="card" data-aos="fade-up"
-                    :data-aos-delay="index * 100">
+                <div v-for="(benefit, index) in service.benefits" :key="index" class="card animate-fade-up"
+                    :style="{ animationDelay: `${index * 100}ms` }">
                     <h3 class="font-bold text-xl text-slate-900 dark:text-white mb-2">{{ benefit.title }}</h3>
                     <p class="text-slate-600 dark:text-slate-400 text-sm">{{ benefit.qty }}</p>
                 </div>

@@ -2,7 +2,7 @@
   <section class="py-20 relative overflow-hidden">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-      <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6" data-aos="fade-up">
+      <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6 animate-fade-up">
         <div>
           <h2 class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-2">L'Équipe CYPASS</h2>
           <p class="text-slate-600 dark:text-slate-400 max-w-xl">Des experts passionnés par la sécurité et
@@ -11,8 +11,8 @@
       </div>
 
       <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div v-for="member in team" :key="member.name" class="group relative" data-aos="fade-up"
-          :data-aos-delay="member.delay">
+        <div v-for="member in team" :key="member.name" class="group relative animate-fade-up"
+          :style="{ animationDelay: `${member.delay}ms` }">
           <div
             class="absolute inset-0 bg-blue-500/10 rounded-2xl rotate-3 scale-95 group-hover:rotate-0 group-hover:scale-100 transition-all duration-300">
           </div>

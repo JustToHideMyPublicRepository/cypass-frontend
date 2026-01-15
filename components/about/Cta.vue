@@ -4,7 +4,7 @@
         </div>
         <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/20 rounded-full blur-[120px]"></div>
 
-        <div class="max-w-4xl mx-auto px-4 text-center relative z-10" data-aos="fade-up">
+        <div class="max-w-4xl mx-auto px-4 text-center relative z-10 animate-fade-up">
             <h2 class="text-3xl md:text-5xl font-bold text-white mb-6">Prêt à sécuriser votre avenir ?</h2>
             <p class="text-xl text-slate-300 mb-8 max-w-2xl mx-auto">Rejoignez les centaines d'organisations qui font
                 déjà confiance à CYPASS pour leur protection numérique.</p>

@@ -3,7 +3,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
       <div class="grid lg:grid-cols-2 gap-16">
-        <div data-aos="fade-right">
+        <div class="animate-fade-right">
           <h2 class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-6">Notre Histoire</h2>
           <div class="space-y-8 relative pl-8 border-l-2 border-slate-200 dark:border-slate-800">
             <div v-for="event in timeline" :key="event.year" class="relative">
@@ -17,7 +17,7 @@
           </div>
         </div>
 
-        <div class="relative" data-aos="fade-left">
+        <div class="relative animate-fade-left">
           <!-- Decorative visual -->
           <div class="grid grid-cols-2 gap-4 h-full">
             <div class="space-y-4 mt-12">

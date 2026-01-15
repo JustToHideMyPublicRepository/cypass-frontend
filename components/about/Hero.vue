@@ -9,7 +9,7 @@
     </div>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-      <div data-aos="fade-up">
+      <div class="animate-fade-up">
         <span
           class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 dark:bg-slate-800 text-cypass-blue text-xs font-bold uppercase tracking-wider mb-6 border border-blue-100 dark:border-slate-700">
           Qui sommes-nous ?

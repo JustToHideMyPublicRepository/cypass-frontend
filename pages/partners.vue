@@ -2,7 +2,7 @@
   <div class="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 min-h-screen bg-slate-50 dark:bg-slate-950 font-sans">
     <div class="max-w-5xl mx-auto space-y-16">
 
-      <div class="text-center space-y-4" data-aos="fade-up">
+      <div class="text-center space-y-4 animate-fade-up">
         <span class="badge badge-green">Écosystème</span>
         <h1 class="text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
           Nos Partenaires <br />
@@ -15,9 +15,9 @@
       </div>
 
       <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <div v-for="partner in partners" :key="partner.name"
-          class="glass-panel p-8 rounded-3xl flex flex-col items-center text-center hover:scale-[1.02] transition-transform duration-300"
-          data-aos="fade-up">
+        <div v-for="(partner, index) in partners" :key="partner.name"
+          class="glass-panel p-8 rounded-3xl flex flex-col items-center text-center hover:scale-[1.02] transition-transform duration-300 animate-fade-up"
+          :style="{ animationDelay: `${index * 100}ms` }">
           <div
             class="w-24 h-24 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-6 text-2xl font-bold text-slate-400">
             {{ partner.initials }}

@@ -2,7 +2,7 @@
   <div class="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 min-h-screen bg-slate-50 dark:bg-slate-950 font-sans">
     <div class="max-w-7xl mx-auto space-y-16">
 
-      <div class="text-center space-y-4" data-aos="fade-up">
+      <div class="text-center space-y-4 animate-fade-up">
         <span class="badge badge-blue">Catalogue de Services</span>
         <h1 class="text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
           Solutions de <span class="text-cypass-blue">Confiance</span>
@@ -13,7 +13,8 @@
       </div>
 
       <div class="grid md:grid-cols-2 lg:grid-cols-2 gap-8">
-        <div v-for="service in services" :key="service.id" class="relative group" data-aos="fade-up">
+        <div v-for="(service, index) in services" :key="service.id" class="relative group animate-fade-up"
+          :style="{ animationDelay: `${index * 100}ms` }">
 
           <NuxtLink :to="service.status === 'available' ? `/services/${service.id}` : '#'" class="block h-full"
             :class="{ 'cursor-not-allowed': service.status !== 'available' }">
