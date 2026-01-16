@@ -11,8 +11,7 @@
 			<div class="space-y-4">
 				<div v-for="(item, index) in faqItems" :key="index"
 					class="glass-panel rounded-2xl overflow-hidden transition-all duration-300 animate-fade-up"
-					:class="{ 'ring-2 ring-cypass-blue/50': activeIndex === index }"
-					:style="{ animationDelay: `${index * 100}ms` }">
+					:class="{ 'ring-2 ring-primary/50': activeIndex === index }" :style="{ animationDelay: `${index * 100}ms` }">
 					<button @click="toggle(index)"
 						class="w-full flex items-center justify-between p-6 text-left focus:outline-none">
 						<span class="font-bold text-slate-900 dark:text-white text-lg">{{ item.question }}</span>

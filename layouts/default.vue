@@ -7,7 +7,7 @@
     ]">
       <div class="h-16 flex items-center px-6 border-b border-slate-800">
         <div
-          class="w-8 h-8 rounded bg-gradient-to-br from-cypass-blue to-cypass-green flex items-center justify-center text-white font-bold mr-2">
+          class="w-8 h-8 rounded bg-gradient-to-br from-primary to-cypass-green flex items-center justify-center text-white font-bold mr-2">
           C</div>
         <span class="text-xl font-bold">CYPASS</span>
       </div>
@@ -15,7 +15,7 @@
       <nav class="p-4 space-y-2">
         <NuxtLink to="/dashboard"
           class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition-colors"
-          active-class="bg-cypass-blue text-white">
+          active-class="bg-primary text-white">
           <IconDashboard class="w-5 h-5" />
           <span>Vue d'ensemble</span>
         </NuxtLink>
@@ -24,19 +24,19 @@
 
         <NuxtLink to="/dashboard/docsentry"
           class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition-colors"
-          active-class="bg-cypass-blue text-white">
+          active-class="bg-primary text-white">
           <IconFileCertificate class="w-5 h-5" />
           <span>DocSentry</span>
         </NuxtLink>
         <NuxtLink to="/dashboard/secuscan"
           class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition-colors"
-          active-class="bg-cypass-blue text-white">
+          active-class="bg-primary text-white">
           <IconScanEye class="w-5 h-5" />
           <span>SecuScan</span>
         </NuxtLink>
         <NuxtLink to="/dashboard/vigitech"
           class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition-colors"
-          active-class="bg-cypass-blue text-white">
+          active-class="bg-primary text-white">
           <IconRadar2 class="w-5 h-5" />
           <span>VigiTech</span>
         </NuxtLink>
@@ -67,7 +67,7 @@
         <div class="hidden md:flex flex-1 max-w-md ml-8 relative">
           <IconSearch class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
           <input type="text" placeholder="Rechercher une alerte, un document..."
-            class="w-full pl-10 pr-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 border-none focus:ring-2 focus:ring-cypass-blue text-sm" />
+            class="w-full pl-10 pr-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 border-none focus:ring-2 focus:ring-primary text-sm" />
         </div>
 
         <!-- Right actions -->

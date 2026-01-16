@@ -1,5 +1,5 @@
 <template>
-  <div class="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-slate-50 dark:bg-slate-950">
+  <div class="relative pt-8 pb-20 px-4 sm:px-6 lg:px-8 bg-slate-50 dark:bg-slate-950">
     <div class="max-w-5xl mx-auto space-y-16">
 
       <div class="text-center space-y-4 animate-fade-up">

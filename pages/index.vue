@@ -1,5 +1,5 @@
 <template>
-   <div class="relative overflow-x-hidden bg-gradient-premium min-h-screen">
+   <div class="relative overflow-x-hidden bg-gradient-premium">
       <HomeBackground />
       <HomeHero />
       <HomePartners />

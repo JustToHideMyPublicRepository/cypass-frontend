@@ -10,11 +10,8 @@
           <NuxtLink to="/" class="flex items-center gap-2 group">
             <div class="relative w-9 h-9">
               <div
-                class="absolute inset-0 bg-gradient-to-br from-primary to-cypass-green rounded-lg blur opacity-70 group-hover:opacity-100 transition-opacity">
-              </div>
-              <div
-                class="relative w-full h-full rounded-lg bg-gradient-to-br from-primary to-cypass-green flex items-center justify-center text-white font-bold shadow-sm">
-                C
+                class="relative w-full h-full rounded-lg bg-white flex items-center justify-center overflow-hidden p-0.5">
+                <img src="/img/logo.png" alt="Logo CYPASS" class="w-full h-full object-contain" />
               </div>
             </div>
             <span
@@ -113,6 +110,8 @@ const colorMode = useColorMode()
 const NavHeader = [
   { label: 'Services', path: '/services', isButton: false },
   { label: 'Support', path: '/support', isButton: false },
+  { label: 'À propos', path: '/about' },
+  { label: 'Développeurs', path: '/developers' },
   { label: 'Connexion', path: '/auth/login', isButton: true },
 ]
 

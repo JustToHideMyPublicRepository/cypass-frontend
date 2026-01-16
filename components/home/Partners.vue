@@ -1,24 +1,46 @@
 <template>
-    <section
-        class="py-12 border-y border-slate-200/50 dark:border-slate-800/50 bg-white/30 dark:bg-slate-900/30 backdrop-blur-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <p class="text-center text-xs font-bold text-slate-400 uppercase tracking-[0.2em] mb-8">Partenaires de
-                Confiance & Institutionnels</p>
-            <div
-                class="flex flex-wrap justify-center items-center gap-12 md:gap-20 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
-                <span class="text-2xl font-bold font-serif text-slate-800 dark:text-slate-200">GOUV.BJ</span>
-                <span class="text-2xl font-black text-slate-800 dark:text-slate-200 tracking-tighter">ASIN</span>
-                <span
-                    class="text-xl font-bold font-mono text-slate-800 dark:text-slate-200 border-2 border-current px-2 py-1">ASIN</span>
-                <div class="flex items-center gap-2 text-slate-800 dark:text-slate-200">
-                    <IconShield class="w-8 h-8" />
-                    <span class="text-xl font-bold">BJ-CSIRT</span>
-                </div>
-            </div>
+  <section class="py-8 bg-slate-900 text-white relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-900 to-primary/20"></div>
+    <!-- Animated Grid -->
+    <div class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-12 text-center">
+        <div v-for="(stat, index) in stats" :key="index" class="space-y-4 group">
+          <div
+            class="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-slate-500 tracking-tighter group-hover:scale-110 transition-transform duration-300">
+            {{ stat.value }}
+          </div>
+          <div :class="`text-sm font-bold uppercase tracking-widest ${stat.colorClass}`">
+            {{ stat.label }}
+          </div>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
 </template>
 
 <script setup lang="ts">
-import { IconShield } from '@tabler/icons-vue'
+const stats = [
+  {
+    value: '99.9%',
+    label: 'Disponibilité',
+    colorClass: 'text-primary'
+  },
+  {
+    value: '5M+',
+    label: 'Transactions/Mois',
+    colorClass: 'text-cypass-green'
+  },
+  {
+    value: '<100ms',
+    label: 'Latence API',
+    colorClass: 'text-purple-400'
+  },
+  {
+    value: 'ISO',
+    label: '18004 certified',
+    colorClass: 'text-orange-400'
+  }
+]
 </script>

@@ -5,9 +5,9 @@
         <!-- Brand Column -->
         <div class="space-y-6">
           <NuxtLink to="/" class="flex items-center gap-2">
-            <div
-              class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-cypass-green flex items-center justify-center text-white font-bold text-lg shadow-lg">
-              C</div>
+            <div class="w-10 h-10 rounded-xl bg-white flex items-center justify-center shadow-lg overflow-hidden p-0.5">
+              <img src="/img/logo.png" alt="Logo CYPASS" class="w-full h-full object-contain" />
+            </div>
             <span class="text-2xl font-bold text-slate-900 dark:text-white">CYPASS</span>
           </NuxtLink>
           <p class="text-slate-500 dark:text-slate-400 leading-relaxed text-sm">

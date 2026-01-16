@@ -22,26 +22,18 @@
 
         <div class="relative animate-fade-left">
           <div class="absolute inset-0 bg-blue-500 blur-[100px] opacity-10 rounded-full"></div>
-          <div
-            class="glass-panel p-6 rounded-2xl font-code text-sm overflow-hidden text-slate-300 bg-slate-900 border-slate-800">
-            <div class="flex items-center gap-2 mb-4 border-b border-slate-700 pb-2">
-              <div class="w-3 h-3 rounded-full bg-red-500"></div>
-              <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
-              <div class="w-3 h-3 rounded-full bg-green-500"></div>
-              <span class="text-xs text-slate-500 ml-2">bash</span>
-            </div>
-            <div class="space-y-2">
-              <p><span class="text-purple-400">curl</span> -X POST https://api.cypass.bj/v1/sign \</p>
-              <p class="pl-4">-H <span class="text-green-400">"Authorization: Bearer YOUR_API_KEY"</span> \</p>
-              <p class="pl-4">-H <span class="text-green-400">"Content-Type: application/json"</span> \</p>
-              <p class="pl-4">-d <span class="text-orange-300">'{</span></p>
-              <p class="pl-8 text-orange-300">"file_hash": "a7f9...9b2",</p>
-              <p class="pl-8 text-orange-300">"signatory": "user_123"</p>
-              <p class="pl-4 text-orange-300">}'</p>
-              <p class="mt-4 text-green-500"># Response: 200 OK</p>
-              <p class="text-slate-400">{ "status": "signed", "timestamp": "2024-01-15T10:00:00Z" }</p>
-            </div>
-          </div>
+          <UiAppFrame type="terminal" title="bash" :glass="true" rounded="rounded-2xl" padding="p-6"
+            class="font-code text-sm text-slate-300 bg-slate-900 border-slate-800" body-class="space-y-2">
+            <p><span class="text-purple-400">curl</span> -X POST https://api.cypass.bj/v1/sign \</p>
+            <p class="pl-4">-H <span class="text-green-400">"Authorization: Bearer YOUR_API_KEY"</span> \</p>
+            <p class="pl-4">-H <span class="text-green-400">"Content-Type: application/json"</span> \</p>
+            <p class="pl-4">-d <span class="text-orange-300">'{</span></p>
+            <p class="pl-8 text-orange-300">"file_hash": "a7f9...9b2",</p>
+            <p class="pl-8 text-orange-300">"signatory": "user_123"</p>
+            <p class="pl-4 text-orange-300">}'</p>
+            <p class="mt-4 text-green-500"># Response: 200 OK</p>
+            <p class="text-slate-400">{ "status": "signed", "timestamp": "2024-01-15T10:00:00Z" }</p>
+          </UiAppFrame>
         </div>
       </div>
 

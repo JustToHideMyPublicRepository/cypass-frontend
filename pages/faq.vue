@@ -6,7 +6,7 @@
         class="absolute top-0 right-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03] dark:opacity-[0.05]">
       </div>
       <div
-        class="absolute top-[10%] right-[30%] w-[600px] h-[600px] bg-cypass-blue/5 rounded-full blur-[100px] animate-pulse-slow">
+        class="absolute top-[10%] right-[30%] w-[600px] h-[600px] bg-primary/5 rounded-full blur-[100px] animate-pulse-slow">
       </div>
     </div>
 
@@ -15,7 +15,7 @@
       <div class="text-center space-y-4 animate-fade-up">
         <span class="badge badge-blue">Aide & Support</span>
         <h1 class="text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
-          Questions <span class="text-cypass-blue">Fréquentes</span>
+          Questions <span class="text-primary">Fréquentes</span>
         </h1>
         <p class="text-lg text-slate-600 dark:text-slate-400">
           Tout ce que vous devez savoir pour utiliser CYPASS efficacement.
@@ -25,19 +25,19 @@
       <div class="space-y-6">
         <div v-for="(category, catIndex) in faqCategories" :key="catIndex" class="animate-fade-up"
           :style="{ animationDelay: `${catIndex * 100}ms` }">
-          <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-6 pl-2 border-l-4 border-cypass-blue">{{
+          <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-6 pl-2 border-l-4 border-primary">{{
             category.title }}</h2>
 
           <div class="space-y-4">
             <div v-for="(item, index) in category.items" :key="index"
               class="glass-panel rounded-2xl overflow-hidden border border-slate-200/50 dark:border-slate-800/50 transition-all duration-300"
-              :class="{ 'shadow-lg shadow-cypass-blue/5': activeIndex === `${catIndex}-${index}` }">
+              :class="{ 'shadow-lg shadow-primary/5': activeIndex === `${catIndex}-${index}` }">
 
               <button @click="toggle(`${catIndex}-${index}`)"
                 class="w-full flex items-center justify-between p-6 text-left focus:outline-none">
                 <span class="font-bold text-slate-800 dark:text-slate-200 text-lg">{{ item.question }}</span>
                 <IconChevronDown class="w-5 h-5 text-slate-400 transition-transform duration-300"
-                  :class="{ 'rotate-180 text-cypass-blue': activeIndex === `${catIndex}-${index}` }" />
+                  :class="{ 'rotate-180 text-primary': activeIndex === `${catIndex}-${index}` }" />
               </button>
 
               <div v-show="activeIndex === `${catIndex}-${index}`"

@@ -7,7 +7,7 @@
         class="absolute top-0 right-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03] dark:opacity-[0.05]">
       </div>
       <div
-        class="absolute top-[10%] left-[5%] w-[500px] h-[500px] bg-cypass-blue/5 rounded-full blur-[100px] animate-pulse-slow">
+        class="absolute top-[10%] left-[5%] w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] animate-pulse-slow">
       </div>
     </div>
 
@@ -17,7 +17,7 @@
       <div class="text-center space-y-4 animate-fade-up mb-16">
         <span class="badge badge-blue">Légal</span>
         <h1 class="text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
-          Mentions <span class="text-cypass-blue">Légales</span>
+          Mentions <span class="text-primary">Légales</span>
         </h1>
         <p class="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
           Informations réglementaires relatives à l'éditeur du service CYPASS, conformément à la loi sur la confiance
@@ -34,7 +34,7 @@
             <h3 class="font-bold text-slate-900 dark:text-white mb-4 px-4">Sommaire</h3>
             <nav class="flex flex-col space-y-1">
               <a v-for="item in toc" :key="item.id" :href="`#${item.id}`"
-                class="px-4 py-2 text-sm rounded-lg transition-colors text-slate-500 hover:text-cypass-blue hover:bg-slate-100 dark:hover:bg-slate-800 dark:text-slate-400">
+                class="px-4 py-2 text-sm rounded-lg transition-colors text-slate-500 hover:text-primary hover:bg-slate-100 dark:hover:bg-slate-800 dark:text-slate-400">
                 {{ item.label }}
               </a>
             </nav>
@@ -93,11 +93,11 @@
               </p>
               <ul class="not-prose space-y-2 mt-4">
                 <li class="flex items-center gap-3 text-sm text-slate-600 dark:text-slate-400">
-                  <IconServer class="w-5 h-5 text-cypass-blue" />
+                  <IconServer class="w-5 h-5 text-primary" />
                   Centre de Données National, Cotonou
                 </li>
                 <li class="flex items-center gap-3 text-sm text-slate-600 dark:text-slate-400">
-                  <IconCertificate class="w-5 h-5 text-cypass-blue" />
+                  <IconCertificate class="w-5 h-5 text-primary" />
                   Conforme au norme ISO 18004
                 </li>
               </ul>

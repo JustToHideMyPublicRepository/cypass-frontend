@@ -37,7 +37,7 @@
 
           <div class="flex flex-col sm:flex-row gap-5 justify-center lg:justify-start pt-4">
             <NuxtLink to="/auth/login" class="w-full sm:w-auto">
-              <button class="btn btn-primary w-full sm:w-auto text-lg px-8 py-4 shadow-cypass-blue/40">
+              <button class="btn btn-primary w-full sm:w-auto text-lg px-8 py-4 shadow-BtW/40">
                 Accéder au Portail
                 <IconArrowRight class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
               </button>
@@ -73,23 +73,9 @@
           </div>
 
           <!-- Main Dashboard Card -->
-          <div
-            class="glass-panel rounded-3xl p-2 transform rotate-y-12 rotate-x-6 hover:rotate-0 transition-all duration-700 ease-out shadow-2xl relative z-20 group">
-
-            <!-- Browser Header -->
-            <div
-              class="bg-slate-900/90 rounded-t-2xl px-4 py-3 flex items-center gap-2 border-b border-white/10 backdrop-blur-md">
-              <div class="flex gap-2">
-                <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
-                <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
-                <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
-              </div>
-              <div
-                class="ml-4 px-3 py-1 bg-white/10 rounded-md text-xs text-slate-300 font-mono flex-grow text-center tracking-wide">
-                https://secure.cypass.bj/dashboard
-              </div>
-            </div>
-
+          <UiAppFrame type="browser" url="https://secure.cypass.bj/dashboard" :glass="true" rounded="rounded-3xl"
+            padding="p-0"
+            class="transform rotate-y-12 rotate-x-6 hover:rotate-0 transition-all duration-700 ease-out z-20 group">
             <!-- Dashboard Content -->
             <div class="bg-slate-50 dark:bg-slate-900 p-6 rounded-b-2xl h-[450px] relative overflow-hidden">
 
@@ -157,7 +143,7 @@
                 </div>
               </div>
             </div>
-          </div>
+          </UiAppFrame>
 
           <!-- Floating Badge -->
           <div

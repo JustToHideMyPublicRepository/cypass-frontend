@@ -1,8 +1,7 @@
 <template>
   <section id="features" class="py-32 relative">
     <!-- Section Decor -->
-    <div
-      class="absolute top-1/4 left-0 w-full h-[500px] bg-gradient-to-r from-cypass-blue/5 to-transparent skew-y-6 -z-10">
+    <div class="absolute top-1/4 left-0 w-full h-[500px] bg-gradient-to-r from-primary/5 to-transparent skew-y-6 -z-10">
     </div>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-40">

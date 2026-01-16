@@ -1,7 +1,7 @@
 <template>
   <section class="py-32 relative overflow-hidden">
     <div class="absolute inset-0 bg-slate-50 dark:bg-slate-950"></div>
-    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-cypass-blue/5 rounded-full blur-3xl">
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-3xl">
     </div>
 
     <div class="max-w-4xl mx-auto px-4 text-center space-y-10 relative z-10">

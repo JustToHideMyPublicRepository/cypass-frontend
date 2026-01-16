@@ -1,6 +1,6 @@
 <template>
   <section class="py-24 bg-slate-900 text-white relative overflow-hidden">
-    <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-900 to-cypass-blue/20"></div>
+    <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-900 to-primary/20"></div>
     <!-- Animated Grid -->
     <div class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10"></div>
 

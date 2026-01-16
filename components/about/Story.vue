@@ -25,7 +25,7 @@
               <div class="h-64 rounded-2xl bg-blue-100 dark:bg-blue-900/20"></div>
             </div>
             <div class="space-y-4">
-              <div class="h-64 rounded-2xl bg-cypass-blue/10"></div>
+              <div class="h-64 rounded-2xl bg-primary/10"></div>
               <div class="h-40 rounded-2xl bg-slate-200 dark:bg-slate-800"></div>
             </div>
           </div>
