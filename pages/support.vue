@@ -17,16 +17,16 @@
       <div class="text-center space-y-8 animate-fade-up">
         <span class="badge badge-blue">Centre d'Aide</span>
         <h1 class="text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
-          Comment pouvons-nous <span class="text-cypass-blue">vous aider ?</span>
+          Comment pouvons-nous <span class="text-primary">vous aider ?</span>
         </h1>
 
         <!-- Search Bar -->
         <div class="max-w-2xl mx-auto relative group">
           <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-            <IconSearch class="w-5 h-5 text-slate-400 group-focus-within:text-cypass-blue transition-colors" />
+            <IconSearch class="w-5 h-5 text-slate-400 group-focus-within:text-primary transition-colors" />
           </div>
           <input type="text"
-            class="block w-full pl-12 pr-4 py-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-lg shadow-slate-200/50 dark:shadow-black/50 focus:ring-2 focus:ring-cypass-blue focus:border-cypass-blue dark:text-white transition-all outline-none"
+            class="block w-full pl-12 pr-4 py-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-lg shadow-slate-200/50 dark:shadow-black/50 focus:ring-2 focus:ring-primary focus:border-primary dark:text-white transition-all outline-none"
             placeholder="Rechercher une réponse, une API ou un guide...">
         </div>
       </div>
@@ -40,11 +40,10 @@
             :class="`w-14 h-14 rounded-2xl ${category.color} flex items-center justify-center mb-6 text-white text-2xl shadow-lg`">
             <component :is="category.icon" class="w-7 h-7" />
           </div>
-          <h3
-            class="text-xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-cypass-blue transition-colors">
+          <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-primary transition-colors">
             {{ category.title }}</h3>
           <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6">{{ category.desc }}</p>
-          <span class="text-cypass-blue text-sm font-bold flex items-center gap-1 group-hover:gap-2 transition-all">
+          <span class="text-primary text-sm font-bold flex items-center gap-1 group-hover:gap-2 transition-all">
             Explorer
             <IconArrowRight class="w-4 h-4" />
           </span>
@@ -75,18 +74,18 @@
 
         <div class="grid md:grid-cols-3 gap-6">
           <div
-            class="group relative overflow-hidden glass-panel p-8 rounded-3xl border border-slate-200/50 dark:border-slate-800/50 hover:border-cypass-blue/50 dark:hover:border-cypass-blue/50 transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-cypass-blue/10 cursor-pointer">
+            class="group relative overflow-hidden glass-panel p-8 rounded-3xl border border-slate-200/50 dark:border-slate-800/50 hover:border-primary/50 dark:hover:border-primary/50 transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-primary/10 cursor-pointer">
             <div
-              class="w-12 h-12 rounded-2xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-cypass-blue mb-6 group-hover:scale-110 transition-transform duration-300">
+              class="w-12 h-12 rounded-2xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-primary mb-6 group-hover:scale-110 transition-transform duration-300">
               <IconRocket class="w-6 h-6" />
             </div>
             <h3
-              class="text-xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-cypass-blue transition-colors">
+              class="text-xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-primary transition-colors">
               Démarrage Rapide</h3>
             <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-4">
               Intégrez le bouton "Se connecter avec CYPASS" en moins de 10 minutes.
             </p>
-            <span class="flex items-center text-sm font-bold text-cypass-blue">
+            <span class="flex items-center text-sm font-bold text-primary">
               Voir le tutoriel
               <IconArrowRight class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
             </span>

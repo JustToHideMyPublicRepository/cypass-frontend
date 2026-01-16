@@ -6,6 +6,7 @@
       <HomeHowItWorks />
       <HomeFeatures />
       <HomeStats />
+      <HomeTestimonials />
       <HomeFaq />
       <HomeCta />
    </div>

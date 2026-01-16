@@ -2,7 +2,7 @@
   <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10">
     <!-- Living Gradients -->
     <div
-      class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-cypass-blue/20 rounded-full blur-[120px] animate-float opacity-60 dark:opacity-20">
+      class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-primary/20 rounded-full blur-[120px] animate-float opacity-60 dark:opacity-20">
     </div>
     <div
       class="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-cypass-green/20 rounded-full blur-[120px] animate-float-delayed opacity-60 dark:opacity-20">
