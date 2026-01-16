@@ -10,15 +10,15 @@
           <NuxtLink to="/" class="flex items-center gap-2 group">
             <div class="relative w-9 h-9">
               <div
-                class="absolute inset-0 bg-gradient-to-br from-cypass-blue to-cypass-green rounded-lg blur opacity-70 group-hover:opacity-100 transition-opacity">
+                class="absolute inset-0 bg-gradient-to-br from-primary to-cypass-green rounded-lg blur opacity-70 group-hover:opacity-100 transition-opacity">
               </div>
               <div
-                class="relative w-full h-full rounded-lg bg-gradient-to-br from-cypass-blue to-cypass-green flex items-center justify-center text-white font-bold shadow-sm">
+                class="relative w-full h-full rounded-lg bg-gradient-to-br from-primary to-cypass-green flex items-center justify-center text-white font-bold shadow-sm">
                 C
               </div>
             </div>
             <span
-              class="text-xl font-bold text-slate-900 dark:text-white tracking-tight group-hover:text-cypass-blue dark:group-hover:text-cypass-green transition-colors">
+              class="text-xl font-bold text-slate-900 dark:text-white tracking-tight group-hover:text-primary dark:group-hover:text-cypass-green transition-colors">
               CYPASS
             </span>
           </NuxtLink>
@@ -28,14 +28,14 @@
             <template v-for="item in NavHeader" :key="item.label">
               <!-- Standard Link -->
               <NuxtLink v-if="!item.isButton" :to="item.path"
-                class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-cypass-blue dark:hover:text-white transition-colors relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-cypass-blue after:left-0 after:-bottom-1 after:transition-all hover:after:w-full"
-                active-class="text-cypass-blue dark:text-white after:w-full">
+                class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-white transition-colors relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-primary after:left-0 after:-bottom-1 after:transition-all hover:after:w-full"
+                active-class="text-primary dark:text-white after:w-full">
                 {{ item.label }}
               </NuxtLink>
 
               <!-- Button Link -->
               <NuxtLink v-else :to="item.path"
-                class="px-5 py-2.5 rounded-full bg-gradient-to-r from-cypass-blue to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white text-sm font-bold shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40 hover:-translate-y-0.5 transition-all duration-300">
+                class="px-5 py-2.5 rounded-full bg-gradient-to-r from-primary to-secondary hover:from-blue-600 hover:to-blue-700 text-white text-sm font-bold shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40 hover:-translate-y-0.5 transition-all duration-300">
                 {{ item.label }}
               </NuxtLink>
             </template>
@@ -77,7 +77,7 @@
           <NuxtLink v-for="item in NavHeader" :key="item.label" :to="item.path" @click="isMobileMenuOpen = false"
             class="p-4 rounded-xl text-lg font-medium transition-colors" :class="[
               item.isButton
-                ? 'bg-cypass-blue text-white font-bold shadow-md'
+                ? 'bg-primary text-white font-bold shadow-md'
                 : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'
             ]">
             {{ item.label }}

@@ -6,7 +6,7 @@
         <div class="space-y-6">
           <NuxtLink to="/" class="flex items-center gap-2">
             <div
-              class="w-10 h-10 rounded-xl bg-gradient-to-br from-cypass-blue to-cypass-green flex items-center justify-center text-white font-bold text-lg shadow-lg">
+              class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-cypass-green flex items-center justify-center text-white font-bold text-lg shadow-lg">
               C</div>
             <span class="text-2xl font-bold text-slate-900 dark:text-white">CYPASS</span>
           </NuxtLink>
@@ -15,44 +15,29 @@
             technologies de pointe.
           </p>
           <div class="flex gap-3">
-            <a v-for="social in ['twitter', 'linkedin', 'github']" :key="social" href="#"
-              class="w-10 h-10 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-center text-slate-500 hover:text-white hover:bg-cypass-blue hover:border-cypass-blue transition-all duration-300">
+            <a v-for="social in socialLinks" :key="social" href="#"
+              class="w-10 h-10 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-center text-slate-500 hover:text-white hover:bg-primary hover:border-primary transition-all duration-300">
               <component :is="getSocialIcon(social)" class="w-5 h-5" />
             </a>
           </div>
         </div>
 
-        <!-- Links Column 1 -->
-        <div>
-          <h4 class="text-slate-900 dark:text-white font-bold mb-6">Plateforme</h4>
+        <!-- Links Columns -->
+        <div v-for="(group, index) in footerGroups" :key="index">
+          <h4 class="text-slate-900 dark:text-white font-bold mb-6">{{ group.title }}</h4>
           <ul class="space-y-3">
-            <li v-for="link in NavFooter.links" :key="link.label">
+            <li v-for="link in group.links" :key="link.label">
               <NuxtLink :to="link.path"
-                class="text-slate-500 dark:text-slate-400 hover:text-cypass-blue dark:hover:text-cypass-green text-sm transition-colors flex items-center gap-2 group">
+                class="text-slate-500 dark:text-slate-400 hover:text-primary dark:hover:text-cypass-green text-sm transition-colors flex items-center gap-2 group">
                 <span
-                  class="w-1.5 h-1.5 rounded-full bg-slate-300 dark:bg-slate-700 group-hover:bg-cypass-blue transition-colors"></span>
+                  class="w-1.5 h-1.5 rounded-full bg-slate-300 dark:bg-slate-700 group-hover:bg-primary transition-colors"></span>
                 {{ link.label }}
               </NuxtLink>
             </li>
           </ul>
         </div>
 
-        <!-- Links Column 2 -->
-        <div>
-          <h4 class="text-slate-900 dark:text-white font-bold mb-6">Ressources</h4>
-          <ul class="space-y-3">
-            <li v-for="link in NavFooter.legal" :key="link.label">
-              <NuxtLink :to="link.path"
-                class="text-slate-500 dark:text-slate-400 hover:text-cypass-blue dark:hover:text-cypass-green text-sm transition-colors flex items-center gap-2 group">
-                <span
-                  class="w-1.5 h-1.5 rounded-full bg-slate-300 dark:bg-slate-700 group-hover:bg-cypass-blue transition-colors"></span>
-                {{ link.label }}
-              </NuxtLink>
-            </li>
-          </ul>
-        </div>
-
-        <!-- Newsletter / Badge (Refined) -->
+        <!-- Badge (Refined) -->
         <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-100 dark:border-slate-800 shadow-sm">
           <h4 class="text-slate-900 dark:text-white font-bold mb-2">Sécurité Certifiée</h4>
           <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">
@@ -87,30 +72,37 @@
     </div>
   </footer>
 </template>
-
 <script setup lang="ts">
 import {
   IconBrandX, IconBrandLinkedin, IconBrandGithub, IconShieldCheck, IconGlobe
 } from '@tabler/icons-vue'
 
-const NavFooter = {
-  links: [
-    { label: 'À propos', path: '/about' },
-    { label: 'Nos Services', path: '/services' },
-    { label: 'Partenaires', path: '/partners' },
-    { label: 'Développeurs', path: '/developers' },
-    { label: 'FAQ', path: '/faq' },
-  ],
-  legal: [
-    { label: 'Mentions Légales', path: '/legal/mentions' },
-    { label: 'Politique de Confidentialité', path: '/legal/privacy' },
-    { label: 'CGU', path: '/legal/terms' },
-    { label: 'Centre d\'aide', path: '/support' },
-    { label: 'État du système', path: '/status' },
-  ]
-}
+const socialLinks = ['twitter', 'linkedin', 'github']
 
-// -- Helper --
+const footerGroups = [
+  {
+    title: 'Plateforme',
+    links: [
+      { label: 'À propos', path: '/about' },
+      { label: 'Nos Services', path: '/services' },
+      { label: 'Partenaires', path: '/partners' },
+      { label: 'Développeurs', path: '/developers' },
+      { label: 'FAQ', path: '/faq' },
+    ]
+  },
+  {
+    title: 'Ressources',
+    links: [
+      { label: 'Mentions Légales', path: '/legal/mentions' },
+      { label: 'Politique de Confidentialité', path: '/legal/privacy' },
+      { label: 'CGU', path: '/legal/terms' },
+      { label: 'Centre d\'aide', path: '/support' },
+      { label: 'État du système', path: '/status' },
+    ]
+  }
+]
+
+// Helper
 const getSocialIcon = (name: string) => {
   switch (name) {
     case 'twitter': return IconBrandX

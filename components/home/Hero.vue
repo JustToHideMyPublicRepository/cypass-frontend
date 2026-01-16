@@ -16,10 +16,10 @@
 
           <h1 class="heading-hero leading-tight">
             Souveraineté <br />
-            <span class="text-transparent bg-clip-text bg-gradient-to-r from-cypass-blue to-cyan-400 relative">
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-cyan-400 relative">
               Numérique
-              <svg class="absolute w-full h-3 -bottom-1 left-0 text-cypass-blue opacity-30" viewBox="0 0 200 9"
-                fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg class="absolute w-full h-3 -bottom-1 left-0 text-primary opacity-30" viewBox="0 0 200 9" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
                 <path
                   d="M2.00025 6.99997C25.7509 9.37523 78.9113 9.81705 112.225 4.88566C145.539 -0.0457375 186.257 0.999738 198.001 2.99996"
                   stroke="currentColor" stroke-width="3" stroke-linecap="round" />
@@ -31,7 +31,7 @@
           <p
             class="text-xl md:text-2xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-light">
             L'infrastructure de confiance protégeant l'écosystème numérique du Bénin.
-            <span class="font-semibold text-cypass-blue dark:text-blue-400">Certification, Veille &
+            <span class="font-semibold text-primary dark:text-blue-400">Certification, Veille &
               Audit</span> en temps réel.
           </p>
 
@@ -58,7 +58,7 @@
             </div>
             <div
               class="flex items-center gap-2 bg-white/50 dark:bg-slate-800/50 px-4 py-2 rounded-lg backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50">
-              <IconServer class="w-5 h-5 text-cypass-blue" />
+              <IconServer class="w-5 h-5 text-primary" />
               <span>Hébergé au Bénin</span>
             </div>
           </div>

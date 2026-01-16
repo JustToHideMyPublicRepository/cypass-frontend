@@ -9,7 +9,7 @@
             <h2 class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-4">
               Notre Mission
             </h2>
-            <div class="h-1 w-20 bg-cypass-blue rounded-full"></div>
+            <div class="h-1 w-20 bg-primary rounded-full"></div>
           </div>
 
           <p class="text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
@@ -25,11 +25,11 @@
 
           <div class="grid grid-cols-2 gap-6 pt-4">
             <div class="flex flex-col gap-2">
-              <span class="text-4xl font-black text-cypass-blue">100%</span>
+              <span class="text-4xl font-black text-primary">100%</span>
               <span class="text-sm text-slate-500 font-medium uppercase tracking-wide">Souverain</span>
             </div>
             <div class="flex flex-col gap-2">
-              <span class="text-4xl font-black text-cypass-blue">24/7</span>
+              <span class="text-4xl font-black text-primary">24/7</span>
               <span class="text-sm text-slate-500 font-medium uppercase tracking-wide">Protection</span>
             </div>
           </div>
@@ -37,8 +37,7 @@
 
         <!-- Visual Abstract -->
         <div class="relative animate-fade-left">
-          <div
-            class="absolute inset-0 bg-gradient-to-tr from-cypass-blue to-purple-500 rounded-3xl blur-2xl opacity-20">
+          <div class="absolute inset-0 bg-gradient-to-tr from-primary to-purple-500 rounded-3xl blur-2xl opacity-20">
           </div>
           <div
             class="relative glass-panel rounded-3xl overflow-hidden aspect-square flex items-center justify-center p-8">

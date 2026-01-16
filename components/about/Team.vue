@@ -35,11 +35,10 @@
               </div>
             </div>
             <h3 class="font-bold text-slate-900 dark:text-white text-lg">{{ member.name }}</h3>
-            <p class="text-cypass-blue text-sm font-medium mb-2">{{ member.role }}</p>
+            <p class="text-primary text-sm font-medium mb-2">{{ member.role }}</p>
           </div>
         </div>
       </div>
-
     </div>
   </section>
 </template>

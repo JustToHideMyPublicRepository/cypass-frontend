@@ -8,9 +8,9 @@
           <div class="space-y-8 relative pl-8 border-l-2 border-slate-200 dark:border-slate-800">
             <div v-for="event in timeline" :key="event.year" class="relative">
               <div
-                class="absolute -left-[41px] top-0 w-5 h-5 rounded-full border-4 border-white dark:border-slate-950 bg-cypass-blue">
+                class="absolute -left-[41px] top-0 w-5 h-5 rounded-full border-4 border-white dark:border-slate-950 bg-primary">
               </div>
-              <span class="text-cypass-blue font-bold text-sm block mb-1">{{ event.year }}</span>
+              <span class="text-primary font-bold text-sm block mb-1">{{ event.year }}</span>
               <h3 class="font-bold text-slate-900 dark:text-white text-lg mb-2">{{ event.title }}</h3>
               <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">{{ event.desc }}</p>
             </div>

@@ -7,7 +7,7 @@
           <span class="badge badge-blue">Pour les Développeurs</span>
           <h1 class="text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
             Intégrez la confiance <br />
-            <span class="text-cypass-blue">dans vos apps</span>
+            <span class="text-primary">dans vos apps</span>
           </h1>
           <p class="text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
             Accédez à nos API REST sécurisées pour automatiser la vérification d'identité, la signature de documents et
@@ -23,7 +23,7 @@
         <div class="relative animate-fade-left">
           <div class="absolute inset-0 bg-blue-500 blur-[100px] opacity-10 rounded-full"></div>
           <div
-            class="glass-panel p-6 rounded-2xl font-mono text-sm overflow-hidden text-slate-300 bg-slate-900 border-slate-800">
+            class="glass-panel p-6 rounded-2xl font-code text-sm overflow-hidden text-slate-300 bg-slate-900 border-slate-800">
             <div class="flex items-center gap-2 mb-4 border-b border-slate-700 pb-2">
               <div class="w-3 h-3 rounded-full bg-red-500"></div>
               <div class="w-3 h-3 rounded-full bg-yellow-500"></div>

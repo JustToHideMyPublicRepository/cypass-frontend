@@ -14,7 +14,7 @@
                 <div class="card p-8 hover:-translate-y-2 transition-transform duration-300 animate-fade-up"
                     style="animation-delay: 0ms">
                     <div
-                        class="w-14 h-14 rounded-xl bg-blue-100 dark:bg-blue-900/30 text-cypass-blue flex items-center justify-center mb-6">
+                        class="w-14 h-14 rounded-xl bg-blue-100 dark:bg-blue-900/30 text-primary flex items-center justify-center mb-6">
                         <IconLock class="w-7 h-7" />
                     </div>
                     <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Souveraineté</h3>

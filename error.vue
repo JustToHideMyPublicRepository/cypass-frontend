@@ -3,7 +3,7 @@
     <!-- Background Decor Elements -->
     <div class="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
       <div
-        class="absolute top-[10%] left-[10%] w-64 h-64 bg-cypass-blue/10 rounded-full blur-3xl opacity-60 animate-pulse-slow">
+        class="absolute top-[10%] left-[10%] w-64 h-64 bg-primary/10 rounded-full blur-3xl opacity-60 animate-pulse-slow">
       </div>
       <div
         class="absolute bottom-[10%] right-[10%] w-96 h-96 bg-cypass-green/10 rounded-full blur-3xl opacity-60 animate-pulse-slower">
@@ -49,7 +49,7 @@
         <button @click="handleClearError"
           class="group relative px-8 py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden">
           <div
-            class="absolute inset-0 bg-gradient-to-r from-cypass-blue to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            class="absolute inset-0 bg-gradient-to-r from-primary to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           </div>
           <span class="relative flex items-center gap-2">
             <IconArrowLeft class="w-5 h-5 transition-transform group-hover:-translate-x-1" />
