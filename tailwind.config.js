@@ -37,9 +37,9 @@ module.exports = {
       },
 
       fontFamily: {
-        heading: ['Montserrat', 'Roboto', 'sans-serif'],
-        body: ['Inter', '"Open Sans"', 'sans-serif'],
-        code: ['"JetBrains+Mono"', '"Fira+Code"', 'sans-serif']
+        heading: ['Montserrat', 'Roboto'],
+        body: ['Inter', '"Open Sans"'],
+        code: ['"JetBrains+Mono"', '"Fira+Code"']
       },
       keyframes: {
         'fade-up': {

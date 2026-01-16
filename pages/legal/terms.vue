@@ -1,5 +1,5 @@
 <template>
-  <div class="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 min-h-screen bg-slate-50 dark:bg-slate-950 font-sans">
+  <div class="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-slate-50 dark:bg-slate-950">
 
     <!-- Background Decor -->
     <div class="absolute inset-0 overflow-hidden pointer-events-none -z-10">

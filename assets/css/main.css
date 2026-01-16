@@ -4,21 +4,12 @@
 
 @layer base {
   :root {
-    /* Color Palette - Premium Slate & Electric Blue/Green */
-    --color-bg-primary: #ffffff;
-    --color-bg-secondary: #f8fafc;
-    --color-text-primary: #0f172a;
-    --color-text-secondary: #475569;
-    --color-border: #e2e8f0;
-    --color-accent-blue: #2563eb;
-    --color-accent-green: #10b981;
-    /* ok */
     --color-primary: #0072FF;
     --color-secondary: #02358B;
     --color-text: #323C4F;
     --color-danger: #ff0000;
     --color-dangerAct: #dc2626;
-    --color-background: #CCE3FF;
+    --color-background: #f8fafc;
     --color-WtB: #FFFFFF;
     --color-WtBAct: #f1f5f9;
     --color-BtW: #000000;
@@ -30,18 +21,12 @@
   }
 
   .dark {
-    --color-bg-primary: #020617;
-    --color-bg-secondary: #0f172a;
-    --color-text-primary: #ffffff;
-    --color-text-secondary: #94a3b8;
-    --color-border: #1e293b;
-    /* ok */
     --color-primary: #FFEA00;
     --color-secondary: #c2b30c;
     --color-text: #d8d6d6;
     --color-danger: #ef4444;
     --color-dangerAct: #b91c1c;
-    --color-background: #051cac;
+    --color-background: #020617;
     --color-WtB: #111827;
     --color-WtBAct: #1F2937;
     --color-BtW: #FFFFFF;
@@ -53,8 +38,7 @@
   }
 
   body {
-    @apply bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] transition-colors duration-300 antialiased leading-relaxed overflow-x-hidden;
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    @apply bg-[var(--color-background)] text-[var(--color-text)] transition-colors duration-300 antialiased leading-relaxed overflow-x-hidden;
   }
 
   /* Custom Scrollbar */

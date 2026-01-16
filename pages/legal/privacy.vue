@@ -1,5 +1,5 @@
 <template>
-  <div class="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 min-h-screen bg-slate-50 dark:bg-slate-950 font-sans">
+  <div class="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-slate-50 dark:bg-slate-950">
 
     <!-- Background Decor -->
     <div class="absolute inset-0 overflow-hidden pointer-events-none -z-10">
@@ -135,7 +135,7 @@
             <div class="prose prose-slate dark:prose-invert max-w-none">
               <p>
                 La sécurité est au cœur de CYPASS. Nous appliquons les standards les plus stricts : chiffrement de bout
-                en bout (AES-256), HSM pour la gestion des clés, et audits de sécurité réguliers par l'ANSSI.
+                en bout (AES-256), HSM pour la gestion des clés, et audits de sécurité réguliers par l'ASIN.
               </p>
             </div>
           </section>

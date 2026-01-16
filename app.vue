@@ -16,7 +16,7 @@ useHead({
     {
       key: 'description',
       name: 'description',
-      content: 'L\'infrastructure de confiance protégeant l\'écosystème numérique du Bénin. Certification, Veille & Audit en temps réel.'
+      content: 'L\'infrastructure de confiance protégeant l\'écosystème numérique du Bénin. Certification, veille & audit en temps réel.'
     },
 
     // Open Graph (Facebook, LinkedIn)

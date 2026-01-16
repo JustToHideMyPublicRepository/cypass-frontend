@@ -146,7 +146,7 @@ const featureServices = [
         subtitle: 'Réseau d\'alerte communautaire.',
         description: 'Une plateforme collaborative pour le signalement et la gestion des incidents de cybersécurité. Protégez votre communauté en temps réel.',
         badge: 'Veille & Alerte',
-        theme: 'green', // Using green as secondary theme
+        theme: 'green',
         status: 'available',
         cta: 'Rejoindre le réseau',
         features: [

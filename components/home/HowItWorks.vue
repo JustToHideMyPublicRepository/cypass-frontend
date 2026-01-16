@@ -21,8 +21,8 @@
           Pipeline de Sécurité
         </span>
         <h2 class="text-3xl md:text-5xl font-bold text-slate-900 dark:text-white mb-6">
-          Protection en <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-cyan-400">Temps
-            Réel</span>
+          Protection en <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-cyan-400">
+            temps réel</span>
         </h2>
         <p class="text-lg text-slate-600 dark:text-slate-400">
           Une approche systémique pour sécuriser, certifier et surveiller votre infrastructure critique.

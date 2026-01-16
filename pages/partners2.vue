@@ -1,5 +1,5 @@
 <template>
-  <div class="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 min-h-screen bg-slate-50 dark:bg-slate-950 font-sans">
+  <div class="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-slate-50 dark:bg-slate-950">
     <!-- Background Decor -->
     <div class="absolute inset-0 overflow-hidden pointer-events-none -z-10">
       <div
@@ -62,7 +62,7 @@
         <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" @click="isModalOpen = false"></div>
 
         <!-- Modal Panel -->
-        <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="flex items-center justify-center p-4">
           <div
             class="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-2xl shadow-2xl p-8 border border-slate-200 dark:border-slate-800 animate-fade-up"
             @click.stop>

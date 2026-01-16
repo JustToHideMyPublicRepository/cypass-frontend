@@ -1,5 +1,5 @@
 <template>
-  <div class="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 min-h-screen bg-slate-50 dark:bg-slate-950 font-sans">
+  <div class="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-slate-50 dark:bg-slate-950">
     <div class="max-w-5xl mx-auto">
 
       <div class="grid lg:grid-cols-2 gap-16 items-center">
@@ -15,7 +15,7 @@
           </p>
 
           <div class="flex gap-4 pt-4">
-            <button class="btn btn-primary">Lire la Documentation</button>
+            <NuxtLink to="/support#developers" class="btn btn-primary">Lire la Documentation</NuxtLink>
             <button class="btn btn-secondary">Obtenir une Clé API</button>
           </div>
         </div>

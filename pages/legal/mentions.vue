@@ -1,5 +1,5 @@
 <template>
-  <div class="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 min-h-screen bg-slate-50 dark:bg-slate-950 font-sans">
+  <div class="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-slate-50 dark:bg-slate-950">
 
     <!-- Background Decor -->
     <div class="absolute inset-0 overflow-hidden pointer-events-none -z-10">
@@ -98,7 +98,7 @@
                 </li>
                 <li class="flex items-center gap-3 text-sm text-slate-600 dark:text-slate-400">
                   <IconCertificate class="w-5 h-5 text-cypass-blue" />
-                  Certifié Tier III et ISO 27001
+                  Conforme au norme ISO 18004
                 </li>
               </ul>
             </div>

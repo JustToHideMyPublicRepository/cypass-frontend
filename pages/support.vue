@@ -1,5 +1,5 @@
 <template>
-  <div class="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 min-h-screen bg-slate-50 dark:bg-slate-950 font-sans">
+  <div class="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-slate-50 dark:bg-slate-950">
 
     <!-- Background Decor -->
     <div class="absolute inset-0 overflow-hidden pointer-events-none -z-10">
@@ -15,7 +15,7 @@
 
       <!-- Header -->
       <div class="text-center space-y-8 animate-fade-up">
-        <span class="badge badge-blue">Support 24/7</span>
+        <span class="badge badge-blue">Centre d'Aide</span>
         <h1 class="text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
           Comment pouvons-nous <span class="text-cypass-blue">vous aider ?</span>
         </h1>
@@ -27,7 +27,7 @@
           </div>
           <input type="text"
             class="block w-full pl-12 pr-4 py-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-lg shadow-slate-200/50 dark:shadow-black/50 focus:ring-2 focus:ring-cypass-blue focus:border-cypass-blue dark:text-white transition-all outline-none"
-            placeholder="Rechercher une réponse (ex: Comment réinitialiser mon mot de passe...)">
+            placeholder="Rechercher une réponse, une API ou un guide...">
         </div>
       </div>
 
@@ -63,9 +63,76 @@
         <NuxtLink to="/faq" class="btn btn-primary px-8">Voir la FAQ</NuxtLink>
       </div>
 
+      <!-- Developers Section (Merged from Docs) -->
+      <div id="developers" class="space-y-8 animate-fade-up pt-12 border-t border-slate-200 dark:border-slate-800">
+        <div class="text-center space-y-4">
+          <span class="badge badge-purple">Espace Développeurs</span>
+          <h2 class="text-3xl font-bold text-slate-900 dark:text-white">Intégration & API</h2>
+          <p class="text-slate-500 dark:text-slate-400 max-w-2xl mx-auto">
+            Accédez à nos ressources techniques pour intégrer CYPASS dans vos applications.
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6">
+          <div
+            class="group relative overflow-hidden glass-panel p-8 rounded-3xl border border-slate-200/50 dark:border-slate-800/50 hover:border-cypass-blue/50 dark:hover:border-cypass-blue/50 transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-cypass-blue/10 cursor-pointer">
+            <div
+              class="w-12 h-12 rounded-2xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-cypass-blue mb-6 group-hover:scale-110 transition-transform duration-300">
+              <IconRocket class="w-6 h-6" />
+            </div>
+            <h3
+              class="text-xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-cypass-blue transition-colors">
+              Démarrage Rapide</h3>
+            <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-4">
+              Intégrez le bouton "Se connecter avec CYPASS" en moins de 10 minutes.
+            </p>
+            <span class="flex items-center text-sm font-bold text-cypass-blue">
+              Voir le tutoriel
+              <IconArrowRight class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+            </span>
+          </div>
+
+          <div
+            class="group relative overflow-hidden glass-panel p-8 rounded-3xl border border-slate-200/50 dark:border-slate-800/50 hover:border-purple-500/50 dark:hover:border-purple-500/50 transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-purple-500/10 cursor-pointer">
+            <div
+              class="w-12 h-12 rounded-2xl bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center text-purple-600 mb-6 group-hover:scale-110 transition-transform duration-300">
+              <IconApi class="w-6 h-6" />
+            </div>
+            <h3
+              class="text-xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-purple-500 transition-colors">
+              Référence API</h3>
+            <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-4">
+              Documentation complète des endpoints REST, schémas de données et codes d'erreur.
+            </p>
+            <span class="flex items-center text-sm font-bold text-purple-500">
+              Explorer l'API
+              <IconArrowRight class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+            </span>
+          </div>
+
+          <div
+            class="group relative overflow-hidden glass-panel p-8 rounded-3xl border border-slate-200/50 dark:border-slate-800/50 hover:border-green-500/50 dark:hover:border-green-500/50 transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-green-500/10 cursor-pointer">
+            <div
+              class="w-12 h-12 rounded-2xl bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-600 mb-6 group-hover:scale-110 transition-transform duration-300">
+              <IconCode class="w-6 h-6" />
+            </div>
+            <h3
+              class="text-xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-green-500 transition-colors">
+              SDKs & Outils</h3>
+            <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-4">
+              Bibliothèques officielles pour Node.js, Python, PHP, Java et Go.
+            </p>
+            <span class="flex items-center text-sm font-bold text-green-500">
+              Télécharger
+              <IconArrowRight class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+            </span>
+          </div>
+        </div>
+      </div>
+
       <!-- Contact Section -->
       <div class="text-center space-y-6 pt-12 border-t border-slate-200 dark:border-slate-800">
-        <p class="text-slate-500 dark:text-slate-400">Vous ne trouvez pas ce que vous cherchez ?</p>
+        <p class="text-slate-500 dark:text-slate-400">Besoin d'une assistance personnalisée ?</p>
         <div class="flex flex-wrap justify-center gap-4">
           <a href="mailto:support@cypass.bj" class="btn btn-ghost border border-slate-200 dark:border-slate-800">
             <IconMail class="w-5 h-5 mr-2" /> Envoyer un email
@@ -81,7 +148,18 @@
 </template>
 
 <script setup lang="ts">
-import { IconSearch, IconArrowRight, IconUserCircle, IconShieldLock, IconTerminal2, IconMail, IconPhone } from '@tabler/icons-vue'
+import {
+  IconSearch,
+  IconArrowRight,
+  IconUserCircle,
+  IconShieldLock,
+  IconTerminal2,
+  IconMail,
+  IconPhone,
+  IconRocket,
+  IconApi,
+  IconCode
+} from '@tabler/icons-vue'
 
 definePageMeta({
   layout: 'guest'
@@ -102,7 +180,7 @@ const categories = [
   },
   {
     title: 'Développeurs & API',
-    desc: 'Intégration technique, documentation API et gestion des clés d\'accès.',
+    desc: 'Accédez directement à la section technique ci-dessous.',
     icon: IconTerminal2,
     color: 'bg-purple-500'
   }

@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="min-h-screen flex items-center justify-center p-4 bg-slate-50 dark:bg-slate-950 font-sans overflow-hidden relative">
-
+  <div class="min-h-screen flex items-center justify-center p-4 overflow-hidden relative">
     <!-- Background Decor Elements -->
     <div class="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
       <div
