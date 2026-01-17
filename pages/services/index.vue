@@ -176,7 +176,7 @@ import {
 const stats = [
   { value: '100%', label: 'Conformité' },
   { value: '24/7', label: 'Surveillance' },
-  { value: 'AES-256', label: 'Chiffrement' },
+  { value: 'SHA-256', label: 'Chiffrement' },
   { value: 'ISO', label: 'Certifié' },
 ]
 

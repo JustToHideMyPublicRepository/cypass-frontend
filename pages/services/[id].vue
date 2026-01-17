@@ -82,8 +82,9 @@
                 class="flex items-center justify-between py-3 border-b border-slate-100 dark:border-slate-800/50">
                 <span class="text-slate-500 dark:text-slate-400 font-medium">{{ spec.label }}</span>
                 <span
-                  class="text-slate-900 dark:text-white font-mono text-sm bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">{{
-                  spec.value }}</span>
+                  class="text-slate-900 dark:text-white font-code text-sm bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">
+                  {{ spec.value }}
+                </span>
               </div>
             </div>
           </div>
@@ -97,12 +98,10 @@
               :class="service.theme === 'blue' ? 'from-blue-500 to-indigo-500' : 'from-green-500 to-emerald-500'">
             </div>
 
-            <!-- DYNAMIC VISUALS BASED ON ID -->
-
             <!-- VISUAL: SECUSCAN (Terminal) -->
             <UiAppFrame v-if="serviceId === 'secuscan'" type="terminal" title="root@secuscan:~" :glass="true"
               class="shadow-2xl shadow-blue-500/10 transform rotate-y-[-5deg] rotate-x-[5deg] transition-transform hover:rotate-0 duration-700">
-              <div class="h-[500px] p-6 text-sm font-mono space-y-4 overflow-hidden bg-slate-900/95 text-slate-300">
+              <div class="h-[500px] p-6 text-sm font-code space-y-4 overflow-hidden bg-slate-900/95 text-slate-300">
                 <div class="flex gap-2">
                   <span class="text-green-500">➜</span>
                   <span class="text-blue-400">~</span>
@@ -148,7 +147,7 @@
                 <!-- Header -->
                 <div
                   class="p-4 border-b border-slate-800 flex justify-between items-center bg-slate-900/80 backdrop-blur-md z-10">
-                  <div class="flex items-center gap-2 text-green-500 font-mono text-xs">
+                  <div class="flex items-center gap-2 text-green-500 font-code text-xs">
                     <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
                     LIVE MONITORING
                   </div>
@@ -384,7 +383,7 @@ const servicesData: Record<string, Service> = {
     ],
     techSpecs: [
       { label: 'Signature Stds', value: 'PAdES / XAdES' },
-      { label: 'Encryption', value: 'RSA-4096 / AES-256' },
+      { label: 'Encryption', value: 'RSA-4096 / SHA-256' },
       { label: 'Hébergement', value: 'Souverain (BJ)' }
     ]
   },

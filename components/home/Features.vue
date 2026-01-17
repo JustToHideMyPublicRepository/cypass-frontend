@@ -94,7 +94,7 @@
                   <p class="text-xs text-slate-500 mb-6 uppercase tracking-wider">République du Bénin
                   </p>
                   <div
-                    class="text-[10px] font-mono text-slate-400 border-t border-slate-100 dark:border-slate-800 pt-4">
+                    class="text-[10px] font-code text-slate-400 border-t border-slate-100 dark:border-slate-800 pt-4">
                     SHA-256: 8f3a...29b1
                   </div>
                 </div>
@@ -147,7 +147,7 @@
           <!-- SecuScan Visual -->
           <UiAppFrame v-else-if="service.id === 'secuscan'" type="terminal" title="root@secuscan:~" :glass="true"
             class="transform transition-transform duration-500 hover:scale-[1.02] hover:rotate-1">
-            <div class="h-[350px] p-4 text-xs font-mono space-y-2 overflow-hidden bg-slate-900/90 text-slate-300">
+            <div class="h-[350px] p-4 text-xs font-code space-y-2 overflow-hidden bg-slate-900/90 text-slate-300">
               <div class="flex gap-2">
                 <span class="text-green-500">➜</span>
                 <span class="text-blue-400">~</span>
@@ -209,7 +209,7 @@
                   <div class="flex-1 min-w-0">
                     <div class="text-xs font-bold text-slate-700 dark:text-slate-200 truncate">CONFIDENTIEL_RAPPORT_{{
                       2023 + i
-                      }}.pdf</div>
+                    }}.pdf</div>
                     <div class="text-[10px] text-slate-400">Detecté sur Pastebin • Il y a {{ i * 5 }} min</div>
                   </div>
                   <div v-if="i === 1" class="px-2 py-0.5 bg-red-500 text-white text-[10px] font-bold rounded">KRITIK

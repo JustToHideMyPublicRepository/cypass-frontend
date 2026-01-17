@@ -66,7 +66,7 @@
                      <td class="px-6 py-4 text-slate-600 dark:text-slate-400">
                         {{ doc.date }}
                      </td>
-                     <td class="px-6 py-4 font-mono text-xs text-slate-500">
+                     <td class="px-6 py-4 font-code text-xs text-slate-500">
                         {{ doc.hash }}
                      </td>
                      <td class="px-6 py-4">

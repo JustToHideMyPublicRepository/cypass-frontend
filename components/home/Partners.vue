@@ -6,10 +6,10 @@
         Confiance & Institutionnels</p>
       <div
         class="flex flex-wrap justify-center items-center gap-12 md:gap-20 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
-        <span class="text-2xl font-bold font-serif text-slate-800 dark:text-slate-200">GOUV.BJ</span>
-        <span class="text-2xl font-black text-slate-800 dark:text-slate-200 tracking-tighter">ASIN</span>
-        <span
-          class="text-xl font-bold font-mono text-slate-800 dark:text-slate-200 border-2 border-current px-2 py-1">ASIN</span>
+        <span class="text-2xl font-bold font-serif text-slate-800 dark:text-slate-200">
+          GOUV.BJ
+        </span>
+        <span class="text-xl font-bold text-slate-800 dark:text-slate-200 border-2 border-current px-2 py-1">ASIN</span>
         <div class="flex items-center gap-2 text-slate-800 dark:text-slate-200">
           <IconShield class="w-8 h-8" />
           <span class="text-xl font-bold">BJ-CSIRT</span>

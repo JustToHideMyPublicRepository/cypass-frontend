@@ -18,7 +18,7 @@
 
       <!-- Browser Address Bar -->
       <div v-if="type === 'browser' && url"
-        class="flex-grow rounded-md bg-white/10 px-3 py-1 text-center text-xs font-mono tracking-wide text-slate-300">
+        class="flex-grow rounded-md bg-white/10 px-3 py-1 text-center text-xs font-code tracking-wide text-slate-300">
         {{ url }}
       </div>
 
@@ -75,13 +75,13 @@ const props = withDefaults(defineProps<Props>(), {
 
 // Auto-determine background based on type if not glass
 const bodyBgClass = computed(() => {
-  if (props.glass) return '' // handled by glass-panel class in wrapper
+  if (props.glass) return ''
 
   switch (props.type) {
     case 'browser':
       return 'bg-slate-50 dark:bg-slate-900'
     case 'terminal':
-      return 'bg-slate-900 text-slate-300 font-mono text-xs'
+      return 'bg-slate-900 text-slate-300 font-code text-xs'
     case 'card':
     default:
       return 'bg-white dark:bg-slate-900'

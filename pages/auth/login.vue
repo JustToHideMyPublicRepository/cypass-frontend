@@ -35,7 +35,7 @@
       <div class="mt-6 pt-6 border-t border-slate-100 dark:border-slate-700 text-center">
         <p class="text-sm text-slate-500 dark:text-slate-400">
           Pas encore de compte ?
-          <a href="#" class="text-primary font-medium hover:underline">Demander un accès</a>
+          <NuxtLink to="/auth/register" class="text-primary font-medium hover:underline">Demander un accès</NuxtLink>
         </p>
       </div>
 

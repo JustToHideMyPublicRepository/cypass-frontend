@@ -1,6 +1,6 @@
 <template>
 	<section class="py-24 relative">
-		<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+		<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
 			<div class="text-center mb-16 animate-fade-up">
 				<h2 class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-4">Questions Fréquentes</h2>

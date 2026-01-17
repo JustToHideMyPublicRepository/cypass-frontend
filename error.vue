@@ -70,7 +70,7 @@
       <div v-if="error?.message && error?.statusCode !== 404"
         class="mt-12 pt-6 border-t border-slate-200 dark:border-slate-800 animate-fade-up"
         style="animation-delay: 600ms">
-        <p class="text-xs font-mono text-slate-400">
+        <p class="text-xs text-slate-400">
           Code: {{ error?.statusCode }} • ID: {{ formatDate(new Date()) }}
         </p>
       </div>

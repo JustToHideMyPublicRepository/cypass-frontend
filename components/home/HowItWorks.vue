@@ -183,11 +183,11 @@
               <!-- Overlay UI -->
               <div class="relative z-10 h-full flex flex-col justify-between">
                 <div class="flex justify-between items-start">
-                  <div class="text-[10px] font-mono text-green-400">SYSTEM_ACTIVE</div>
+                  <div class="text-[10px] font-code text-green-400">SYSTEM_ACTIVE</div>
                   <IconWifi class="w-4 h-4 text-green-500 animate-pulse" />
                 </div>
 
-                <div class="space-y-2 font-mono text-[10px]">
+                <div class="space-y-2 font-code text-[10px]">
                   <div class="flex justify-between text-slate-400">
                     <span>UPTIME</span>
                     <span class="text-white">99.99%</span>
