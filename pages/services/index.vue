@@ -164,59 +164,14 @@
 </template>
 
 <script setup lang="ts">
-import {
-  IconScanEye,
-  IconCertificate,
-  IconRadar2,
-  IconArrowRight,
-  IconEye,
-  IconCheck
-} from '@tabler/icons-vue'
+import { IconCheck, IconArrowRight } from '@tabler/icons-vue'
+import { services } from '@/data/services'
 
 const stats = [
   { value: '100%', label: 'Conformité' },
   { value: '24/7', label: 'Surveillance' },
   { value: 'SHA-256', label: 'Chiffrement' },
   { value: 'ISO', label: 'Certifié' },
-]
-
-const services = [
-  {
-    id: 'docsentry',
-    title: 'DocSentry',
-    description: 'Infrastructure PKI souveraine pour la signature électronique qualifiée et l\'archivage à valeur probante.',
-    icon: IconCertificate,
-    status: 'available',
-    theme: 'green',
-    specs: ['Signature eIDAS', 'Archivage Légal', 'Preuve Numérique', 'API Rest']
-  },
-  {
-    id: 'vigitech',
-    title: 'VigiTech',
-    description: 'Centre Opérationnel de Sécurité (SOC) communautaire pour la détection et la réponse aux incidents.',
-    icon: IconRadar2,
-    status: 'available',
-    theme: 'green',
-    specs: ['Menaces TR', 'SIEM Cloud', 'Threat Intel', 'Support 24/7']
-  },
-  {
-    id: 'secuscan',
-    title: 'SecuScan',
-    description: 'Scanner de vulnérabilités automatisé identifiant proactivement les failles de votre périmètre.',
-    icon: IconScanEye,
-    status: 'coming_soon',
-    theme: 'blue',
-    specs: ['Audit OWASP', 'Rapports PDF', 'Scan Continu', 'Score CVSS']
-  },
-  {
-    id: 'leakmonitor',
-    title: 'LeakMonitor',
-    description: 'Surveillance du darkweb et des fuites de données pour protéger votre marque et vos documents.',
-    icon: IconEye,
-    status: 'coming_soon',
-    theme: 'blue',
-    specs: ['Veille Darkweb', 'Alerte Fuite', 'Protection Marque', 'OSINT']
-  }
 ]
 
 definePageMeta({

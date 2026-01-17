@@ -24,7 +24,7 @@
 
       <!-- Terminal/Card Title -->
       <div v-else-if="title" class="flex-grow text-xs font-bold text-slate-400"
-        :class="{ 'font-mono': type === 'terminal', 'uppercase tracking-wider': type === 'card' }">
+        :class="{ 'font-code': type === 'terminal', 'uppercase tracking-wider': type === 'card' }">
         {{ title }}
       </div>
 

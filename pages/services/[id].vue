@@ -151,7 +151,7 @@
                     <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
                     LIVE MONITORING
                   </div>
-                  <div class="text-xs text-slate-500 font-mono">LATENCY: 12ms</div>
+                  <div class="text-xs text-slate-500 font-code">LATENCY: 12ms</div>
                 </div>
 
                 <!-- Central Radar -->
@@ -177,13 +177,13 @@
                   <div class="text-[10px] text-slate-500 uppercase tracking-widest mb-2">Recent Alerts</div>
                   <div
                     class="flex items-center gap-3 text-xs text-slate-300 p-2 bg-slate-900 rounded border border-slate-800 border-l-2 border-l-red-500">
-                    <span class="font-mono text-red-400">CRITICAL</span>
+                    <span class="font-code text-red-400">CRITICAL</span>
                     <span>DDoS Attempt detected on Port 443</span>
                     <span class="ml-auto text-slate-600">Now</span>
                   </div>
                   <div
                     class="flex items-center gap-3 text-xs text-slate-300 p-2 bg-slate-900 rounded border border-slate-800 border-l-2 border-l-yellow-500">
-                    <span class="font-mono text-yellow-400">WARN</span>
+                    <span class="font-code text-yellow-400">WARN</span>
                     <span>Unusual login location (IP: 45.2.X.X)</span>
                     <span class="ml-auto text-slate-600">2m ago</span>
                   </div>
@@ -222,11 +222,11 @@
                     </div>
                     <div class="flex justify-between">
                       <span class="text-slate-500">Algorithme</span>
-                      <span class="font-mono text-slate-800 dark:text-slate-200">SHA-256 / RSA-4096</span>
+                      <span class="font-code text-slate-800 dark:text-slate-200">SHA-256 / RSA-4096</span>
                     </div>
                     <div class="flex justify-between">
                       <span class="text-slate-500">Empreinte</span>
-                      <span class="font-mono text-slate-800 dark:text-slate-200 truncate w-32">8f3a...29b1</span>
+                      <span class="font-code text-slate-800 dark:text-slate-200 truncate w-32">8f3a...29b1</span>
                     </div>
                   </div>
                 </div>
@@ -290,7 +290,6 @@
                 </div>
               </div>
             </UiAppFrame>
-
           </div>
         </div>
 
@@ -313,119 +312,13 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
 import { computed } from 'vue'
-import {
-  IconScanEye,
-  IconCertificate,
-  IconRadar2,
-  IconEye,
-  IconCheck,
-  IconArrowRight,
-  IconFileText,
-  IconClock,
-  IconShieldCheck
-} from '@tabler/icons-vue'
+import { IconCheck, IconArrowRight, IconFileText, IconClock, IconShieldCheck } from '@tabler/icons-vue'
+import { services } from '@/data/services'
 
 const route = useRoute()
 const serviceId = route.params.id
 
-// Types
-interface Benefit {
-  title: string
-  qty: string
-}
-
-interface TechSpec {
-  label: string
-  value: string
-}
-
-interface Service {
-  title: string
-  fullDescription: string
-  icon: any
-  status: 'available' | 'coming_soon'
-  theme: 'blue' | 'green'
-  benefits: Benefit[]
-  techSpecs: TechSpec[]
-}
-
-// Mock Data Database
-const servicesData: Record<string, Service> = {
-  'secuscan': {
-    title: 'SecuScan',
-    fullDescription: 'Une solution complète d\'analyse de vulnérabilité qui scanne en continu vos applications, API et infrastructures cloud pour détecter les failles de sécurité avant les attaquants, garantissant une posture de sécurité robuste.',
-    icon: IconScanEye,
-    status: 'coming_soon',
-    theme: 'blue',
-    benefits: [
-      { title: 'OWASP Top 10', qty: 'Couverture complète des failles web courantes.' },
-      { title: 'Rapports PDF', qty: 'Exports détaillés pour les équipes techniques et la direction.' },
-      { title: 'Zéro Faux Positif', qty: 'Algorithme de validation par IA pour réduire le bruit.' },
-      { title: 'Scan Continu', qty: 'Surveillance 24/7 de votre périmètre exposé.' }
-    ],
-    techSpecs: [
-      { label: 'Scanner Engine', value: 'Nmap / OpenVAS Custom' },
-      { label: 'Compliance', value: 'ISO 27001' },
-      { label: 'Deployment', value: 'SaaS / On-Premise' }
-    ]
-  },
-  'docsentry': {
-    title: 'DocSentry',
-    fullDescription: 'Infrastructure PKI souveraine permettant la signature électronique qualifiée, le cachetage serveur et l\'archivage à valeur probante de tous vos documents administratifs, en totale conformité avec les réglementations en vigueur.',
-    icon: IconCertificate,
-    status: 'available',
-    theme: 'green',
-    benefits: [
-      { title: 'eIDAS Ready', qty: 'Conforme aux règlements européens et béninois.' },
-      { title: 'API REST', qty: 'Intégration facile dans vos workflows existants.' },
-      { title: 'Preuve Légale', qty: 'Validité juridique garantie devant les tribunaux.' },
-      { title: 'Archivage Long', qty: 'Conservation sécurisée jusqu\'à 10 ans.' }
-    ],
-    techSpecs: [
-      { label: 'Signature Stds', value: 'PAdES / XAdES' },
-      { label: 'Encryption', value: 'RSA-4096 / SHA-256' },
-      { label: 'Hébergement', value: 'Souverain (BJ)' }
-    ]
-  },
-  'vigitech': {
-    title: 'VigiTech',
-    fullDescription: 'Votre tour de contrôle cybernétique. Un réseau d\'alerte communautaire et un SOC (Security Operations Center) qui permet de signaler anonymement les incidents et de recevoir des notifications ciblées en temps réel.',
-    icon: IconRadar2,
-    status: 'available',
-    theme: 'green',
-    benefits: [
-      { title: 'Alerte Communautaire', qty: 'Signalement collaboratif des menaces.' },
-      { title: 'Veille Ciblée', qty: 'Notifications filtrées par secteur d\'activité.' },
-      { title: 'Réponse Rapide', qty: 'Validation et diffusion immédiate des alertes.' },
-      { title: 'SOC Virtuel', qty: 'Dashboards de surveillance unifiés.' }
-    ],
-    techSpecs: [
-      { label: 'Protocoles', value: 'STIX / TAXII' },
-      { label: 'SLA Réponse', value: '< 15 min' },
-      { label: 'Support', value: '24/7' }
-    ]
-  },
-  'leakmonitor': {
-    title: 'LeakMonitor',
-    fullDescription: 'Système avancé de surveillance des fuites de données et de traçabilité des accès aux documents sensibles. Détecte les comportements anormaux, surveille le darkweb et prévient les exfiltrations de données critiques.',
-    icon: IconEye,
-    status: 'coming_soon',
-    theme: 'blue',
-    benefits: [
-      { title: 'DLP Avancé', qty: 'Data Loss Prevention pour vos documents critiques.' },
-      { title: 'Audit Log', qty: 'Journalisation inviolable de tous les accès.' },
-      { title: 'Alertes Temps Réel', qty: 'Soyez notifié dès qu\'une anomalie est détectée.' },
-      { title: 'Veille Darkweb', qty: 'Scan proactif des bases de données fuitées.' }
-    ],
-    techSpecs: [
-      { label: 'Detection', value: 'AI / Pattern Matching' },
-      { label: 'Sources', value: 'Darkweb / Pastebin' },
-      { label: 'Notification', value: 'Email / SMS / Webhook' }
-    ]
-  }
-}
-
-const service = computed<Service | undefined>(() => servicesData[serviceId as string])
+const service = computed(() => services.find(s => s.id === serviceId))
 
 definePageMeta({
   layout: 'guest'

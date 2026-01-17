@@ -42,10 +42,10 @@
 
         <!-- Metric Floating Elements -->
         <div class="absolute -top-10 left-10 hidden lg:block animate-float-slow">
-          <div class="font-mono text-[10px] text-blue-500/40">RX: 104.2 Mb/s</div>
+          <div class="font-code text-[10px] text-blue-500/40">RX: 104.2 Mb/s</div>
         </div>
         <div class="absolute -bottom-10 right-10 hidden lg:block animate-float-delayed">
-          <div class="font-mono text-[10px] text-green-500/40">SYS: STABLE</div>
+          <div class="font-code text-[10px] text-green-500/40">SYS: STABLE</div>
         </div>
 
 
@@ -124,7 +124,7 @@
                     <div class="absolute inset-0 border-l border-r border-yellow-600/20 left-1/2 -translate-x-1/2">
                     </div>
                   </div>
-                  <div class="font-mono text-[10px] text-slate-400 tracking-tighter">
+                  <div class="font-code text-[10px] text-slate-400 tracking-tighter">
                     KEY: 8F3A-29B1-XXXX<br>
                     EXP: 12/2028
                   </div>
@@ -136,7 +136,7 @@
                     <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
                     <span class="text-[10px] font-bold text-green-600 uppercase">Vérifié</span>
                   </div>
-                  <div class="text-[10px] text-slate-400 font-mono">
+                  <div class="text-[10px] text-slate-400 font-code">
                     #CS-8812
                   </div>
                 </div>

@@ -135,7 +135,7 @@
                   <IconRadar2 class="w-6 h-6 text-green-500 animate-spin-slow" />
                   <div>
                     <div class="text-xs font-bold text-white uppercase tracking-wider">Menace Détectée</div>
-                    <div class="text-[10px] text-slate-400 font-mono">IP: 192.168.X.X • Port Scan Multiples</div>
+                    <div class="text-[10px] text-slate-400 font-code">IP: 192.168.X.X • Port Scan Multiples</div>
                   </div>
                   <button
                     class="ml-auto px-3 py-1 bg-red-500/20 text-red-400 text-xs font-bold rounded hover:bg-red-500/30">Bloquer</button>
@@ -243,73 +243,8 @@
 </template>
 
 <script setup lang="ts">
-import {
-  IconCheck,
-  IconArrowRight,
-  IconBug,
-  IconFileReport,
-  IconCertificate,
-  IconShieldCheck,
-  IconRadar2,
-  IconEye
-} from '@tabler/icons-vue'
+import { IconCheck, IconArrowRight, IconFileReport, IconCertificate, IconRadar2 } from '@tabler/icons-vue'
+import { services } from '@/data/services'
 
-const featureServices = [
-  {
-    id: 'docsentry',
-    title: 'DocSentry',
-    subtitle: 'La preuve par la cryptographie.',
-    description: 'Infrastructure de clés publiques (PKI) souveraine pour la signature et la vérification de documents officiels. Garantissez l\'authenticité de chaque acte administratif.',
-    badge: 'Confiance Numérique',
-    theme: 'green',
-    status: 'available',
-    cta: 'Découvrir l\'API de signature',
-    list: ['Conformité eIDAS & RGS', 'Timestamping qualifié', 'Archivage à valeur probante']
-  },
-  {
-    id: 'vigitech',
-    title: 'VigiTech',
-    subtitle: 'Réseau d\'alerte communautaire.',
-    description: 'Une plateforme collaborative pour le signalement et la gestion des incidents de cybersécurité. Protégez votre communauté en temps réel.',
-    badge: 'Veille & Alerte',
-    theme: 'green',
-    status: 'available',
-    cta: 'Rejoindre le réseau',
-    features: [
-      { title: 'Signalement Anonyme', desc: 'Déclarez les incidents en toute sécurité.', icon: IconRadar2 },
-      { title: 'Alertes Ciblées', desc: 'Recevez uniquement ce qui vous concerne.', icon: IconShieldCheck }
-    ],
-    image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=800'
-  },
-  {
-    id: 'secuscan',
-    title: 'SecuScan',
-    subtitle: 'Anticipez les menaces avant l\'impact.',
-    description: 'Notre moteur d\'analyse de nouvelle génération scanne en continu votre périmètre exposé. Détection des failles OWASP Top 10.',
-    badge: 'Audit Automatisé',
-    theme: 'blue',
-    status: 'coming_soon',
-    cta: 'En savoir plus',
-    features: [
-      { title: 'Scan Pentest', desc: 'Simulation d\'attaques réelles', icon: IconBug },
-      { title: 'Rapports PDF', desc: 'Détaillés et actionnables', icon: IconFileReport }
-    ],
-    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800'
-  },
-  {
-    id: 'leakmonitor',
-    title: 'LeakMonitor',
-    subtitle: 'Surveillance des données sensibles.',
-    description: 'Détection proactive des fuites de données et traçabilité des accès aux documents sensibles au sein de votre organisation.',
-    badge: 'Protection des Données',
-    theme: 'blue',
-    status: 'coming_soon',
-    cta: 'En savoir plus',
-    features: [
-      { title: 'Traçabilité', desc: 'Journalisation immuable des accès.', icon: IconEye },
-      { title: 'Alertes Fuites', desc: 'Notification immédiate en cas d\'exfiltration.', icon: IconBug } // Using generic icon
-    ],
-    image: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&q=80&w=800'
-  }
-]
+const featureServices = computed(() => services)
 </script>
