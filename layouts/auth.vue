@@ -19,7 +19,7 @@
           <div class="mb-10 animate-fade-down">
             <NuxtLink to="/" class="inline-flex items-center gap-3 group">
               <div
-                class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-cypass-green flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform overflow-hidden p-0.5">
+                class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform overflow-hidden p-0.5">
                 <div class="w-full h-full bg-white rounded-[10px] flex items-center justify-center">
                   <img src="/img/logo.png" alt="Cypass Logo" class="w-full h-full object-contain" />
                 </div>

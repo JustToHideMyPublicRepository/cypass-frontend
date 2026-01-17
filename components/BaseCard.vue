@@ -1,7 +1,8 @@
 <template>
-  <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 transition-all hover:shadow-md">
+  <div
+    class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 transition-all hover:shadow-md">
     <div v-if="$slots.header || title" class="mb-4 flex items-center justify-between">
-      <h3 v-if="title" class="text-lg font-semibold text-cypass-dark dark:text-white">{{ title }}</h3>
+      <h3 v-if="title" class="text-lg font-semibold text-BtW">{{ title }}</h3>
       <slot name="header"></slot>
     </div>
     <div class="text-slate-600 dark:text-slate-300">

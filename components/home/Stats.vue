@@ -30,7 +30,7 @@ const stats = [
   {
     value: '5M+',
     label: 'Transactions/Mois',
-    colorClass: 'text-cypass-green'
+    colorClass: 'text-secondary'
   },
   {
     value: '<100ms',

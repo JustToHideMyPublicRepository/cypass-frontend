@@ -11,7 +11,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
       <div class="animate-fade-up">
         <span
-          class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 dark:bg-slate-800 text-cypass-green text-xs font-bold uppercase tracking-wider mb-6 border border-blue-100 dark:border-slate-700">
+          class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 dark:bg-slate-800 text-secondary text-xs font-bold uppercase tracking-wider mb-6 border border-blue-100 dark:border-slate-700">
           Qui sommes-nous ?
         </span>
         <h1 class="text-5xl md:text-7xl font-black text-slate-900 dark:text-white tracking-tight mb-6 leading-tight">

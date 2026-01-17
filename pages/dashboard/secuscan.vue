@@ -13,9 +13,9 @@
                <div class="flex-1 relative">
                   <IconWorld class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                   <input type="url" placeholder="https://example.gouv.bj"
-                     class="w-full pl-10 pr-4 py-3 rounded-lg border-none bg-white/10 text-white placeholder-slate-400 focus:ring-2 focus:ring-cypass-green" />
+                     class="w-full pl-10 pr-4 py-3 rounded-lg border-none bg-white/10 text-white placeholder-slate-400 focus:ring-2 focus:ring-secondary" />
                </div>
-               <BaseButton variant="primary" class="bg-cypass-green hover:bg-emerald-600 px-6">
+               <BaseButton variant="primary" class="bg-secondary hover:bg-emerald-600 px-6">
                   Scanner
                </BaseButton>
             </div>
@@ -35,7 +35,7 @@
                   <span class="absolute bottom-2 text-xs text-slate-500">Score</span>
                   <svg class="absolute inset-0 w-full h-full -rotate-90">
                      <circle cx="80" cy="80" r="76" stroke="currentColor" stroke-width="8" fill="none"
-                        class="text-cypass-green" stroke-dasharray="477" stroke-dashoffset="71"></circle>
+                        class="text-secondary" stroke-dasharray="477" stroke-dashoffset="71"></circle>
                   </svg>
                </div>
                <div class="mt-6 w-full space-y-3">

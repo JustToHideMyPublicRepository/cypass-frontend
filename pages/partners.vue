@@ -6,7 +6,7 @@
         <span class="badge badge-green">Écosystème</span>
         <h1 class="text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
           Nos Partenaires <br />
-          <span class="text-cypass-green">Institutionnels</span>
+          <span class="text-secondary">Institutionnels</span>
         </h1>
         <p class="text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
           Nous collaborons avec les acteurs clés de la sécurité et du numérique au Bénin pour garantir un service de

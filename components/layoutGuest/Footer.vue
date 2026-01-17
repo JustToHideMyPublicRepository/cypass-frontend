@@ -28,7 +28,7 @@
           <ul class="space-y-3">
             <li v-for="link in group.links" :key="link.label">
               <NuxtLink :to="link.path"
-                class="text-slate-500 dark:text-slate-400 hover:text-primary dark:hover:text-cypass-green text-sm transition-colors flex items-center gap-2 group">
+                class="text-slate-500 dark:text-slate-400 hover:text-primary dark:hover:text-secondary text-sm transition-colors flex items-center gap-2 group">
                 <span
                   class="w-1.5 h-1.5 rounded-full bg-slate-300 dark:bg-slate-700 group-hover:bg-primary transition-colors"></span>
                 {{ link.label }}

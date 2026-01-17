@@ -7,7 +7,7 @@
     ]">
       <div class="h-16 flex items-center px-6 border-b border-slate-800">
         <div
-          class="w-8 h-8 rounded bg-gradient-to-br from-primary to-cypass-green flex items-center justify-center text-white font-bold mr-2">
+          class="w-8 h-8 rounded bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-bold mr-2">
           C</div>
         <span class="text-xl font-bold">CYPASS</span>
       </div>

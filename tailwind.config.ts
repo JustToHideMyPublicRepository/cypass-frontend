@@ -31,9 +31,7 @@ export default {
 
         cypass: {
           blue: '#1e3a8a', // Deep security blue
-          green: '#059669', // Certified green
-          dark: '#0f172a',
-          light: '#f8fafc',
+          green: '#059669',
         }
       },
 

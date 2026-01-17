@@ -81,10 +81,10 @@
             <div class="p-4 min-h-[350px] flex items-center justify-center">
               <div
                 class="relative z-10 w-full max-w-sm bg-white dark:bg-slate-900 shadow-2xl rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800">
-                <div class="h-2 bg-gradient-to-r from-cypass-green to-emerald-400"></div>
+                <div class="h-2 bg-gradient-to-r from-secondary to-emerald-400"></div>
                 <div class="p-8 text-center">
                   <div
-                    class="w-20 h-20 mx-auto bg-green-50 dark:bg-green-900/20 rounded-full flex items-center justify-center text-cypass-green mb-6 relative">
+                    class="w-20 h-20 mx-auto bg-green-50 dark:bg-green-900/20 rounded-full flex items-center justify-center text-secondary mb-6 relative">
                     <IconCertificate class="w-10 h-10 relative z-10" />
                     <div class="absolute inset-0 rounded-full border-2 border-green-500 animate-ping opacity-20">
                     </div>

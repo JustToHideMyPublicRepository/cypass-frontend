@@ -53,7 +53,7 @@
             class="pt-10 flex flex-wrap items-center justify-center lg:justify-start gap-6 text-sm font-semibold text-slate-500 dark:text-slate-400">
             <div
               class="flex items-center gap-2 bg-white/50 dark:bg-slate-800/50 px-4 py-2 rounded-lg backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50">
-              <IconShieldCheck class="w-5 h-5 text-cypass-green" />
+              <IconShieldCheck class="w-5 h-5 text-secondary" />
               <span>Données Chiffrées</span>
             </div>
             <div

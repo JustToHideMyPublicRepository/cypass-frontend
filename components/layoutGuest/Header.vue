@@ -15,7 +15,7 @@
               </div>
             </div>
             <span
-              class="text-xl font-bold text-slate-900 dark:text-white tracking-tight group-hover:text-primary dark:group-hover:text-cypass-green transition-colors">
+              class="text-xl font-bold text-slate-900 dark:text-white tracking-tight group-hover:text-primary dark:group-hover:text-secondary transition-colors">
               CYPASS
             </span>
           </NuxtLink>
