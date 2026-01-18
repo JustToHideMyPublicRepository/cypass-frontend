@@ -29,8 +29,7 @@
             & Sécurité
           </h1>
 
-          <p
-            class="text-xl md:text-2xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-light">
+          <p class="text-xl md:text-2xl text-hsa max-w-2xl mx-auto lg:mx-0 leading-relaxed font-light">
             L'infrastructure de confiance protégeant l'écosystème numérique du Bénin.
             <span class="font-semibold text-primary">Certification, Veille & Audit</span>
             en temps réel.
@@ -51,14 +50,12 @@
           </div>
 
           <div
-            class="pt-10 flex flex-wrap items-center justify-center lg:justify-start gap-6 text-sm font-semibold text-slate-500 dark:text-slate-400">
-            <div
-              class="flex items-center gap-2 bg-white/50 dark:bg-slate-800/50 px-4 py-2 rounded-lg backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50">
+            class="pt-10 flex flex-wrap items-center justify-center lg:justify-start gap-6 text-sm font-semibold text-hsa">
+            <div class="flex items-center gap-2 bg-WtB/50 px-4 py-2 rounded-lg backdrop-blur-sm border border-ash/50">
               <IconShieldCheck class="w-5 h-5 text-primary" />
               <span>Données Chiffrées</span>
             </div>
-            <div
-              class="flex items-center gap-2 bg-white/50 dark:bg-slate-800/50 px-4 py-2 rounded-lg backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50">
+            <div class="flex items-center gap-2 bg-WtB/50 px-4 py-2 rounded-lg backdrop-blur-sm border border-ash/50">
               <IconServer class="w-5 h-5 text-primary" />
               <span>Hébergé au Bénin</span>
             </div>
@@ -78,7 +75,7 @@
             padding="p-0"
             class="transform rotate-y-12 rotate-x-6 hover:rotate-0 transition-all duration-700 ease-out z-20 group">
             <!-- Dashboard Content -->
-            <div class="bg-slate-50 dark:bg-slate-900 p-6 rounded-b-2xl h-[450px] relative overflow-hidden">
+            <div class="bg-bgClr p-6 rounded-b-2xl h-[450px] relative overflow-hidden">
 
               <!-- Decorative Grid -->
               <div
@@ -96,10 +93,10 @@
                   <div class="text-4xl font-bold mb-4 flex items-center gap-3">
                     Faible
                     <span
-                      class="px-2 py-1 bg-green-500/20 text-green-300 text-xs rounded-full border border-green-500/30">Stable</span>
+                      class="px-2 py-1 bg-success/20 text-success border border-success/30 text-xs rounded-full">Stable</span>
                   </div>
                   <div class="w-full bg-black/20 rounded-full h-2 mb-2">
-                    <div class="bg-green-400 h-2 rounded-full w-[15%] shadow-[0_0_10px_rgba(74,222,128,0.5)]">
+                    <div class="bg-success h-2 rounded-full w-[15%] shadow-[0_0_10px_rgba(74,222,128,0.5)]">
                     </div>
                   </div>
                   <p class="text-xs text-blue-200">Dernière mise à jour: à l'instant</p>
@@ -107,40 +104,37 @@
 
                 <!-- Mini Cards -->
                 <div
-                  class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col items-center justify-center gap-2 hover:scale-105 transition-transform duration-300">
-                  <div
-                    class="w-12 h-12 rounded-xl bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center text-orange-600">
-                    <IconAlertTriangle class="w-6 h-6" />
+                  class="bg-WtB p-4 rounded-2xl shadow-sm border border-ash flex flex-col items-center justify-center gap-2 hover:scale-105 transition-transform duration-300">
+                  <div class="w-12 h-12 rounded-xl bg-warning/20 flex items-center justify-center">
+                    <IconAlertTriangle class="w-6 h-6 text-warning" />
                   </div>
-                  <span class="text-2xl font-bold text-slate-800 dark:text-white">0</span>
-                  <span class="text-xs text-slate-500">Alertes Critiques</span>
+                  <span class="text-2xl font-bold text-BtW">0</span>
+                  <span class="text-xs text-hsa">Alertes Critiques</span>
                 </div>
 
                 <div
-                  class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col items-center justify-center gap-2 hover:scale-105 transition-transform duration-300">
-                  <div
-                    class="w-12 h-12 rounded-xl bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-600">
-                    <IconCheck class="w-6 h-6" />
+                  class="bg-WtB p-4 rounded-2xl shadow-sm border border-ash flex flex-col items-center justify-center gap-2 hover:scale-105 transition-transform duration-300">
+                  <div class="w-12 h-12 rounded-xl bg-success/20 flex items-center justify-center">
+                    <IconCheck class="w-6 h-6 text-success" />
                   </div>
-                  <span class="text-2xl font-bold text-slate-800 dark:text-white">100%</span>
-                  <span class="text-xs text-slate-500">Conformité</span>
+                  <span class="text-2xl font-bold text-BtW">100%</span>
+                  <span class="text-xs text-hsa">Conformité</span>
                 </div>
 
                 <!-- List Item -->
                 <div
-                  class="col-span-2 bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 flex items-center justify-between">
+                  class="col-span-2 bg-WtB p-4 rounded-2xl shadow-sm border border-ash flex items-center justify-between">
                   <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center">
-                      <IconFileAnalytics class="w-5 h-5 text-slate-500" />
+                    <div class="w-10 h-10 rounded-full bg-ash flex items-center justify-center">
+                      <IconFileAnalytics class="w-5 h-5 text-hsa" />
                     </div>
                     <div>
-                      <div class="text-sm font-bold text-slate-900 dark:text-white">Rapport Audit
+                      <div class="text-sm font-bold text-BtW">Rapport Audit
                         #882</div>
-                      <div class="text-xs text-slate-500">Généré le 14 Janv.</div>
+                      <div class="text-xs text-hsa">Généré le 14 Janv.</div>
                     </div>
                   </div>
-                  <button
-                    class="px-3 py-1 text-xs font-bold text-blue-600 bg-blue-50 dark:bg-blue-900/20 rounded-lg">Voir</button>
+                  <button class="px-3 py-1 text-xs font-bold text-primary bg-ash rounded-lg">Voir</button>
                 </div>
               </div>
             </div>
@@ -150,16 +144,14 @@
           <div
             class="absolute bottom-10 -left-10 glass-panel p-4 rounded-xl flex items-center gap-3 z-30 animate-float-delayed">
             <div class="relative">
-              <span
-                class="absolute top-0 right-0 w-3 h-3 bg-green-500 border-2 border-white dark:border-slate-800 rounded-full z-10"></span>
-              <div
-                class="w-12 h-12 bg-slate-100 dark:bg-slate-800 rounded-lg flex items-center justify-center overflow-hidden">
+              <span class="absolute top-0 right-0 w-3 h-3 bg-success border-2 border-WtB rounded-full z-10"></span>
+              <div class="w-12 h-12 bg-ash rounded-lg flex items-center justify-center overflow-hidden">
                 <img src="https://ui-avatars.com/api/?name=Admin+User&background=0D8ABC&color=fff" alt="User" />
               </div>
             </div>
             <div>
-              <div class="text-sm font-bold text-slate-900 dark:text-white">Session Sécurisée</div>
-              <div class="text-xs text-slate-500">Chiffrement SHA-256</div>
+              <div class="text-sm font-bold text-BtW">Session Sécurisée</div>
+              <div class="text-xs text-hsa">Chiffrement SHA-256</div>
             </div>
           </div>
         </div>

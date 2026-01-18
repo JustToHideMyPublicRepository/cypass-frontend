@@ -19,6 +19,8 @@ export default {
         textClr: 'var(--color-text)',
         success: 'var(--color-success)',
         successAct: 'var(--color-successAct)',
+        warning: 'var(--color-warning)',
+        warningAct: 'var(--color-warningAct)',
         danger: 'var(--color-danger)',
         dangerAct: 'var(--color-dangerAct)',
         bgClr: 'var(--color-background)',
