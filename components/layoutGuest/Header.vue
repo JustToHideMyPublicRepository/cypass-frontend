@@ -14,8 +14,7 @@
                 <img src="/img/logo.png" alt="Logo CYPASS" class="w-full h-full object-contain" />
               </div>
             </div>
-            <span
-              class="text-xl font-bold text-slate-900 dark:text-white tracking-tight group-hover:text-primary dark:group-hover:text-secondary transition-colors">
+            <span class="text-xl font-bold tracking-tight group-hover:text-BtW transition-colors">
               CYPASS
             </span>
           </NuxtLink>
@@ -25,21 +24,20 @@
             <template v-for="item in NavHeader" :key="item.label">
               <!-- Standard Link -->
               <NuxtLink v-if="!item.isButton" :to="item.path"
-                class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-white transition-colors relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-primary after:left-0 after:-bottom-1 after:transition-all hover:after:w-full"
-                active-class="text-primary dark:text-white after:w-full">
+                class="text-sm font-medium hover:text-primary transition-colors relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-primary after:left-0 after:-bottom-1 after:transition-all hover:after:w-full"
+                active-class="text-primary after:w-full">
                 {{ item.label }}
               </NuxtLink>
 
               <!-- Button Link -->
               <NuxtLink v-else :to="item.path"
-                class="px-5 py-2.5 rounded-full bg-gradient-to-r from-primary to-secondary hover:from-blue-600 hover:to-blue-700 text-white text-sm font-bold shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40 hover:-translate-y-0.5 transition-all duration-300">
+                class="btn btn-primary w-full sm:w-auto text-lg px-5 py-2.5 shadow-BtW/40 rounded-full text-sm ">
                 {{ item.label }}
               </NuxtLink>
             </template>
 
             <!-- Theme Toggle -->
-            <button @click="toggleTheme"
-              class="ml-2 p-2 rounded-full text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 transition-colors"
+            <button @click="toggleTheme" class="ml-2 p-2 rounded-full hover:bg-ash transition-colors"
               aria-label="Toggle Theme">
               <IconSun v-if="colorMode.preference === 'dark'" class="w-5 h-5 text-yellow-400" />
               <IconMoon v-else class="w-5 h-5" />
@@ -48,8 +46,7 @@
 
           <!-- Mobile Controls -->
           <div class="md:hidden flex items-center gap-4">
-            <button @click="toggleTheme"
-              class="p-2 rounded-full text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 transition-colors">
+            <button @click="toggleTheme" class="p-2 rounded-full text-slate-500 hover:bg-ash transition-colors">
               <IconSun v-if="colorMode.preference === 'dark'" class="w-5 h-5 text-yellow-400" />
               <IconMoon v-else class="w-5 h-5" />
             </button>
@@ -106,7 +103,7 @@ const NavHeader = [
   { label: 'Services', path: '/services', isButton: false },
   { label: 'Support', path: '/support', isButton: false },
   { label: 'À propos', path: '/about' },
-  { label: 'Développeurs', path: '/developers' },
+  { label: 'Contact', path: '/contact' },
   { label: 'Connexion', path: '/auth/login', isButton: true },
 ]
 

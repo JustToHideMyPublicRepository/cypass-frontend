@@ -9,9 +9,8 @@
 
       <div class="space-y-4">
         <div>
-          <label for="email" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Email
-            Professionnel</label>
-          <input v-model="email" id="email" type="email" placeholder="nom@gouv.bj" required
+          <label for="email" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Email</label>
+          <input v-model="email" id="email" type="email" placeholder="nom@exemple.com" required
             class="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-slate-700 dark:text-white transition-shadow" />
         </div>
 
@@ -32,7 +31,13 @@
         </BaseButton>
       </div>
 
-      <div class="mt-6 pt-6 border-t border-slate-100 dark:border-slate-700 text-center">
+      <div class="relative flex py-2 items-center pt-6">
+        <div class="flex-grow border-t border-slate-200 dark:border-slate-800"></div>
+        <span class="flex-shrink-0 mx-4 text-xs font-bold text-slate-400 uppercase">Ou</span>
+        <div class="flex-grow border-t border-slate-200 dark:border-slate-800"></div>
+      </div>
+
+      <div class="mt-6 text-center">
         <p class="text-sm text-slate-500 dark:text-slate-400">
           Pas encore de compte ?
           <NuxtLink to="/auth/register" class="text-primary font-medium hover:underline">Demander un accès</NuxtLink>

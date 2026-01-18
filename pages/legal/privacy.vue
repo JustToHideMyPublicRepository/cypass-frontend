@@ -134,7 +134,7 @@
             <div class="prose prose-slate dark:prose-invert max-w-none">
               <p>
                 La sécurité est au cœur de CYPASS. Nous appliquons les standards les plus stricts : chiffrement de bout
-                en bout (AES-256), HSM pour la gestion des clés, et audits de sécurité réguliers par l'ASIN.
+                en bout (SHA-256), HSM pour la gestion des clés, et audits de sécurité réguliers par l'ASIN.
               </p>
             </div>
           </section>

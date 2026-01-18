@@ -4,7 +4,7 @@
 
       <div class="grid lg:grid-cols-2 gap-16 items-center">
         <div class="space-y-6 animate-fade-right">
-          <span class="badge badge-blue">Pour les Développeurs</span>
+          <span class="badge badge-primary">Pour les Développeurs</span>
           <h1 class="text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
             Intégrez la confiance <br />
             <span class="text-primary">dans vos apps</span>

@@ -16,7 +16,7 @@
     <!-- Hero Section -->
     <section class="pt-32 pb-20 px-4 sm:px-6 lg:px-8 text-center relative z-10">
       <div class="max-w-3xl mx-auto space-y-8 animate-fade-up">
-        <span class="badge badge-blue mb-4">Support & Documentation</span>
+        <span class="badge badge-primary mb-4">Support & Documentation</span>
         <h1 class="text-5xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tight leading-tight">
           Comment pouvons-nous <br /> <span class="text-primary">vous aider ?</span>
         </h1>

@@ -3,7 +3,8 @@
     <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-2">Créer un compte</h2>
     <p class="text-slate-500 dark:text-slate-400 mb-8">Rejoignez la plateforme de souveraineté numérique.</p>
 
-    <form @submit.prevent="handleRegister" class="space-y-5">
+    <form @submit.prevent="handleRegister"
+      class="bg-white dark:bg-slate-800 shadow-xl rounded-2xl p-8 border border-slate-100 dark:border-slate-700 space-y-5">
 
       <!-- Name Fields -->
       <div class="grid grid-cols-2 gap-4">
@@ -11,13 +12,13 @@
           <label class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wide">Prénom</label>
           <input type="text" v-model="form.firstName" required
             class="w-full px-4 py-3 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none text-slate-900 dark:text-white"
-            placeholder="John" />
+            placeholder="Prénom" />
         </div>
         <div class="space-y-1">
           <label class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wide">Nom</label>
           <input type="text" v-model="form.lastName" required
             class="w-full px-4 py-3 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none text-slate-900 dark:text-white"
-            placeholder="Doe" />
+            placeholder="Nom" />
         </div>
       </div>
 
@@ -29,7 +30,7 @@
           <IconMail class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
           <input type="email" v-model="form.email" required
             class="w-full pl-12 pr-4 py-3 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none text-slate-900 dark:text-white"
-            placeholder="john.doe@entreprise.bj" />
+            placeholder="nom@exemple.com" />
         </div>
       </div>
 

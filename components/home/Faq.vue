@@ -22,8 +22,8 @@
 							<span
 								class="font-bold text-slate-900 dark:text-white text-lg group-hover:text-primary transition-colors pr-8">{{
 									item.question }}</span>
-							<span class="p-2 rounded-full bg-slate-100 dark:bg-slate-800 transition-all duration-300 flex-shrink-0"
-								:class="{ 'rotate-180 bg-primary text-white': activeIndex === index, 'group-hover:bg-primary/20': activeIndex !== index }">
+							<span class="p-2 rounded-full bg-ashAct transition-all duration-300 flex-shrink-0"
+								:class="{ 'rotate-180': activeIndex === index, 'group-hover:bg-primary/20': activeIndex !== index }">
 								<IconChevronDown class="w-5 h-5" />
 							</span>
 						</button>

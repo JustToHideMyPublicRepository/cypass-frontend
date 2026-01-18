@@ -15,7 +15,7 @@
 
       <!-- Header -->
       <div class="text-center space-y-8 animate-fade-up">
-        <span class="badge badge-blue">Centre d'Aide</span>
+        <span class="badge badge-primary">Centre d'Aide</span>
         <h1 class="text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
           Comment pouvons-nous <span class="text-primary">vous aider ?</span>
         </h1>

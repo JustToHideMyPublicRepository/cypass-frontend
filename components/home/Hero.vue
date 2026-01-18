@@ -5,16 +5,17 @@
         <!-- Text -->
         <div class="text-center lg:text-left space-y-8 animate-fade-right">
           <div
-            class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card border border-BtW shadow-lg backdrop-blur-md">
+            class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-panel border border-BtW shadow-lg backdrop-blur-md">
             <span class="relative flex h-2 w-2">
               <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-              <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
             </span>
-            <span class="text-xs font-bold uppercase tracking-widest text-slate-800 dark:text-slate-200">
+            <span class="text-xs font-bold uppercase tracking-widest">
               Plateforme Nationale Unifiée</span>
           </div>
 
-          <h1 class="heading-hero leading-tight">
+          <h1
+            class="text-5xl md:text-7xl font-extrabold tracking-tight leading-[1.1] text-transparent bg-clip-text bg-gradient-to-r from-textClr via-hsa to-BtW leading-tight">
             Souveraineté <br />
             <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-cyan-400 relative">
               Numérique
@@ -31,8 +32,8 @@
           <p
             class="text-xl md:text-2xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-light">
             L'infrastructure de confiance protégeant l'écosystème numérique du Bénin.
-            <span class="font-semibold text-primary dark:text-blue-400">Certification, Veille &
-              Audit</span> en temps réel.
+            <span class="font-semibold text-primary">Certification, Veille & Audit</span>
+            en temps réel.
           </p>
 
           <div class="flex flex-col sm:flex-row gap-5 justify-center lg:justify-start pt-4">
@@ -147,7 +148,7 @@
 
           <!-- Floating Badge -->
           <div
-            class="absolute bottom-10 -left-10 glass-card p-4 rounded-xl flex items-center gap-3 z-30 animate-float-delayed">
+            class="absolute bottom-10 -left-10 glass-panel p-4 rounded-xl flex items-center gap-3 z-30 animate-float-delayed">
             <div class="relative">
               <span
                 class="absolute top-0 right-0 w-3 h-3 bg-green-500 border-2 border-white dark:border-slate-800 rounded-full z-10"></span>
@@ -158,7 +159,7 @@
             </div>
             <div>
               <div class="text-sm font-bold text-slate-900 dark:text-white">Session Sécurisée</div>
-              <div class="text-xs text-slate-500">Chiffrement AES-256</div>
+              <div class="text-xs text-slate-500">Chiffrement SHA-256</div>
             </div>
           </div>
         </div>

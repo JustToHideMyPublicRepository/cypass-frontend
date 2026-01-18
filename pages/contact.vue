@@ -13,7 +13,7 @@
     <div class="max-w-7xl mx-auto">
       <!-- Header -->
       <div class="text-center max-w-3xl mx-auto mb-20 animate-fade-up">
-        <span class="badge badge-blue mb-4">Contact & Support</span>
+        <span class="badge badge-primary mb-4">Contact & Support</span>
         <h1 class="text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight mb-6">
           Parlons de votre <span class="text-primary">sécurité</span>
         </h1>
@@ -41,8 +41,7 @@
                   <label class="text-sm font-bold text-slate-700 dark:text-slate-300">Nom complet</label>
                   <div class="relative">
                     <IconUser class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-                    <input v-model="form.name" type="text" placeholder="John Doe"
-                      class="w-full pl-12 pr-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none"
+                    <input v-model="form.name" type="text" placeholder="Prenom et Nom" class="input pl-12 pr-4"
                       required />
                   </div>
                 </div>
@@ -50,8 +49,7 @@
                   <label class="text-sm font-bold text-slate-700 dark:text-slate-300">Email professionnel</label>
                   <div class="relative">
                     <IconMail class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-                    <input v-model="form.email" type="email" placeholder="john@company.com"
-                      class="w-full pl-12 pr-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none"
+                    <input v-model="form.email" type="email" placeholder="nom@exemple.com" class="input pl-12 pr-4"
                       required />
                   </div>
                 </div>
@@ -61,9 +59,7 @@
                 <label class="text-sm font-bold text-slate-700 dark:text-slate-300">Sujet</label>
                 <div class="relative">
                   <IconMessage class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-                  <select v-model="form.subject"
-                    class="w-full pl-12 pr-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none appearance-none"
-                    required>
+                  <select v-model="form.subject" class=" input pl-12 pr-4 appearance-none" required>
                     <option value="" disabled selected>Sélectionnez un sujet</option>
                     <option value="commercial">Demande Commerciale / Devis</option>
                     <option value="technical">Support Technique</option>
@@ -78,12 +74,11 @@
               <div class="space-y-2">
                 <label class="text-sm font-bold text-slate-700 dark:text-slate-300">Message</label>
                 <textarea v-model="form.message" rows="5" placeholder="Détaillez votre demande..."
-                  class="w-full p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none resize-none"
-                  required></textarea>
+                  class="input resize-none" required></textarea>
               </div>
 
               <button type="submit" :disabled="loading"
-                class="w-full py-4 bg-primary hover:bg-primary-dark text-white rounded-xl font-bold text-lg shadow-lg shadow-primary/25 transition-all transform hover:-translate-y-1 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+                class="btn btn-primary w-full disabled:cursor-not-allowed flex items-center justify-center gap-2">
                 <span v-if="loading" class="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></span>
                 <span v-else>Envoyer le message</span>
                 <IconSend v-if="!loading" class="w-5 h-5" />

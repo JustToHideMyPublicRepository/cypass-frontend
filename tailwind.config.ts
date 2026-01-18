@@ -13,9 +13,12 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: 'var(--color-primary)',
+        primarys: 'var(--color-primary)',
+        primary: 'rgb(var(--color-primary) / <alpha-value>)',
         secondary: 'var(--color-secondary)',
         textClr: 'var(--color-text)',
+        success: 'var(--color-success)',
+        successAct: 'var(--color-successAct)',
         danger: 'var(--color-danger)',
         dangerAct: 'var(--color-dangerAct)',
         bgClr: 'var(--color-background)',
@@ -27,12 +30,6 @@ export default {
         ashAct: 'var(--color-ashAct)',
         hsa: 'var(--color-hsa)',
         hsaAct: 'var(--color-hsaAct)',
-
-
-        cypass: {
-          blue: '#1e3a8a', // Deep security blue
-          green: '#059669',
-        }
       },
 
       fontFamily: {

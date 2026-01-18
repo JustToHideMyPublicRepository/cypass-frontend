@@ -6,7 +6,7 @@
         class="absolute top-[10%] left-[10%] w-64 h-64 bg-primary/10 rounded-full blur-3xl opacity-60 animate-pulse-slow">
       </div>
       <div
-        class="absolute bottom-[10%] right-[10%] w-96 h-96 bg-cypass-green/10 rounded-full blur-3xl opacity-60 animate-pulse-slower">
+        class="absolute bottom-[10%] right-[10%] w-96 h-96 bg-secondary/10 rounded-full blur-3xl opacity-60 animate-pulse-slower">
       </div>
       <div class="absolute top-[40%] right-[30%] w-72 h-72 bg-purple-500/10 rounded-full blur-3xl opacity-40">
       </div>

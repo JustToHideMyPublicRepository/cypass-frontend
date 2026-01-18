@@ -10,9 +10,8 @@
         déjà confiance à CYPASS pour leur protection numérique.</p>
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
         <NuxtLink to="/auth/register" class="btn btn-primary px-8 py-3 text-lg">Créer un compte</NuxtLink>
-        <NuxtLink to="/contact"
-          class="btn btn-ghost text-white border border-white/20 hover:bg-white/10 px-8 py-3 text-lg">Nous
-          Contacter</NuxtLink>
+        <NuxtLink to="/contact" class="btn btn-ghost text-white px-8 py-3 text-lg">
+          Nous contacter</NuxtLink>
       </div>
     </div>
   </section>

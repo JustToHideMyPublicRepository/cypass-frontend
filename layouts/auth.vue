@@ -1,9 +1,7 @@
 <template>
-  <div class="h-screen w-full flex overflow-hidden bg-slate-50 dark:bg-slate-950">
-
+  <div class="h-screen w-full flex overflow-hidden">
     <!-- Left Column: Form Area (1/3) -->
-    <div
-      class="w-full lg:w-1/3 h-full z-10 bg-white dark:bg-slate-950 shadow-2xl lg:shadow-none relative flex flex-col">
+    <div class="w-full lg:w-1/3 h-full z-10 bg-WtBAct shadow-2xl lg:shadow-none relative flex flex-col">
 
       <!-- Theme Toggle (Fixed relative to column) -->
       <button @click="toggleTheme"
@@ -18,13 +16,12 @@
 
           <div class="mb-10 animate-fade-down">
             <NuxtLink to="/" class="inline-flex items-center gap-3 group">
-              <div
-                class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform overflow-hidden p-0.5">
+              <div class="w-10 h-10 rounded-xl p-0.5">
                 <div class="w-full h-full bg-white rounded-[10px] flex items-center justify-center">
                   <img src="/img/logo.png" alt="Cypass Logo" class="w-full h-full object-contain" />
                 </div>
               </div>
-              <span class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">CYPASS</span>
+              <span class="text-2xl font-black tracking-tight">CYPASS</span>
             </NuxtLink>
           </div>
 
@@ -32,7 +29,7 @@
             <slot />
           </div>
 
-          <div class="mt-8 text-center text-xs text-slate-400 dark:text-slate-500 animate-fade-in pb-4">
+          <div class="mt-8 text-center text-xs animate-fade-in pb-4">
             &copy; {{ new Date().getFullYear() }} CYPASS. Tous droits réservés.
           </div>
 
@@ -41,10 +38,8 @@
     </div>
 
     <!-- Right Column: Visual Area (2/3) -->
-    <div
-      class="hidden lg:block lg:w-2/3 relative overflow-hidden bg-slate-100 dark:bg-slate-900 transition-colors duration-500">
+    <div class="hidden lg:block lg:w-2/3 relative overflow-hidden transition-colors duration-500">
 
-      <!-- Dynamic Background (Adapts to Light/Dark) -->
       <div
         class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 z-10 pointer-events-none mix-blend-overlay">
       </div>
@@ -120,10 +115,10 @@ const slideInterval = ref<any>(null)
 
 const slides = [
   {
-    title: 'Souveraineté Numérique',
+    title: 'Souveraineté numérique',
     description: 'Accédez à une suite d\'outils sécurisés conçus pour protéger vos données et garantir votre indépendance technologique.',
     icon: IconShieldLock,
-    iconBg: 'bg-gradient-to-br from-blue-500 to-indigo-600',
+    iconBg: 'bg-gradient-to-br from-primary to-seconadry',
     blobColor1: 'bg-blue-500/30',
     blobColor2: 'bg-indigo-500/30'
   },

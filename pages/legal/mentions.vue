@@ -15,7 +15,7 @@
 
       <!-- Hero Header -->
       <div class="text-center space-y-4 animate-fade-up mb-16">
-        <span class="badge badge-blue">Légal</span>
+        <span class="badge badge-primary">Légal</span>
         <h1 class="text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
           Mentions <span class="text-primary">Légales</span>
         </h1>
