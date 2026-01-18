@@ -1,114 +1,170 @@
 <template>
-  <div class="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-slate-50 dark:bg-slate-950">
-    <!-- Background Decor -->
+  <div class="relative min-h-screen bg-slate-50 dark:bg-slate-950">
+    <!-- Hero Background -->
     <div class="absolute inset-0 overflow-hidden pointer-events-none -z-10">
       <div
-        class="absolute top-0 right-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03] dark:opacity-[0.05]">
+        class="absolute top-0 w-full h-[500px] bg-gradient-to-b from-white to-transparent dark:from-slate-900/50 dark:to-transparent">
       </div>
       <div
-        class="absolute top-[10%] right-[30%] w-[600px] h-[600px] bg-primary/5 rounded-full blur-[100px] animate-pulse-slow">
+        class="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] bg-primary/10 rounded-full blur-[120px] animate-pulse-slow">
+      </div>
+      <div
+        class="absolute top-[20%] left-[-10%] w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-[100px] animate-float">
       </div>
     </div>
 
-    <div class="max-w-4xl mx-auto space-y-16">
-
-      <div class="text-center space-y-4 animate-fade-up">
-        <span class="badge badge-blue">Aide & Support</span>
-        <h1 class="text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
-          Questions <span class="text-primary">Fréquentes</span>
+    <!-- Hero Section -->
+    <section class="pt-32 pb-20 px-4 sm:px-6 lg:px-8 text-center relative z-10">
+      <div class="max-w-3xl mx-auto space-y-8 animate-fade-up">
+        <span class="badge badge-blue mb-4">Support & Documentation</span>
+        <h1 class="text-5xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tight leading-tight">
+          Comment pouvons-nous <br /> <span class="text-primary">vous aider ?</span>
         </h1>
-        <p class="text-lg text-slate-600 dark:text-slate-400">
-          Tout ce que vous devez savoir pour utiliser CYPASS efficacement.
-        </p>
+
+        <!-- Search Bar -->
+        <div class="relative max-w-2xl mx-auto group">
+          <div
+            class="absolute inset-0 bg-primary/20 blur-xl rounded-2xl group-hover:bg-primary/30 transition-colors opacity-50">
+          </div>
+          <div
+            class="relative bg-white dark:bg-slate-900 rounded-2xl p-2 shadow-2xl border border-slate-200 dark:border-slate-800 flex items-center transition-transform transform group-hover:-translate-y-1">
+            <IconSearch class="w-6 h-6 text-slate-400 ml-4" />
+            <input v-model="searchQuery" type="text"
+              class="w-full bg-transparent border-none focus:ring-0 text-lg py-4 px-4 text-slate-900 dark:text-white placeholder-slate-400 font-medium"
+              placeholder="Rechercher une réponse (ex: mot de passe, API, sécurité)..." />
+            <div class="hidden sm:flex items-center gap-2 pr-4 text-xs text-slate-400 font-code">
+              <span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">CTRL</span>
+              <span>+</span>
+              <span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">K</span>
+            </div>
+          </div>
+        </div>
       </div>
+    </section>
 
-      <div class="space-y-6">
-        <div v-for="(category, catIndex) in faqCategories" :key="catIndex" class="animate-fade-up"
-          :style="{ animationDelay: `${catIndex * 100}ms` }">
-          <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-6 pl-2 border-l-4 border-primary">{{
-            category.title }}</h2>
+    <!-- Quick Topics Grid -->
+    <section class="px-4 sm:px-6 lg:px-8 pb-12">
+      <div class="max-w-6xl mx-auto">
+        <!-- FAQ List -->
+        <div class="max-w-3xl mx-auto space-y-12">
+          <div v-for="(category, catIndex) in filteredCategories" :key="catIndex" class="animate-fade-up"
+            :style="{ animationDelay: `${200 + catIndex * 100}ms` }">
+            <h2 class="flex items-center gap-3 text-2xl font-bold text-slate-900 dark:text-white mb-8">
+              <span class="w-8 h-1 bg-gradient-to-r from-primary to-transparent rounded-full"></span>
+              {{ category.title }}
+            </h2>
 
-          <div class="space-y-4">
-            <div v-for="(item, index) in category.items" :key="index"
-              class="glass-panel rounded-2xl overflow-hidden border border-slate-200/50 dark:border-slate-800/50 transition-all duration-300"
-              :class="{ 'shadow-lg shadow-primary/5': activeIndex === `${catIndex}-${index}` }">
+            <div class="space-y-4">
+              <div v-for="(item, index) in category.items" :key="index"
+                class="group bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden transition-all duration-300 hover:border-primary/50"
+                :class="{ 'shadow-lg ring-1 ring-primary/20': activeIndex === `${catIndex}-${index}` }">
 
-              <button @click="toggle(`${catIndex}-${index}`)"
-                class="w-full flex items-center justify-between p-6 text-left focus:outline-none">
-                <span class="font-bold text-slate-800 dark:text-slate-200 text-lg">{{ item.question }}</span>
-                <IconChevronDown class="w-5 h-5 text-slate-400 transition-transform duration-300"
-                  :class="{ 'rotate-180 text-primary': activeIndex === `${catIndex}-${index}` }" />
-              </button>
+                <button @click="toggle(`${catIndex}-${index}`)"
+                  class="w-full flex items-center justify-between p-6 text-left focus:outline-none">
+                  <span
+                    class="font-bold text-slate-800 dark:text-slate-200 text-lg pr-4 group-hover:text-primary transition-colors">{{
+                      item.question }}</span>
+                  <div
+                    class="w-8 h-8 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center transition-colors group-hover:bg-primary/10">
+                    <IconChevronDown class="w-5 h-5 text-slate-400 transition-transform duration-300"
+                      :class="{ 'rotate-180 text-primary': activeIndex === `${catIndex}-${index}` }" />
+                  </div>
+                </button>
 
-              <div v-show="activeIndex === `${catIndex}-${index}`"
-                class="px-6 pb-6 text-slate-600 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-800/50 pt-4">
-                {{ item.answer }}
+                <div v-show="activeIndex === `${catIndex}-${index}`"
+                  class="px-6 pb-8 text-slate-600 dark:text-slate-400 leading-relaxed max-w-none prose prose-slate dark:prose-invert">
+                  {{ item.answer }}
+
+                  <div
+                    class="mt-4 pt-4 border-t border-dashed border-slate-200 dark:border-slate-800 flex items-center gap-2 text-xs text-slate-400">
+                    <IconBulb class="w-4 h-4 text-yellow-500" />
+                    <span>Cela a-t-il répondu à votre question ?</span>
+                    <button class="hover:text-primary underline">Oui</button>
+                    <span>•</span>
+                    <button class="hover:text-primary underline">Non</button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+    </section>
 
-      <div class="text-center pt-12 animate-fade-up">
-        <p class="text-slate-500 dark:text-slate-400 mb-4">Vous ne trouvez pas votre réponse ?</p>
-        <NuxtLink to="/support" class="btn btn-primary">Contacter le support</NuxtLink>
+    <!-- Still need help? -->
+    <section class="py-20 text-center">
+      <div class="max-w-2xl mx-auto px-4 animate-fade-up">
+        <div
+          class="p-8 rounded-3xl bg-gradient-to-br from-slate-900 to-slate-800 text-white shadow-2xl relative overflow-hidden">
+          <!-- Decor -->
+          <div
+            class="absolute top-0 right-0 w-64 h-64 bg-primary rounded-full blur-[80px] opacity-20 transform translate-x-1/2 -translate-y-1/2">
+          </div>
+
+          <div class="relative z-10">
+            <h3 class="text-2xl font-bold mb-4">Vous ne trouvez pas votre réponse ?</h3>
+            <p class="text-slate-300 mb-8">Notre équipe de support est disponible 24/7 pour vous accompagner.</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+              <NuxtLink to="/support" class="btn bg-white text-slate-900 hover:bg-slate-100 border-none">
+                <IconMessageCircle class="w-5 h-5 mr-2" />
+                Ouvrir un ticket
+              </NuxtLink>
+              <a href="mailto:support@cypass.bj"
+                class="btn bg-transparent border border-white/20 text-white hover:bg-white/10">
+                Envoyer un email
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
-
-    </div>
+    </section>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { IconChevronDown } from '@tabler/icons-vue'
+import { ref, computed } from 'vue'
+import { IconChevronDown, IconSearch, IconMessageCircle, IconBulb } from '@tabler/icons-vue'
+import { faqCategories } from '@/data/faq'
 
 definePageMeta({
   layout: 'guest'
 })
 
 const activeIndex = ref<string | null>(null)
+const searchQuery = ref('')
+const selectedCategory = ref<string | null>(null)
+
+const selectCategory = (category: string) => {
+  selectedCategory.value = category
+  // Optional: Scroll to list
+}
+
+// Filter FAQ based on search and selection
+const filteredCategories = computed(() => {
+  let categories = faqCategories
+
+  // Filter by Category Selection
+  if (selectedCategory.value) {
+    categories = categories.filter(cat => cat.title.includes(selectedCategory.value!))
+  }
+
+  // Filter by Search
+  if (searchQuery.value) {
+    return categories.map(cat => ({
+      ...cat,
+      items: cat.items.filter(item =>
+        item.question.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+        item.answer.toLowerCase().includes(searchQuery.value.toLowerCase())
+      )
+    })).filter(cat => cat.items.length > 0)
+  }
+
+  return categories
+})
 
 const toggle = (id: string) => {
   activeIndex.value = activeIndex.value === id ? null : id
 }
-
-const faqCategories = [
-  {
-    title: 'Général',
-    items: [
-      {
-        question: 'Qu\'est-ce que CYPASS ?',
-        answer: 'CYPASS est l\'infrastructure nationale de confiance numérique du Bénin. Elle permet l\'authentification sécurisée, la signature électronique et l\'échange de documents certifiés pour les citoyens et les entreprises.'
-      },
-      {
-        question: 'Est-ce un service gratuit ?',
-        answer: 'L\'accès aux services de base (identité numérique, consultation) est gratuit pour tous les citoyens. Certains services avancés pour les entreprises peuvent être soumis à tarification.'
-      }
-    ]
-  },
-  {
-    title: 'Compte & Sécurité',
-    items: [
-      {
-        question: 'Comment créer un compte ?',
-        answer: 'Vous avez besoin de votre Numéro Personnel d\'Identification (NPI) figurant sur votre carte CIP ou biométrique. Cliquez sur "Connexion" puis suivez la procédure d\'enrôlement.'
-      },
-      {
-        question: 'J\'ai oublié mon mot de passe',
-        answer: 'Rendez-vous sur la page de connexion et cliquez sur "Mot de passe oublié". Un lien de réinitialisation vous sera envoyé par email ou SMS sécurisé.'
-      }
-    ]
-  },
-  {
-    title: 'Technique',
-    items: [
-      {
-        question: 'Comment intégrer CYPASS à mon application ?',
-        answer: 'Consultez notre documentation développeur pour accéder aux API OAuth2 et OpenID Connect. Des SDK sont disponibles pour les langages les plus courants.'
-      }
-    ]
-  }
-]
 
 useHead({
   title: 'Questions Fréquentes'

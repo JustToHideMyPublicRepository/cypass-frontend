@@ -23,13 +23,10 @@
               <div
                 class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
                 <div class="flex gap-2">
-                  <a href="#"
-                    class="p-2 bg-white/20 hover:bg-white/40 rounded-full backdrop-blur-sm transition-colors text-white">
-                    <IconBrandLinkedin class="w-4 h-4" />
-                  </a>
-                  <a href="#"
-                    class="p-2 bg-white/20 hover:bg-white/40 rounded-full backdrop-blur-sm transition-colors text-white">
-                    <IconBrandX class="w-4 h-4" />
+                  <a v-for="social in member.socials" :key="social.name" :href="social.url"
+                    class="p-2 bg-white/20 hover:bg-white/40 rounded-full backdrop-blur-sm transition-colors text-white"
+                    :title="social.name">
+                    <component :is="social.icon" class="w-4 h-4" />
                   </a>
                 </div>
               </div>
@@ -44,32 +41,85 @@
 </template>
 
 <script setup lang="ts">
-import { IconBrandLinkedin, IconBrandX } from '@tabler/icons-vue'
+import { IconBrandLinkedin, IconBrandX, IconBrandFacebook } from '@tabler/icons-vue'
 
 const team = [
   {
     name: "Charmaine YEBADOKPO",
     role: "Responsable Sécurité (CISO)",
     image: "https://cdn.jsdelivr.net/gh/progestionsoft/Files/_General/Images/Team/Charmaine.png",
-    delay: 0
+    delay: 0,
+    socials: [
+      {
+        name: 'LinkedIn',
+        icon: IconBrandLinkedin,
+        url: '#'
+      },
+      {
+        name: 'Facebook',
+        icon: IconBrandFacebook,
+        url: '#'
+      }
+    ]
   },
   {
     name: "Elisée ATONDE",
     role: "Responsable Technique (CTO)",
     image: "https://cdn.jsdelivr.net/gh/progestionsoft/Files/_General/Images/Team/Elysee.png",
-    delay: 100
+    delay: 100,
+    socials: [
+      {
+        name: 'LinkedIn',
+        icon: IconBrandLinkedin,
+        url: '#'
+      },
+      {
+        name: 'Facebook',
+        icon: IconBrandFacebook,
+        url: '#'
+      }
+    ]
   },
   {
     name: "Christelle AKIOLA",
     role: "Développeuse fronten-end",
     image: "https://cdn.jsdelivr.net/gh/progestionsoft/Files/_General/Images/Team/Christelle.png",
-    delay: 200
+    delay: 200,
+    socials: [
+      {
+        name: 'LinkedIn',
+        icon: IconBrandLinkedin,
+        url: '#'
+      },
+      {
+        name: 'Facebook',
+        icon: IconBrandFacebook,
+        url: '#'
+      }
+    ]
   },
   {
     name: "Steve Aster AFOVO",
     role: "Responsable Financier et Administratif (CFO)",
     image: "https://cdn.jsdelivr.net/gh/progestionsoft/Files/_General/Images/Team/SteveAster.png",
-    delay: 300
+    delay: 300,
+    socials: [
+      {
+        name: 'LinkedIn',
+        icon: IconBrandLinkedin,
+        url: '#'
+      },
+      {
+        name: 'Facebook',
+        icon: IconBrandFacebook,
+        url: '#'
+      },
+      {
+        name: 'X',
+        icon: IconBrandX,
+        url: '#'
+      }
+    ]
   }
 ]
 </script>

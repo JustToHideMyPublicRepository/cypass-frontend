@@ -134,6 +134,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { IconChevronDown, IconSearch, IconBook, IconCode, IconArticle } from '@tabler/icons-vue'
+import { popularFaqItems } from '@/data/faq'
 
 const activeIndex = ref<number | null>(0)
 
@@ -141,22 +142,5 @@ const toggle = (index: number) => {
 	activeIndex.value = activeIndex.value === index ? null : index
 }
 
-const faqItems = [
-	{
-		question: "CYPASS est-il obligatoire pour toutes les entreprises ?",
-		answer: "L'utilisation de CYPASS est fortement recommandée pour les Opérateurs de Services Essentiels (OSE) et les administrations publiques, conformément à la stratégie nationale de cybersécurité. Pour le secteur privé standard, c'est une option premium garantissant la conformité."
-	},
-	{
-		question: "Comment sont sécurisées les signatures numériques ?",
-		answer: "Nos signatures utilisent des certificats X.509 conformes aux normes eIDAS et RGS. Chaque signature est horodatée et scellée cryptographiquement, garantissant l'intégrité et la non-répudiation du document."
-	},
-	{
-		question: "Le scan de vulnérabilité impacte-t-il les performances ?",
-		answer: "Non. SecuScan est conçu pour effectuer des tests non-intrusifs. Nous adaptons la vitesse des requêtes pour ne jamais perturber la disponibilité de vos services en production."
-	},
-	{
-		question: "Où sont hébergées les données ?",
-		answer: "Toutes les données sont hébergées souverainement sur le territoire de la République du Bénin, dans des datacenters certifiés Tier III/IV, garantissant la conformité avec le Code du Numérique."
-	}
-]
+const faqItems = popularFaqItems
 </script>

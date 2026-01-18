@@ -168,13 +168,5 @@
 </template>
 
 <script setup lang="ts">
-import {
-  IconShieldCheck,
-  IconServer,
-  IconArrowRight,
-  IconShieldLock,
-  IconAlertTriangle,
-  IconCheck,
-  IconFileAnalytics
-} from '@tabler/icons-vue'
+import { IconShieldCheck, IconServer, IconArrowRight, IconShieldLock, IconAlertTriangle, IconCheck, IconFileAnalytics } from '@tabler/icons-vue'
 </script>
