@@ -109,4 +109,8 @@ const faqCategories = [
     ]
   }
 ]
+
+useHead({
+  title: 'Questions Fréquentes'
+})
 </script>

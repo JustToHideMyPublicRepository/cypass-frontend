@@ -147,18 +147,7 @@
 </template>
 
 <script setup lang="ts">
-import {
-  IconSearch,
-  IconArrowRight,
-  IconUserCircle,
-  IconShieldLock,
-  IconTerminal2,
-  IconMail,
-  IconPhone,
-  IconRocket,
-  IconApi,
-  IconCode
-} from '@tabler/icons-vue'
+import { IconSearch, IconArrowRight, IconUserCircle, IconShieldLock, IconTerminal2, IconMail, IconPhone, IconRocket, IconApi, IconCode } from '@tabler/icons-vue'
 
 definePageMeta({
   layout: 'guest'
@@ -184,4 +173,8 @@ const categories = [
     color: 'bg-purple-500'
   }
 ]
+
+useHead({
+  title: 'Centre d\'aide'
+})
 </script>

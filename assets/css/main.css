@@ -187,6 +187,6 @@
 
   /* Gradient utilities */
   .bg-gradient-premium {
-    @apply bg-gradient-to-br from-slate-50 to-white dark:from-slate-950 dark:to-slate-900;
+    @apply bg-gradient-to-br from-[var(--color-background)] to-[var(--color-WtB)];
   }
 }

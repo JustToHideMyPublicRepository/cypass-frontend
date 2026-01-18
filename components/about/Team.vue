@@ -44,7 +44,7 @@
 </template>
 
 <script setup lang="ts">
-import { IconArrowRight, IconBrandLinkedin, IconBrandX } from '@tabler/icons-vue'
+import { IconBrandLinkedin, IconBrandX } from '@tabler/icons-vue'
 
 const team = [
   {

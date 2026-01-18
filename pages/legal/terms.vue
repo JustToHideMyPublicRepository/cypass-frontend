@@ -12,7 +12,6 @@
     </div>
 
     <div class="max-w-7xl mx-auto">
-
       <!-- Hero Header -->
       <div class="text-center space-y-4 animate-fade-up mb-16">
         <span class="badge badge-purple">Règlement</span>
@@ -110,9 +109,7 @@
               </p>
             </div>
           </section>
-
         </div>
-
       </div>
 
     </div>
@@ -130,4 +127,8 @@ const toc = [
   { id: 'responsibility', label: '3. Responsabilités' },
   { id: 'modification', label: '4. Modification' },
 ]
+
+useHead({
+  title: 'Conditions Générales d\'Utilisation'
+})
 </script>

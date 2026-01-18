@@ -45,4 +45,8 @@
 definePageMeta({
   layout: 'guest'
 })
+
+useHead({
+  title: 'Développeurs'
+})
 </script>

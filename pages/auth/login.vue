@@ -77,4 +77,8 @@ const handleLogin = async () => {
 
   loading.value = false
 }
+
+useHead({
+  title: 'Connexion'
+})
 </script>

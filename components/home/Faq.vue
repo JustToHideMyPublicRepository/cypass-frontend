@@ -56,7 +56,6 @@
 							<!-- Knowledge Base Content -->
 							<div class="p-6 overflow-hidden relative flex-1">
 								<div class="space-y-6">
-
 									<!-- Quick Links Grid -->
 									<div class="grid grid-cols-2 gap-3">
 										<div
@@ -108,15 +107,14 @@
 											</div>
 										</div>
 									</div>
-
 								</div>
 
 								<!-- Hover Effect Helper -->
 								<div
 									class="absolute bottom-6 left-6 right-6 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 rounded-lg flex items-center gap-3">
 									<div class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></div>
-									<span class="text-xs text-blue-700 dark:text-blue-300 font-medium">Service de support actif
-										24/7</span>
+									<span class="text-xs text-blue-700 dark:text-blue-300 font-medium">
+										Service de support actif 24/7</span>
 								</div>
 							</div>
 						</div>
@@ -129,7 +127,6 @@
 				<NuxtLink to="/support" class="text-primary font-bold hover:underline">Contacter le support dédié
 					&rarr;</NuxtLink>
 			</div>
-
 		</div>
 	</section>
 </template>

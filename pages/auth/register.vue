@@ -120,4 +120,8 @@ const handleRegister = async () => {
     // Add logic to handle registration (e.g., call auth store)
   }, 1500)
 }
+
+useHead({
+  title: 'Inscription'
+})
 </script>

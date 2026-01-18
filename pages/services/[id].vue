@@ -323,4 +323,8 @@ const service = computed(() => services.find(s => s.id === serviceId))
 definePageMeta({
   layout: 'guest'
 })
+
+useHead({
+  title: computed(() => service.value?.title || 'Service Details')
+})
 </script>

@@ -144,4 +144,8 @@ const partners = [
 definePageMeta({
   layout: 'guest'
 })
+
+useHead({
+  title: 'Partnenaires'
+})
 </script>

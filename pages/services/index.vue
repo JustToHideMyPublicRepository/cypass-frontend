@@ -177,6 +177,10 @@ const stats = [
 definePageMeta({
   layout: 'guest'
 })
+
+useHead({
+  title: 'Services'
+})
 </script>
 
 <style scoped>

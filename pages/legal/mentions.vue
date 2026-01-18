@@ -123,11 +123,8 @@
               </p>
             </div>
           </section>
-
         </div>
-
       </div>
-
     </div>
   </div>
 </template>
@@ -144,4 +141,8 @@ const toc = [
   { id: 'hosting', label: '2. Hébergement' },
   { id: 'ip', label: '3. Propriété Intellectuelle' },
 ]
+
+useHead({
+  title: 'Mentions Légales'
+})
 </script>

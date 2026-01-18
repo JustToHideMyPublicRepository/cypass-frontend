@@ -43,7 +43,6 @@
 
         <!-- Main Content -->
         <div class="lg:col-span-3 space-y-8 animate-fade-up" style="animation-delay: 100ms">
-
           <section id="collection"
             class="glass-panel p-8 md:p-10 rounded-3xl border border-slate-200/50 dark:border-slate-800/50">
             <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-3">
@@ -139,11 +138,8 @@
               </p>
             </div>
           </section>
-
         </div>
-
       </div>
-
     </div>
   </div>
 </template>
@@ -161,4 +157,8 @@ const toc = [
   { id: 'rights', label: '3. Vos Droits' },
   { id: 'security', label: '4. Sécurité' },
 ]
+
+useHead({
+  title: 'Politique de Confidentialité'
+})
 </script>

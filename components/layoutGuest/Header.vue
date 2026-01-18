@@ -97,12 +97,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
-import {
-  IconMenu2,
-  IconX,
-  IconSun,
-  IconMoon
-} from '@tabler/icons-vue'
+import { IconMenu2, IconX, IconSun, IconMoon } from '@tabler/icons-vue'
 
 const colorMode = useColorMode()
 

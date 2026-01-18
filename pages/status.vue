@@ -75,4 +75,8 @@ const components = [
   { name: 'Service de Notification', status: 'Opérationnel' },
   { name: 'Interface Web (Frontend)', status: 'Opérationnel' },
 ]
+
+useHead({
+  title: 'Statut de services'
+})
 </script>
