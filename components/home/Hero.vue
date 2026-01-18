@@ -11,13 +11,13 @@
               <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
             </span>
             <span class="text-xs font-bold uppercase tracking-widest">
-              Plateforme Nationale Unifiée</span>
+              Plateforme nationale unifiée</span>
           </div>
 
           <h1
             class="text-5xl md:text-7xl font-extrabold tracking-tight leading-[1.1] text-transparent bg-clip-text bg-gradient-to-r from-textClr via-hsa to-BtW leading-tight">
             Souveraineté <br />
-            <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-cyan-400 relative">
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-success relative">
               Numérique
               <svg class="absolute w-full h-3 -bottom-1 left-0 text-primary opacity-30" viewBox="0 0 200 9" fill="none"
                 xmlns="http://www.w3.org/2000/svg">
@@ -54,7 +54,7 @@
             class="pt-10 flex flex-wrap items-center justify-center lg:justify-start gap-6 text-sm font-semibold text-slate-500 dark:text-slate-400">
             <div
               class="flex items-center gap-2 bg-white/50 dark:bg-slate-800/50 px-4 py-2 rounded-lg backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50">
-              <IconShieldCheck class="w-5 h-5 text-secondary" />
+              <IconShieldCheck class="w-5 h-5 text-primary" />
               <span>Données Chiffrées</span>
             </div>
             <div

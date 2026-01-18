@@ -4,7 +4,8 @@
 
 @layer base {
   :root {
-    --color-primary: #0072FF;
+    /* --color-primary: #0072FF; */
+    --color-primary: 0 114 255;
     --color-secondary: #02358B;
     --color-text: #323C4F;
     --color-success: #4ade80;
@@ -23,7 +24,8 @@
   }
 
   .dark {
-    --color-primary: #FFEA00;
+    /* --color-primary: #FFEA00; */
+    --color-primary: 255 234 0;
     --color-secondary: #c2b30c;
     --color-text: #d8d6d6;
     --color-success: #15803d;
