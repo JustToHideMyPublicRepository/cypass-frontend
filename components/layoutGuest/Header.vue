@@ -31,7 +31,7 @@
 
               <!-- Button Link -->
               <NuxtLink v-else :to="item.path"
-                class="btn btn-primary w-full sm:w-auto text-lg px-5 py-2.5 shadow-BtW/40 rounded-full text-sm ">
+                class="btn btn-primary w-full sm:w-auto text-lg px-5 py-2.5 shadow-BtW/40 rounded-full text-sm">
                 {{ item.label }}
               </NuxtLink>
             </template>

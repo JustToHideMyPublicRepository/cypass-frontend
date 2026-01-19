@@ -1,27 +1,26 @@
 <template>
   <div class="w-full">
-    <form @submit.prevent="handleLogin"
-      class="bg-white dark:bg-slate-800 shadow-xl rounded-2xl p-8 border border-slate-100 dark:border-slate-700">
-      <div v-if="error" class="mb-4 p-3 bg-red-100 text-red-700 rounded-lg text-sm flex items-center gap-2">
+    <form @submit.prevent="handleLogin" class="bg-WtB shadow-xl rounded-2xl p-8 border border-ash">
+      <div v-if="error" class="mb-4 p-3 bg-danger/10 text-danger rounded-lg text-sm flex items-center gap-2">
         <IconAlertCircle class="w-4 h-4" />
         {{ error }}
       </div>
 
       <div class="space-y-4">
         <div>
-          <label for="email" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Email</label>
+          <label for="email" class="block text-sm font-medium mb-1">Email</label>
           <input v-model="email" id="email" type="email" placeholder="nom@exemple.com" required
-            class="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-slate-700 dark:text-white transition-shadow" />
+            class="w-full px-4 py-2 rounded-lg border border-ashAct focus:ring-2 focus:ring-primary focus:border-transparent bg-ash transition-shadow outline-none" />
         </div>
 
         <div>
           <div class="flex justify-between items-center mb-1">
-            <label for="password" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Mot de
+            <label for="password" class="block text-sm font-medium text-BtW">Mot de
               passe</label>
             <a href="#" class="text-xs text-primary hover:underline">Oublié ?</a>
           </div>
           <input v-model="password" id="password" type="password" required
-            class="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-slate-700 dark:text-white transition-shadow" />
+            class="w-full px-4 py-2 rounded-lg border border-ashAct focus:ring-2 focus:ring-primary focus:border-transparent bg-ash transition-shadow outline-none" />
         </div>
       </div>
 
@@ -32,19 +31,19 @@
       </div>
 
       <div class="relative flex py-2 items-center pt-6">
-        <div class="flex-grow border-t border-slate-200 dark:border-slate-800"></div>
-        <span class="flex-shrink-0 mx-4 text-xs font-bold text-slate-400 uppercase">Ou</span>
-        <div class="flex-grow border-t border-slate-200 dark:border-slate-800"></div>
+        <div class="flex-grow border-t border-ash"></div>
+        <span class="flex-shrink-0 mx-4 text-xs font-bold text-hsa uppercase">Ou</span>
+        <div class="flex-grow border-t border-ash"></div>
       </div>
 
       <div class="mt-6 text-center">
-        <p class="text-sm text-slate-500 dark:text-slate-400">
+        <p class="text-sm text-hsa">
           Pas encore de compte ?
           <NuxtLink to="/auth/register" class="text-primary font-medium hover:underline">Demander un accès</NuxtLink>
         </p>
       </div>
 
-      <div class="mt-4 bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg text-xs text-blue-800 dark:text-blue-300">
+      <div class="mt-4 bg-primary/5 p-3 rounded-lg text-xs text-primary">
         <p class="font-bold">Comptes de test :</p>
         <p>admin@cypass.bj / (any password)</p>
         <p>jean.dupont@gouv.bj / (any password)</p>
