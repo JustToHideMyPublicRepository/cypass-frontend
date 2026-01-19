@@ -1,26 +1,6 @@
 <template>
   <div class="relative overflow-hidden">
-    <!-- Background Decor -->
-    <div class="absolute inset-0 pointer-events-none -z-10">
-      <div
-        class="absolute top-0 right-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03] dark:opacity-[0.05]">
-      </div>
-      <!-- Living Gradients -->
-      <div
-        class="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] bg-purple-500/10 rounded-full blur-[120px] animate-float opacity-60">
-      </div>
-      <div
-        class="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-primary/10 rounded-full blur-[120px] animate-float-delayed opacity-60">
-      </div>
-
-      <!-- Grid Lines -->
-      <div
-        class="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[length:24px_24px] mask-gradient">
-      </div>
-    </div>
-
     <div class="max-w-7xl mx-auto space-y-24 relative z-10">
-
       <!-- Hero Section -->
       <div class="text-center space-y-6 animate-fade-up relative">
         <div
@@ -33,9 +13,9 @@
             Services v2.0</span>
         </div>
 
-        <h1 class="text-5xl md:text-7xl font-black text-BtW tracking-tighter leading-tight">
+        <h1 class="text-5xl md:text-7xl font-black tracking-tighter leading-tight">
           Solutions de <br class="md:hidden" />
-          <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary via-blue-500 to-purple-600 relative">
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary via-success to-secondary relative">
             Confiance Numérique
             <svg class="absolute w-full h-3 -bottom-1 left-0 text-primary opacity-30 hidden md:block"
               viewBox="0 0 200 9" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -54,7 +34,7 @@
       <div class="grid grid-cols-2 md:grid-cols-4 gap-8 py-8 border-y border-ash/50 backdrop-blur-sm animate-fade-up"
         style="animation-delay: 100ms;">
         <div v-for="stat in stats" :key="stat.label" class="text-center">
-          <div class="text-3xl font-bold text-BtW mb-1">{{ stat.value }}</div>
+          <div class="text-3xl font-bold mb-1">{{ stat.value }}</div>
           <div class="text-[10px] font-bold uppercase tracking-widest text-slate-500">{{ stat.label }}</div>
         </div>
       </div>
@@ -107,7 +87,7 @@
               </div>
 
               <div class="relative z-10 flex-grow">
-                <h3 class="text-3xl font-bold text-BtW mb-3 group-hover:text-primary transition-colors">
+                <h3 class="text-3xl font-bold mb-3 group-hover:text-primary transition-colors">
                   {{ service.title }}
                 </h3>
                 <p class="text-hsa leading-relaxed text-base mb-6">

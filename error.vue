@@ -14,7 +14,7 @@
 
     <!-- Main Card -->
     <div
-      class="w-full max-w-2xl bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 p-8 md:p-12 text-center transform transition-all hover:scale-[1.01] duration-500 relative z-10 animate-fade-up">
+      class="w-full max-w-2xl bg-WtB/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-ash p-8 md:p-12 text-center transform transition-all hover:scale-[1.01] duration-500 relative z-10 animate-fade-up">
 
       <!-- Icon Container -->
       <div class="mb-8 relative inline-block animate-fade-down" style="animation-delay: 200ms">
@@ -28,17 +28,17 @@
 
       <!-- Error Code -->
       <h1
-        class="text-8xl md:text-9xl font-black text-slate-200 dark:text-slate-800 tracking-tighter select-none mb-4 leading-none animate-fade-up"
+        class="text-8xl md:text-9xl font-black text-ashAct tracking-tighter select-none mb-4 leading-none animate-fade-up"
         style="animation-delay: 300ms">
         {{ error?.statusCode || 'ERR' }}
       </h1>
 
       <!-- Message -->
       <div class="space-y-4 mb-10 animate-fade-up" style="animation-delay: 400ms">
-        <h2 class="text-3xl font-bold text-slate-900 dark:text-white">
+        <h2 class="text-3xl font-bold text-BtW">
           {{ errorTitle }}
         </h2>
-        <p class="text-lg text-slate-600 dark:text-slate-400 max-w-md mx-auto leading-relaxed">
+        <p class="text-lg text-hsa max-w-md mx-auto leading-relaxed">
           {{ errorMessage }}
         </p>
       </div>
@@ -47,7 +47,7 @@
       <div class="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-up"
         style="animation-delay: 500ms">
         <button @click="handleClearError"
-          class="group relative px-8 py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden">
+          class="group relative px-8 py-4 bg-BtW text-WtB font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden">
           <div
             class="absolute inset-0 bg-gradient-to-r from-primary to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           </div>
@@ -58,7 +58,7 @@
         </button>
 
         <button v-if="error?.statusCode !== 404" @click="handleRefresh"
-          class="group px-8 py-4 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all duration-300">
+          class="group px-8 py-4 bg-WtBAct font-bold rounded-xl border border-ash hover:bg-ash transition-all duration-300">
           <span class="flex items-center gap-2">
             <IconRefresh class="w-5 h-5 transition-transform group-hover:rotate-180 duration-500" />
             Réessayer
@@ -67,10 +67,9 @@
       </div>
 
       <!-- Technical Details (Optional, collapsed usually, but just distinct style here) -->
-      <div v-if="error?.message && error?.statusCode !== 404"
-        class="mt-12 pt-6 border-t border-slate-200 dark:border-slate-800 animate-fade-up"
+      <div v-if="error?.message && error?.statusCode !== 404" class="mt-12 pt-6 border-t border-ash animate-fade-up"
         style="animation-delay: 600ms">
-        <p class="text-xs text-slate-400">
+        <p class="text-xs text-hsa">
           Code: {{ error?.statusCode }} • ID: {{ formatDate(new Date()) }}
         </p>
       </div>
@@ -78,7 +77,7 @@
     </div>
 
     <!-- Footer Copyright -->
-    <div class="absolute bottom-6 w-full text-center text-slate-400 text-sm opacity-60">
+    <div class="absolute bottom-6 w-full text-center text-hsa text-sm opacity-60">
       &copy; {{ new Date().getFullYear() }} CYPASS. Tous droits réservés.
     </div>
 
