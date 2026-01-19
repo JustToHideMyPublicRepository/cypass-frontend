@@ -65,14 +65,14 @@
                 :class="service.theme === 'blue' ? 'bg-primary/10 text-primary' : 'bg-success/10 text-success'">
                 <IconCheck class="w-5 h-5" />
               </div>
-              <h3 class="font-bold text-lg text-BtW mb-2">{{ benefit.title }}</h3>
+              <h3 class="font-bold text-lg mb-2">{{ benefit.title }}</h3>
               <p class="text-hsa text-sm leading-relaxed">{{ benefit.qty }}</p>
             </div>
           </div>
 
           <!-- "How it works" Mini Section -->
           <div class="pt-8 border-t border-ash">
-            <h3 class="text-xl font-bold text-BtW mb-6">Spécifications Techniques</h3>
+            <h3 class="text-xl font-bold mb-6">Spécifications Techniques</h3>
             <div class="space-y-4">
               <div v-for="spec in service.techSpecs" :key="spec.label"
                 class="flex items-center justify-between py-3 border-b border-ash/50">
@@ -115,12 +115,12 @@
                   </div>
                   <div class="bg-slate-800 p-2 rounded">
                     <div class="text-[10px] uppercase text-slate-500">Vulns Found</div>
-                    <div class="text-xl text-red-400 font-bold">2</div>
+                    <div class="text-xl text-danger font-bold">2</div>
                   </div>
                 </div>
 
                 <div class="pl-4 mt-4 text-white">VULNERABILITY REPORT:</div>
-                <div class="pl-4 text-red-400">1. CVE-2024-XXXX (Critical) - SSL Misconfiguration</div>
+                <div class="pl-4 text-danger">1. CVE-2024-XXXX (Critical) - SSL Misconfiguration</div>
                 <div class="pl-4 text-yellow-400">2. CVE-2023-XXXX (Medium) - Header leakage</div>
                 <div class="pl-4 text-green-500 mt-2">Generating remediation plan... DONE</div>
                 <span class="animate-pulse">_</span>
@@ -161,7 +161,7 @@
                       </div>
                     </div>
                     <!-- Blips -->
-                    <div class="absolute top-[20%] right-[30%] w-3 h-3 bg-red-500 rounded-full animate-ping"></div>
+                    <div class="absolute top-[20%] right-[30%] w-3 h-3 bg-danger rounded-full animate-ping"></div>
                     <div class="absolute bottom-[20%] left-[30%] w-2 h-2 bg-yellow-500 rounded-full animate-pulse">
                     </div>
                   </div>
@@ -171,14 +171,14 @@
                 <div class="h-[150px] bg-slate-950 border-t border-slate-800 p-4 space-y-2 z-10">
                   <div class="text-[10px] text-slate-500 uppercase tracking-widest mb-2">Recent Alerts</div>
                   <div
-                    class="flex items-center gap-3 text-xs text-slate-300 p-2 bg-slate-900 rounded border border-slate-800 border-l-2 border-l-red-500">
-                    <span class="font-code text-red-400">CRITICAL</span>
+                    class="flex items-center gap-3 text-xs text-slate-300 p-2 bg-slate-900 rounded border border-slate-800 border-l-2 border-l-danger">
+                    <span class="font-code text-danger">CRITICAL</span>
                     <span>DDoS Attempt detected on Port 443</span>
                     <span class="ml-auto text-slate-600">Now</span>
                   </div>
                   <div
                     class="flex items-center gap-3 text-xs text-slate-300 p-2 bg-slate-900 rounded border border-slate-800 border-l-2 border-l-yellow-500">
-                    <span class="font-code text-yellow-400">WARN</span>
+                    <span class="font-code text-warning">WARN</span>
                     <span>Unusual login location (IP: 45.2.X.X)</span>
                     <span class="ml-auto text-slate-600">2m ago</span>
                   </div>
@@ -205,7 +205,7 @@
                     Document Certifié
                   </div>
 
-                  <h3 class="font-serif text-2xl font-bold text-BtW mb-2">Contrat_Cadre_v2.pdf
+                  <h3 class="font-serif text-2xl font-bold mb-2">Contrat_Cadre_v2.pdf
                   </h3>
                   <p class="text-xs text-slate-500 mb-8">Signé numériquement le 16 Jan 2024</p>
 
@@ -220,7 +220,7 @@
                     </div>
                     <div class="flex justify-between">
                       <span class="text-slate-500">Empreinte</span>
-                      <span class="font-code text-BtW truncate w-32">8f3a...29b1</span>
+                      <span class="font-code truncate w-32">8f3a...29b1</span>
                     </div>
                   </div>
                 </div>

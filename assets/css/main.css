@@ -119,6 +119,10 @@
   .badge-success {
     @apply bg-success/10 text-success border border-success/20;
   }
+
+  .badge-secondary {
+    @apply bg-secondary/10 text-secondary border border-secondary/20;
+  }
 }
 
 @layer utilities {
@@ -171,6 +175,18 @@
   }
 
   /* Color opacity utilities */
+  .bg-secondary\/10 {
+    background-color: color-mix(in srgb, var(--color-secondary) 10%, transparent);
+  }
+
+  .bg-secondary\/20 {
+    background-color: color-mix(in srgb, var(--color-secondary) 20%, transparent);
+  }
+
+  .border-secondary\/20 {
+    border-color: color-mix(in srgb, var(--color-secondary) 20%, transparent);
+  }
+
   .bg-success\/10 {
     background-color: color-mix(in srgb, var(--color-success) 10%, transparent);
   }

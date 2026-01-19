@@ -1,5 +1,5 @@
 <template>
-  <div class="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-slate-50 dark:bg-slate-950 overflow-hidden">
+  <div class="relative overflow-hidden">
     <!-- Background Decor -->
     <div class="absolute inset-0 pointer-events-none -z-10">
       <div
@@ -24,16 +24,16 @@
       <!-- Hero Section -->
       <div class="text-center space-y-6 animate-fade-up relative">
         <div
-          class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900/5 dark:bg-slate-100/10 border border-slate-200 dark:border-slate-800 backdrop-blur-sm mb-4">
+          class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-ash border border-ash backdrop-blur-sm mb-4">
           <span class="relative flex h-2 w-2">
             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
             <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
           </span>
-          <span class="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Catalogue de
+          <span class="text-xs font-bold uppercase tracking-widest text-hsa">Catalogue de
             Services v2.0</span>
         </div>
 
-        <h1 class="text-5xl md:text-7xl font-black text-slate-900 dark:text-white tracking-tighter leading-tight">
+        <h1 class="text-5xl md:text-7xl font-black text-BtW tracking-tighter leading-tight">
           Solutions de <br class="md:hidden" />
           <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary via-blue-500 to-purple-600 relative">
             Confiance Numérique
@@ -45,17 +45,16 @@
             </svg>
           </span>
         </h1>
-        <p class="text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed font-light">
+        <p class="text-xl text-hsa max-w-2xl mx-auto leading-relaxed font-light">
           Une suite complète d'outils souverains pour sécuriser, certifier et surveiller votre écosystème numérique.
         </p>
       </div>
 
       <!-- Trust Stats -->
-      <div
-        class="grid grid-cols-2 md:grid-cols-4 gap-8 py-8 border-y border-slate-200/50 dark:border-slate-800/50 backdrop-blur-sm animate-fade-up"
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 py-8 border-y border-ash/50 backdrop-blur-sm animate-fade-up"
         style="animation-delay: 100ms;">
         <div v-for="stat in stats" :key="stat.label" class="text-center">
-          <div class="text-3xl font-bold text-slate-900 dark:text-white mb-1">{{ stat.value }}</div>
+          <div class="text-3xl font-bold text-BtW mb-1">{{ stat.value }}</div>
           <div class="text-[10px] font-bold uppercase tracking-widest text-slate-500">{{ stat.label }}</div>
         </div>
       </div>
@@ -74,9 +73,9 @@
             <template #headerActions>
               <div v-if="service.status === 'available'" class="flex items-center gap-2">
                 <span class="w-2 h-2 rounded-full animate-pulse"
-                  :class="service.theme === 'blue' ? 'bg-blue-500' : 'bg-green-500'"></span>
+                  :class="service.theme === 'blue' ? 'bg-primary' : 'bg-success'"></span>
                 <span class="text-[10px] font-bold uppercase tracking-wider"
-                  :class="service.theme === 'blue' ? 'text-blue-400' : 'text-green-400'">Online</span>
+                  :class="service.theme === 'blue' ? 'text-primary' : 'text-success'">Online</span>
               </div>
               <div v-else class="flex items-center gap-2">
                 <span class="w-2 h-2 rounded-full bg-slate-500"></span>
@@ -84,8 +83,7 @@
               </div>
             </template>
 
-            <div
-              class="p-8 h-full flex flex-col relative overflow-hidden group-hover:bg-slate-50/50 dark:group-hover:bg-slate-800/50 transition-colors">
+            <div class="p-8 h-full flex flex-col relative overflow-hidden group-hover:bg-ash/50 transition-colors">
               <!-- Background Gradient -->
               <div
                 class="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-10 transition-opacity duration-500"
@@ -103,32 +101,31 @@
                 </div>
 
                 <NuxtLink v-if="service.status === 'available'" :to="`/services/${service.id}`"
-                  class="w-10 h-10 rounded-full border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-primary transition-all">
+                  class="w-10 h-10 rounded-full border border-ash flex items-center justify-center text-slate-400 hover:bg-ash hover:text-primary transition-all">
                   <IconArrowRight class="w-5 h-5" />
                 </NuxtLink>
               </div>
 
               <div class="relative z-10 flex-grow">
-                <h3
-                  class="text-3xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-primary transition-colors">
+                <h3 class="text-3xl font-bold text-BtW mb-3 group-hover:text-primary transition-colors">
                   {{ service.title }}
                 </h3>
-                <p class="text-slate-600 dark:text-slate-400 leading-relaxed text-base mb-6">
+                <p class="text-hsa leading-relaxed text-base mb-6">
                   {{ service.description }}
                 </p>
 
                 <!-- Mini Specs / Features -->
                 <div class="grid grid-cols-2 gap-3 mb-6">
                   <div v-for="spec in service.specs" :key="spec"
-                    class="flex items-center gap-2 text-xs font-medium text-slate-500 dark:text-slate-400 bg-slate-100/50 dark:bg-slate-800/50 rounded-lg px-2 py-1.5">
-                    <IconCheck class="w-3 h-3" :class="service.theme === 'blue' ? 'text-blue-500' : 'text-green-500'" />
+                    class="flex items-center gap-2 text-xs font-medium text-hsa bg-ash/50 rounded-lg px-2 py-1.5">
+                    <IconCheck class="w-3 h-3" :class="service.theme === 'blue' ? 'text-primary' : 'text-success'" />
                     {{ spec }}
                   </div>
                 </div>
               </div>
 
               <!-- Action / Coming Soon -->
-              <div class="relative z-10 mt-auto pt-6 border-t border-slate-100 dark:border-slate-800">
+              <div class="relative z-10 mt-auto pt-6 border-t border-ash">
                 <NuxtLink v-if="service.status === 'available'" :to="`/services/${service.id}`">
                   <button
                     class="w-full py-3 rounded-xl font-bold text-sm transition-all duration-300 group-hover:shadow-lg flex items-center justify-center gap-2"
@@ -140,7 +137,7 @@
                   </button>
                 </NuxtLink>
                 <div v-else
-                  class="w-full py-3 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-400 font-bold text-sm text-center cursor-not-allowed border border-slate-200 dark:border-slate-700">
+                  class="w-full py-3 rounded-xl bg-ash text-slate-400 font-bold text-sm text-center cursor-not-allowed border border-ash">
                   Bientôt Disponible
                 </div>
               </div>
@@ -152,7 +149,7 @@
 
       <!-- Bottom CTA (Optional) -->
       <div class="text-center pt-10 pb-10">
-        <p class="text-slate-500 dark:text-slate-400 text-sm">
+        <p class="text-hsa text-sm">
           Vous avez des besoins spécifiques ? <NuxtLink to="/contact" class="text-primary hover:underline">Contactez
             notre
             équipe commerciale</NuxtLink>.
