@@ -15,7 +15,7 @@
 
       <!-- Hero Header -->
       <div class="text-center space-y-4 animate-fade-up mb-16">
-        <span class="badge badge-green">RGPD / APDP</span>
+        <span class="badge badge-success">RGPD / APDP</span>
         <h1 class="text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
           Politique de <span class="text-green-500">Confidentialité</span>
         </h1>

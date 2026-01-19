@@ -7,7 +7,7 @@
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       <div class="text-center mb-16 animate-fade-up">
-        <span class="badge badge-green mb-4">Confiance Accordée</span>
+        <span class="badge badge-success mb-4">Confiance Accordée</span>
         <h2 class="text-3xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight mb-4">
           Ils sécurisent leur avenir avec <span class="text-primary">CYPASS</span>
         </h2>
