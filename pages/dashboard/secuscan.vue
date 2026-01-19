@@ -1,8 +1,8 @@
 <template>
    <div class="space-y-6">
       <div>
-         <h1 class="text-2xl font-bold text-slate-900 dark:text-white">SecuScan</h1>
-         <p class="text-slate-500 dark:text-slate-400">Audit et détection de vulnérabilités</p>
+         <h1 class="text-2xl font-bold text-BtW">SecuScan</h1>
+         <p class="text-hsa">Audit et détection de vulnérabilités</p>
       </div>
 
       <!-- Scanner Input -->
@@ -29,10 +29,9 @@
          <!-- Chart Placeholder -->
          <BaseCard title="Synthèse des risques" class="lg:col-span-1">
             <div class="flex flex-col items-center justify-center py-8">
-               <div
-                  class="w-40 h-40 rounded-full border-8 border-slate-100 dark:border-slate-800 flex items-center justify-center relative">
-                  <span class="text-3xl font-bold text-slate-900 dark:text-white">85%</span>
-                  <span class="absolute bottom-2 text-xs text-slate-500">Score</span>
+               <div class="w-40 h-40 rounded-full border-8 border-ash flex items-center justify-center relative">
+                  <span class="text-3xl font-bold text-BtW">85%</span>
+                  <span class="absolute bottom-2 text-xs text-hsa">Score</span>
                   <svg class="absolute inset-0 w-full h-full -rotate-90">
                      <circle cx="80" cy="80" r="76" stroke="currentColor" stroke-width="8" fill="none"
                         class="text-secondary" stroke-dasharray="477" stroke-dashoffset="71"></circle>
@@ -42,17 +41,17 @@
                   <div class="flex justify-between text-sm">
                      <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-red-500"></span>
                         Critique</span>
-                     <span class="font-medium">1</span>
+                     <span class="font-medium text-BtW">1</span>
                   </div>
                   <div class="flex justify-between text-sm">
                      <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-yellow-500"></span>
                         Moyen</span>
-                     <span class="font-medium">2</span>
+                     <span class="font-medium text-BtW">2</span>
                   </div>
                   <div class="flex justify-between text-sm">
                      <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-blue-500"></span>
                         Faible</span>
-                     <span class="font-medium">5</span>
+                     <span class="font-medium text-BtW">5</span>
                   </div>
                </div>
             </div>
@@ -62,7 +61,7 @@
          <BaseCard title="Vulnérabilités Détectées" class="lg:col-span-2">
             <div class="space-y-4">
                <div v-for="vuln in cypassData.vulnerabilities" :key="vuln.id"
-                  class="p-4 rounded-lg border border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50">
+                  class="p-4 rounded-lg border border-ash bg-ash/50">
                   <div class="flex items-start justify-between">
                      <div class="flex items-start gap-3">
                         <div :class="['mt-1 p-1.5 rounded-lg',
@@ -72,14 +71,14 @@
                            <IconBug class="w-5 h-5" />
                         </div>
                         <div>
-                           <h3 class="font-semibold text-slate-900 dark:text-white">{{ vuln.type }}</h3>
-                           <p class="text-sm text-slate-500 font-code mt-1">{{ vuln.url }}</p>
+                           <h3 class="font-semibold text-BtW">{{ vuln.type }}</h3>
+                           <p class="text-sm text-hsa font-code mt-1">{{ vuln.url }}</p>
                         </div>
                      </div>
                      <StatusBadge :status="vuln.severity" />
                   </div>
                   <div class="mt-4 flex justify-between items-center">
-                     <div class="text-xs text-slate-500">Détecté le 12/01/2026</div>
+                     <div class="text-xs text-hsa">Détecté le 12/01/2026</div>
                      <BaseButton variant="secondary" size="sm">Détails</BaseButton>
                   </div>
                </div>

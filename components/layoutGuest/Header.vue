@@ -25,7 +25,7 @@
               <!-- Standard Link -->
               <NuxtLink v-if="!item.isButton" :to="item.path"
                 class="text-sm font-medium hover:text-primary transition-colors relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-primary after:left-0 after:-bottom-1 after:transition-all hover:after:w-full"
-                active-class="text-primary after:w-full">
+                :class="{ 'text-primary after:w-full': isLinkActive(item.path) }">
                 {{ item.label }}
               </NuxtLink>
 
@@ -97,6 +97,12 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import { IconMenu2, IconX, IconSun, IconMoon } from '@tabler/icons-vue'
 
 const colorMode = useColorMode()
+const route = useRoute()
+
+const isLinkActive = (path: string) => {
+  if (path === '/') return route.path === '/'
+  return route.path.startsWith(path)
+}
 
 // -- Navigation Constants --
 const NavHeader = [

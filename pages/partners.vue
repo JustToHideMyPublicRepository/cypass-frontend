@@ -1,14 +1,14 @@
 <template>
-  <div class="relative pt-8 pb-20 px-4 sm:px-6 lg:px-8 bg-slate-50 dark:bg-slate-950">
+  <div class="relative">
     <div class="max-w-5xl mx-auto space-y-16">
 
       <div class="text-center space-y-4 animate-fade-up">
         <span class="badge badge-success">Écosystème</span>
-        <h1 class="text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
+        <h1 class="text-4xl md:text-5xl font-black tracking-tight">
           Nos Partenaires <br />
           <span class="text-secondary">Institutionnels</span>
         </h1>
-        <p class="text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
+        <p class="text-lg text-hsa max-w-2xl mx-auto">
           Nous collaborons avec les acteurs clés de la sécurité et du numérique au Bénin pour garantir un service de
           confiance.
         </p>
@@ -22,11 +22,11 @@
           class="glass-panel p-8 rounded-3xl flex flex-col items-center text-center hover:scale-[1.02] transition-transform duration-300 animate-fade-up"
           :style="{ animationDelay: `${index * 100}ms` }">
           <div
-            class="w-24 h-24 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-6 text-2xl font-bold text-slate-400">
+            class="w-24 h-24 rounded-full bg-ash flex items-center justify-center mb-6 text-2xl font-bold text-hsa border border-ashAct">
             {{ partner.initials }}
           </div>
-          <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">{{ partner.name }}</h3>
-          <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">{{ partner.role }}</p>
+          <h3 class="text-xl font-bold mb-2">{{ partner.name }}</h3>
+          <p class="text-sm text-hsa mb-6">{{ partner.role }}</p>
           <a href="#" class="btn btn-secondary text-xs px-4 py-2">Visiter le site</a>
         </div>
       </div>
@@ -43,51 +43,48 @@
 
         <!-- Modal Panel -->
         <div class="flex items-center justify-center p-4">
-          <div
-            class="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-2xl shadow-2xl p-8 border border-slate-200 dark:border-slate-800 animate-fade-up"
+          <div class="relative w-full max-w-lg bg-WtB rounded-2xl shadow-2xl p-8 border border-ash animate-fade-up"
             @click.stop>
             <!-- Close Button -->
             <button @click="isModalOpen = false"
-              class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+              class="absolute top-4 right-4 text-hsa hover:text-primary transition-colors">
               <IconX class="w-6 h-6" />
             </button>
 
             <!-- Header -->
             <div class="mb-6">
-              <h3 class="text-2xl font-bold text-slate-900 dark:text-white">Devenir Partenaire</h3>
-              <p class="text-slate-500 dark:text-slate-400 mt-2">Rejoignez l'écosystème de confiance CYPASS.</p>
+              <h3 class="text-2xl font-bold text-BtW">Devenir Partenaire</h3>
+              <p class="text-hsa mt-2">Rejoignez l'écosystème de confiance CYPASS.</p>
             </div>
 
             <!-- Form -->
             <form @submit.prevent="submitPartnerRequest" class="space-y-4">
               <div>
-                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Nom de
+                <label class="block text-sm font-bold mb-1">Nom de
                   l'organisation</label>
-                <input type="text" required class="input input-bordered w-full bg-slate-50 dark:bg-slate-800"
-                  placeholder="Ex: Tech Solutions" />
+                <input type="text" required class="input" placeholder="Ex: Tech Solutions" />
               </div>
 
               <div class="grid grid-cols-2 gap-4">
                 <div>
-                  <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Contact</label>
-                  <input type="text" required class="input input-bordered w-full bg-slate-50 dark:bg-slate-800"
-                    placeholder="Nom complet" />
+                  <label class="block text-sm font-bold mb-1">Contact</label>
+                  <input type="text" required class="input" placeholder="Nom complet" />
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Email</label>
-                  <input type="email" required class="input input-bordered w-full bg-slate-50 dark:bg-slate-800"
-                    placeholder="email@company.com" />
+                  <label class="block text-sm font-bold mb-1">Email</label>
+                  <input type="email" required class="input" placeholder="email@company.com" />
                 </div>
               </div>
 
               <div>
-                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Message</label>
-                <textarea class="textarea textarea-bordered w-full bg-slate-50 dark:bg-slate-800 h-24"
+                <label class="block text-sm font-bold mb-1">Message</label>
+                <textarea class="textarea input h-24 pt-3"
                   placeholder="Décrivez votre projet de partenariat..."></textarea>
               </div>
 
               <div class="pt-4 flex gap-3">
-                <button type="button" @click="isModalOpen = false" class="btn btn-ghost flex-1">Annuler</button>
+                <button type="button" @click="isModalOpen = false"
+                  class="btn btn-ghost flex-1 text-BtW">Annuler</button>
                 <button type="submit" class="btn btn-primary flex-1">Envoyer la demande</button>
               </div>
             </form>

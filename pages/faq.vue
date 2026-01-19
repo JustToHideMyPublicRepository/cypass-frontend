@@ -1,23 +1,10 @@
 <template>
-  <div class="relative min-h-screen bg-slate-50 dark:bg-slate-950">
-    <!-- Hero Background -->
-    <div class="absolute inset-0 overflow-hidden pointer-events-none -z-10">
-      <div
-        class="absolute top-0 w-full h-[500px] bg-gradient-to-b from-white to-transparent dark:from-slate-900/50 dark:to-transparent">
-      </div>
-      <div
-        class="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] bg-primary/10 rounded-full blur-[120px] animate-pulse-slow">
-      </div>
-      <div
-        class="absolute top-[20%] left-[-10%] w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-[100px] animate-float">
-      </div>
-    </div>
-
+  <div class="relative">
     <!-- Hero Section -->
-    <section class="pt-32 pb-20 px-4 sm:px-6 lg:px-8 text-center relative z-10">
+    <section class="pb-20 px-4 sm:px-6 lg:px-8 text-center relative z-10">
       <div class="max-w-3xl mx-auto space-y-8 animate-fade-up">
         <span class="badge badge-primary mb-4">Support & Documentation</span>
-        <h1 class="text-5xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tight leading-tight">
+        <h1 class="text-5xl md:text-6xl font-black tracking-tight leading-tight">
           Comment pouvons-nous <br /> <span class="text-primary">vous aider ?</span>
         </h1>
 
@@ -27,15 +14,15 @@
             class="absolute inset-0 bg-primary/20 blur-xl rounded-2xl group-hover:bg-primary/30 transition-colors opacity-50">
           </div>
           <div
-            class="relative bg-white dark:bg-slate-900 rounded-2xl p-2 shadow-2xl border border-slate-200 dark:border-slate-800 flex items-center transition-transform transform group-hover:-translate-y-1">
-            <IconSearch class="w-6 h-6 text-slate-400 ml-4" />
+            class="relative bg-WtB rounded-2xl p-2 shadow-2xl border border-ash flex items-center transition-transform transform group-hover:-translate-y-1">
+            <IconSearch class="w-6 h-6 text-hsa ml-4" />
             <input v-model="searchQuery" type="text"
-              class="w-full bg-transparent border-none focus:ring-0 text-lg py-4 px-4 text-slate-900 dark:text-white placeholder-slate-400 font-medium"
+              class="w-full bg-transparent border-none focus:ring-0 text-lg py-4 px-4 placeholder-slate-400 font-medium"
               placeholder="Rechercher une réponse (ex: mot de passe, API, sécurité)..." />
-            <div class="hidden sm:flex items-center gap-2 pr-4 text-xs text-slate-400 font-code">
-              <span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">CTRL</span>
+            <div class="hidden sm:flex items-center gap-2 pr-4 text-xs text-hsa font-code">
+              <span class="bg-ash px-2 py-1 rounded">CTRL</span>
               <span>+</span>
-              <span class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">K</span>
+              <span class="bg-ash px-2 py-1 rounded">K</span>
             </div>
           </div>
         </div>
@@ -49,34 +36,32 @@
         <div class="max-w-3xl mx-auto space-y-12">
           <div v-for="(category, catIndex) in filteredCategories" :key="catIndex" class="animate-fade-up"
             :style="{ animationDelay: `${200 + catIndex * 100}ms` }">
-            <h2 class="flex items-center gap-3 text-2xl font-bold text-slate-900 dark:text-white mb-8">
+            <h2 class="flex items-center gap-3 text-2xl font-bold mb-8">
               <span class="w-8 h-1 bg-gradient-to-r from-primary to-transparent rounded-full"></span>
               {{ category.title }}
             </h2>
 
             <div class="space-y-4">
               <div v-for="(item, index) in category.items" :key="index"
-                class="group bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden transition-all duration-300 hover:border-primary/50"
+                class="group bg-WtB rounded-2xl border border-ash overflow-hidden transition-all duration-300 hover:border-primary/50"
                 :class="{ 'shadow-lg ring-1 ring-primary/20': activeIndex === `${catIndex}-${index}` }">
 
                 <button @click="toggle(`${catIndex}-${index}`)"
                   class="w-full flex items-center justify-between p-6 text-left focus:outline-none">
-                  <span
-                    class="font-bold text-slate-800 dark:text-slate-200 text-lg pr-4 group-hover:text-primary transition-colors">{{
-                      item.question }}</span>
+                  <span class="font-bold text-lg pr-4 group-hover:text-primary transition-colors">{{
+                    item.question }}</span>
                   <div
-                    class="w-8 h-8 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center transition-colors group-hover:bg-primary/10">
-                    <IconChevronDown class="w-5 h-5 text-slate-400 transition-transform duration-300"
+                    class="w-8 h-8 rounded-full bg-ash flex items-center justify-center transition-colors group-hover:bg-primary/10">
+                    <IconChevronDown class="w-5 h-5 text-hsa transition-transform duration-300"
                       :class="{ 'rotate-180 text-primary': activeIndex === `${catIndex}-${index}` }" />
                   </div>
                 </button>
 
                 <div v-show="activeIndex === `${catIndex}-${index}`"
-                  class="px-6 pb-8 text-slate-600 dark:text-slate-400 leading-relaxed max-w-none prose prose-slate dark:prose-invert">
+                  class="px-6 pb-8 text-hsa leading-relaxed max-w-none prose prose-slate">
                   {{ item.answer }}
 
-                  <div
-                    class="mt-4 pt-4 border-t border-dashed border-slate-200 dark:border-slate-800 flex items-center gap-2 text-xs text-slate-400">
+                  <div class="mt-4 pt-4 border-t border-dashed border-ash flex items-center gap-2 text-xs text-hsa">
                     <IconBulb class="w-4 h-4 text-yellow-500" />
                     <span>Cela a-t-il répondu à votre question ?</span>
                     <button class="hover:text-primary underline">Oui</button>
@@ -133,11 +118,6 @@ definePageMeta({
 const activeIndex = ref<string | null>(null)
 const searchQuery = ref('')
 const selectedCategory = ref<string | null>(null)
-
-const selectCategory = (category: string) => {
-  selectedCategory.value = category
-  // Optional: Scroll to list
-}
 
 // Filter FAQ based on search and selection
 const filteredCategories = computed(() => {
