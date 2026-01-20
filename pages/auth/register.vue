@@ -62,12 +62,11 @@
       </div>
 
       <!-- Submit Button -->
-      <button type="submit" :disabled="isLoading"
-        class="btn btn-primary w-full sm:w-auto text-lg px-5 py-2.5 shadow-BtW/40 rounded-full text-sm">
-        <span v-if="isLoading" class="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin"></span>
-        <span v-else>Créer mon compte</span>
-        <IconArrowRight v-if="!isLoading" class="w-5 h-5" />
-      </button>
+      <UiBaseButton type="submit" :loading="isLoading"
+        class="w-full sm:w-auto text-lg px-5 py-2.5 shadow-BtW/40 rounded-full text-sm">
+        Créer mon compte
+        <IconArrowRight v-if="!isLoading" class="w-5 h-5 ml-2" />
+      </UiBaseButton>
 
       <!-- Divider -->
       <div class="relative flex py-2 items-center">

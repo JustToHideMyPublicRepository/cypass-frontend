@@ -11,7 +11,7 @@
         <!-- Search Bar -->
         <div class="max-w-2xl mx-auto relative group">
           <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-            <IconSearch class="w-5 h-5 text-slate-400 group-focus-within:text-primary transition-colors" />
+            <IconSearch class="w-5 h-5 text-hsa/50 group-focus-within:text-primary transition-colors" />
           </div>
           <input type="text"
             class="block w-full pl-12 pr-4 py-4 bg-WtB border border-ash rounded-2xl shadow-lg shadow-ash/50 focus:ring-2 focus:ring-primary focus:border-primary transition-all outline-none"
@@ -47,7 +47,7 @@
             Consultez notre base de connaissances pour trouver des réponses rapides aux questions les plus courantes.
           </p>
         </div>
-        <NuxtLink to="/faq" class="btn btn-primary px-8">Voir la FAQ</NuxtLink>
+        <UiBaseButton to="/faq" variant="primary" class="px-8">Voir la FAQ</UiBaseButton>
       </div>
 
       <!-- Developers Section (Merged from Docs) -->
@@ -118,12 +118,12 @@
       <div class="text-center space-y-6 pt-12 border-t border-ash">
         <p class="text-hsa">Besoin d'une assistance personnalisée ?</p>
         <div class="flex flex-wrap justify-center gap-4">
-          <a href="mailto:support@cypass.bj" class="btn btn-ghost border border-ash">
+          <UiBaseButton href="mailto:support@cypass.bj" variant="secondary" class="border border-ash">
             <IconMail class="w-5 h-5 mr-2" /> Envoyer un email
-          </a>
-          <a href="tel:+22921310000" class="btn btn-ghost border border-ash">
+          </UiBaseButton>
+          <UiBaseButton href="tel:+22921310000" variant="secondary" class="border border-ash">
             <IconPhone class="w-5 h-5 mr-2" /> +229 21 31 00 00
-          </a>
+          </UiBaseButton>
         </div>
       </div>
     </div>

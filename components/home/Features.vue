@@ -52,16 +52,15 @@
           </ul>
 
           <div class="pt-4">
-            <NuxtLink v-if="service.status === 'available'" :to="`/services/${service.id}`">
-              <button
-                :class="['btn btn-ghost pl-0 hover:pl-4 transition-all', service.theme === 'blue' ? 'text-primary' : 'text-success']">
-                {{ service.cta }}
-                <IconArrowRight class="w-4 h-4 ml-2" />
-              </button>
-            </NuxtLink>
-            <button v-else disabled class="btn btn-ghost text-hsa pl-0 cursor-not-allowed">
+            <UiBaseButton v-if="service.status === 'available'" :to="`/services/${service.id}`" variant="secondary"
+              class="pl-0 hover:pl-4 transition-all !bg-transparent border-none shadow-none"
+              :class="service.theme === 'blue' ? 'text-primary' : 'text-success'">
+              {{ service.cta }}
+              <IconArrowRight class="w-4 h-4 ml-2" />
+            </UiBaseButton>
+            <UiBaseButton v-else disabled class="btn btn-ghost text-hsa pl-0 cursor-not-allowed">
               Disponible prochainement
-            </button>
+            </UiBaseButton>
           </div>
         </div>
 
@@ -105,40 +104,40 @@
           <!-- VigiTech Visual -->
           <UiAppFrame v-else-if="service.id === 'vigitech'" type="card"
             class="transform transition-transform duration-500 hover:scale-[1.02] hover:-rotate-1" :glass="true">
-            <div class="relative h-[350px] overflow-hidden bg-slate-900 flex items-center justify-center">
+            <div class="relative h-[350px] overflow-hidden bg-WtB flex items-center justify-center">
               <!-- Radar Background -->
               <div
-                class="absolute inset-0 bg-[radial-gradient(circle_at_center,theme(colors.emerald.900/0.2)_1px,transparent_1px)] bg-[length:24px_24px]">
+                class="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--color-success)_1px,transparent_1px)] opacity-20 bg-[length:24px_24px]">
               </div>
-              <div class="absolute inset-0 bg-gradient-to-b from-transparent via-slate-900/50 to-slate-900"></div>
+              <div class="absolute inset-0 bg-gradient-to-b from-transparent via-WtB/50 to-WtB"></div>
 
               <!-- Radar Circles -->
-              <div class="absolute w-[400px] h-[400px] border border-emerald-900/30 rounded-full"></div>
-              <div class="absolute w-[300px] h-[300px] border border-emerald-500/20 rounded-full"></div>
-              <div class="absolute w-[200px] h-[200px] border border-emerald-500/40 rounded-full animate-pulse"></div>
+              <div class="absolute w-[400px] h-[400px] border border-success/30 rounded-full"></div>
+              <div class="absolute w-[300px] h-[300px] border border-success/20 rounded-full"></div>
+              <div class="absolute w-[200px] h-[200px] border border-success/40 rounded-full animate-pulse"></div>
 
               <!-- Scanning Line -->
               <div
-                class="absolute w-[200px] h-[200px] bg-gradient-to-tr from-transparent to-emerald-500/20 rounded-full animate-spin-slow origin-bottom-left"
+                class="absolute w-[200px] h-[200px] bg-gradient-to-tr from-transparent to-success/20 rounded-full animate-spin-slow origin-bottom-left"
                 style="transform-origin: center;"></div>
 
               <!-- Alert Points -->
-              <div class="absolute top-[30%] left-[60%] w-3 h-3 bg-red-500 rounded-full animate-ping"></div>
-              <div class="absolute top-[30%] left-[60%] w-3 h-3 bg-red-500 rounded-full"></div>
+              <div class="absolute top-[30%] left-[60%] w-3 h-3 bg-danger rounded-full animate-ping"></div>
+              <div class="absolute top-[30%] left-[60%] w-3 h-3 bg-danger rounded-full"></div>
 
-              <div class="absolute bottom-[40%] right-[30%] w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></div>
+              <div class="absolute bottom-[40%] right-[30%] w-2 h-2 bg-warning rounded-full animate-pulse"></div>
 
               <!-- Overlay Text -->
               <div
-                class="absolute bottom-6 left-6 right-6 p-4 bg-slate-800/90 backdrop-blur-sm rounded-xl border border-slate-700">
+                class="absolute bottom-6 left-6 right-6 p-4 bg-ash/90 backdrop-blur-sm rounded-xl border border-ashAct">
                 <div class="flex items-center gap-3">
-                  <IconRadar2 class="w-6 h-6 text-emerald-500 animate-spin-slow" />
+                  <IconRadar2 class="w-6 h-6 text-success animate-spin-slow" />
                   <div>
-                    <div class="text-xs font-bold text-white uppercase tracking-wider">Menace Détectée</div>
-                    <div class="text-[10px] text-slate-400 font-code">IP: 192.168.X.X • Port Scan Multiples</div>
+                    <div class="text-xs font-bold text-BtW uppercase tracking-wider">Menace Détectée</div>
+                    <div class="text-[10px] text-hsa font-code">IP: 192.168.X.X • Port Scan Multiples</div>
                   </div>
                   <button
-                    class="ml-auto px-3 py-1 bg-red-500/20 text-red-400 text-xs font-bold rounded hover:bg-red-500/30">Bloquer</button>
+                    class="ml-auto px-3 py-1 bg-danger/10 text-danger text-xs font-bold rounded hover:bg-danger/20">Bloquer</button>
                 </div>
               </div>
             </div>
@@ -147,30 +146,30 @@
           <!-- SecuScan Visual -->
           <UiAppFrame v-else-if="service.id === 'secuscan'" type="terminal" title="root@secuscan:~" :glass="true"
             class="transform transition-transform duration-500 hover:scale-[1.02] hover:rotate-1">
-            <div class="h-[350px] p-4 text-xs font-code space-y-2 overflow-hidden bg-slate-900/90 text-slate-300">
+            <div class="h-[350px] p-4 text-xs font-code space-y-2 overflow-hidden bg-WtB text-hsa">
               <div class="flex gap-2">
-                <span class="text-emerald-500">➜</span>
-                <span class="text-blue-400">~</span>
+                <span class="text-success">➜</span>
+                <span class="text-primary">~</span>
                 <span>nmap -sV -p- target.gov.bj</span>
               </div>
-              <div class="pl-4 text-slate-500">Starting Nmap 7.92 at 2024-01-16 14:00 CET</div>
+              <div class="pl-4 text-hsa opacity-70">Starting Nmap 7.92 at 2024-01-16 14:00 CET</div>
               <div class="pl-4">Nmap scan report for target.gov.bj (10.0.0.1)</div>
               <div class="pl-4">Host is up (0.002s latency).</div>
-              <div class="pl-4 text-slate-500">Not shown: 65532 closed tcp ports (reset)</div>
-              <div class="pl-4 text-white">PORT STATE SERVICE VERSION</div>
-              <div class="pl-4"><span class="text-emerald-400">80/tcp open http</span> nginx 1.18.0</div>
-              <div class="pl-4"><span class="text-emerald-400">443/tcp open ssl/https</span> nginx 1.18.0</div>
-              <div class="pl-4"><span class="text-yellow-400">8080/tcp open http-proxy</span> unknown</div>
+              <div class="pl-4 text-hsa opacity-70">Not shown: 65532 closed tcp ports (reset)</div>
+              <div class="pl-4 text-BtW font-bold">PORT STATE SERVICE VERSION</div>
+              <div class="pl-4"><span class="text-success">80/tcp open http</span> nginx 1.18.0</div>
+              <div class="pl-4"><span class="text-success">443/tcp open ssl/https</span> nginx 1.18.0</div>
+              <div class="pl-4"><span class="text-warning">8080/tcp open http-proxy</span> unknown</div>
               <br>
               <div class="flex gap-2">
-                <span class="text-emerald-500">➜</span>
-                <span class="text-blue-400">~</span>
+                <span class="text-success">➜</span>
+                <span class="text-primary">~</span>
                 <span>vuln-scan --target 10.0.0.1 --deep</span>
               </div>
-              <div class="pl-4 text-slate-500">[+] Initializing vulnerability database...</div>
-              <div class="pl-4 text-slate-500">[+] Checking CVE-2023-XXXX...</div>
-              <div class="pl-4 text-red-400">[!] POTENTIAL FLLAW DETECTED: Outdated SSL Protocol</div>
-              <div class="pl-4 text-emerald-500">Generating Report........... DONE</div>
+              <div class="pl-4 text-hsa opacity-70">[+] Initializing vulnerability database...</div>
+              <div class="pl-4 text-hsa opacity-70">[+] Checking CVE-2023-XXXX...</div>
+              <div class="pl-4 text-danger">[!] POTENTIAL FLLAW DETECTED: Outdated SSL Protocol</div>
+              <div class="pl-4 text-success">Generating Report........... DONE</div>
               <span class="animate-pulse">_</span>
             </div>
           </UiAppFrame>
@@ -227,9 +226,8 @@
             :class="{ 'grayscale opacity-60': service.status !== 'available' }" />
 
           <div v-if="service.status !== 'available'"
-            class="absolute inset-0 flex items-center justify-center bg-slate-900/10 backdrop-blur-[1px] z-20 rounded-3xl">
-            <span
-              class="px-6 py-3 bg-slate-900 text-white rounded-full font-bold shadow-xl border border-slate-700">Bientôt
+            class="absolute inset-0 flex items-center justify-center bg-WtB/50 backdrop-blur-[1px] z-20 rounded-3xl">
+            <span class="px-6 py-3 bg-BtW text-WtB rounded-full font-bold shadow-xl border border-ash">Bientôt
               Disponible</span>
           </div>
         </div>

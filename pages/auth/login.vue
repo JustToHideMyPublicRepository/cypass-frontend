@@ -19,8 +19,15 @@
               passe</label>
             <a href="#" class="text-xs text-primary hover:underline">Oublié ?</a>
           </div>
-          <input v-model="password" id="password" type="password" required
-            class="w-full px-4 py-2 rounded-lg border border-ashAct focus:ring-2 focus:ring-primary focus:border-transparent bg-ash transition-shadow outline-none" />
+          <div class="relative">
+            <input v-model="password" id="password" :type="showPassword ? 'text' : 'password'" required
+              class="w-full px-4 py-2 rounded-lg border border-ashAct focus:ring-2 focus:ring-primary focus:border-transparent bg-ash transition-shadow outline-none pr-10" />
+            <button type="button" @click="showPassword = !showPassword"
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-hsa hover:text-primary focus:outline-none">
+              <IconEye v-if="showPassword" class="w-5 h-5" />
+              <IconEyeOff v-else class="w-5 h-5" />
+            </button>
+          </div>
         </div>
       </div>
 
@@ -53,7 +60,7 @@
 </template>
 
 <script setup lang="ts">
-import { IconAlertCircle } from '@tabler/icons-vue'
+import { IconAlertCircle, IconEye, IconEyeOff } from '@tabler/icons-vue'
 
 definePageMeta({
   layout: 'auth'
@@ -61,6 +68,7 @@ definePageMeta({
 
 const email = ref('')
 const password = ref('')
+const showPassword = ref(false)
 const error = ref('')
 const loading = ref(false)
 const cypassData = useCypassData()
