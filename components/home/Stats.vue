@@ -1,9 +1,5 @@
 <template>
   <section class="py-24 bg-slate-900 text-white relative overflow-hidden">
-    <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-900 to-primary/20"></div>
-    <!-- Animated Grid -->
-    <div class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10"></div>
-
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       <div class="grid grid-cols-2 md:grid-cols-4 gap-12 text-center">
         <div v-for="(stat, index) in stats" :key="index" class="space-y-4 group">

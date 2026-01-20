@@ -1,7 +1,7 @@
 <template>
   <div class="relative">
     <!-- Background Decor -->
-    <div class="absolute inset-0 overflow-hidden pointer-events-none -z-10">
+    <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
       <div v-if="service"
         class="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] rounded-full blur-[120px] opacity-20"
         :class="service.theme === 'blue' ? 'bg-blue-500' : 'bg-green-500'">

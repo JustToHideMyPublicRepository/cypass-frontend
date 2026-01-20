@@ -1,7 +1,6 @@
 <template>
   <div class="relative">
     <div class="max-w-5xl mx-auto space-y-16">
-
       <div class="text-center space-y-4 animate-fade-up">
         <span class="badge badge-success">Écosystème</span>
         <h1 class="text-4xl md:text-5xl font-black tracking-tight">

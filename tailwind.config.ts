@@ -62,6 +62,8 @@ export default {
         'fade-down': 'fade-down 0.8s ease-out forwards',
         'fade-left': 'fade-left 0.8s ease-out forwards',
         'fade-right': 'fade-right 0.8s ease-out forwards',
+        'pulse-slow': 'pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'pulse-slower': 'pulse 10s cubic-bezier(0.4, 0, 0.6, 1) infinite',
       },
     },
   },

@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10">
+  <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
     <!-- Living Gradients -->
     <div
       class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-primary/20 rounded-full blur-[120px] animate-float opacity-60 dark:opacity-20">

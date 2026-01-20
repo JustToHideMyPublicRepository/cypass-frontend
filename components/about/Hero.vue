@@ -1,5 +1,5 @@
 <template>
-  <section class="relative pt-32 pb-20 overflow-hidden">
+  <section class="relative">
     <!-- Background Elements -->
     <div class="absolute top-0 left-0 w-full h-full overflow-hidden -z-10">
       <div class="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-primary rounded-full blur-[100px]">

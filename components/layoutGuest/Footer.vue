@@ -81,7 +81,7 @@ const footerGroups = [
     title: 'Plateforme',
     links: [
       { label: 'À propos', path: '/about' },
-      { label: 'Nos Services', path: '/services' },
+      { label: 'Services', path: '/services' },
       { label: 'Partenaires', path: '/partners' },
       { label: 'Développeurs', path: '/developers' },
       { label: 'FAQ', path: '/faq' },
@@ -91,7 +91,7 @@ const footerGroups = [
     title: 'Ressources',
     links: [
       { label: 'Mentions Légales', path: '/legal/mentions' },
-      { label: 'Politique de Confidentialité', path: '/legal/privacy' },
+      { label: 'Confidentialité', path: '/legal/privacy' },
       { label: 'CGU', path: '/legal/terms' },
       { label: 'Centre d\'aide', path: '/support' },
       { label: 'État du système', path: '/status' },
