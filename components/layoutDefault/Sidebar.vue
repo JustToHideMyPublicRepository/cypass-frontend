@@ -4,10 +4,12 @@
     isOpen ? 'translate-x-0' : '-translate-x-full'
   ]">
     <div class="h-16 flex items-center px-6 border-b border-ash">
-      <div
-        class="w-8 h-8 rounded bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-bold mr-2">
-        C</div>
-      <span class="text-xl font-bold text-BtW">CYPASS</span>
+      <NuxtLink to="/" class="flex items-center gap-2 group">
+        <div class="w-8 h-8 rounded-lg bg-WtB flex items-center justify-center shadow-sm border border-ash p-0.5">
+          <img src="/img/logo.png" alt="Logo CYPASS" class="w-full h-full object-contain" />
+        </div>
+        <span class="text-xl font-bold text-BtW group-hover:text-primary transition-colors">CYPASS</span>
+      </NuxtLink>
     </div>
 
     <nav class="p-4 space-y-2">
@@ -39,10 +41,9 @@
 </template>
 
 <script setup lang="ts">
-import { IconHome, IconLayoutDashboard as IconDashboard, IconFileCertificate, IconScanEye, IconRadar2, IconLogout } from '@tabler/icons-vue'
+import { IconLayoutDashboard as IconDashboard, IconFileCertificate, IconScanEye, IconRadar2, IconLogout } from '@tabler/icons-vue'
 
 const mainLinks = [
-  { label: 'Retour', path: '/', icon: IconHome },
   { label: 'Vue d\'ensemble', path: '/dashboard', icon: IconDashboard }
 ]
 

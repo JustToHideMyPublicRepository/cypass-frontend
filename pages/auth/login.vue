@@ -49,7 +49,7 @@
       <div class="mt-6 text-center">
         <p class="text-sm text-hsa">
           Pas encore de compte ?
-          <NuxtLink to="/auth/register" class="text-primary font-medium hover:underline">Créer un compte un compte
+          <NuxtLink to="/auth/register" class="text-primary font-medium hover:underline">Créer un compte
           </NuxtLink>
         </p>
       </div>
