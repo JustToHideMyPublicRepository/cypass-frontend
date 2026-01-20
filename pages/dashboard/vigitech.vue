@@ -8,7 +8,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
       <!-- Feed -->
       <div class="lg:col-span-3 space-y-6">
-        <BaseCard v-for="alert in cypassData.alerts" :key="alert.id" class="border-l-4" :class="[
+        <UiBaseCard v-for="alert in cypassData.alerts" :key="alert.id" class="border-l-4" :class="[
           alert.severity === 'High' ? 'border-l-red-500' :
             alert.severity === 'Medium' ? 'border-l-yellow-500' : 'border-l-blue-500'
         ]">
@@ -24,7 +24,7 @@
               </div>
               <div>
                 <div class="flex items-center gap-2 mb-1">
-                  <StatusBadge :status="alert.severity" />
+                  <UiStatusBadge :status="alert.severity" />
                   <span class="text-xs text-hsa">{{ new Date(alert.timestamp).toLocaleTimeString()
                   }}</span>
                 </div>
@@ -46,12 +46,12 @@
               <IconEye class="w-4 h-4" /> Voir log brut
             </button>
           </div>
-        </BaseCard>
+        </UiBaseCard>
       </div>
 
       <!-- Sidebar Widgets -->
       <div class="space-y-6">
-        <BaseCard title="Sources Surveillées">
+        <UiBaseCard title="Sources Surveillées">
           <ul class="space-y-3 text-sm">
             <li class="flex justify-between items-center text-hsa">
               <span>Traffic Réseau</span>
@@ -70,9 +70,9 @@
               <span class="w-2 h-2 rounded-full bg-yellow-500"></span>
             </li>
           </ul>
-        </BaseCard>
+        </UiBaseCard>
 
-        <BaseCard class="bg-blue-600 text-white border-none">
+        <UiBaseCard class="bg-blue-600 text-white border-none">
           <h3 class="font-bold mb-2 flex items-center gap-2">
             <IconBroadcast class="w-5 h-5" /> Mode Veille
           </h3>
@@ -82,7 +82,7 @@
             <div class="bg-white/80 h-1.5 rounded-full w-2/3 animate-[pulse_2s_infinite]"></div>
           </div>
           <div class="text-xs text-blue-200 text-right">Analyse en cours...</div>
-        </BaseCard>
+        </UiBaseCard>
       </div>
     </div>
   </div>

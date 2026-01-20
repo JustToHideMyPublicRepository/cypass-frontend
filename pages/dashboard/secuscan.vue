@@ -6,7 +6,7 @@
     </div>
 
     <!-- Scanner Input -->
-    <BaseCard class="bg-gradient-to-r from-slate-900 to-slate-800 text-white border-none">
+    <UiBaseCard class="bg-gradient-to-r from-slate-900 to-slate-800 text-white border-none">
       <div class="max-w-3xl mx-auto py-8">
         <h2 class="text-xl font-semibold mb-4 text-center">Lancer un audit de sécurité</h2>
         <div class="flex gap-2">
@@ -22,12 +22,12 @@
         <p class="text-xs text-slate-400 mt-2 text-center">Scan complet incluant OWASP Top 10 et conformité RGPD.
         </p>
       </div>
-    </BaseCard>
+    </UiBaseCard>
 
     <!-- Results -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <!-- Chart Placeholder -->
-      <BaseCard title="Synthèse des risques" class="lg:col-span-1">
+      <UiBaseCard title="Synthèse des risques" class="lg:col-span-1">
         <div class="flex flex-col items-center justify-center py-8">
           <div class="w-40 h-40 rounded-full border-8 border-ash flex items-center justify-center relative">
             <span class="text-3xl font-bold">85%</span>
@@ -55,10 +55,10 @@
             </div>
           </div>
         </div>
-      </BaseCard>
+      </UiBaseCard>
 
       <!-- Vulnerabilities List -->
-      <BaseCard title="Vulnérabilités Détectées" class="lg:col-span-2">
+      <UiBaseCard title="Vulnérabilités Détectées" class="lg:col-span-2">
         <div class="space-y-4">
           <div v-for="vuln in cypassData.vulnerabilities" :key="vuln.id"
             class="p-4 rounded-lg border border-ash bg-ash/50">
@@ -75,7 +75,7 @@
                   <p class="text-sm text-hsa font-code mt-1">{{ vuln.url }}</p>
                 </div>
               </div>
-              <StatusBadge :status="vuln.severity" />
+              <UiStatusBadge :status="vuln.severity" />
             </div>
             <div class="mt-4 flex justify-between items-center">
               <div class="text-xs text-hsa">Détecté le 12/01/2026</div>
@@ -83,7 +83,7 @@
             </div>
           </div>
         </div>
-      </BaseCard>
+      </UiBaseCard>
     </div>
   </div>
 </template>

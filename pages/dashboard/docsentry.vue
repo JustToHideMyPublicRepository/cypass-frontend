@@ -11,7 +11,7 @@
     </div>
 
     <!-- Filters and Search (Mock) -->
-    <BaseCard>
+    <UiBaseCard>
       <div class="flex flex-col md:flex-row gap-4">
         <div class="flex-1 relative">
           <span class="absolute left-3 top-1/2 -translate-y-1/2 text-hsa">
@@ -32,10 +32,10 @@
           </UiBaseButton>
         </div>
       </div>
-    </BaseCard>
+    </UiBaseCard>
 
     <!-- Documents Table -->
-    <BaseCard class="overflow-hidden p-0">
+    <UiBaseCard class="overflow-hidden p-0">
       <div class="overflow-x-auto">
         <table class="w-full text-sm text-left">
           <thead class="text-xs text-hsa uppercase bg-ash/50 border-b border-ash">
@@ -67,7 +67,7 @@
                 {{ doc.hash }}
               </td>
               <td class="px-6 py-4">
-                <StatusBadge :status="doc.status" />
+                <UiStatusBadge :status="doc.status" />
               </td>
               <td class="px-6 py-4 text-right">
                 <button class="hover:text-primary transition-colors mx-1">
@@ -91,7 +91,7 @@
           <UiBaseButton variant="secondary" size="sm" disabled>Suivant</UiBaseButton>
         </div>
       </div>
-    </BaseCard>
+    </UiBaseCard>
   </div>
 </template>
 
