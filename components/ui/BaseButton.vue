@@ -20,7 +20,7 @@ import { computed } from 'vue'
 import { IconLoader2 } from '@tabler/icons-vue'
 
 const props = withDefaults(defineProps<{
-  variant?: 'primary' | 'secondary' | 'danger'
+  variant?: 'primary' | 'secondary' | 'danger' | 'ghost'
   block?: boolean
   disabled?: boolean
   loading?: boolean
@@ -40,6 +40,7 @@ const buttonClasses = computed(() => [
   props.variant === 'primary' ? 'btn-primary' : '',
   props.variant === 'secondary' ? 'btn-secondary' : '',
   props.variant === 'danger' ? 'btn-danger' : '',
+  props.variant === 'ghost' ? 'btn-ghost' : '',
   props.block ? 'w-full' : '',
   (props.disabled || props.loading) ? 'opacity-50 cursor-not-allowed pointer-events-none' : ''
 ])

@@ -11,9 +11,9 @@
           Nous collaborons avec les acteurs clés de la sécurité et du numérique au Bénin pour garantir un service de
           confiance.
         </p>
-        <button @click="isModalOpen = true" class="btn btn-primary mt-8">
+        <UiBaseButton @click="isModalOpen = true" class="mt-8">
           Devenir Partenaire
-        </button>
+        </UiBaseButton>
       </div>
 
       <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -26,7 +26,7 @@
           </div>
           <h3 class="text-xl font-bold mb-2">{{ partner.name }}</h3>
           <p class="text-sm text-hsa mb-6">{{ partner.role }}</p>
-          <a href="#" class="btn btn-secondary text-xs px-4 py-2">Visiter le site</a>
+          <UiBaseButton href="#" variant="secondary" class="text-xs px-4 py-2">Visiter le site</UiBaseButton>
         </div>
       </div>
 
@@ -82,9 +82,9 @@
               </div>
 
               <div class="pt-4 flex gap-3">
-                <button type="button" @click="isModalOpen = false"
-                  class="btn btn-ghost flex-1 text-BtW">Annuler</button>
-                <button type="submit" class="btn btn-primary flex-1">Envoyer la demande</button>
+                <UiBaseButton type="button" @click="isModalOpen = false" variant="ghost" class="flex-1">Annuler
+                </UiBaseButton>
+                <UiBaseButton type="submit" class="flex-1">Envoyer la demande</UiBaseButton>
               </div>
             </form>
           </div>

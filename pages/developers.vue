@@ -5,18 +5,18 @@
       <div class="grid lg:grid-cols-2 gap-16 items-center">
         <div class="space-y-6 animate-fade-right">
           <span class="badge badge-primary">Pour les Développeurs</span>
-          <h1 class="text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
+          <h1 class="text-4xl md:text-5xl font-black text-BtW tracking-tight">
             Intégrez la confiance <br />
             <span class="text-primary">dans vos apps</span>
           </h1>
-          <p class="text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
+          <p class="text-lg text-hsa leading-relaxed">
             Accédez à nos API REST sécurisées pour automatiser la vérification d'identité, la signature de documents et
             la consultation des registres officiels.
           </p>
 
           <div class="flex gap-4 pt-4">
-            <NuxtLink to="/support#developers" class="btn btn-primary">Lire la Documentation</NuxtLink>
-            <button class="btn btn-secondary">Obtenir une Clé API</button>
+            <UiBaseButton to="/support#developers">Lire la Documentation</UiBaseButton>
+            <UiBaseButton variant="secondary">Obtenir une Clé API</UiBaseButton>
           </div>
         </div>
 

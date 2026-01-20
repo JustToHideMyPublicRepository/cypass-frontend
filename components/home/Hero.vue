@@ -36,17 +36,13 @@
           </p>
 
           <div class="flex flex-col sm:flex-row gap-5 justify-center lg:justify-start pt-4">
-            <NuxtLink to="/auth/login" class="w-full sm:w-auto">
-              <button class="btn btn-primary w-full sm:w-auto text-lg px-8 py-4 shadow-BtW/40">
-                Accéder au Portail
-                <IconArrowRight class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-              </button>
-            </NuxtLink>
-            <NuxtLink to="#features" class="w-full sm:w-auto">
-              <button class="btn btn-secondary w-full sm:w-auto text-lg px-8 py-4">
-                Découvrir les services
-              </button>
-            </NuxtLink>
+            <UiBaseButton to="/auth/login" class="w-full sm:w-auto text-lg px-8 py-4 shadow-BtW/40">
+              Accéder au Portail
+              <IconArrowRight class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+            </UiBaseButton>
+            <UiBaseButton to="#features" variant="secondary" class="w-full sm:w-auto text-lg px-8 py-4">
+              Découvrir les services
+            </UiBaseButton>
           </div>
 
           <div
