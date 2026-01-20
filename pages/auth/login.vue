@@ -25,9 +25,9 @@
       </div>
 
       <div class="mt-6">
-        <BaseButton type="submit" block :loading="loading">
+        <UiBaseButton type="submit" block :loading="loading">
           Se Connecter
-        </BaseButton>
+        </UiBaseButton>
       </div>
 
       <div class="relative flex py-2 items-center pt-6">

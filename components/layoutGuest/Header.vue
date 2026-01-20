@@ -71,7 +71,7 @@
           <NuxtLink v-for="item in NavHeader" :key="item.label" :to="item.path" @click="isMobileMenuOpen = false"
             class="p-4 rounded-xl text-lg font-medium transition-colors" :class="[
               item.isButton
-                ? 'bg-primary text-white font-bold shadow-md'
+                ? 'btn btn-primary shadow-md'
                 : 'text-BtW hover:bg-ash'
             ]">
             {{ item.label }}
@@ -81,7 +81,7 @@
         <div class="mt-8 pt-8 border-t border-ash w-full text-center">
           <p class="text-sm text-hsa mb-4">Préférences</p>
           <button @click="toggleTheme"
-            class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-ash text-hsa">
+            class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-ash text-hsa hover:bg-ash/50 transition-colors">
             <IconSun v-if="colorMode.preference === 'dark'" class="w-4 h-4 text-yellow-500" />
             <IconMoon v-else class="w-4 h-4" />
             <span>{{ colorMode.preference === 'dark' ? 'Mode Clair' : 'Mode Sombre' }}</span>

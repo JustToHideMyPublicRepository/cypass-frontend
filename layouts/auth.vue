@@ -1,13 +1,14 @@
 <template>
   <div class="h-screen w-full flex overflow-hidden">
     <!-- Left Column: Form Area (1/3) -->
-    <div class="w-full lg:w-1/3 h-full z-10 bg-WtBAct shadow-2xl lg:shadow-none relative flex flex-col">
+    <div
+      class="w-full lg:w-1/3 h-full z-10 bg-WtB shadow-2xl lg:shadow-none relative flex flex-col border-r border-ash">
 
       <!-- Theme Toggle (Fixed relative to column) -->
       <button @click="toggleTheme"
-        class="absolute top-6 right-6 p-2 rounded-full text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors z-30">
+        class="absolute top-6 right-6 p-2 rounded-full text-hsa hover:bg-ash/50 transition-colors z-30">
         <IconSun v-if="colorMode.preference === 'dark'" class="w-5 h-5 text-yellow-500" />
-        <IconMoon v-else class="w-5 h-5 text-slate-600" />
+        <IconMoon v-else class="w-5 h-5" />
       </button>
 
       <!-- Scrollable Content -->
@@ -29,7 +30,7 @@
             <slot />
           </div>
 
-          <div class="mt-8 text-center text-xs animate-fade-in pb-4">
+          <div class="mt-8 text-center text-xs animate-fade-in pb-4 text-hsa">
             &copy; {{ new Date().getFullYear() }} CYPASS. Tous droits réservés.
           </div>
 
@@ -38,7 +39,7 @@
     </div>
 
     <!-- Right Column: Visual Area (2/3) -->
-    <div class="hidden lg:block lg:w-2/3 relative overflow-hidden transition-colors duration-500">
+    <div class="hidden lg:block lg:w-2/3 relative overflow-hidden transition-colors duration-500 bg-slate-900">
 
       <div
         class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 z-10 pointer-events-none mix-blend-overlay">
@@ -54,7 +55,7 @@
 
       <!-- Grid Overlay -->
       <div
-        class="absolute inset-0 bg-[linear-gradient(rgba(17,24,39,0.05)_2px,transparent_2px),linear-gradient(90deg,rgba(17,24,39,0.05)_2px,transparent_2px)] dark:bg-[linear-gradient(rgba(255,255,255,0.05)_2px,transparent_2px),linear-gradient(90deg,rgba(255,255,255,0.05)_2px,transparent_2px)] bg-[length:40px_40px] opacity-20">
+        class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_2px,transparent_2px),linear-gradient(90deg,rgba(255,255,255,0.05)_2px,transparent_2px)] bg-[length:40px_40px] opacity-20">
       </div>
 
       <!-- Central Visual Content (Slideshow) -->
@@ -66,7 +67,7 @@
 
             <!-- Glass Card -->
             <div
-              class="glass-panel p-12 rounded-3xl border border-white/40 dark:border-white/10 backdrop-blur-xl shadow-2xl bg-white/40 dark:bg-slate-900/40">
+              class="glass-panel p-12 rounded-3xl border border-white/10 backdrop-blur-xl shadow-2xl bg-slate-900/40">
 
               <!-- Icon -->
               <div
@@ -75,9 +76,9 @@
                 <component :is="slide.icon" class="w-10 h-10" />
               </div>
 
-              <h2 class="text-4xl font-bold text-slate-900 dark:text-white mb-4 transition-colors">{{ slide.title }}
+              <h2 class="text-4xl font-bold text-white mb-4 transition-colors">{{ slide.title }}
               </h2>
-              <p class="text-lg text-slate-600 dark:text-slate-300 leading-relaxed transition-colors">
+              <p class="text-lg text-slate-300 leading-relaxed transition-colors">
                 {{ slide.description }}
               </p>
             </div>
@@ -123,7 +124,7 @@ const slides = [
     blobColor2: 'bg-indigo-500/30'
   },
   {
-    title: 'Certification Électronique',
+    title: 'Certification électronique',
     description: 'Signez et validez vos documents officiels avec DocSentry, la solution de confiance reconnue par l\'État.',
     icon: IconCertificate,
     iconBg: 'bg-gradient-to-br from-green-500 to-emerald-600',
@@ -131,7 +132,7 @@ const slides = [
     blobColor2: 'bg-emerald-500/30'
   },
   {
-    title: 'Surveillance Active',
+    title: 'Surveillance active',
     description: 'VigiTech surveille en permanence votre infrastructure pour détecter et neutraliser les menaces avant qu\'elles n\'agissent.',
     icon: IconEye,
     iconBg: 'bg-gradient-to-br from-purple-500 to-pink-600',

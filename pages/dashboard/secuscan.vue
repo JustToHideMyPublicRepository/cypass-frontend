@@ -15,9 +15,9 @@
             <input type="url" placeholder="https://example.gouv.bj"
               class="w-full pl-10 pr-4 py-3 rounded-lg border-none bg-white/10 text-white placeholder-slate-400 focus:ring-2 focus:ring-secondary" />
           </div>
-          <BaseButton variant="primary" class="bg-secondary hover:bg-emerald-600 px-6">
+          <UiBaseButton variant="primary" class="bg-secondary hover:bg-emerald-600 px-6">
             Scanner
-          </BaseButton>
+          </UiBaseButton>
         </div>
         <p class="text-xs text-slate-400 mt-2 text-center">Scan complet incluant OWASP Top 10 et conformité RGPD.
         </p>
@@ -79,7 +79,7 @@
             </div>
             <div class="mt-4 flex justify-between items-center">
               <div class="text-xs text-hsa">Détecté le 12/01/2026</div>
-              <BaseButton variant="secondary" size="sm">Détails</BaseButton>
+              <UiBaseButton variant="secondary" size="sm">Détails</UiBaseButton>
             </div>
           </div>
         </div>

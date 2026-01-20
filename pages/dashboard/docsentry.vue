@@ -5,9 +5,9 @@
         <h1 class="text-2xl font-bold">DocSentry</h1>
         <p>Gestion et certification des documents officiels</p>
       </div>
-      <BaseButton>
+      <UiBaseButton>
         <span class="mr-2">+</span> Nouveau Document
-      </BaseButton>
+      </UiBaseButton>
     </div>
 
     <!-- Filters and Search (Mock) -->
@@ -27,9 +27,9 @@
             <option>En attente</option>
             <option>Rejeté</option>
           </select>
-          <BaseButton variant="secondary">
+          <UiBaseButton variant="secondary">
             Filtres
-          </BaseButton>
+          </UiBaseButton>
         </div>
       </div>
     </BaseCard>
@@ -87,8 +87,8 @@
         <div class="text-sm text-hsa">Affichage de <span class="font-medium">1</span> à <span
             class="font-medium">3</span> sur <span class="font-medium">3</span> résultats</div>
         <div class="flex gap-2">
-          <BaseButton variant="secondary" size="sm" disabled>Précédent</BaseButton>
-          <BaseButton variant="secondary" size="sm" disabled>Suivant</BaseButton>
+          <UiBaseButton variant="secondary" size="sm" disabled>Précédent</UiBaseButton>
+          <UiBaseButton variant="secondary" size="sm" disabled>Suivant</UiBaseButton>
         </div>
       </div>
     </BaseCard>
