@@ -71,12 +71,10 @@
                   required></textarea>
               </div>
 
-              <button type="submit" :disabled="loading"
-                class="btn btn-primary w-full disabled:cursor-not-allowed flex items-center justify-center gap-2">
-                <span v-if="loading" class="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></span>
-                <span v-else>Envoyer le message</span>
-                <IconSend v-if="!loading" class="w-5 h-5" />
-              </button>
+              <UiBaseButton type="submit" :disabled="loading" :loading="loading" block>
+                Envoyer le message
+                <IconSend v-if="!loading" class="w-5 h-5 ml-2" />
+              </UiBaseButton>
             </form>
           </div>
         </div>

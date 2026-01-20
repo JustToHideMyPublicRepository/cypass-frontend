@@ -33,7 +33,6 @@
           <div class="mt-8 text-center text-xs animate-fade-in pb-4 text-hsa">
             &copy; {{ new Date().getFullYear() }} CYPASS. Tous droits réservés.
           </div>
-
         </div>
       </div>
     </div>
@@ -93,9 +92,7 @@
             :class="currentSlide === index ? 'w-8 bg-primary' : 'w-2 bg-slate-400/50 hover:bg-slate-400'">
           </button>
         </div>
-
       </div>
-
     </div>
   </div>
 </template>

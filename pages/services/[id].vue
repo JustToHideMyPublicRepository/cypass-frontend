@@ -37,14 +37,14 @@
             </p>
 
             <div v-if="service.status === 'available'" class="flex flex-col sm:flex-row gap-4 pt-4">
-              <button class="btn btn-primary shadow-xl shadow-primary/20">
+              <UiBaseButton class="shadow-xl shadow-primary/20">
                 Demander une démo
                 <IconArrowRight class="w-5 h-5 ml-2" />
-              </button>
-              <button class="btn btn-secondary">
+              </UiBaseButton>
+              <UiBaseButton variant="secondary">
                 <IconFileText class="w-5 h-5 mr-2" />
                 Documentation API
-              </button>
+              </UiBaseButton>
             </div>
             <div v-else class="pt-4">
               <div
@@ -292,8 +292,7 @@
       <div class="text-9xl font-black text-ashAct mb-8">404</div>
       <h1 class="text-2xl font-bold text-BtW">Service introuvable</h1>
       <p class="text-slate-500 mb-8">Le module que vous recherchez n'existe pas ou n'est plus disponible.</p>
-      <NuxtLink to="/services" class="btn btn-primary">Retour au catalogue
-      </NuxtLink>
+      <UiBaseButton to="/services">Retour au catalogue</UiBaseButton>
     </div>
 
   </div>

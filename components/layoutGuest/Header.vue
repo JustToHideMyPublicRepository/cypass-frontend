@@ -67,14 +67,10 @@
       <div v-if="isMobileMenuOpen"
         class="fixed inset-0 z-40 md:hidden pt-24 px-4 bg-WtB/95 backdrop-blur-xl flex flex-col items-center">
         <div class="flex flex-col gap-6 w-full max-w-sm text-center">
-          <NuxtLink v-for="item in NavHeader" :key="item.label" :to="item.path" @click="isMobileMenuOpen = false"
-            class="p-4 rounded-xl text-lg font-medium transition-colors" :class="[
-              item.isButton
-                ? 'btn btn-primary shadow-md'
-                : 'text-BtW hover:bg-ash'
-            ]">
+          <UiBaseButton v-for="item in NavHeader" :key="item.label" :to="item.path" @click="isMobileMenuOpen = false"
+            :variant="item.isButton ? 'primary' : 'ghost'" class="p-4 rounded-xl text-lg font-medium">
             {{ item.label }}
-          </NuxtLink>
+          </UiBaseButton>
         </div>
 
         <div class="mt-8 pt-8 border-t border-ash w-full text-center">

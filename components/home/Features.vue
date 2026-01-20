@@ -58,7 +58,7 @@
               {{ service.cta }}
               <IconArrowRight class="w-4 h-4 ml-2" />
             </UiBaseButton>
-            <UiBaseButton v-else disabled class="btn btn-ghost text-hsa pl-0 cursor-not-allowed">
+            <UiBaseButton v-else disabled variant="primary" class="text-hsa pl-0 cursor-not-allowed">
               Disponible prochainement
             </UiBaseButton>
           </div>
