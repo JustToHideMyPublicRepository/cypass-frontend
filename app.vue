@@ -1,7 +1,9 @@
 <template>
   <div class="min-h-screen bg-gradient-premium text-textClr font-body">
     <NuxtLayout>
-      <NuxtPage />
+      <div class="py-8">
+        <NuxtPage />
+      </div>
     </NuxtLayout>
   </div>
 </template>

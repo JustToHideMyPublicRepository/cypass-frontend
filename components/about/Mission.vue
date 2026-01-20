@@ -60,15 +60,8 @@
                 <div class="absolute inset-0 flex items-center justify-center">
                   <div class="relative">
                     <div class="absolute inset-0 bg-primary/20 blur-xl rounded-full"></div>
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                      class="w-16 h-16 text-primary drop-shadow-[0_0_15px_rgba(59,130,246,0.5)]" viewBox="0 0 24 24"
-                      stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round"
-                      stroke-linejoin="round">
-                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                      <path d="M12 3a12 12 0 0 0 8.5 3a12 12 0 0 1 -8.5 15a12 12 0 0 1 -8.5 -15a12 12 0 0 0 8.5 -3" />
-                      <path d="M12 11m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
-                      <path d="M12 12l0 2.5" />
-                    </svg>
+                    <IconShieldLock class="w-16 h-16 text-primary drop-shadow-[0_0_15px_rgba(59,130,246,0.5)]"
+                      stroke-width="1.5" />
                   </div>
                 </div>
               </div>
@@ -87,6 +80,8 @@
 </template>
 
 <script setup lang="ts">
+import { IconShieldLock } from '@tabler/icons-vue'
+
 const stats = [
   { value: '100%', label: 'Souverain' },
   { value: '24/7', label: 'Protection' }
