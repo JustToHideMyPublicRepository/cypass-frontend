@@ -121,4 +121,8 @@ const cypassData = useCypassData()
 const formatTime = (ts: string) => {
   return new Date(ts).toLocaleString()
 }
+
+useHead({
+  title: 'Tableau de bord'
+})
 </script>

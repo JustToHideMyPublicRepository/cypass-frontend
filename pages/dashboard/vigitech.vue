@@ -97,4 +97,8 @@ definePageMeta({
 })
 
 const cypassData = useCypassData()
+
+useHead({
+  title: 'VigiTech'
+})
 </script>

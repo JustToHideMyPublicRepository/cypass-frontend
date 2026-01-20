@@ -55,9 +55,11 @@
             class="w-4 h-4 rounded border-ashAct text-primary focus:ring-primary bg-ash" />
         </div>
         <label for="terms" class="text-sm text-hsa leading-tight">
-          Je confirme avoir lu et j'accepte les <a href="#" class="text-primary hover:underline font-bold">Conditions
-            Générales d'Utilisation</a> et la <a href="#" class="text-primary hover:underline font-bold">Politique de
-            Confidentialité</a>.
+          Je confirme avoir lu et j'accepte les <NuxtLink to="/legal/terms"
+            class="text-primary hover:underline font-bold">Conditions
+            Générales d'Utilisation</NuxtLink> et la <NuxtLink to="/legal/privacy"
+            class="text-primary hover:underline font-bold">Politique de
+            Confidentialité</NuxtLink>.
         </label>
       </div>
 

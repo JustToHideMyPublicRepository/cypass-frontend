@@ -104,4 +104,8 @@ definePageMeta({
 })
 
 const cypassData = useCypassData()
+
+useHead({
+  title: 'DocSentry'
+})
 </script>

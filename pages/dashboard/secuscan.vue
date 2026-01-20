@@ -97,4 +97,8 @@ definePageMeta({
 })
 
 const cypassData = useCypassData()
+
+useHead({
+  title: 'SecuScan'
+})
 </script>

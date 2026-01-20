@@ -162,7 +162,6 @@
               </div>
             </div>
           </UiAppFrame>
-
         </div>
       </div>
     </div>
@@ -178,7 +177,7 @@ definePageMeta({
 })
 
 useHead({
-  title: 'Contact & Support'
+  title: 'Contact'
 })
 
 const loading = ref(false)
