@@ -1,6 +1,6 @@
 <template>
   <div class="flex-1 overflow-y-auto w-full custom-scrollbar">
-    <div class="flex flex-col justify-center min-h-full px-8 sm:px-12 lg:px-16 xl:px-24 py-12">
+    <div class="flex flex-col justify-center min-h-full px-6 sm:px-10 lg:px-12 xl:px-16 py-12 max-w-lg mx-auto">
 
       <div class="mb-10 animate-fade-down">
         <NuxtLink to="/" class="inline-flex items-center gap-3 group">

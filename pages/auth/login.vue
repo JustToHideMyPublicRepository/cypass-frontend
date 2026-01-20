@@ -1,5 +1,8 @@
 <template>
-  <div class="w-full">
+  <div class="w-full max-w-md">
+    <h2 class="text-2xl font-bold mb-2">Connexion</h2>
+    <p class="text-hsa mb-8">Accédez à votre espace sécurisé CYPASS.</p>
+
     <form @submit.prevent="handleLogin" class="bg-WtB shadow-xl rounded-2xl p-8 border border-ash">
       <div v-if="error" class="mb-4 p-3 bg-danger/10 text-danger rounded-lg text-sm flex items-center gap-2">
         <IconAlertCircle class="w-4 h-4" />
@@ -46,7 +49,8 @@
       <div class="mt-6 text-center">
         <p class="text-sm text-hsa">
           Pas encore de compte ?
-          <NuxtLink to="/auth/register" class="text-primary font-medium hover:underline">Demander un accès</NuxtLink>
+          <NuxtLink to="/auth/register" class="text-primary font-medium hover:underline">Créer un compte un compte
+          </NuxtLink>
         </p>
       </div>
 

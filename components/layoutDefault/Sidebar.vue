@@ -11,32 +11,20 @@
     </div>
 
     <nav class="p-4 space-y-2">
-      <NuxtLink to="/dashboard"
+      <NuxtLink v-for="link in mainLinks" :key="link.path" :to="link.path"
         class="flex items-center gap-3 px-4 py-3 rounded-lg text-hsa hover:bg-ash hover:text-BtW transition-colors"
         active-class="bg-primary text-white hover:bg-primary/90 hover:text-white">
-        <IconDashboard class="w-5 h-5" />
-        <span>Vue d'ensemble</span>
+        <component :is="link.icon" class="w-5 h-5" />
+        <span>{{ link.label }}</span>
       </NuxtLink>
 
       <div class="px-4 py-2 text-xs font-semibold text-hsa uppercase tracking-wider mt-6">Modules</div>
 
-      <NuxtLink to="/dashboard/docsentry"
+      <NuxtLink v-for="link in moduleLinks" :key="link.path" :to="link.path"
         class="flex items-center gap-3 px-4 py-3 rounded-lg text-hsa hover:bg-ash hover:text-BtW transition-colors"
         active-class="bg-primary text-white hover:bg-primary/90 hover:text-white">
-        <IconFileCertificate class="w-5 h-5" />
-        <span>DocSentry</span>
-      </NuxtLink>
-      <NuxtLink to="/dashboard/secuscan"
-        class="flex items-center gap-3 px-4 py-3 rounded-lg text-hsa hover:bg-ash hover:text-BtW transition-colors"
-        active-class="bg-primary text-white hover:bg-primary/90 hover:text-white">
-        <IconScanEye class="w-5 h-5" />
-        <span>SecuScan</span>
-      </NuxtLink>
-      <NuxtLink to="/dashboard/vigitech"
-        class="flex items-center gap-3 px-4 py-3 rounded-lg text-hsa hover:bg-ash hover:text-BtW transition-colors"
-        active-class="bg-primary text-white hover:bg-primary/90 hover:text-white">
-        <IconRadar2 class="w-5 h-5" />
-        <span>VigiTech</span>
+        <component :is="link.icon" class="w-5 h-5" />
+        <span>{{ link.label }}</span>
       </NuxtLink>
     </nav>
 
@@ -51,7 +39,18 @@
 </template>
 
 <script setup lang="ts">
-import { IconLayoutDashboard as IconDashboard, IconFileCertificate, IconScanEye, IconRadar2, IconLogout } from '@tabler/icons-vue'
+import { IconHome, IconLayoutDashboard as IconDashboard, IconFileCertificate, IconScanEye, IconRadar2, IconLogout } from '@tabler/icons-vue'
+
+const mainLinks = [
+  { label: 'Retour', path: '/', icon: IconHome },
+  { label: 'Vue d\'ensemble', path: '/dashboard', icon: IconDashboard }
+]
+
+const moduleLinks = [
+  { label: 'DocSentry', path: '/dashboard/docsentry', icon: IconFileCertificate },
+  { label: 'SecuScan', path: '/dashboard/secuscan', icon: IconScanEye },
+  { label: 'VigiTech', path: '/dashboard/vigitech', icon: IconRadar2 }
+]
 
 defineProps<{
   isOpen: boolean

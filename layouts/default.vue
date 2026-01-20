@@ -9,7 +9,7 @@
     <!-- Main Content -->
     <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
       <!-- Topbar -->
-      <LayoutDefaultHeader :user="user" @toggle-menu="isOpen = !isOpen" />
+      <LayoutDefaultHeader :user="user" @toggle-menu="isOpen = !isOpen" @logout="handleLogout" />
 
       <!-- Page Content -->
       <main class="flex-1 overflow-auto p-4 sm:p-6 lg:p-8">

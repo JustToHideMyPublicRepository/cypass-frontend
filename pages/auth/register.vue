@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="w-full max-w-md">
     <h2 class="text-2xl font-bold mb-2">Créer un compte</h2>
     <p class="text-hsa mb-8">Rejoignez la plateforme de souveraineté numérique.</p>
 
@@ -62,8 +62,7 @@
       </div>
 
       <!-- Submit Button -->
-      <UiBaseButton type="submit" :loading="isLoading"
-        class="w-full sm:w-auto text-lg px-5 py-2.5 shadow-BtW/40 rounded-full text-sm">
+      <UiBaseButton type="submit" block :loading="isLoading">
         Créer mon compte
         <IconArrowRight v-if="!isLoading" class="w-5 h-5 ml-2" />
       </UiBaseButton>

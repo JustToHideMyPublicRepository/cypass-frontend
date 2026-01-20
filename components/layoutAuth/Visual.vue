@@ -21,31 +21,30 @@
     <!-- Central Visual Content (Slideshow) -->
     <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-12 z-20">
 
-      <TransitionGroup name="fade-slide" tag="div" class="relative w-full max-w-2xl h-[400px]">
+      <TransitionGroup name="fade-slide" tag="div" class="relative w-full max-w-2xl h-[450px]">
         <div v-for="(slide, index) in slides" :key="index" v-show="currentSlide === index"
           class="absolute inset-0 flex flex-col items-center justify-center space-y-8">
 
-          <!-- Glass Card -->
-          <div class="glass-panel p-12 rounded-3xl border border-white/10 backdrop-blur-xl shadow-2xl bg-slate-900/40">
+          <!-- App Frame Visual -->
+          <UiAppFrame :type="slide.frameType" :title="slide.frameTitle" :glass="true"
+            class="shadow-2xl transform rotate-y-[-3deg] rotate-x-[3deg] transition-transform hover:rotate-0 duration-700 w-full max-w-lg">
+            <div class="p-8 text-center" :class="slide.frameBg">
+              <!-- Icon -->
+              <div
+                class="mb-6 w-20 h-20 rounded-2xl flex items-center justify-center text-white shadow-lg mx-auto transform transition-all duration-500 hover:scale-110"
+                :class="slide.iconBg">
+                <component :is="slide.icon" class="w-10 h-10" />
+              </div>
 
-            <!-- Icon -->
-            <div
-              class="mb-6 w-20 h-20 rounded-2xl flex items-center justify-center text-white shadow-lg mx-auto transform transition-all duration-500 hover:scale-110"
-              :class="slide.iconBg">
-              <component :is="slide.icon" class="w-10 h-10" />
+              <h2 class="text-3xl font-bold text-white mb-4">{{ slide.title }}</h2>
+              <p class="text-base text-slate-300 leading-relaxed">{{ slide.description }}</p>
             </div>
-
-            <h2 class="text-4xl font-bold text-white mb-4 transition-colors">{{ slide.title }}
-            </h2>
-            <p class="text-lg text-slate-300 leading-relaxed transition-colors">
-              {{ slide.description }}
-            </p>
-          </div>
+          </UiAppFrame>
         </div>
       </TransitionGroup>
 
       <!-- Slide Indicators -->
-      <div class="flex gap-3 mt-12 z-20">
+      <div class="flex gap-3 mt-8 z-20">
         <button v-for="(_, index) in slides" :key="index" @click="setSlide(index)"
           class="h-2 rounded-full transition-all duration-300"
           :class="currentSlide === index ? 'w-8 bg-primary' : 'w-2 bg-slate-400/50 hover:bg-slate-400'">
@@ -65,27 +64,36 @@ const slideInterval = ref<any>(null)
 const slides = [
   {
     title: 'Souveraineté numérique',
-    description: 'Accédez à une suite d\'outils sécurisés conçus pour protéger vos données et garantir votre indépendance technologique.',
+    description: 'Accédez à une suite d\'outils sécurisés pour protéger vos données.',
     icon: IconShieldLock,
-    iconBg: 'bg-gradient-to-br from-primary to-seconadry',
+    iconBg: 'bg-gradient-to-br from-primary to-secondary',
     blobColor1: 'bg-blue-500/30',
-    blobColor2: 'bg-indigo-500/30'
+    blobColor2: 'bg-indigo-500/30',
+    frameType: 'card' as const,
+    frameTitle: '',
+    frameBg: 'bg-slate-900/80'
   },
   {
     title: 'Certification électronique',
-    description: 'Signez et validez vos documents officiels avec DocSentry, la solution de confiance reconnue par l\'État.',
+    description: 'Signez et validez vos documents avec DocSentry.',
     icon: IconCertificate,
     iconBg: 'bg-gradient-to-br from-green-500 to-emerald-600',
     blobColor1: 'bg-green-500/30',
-    blobColor2: 'bg-emerald-500/30'
+    blobColor2: 'bg-emerald-500/30',
+    frameType: 'browser' as const,
+    frameTitle: 'docsentry.cypass.bj',
+    frameBg: 'bg-slate-900/80'
   },
   {
     title: 'Surveillance active',
-    description: 'VigiTech surveille en permanence votre infrastructure pour détecter et neutraliser les menaces avant qu\'elles n\'agissent.',
+    description: 'VigiTech détecte et neutralise les menaces en temps réel.',
     icon: IconEye,
     iconBg: 'bg-gradient-to-br from-purple-500 to-pink-600',
     blobColor1: 'bg-purple-500/30',
-    blobColor2: 'bg-pink-500/30'
+    blobColor2: 'bg-pink-500/30',
+    frameType: 'terminal' as const,
+    frameTitle: 'vigitech@cypass:~',
+    frameBg: 'bg-slate-950'
   }
 ]
 
