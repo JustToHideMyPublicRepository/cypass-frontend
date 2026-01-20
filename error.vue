@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center p-4 overflow-hidden relative">
+  <div class="min-h-screen flex items-center justify-center p-4 overflow-hidden relative bg-bgClr">
     <!-- Theme Toggle (Top Right) -->
     <div class="absolute top-4 right-4 z-50">
       <UiThemeToggle />
@@ -25,17 +25,17 @@
 
       <!-- Error Code -->
       <h1
-        class="text-9xl font-black text-slate-200 dark:text-slate-800 tracking-tighter select-none mb-6 leading-none animate-fade-up mix-blend-overlay dark:mix-blend-normal"
+        class="text-9xl font-black text-ash tracking-tighter select-none mb-6 leading-none animate-fade-up mix-blend-overlay dark:mix-blend-normal opacity-20"
         style="animation-delay: 300ms">
         {{ error?.statusCode || 'ERR' }}
       </h1>
 
       <!-- Message -->
       <div class="relative -mt-16 space-y-6 mb-12 animate-fade-up" style="animation-delay: 400ms">
-        <h2 class="text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
+        <h2 class="text-4xl md:text-5xl font-black tracking-tight">
           {{ errorTitle }}
         </h2>
-        <p class="text-xl text-slate-600 dark:text-slate-400 max-w-lg mx-auto leading-relaxed font-medium">
+        <p class="text-xl text-hsa max-w-lg mx-auto leading-relaxed font-medium">
           {{ errorMessage }}
         </p>
       </div>
@@ -44,7 +44,7 @@
       <div class="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-up"
         style="animation-delay: 500ms">
         <button @click="handleClearError"
-          class="group relative px-8 py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold rounded-2xl shadow-xl shadow-slate-900/20 dark:shadow-white/10 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 overflow-hidden">
+          class="group relative px-8 py-4 bg-BtW text-WtB font-bold rounded-2xl shadow-xl shadow-ash/20 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 overflow-hidden">
           <div
             class="absolute inset-0 bg-white/20 dark:bg-black/10 translate-y-[100%] group-hover:translate-y-0 transition-transform duration-300">
           </div>
@@ -55,7 +55,7 @@
         </button>
 
         <button v-if="error?.statusCode !== 404" @click="handleRefresh"
-          class="group px-8 py-4 bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-bold rounded-2xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 transition-all duration-300 hover:border-primary/50">
+          class="group px-8 py-4 bg-WtB font-bold rounded-2xl border border-ash hover:bg-ash/10 transition-all duration-300 hover:border-primary/50">
           <span class="flex items-center gap-3">
             <IconRefresh class="w-5 h-5 transition-transform group-hover:rotate-180 duration-500" />
             Réessayer
@@ -64,11 +64,9 @@
       </div>
 
       <!-- Technical Details -->
-      <div v-if="error?.message && error?.statusCode !== 404"
-        class="mt-12 pt-8 border-t border-slate-200 dark:border-slate-800 animate-fade-up"
+      <div v-if="error?.message && error?.statusCode !== 404" class="mt-12 pt-8 border-t border-ash animate-fade-up"
         style="animation-delay: 600ms">
-        <div
-          class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-100 dark:bg-slate-800/50 text-xs font-mono text-slate-500 dark:text-slate-400">
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-ash/50 text-xs font-mono text-hsa">
           <IconBug class="w-3 h-3" />
           Code: {{ error?.statusCode }} • ID: {{ formatDate(new Date()) }}
         </div>
@@ -78,7 +76,7 @@
 
     <!-- Footer Copyright -->
     <div class="absolute bottom-8 w-full text-center">
-      <p class="text-sm font-medium text-slate-400 dark:text-slate-500">
+      <p class="text-sm font-medium text-hsa">
         &copy; {{ new Date().getFullYear() }} CYPASS. Tous droits réservés.
       </p>
     </div>

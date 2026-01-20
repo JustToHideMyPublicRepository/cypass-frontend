@@ -4,8 +4,8 @@
 
       <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6 animate-fade-up">
         <div>
-          <h2 class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-2">L'Équipe CYPASS</h2>
-          <p class="text-slate-600 dark:text-slate-400 max-w-xl">Des experts passionnés par la sécurité et
+          <h2 class="text-3xl md:text-4xl font-bold text-BtW mb-2">L'Équipe CYPASS</h2>
+          <p class="text-hsa max-w-xl">Des experts passionnés par la sécurité et
             déterminés à faire la différence.</p>
         </div>
       </div>
@@ -16,7 +16,7 @@
           <div
             class="absolute inset-0 bg-blue-500/10 rounded-2xl rotate-3 scale-95 group-hover:rotate-0 group-hover:scale-100 transition-all duration-300">
           </div>
-          <div class="glass-panel p-4 rounded-2xl relative bg-white dark:bg-slate-900">
+          <div class="glass-panel p-4 rounded-2xl relative bg-WtB">
             <div class="aspect-[4/5] rounded-xl overflow-hidden mb-4 relative">
               <img :src="member.image" :alt="member.name"
                 class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 transform group-hover:scale-110" />
@@ -24,14 +24,14 @@
                 class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
                 <div class="flex gap-2">
                   <a v-for="social in member.socials" :key="social.name" :href="social.url"
-                    class="p-2 bg-white/20 hover:bg-white/40 rounded-full backdrop-blur-sm transition-colors text-white"
+                    class="p-2 bg-white/20 hover:bg-white/40 rounded-full backdrop-blur-sm transition-colors"
                     :title="social.name">
                     <component :is="social.icon" class="w-4 h-4" />
                   </a>
                 </div>
               </div>
             </div>
-            <h3 class="font-bold text-slate-900 dark:text-white text-lg">{{ member.name }}</h3>
+            <h3 class="font-bold text-BtW text-lg">{{ member.name }}</h3>
             <p class="text-primary text-sm font-medium mb-2">{{ member.role }}</p>
           </div>
         </div>

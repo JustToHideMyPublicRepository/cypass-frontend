@@ -2,7 +2,7 @@
   <button :class="[
     'inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed',
     variant === 'primary' ? 'bg-primary hover:bg-blue-900 text-white focus:ring-primary' : '',
-    variant === 'secondary' ? 'bg-white text-slate-700 border border-slate-300 hover:bg-slate-50 focus:ring-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-600 dark:hover:bg-slate-700' : '',
+    variant === 'secondary' ? 'bg-WtB text-BtW border border-ash hover:bg-ash/10 focus:ring-ash dark:hover:bg-slate-700' : '',
     variant === 'danger' ? 'bg-red-600 hover:bg-red-700 text-white focus:ring-red-500' : '',
     block ? 'w-full' : ''
   ]" :disabled="disabled || loading">

@@ -151,8 +151,7 @@
                 <span class="relative flex h-6 w-6">
                   <span
                     class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                  <span
-                    class="relative inline-flex rounded-full h-6 w-6 bg-primary border-4 border-white dark:border-slate-900"></span>
+                  <span class="relative inline-flex rounded-full h-6 w-6 bg-primary border-4 border-WtB"></span>
                 </span>
               </div>
 
