@@ -79,12 +79,12 @@ const bodyBgClass = computed(() => {
 
   switch (props.type) {
     case 'browser':
-      return 'bg-slate-50 dark:bg-slate-900'
+      return 'bg-ash'
     case 'terminal':
       return 'bg-slate-900 text-slate-300 font-code text-xs'
     case 'card':
     default:
-      return 'bg-white dark:bg-slate-900'
+      return 'bg-WtB'
   }
 })
 

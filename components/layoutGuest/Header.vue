@@ -36,19 +36,12 @@
             </template>
 
             <!-- Theme Toggle -->
-            <button @click="toggleTheme" class="ml-2 p-2 rounded-full hover:bg-ash transition-colors"
-              aria-label="Toggle Theme">
-              <IconSun v-if="colorMode.preference === 'dark'" class="w-5 h-5 text-yellow-400" />
-              <IconMoon v-else class="w-5 h-5" />
-            </button>
+            <UiThemeToggle class="ml-2" />
           </nav>
 
           <!-- Mobile Controls -->
           <div class="md:hidden flex items-center gap-4">
-            <button @click="toggleTheme" class="p-2 rounded-full text-hsa hover:bg-ash transition-colors">
-              <IconSun v-if="colorMode.preference === 'dark'" class="w-5 h-5 text-yellow-400" />
-              <IconMoon v-else class="w-5 h-5" />
-            </button>
+            <UiThemeToggle />
 
             <button @click="isMobileMenuOpen = !isMobileMenuOpen"
               class="p-2 rounded-lg text-hsa hover:bg-ash transition-colors focus:outline-none">
@@ -75,12 +68,7 @@
 
         <div class="mt-8 pt-8 border-t border-ash w-full text-center">
           <p class="text-sm text-hsa mb-4">Préférences</p>
-          <button @click="toggleTheme"
-            class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-ash text-hsa hover:bg-ash/50 transition-colors">
-            <IconSun v-if="colorMode.preference === 'dark'" class="w-4 h-4 text-yellow-500" />
-            <IconMoon v-else class="w-4 h-4" />
-            <span>{{ colorMode.preference === 'dark' ? 'Mode Clair' : 'Mode Sombre' }}</span>
-          </button>
+          <UiThemeToggle />
         </div>
       </div>
     </Transition>
@@ -89,9 +77,8 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
-import { IconMenu2, IconX, IconSun, IconMoon } from '@tabler/icons-vue'
+import { IconMenu2, IconX } from '@tabler/icons-vue'
 
-const colorMode = useColorMode()
 const route = useRoute()
 
 const isLinkActive = (path: string) => {
@@ -114,10 +101,6 @@ const scrolled = ref(false)
 
 const handleScroll = () => {
   scrolled.value = window.scrollY > 20
-}
-
-const toggleTheme = () => {
-  colorMode.preference = colorMode.preference === 'dark' ? 'light' : 'dark'
 }
 
 onMounted(() => {

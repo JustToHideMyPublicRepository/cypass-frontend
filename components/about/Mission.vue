@@ -6,18 +6,18 @@
         <!-- Text Content -->
         <div class="space-y-8 animate-fade-right">
           <div>
-            <h2 class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-4">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">
               Notre Mission
             </h2>
             <div class="h-1 w-20 bg-primary rounded-full"></div>
           </div>
 
-          <p class="text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
+          <p class="text-lg leading-relaxed">
             Dans un monde hyper-connecté, la donnée est devenue l'actif le plus précieux des nations et des
             entreprises. Notre mission est de construire une infrastructure souveraine, robuste et
             résiliente capable de protéger ces actifs contre les menaces émergentes.
           </p>
-          <p class="text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
+          <p class="text-lg leading-relaxed">
             Nous démocratisons l'accès aux technologies de cybersécurité avancées (PKI, SOC, SIEM) pour
             permettre à chaque PME, administration et citoyen béninois d'interagir numériquement en toute
             confiance.
