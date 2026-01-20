@@ -44,12 +44,12 @@
               <span class="font-medium">1</span>
             </div>
             <div class="flex justify-between text-sm">
-              <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-yellow-500"></span>
+              <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-warning"></span>
                 Moyen</span>
               <span class="font-medium">2</span>
             </div>
             <div class="flex justify-between text-sm">
-              <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-primary"></span>
+              <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-success"></span>
                 Faible</span>
               <span class="font-medium">5</span>
             </div>
@@ -66,7 +66,7 @@
               <div class="flex items-start gap-3">
                 <div :class="['mt-1 p-1.5 rounded-lg',
                   vuln.severity === 'High' ? 'bg-danger/10 text-danger' :
-                    vuln.severity === 'Medium' ? 'bg-yellow-500/10 text-yellow-600 dark:text-yellow-400' : 'bg-primary/10 text-primary'
+                    vuln.severity === 'Medium' ? 'bg-warning/10 text-warning' : 'bg-primary/10 text-primary'
                 ]">
                   <IconBug class="w-5 h-5" />
                 </div>

@@ -11,13 +11,12 @@
 
     <!-- Main Status Card -->
     <div
-      class="glass-panel p-8 rounded-3xl animate-fade-up border-l-4 border-green-500 flex items-center gap-6 shadow-lg shadow-green-500/10">
-      <div
-        class="w-16 h-16 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-600 dark:text-green-400 animate-pulse">
+      class="glass-panel p-8 rounded-3xl animate-fade-up border-l-4 border-success flex items-center gap-6 shadow-lg shadow-success/10">
+      <div class="w-16 h-16 rounded-full bg-success/20 flex items-center justify-center text-success animate-pulse">
         <IconCheck class="w-8 h-8" />
       </div>
       <div>
-        <h2 class="text-2xl font-bold text-BtW">Tous les systèmes sont opérationnels</h2>
+        <h2 class="text-2xl font-bold">Tous les systèmes sont opérationnels</h2>
         <p class="text-hsa">Dernière mise à jour : {{ new Date().toLocaleTimeString() }}</p>
       </div>
     </div>
@@ -28,10 +27,10 @@
 
       <div v-for="(component, index) in components" :key="component.name"
         class="glass-panel p-4 px-6 rounded-2xl flex items-center justify-between border border-ash/50">
-        <span class="font-medium text-BtW">{{ component.name }}</span>
+        <span class="font-medium">{{ component.name }}</span>
         <div class="flex items-center gap-3">
-          <span class="text-xs font-bold text-green-500">{{ component.status }}</span>
-          <div class="w-2.5 h-2.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]"></div>
+          <span class="text-xs font-bold text-success">{{ component.status }}</span>
+          <div class="w-2.5 h-2.5 rounded-full bg-success shadow-[0_0_8px_rgba(34,197,94,0.6)]"></div>
         </div>
       </div>
     </div>

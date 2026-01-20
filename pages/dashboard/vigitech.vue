@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-6">
     <div>
-      <h1 class="text-2xl font-bold text-BtW">VigiTech</h1>
+      <h1 class="text-2xl font-bold">VigiTech</h1>
       <p class="text-hsa">Veille cybernétique et alertes en temps réel</p>
     </div>
 
@@ -9,8 +9,8 @@
       <!-- Feed -->
       <div class="lg:col-span-3 space-y-6">
         <UiBaseCard v-for="alert in cypassData.alerts" :key="alert.id" class="border-l-4" :class="[
-          alert.severity === 'High' ? 'border-l-red-500' :
-            alert.severity === 'Medium' ? 'border-l-yellow-500' : 'border-l-blue-500'
+          alert.severity === 'High' ? 'border-l-danger' :
+            alert.severity === 'Medium' ? 'border-l-warning' : 'border-l-primary'
         ]">
           <div class="flex items-start justify-between">
             <div class="flex gap-4">
@@ -28,7 +28,7 @@
                   <span class="text-xs text-hsa">{{ new Date(alert.timestamp).toLocaleTimeString()
                   }}</span>
                 </div>
-                <h3 class="text-lg font-semibold text-BtW">{{ alert.title }}</h3>
+                <h3 class="text-lg font-semibold">{{ alert.title }}</h3>
                 <p class="text-hsa mt-2">{{ alert.description }}</p>
               </div>
             </div>
@@ -55,19 +55,19 @@
           <ul class="space-y-3 text-sm">
             <li class="flex justify-between items-center text-hsa">
               <span>Traffic Réseau</span>
-              <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+              <span class="w-2 h-2 rounded-full bg-success animate-pulse"></span>
             </li>
             <li class="flex justify-between items-center text-hsa">
               <span>Logs Système</span>
-              <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+              <span class="w-2 h-2 rounded-full bg-success animate-pulse"></span>
             </li>
             <li class="flex justify-between items-center text-hsa">
               <span>Feeds CERT-BJ</span>
-              <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+              <span class="w-2 h-2 rounded-full bg-success animate-pulse"></span>
             </li>
             <li class="flex justify-between items-center text-hsa">
               <span>Dark Web Monitor</span>
-              <span class="w-2 h-2 rounded-full bg-yellow-500"></span>
+              <span class="w-2 h-2 rounded-full bg-warning"></span>
             </li>
           </ul>
         </UiBaseCard>

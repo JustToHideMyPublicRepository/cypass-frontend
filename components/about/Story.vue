@@ -4,15 +4,14 @@
 
       <div class="grid lg:grid-cols-2 gap-16">
         <div class="animate-fade-right">
-          <h2 class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-6">Notre Histoire</h2>
-          <div class="space-y-8 relative pl-8 border-l-2 border-slate-200 dark:border-slate-800">
+          <h2 class="text-3xl md:text-4xl font-bold mb-6">Notre Histoire</h2>
+          <div class="space-y-8 relative pl-8 border-l-2 border-ash">
             <div v-for="event in timeline" :key="event.year" class="relative">
-              <div
-                class="absolute -left-[41px] top-0 w-5 h-5 rounded-full border-4 border-white dark:border-slate-950 bg-primary">
+              <div class="absolute -left-[41px] top-0 w-5 h-5 rounded-full border-4 border-WtB bg-primary">
               </div>
               <span class="text-primary font-bold text-sm block mb-1">{{ event.year }}</span>
-              <h3 class="font-bold text-slate-900 dark:text-white text-lg mb-2">{{ event.title }}</h3>
-              <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">{{ event.desc }}</p>
+              <h3 class="font-bold text-lg mb-2">{{ event.title }}</h3>
+              <p class="text-hsa text-sm leading-relaxed">{{ event.desc }}</p>
             </div>
           </div>
         </div>
