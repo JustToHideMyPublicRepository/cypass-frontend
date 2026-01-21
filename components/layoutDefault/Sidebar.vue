@@ -53,15 +53,17 @@
           Bientôt disponible</div>
         <div v-show="isCollapsed" class="border-t border-ash mx-2"></div>
         <div class="space-y-1.5">
-          <div v-for="service in comingSoonModules" :key="service.id" class="nav-link disabled group/item relative"
-            :class="{ 'justify-center px-0': isCollapsed }"
+          <NuxtLink v-for="service in comingSoonModules" :key="service.id" :to="`/coming-soon?service=${service.id}`"
+            class="nav-link light-link group/item relative" :class="{ 'justify-center px-0': isCollapsed }"
             :title="isCollapsed ? `${service.title} (Bientôt disponible)` : ''">
             <component :is="service.icon" class="w-5 h-5 icon opacity-50" />
             <span v-show="!isCollapsed" class="opacity-50 decoration-hsa truncate">
               {{ service.title }}</span>
             <span v-show="!isCollapsed"
-              class="absolute right-2 text-[9px] font-bold px-1.5 py-0.5 rounded bg-ashAct text-hsa opacity-0 group-hover/item:opacity-100 transition-opacity">Bientôt</span>
-          </div>
+              class="absolute right-2 text-[9px] font-bold px-1.5 py-0.5 rounded bg-ashAct text-hsa opacity-0 group-hover/item:opacity-100 transition-opacity">
+              Détails
+            </span>
+          </NuxtLink>
         </div>
       </div>
     </div>
@@ -121,6 +123,10 @@ const comingSoonModules = computed(() => services.filter(s => s.status !== 'avai
 /* Disabled/Coming Soon State */
 .nav-link.disabled {
   @apply cursor-not-allowed select-none text-hsa opacity-50 grayscale-[0.5];
+}
+
+.nav-link.light-link {
+  @apply text-hsa hover:bg-ash hover:text-BtW opacity-60 hover:opacity-100 transition-all;
 }
 
 .icon {
