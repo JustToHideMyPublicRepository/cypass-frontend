@@ -7,13 +7,19 @@
       </div>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Loading State -->
+    <div v-if="profilStore.loading && !profilStore.profile" class="flex items-center justify-center py-12">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+    </div>
+
+    <div v-else class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <!-- Left Column: User Card -->
       <div class="space-y-6">
         <UiBaseCard class="text-center py-8">
           <div class="relative w-32 h-32 mx-auto mb-4">
             <div class="w-full h-full rounded-full overflow-hidden border-4 border-ash bg-ash">
-              <img :src="user?.avatar || 'https://i.pravatar.cc/300'" alt="Avatar" class="w-full h-full object-cover" />
+              <img :src="`https://api.dicebear.com/9.x/icons/svg?seed=${user?.name || 'User'}`" alt="Avatar"
+                class="w-full h-full object-cover" />
             </div>
             <button
               class="absolute bottom-0 right-0 bg-primary text-white p-2 rounded-full shadow-lg hover:bg-primary/90 transition-colors">
@@ -21,25 +27,38 @@
             </button>
           </div>
           <h2 class="text-xl font-bold text-BtW">{{ user?.name || 'Utilisateur' }}</h2>
-          <p class="text-hsa mb-4">{{ user?.role || 'Administrateur' }}</p>
+          <p class="text-hsa mb-4">{{ user?.role === 'admin' ? 'Administrateur' : 'Utilisateur' }}</p>
           <div class="flex justify-center gap-2">
             <UiStatusBadge status="Active" />
           </div>
         </UiBaseCard>
 
-        <!-- Completion Widget -->
-        <UiBaseCard title="Complétude du profil">
-          <div class="space-y-2">
-            <div class="flex justify-between text-sm">
-              <span class="text-BtW">Progression</span>
-              <span class="text-primary font-bold">85%</span>
+        <!-- Statistics Widgets -->
+        <div class="space-y-4">
+          <UiBaseCard>
+            <div class="flex items-center gap-4">
+              <div class="p-3 bg-primary/10 rounded-xl">
+                <IconFileCertificate class="w-6 h-6 text-primary" />
+              </div>
+              <div>
+                <p class="text-xs font-bold text-hsa uppercase">Documents</p>
+                <h4 class="text-xl font-bold">{{ profilStore.statistics?.total_documents || 0 }}</h4>
+              </div>
             </div>
-            <div class="w-full bg-ash rounded-full h-2 overflow-hidden">
-              <div class="bg-primary h-full rounded-full" style="width: 85%"></div>
+          </UiBaseCard>
+
+          <UiBaseCard>
+            <div class="flex items-center gap-4">
+              <div class="p-3 bg-danger/10 rounded-xl">
+                <IconAlertTriangle class="w-6 h-6 text-danger" />
+              </div>
+              <div>
+                <p class="text-xs font-bold text-hsa uppercase">Incidents</p>
+                <h4 class="text-xl font-bold">{{ profilStore.statistics?.total_incidents || 0 }}</h4>
+              </div>
             </div>
-            <p class="text-xs text-hsa mt-2">Ajoutez votre numéro de téléphone pour atteindre 100%.</p>
-          </div>
-        </UiBaseCard>
+          </UiBaseCard>
+        </div>
       </div>
 
       <!-- Right Column: Forms -->
@@ -50,12 +69,12 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div class="space-y-1">
                 <label class="text-xs font-bold text-hsa uppercase">Prénom</label>
-                <input type="text" v-model="form.firstName"
+                <input type="text" v-model="form.prenom"
                   class="w-full px-4 py-2.5 rounded-lg bg-ash border border-ashAct focus:ring-2 focus:ring-primary outline-none text-BtW" />
               </div>
               <div class="space-y-1">
                 <label class="text-xs font-bold text-hsa uppercase">Nom</label>
-                <input type="text" v-model="form.lastName"
+                <input type="text" v-model="form.nom"
                   class="w-full px-4 py-2.5 rounded-lg bg-ash border border-ashAct focus:ring-2 focus:ring-primary outline-none text-BtW" />
               </div>
             </div>
@@ -64,22 +83,19 @@
               <label class="text-xs font-bold text-hsa uppercase">Email</label>
               <div class="relative">
                 <IconMail class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-hsa" />
-                <input type="email" v-model="form.email"
-                  class="w-full pl-10 pr-4 py-2.5 rounded-lg bg-ash border border-ashAct focus:ring-2 focus:ring-primary outline-none text-BtW" />
+                <input type="email" v-model="form.email" disabled
+                  class="w-full pl-10 pr-4 py-2.5 rounded-lg bg-ash/50 border border-ashAct text-hsa cursor-not-allowed outline-none" />
               </div>
             </div>
 
             <div class="space-y-1">
-              <label class="text-xs font-bold text-hsa uppercase">Mots de passe actuel</label>
-              <div class="relative">
-                <IconLock class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-hsa" />
-                <input type="password" placeholder="Pour confirmer les changements"
-                  class="w-full pl-10 pr-4 py-2.5 rounded-lg bg-ash border border-ashAct focus:ring-2 focus:ring-primary outline-none text-BtW" />
-              </div>
+              <label class="text-xs font-bold text-hsa uppercase">Organisation</label>
+              <input type="text" v-model="form.organisation" disabled
+                class="w-full px-4 py-2.5 rounded-lg bg-ash/50 border border-ashAct text-hsa cursor-not-allowed outline-none" />
             </div>
 
             <div class="pt-4 flex justify-end">
-              <UiBaseButton type="submit" :loading="loading">
+              <UiBaseButton type="submit" :loading="profilStore.loading">
                 Enregistrer les modifications
               </UiBaseButton>
             </div>
@@ -94,7 +110,7 @@
               <p class="text-sm text-hsa">Sécurisez votre compte avec une étape supplémentaire.</p>
             </div>
             <label class="relative inline-flex items-center cursor-pointer">
-              <input type="checkbox" class="sr-only peer" checked>
+              <input type="checkbox" class="sr-only peer">
               <div
                 class="w-11 h-6 bg-ash peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary">
               </div>
@@ -107,8 +123,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed } from 'vue'
-import { IconCamera, IconMail, IconLock } from '@tabler/icons-vue'
+import { ref, reactive, computed, onMounted } from 'vue'
+import { IconCamera, IconMail, IconLock, IconFileCertificate, IconAlertTriangle } from '@tabler/icons-vue'
+import { useAuthStore } from '~/stores/auth'
+import { useProfilStore } from '~/stores/profil'
 
 definePageMeta({
   layout: 'default',
@@ -119,22 +137,33 @@ useHead({
   title: 'Mon Profil'
 })
 
-const cypassData = useCypassData()
-const user = computed(() => cypassData.currentUser)
+const authStore = useAuthStore()
+const profilStore = useProfilStore()
 
-const loading = ref(false)
+const user = computed(() => authStore.user)
+
 const form = reactive({
-  firstName: 'John',
-  lastName: 'Doe',
-  email: 'john.doe@cypass.bj',
-  phone: ''
+  nom: '',
+  prenom: '',
+  email: '',
+  organisation: ''
+})
+
+onMounted(async () => {
+  await profilStore.fetchProfile()
+  if (profilStore.profile) {
+    // Simple split logic: first word as prenom, rest as nom
+    const nameParts = profilStore.profile.name.split(' ')
+    form.prenom = nameParts[0]
+    form.nom = nameParts.slice(1).join(' ')
+
+    form.email = profilStore.profile.email
+    form.organisation = profilStore.profile.organization_name || 'N/A'
+  }
 })
 
 const updateProfile = async () => {
-  loading.value = true
-  setTimeout(() => {
-    loading.value = false
-    // Mock success
-  }, 1000)
+  // Logic for updating profile can be added to profilStore later
+  console.log('Update profile:', form)
 }
 </script>

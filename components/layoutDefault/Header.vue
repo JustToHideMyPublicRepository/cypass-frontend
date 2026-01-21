@@ -26,8 +26,9 @@
             <div class="text-sm font-medium text-BtW">{{ user?.name || 'Utilisateur' }}</div>
             <div class="text-xs text-hsa">{{ user?.email || 'user@cypass.bj' }}</div>
           </div>
-          <div class="w-10 h-10 rounded-full bg-ash overflow-hidden">
-            <img :src="user?.avatar || 'https://i.pravatar.cc/150'" alt="Profile" class="w-full h-full object-cover" />
+          <div class="w-10 h-10 rounded-full bg-ash overflow-hidden border border-ashAct">
+            <img :src="`https://api.dicebear.com/9.x/icons/svg?seed=${user?.name || 'Utilisateur'}`" alt="Profile"
+              class="w-full h-full object-cover" />
           </div>
           <IconChevronDown class="w-4 h-4 text-hsa transition-transform" :class="{ 'rotate-180': isDropdownOpen }" />
         </button>
