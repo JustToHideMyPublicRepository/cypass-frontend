@@ -23,13 +23,11 @@
 import { ref, computed } from 'vue'
 
 const isOpen = ref(false)
-const cypassData = useCypassData()
+const authStore = useAuthStore()
 
-const user = computed(() => cypassData.currentUser)
+const user = computed(() => authStore.user)
 
-const router = useRouter()
 const handleLogout = () => {
-  cypassData.logout()
-  router.push('/auth/login')
+  authStore.logout()
 }
 </script>

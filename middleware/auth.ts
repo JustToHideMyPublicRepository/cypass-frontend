@@ -1,7 +1,7 @@
 export default defineNuxtRouteMiddleware((to, from) => {
-    const cypassData = useCypassData()
+    const auth = useAuthStore()
 
-    if (!cypassData.currentUser && to.path.startsWith('/dashboard')) {
+    if (!auth.user && to.path.startsWith('/dashboard')) {
         return navigateTo('/auth/login')
     }
 })

@@ -51,7 +51,7 @@
       <!-- Terms and Conditions -->
       <div class="flex items-start gap-3">
         <div class="flex items-center h-5">
-          <input id="terms" type="checkbox" v-model="form.acceptTerms" required
+          <input id="terms" type="checkbox" v-model="form.acceptTerms"
             class="w-4 h-4 rounded border-ashAct text-primary focus:ring-primary bg-ash" />
         </div>
         <label for="terms" class="text-sm text-hsa leading-tight">
@@ -82,12 +82,15 @@
         <NuxtLink to="/auth/login" class="font-bold text-primary hover:underline ml-1">Se connecter</NuxtLink>
       </div>
     </form>
+
+    <UiAppToast v-model="toast.show" :type="toast.type" :title="toast.title" :message="toast.message" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
 import { IconMail, IconLock, IconEye, IconEyeOff, IconArrowRight } from '@tabler/icons-vue'
+import { useAuthStore } from '~/stores/auth'
 
 definePageMeta({
   layout: 'auth'
@@ -104,20 +107,46 @@ const form = reactive({
   acceptTerms: false
 })
 
+const toast = reactive({
+  show: false,
+  type: 'info' as any,
+  title: '',
+  message: ''
+})
+
+const showToast = (type: string, title: string, message: string) => {
+  toast.type = type
+  toast.title = title
+  toast.message = message
+  toast.show = true
+}
+
+const authStore = useAuthStore()
+
 const handleRegister = async () => {
   if (!form.acceptTerms) {
-    alert("Veuillez accepter les conditions d'utilisation")
+    showToast('warning', 'Attention', "Veuillez accepter les conditions d'utilisation")
     return
   }
 
   isLoading.value = true
 
-  // Simulate API call
-  setTimeout(() => {
-    isLoading.value = false
-    console.log('Registering with:', form)
-    // Add logic to handle registration (e.g., call auth store)
-  }, 1500)
+  const success = await authStore.register({
+    nom: form.lastName,
+    prenom: form.firstName,
+    email: form.email,
+    password: form.password,
+    accept_conditions: form.acceptTerms
+  })
+
+  isLoading.value = false
+
+  if (success) {
+    showToast('success', 'Félicitations', authStore.message || 'Compte créé avec succès')
+    setTimeout(() => navigateTo('/auth/login'), 2000)
+  } else {
+    showToast('error', 'Erreur', authStore.error || "Une erreur est survenue")
+  }
 }
 
 useHead({

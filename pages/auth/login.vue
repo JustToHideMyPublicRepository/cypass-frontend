@@ -4,11 +4,6 @@
     <p class="text-hsa mb-8">Accédez à votre espace sécurisé CYPASS.</p>
 
     <form @submit.prevent="handleLogin" class="bg-WtB shadow-xl rounded-2xl p-8 border border-ash">
-      <div v-if="error" class="mb-4 p-3 bg-danger/10 text-danger rounded-lg text-sm flex items-center gap-2">
-        <IconAlertCircle class="w-4 h-4" />
-        {{ error }}
-      </div>
-
       <div class="space-y-4">
         <div>
           <label for="email" class="block text-sm font-medium mb-1">Email</label>
@@ -53,18 +48,15 @@
           </NuxtLink>
         </p>
       </div>
-
-      <div class="mt-4 bg-primary/5 p-3 rounded-lg text-xs text-primary">
-        <p class="font-bold">Comptes de test :</p>
-        <p>admin@cypass.bj / (any password)</p>
-        <p>jean.dupont@gouv.bj / (any password)</p>
-      </div>
     </form>
+
+    <UiAppToast v-model="toast.show" :type="toast.type" :title="toast.title" :message="toast.message" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { IconAlertCircle, IconEye, IconEyeOff } from '@tabler/icons-vue'
+import { IconEye, IconEyeOff } from '@tabler/icons-vue'
+import { useAuthStore } from '~/stores/auth'
 
 definePageMeta({
   layout: 'auth'
@@ -73,22 +65,36 @@ definePageMeta({
 const email = ref('')
 const password = ref('')
 const showPassword = ref(false)
-const error = ref('')
 const loading = ref(false)
-const cypassData = useCypassData()
-const router = useRouter()
+
+const toast = reactive({
+  show: false,
+  type: 'info' as any,
+  title: '',
+  message: ''
+})
+
+const showToast = (type: string, title: string, message: string) => {
+  toast.type = type
+  toast.title = title
+  toast.message = message
+  toast.show = true
+}
+const authStore = useAuthStore()
 
 const handleLogin = async () => {
   loading.value = true
-  error.value = ''
 
-  // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 800))
+  const success = await authStore.login({
+    email: email.value,
+    password: password.value
+  })
 
-  if (cypassData.login(email.value, password.value)) {
-    router.push('/dashboard')
+  if (success) {
+    showToast('success', 'Bienvenue', 'Connexion réussie !')
+    setTimeout(() => navigateTo('/dashboard'), 1500)
   } else {
-    error.value = "Identifiants invalides. Essayez les comptes de test."
+    showToast('error', 'Erreur de connexion', authStore.error || "Identifiants invalides.")
   }
 
   loading.value = false
