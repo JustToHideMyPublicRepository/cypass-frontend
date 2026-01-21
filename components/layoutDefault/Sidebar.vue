@@ -1,61 +1,142 @@
 <template>
   <aside :class="[
-    'fixed inset-y-0 left-0 z-50 w-64 bg-WtB border-r border-ash transform transition-transform duration-300 ease-in-out md:translate-x-0 md:static',
-    isOpen ? 'translate-x-0' : '-translate-x-full'
+    'fixed inset-y-0 left-0 z-50 bg-WtB border-r border-ash transform transition-all duration-300 ease-in-out md:static shrink-0',
+    isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0',
+    isCollapsed ? 'w-20' : 'w-64'
   ]">
-    <div class="h-16 flex items-center px-6 border-b border-ash">
-      <NuxtLink to="/" class="flex items-center gap-2 group">
-        <div class="w-8 h-8 rounded-lg bg-WtB flex items-center justify-center shadow-sm border border-ash p-0.5">
+    <!-- Logo Header -->
+    <div class="h-16 flex items-center px-4 border-b border-ash overflow-hidden">
+      <NuxtLink to="/" class="flex items-center gap-2 group min-w-max">
+        <div
+          class="w-8 h-8 rounded-lg bg-WtB flex items-center justify-center shadow-sm border border-ash p-0.5 shrink-0">
           <img src="/img/logo.png" alt="Logo CYPASS" class="w-full h-full object-contain" />
         </div>
-        <span class="text-xl font-bold text-BtW group-hover:text-primary transition-colors">CYPASS</span>
+        <span v-show="!isCollapsed"
+          class="text-xl font-bold text-BtW group-hover:text-primary transition-colors">CYPASS</span>
       </NuxtLink>
+
+      <!-- Desktop Collapse Toggle -->
+      <button @click="$emit('toggle-collapse')"
+        class="hidden md:flex ml-auto p-1.5 rounded-lg hover:bg-ash text-hsa hover:text-BtW transition-colors">
+        <IconChevronLeft :class="['w-5 h-5 transition-transform duration-300', isCollapsed ? 'rotate-180' : '']" />
+      </button>
     </div>
 
-    <nav class="p-4 space-y-2">
-      <NuxtLink v-for="link in mainLinks" :key="link.path" :to="link.path"
-        class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-ash hover:text-BtW transition-colors"
-        active-class="bg-primary hover:bg-secondary text-WtB hover:text-ash">
-        <component :is="link.icon" class="w-5 h-5" />
-        <span>{{ link.label }}</span>
-      </NuxtLink>
+    <div class="h-[calc(100vh-8rem)] overflow-y-auto px-3 py-6 space-y-8 scrollbar-hide">
+      <!-- Main Links -->
+      <nav class="space-y-1.5">
+        <NuxtLink v-for="link in mainLinks" :key="link.path" :to="link.path" class="nav-link"
+          :class="{ 'justify-center px-0': isCollapsed }" active-class="active" :title="isCollapsed ? link.label : ''">
+          <component :is="link.icon" class="w-5 h-5 icon" />
+          <span v-show="!isCollapsed" class="truncate">{{ link.label }}</span>
+        </NuxtLink>
+      </nav>
 
-      <div class="px-4 py-2 text-xs font-semibold text-hsa uppercase tracking-wider mt-6">Modules</div>
+      <!-- Active Modules -->
+      <div class="space-y-4">
+        <div v-show="!isCollapsed" class="px-4 text-[10px] font-bold text-hsa uppercase tracking-[0.2em] truncate">
+          Modules actifs</div>
+        <div v-show="isCollapsed" class="border-t border-ash mx-2"></div>
+        <nav class="space-y-1.5">
+          <NuxtLink v-for="service in activeModules" :key="service.id" :to="`/dashboard/${service.id}`" class="nav-link"
+            :class="{ 'justify-center px-0': isCollapsed }" active-class="active"
+            :title="isCollapsed ? service.title : ''">
+            <component :is="service.icon" class="w-5 h-5 icon" />
+            <span v-show="!isCollapsed" class="truncate">{{ service.title }}</span>
+          </NuxtLink>
+        </nav>
+      </div>
 
-      <NuxtLink v-for="link in moduleLinks" :key="link.path" :to="link.path"
-        class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-ash hover:text-BtW transition-colors"
-        active-class="bg-primary hover:bg-secondary text-WtB hover:text-ash">
-        <component :is="link.icon" class="w-5 h-5" />
-        <span>{{ link.label }}</span>
-      </NuxtLink>
-    </nav>
+      <!-- Coming Soon Modules -->
+      <div class="space-y-4">
+        <div v-show="!isCollapsed" class="px-4 text-[10px] font-bold text-hsa uppercase tracking-[0.2em] truncate">
+          Bientôt disponible</div>
+        <div v-show="isCollapsed" class="border-t border-ash mx-2"></div>
+        <div class="space-y-1.5">
+          <div v-for="service in comingSoonModules" :key="service.id" class="nav-link disabled group/item relative"
+            :class="{ 'justify-center px-0': isCollapsed }"
+            :title="isCollapsed ? `${service.title} (Bientôt disponible)` : ''">
+            <component :is="service.icon" class="w-5 h-5 icon opacity-50" />
+            <span v-show="!isCollapsed" class="opacity-50 decoration-hsa truncate">
+              {{ service.title }}</span>
+            <span v-show="!isCollapsed"
+              class="absolute right-2 text-[9px] font-bold px-1.5 py-0.5 rounded bg-ashAct text-hsa opacity-0 group-hover/item:opacity-100 transition-opacity">Bientôt</span>
+          </div>
+        </div>
+      </div>
+    </div>
 
-    <div class="absolute bottom-0 left-0 right-0 p-4 border-t border-ash">
+    <!-- Footer Action -->
+    <div class="absolute bottom-0 left-0 right-0 p-4 border-t border-ash bg-ash/10 overflow-hidden">
       <button @click="$emit('logout')"
-        class="flex items-center gap-3 px-4 py-3 w-full rounded-lg text-danger hover:bg-danger/10 hover:text-dangerAct transition-colors">
-        <IconLogout class="w-5 h-5" />
-        <span>Déconnexion</span>
+        class="flex items-center gap-3 px-4 py-3 w-full rounded-xl text-danger hover:bg-danger/10 hover:text-dangerAct transition-all duration-200 group-logout font-medium"
+        :class="{ 'justify-center px-0': isCollapsed }" :title="isCollapsed ? 'Déconnexion' : ''">
+        <IconLogout class="w-5 h-5 group-logout-hover:scale-110 transition-transform shrink-0" />
+        <span v-show="!isCollapsed" class="truncate">Déconnexion</span>
       </button>
     </div>
   </aside>
 </template>
 
 <script setup lang="ts">
-import { IconLayoutDashboard as IconDashboard, IconFileCertificate, IconScanEye, IconRadar2, IconLogout } from '@tabler/icons-vue'
+import { computed } from 'vue'
+import { IconLayoutDashboard as IconDashboard, IconLogout, IconChevronLeft } from '@tabler/icons-vue'
+import { services } from '@/data/services'
+
+defineProps<{
+  isOpen: boolean
+  isCollapsed: boolean
+}>()
+
+defineEmits(['logout', 'toggle-collapse'])
 
 const mainLinks = [
   { label: 'Vue d\'ensemble', path: '/dashboard', icon: IconDashboard }
 ]
 
-const moduleLinks = [
-  { label: 'DocSentry', path: '/dashboard/docsentry', icon: IconFileCertificate },
-  { label: 'SecuScan', path: '/dashboard/secuscan', icon: IconScanEye },
-  { label: 'VigiTech', path: '/dashboard/vigitech', icon: IconRadar2 }
-]
-
-defineProps<{
-  isOpen: boolean
-}>()
-
-defineEmits(['logout'])
+const activeModules = computed(() => services.filter(s => s.status === 'available'))
+const comingSoonModules = computed(() => services.filter(s => s.status !== 'available'))
 </script>
+
+<style scoped>
+.nav-link {
+  @apply flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-sm font-medium;
+}
+
+/* Base Link State */
+.nav-link:not(.active):not(.disabled) {
+  @apply text-hsa hover:bg-ash hover:text-BtW;
+}
+
+/* Active Link State */
+.nav-link.active {
+  @apply bg-primary text-WtB shadow-lg shadow-primary/20;
+}
+
+/* Hover effect on active link */
+.nav-link.active:hover {
+  @apply bg-secondary text-ash;
+}
+
+/* Disabled/Coming Soon State */
+.nav-link.disabled {
+  @apply cursor-not-allowed select-none text-hsa opacity-50 grayscale-[0.5];
+}
+
+.icon {
+  @apply transition-transform duration-200;
+}
+
+.nav-link:hover .icon:not(.active) {
+  @apply scale-110;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+</style>
