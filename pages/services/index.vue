@@ -116,10 +116,12 @@
                     <IconArrowRight class="w-4 h-4" />
                   </button>
                 </NuxtLink>
-                <div v-else
-                  class="w-full py-3 rounded-xl bg-ash text-slate-400 font-bold text-sm text-center cursor-not-allowed border border-ash">
-                  Bientôt Disponible
-                </div>
+                <NuxtLink v-else :to="`/coming-soon?service=${service.id}`">
+                  <button
+                    class="w-full py-3 rounded-xl bg-ash text-slate-400 font-bold text-sm text-center border border-ash hover:bg-ashAct/10 hover:text-hsa transition-colors">
+                    Bientôt Disponible
+                  </button>
+                </NuxtLink>
               </div>
 
             </div>

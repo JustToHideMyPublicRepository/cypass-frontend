@@ -58,7 +58,8 @@
               {{ service.cta }}
               <IconArrowRight class="w-4 h-4 ml-2" />
             </UiBaseButton>
-            <UiBaseButton v-else disabled variant="ghost" class="text-hsa hover:text-danger hover:cursor-not-allowed">
+            <UiBaseButton v-else :to="`/coming-soon?service=${service.id}`" variant="ghost"
+              class="text-hsa hover:text-primary">
               Disponible prochainement
             </UiBaseButton>
           </div>
@@ -226,9 +227,11 @@
             :class="{ 'grayscale opacity-60': service.status !== 'available' }" />
 
           <div v-if="service.status !== 'available'"
-            class="absolute inset-0 flex items-center justify-center bg-WtB/50 backdrop-blur-[1px] z-20 rounded-3xl">
-            <span class="px-6 py-3 bg-BtW text-WtB rounded-full font-bold shadow-xl border border-ash">Bientôt
-              Disponible</span>
+            class="absolute inset-0 flex items-center justify-center bg-WtB/50 backdrop-blur-[1px] z-20 rounded-3xl group-hover:bg-WtB/40 transition-colors">
+            <NuxtLink :to="`/coming-soon?service=${service.id}`"
+              class="px-6 py-3 bg-BtW text-WtB rounded-full font-bold shadow-xl border border-ash hover:scale-105 transition-transform">
+              Bientôt Disponible
+            </NuxtLink>
           </div>
         </div>
       </div>

@@ -23,7 +23,7 @@
           {{ serviceTitle }}<span class="text-primary">.</span>
         </h1>
         <p class="text-xl text-hsa font-light max-w-lg mx-auto leading-relaxed">
-          Nous préparons quelque chose d'exceptionnel pour renforcer votre sécurité numérique.
+          {{ serviceDescription }}
         </p>
       </div>
 
@@ -85,5 +85,6 @@ const serviceId = computed(() => route.query.service as string)
 const currentService = computed(() => services.find(s => s.id === serviceId.value))
 
 const serviceTitle = computed(() => currentService.value?.title || 'Prochainement')
+const serviceDescription = computed(() => currentService.value?.description || "Nous préparons quelque chose d'exceptionnel pour renforcer votre sécurité numérique.")
 const serviceIcon = computed(() => currentService.value?.icon || IconRocket)
 </script>
