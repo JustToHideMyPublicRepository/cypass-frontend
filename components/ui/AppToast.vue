@@ -42,7 +42,7 @@
 
 <script setup lang="ts">
 import { ref, watch, computed, onMounted, onUnmounted } from 'vue'
-import { IconCheck, IconX, IconAlertTriangle, IconInfoCircle } from '@tabler/icons-vue'
+import { IconCheck, IconX, IconAlertTriangle, IconInfoCircle, IconCircleX } from '@tabler/icons-vue'
 
 interface Props {
   modelValue: boolean
@@ -101,7 +101,7 @@ watch(() => props.modelValue, (newVal) => {
 const icon = computed(() => {
   switch (props.type) {
     case 'success': return IconCheck
-    case 'error': return IconX
+    case 'error': return IconCircleX
     case 'warning': return IconAlertTriangle
     default: return IconInfoCircle
   }

@@ -46,6 +46,7 @@
             <IconEyeOff v-else class="w-5 h-5" />
           </button>
         </div>
+        <AuthPasswordValidator :password="form.password" class="mt-2" />
       </div>
 
       <!-- Terms and Conditions -->
@@ -82,8 +83,6 @@
         <NuxtLink to="/auth/login" class="font-bold text-primary hover:underline ml-1">Se connecter</NuxtLink>
       </div>
     </form>
-
-    <UiAppToast v-model="toast.show" :type="toast.type" :title="toast.title" :message="toast.message" />
   </div>
 </template>
 
@@ -91,6 +90,7 @@
 import { ref, reactive } from 'vue'
 import { IconMail, IconLock, IconEye, IconEyeOff, IconArrowRight } from '@tabler/icons-vue'
 import { useAuthStore } from '~/stores/auth'
+import { useToastStore } from '~/stores/toast'
 
 definePageMeta({
   layout: 'auth'
@@ -107,25 +107,12 @@ const form = reactive({
   acceptTerms: false
 })
 
-const toast = reactive({
-  show: false,
-  type: 'info' as any,
-  title: '',
-  message: ''
-})
-
-const showToast = (type: string, title: string, message: string) => {
-  toast.type = type
-  toast.title = title
-  toast.message = message
-  toast.show = true
-}
-
 const authStore = useAuthStore()
+const toastStore = useToastStore()
 
 const handleRegister = async () => {
   if (!form.acceptTerms) {
-    showToast('warning', 'Attention', "Veuillez accepter les conditions d'utilisation")
+    toastStore.showToast('warning', 'Attention', "Veuillez accepter les conditions d'utilisation")
     return
   }
 
@@ -142,10 +129,10 @@ const handleRegister = async () => {
   isLoading.value = false
 
   if (success) {
-    showToast('success', 'Félicitations', authStore.message || 'Compte créé avec succès')
+    toastStore.showToast('success', 'Félicitations', authStore.message || 'Compte créé avec succès')
     setTimeout(() => navigateTo('/auth/login'), 2000)
   } else {
-    showToast('error', 'Erreur', authStore.error || "Une erreur est survenue")
+    toastStore.showToast('error', 'Erreur', authStore.error || "Une erreur est survenue")
   }
 }
 

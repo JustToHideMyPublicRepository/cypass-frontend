@@ -4,11 +4,18 @@
       <div class="py-8">
         <NuxtPage />
       </div>
+      <UiAppToast :model-value="toastStore.show" @update:model-value="val => toastStore.show = val"
+        :type="toastStore.type" :title="toastStore.title" :message="toastStore.message"
+        :duration="toastStore.duration" />
     </NuxtLayout>
   </div>
 </template>
 
 <script setup lang="ts">
+import { useToastStore } from '@/stores/toast'
+
+const toastStore = useToastStore()
+
 const heroImagePath = "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=800";
 const baseUrl = "https://cypass.bj";
 

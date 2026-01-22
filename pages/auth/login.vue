@@ -7,8 +7,11 @@
       <div class="space-y-4">
         <div>
           <label for="email" class="block text-sm font-medium mb-1">Email</label>
-          <input v-model="email" id="email" type="email" placeholder="nom@exemple.com" required
-            class="w-full px-4 py-2 rounded-lg border border-ashAct focus:ring-2 focus:ring-primary focus:border-transparent bg-ash transition-shadow outline-none" />
+          <div class="relative">
+            <IconMail class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-hsa" />
+            <input v-model="email" id="email" type="email" placeholder="nom@exemple.com" required
+              class="w-full pl-12 pr-4 py-2 rounded-lg border border-ashAct focus:ring-2 focus:ring-primary focus:border-transparent bg-ash transition-shadow outline-none" />
+          </div>
         </div>
 
         <div>
@@ -18,10 +21,11 @@
             <a href="#" class="text-xs text-primary hover:underline">Oublié ?</a>
           </div>
           <div class="relative">
+            <IconLock class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-hsa" />
             <input v-model="password" id="password" :type="showPassword ? 'text' : 'password'" required
-              class="w-full px-4 py-2 rounded-lg border border-ashAct focus:ring-2 focus:ring-primary focus:border-transparent bg-ash transition-shadow outline-none pr-10" />
+              class="w-full pl-12 pr-12 py-2 rounded-lg border border-ashAct focus:ring-2 focus:ring-primary focus:border-transparent bg-ash transition-shadow outline-none" />
             <button type="button" @click="showPassword = !showPassword"
-              class="absolute right-3 top-1/2 -translate-y-1/2 text-hsa hover:text-primary focus:outline-none">
+              class="absolute right-4 top-1/2 -translate-y-1/2 text-hsa hover:text-primary focus:outline-none">
               <IconEye v-if="showPassword" class="w-5 h-5" />
               <IconEyeOff v-else class="w-5 h-5" />
             </button>
@@ -49,14 +53,13 @@
         </p>
       </div>
     </form>
-
-    <UiAppToast v-model="toast.show" :type="toast.type" :title="toast.title" :message="toast.message" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { IconEye, IconEyeOff } from '@tabler/icons-vue'
+import { IconEye, IconEyeOff, IconMail, IconLock } from '@tabler/icons-vue'
 import { useAuthStore } from '~/stores/auth'
+import { useToastStore } from '~/stores/toast'
 
 definePageMeta({
   layout: 'auth'
@@ -67,20 +70,9 @@ const password = ref('')
 const showPassword = ref(false)
 const loading = ref(false)
 
-const toast = reactive({
-  show: false,
-  type: 'info' as any,
-  title: '',
-  message: ''
-})
 
-const showToast = (type: string, title: string, message: string) => {
-  toast.type = type
-  toast.title = title
-  toast.message = message
-  toast.show = true
-}
 const authStore = useAuthStore()
+const toastStore = useToastStore()
 
 const handleLogin = async () => {
   loading.value = true
@@ -91,10 +83,10 @@ const handleLogin = async () => {
   })
 
   if (success) {
-    showToast('success', 'Bienvenue', 'Connexion réussie !')
+    toastStore.showToast('success', 'Bienvenue', 'Connexion réussie !')
     setTimeout(() => navigateTo('/dashboard'), 1500)
   } else {
-    showToast('error', 'Erreur de connexion', authStore.error || "Identifiants invalides.")
+    toastStore.showToast('error', 'Erreur de connexion', authStore.error || "Identifiants invalides.")
   }
 
   loading.value = false
