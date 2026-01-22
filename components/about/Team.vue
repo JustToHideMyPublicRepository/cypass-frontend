@@ -14,12 +14,6 @@
         <div v-for="member in team" :key="member.name" class="group relative animate-fade-up"
           :style="{ animationDelay: `${member.delay}ms` }">
           <UiAppFrame type="card" :title="member.role" :glass="true" class="h-full">
-            <template #headerActions>
-              <div class="flex gap-2">
-                <div class="w-2 h-2 rounded-full bg-primary/50"></div>
-                <div class="w-2 h-2 rounded-full bg-ashAct"></div>
-              </div>
-            </template>
             <div class="p-4 relative">
               <div class="aspect-[4/5] rounded-xl overflow-hidden mb-4 relative">
                 <img :src="member.image" :alt="member.name"
@@ -35,10 +29,7 @@
                   </div>
                 </div>
               </div>
-              <h3 class="font-bold text-BtW text-lg">{{ member.name }}</h3>
-              <!-- Role is now in the frame title, maybe duplicative? -->
-              <!-- The user asked to use AppFrame like in developers.vue which uses type="terminal" mostly or card. -->
-              <!-- Let's keep the content clean inside. -->
+              <h3 class="font-bold text-lg">{{ member.name }}</h3>
             </div>
           </UiAppFrame>
         </div>

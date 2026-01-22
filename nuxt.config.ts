@@ -39,6 +39,7 @@ export default defineNuxtConfig({
     classSuffix: '',
     preference: 'system',
     fallback: 'dark',
+    storageKey: 'cps_theme',
   },
 
   app: {

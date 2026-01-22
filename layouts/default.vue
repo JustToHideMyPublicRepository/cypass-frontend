@@ -30,6 +30,17 @@ import { ref, computed } from 'vue'
 
 const isOpen = ref(false)
 const isCollapsed = ref(false)
+
+onMounted(() => {
+  const storedState = localStorage.getItem('cps_sidebar')
+  if (storedState) {
+    isCollapsed.value = storedState === 'true'
+  }
+})
+
+watch(isCollapsed, (newVal) => {
+  localStorage.setItem('cps_sidebar', String(newVal))
+})
 const authStore = useAuthStore()
 
 const user = computed(() => authStore.user)

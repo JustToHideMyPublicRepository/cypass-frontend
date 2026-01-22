@@ -4,8 +4,9 @@
       <div class="text-center mb-8">
         <h2 class="text-2xl font-bold mb-2">Vérification de l'email</h2>
         <p v-if="authStore.loading" class="text-hsa mb-8">Nous vérifions votre compte...</p>
-        <p v-else-if="success" class="text-hsa mb-8">Descriptio pour succes</p>
-        <p v-else="success" class="text-hsa mb-8">Descriptio pour erreur</p>
+        <p v-else-if="success" class="text-hsa mb-8">Votre email a été vérifié. Vous pouvez maintenant vous connecter.
+        </p>
+        <p v-else class="text-hsa mb-8">Le lien de vérification est invalide ou a expiré.</p>
       </div>
 
       <div v-if="authStore.loading" class="flex flex-col items-center justify-center py-12">
