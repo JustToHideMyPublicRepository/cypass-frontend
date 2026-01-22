@@ -46,7 +46,8 @@
             <IconEyeOff v-else class="w-5 h-5" />
           </button>
         </div>
-        <AuthPasswordValidator :password="form.password" class="mt-2" />
+        <UtilsPasswordValidator v-if="form.password && form.password.length > 0" :password="form.password"
+          class="mt-2" />
       </div>
 
       <!-- Terms and Conditions -->

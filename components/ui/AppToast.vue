@@ -4,7 +4,7 @@
       enter-from-class="translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-2"
       enter-to-class="translate-y-0 opacity-100 sm:translate-x-0" leave-active-class="transition ease-in duration-100"
       leave-from-class="opacity-100" leave-to-class="opacity-0">
-      <div v-if="modelValue"
+      <div v-if="modelValue" role="alert" aria-live="assertive"
         class="fixed top-5 right-5 z-[9999] max-w-sm w-full bg-WtB shadow-2xl rounded-2xl border pointer-events-auto overflow-hidden"
         :class="containerClass">
         <div class="p-4">

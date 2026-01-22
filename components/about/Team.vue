@@ -13,27 +13,34 @@
       <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div v-for="member in team" :key="member.name" class="group relative animate-fade-up"
           :style="{ animationDelay: `${member.delay}ms` }">
-          <div
-            class="absolute inset-0 bg-blue-500/10 rounded-2xl rotate-3 scale-95 group-hover:rotate-0 group-hover:scale-100 transition-all duration-300">
-          </div>
-          <div class="glass-panel p-4 rounded-2xl relative bg-WtB">
-            <div class="aspect-[4/5] rounded-xl overflow-hidden mb-4 relative">
-              <img :src="member.image" :alt="member.name"
-                class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 transform group-hover:scale-110" />
-              <div
-                class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                <div class="flex gap-2">
-                  <a v-for="social in member.socials" :key="social.name" :href="social.url"
-                    class="p-2 bg-white/20 hover:bg-white/40 rounded-full backdrop-blur-sm transition-colors"
-                    :title="social.name">
-                    <component :is="social.icon" class="w-4 h-4" />
-                  </a>
+          <UiAppFrame type="card" :title="member.role" :glass="true" class="h-full">
+            <template #headerActions>
+              <div class="flex gap-2">
+                <div class="w-2 h-2 rounded-full bg-primary/50"></div>
+                <div class="w-2 h-2 rounded-full bg-ashAct"></div>
+              </div>
+            </template>
+            <div class="p-4 relative">
+              <div class="aspect-[4/5] rounded-xl overflow-hidden mb-4 relative">
+                <img :src="member.image" :alt="member.name"
+                  class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 transform group-hover:scale-110" />
+                <div
+                  class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                  <div class="flex gap-2">
+                    <a v-for="social in member.socials" :key="social.name" :href="social.url"
+                      class="p-2 bg-white/20 hover:bg-white/40 rounded-full backdrop-blur-sm transition-colors text-white"
+                      :title="social.name">
+                      <component :is="social.icon" class="w-4 h-4" />
+                    </a>
+                  </div>
                 </div>
               </div>
+              <h3 class="font-bold text-BtW text-lg">{{ member.name }}</h3>
+              <!-- Role is now in the frame title, maybe duplicative? -->
+              <!-- The user asked to use AppFrame like in developers.vue which uses type="terminal" mostly or card. -->
+              <!-- Let's keep the content clean inside. -->
             </div>
-            <h3 class="font-bold text-BtW text-lg">{{ member.name }}</h3>
-            <p class="text-primary text-sm font-medium mb-2">{{ member.role }}</p>
-          </div>
+          </UiAppFrame>
         </div>
       </div>
     </div>
