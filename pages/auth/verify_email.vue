@@ -1,46 +1,44 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gray-900 px-4">
-    <div class="max-w-md w-full bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-700">
+  <div class="w-full max-w-md">
+    <div class="bg-WtB shadow-xl rounded-2xl p-8 border border-ash space-y-5">
       <div class="text-center mb-8">
-        <h1 class="text-3xl font-bold text-white mb-2">Vérification de l'email</h1>
-        <p class="text-gray-400">Nous vérifions votre compte...</p>
+        <h2 class="text-2xl font-bold mb-2">Vérification de l'email</h2>
+        <p class="text-hsa mb-8">Nous vérifions votre compte...</p>
       </div>
 
       <div v-if="authStore.loading" class="flex flex-col items-center justify-center py-12">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-        <p class="mt-4 text-gray-400">Veuillez patienter...</p>
+        <p class="mt-4">Veuillez patienter...</p>
       </div>
 
       <div v-else-if="success" class="text-center py-8">
-        <div class="bg-green-500/10 text-green-500 p-4 rounded-xl mb-6 flex items-center justify-center">
+        <div class="bg-success/10 text-success p-4 rounded-xl mb-6 flex items-center justify-center">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24"
             stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
               d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         </div>
-        <h2 class="text-xl font-semibold text-white mb-2">Succès !</h2>
-        <p class="text-gray-400 mb-8">{{ authStore.message || 'Votre compte a été activé avec succès.' }}</p>
-        <NuxtLink to="/auth/login"
-          class="inline-block w-full py-3 px-6 bg-primary hover:bg-primary-dark text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-[1.02]">
+        <h2 class="text-xl font-semibold mb-2">Succès !</h2>
+        <p class="mb-8">{{ authStore.message || 'Votre compte a été activé avec succès.' }}</p>
+        <UiBaseButton to="/auth/login" variant="primary">
           Se connecter
-        </NuxtLink>
+        </UiBaseButton>
       </div>
 
       <div v-else class="text-center py-8">
-        <div class="bg-red-500/10 text-red-500 p-4 rounded-xl mb-6 flex items-center justify-center">
+        <div class="bg-danger/10 text-danger p-4 rounded-xl mb-6 flex items-center justify-center">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24"
             stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
               d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         </div>
-        <h2 class="text-xl font-semibold text-white mb-2">Erreur</h2>
-        <p class="text-gray-400 mb-8">{{ authStore.error || 'Le lien de vérification est invalide ou a expiré.' }}</p>
-        <NuxtLink to="/auth/register"
-          class="inline-block w-full py-3 px-6 bg-gray-700 hover:bg-gray-600 text-white font-semibold rounded-xl transition-all duration-300">
+        <h2 class="text-xl font-semibold mb-2">Erreur</h2>
+        <p class="mb-8">{{ authStore.error || 'Le lien de vérification est invalide ou a expiré.' }}</p>
+        <UiBaseButton to="/auth/register" variant="secondary">
           Retour à l'inscription
-        </NuxtLink>
+        </UiBaseButton>
       </div>
     </div>
 
