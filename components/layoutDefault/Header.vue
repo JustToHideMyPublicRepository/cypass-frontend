@@ -69,13 +69,14 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
-import { IconMenu2, IconSearch, IconChevronDown, IconUser, IconSettings, IconHelp, IconLogout } from '@tabler/icons-vue'
+import { IconMenu2, IconSearch, IconChevronDown, IconUser, IconSettings, IconHelp, IconDevices, IconLogout } from '@tabler/icons-vue'
 
 const isDropdownOpen = ref(false)
 const dropdownRef = ref<HTMLElement | null>(null)
 
 const dropdownLinks = [
   { label: 'Mon Profil', path: '/dashboard/profile', icon: IconUser },
+  { label: 'Sessions', path: '/dashboard/sessions', icon: IconDevices },
   { label: 'Paramètres', path: '/dashboard/settings', icon: IconSettings },
   { label: 'Aide & Support', path: '/support', icon: IconHelp }
 ]

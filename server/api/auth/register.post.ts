@@ -19,7 +19,7 @@ export default defineEventHandler(async (event: H3Event) => {
   } catch (error: any) {
     throw createError({
       statusCode: error.statusCode || 500,
-      statusMessage: error.statusMessage || 'Internal Server Error',
+      statusMessage: error.data?.message || error.statusMessage || 'Internal Server Error',
       data: error.data
     })
   }

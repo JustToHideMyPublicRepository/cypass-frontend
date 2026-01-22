@@ -1,6 +1,7 @@
-import { defineEventHandler, getCookie, createError, type H3Event } from 'h3'
+import { defineEventHandler, readBody, getCookie, createError, type H3Event } from 'h3'
 
 export default defineEventHandler(async (event: H3Event) => {
+  const body = await readBody(event)
   const token = getCookie(event, 'cypass_token')
   const config = useRuntimeConfig()
   const baseApi = config.public.cypassBaseAPI
@@ -13,12 +14,14 @@ export default defineEventHandler(async (event: H3Event) => {
   }
 
   try {
-    const response = await $fetch<{ success: boolean; message: string; data: any }>(`${baseApi}/api/auth/verify_token.php`, {
-      method: 'GET',
+    const response = await $fetch<{ success: boolean; message: string; data: any }>(`${baseApi}/api/auth/sessions.php`, {
+      method: 'DELETE',
       headers: {
+        'Content-Type': 'application/json',
         'Accept': 'application/json',
         'Authorization': `Bearer ${token}`
-      }
+      },
+      body: body
     })
 
     return response

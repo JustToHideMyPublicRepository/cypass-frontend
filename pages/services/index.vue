@@ -67,7 +67,7 @@
               <!-- Background Gradient -->
               <div
                 class="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-10 transition-opacity duration-500"
-                :class="service.theme === 'blue' ? 'from-blue-500 to-transparent' : 'from-green-500 to-transparent'">
+                :class="service.theme === 'blue' ? 'from-primary to-transparent' : 'from-success to-transparent'">
               </div>
 
               <!-- Icon & Content -->
@@ -75,8 +75,8 @@
                 <div
                   class="w-16 h-16 rounded-2xl flex items-center justify-center text-white shadow-lg transform group-hover:scale-110 transition-transform duration-300"
                   :class="service.theme === 'blue'
-                    ? 'bg-gradient-to-br from-blue-500 to-indigo-600 shadow-blue-500/30'
-                    : 'bg-gradient-to-br from-emerald-500 to-teal-600 shadow-emerald-500/30'">
+                    ? 'bg-gradient-to-br from-primary to-secondary shadow-blue-500/30'
+                    : 'bg-gradient-to-br from-success to-teal-600 shadow-emerald-500/30'">
                   <component :is="service.icon" class="w-8 h-8" />
                 </div>
 
@@ -110,8 +110,8 @@
                   <button
                     class="w-full py-3 rounded-xl font-bold text-sm transition-all duration-300 group-hover:shadow-lg flex items-center justify-center gap-2"
                     :class="service.theme === 'blue'
-                      ? 'bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white'
-                      : 'bg-emerald-50 text-emerald-600 hover:bg-emerald-600 hover:text-white'">
+                      ? 'bg-primary/10 text-primary hover:bg-primary hover:text-white'
+                      : 'bg-success/10 text-success hover:bg-success hover:text-white'">
                     <span>Explorer le module</span>
                     <IconArrowRight class="w-4 h-4" />
                   </button>

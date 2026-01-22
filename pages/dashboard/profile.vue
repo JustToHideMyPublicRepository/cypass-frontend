@@ -27,7 +27,8 @@
             </button>
           </div>
           <h2 class="text-xl font-bold text-BtW">{{ user?.name || 'Utilisateur' }}</h2>
-          <p class="text-hsa mb-4">{{ user?.role === 'admin' ? 'Administrateur' : 'Utilisateur' }}</p>
+          <p class="text-hsa mb-2">{{ user?.role === 'admin' ? 'Administrateur' : 'Utilisateur' }}</p>
+          <p class="text-xs text-hsa mb-4">Membre depuis {{ formatDate(user?.created_at) }}</p>
           <div class="flex justify-center gap-2">
             <UiStatusBadge status="Active" />
           </div>
@@ -127,6 +128,8 @@ import { ref, reactive, computed, onMounted } from 'vue'
 import { IconCamera, IconMail, IconLock, IconFileCertificate, IconAlertTriangle } from '@tabler/icons-vue'
 import { useAuthStore } from '~/stores/auth'
 import { useProfilStore } from '~/stores/profil'
+import { format } from 'date-fns'
+import { fr } from 'date-fns/locale'
 
 definePageMeta({
   layout: 'default',
@@ -165,5 +168,10 @@ onMounted(async () => {
 const updateProfile = async () => {
   // Logic for updating profile can be added to profilStore later
   console.log('Update profile:', form)
+}
+
+const formatDate = (dateString?: string) => {
+  if (!dateString) return '...'
+  return format(new Date(dateString), 'd MMMM yyyy', { locale: fr })
 }
 </script>

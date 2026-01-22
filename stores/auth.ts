@@ -92,6 +92,98 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
+    async forgotPassword(email: string) {
+      this.loading = true
+      this.error = null
+      try {
+        const response = await $fetch<{ success: boolean; message: string }>('/api/auth/forgot-password', {
+          method: 'POST',
+          body: { email }
+        })
+        if (response.success) {
+          this.message = response.message
+          return true
+        }
+        this.error = response.message
+        return false
+      } catch (err: any) {
+        this.error = err.data?.message || 'Une erreur est survenue lors de la demande'
+        return false
+      } finally {
+        this.loading = false
+      }
+    },
+
+    async resetPassword(data: { token: string; password: string; confirm: string }) {
+      this.loading = true
+      this.error = null
+      try {
+        const response = await $fetch<{ success: boolean; message: string }>('/api/auth/reset-password', {
+          method: 'POST',
+          body: {
+            token: data.token,
+            new_password: data.password,
+            confirm_password: data.confirm
+          }
+        })
+        if (response.success) {
+          this.message = response.message
+          return true
+        }
+        this.error = response.message
+        return false
+      } catch (err: any) {
+        this.error = err.data?.message || 'Une erreur est survenue lors de la réinitialisation'
+        return false
+      } finally {
+        this.loading = false
+      }
+    },
+
+    async fetchSessions() {
+      this.loading = true
+      this.error = null
+      try {
+        const response = await $fetch<{ success: boolean; message: string; data: { sessions: any[] } }>('/api/auth/sessions', {
+          method: 'GET'
+        })
+        if (response.success) {
+          return response.data.sessions
+        }
+        return []
+      } catch (err: any) {
+        this.error = err.data?.message || 'Impossible de récupérer les sessions'
+        return []
+      } finally {
+        this.loading = false
+      }
+    },
+
+    async revokeSession(tokenId: string, revokeAll: boolean = false) {
+      this.loading = true
+      this.error = null
+      try {
+        const response = await $fetch<{ success: boolean; message: string }>('/api/auth/sessions', {
+          method: 'DELETE',
+          body: {
+            token_id: tokenId,
+            revoke_all: revokeAll
+          }
+        })
+        if (response.success) {
+          this.message = response.message
+          return true
+        }
+        this.error = response.message
+        return false
+      } catch (err: any) {
+        this.error = err.data?.message || 'Impossible de révoquer la session'
+        return false
+      } finally {
+        this.loading = false
+      }
+    },
+
     async logout() {
       try {
         await $fetch('/api/auth/logout', { method: 'POST' })

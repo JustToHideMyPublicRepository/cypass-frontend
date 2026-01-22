@@ -13,7 +13,7 @@ export default defineEventHandler(async (event: H3Event) => {
   }
 
   try {
-    const response = await $fetch<{ success: boolean; message: string; data: any }>(`${baseApi}/api/auth/verify_token.php`, {
+    const response = await $fetch<{ success: boolean; message: string; data: any }>(`${baseApi}/api/auth/sessions.php`, {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
@@ -25,7 +25,7 @@ export default defineEventHandler(async (event: H3Event) => {
   } catch (error: any) {
     throw createError({
       statusCode: error.statusCode || 500,
-      statusMessage: error.data?.message || error.statusMessage || 'Internal Server Error',
+      statusMessage: error.statusMessage || 'Internal Server Error',
       data: error.data
     })
   }

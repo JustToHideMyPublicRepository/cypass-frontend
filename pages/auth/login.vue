@@ -18,7 +18,8 @@
           <div class="flex justify-between items-center mb-1">
             <label for="password" class="block text-sm font-medium text-BtW">Mot de
               passe</label>
-            <a href="#" class="text-xs text-primary hover:underline">Oublié ?</a>
+            <button type="button" @click="showForgotModal = true" class="text-xs text-primary hover:underline">Oublié
+              ?</button>
           </div>
           <div class="relative">
             <IconLock class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-hsa" />
@@ -53,6 +54,10 @@
         </p>
       </div>
     </form>
+
+    <!-- Forgot Password Modal -->
+    <ModalPassword :show="showForgotModal" :loading="forgotLoading" @close="showForgotModal = false"
+      @submit="handleForgot" />
   </div>
 </template>
 
@@ -69,6 +74,8 @@ const email = ref('')
 const password = ref('')
 const showPassword = ref(false)
 const loading = ref(false)
+const showForgotModal = ref(false)
+const forgotLoading = ref(false)
 
 
 const authStore = useAuthStore()
@@ -84,12 +91,25 @@ const handleLogin = async () => {
 
   if (success) {
     toastStore.showToast('success', 'Bienvenue', 'Connexion réussie !')
-    setTimeout(() => navigateTo('/dashboard'), 1500)
+    setTimeout(() => navigateTo('/dashboard'), 1000)
   } else {
     toastStore.showToast('error', 'Erreur de connexion', authStore.error || "Identifiants invalides.")
   }
 
   loading.value = false
+}
+
+const handleForgot = async (forgotEmail: string) => {
+  forgotLoading.value = true
+  const success = await authStore.forgotPassword(forgotEmail)
+
+  if (success) {
+    toastStore.showToast('success', 'Email envoyé', 'Vérifiez votre boîte de réception.')
+    showForgotModal.value = false
+  } else {
+    toastStore.showToast('error', 'Erreur', authStore.error || "Impossible d'envoyer l'email.")
+  }
+  forgotLoading.value = false
 }
 
 useHead({

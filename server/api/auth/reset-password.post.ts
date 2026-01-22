@@ -1,17 +1,18 @@
-import { defineEventHandler, getQuery, createError, type H3Event } from 'h3'
+import { defineEventHandler, readBody, createError, type H3Event } from 'h3'
 
 export default defineEventHandler(async (event: H3Event) => {
-  const query = getQuery(event)
+  const body = await readBody(event)
   const config = useRuntimeConfig()
   const baseApi = config.public.cypassBaseAPI
 
   try {
-    const response = await $fetch<{ success: boolean; message: string; data: any }>(`${baseApi}/api/auth/verify_email.php`, {
-      method: 'GET',
-      params: { token: query.token },
+    const response = await $fetch<{ success: boolean; message: string; data: any }>(`${baseApi}/api/auth/reset_password.php`, {
+      method: 'POST',
       headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
         'Accept': 'application/json'
-      }
+      },
+      body: new URLSearchParams(body).toString()
     })
 
     return response
