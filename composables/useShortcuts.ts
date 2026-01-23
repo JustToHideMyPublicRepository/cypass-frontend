@@ -1,5 +1,6 @@
 import { onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { shortcutsData } from '@/data/shortcuts'
 
 interface ShortcutOptions {
   global?: boolean
@@ -24,8 +25,10 @@ export const useShortcuts = (options: ShortcutOptions = {}) => {
       return
     }
 
+    const key = event.key.toLowerCase()
+
     // Contextual Search Shortcut (Ctrl+K or Cmd+K)
-    if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
+    if ((event.ctrlKey || event.metaKey) && key === 'k') {
       if (options.searchCallback) {
         event.preventDefault()
         options.searchCallback()
@@ -34,40 +37,15 @@ export const useShortcuts = (options: ShortcutOptions = {}) => {
 
     // Global Navigation Shortcuts (Shift + char)
     if (event.shiftKey) {
-      switch (event.key.toLowerCase()) {
-        case 'h': // Home
-          router.push('/')
-          break
-        case 'l': // Login
-          router.push('/auth/login')
-          break
-        case 'p': // Profile
-          router.push('/dashboard/profile')
-          break
-        case 'm': // Legal Mentions
-          router.push('/legal/mentions')
-          break
-        case 's': // Support
-          router.push('/support')
-          break
-        case 'a': // About
-          router.push('/about')
-          break
-        case 'c': // Contact
-          router.push('/contact')
-          break
-        case 'f': // FAQ
-          router.push('/faq')
-          break
-        case 'd': // Developers
-          router.push('/developers')
-          break
-        case 't': // Status
-          router.push('/status')
-          break
-        case '?': // Help
-          router.push('/help/shortcuts')
-          break
+      // Find matching shortcut in our centralized data
+      const shortcut = Object.values(shortcutsData).find(s =>
+        s.isGlobal && s.modifier === 'Shift' && s.key === key
+      )
+
+      if (shortcut?.path) {
+        router.push(shortcut.path)
+      } else if (key === '?') {
+        router.push('/help/shortcuts')
       }
     }
 

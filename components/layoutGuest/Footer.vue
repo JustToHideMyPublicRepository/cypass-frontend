@@ -27,7 +27,7 @@
           <h4 class="font-bold mb-6">{{ group.title }}</h4>
           <ul class="space-y-3">
             <li v-for="link in group.links" :key="link.label">
-              <NuxtLink :to="link.path"
+              <NuxtLink :to="link.path" v-tooltip="getLinkTooltip(link.path)"
                 class="text-hsa hover:text-primary transition-colors flex items-center gap-2 group">
                 <span class="w-1.5 h-1.5 rounded-full bg-ashAct group-hover:bg-primary transition-colors"></span>
                 {{ link.label }}
@@ -73,6 +73,7 @@
 import {
   IconBrandX, IconBrandLinkedin, IconBrandGithub, IconShieldCheck, IconGlobe
 } from '@tabler/icons-vue'
+import { getLinkTooltip } from '~/data/shortcuts'
 
 const socialLinks = ['twitter', 'linkedin', 'github']
 
@@ -98,6 +99,7 @@ const footerGroups = [
     ]
   }
 ]
+
 
 // Helper
 const getSocialIcon = (name: string) => {

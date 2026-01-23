@@ -22,7 +22,7 @@
           <!-- Desktop Nav -->
           <nav class="hidden md:flex items-center gap-6">
             <template v-for="item in NavHeader" :key="item.label">
-              <NuxtLink :to="item.path"
+              <NuxtLink :to="item.path" v-tooltip="getLinkTooltip(item.path)"
                 class="text-sm font-medium hover:text-primary transition-colors relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-primary after:left-0 after:-bottom-1 after:transition-all hover:after:w-full"
                 :class="{ 'text-primary after:w-full': isLinkActive(item.path) }">
                 {{ item.label }}
@@ -31,7 +31,8 @@
 
             <!-- Auth Action -->
             <template v-if="!authStore.user">
-              <UiBaseButton to="/auth/login" class="px-5 py-2.5 rounded-full text-sm">
+              <UiBaseButton to="/auth/login" v-tooltip="getLinkTooltip('/auth/login')"
+                class="px-5 py-2.5 rounded-full text-sm">
                 Connexion
               </UiBaseButton>
             </template>
@@ -137,6 +138,7 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import { IconMenu2, IconX } from '@tabler/icons-vue'
 import { useAuthStore } from '~/stores/auth'
+import { getLinkTooltip } from '~/data/shortcuts'
 
 const route = useRoute()
 
@@ -144,6 +146,7 @@ const isLinkActive = (path: string) => {
   if (path === '/') return route.path === '/'
   return route.path.startsWith(path)
 }
+
 
 // -- Navigation Constants --
 const NavHeader = [

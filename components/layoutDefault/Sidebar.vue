@@ -26,7 +26,8 @@
       <!-- Main Links -->
       <nav class="space-y-1.5">
         <NuxtLink v-for="link in mainLinks" :key="link.path" :to="link.path" class="nav-link"
-          :class="{ 'justify-center px-0': isCollapsed }" active-class="active" :title="isCollapsed ? link.label : ''">
+          v-tooltip="getLinkTooltip(link.path)" :class="{ 'justify-center px-0': isCollapsed }" active-class="active"
+          :title="isCollapsed ? link.label : ''">
           <component :is="link.icon" class="w-5 h-5 icon" />
           <span v-show="!isCollapsed" class="truncate">{{ link.label }}</span>
         </NuxtLink>
@@ -84,6 +85,7 @@
 import { computed } from 'vue'
 import { IconLayoutDashboard as IconDashboard, IconLogout, IconChevronLeft } from '@tabler/icons-vue'
 import { services } from '@/data/services'
+import { getLinkTooltip } from '~/data/shortcuts'
 
 defineProps<{
   isOpen: boolean
@@ -91,6 +93,7 @@ defineProps<{
 }>()
 
 defineEmits(['logout', 'toggle-collapse'])
+
 
 const mainLinks = [
   { label: 'Vue d\'ensemble', path: '/dashboard', icon: IconDashboard }
