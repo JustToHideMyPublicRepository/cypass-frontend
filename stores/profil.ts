@@ -20,6 +20,7 @@ interface ProfilState {
   statistics: Statistics | null
   loading: boolean
   error: string | null
+  message: string | null
 }
 
 export const useProfilStore = defineStore('profil', {
@@ -27,7 +28,8 @@ export const useProfilStore = defineStore('profil', {
     profile: null,
     statistics: null,
     loading: false,
-    error: null
+    error: null,
+    message: null
   }),
 
   actions: {
@@ -45,6 +47,30 @@ export const useProfilStore = defineStore('profil', {
         return false
       } catch (err: any) {
         this.error = err.data?.message || 'Une erreur est survenue lors de la récupération du profil'
+        return false
+      } finally {
+        this.loading = false
+      }
+    },
+
+    async updateEmail(newEmail: string, currentPassword: string) {
+      this.loading = true
+      this.error = null
+      try {
+        const response = await $fetch<{ success: boolean; message: string }>('/api/profile/email', {
+          method: 'PUT',
+          body: { new_email: newEmail, current_password: currentPassword }
+        })
+        if (response.success) {
+          this.message = response.message
+          // Profile needs refresh to show "pending" status badge
+          await this.fetchProfile()
+          return true
+        }
+        this.error = response.message
+        return false
+      } catch (err: any) {
+        this.error = err.data?.message || 'Une erreur est survenue'
         return false
       } finally {
         this.loading = false

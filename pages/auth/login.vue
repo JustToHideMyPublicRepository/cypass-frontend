@@ -36,7 +36,7 @@
 
       <div class="mt-6">
         <UiBaseButton type="submit" block :loading="loading">
-          Se Connecter
+          Se connecter
         </UiBaseButton>
       </div>
 

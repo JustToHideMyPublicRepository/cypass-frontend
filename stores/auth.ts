@@ -114,6 +114,28 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
+    async resendVerification(email: string) {
+      this.loading = true
+      this.error = null
+      try {
+        const response = await $fetch<{ success: boolean; message: string }>('/api/auth/resend-verification', {
+          method: 'POST',
+          body: { email }
+        })
+        if (response.success) {
+          this.message = response.message
+          return true
+        }
+        this.error = response.message
+        return false
+      } catch (err: any) {
+        this.error = err.data?.message || 'Une erreur est survenue lors de l\'envoi'
+        return false
+      } finally {
+        this.loading = false
+      }
+    },
+
     async resetPassword(data: { token: string; password: string; confirm: string }) {
       this.loading = true
       this.error = null

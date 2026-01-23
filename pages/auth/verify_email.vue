@@ -31,14 +31,23 @@
           <IconCircleX class="h-10 w-10" />
         </div>
         <h2 class="text-xl font-semibold mb-2">Erreur</h2>
-        <p class="mb-8">{{ authStore.error || 'Le lien de vérification est invalide ou a expiré.' }}</p>
-        <UiBaseButton to="/auth/register" variant="secondary">
-          Retour à l'inscription
-        </UiBaseButton>
+        <p class="mb-4">{{ authStore.error || 'Le lien de vérification est invalide ou a expiré.' }}</p>
+
+        <div class="space-y-4">
+          <UiBaseButton @click="handleResend" :loading="resending" variant="primary" class="w-full">
+            Renvoyer le lien de vérification
+          </UiBaseButton>
+
+          <UiBaseButton to="/auth/register" variant="secondary" class="w-full">
+            Retour à l'inscription
+          </UiBaseButton>
+        </div>
       </div>
     </div>
 
-
+    <!-- Resend Email Modal -->
+    <ModalAuthMail :show="showResendModal" :loading="resending" :initial-email="emailToResend"
+      @close="showResendModal = false" @submit="handleResendSubmit" />
   </div>
 </template>
 
@@ -55,9 +64,13 @@ const route = useRoute()
 const authStore = useAuthStore()
 const toastStore = useToastStore()
 const success = ref(false)
+const resending = ref(false)
+const emailToResend = ref('')
+const showResendModal = ref(false)
 
 onMounted(async () => {
   const token = Array.isArray(route.query.token) ? route.query.token[0] : route.query.token
+  emailToResend.value = (Array.isArray(route.query.email) ? route.query.email[0] : route.query.email) || ''
   if (!token) {
     authStore.error = "Token de vérification manquant."
     toastStore.showToast('error', 'Erreur', authStore.error)
@@ -72,4 +85,24 @@ onMounted(async () => {
     toastStore.showToast('error', 'Échec de vérification', authStore.error || 'Le lien est invalide.')
   }
 })
+
+const handleResend = () => {
+  if (!emailToResend.value) {
+    showResendModal.value = true
+  } else {
+    handleResendSubmit(emailToResend.value)
+  }
+}
+
+const handleResendSubmit = async (email: string) => {
+  resending.value = true
+  const result = await authStore.resendVerification(email)
+  if (result) {
+    toastStore.showToast('success', 'Email envoyé', authStore.message || 'Un nouveau lien a été envoyé.')
+    showResendModal.value = false
+  } else {
+    toastStore.showToast('error', 'Erreur', authStore.error || 'Échec de l\'envoi.')
+  }
+  resending.value = false
+}
 </script>

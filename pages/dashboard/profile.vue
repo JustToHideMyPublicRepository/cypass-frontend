@@ -30,7 +30,9 @@
           <p class="text-hsa mb-2">{{ user?.role === 'admin' ? 'Administrateur' : 'Utilisateur' }}</p>
           <p class="text-xs text-hsa mb-4">Membre depuis {{ formatDate(user?.created_at) }}</p>
           <div class="flex justify-center gap-2">
-            <UiStatusBadge status="Active" />
+            <UiStatusBadge :status="profilStore.profile?.email_verified ? 'Verified' : 'Pending'">
+              {{ profilStore.profile?.email_verified ? 'Vérifié' : 'En attente' }}
+            </UiStatusBadge>
           </div>
         </UiBaseCard>
 
@@ -81,11 +83,14 @@
             </div>
 
             <div class="space-y-1">
-              <label class="text-xs font-bold text-hsa uppercase">Email</label>
-              <div class="relative">
-                <IconMail class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-hsa" />
-                <input type="email" v-model="form.email" disabled
-                  class="w-full pl-10 pr-4 py-2.5 rounded-lg bg-ash/50 border border-ashAct text-hsa cursor-not-allowed outline-none" />
+              <label class="text-xs font-bold text-hsa uppercase">Email actuel</label>
+              <div class="flex items-center gap-2">
+                <div class="relative flex-1">
+                  <IconMail class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-hsa" />
+                  <input type="email" v-model="form.email" disabled
+                    class="w-full pl-10 pr-4 py-2.5 rounded-lg bg-ash/50 border border-ashAct text-hsa cursor-not-allowed outline-none" />
+                </div>
+                <UiStatusBadge :status="profilStore.profile?.email_verified ? 'Verified' : 'Pending'" />
               </div>
             </div>
 
@@ -98,6 +103,35 @@
             <div class="pt-4 flex justify-end">
               <UiBaseButton type="submit" :loading="profilStore.loading">
                 Enregistrer les modifications
+              </UiBaseButton>
+            </div>
+          </form>
+        </UiBaseCard>
+
+        <!-- Change Email -->
+        <UiBaseCard title="Modifier l'adresse email" class="border-l-4 border-l-primary">
+          <form @submit.prevent="updateEmail" class="space-y-4">
+            <div class="space-y-4">
+              <div class="space-y-1">
+                <label class="text-xs font-bold text-hsa uppercase">Nouvel Email</label>
+                <div class="relative">
+                  <IconMail class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-hsa" />
+                  <input type="email" v-model="emailForm.newEmail" required placeholder="nouvel.email@exemple.com"
+                    class="w-full pl-10 pr-4 py-2.5 rounded-lg bg-ash border border-ashAct focus:ring-2 focus:ring-primary outline-none text-BtW" />
+                </div>
+              </div>
+              <div class="space-y-1">
+                <label class="text-xs font-bold text-hsa uppercase">Mot de passe actuel</label>
+                <div class="relative">
+                  <IconLock class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-hsa" />
+                  <input type="password" v-model="emailForm.password" required placeholder="••••••••"
+                    class="w-full pl-10 pr-4 py-2.5 rounded-lg bg-ash border border-ashAct focus:ring-2 focus:ring-primary outline-none text-BtW" />
+                </div>
+              </div>
+            </div>
+            <div class="pt-4 flex justify-end">
+              <UiBaseButton type="submit" :loading="profilStore.loading" variant="primary">
+                Changer l'email
               </UiBaseButton>
             </div>
           </form>
@@ -128,6 +162,7 @@ import { ref, reactive, computed, onMounted } from 'vue'
 import { IconCamera, IconMail, IconLock, IconFileCertificate, IconAlertTriangle } from '@tabler/icons-vue'
 import { useAuthStore } from '~/stores/auth'
 import { useProfilStore } from '~/stores/profil'
+import { useToastStore } from '~/stores/toast'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 
@@ -142,6 +177,7 @@ useHead({
 
 const authStore = useAuthStore()
 const profilStore = useProfilStore()
+const toastStore = useToastStore()
 
 const user = computed(() => authStore.user)
 
@@ -150,6 +186,11 @@ const form = reactive({
   prenom: '',
   email: '',
   organisation: ''
+})
+
+const emailForm = reactive({
+  newEmail: '',
+  password: ''
 })
 
 onMounted(async () => {
@@ -168,6 +209,17 @@ onMounted(async () => {
 const updateProfile = async () => {
   // Logic for updating profile can be added to profilStore later
   console.log('Update profile:', form)
+}
+
+const updateEmail = async () => {
+  const success = await profilStore.updateEmail(emailForm.newEmail, emailForm.password)
+  if (success) {
+    toastStore.showToast('success', 'Email modifié', profilStore.message || 'Veuillez vérifier votre nouvelle adresse.')
+    emailForm.newEmail = ''
+    emailForm.password = ''
+  } else {
+    toastStore.showToast('error', 'Erreur', profilStore.error || 'Impossible de modifier l\'email.')
+  }
 }
 
 const formatDate = (dateString?: string) => {

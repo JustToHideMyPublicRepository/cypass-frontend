@@ -26,7 +26,9 @@
           <div class="grid grid-cols-2 gap-6 pt-4">
             <div v-for="stat in stats" :key="stat.label" class="flex flex-col gap-2">
               <span class="text-4xl font-black text-primary">{{ stat.value }}</span>
-              <span class="text-sm text-slate-500 font-medium uppercase tracking-wide">{{ stat.label }}</span>
+              <span class="text-sm font-medium uppercase tracking-wide">
+                {{ stat.label }}
+              </span>
             </div>
           </div>
         </div>
