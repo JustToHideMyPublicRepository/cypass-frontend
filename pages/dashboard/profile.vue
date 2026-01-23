@@ -10,7 +10,7 @@
     <div v-else class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <!-- Left Column: User Card & Stats -->
       <div class="space-y-6">
-        <ProfileSidebar :user="user" :email-verified="!!profilStore.profile?.email_verified" />
+        <ProfileSidebar :user="user" :status="profilStore.profile?.status || 'active'" />
         <ProfileStats :statistics="profilStore.statistics" />
       </div>
 
@@ -66,9 +66,8 @@ const form = reactive({
 onMounted(async () => {
   await profilStore.fetchProfile()
   if (profilStore.profile) {
-    const nameParts = profilStore.profile.name.split(' ')
-    form.prenom = nameParts[0]
-    form.nom = nameParts.slice(1).join(' ')
+    form.prenom = profilStore.profile.first_name
+    form.nom = profilStore.profile.last_name
     form.email = profilStore.profile.email
     form.organisation = profilStore.profile.organization_name || 'N/A'
   }

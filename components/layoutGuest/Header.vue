@@ -42,10 +42,9 @@
                   class="flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-ash transition-colors">
                   <div
                     class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center overflow-hidden border border-primary/20">
-                    <img :src="`https://api.dicebear.com/9.x/icons/svg?seed=${authStore.user.name}`" alt="Avatar"
-                      class="w-full h-full object-cover" />
+                    <img :src="authStore.avatarUrl" alt="Avatar" class="w-full h-full object-cover" />
                   </div>
-                  <span class="text-sm font-semibold hidden lg:block">{{ authStore.user.name.split(' ')[0] }}</span>
+                  <span class="text-sm font-semibold hidden lg:block">{{ authStore.user.first_name }}</span>
                 </button>
 
                 <Transition enter-active-class="transition duration-100 ease-out"
@@ -56,7 +55,7 @@
                     class="absolute right-0 mt-2 w-48 origin-top-right rounded-xl bg-WtB border border-ash shadow-lg z-50 overflow-hidden">
                     <div class="p-3 border-b border-ash bg-ash/20">
                       <p class="text-xs font-bold text-hsa uppercase tracking-wider">Connecté en tant que</p>
-                      <p class="text-sm font-bold truncate text-BtW">{{ authStore.user.name }}</p>
+                      <p class="text-sm font-bold truncate text-BtW">{{ authStore.fullName }}</p>
                     </div>
                     <div class="py-1">
                       <NuxtLink to="/dashboard" @click="isDropdownOpen = false"
@@ -147,8 +146,7 @@ const isLinkActive = (path: string) => {
   return route.path.startsWith(path)
 }
 
-
-// -- Navigation Constants --
+// Navigation Constants
 const NavHeader = [
   { label: 'Services', path: '/services', isButton: false },
   { label: 'Support', path: '/support', isButton: false },

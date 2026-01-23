@@ -3,8 +3,10 @@ import { defineStore } from 'pinia'
 interface User {
   id: string
   email: string
-  name: string
+  first_name: string
+  last_name: string
   organization: string | null
+  avatar_url: string | null
   role: string
   created_at: string
 }
@@ -24,12 +26,30 @@ export const useAuthStore = defineStore('auth', {
     message: null
   }),
 
+  getters: {
+    fullName: (state) => {
+      if (!state.user) return 'Utilisateur'
+      return `${state.user.first_name} ${state.user.last_name}`.trim() || 'Utilisateur'
+    },
+    avatarUrl: (state) => {
+      const baseUrl = 'https://cypass-backend.alwaysdata.net'
+      if (state.user?.avatar_url && state.user.avatar_url.trim() !== '') {
+        const url = state.user.avatar_url
+        if (url.startsWith('http')) return url
+        const cleanUrl = url.replace(/^\/+/, '')
+        return `${baseUrl}/${cleanUrl}`
+      }
+      const seed = state.user ? `${state.user.first_name} ${state.user.last_name}`.trim() : 'Utilisateur'
+      return `https://api.dicebear.com/9.x/icons/svg?seed=${seed}`
+    }
+  },
+
   actions: {
     async login(credentials: { email: string; password: string }) {
       this.loading = true
       this.error = null
       try {
-        const response = await $fetch<{ success: boolean; message: string; data: { user: User } }>('/api/auth/login', {
+        const response = await $fetch<{ success: boolean; message: string; data: { user: User; token: string } }>('/api/auth/login', {
           method: 'POST',
           body: credentials
         })

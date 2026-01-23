@@ -23,12 +23,11 @@
         <button @click="isDropdownOpen = !isDropdownOpen"
           class="flex items-center gap-3 hover:opacity-80 transition-opacity">
           <div class="text-right hidden sm:block">
-            <div class="text-sm font-medium text-BtW">{{ user?.name || 'Utilisateur' }}</div>
-            <div class="text-xs text-hsa">{{ user?.email || 'user@cypass.bj' }}</div>
+            <div class="text-sm font-medium text-BtW">{{ authStore.fullName }}</div>
+            <div class="text-xs text-hsa">{{ authStore.user?.email }}</div>
           </div>
           <div class="w-10 h-10 rounded-full bg-ash overflow-hidden border border-ashAct">
-            <img :src="`https://api.dicebear.com/9.x/icons/svg?seed=${user?.name || 'Utilisateur'}`" alt="Profile"
-              class="w-full h-full object-cover" />
+            <img :src="authStore.avatarUrl" alt="Profile" class="w-full h-full object-cover" />
           </div>
           <IconChevronDown class="w-4 h-4 text-hsa transition-transform" :class="{ 'rotate-180': isDropdownOpen }" />
         </button>
@@ -41,8 +40,8 @@
           <div v-if="isDropdownOpen"
             class="absolute right-0 mt-2 w-56 origin-top-right rounded-xl bg-WtB border border-ash shadow-lg z-50 overflow-hidden">
             <div class="p-3 border-b border-ash">
-              <p class="text-sm font-medium text-BtW">{{ user?.name || 'Utilisateur' }}</p>
-              <p class="text-xs text-hsa truncate">{{ user?.email || 'user@cypass.bj' }}</p>
+              <p class="text-sm font-medium text-BtW">{{ authStore.fullName }}</p>
+              <p class="text-xs text-hsa truncate">{{ authStore.user?.email }}</p>
             </div>
 
             <div class="py-2">
@@ -71,7 +70,10 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import { IconMenu2, IconSearch, IconChevronDown, IconUser, IconSettings, IconHelp, IconDevices, IconLogout, IconKeyboard } from '@tabler/icons-vue'
+import { useAuthStore } from '~/stores/auth'
 import { getLinkTooltip } from '~/data/shortcuts'
+
+const authStore = useAuthStore()
 
 const isDropdownOpen = ref(false)
 const dropdownRef = ref<HTMLElement | null>(null)
@@ -85,14 +87,6 @@ const dropdownLinks = [
   { label: 'Raccourcis Clavier', path: '/help/shortcuts', icon: IconKeyboard },
   { label: 'Aide & Support', path: '/support', icon: IconHelp }
 ]
-
-defineProps<{
-  user?: {
-    name?: string
-    email?: string
-    avatar?: string
-  } | null
-}>()
 
 defineEmits(['toggle-menu', 'logout'])
 

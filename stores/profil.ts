@@ -3,9 +3,12 @@ import { defineStore } from 'pinia'
 interface UserProfile {
   id: string
   email: string
-  name: string
+  first_name: string
+  last_name: string
   organization_name: string | null
+  avatar_url: string | null
   role: string
+  status: 'pending' | 'active' | 'pending_delete' | 'deleted' | 'suspended'
   email_verified: boolean
   created_at: string
 }

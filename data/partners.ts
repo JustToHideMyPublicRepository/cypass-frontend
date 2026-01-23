@@ -26,7 +26,7 @@ export const partners: Partner[] = [
   {
     name: 'ARCEP',
     role: 'Autorité de Régulation des Communications Électroniques',
-    logo: '/images/partners/arcep.png',
+    logo: 'https://srtb.bj/storage/2021/01/ARCEP.jpg',
     website: 'https://arcep.bj/',
     initials: 'ARCEP'
   },
@@ -47,7 +47,7 @@ export const partners: Partner[] = [
   {
     name: 'GOUV.BJ',
     role: 'Portail Officiel du Gouvernement du Bénin',
-    logo: 'https://www.gouv.bj/',
+    logo: 'https://www.gouv.bj/images/logo-white.png',
     website: 'https://www.gouv.bj/',
     initials: 'GOUV',
     style: 'text-2xl font-bold font-serif'
