@@ -25,8 +25,13 @@
           <label class="text-xs font-bold text-hsa uppercase">Mot de passe actuel</label>
           <div class="relative">
             <IconLock class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-hsa" />
-            <input type="password" v-model="form.password" required placeholder="••••••••"
-              class="w-full pl-10 pr-4 py-2.5 rounded-lg bg-ash border border-ashAct focus:ring-2 focus:ring-primary outline-none text-BtW" />
+            <input :type="showPassword ? 'text' : 'password'" v-model="form.password" required placeholder="••••••••"
+              class="w-full pl-10 pr-12 py-2.5 rounded-lg bg-ash border border-ashAct focus:ring-2 focus:ring-primary outline-none text-BtW" />
+            <button type="button" @click="showPassword = !showPassword"
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-hsa hover:text-BtW transition-colors">
+              <IconEye v-if="showPassword" class="w-5 h-5" />
+              <IconEyeOff v-else class="w-5 h-5" />
+            </button>
           </div>
         </div>
       </div>
@@ -44,8 +49,8 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue'
-import { IconMail, IconLock, IconAlertCircle } from '@tabler/icons-vue'
+import { ref, reactive } from 'vue'
+import { IconMail, IconLock, IconAlertCircle, IconEye, IconEyeOff } from '@tabler/icons-vue'
 
 defineProps<{
   show: boolean
@@ -53,6 +58,8 @@ defineProps<{
 }>()
 
 const emit = defineEmits(['close', 'submit'])
+
+const showPassword = ref(false)
 
 const form = reactive({
   newEmail: '',
