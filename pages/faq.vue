@@ -9,21 +9,17 @@
         </h1>
 
         <!-- Search Bar -->
-        <div class="relative max-w-2xl mx-auto group">
-          <div
-            class="absolute inset-0 bg-primary/20 blur-xl rounded-2xl group-hover:bg-primary/30 transition-colors opacity-50">
+        <div class="max-w-2xl mx-auto relative group">
+          <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+            <IconSearch class="w-5 h-5 text-hsa/50 group-focus-within:text-primary transition-colors" />
           </div>
-          <div
-            class="relative bg-WtB rounded-2xl p-2 shadow-2xl border border-ash flex items-center transition-all transform group-hover:-translate-y-1 focus-within:border-primary/50 focus-within:ring-4 focus-within:ring-primary/5">
-            <IconSearch class="w-6 h-6 text-hsa ml-4" />
-            <input ref="searchInput" v-model="searchQuery" type="text"
-              class="w-full bg-transparent border-none focus:ring-0 text-lg py-4 px-4 placeholder-slate-400 font-medium"
-              placeholder="Rechercher une réponse (ex: mot de passe, API, sécurité)..." />
-            <div class="hidden sm:flex items-center gap-2 pr-4 text-xs text-hsa font-code">
-              <span class="bg-ash px-2 py-1 rounded">CTRL</span>
-              <span>+</span>
-              <span class="bg-ash px-2 py-1 rounded">K</span>
-            </div>
+          <input ref="searchInput" v-model="searchQuery" type="text"
+            class="block w-full pl-12 pr-16 py-4 bg-WtB border border-ash rounded-2xl shadow-lg shadow-ash/50 focus:ring-2 focus:ring-primary focus:border-primary transition-all outline-none"
+            placeholder="Rechercher une réponse (ex: mot de passe, API, sécurité)...">
+          <div class="hidden sm:flex items-center gap-1 absolute right-4 top-1/2 -translate-y-1/2">
+            <kbd class="px-1.5 py-0.5 rounded bg-ash text-[10px] font-bold text-hsa border border-ashAct">CTRL</kbd>
+            <span class="text-[10px] text-hsa">+</span>
+            <kbd class="px-1.5 py-0.5 rounded bg-ash text-[10px] font-bold text-hsa border border-ashAct">K</kbd>
           </div>
         </div>
       </div>

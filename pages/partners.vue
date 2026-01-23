@@ -22,9 +22,11 @@
           :style="{ animationDelay: `${index * 100}ms` }">
           <div
             class="w-24 h-24 rounded-full bg-ash flex items-center justify-center mb-6 text-2xl font-bold text-hsa border border-ashAct overflow-hidden p-4">
-            <img v-if="partner.logo" :src="partner.logo" :alt="partner.name" class="w-full h-full object-contain"
-              @error="(e) => (e.target as HTMLImageElement).src = `https://api.dicebear.com/7.x/initials/svg?seed=${partner.initials || partner.name}`" />
-            <span v-else>{{ partner.initials }}</span>
+            <template v-if="partner.logo && !erroredLogos.has(partner.name)">
+              <img :src="partner.logo" :alt="partner.name" class="w-full h-full object-contain"
+                @error="handleImageError(partner.name)" />
+            </template>
+            <span v-else>{{ partner.initials || partner.name.charAt(0) }}</span>
           </div>
           <h3 class="text-xl font-bold mb-2">{{ partner.name }}</h3>
           <p class="text-sm text-hsa mb-6">{{ partner.role }}</p>
@@ -74,8 +76,14 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { IconX } from '@tabler/icons-vue'
+import { partners } from '@/data/partners'
 
 const isModalOpen = ref(false)
+const erroredLogos = ref(new Set<string>())
+
+const handleImageError = (name: string) => {
+  erroredLogos.value.add(name)
+}
 
 const submitPartnerRequest = () => {
   // Simulate API call
@@ -85,8 +93,6 @@ const submitPartnerRequest = () => {
     isModalOpen.value = false
   }, 1000)
 }
-
-import { partners } from '@/data/partners'
 
 definePageMeta({
   layout: 'guest'

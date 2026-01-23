@@ -13,9 +13,14 @@
           <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
             <IconSearch class="w-5 h-5 text-hsa/50 group-focus-within:text-primary transition-colors" />
           </div>
-          <input type="text"
-            class="block w-full pl-12 pr-4 py-4 bg-WtB border border-ash rounded-2xl shadow-lg shadow-ash/50 focus:ring-2 focus:ring-primary focus:border-primary transition-all outline-none"
+          <input ref="searchInput" type="text"
+            class="block w-full pl-12 pr-16 py-4 bg-WtB border border-ash rounded-2xl shadow-lg shadow-ash/50 focus:ring-2 focus:ring-primary focus:border-primary transition-all outline-none"
             placeholder="Rechercher une réponse, une API ou un guide...">
+          <div class="hidden sm:flex items-center gap-1 absolute right-4 top-1/2 -translate-y-1/2">
+            <kbd class="px-1.5 py-0.5 rounded bg-ash text-[10px] font-bold text-hsa border border-ashAct">CTRL</kbd>
+            <span class="text-[10px] text-hsa">+</span>
+            <kbd class="px-1.5 py-0.5 rounded bg-ash text-[10px] font-bold text-hsa border border-ashAct">K</kbd>
+          </div>
         </div>
       </div>
 
@@ -132,6 +137,12 @@
 
 <script setup lang="ts">
 import { IconSearch, IconArrowRight, IconUserCircle, IconShieldLock, IconTerminal2, IconMail, IconPhone, IconRocket, IconApi, IconCode } from '@tabler/icons-vue'
+
+const searchInput = ref<HTMLInputElement | null>(null)
+
+useShortcuts({
+  searchCallback: () => searchInput.value?.focus()
+})
 
 definePageMeta({
   layout: 'guest'

@@ -1,10 +1,10 @@
 <template>
   <div class="fixed bottom-6 right-6 z-[60]">
     <!-- Trigger Button -->
-    <button @click="isOpen = !isOpen"
-      class="w-14 h-14 rounded-full bg-primary text-ash shadow-2xl shadow-primary/40 flex items-center justify-center hover:scale-110 active:scale-95 transition-all duration-300 group">
-      <IconHelp v-if="!isOpen" class="w-7 h-7" />
-      <IconX v-else class="w-7 h-7" />
+    <button @click.stop="isOpen = !isOpen"
+      class="rounded-full bg-primary text-ash shadow-2xl shadow-primary/40 flex items-center justify-center hover:scale-110 active:scale-95 transition-all duration-300 group p-2">
+      <IconHelp v-if="!isOpen" class="w-6 h-6" />
+      <IconX v-else class="w-6 h-6" />
 
       <!-- Pulse Effect -->
       <span class="absolute inset-0 rounded-full bg-primary animate-ping opacity-20 pointer-events-none"></span>
@@ -29,7 +29,7 @@
             class="flex items-center gap-3 p-3 rounded-2xl hover:bg-ash transition-all group/item">
             <div
               class="w-10 h-10 rounded-xl bg-ash flex items-center justify-center text-hsa group-hover/item:bg-primary/10 group-hover/item:text-primary transition-colors">
-              <component :is="link.icon" class="w-5 h-5" />
+              <component :is="link.icon" class="w-4 h-4" />
             </div>
             <div>
               <div class="text-sm font-bold text-BtW group-hover/item:text-primary transition-colors">{{ link.label }}
