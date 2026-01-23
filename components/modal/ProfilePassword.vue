@@ -20,7 +20,7 @@
             <input type="password" v-model="form.new" required placeholder="••••••••"
               class="w-full pl-10 pr-4 py-2.5 rounded-lg bg-ash border border-ashAct focus:ring-2 focus:ring-primary outline-none text-BtW" />
           </div>
-          <UtilsPasswordValidator :password="form.new" />
+          <UtilsPasswordValidator v-if="form.new && form.new.length > 0" :password="form.new" />
         </div>
 
         <div class="space-y-1">
