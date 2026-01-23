@@ -17,8 +17,13 @@
 						:style="{ animationDelay: `${index * 100}ms` }">
 						<button @click="toggle(index)"
 							class="w-full flex items-center justify-between p-6 text-left focus:outline-none group">
-							<span class="font-bold text-BtW text-lg group-hover:text-primary transition-colors pr-8">{{
-								item.question }}</span>
+							<div class="flex flex-col gap-2 pr-8">
+								<UiStatusBadge v-if="item.category" :status="item.category" class="w-fit">
+									{{ truncate(item.category, 15) }}
+								</UiStatusBadge>
+								<span class="font-bold text-BtW text-lg group-hover:text-primary transition-colors">{{
+									item.question }}</span>
+							</div>
 							<span class="p-2 rounded-full bg-ashAct transition-all duration-300 flex-shrink-0"
 								:class="{ 'rotate-180': activeIndex === index, 'group-hover:bg-primary/20': activeIndex !== index }">
 								<IconChevronDown class="w-5 h-5" />
@@ -122,7 +127,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { IconChevronDown, IconSearch, IconBook, IconCode, IconArticle } from '@tabler/icons-vue'
 import { popularFaqItems } from '@/data/faq'
 
@@ -132,5 +137,15 @@ const toggle = (index: number) => {
 	activeIndex.value = activeIndex.value === index ? null : index
 }
 
-const faqItems = popularFaqItems
+// Function to truncate strings
+const truncate = (text: string, length: number) => {
+	return text.length > length ? text.substring(0, length) + '...' : text
+}
+
+// Randomly shuffle and take 4 items
+const faqItems = computed(() => {
+	return [...popularFaqItems]
+		.sort(() => Math.random() - 0.5)
+		.slice(0, 4)
+})
 </script>

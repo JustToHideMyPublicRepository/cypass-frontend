@@ -14,9 +14,9 @@
             class="absolute inset-0 bg-primary/20 blur-xl rounded-2xl group-hover:bg-primary/30 transition-colors opacity-50">
           </div>
           <div
-            class="relative bg-WtB rounded-2xl p-2 shadow-2xl border border-ash flex items-center transition-transform transform group-hover:-translate-y-1">
+            class="relative bg-WtB rounded-2xl p-2 shadow-2xl border border-ash flex items-center transition-all transform group-hover:-translate-y-1 focus-within:border-primary/50 focus-within:ring-4 focus-within:ring-primary/5">
             <IconSearch class="w-6 h-6 text-hsa ml-4" />
-            <input v-model="searchQuery" type="text"
+            <input ref="searchInput" v-model="searchQuery" type="text"
               class="w-full bg-transparent border-none focus:ring-0 text-lg py-4 px-4 placeholder-slate-400 font-medium"
               placeholder="Rechercher une réponse (ex: mot de passe, API, sécurité)..." />
             <div class="hidden sm:flex items-center gap-2 pr-4 text-xs text-hsa font-code">
@@ -30,6 +30,19 @@
     </section>
 
     <!-- Quick Topics Grid -->
+    <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+      <div class="flex flex-wrap justify-center gap-4 mb-12">
+        <button @click="selectedCategoryText = null" class="px-6 py-2 rounded-full font-bold transition-all border"
+          :class="!selectedCategoryText ? 'bg-primary text-white border-primary shadow-lg shadow-primary/20' : 'bg-WtB text-hsa border-ash hover:border-primary/50'">
+          Tous
+        </button>
+        <button v-for="cat in faqCategories" :key="cat.title" @click="selectedCategoryText = cat.title"
+          class="px-6 py-2 rounded-full font-bold transition-all border"
+          :class="selectedCategoryText === cat.title ? 'bg-primary text-white border-primary shadow-lg shadow-primary/20' : 'bg-WtB text-hsa border-ash hover:border-primary/50'">
+          {{ cat.title }}
+        </button>
+      </div>
+    </section>
     <section class="px-4 sm:px-6 lg:px-8 pb-12">
       <div class="max-w-6xl mx-auto">
         <!-- FAQ List -->
@@ -111,21 +124,27 @@ import { ref, computed } from 'vue'
 import { IconChevronDown, IconSearch, IconMessageCircle, IconBulb } from '@tabler/icons-vue'
 import { faqCategories } from '@/data/faq'
 
+const searchInput = ref<HTMLInputElement | null>(null)
+
+useShortcuts({
+  searchCallback: () => searchInput.value?.focus()
+})
+
 definePageMeta({
   layout: 'guest'
 })
 
 const activeIndex = ref<string | null>(null)
 const searchQuery = ref('')
-const selectedCategory = ref<string | null>(null)
+const selectedCategoryText = ref<string | null>(null)
 
 // Filter FAQ based on search and selection
 const filteredCategories = computed(() => {
   let categories = faqCategories
 
   // Filter by Category Selection
-  if (selectedCategory.value) {
-    categories = categories.filter(cat => cat.title.includes(selectedCategory.value!))
+  if (selectedCategoryText.value) {
+    categories = categories.filter(cat => cat.title === selectedCategoryText.value)
   }
 
   // Filter by Search

@@ -3,7 +3,7 @@
     class="relative p-2 rounded-full border border-ash hover:bg-ash transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-primary/50"
     aria-label="Toggle Theme">
     <Transition name="fade" mode="out-in">
-      <IconSun v-if="colorMode.preference === 'dark'" class="w-5 h-5 text-yellow-500" />
+      <IconSun v-if="colorMode.value === 'dark'" class="w-5 h-5 text-yellow-500" />
       <IconMoon v-else class="w-5 h-5 text-slate-600" />
     </Transition>
   </button>
@@ -15,7 +15,7 @@ import { IconSun, IconMoon } from '@tabler/icons-vue'
 const colorMode = useColorMode()
 
 const toggleTheme = () => {
-  colorMode.preference = colorMode.preference === 'dark' ? 'light' : 'dark'
+  colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
 }
 </script>
 

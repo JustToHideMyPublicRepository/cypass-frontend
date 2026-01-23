@@ -21,76 +21,53 @@
           class="glass-panel p-8 rounded-3xl flex flex-col items-center text-center hover:scale-[1.02] transition-transform duration-300 animate-fade-up"
           :style="{ animationDelay: `${index * 100}ms` }">
           <div
-            class="w-24 h-24 rounded-full bg-ash flex items-center justify-center mb-6 text-2xl font-bold text-hsa border border-ashAct">
-            {{ partner.initials }}
+            class="w-24 h-24 rounded-full bg-ash flex items-center justify-center mb-6 text-2xl font-bold text-hsa border border-ashAct overflow-hidden p-4">
+            <img v-if="partner.logo" :src="partner.logo" :alt="partner.name" class="w-full h-full object-contain"
+              @error="(e) => (e.target as HTMLImageElement).src = `https://api.dicebear.com/7.x/initials/svg?seed=${partner.initials || partner.name}`" />
+            <span v-else>{{ partner.initials }}</span>
           </div>
           <h3 class="text-xl font-bold mb-2">{{ partner.name }}</h3>
           <p class="text-sm text-hsa mb-6">{{ partner.role }}</p>
-          <UiBaseButton href="#" variant="secondary" class="text-xs px-4 py-2">Visiter le site</UiBaseButton>
+          <UiBaseButton :href="partner.website" target="_blank" variant="secondary" class="text-xs px-4 py-2">Visiter le
+            site</UiBaseButton>
         </div>
       </div>
 
     </div>
 
     <!-- Partner Modal -->
-    <Transition enter-active-class="transition duration-300 ease-out" enter-from-class="opacity-0"
-      enter-to-class="opacity-100" leave-active-class="transition duration-200 ease-in" leave-from-class="opacity-100"
-      leave-to-class="opacity-0">
-      <div v-if="isModalOpen" class="fixed inset-0 z-50 overflow-y-auto" role="dialog" aria-modal="true">
-        <!-- Backdrop -->
-        <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" @click="isModalOpen = false"></div>
+    <UiBaseModal :show="isModalOpen" title="Devenir Partenaire" @close="isModalOpen = false">
+      <p class="text-hsa mb-6">Rejoignez l'écosystème de confiance CYPASS.</p>
 
-        <!-- Modal Panel -->
-        <div class="flex items-center justify-center p-4">
-          <div class="relative w-full max-w-lg bg-WtB rounded-2xl shadow-2xl p-8 border border-ash animate-fade-up"
-            @click.stop>
-            <!-- Close Button -->
-            <button @click="isModalOpen = false"
-              class="absolute top-4 right-4 text-hsa hover:text-primary transition-colors">
-              <IconX class="w-6 h-6" />
-            </button>
+      <!-- Form -->
+      <form @submit.prevent="submitPartnerRequest" class="space-y-4">
+        <div>
+          <label class="block text-sm font-bold mb-1">Nom de l'organisation</label>
+          <input type="text" required class="input" placeholder="Ex: Tech Solutions" />
+        </div>
 
-            <!-- Header -->
-            <div class="mb-6">
-              <h3 class="text-2xl font-bold text-BtW">Devenir Partenaire</h3>
-              <p class="text-hsa mt-2">Rejoignez l'écosystème de confiance CYPASS.</p>
-            </div>
-
-            <!-- Form -->
-            <form @submit.prevent="submitPartnerRequest" class="space-y-4">
-              <div>
-                <label class="block text-sm font-bold mb-1">Nom de
-                  l'organisation</label>
-                <input type="text" required class="input" placeholder="Ex: Tech Solutions" />
-              </div>
-
-              <div class="grid grid-cols-2 gap-4">
-                <div>
-                  <label class="block text-sm font-bold mb-1">Contact</label>
-                  <input type="text" required class="input" placeholder="Nom complet" />
-                </div>
-                <div>
-                  <label class="block text-sm font-bold mb-1">Email</label>
-                  <input type="email" required class="input" placeholder="email@company.com" />
-                </div>
-              </div>
-
-              <div>
-                <label class="block text-sm font-bold mb-1">Message</label>
-                <textarea class="textarea input h-24 pt-3"
-                  placeholder="Décrivez votre projet de partenariat..."></textarea>
-              </div>
-
-              <div class="pt-4 flex gap-3">
-                <UiBaseButton type="button" @click="isModalOpen = false" variant="ghost" class="flex-1">Annuler
-                </UiBaseButton>
-                <UiBaseButton type="submit" class="flex-1">Envoyer la demande</UiBaseButton>
-              </div>
-            </form>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-bold mb-1">Contact</label>
+            <input type="text" required class="input" placeholder="Nom complet" />
+          </div>
+          <div>
+            <label class="block text-sm font-bold mb-1">Email</label>
+            <input type="email" required class="input" placeholder="email@company.com" />
           </div>
         </div>
-      </div>
-    </Transition>
+
+        <div>
+          <label class="block text-sm font-bold mb-1">Message</label>
+          <textarea class="textarea input h-24 pt-3" placeholder="Décrivez votre projet de partenariat..."></textarea>
+        </div>
+
+        <div class="pt-4 flex gap-3">
+          <UiBaseButton type="button" @click="isModalOpen = false" variant="ghost" class="flex-1">Annuler</UiBaseButton>
+          <UiBaseButton type="submit" class="flex-1">Envoyer la demande</UiBaseButton>
+        </div>
+      </form>
+    </UiBaseModal>
   </div>
 </template>
 
@@ -109,33 +86,7 @@ const submitPartnerRequest = () => {
   }, 1000)
 }
 
-const partners = [
-  {
-    name: 'ASIN',
-    initials: 'ASIN',
-    role: 'Agence des Systèmes d\'Information et du Numérique'
-  },
-  {
-    name: 'BJ-CSIRT',
-    initials: 'CSIRT',
-    role: 'Centre de Réponse aux Incidents de Sécurité Informatique'
-  },
-  {
-    name: 'ARCEP',
-    initials: 'ARCEP',
-    role: 'Autorité de Régulation des Communications Électroniques'
-  },
-  {
-    name: 'Ministère du Numérique et de la Digitalisation',
-    initials: 'MND',
-    role: 'Ministère de tutelle'
-  },
-  {
-    name: 'APIEX',
-    initials: 'APIEX',
-    role: 'Agence de Promotion des Investissements et des Exportations'
-  },
-]
+import { partners } from '@/data/partners'
 
 definePageMeta({
   layout: 'guest'
