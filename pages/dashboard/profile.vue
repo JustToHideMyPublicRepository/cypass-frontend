@@ -10,14 +10,15 @@
     <div v-else class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <!-- Left Column: User Card & Stats -->
       <div class="space-y-6">
-        <ProfileSidebar :user="user" :status="profilStore.profile?.status || 'active'" />
+        <ProfileSidebar :user="user" :status="profilStore.profile?.status || 'active'"
+          @open-avatar="showAvatarModal = true" />
         <ProfileStats :statistics="profilStore.statistics" />
       </div>
 
       <!-- Right Column: Personal Info & Security -->
       <div class="lg:col-span-2 space-y-6">
-        <ProfilePersonalInfo v-model="form" :loading="profilStore.loading"
-          :email-verified="!!profilStore.profile?.email_verified" @update="handleProfileUpdate" />
+        <ProfilePersonalInfo v-model="form" :email-verified="!!profilStore.profile?.email_verified"
+          @open-edit="showInfoModal = true" />
 
         <ProfileSecurity @open-email="showEmailModal = true" @open-password="showPasswordModal = true" />
       </div>
@@ -29,6 +30,12 @@
 
     <ModalProfilePassword :show="showPasswordModal" :loading="profilStore.loading" @close="showPasswordModal = false"
       @submit="handlePasswordUpdate" />
+
+    <ModalProfileAvatar :show="showAvatarModal" :current-avatar="user?.avatar_url" :is-loading="profilStore.loading"
+      @close="showAvatarModal = false" @submit="handleAvatarUpload" />
+
+    <ModalProfileInfo :show="showInfoModal" :is-loading="profilStore.loading" :initial-data="form"
+      @close="showInfoModal = false" @submit="handleInfoUpdate" />
   </div>
 </template>
 
@@ -55,6 +62,8 @@ const user = computed(() => authStore.user)
 
 const showEmailModal = ref(false)
 const showPasswordModal = ref(false)
+const showAvatarModal = ref(false)
+const showInfoModal = ref(false)
 
 const form = reactive({
   nom: '',
@@ -79,9 +88,32 @@ onMounted(async () => {
   syncFormWithProfile()
 })
 
-const handleProfileUpdate = async () => {
-  // Add backend integration for profile info update if needed
-  toastStore.showToast('info', 'Information', 'La mise à jour du profil sera bientôt disponible.')
+const handleAvatarUpload = async (file: File) => {
+  const success = await profilStore.uploadAvatar(file)
+  if (success) {
+    toastStore.showToast('success', 'Photo de profil', 'Votre photo a été mise à jour avec succès.')
+    showAvatarModal.value = false
+    // Update local user state
+    if (authStore.user && profilStore.profile) {
+      authStore.user.avatar_url = profilStore.profile.avatar_url
+    }
+  } else {
+    toastStore.showToast('error', 'Erreur d\'upload', profilStore.error || 'Impossible de mettre à jour la photo.')
+  }
+}
+
+const handleInfoUpdate = async (data: any) => {
+  const success = await profilStore.updatePersonalInfo({
+    first_name: data.prenom,
+    last_name: data.nom,
+    organization_name: data.organisation
+  })
+  if (success) {
+    toastStore.showToast('success', 'Profil mis à jour', 'Vos informations ont été enregistrées.')
+    showInfoModal.value = false
+  } else {
+    toastStore.showToast('error', 'Erreur de mise à jour', profilStore.error || 'Impossible d\'enregistrer les modifications.')
+  }
 }
 
 const handleEmailUpdate = async (data: any) => {

@@ -81,7 +81,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
-import { IconMenu2, IconSearch, IconChevronDown, IconUser, IconSettings, IconHelp, IconDevices, IconLogout, IconKeyboard } from '@tabler/icons-vue'
+import { IconMenu2, IconSearch, IconChevronDown, IconUser, IconSettings, IconHelp, IconDevices, IconLogout, IconKeyboard, IconActivity } from '@tabler/icons-vue'
 import { useAuthStore } from '~/stores/auth'
 import { useProfilStore } from '~/stores/profil'
 import { getLinkTooltip } from '~/data/shortcuts'
@@ -97,6 +97,7 @@ const searchTooltip = '<span class="kbd-hint">CTRL</span> + <span class="kbd-hin
 const dropdownLinks = [
   { label: 'Mon Profil', path: '/dashboard/profile', icon: IconUser },
   { label: 'Sessions', path: '/dashboard/sessions', icon: IconDevices },
+  { label: 'Journal', path: '/dashboard/logs', icon: IconActivity },
   { label: 'Paramètres', path: '/dashboard/settings', icon: IconSettings },
   { label: 'Raccourcis Clavier', path: '/help/shortcuts', icon: IconKeyboard },
   { label: 'Aide & Support', path: '/support', icon: IconHelp }

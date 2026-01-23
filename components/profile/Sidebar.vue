@@ -26,7 +26,7 @@
         </div>
 
         <!-- Floating Action Button -->
-        <button
+        <button @click="$emit('open-avatar')"
           class="absolute -bottom-1 -right-1 z-30 bg-WtB text-primary p-2.5 rounded-2xl shadow-xl hover:bg-primary hover:text-white transition-all duration-300 hover:scale-110 group/cam"
           v-tooltip="'Changer la photo'">
           <IconCamera class="w-5 h-5 transition-transform group-hover/cam:rotate-12" />
@@ -66,7 +66,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { IconCamera, IconShieldCheck } from '@tabler/icons-vue'
+import { IconCamera } from '@tabler/icons-vue'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { useAuthStore } from '~/stores/auth'
@@ -75,6 +75,8 @@ const props = defineProps<{
   user: any
   status: 'pending' | 'active' | 'pending_delete' | 'deleted' | 'suspended'
 }>()
+
+defineEmits(['open-avatar'])
 
 const authStore = useAuthStore()
 

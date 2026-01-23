@@ -1,9 +1,16 @@
 <template>
   <div class="py-12 px-6 bg-WtB border border-ash/20 rounded-none shadow-none">
     <!-- Ultra-Minimalist Header -->
-    <div class="mb-20 space-y-4">
-      <h3 class="text-4xl font-light tracking-tight text-BtW uppercase">Aperçu du Profil</h3>
-      <div class="w-16 h-0.5 bg-BtW"></div>
+    <div class="mb-20 flex justify-between items-start gap-4">
+      <div class="space-y-4">
+        <h3 class="text-4xl font-light tracking-tight text-BtW uppercase">Aperçu du Profil</h3>
+        <div class="w-16 h-0.5 bg-BtW"></div>
+      </div>
+
+      <button @click="$emit('open-edit')"
+        class="text-[10px] font-black uppercase tracking-[0.2em] px-6 py-3 border border-BtW/20 hover:bg-BtW hover:text-WtB transition-all duration-500">
+        Modifier le profil
+      </button>
     </div>
 
     <div class="max-w-3xl space-y-24">
@@ -56,7 +63,7 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
+defineProps<{
   modelValue: {
     prenom: string
     nom: string
@@ -65,4 +72,6 @@ const props = defineProps<{
   }
   emailVerified: boolean
 }>()
+
+defineEmits(['open-edit'])
 </script>

@@ -18,9 +18,30 @@ interface Statistics {
   total_incidents: number
 }
 
+interface LogEntry {
+  id: string
+  action: string
+  action_label: string
+  details: any
+  ip_address: string
+  user_agent: string
+  status: string
+  timestamp: string
+  log_type: string
+}
+
+interface LogStatistics {
+  total_logs: number
+  by_type: Record<string, number>
+  by_action: Record<string, number>
+  date_range: string
+}
+
 interface ProfilState {
   profile: UserProfile | null
   statistics: Statistics | null
+  logs: LogEntry[]
+  logStatistics: LogStatistics | null
   loading: boolean
   error: string | null
   message: string | null
@@ -30,6 +51,8 @@ export const useProfilStore = defineStore('profil', {
   state: (): ProfilState => ({
     profile: null,
     statistics: null,
+    logs: [],
+    logStatistics: null,
     loading: false,
     error: null,
     message: null
@@ -100,6 +123,76 @@ export const useProfilStore = defineStore('profil', {
         return false
       } catch (err: any) {
         this.error = err.data?.message || 'Une erreur est survenue'
+        return false
+      } finally {
+        this.loading = false
+      }
+    },
+
+    async fetchLogs(params: { limit?: number; type?: string; date?: string } = {}) {
+      this.loading = true
+      this.error = null
+      try {
+        const response = await $fetch<{ success: boolean; data: { logs: LogEntry[]; statistics: LogStatistics } }>('/api/profile/logs', {
+          params
+        })
+        if (response.success) {
+          this.logs = response.data.logs
+          this.logStatistics = response.data.statistics
+          return true
+        }
+        return false
+      } catch (err: any) {
+        this.error = err.data?.message || 'Erreur lors de la récupération des logs'
+        return false
+      } finally {
+        this.loading = false
+      }
+    },
+
+    async uploadAvatar(file: File) {
+      this.loading = true
+      this.error = null
+      try {
+        const formData = new FormData()
+        formData.append('avatar', file)
+
+        const response = await $fetch<{ success: boolean; data: { avatar_url: string }; message: string }>('/api/profile/avatar', {
+          method: 'POST',
+          body: formData
+        })
+        if (response.success) {
+          this.message = response.message
+          if (this.profile) {
+            this.profile.avatar_url = response.data.avatar_url
+          }
+          return true
+        }
+        return false
+      } catch (err: any) {
+        this.error = err.data?.message || 'Erreur lors de l’upload de l’avatar'
+        return false
+      } finally {
+        this.loading = false
+      }
+    },
+
+    async updatePersonalInfo(data: { first_name?: string; last_name?: string; organization_name?: string }) {
+      this.loading = true
+      this.error = null
+      try {
+        const response = await $fetch<{ success: boolean; message: string }>('/api/profile/update', {
+          method: 'PUT',
+          body: data
+        })
+        if (response.success) {
+          this.message = response.message
+          await this.fetchProfile() // Refresh local data
+          return true
+        }
+        return false
+      } catch (err: any) {
+        this.error = err.data?.message || 'Erreur lors de la mise à jour des informations'
         return false
       } finally {
         this.loading = false
