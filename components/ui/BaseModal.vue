@@ -16,7 +16,7 @@
               <IconCircleX class="w-6 h-6" />
             </button>
           </div>
-          <div class="relative">
+          <div class="relative max-h-[70vh] overflow-y-auto px-1 -mx-1">
             <slot />
           </div>
           <div v-if="$slots.footer" class="pt-2">
