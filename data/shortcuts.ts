@@ -112,5 +112,5 @@ export const getLinkTooltip = (path: string) => {
   const entry = Object.values(shortcutsData).find(s => s.path === path)
   if (!entry) return null
   const mod = entry.modifier ? `<span class="kbd-hint">${entry.modifier}</span> + ` : ''
-  return `${mod}<span class="kbd-hint">${entry.key.toUpperCase()}</span>`
+  return `<span class="kbd-wrapper">${mod}<span class="kbd-hint">${entry.key.toUpperCase()}</span></span>`
 }

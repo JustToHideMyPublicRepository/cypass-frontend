@@ -8,9 +8,8 @@ export default defineNuxtPlugin((nuxtApp) => {
   style.textContent = `
     .shortcut-tooltip {
       position: fixed;
-      background: var(--BtW);
+      background: transparent;
       padding: 0;
-      border-radius: 0.375rem;
       pointer-events: none;
       z-index: 9999;
       opacity: 0;
@@ -21,20 +20,36 @@ export default defineNuxtPlugin((nuxtApp) => {
       opacity: 1;
       transform: translateY(0) scale(1);
     }
+    .kbd-wrapper {
+       display: flex;
+       align-items: center;
+       gap: 0.25rem;
+       padding: 0.35rem 0.6rem;
+       background: color-mix(in srgb, var(--BtW) 80%, transparent);
+       backdrop-filter: blur(8px);
+       border: 1px solid var(--ash);
+       border-radius: 0.75rem;
+       box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+       color: var(--hsa);
+    }
+    .dark .kbd-wrapper {
+       background: color-mix(in srgb, var(--WtB) 60%, transparent);
+    }
     .kbd-hint {
        display: inline-flex;
        align-items: center;
        justify-content: center;
-       padding: 0.25rem 0.5rem;
+       padding: 0.2rem 0.4rem;
        background-color: var(--BtW);
        color: var(--WtB);
-       border: 1px solid var(--ash);
-       border-radius: 0.25rem;
-       font-size: 0.75rem;
-       font-weight: 700;
-       box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.1);
-       min-width: 1.5rem;
+       border: 1px solid var(--ashAct);
+       border-radius: 0.35rem;
+       font-size: 0.7rem;
+       font-weight: 800;
+       box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.2);
+       min-width: 1.4rem;
        font-family: inherit;
+       line-height: 1;
     }
   `
   document.head.appendChild(style)
