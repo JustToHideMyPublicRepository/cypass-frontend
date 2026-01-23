@@ -31,8 +31,9 @@
             <span class="text-[10px] font-black text-BtW/40 uppercase tracking-widest">Email de contact</span>
             <div class="flex flex-col gap-2">
               <div class="flex items-center gap-3">
-                <p class="text-lg font-medium text-BtW underline decoration-ash/30 underline-offset-8">{{
-                  modelValue.email }}</p>
+                <p class="text-lg font-medium text-BtW underline decoration-ash/30 underline-offset-8">
+                  {{ modelValue.email }}
+                </p>
                 <div v-if="emailVerified"
                   class="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.4)]"></div>
                 <div v-else class="w-2 h-2 rounded-full bg-yellow-500 shadow-[0_0_10px_rgba(234,179,8,0.4)]"></div>
@@ -65,7 +66,3 @@ const props = defineProps<{
   emailVerified: boolean
 }>()
 </script>
-
-<style scoped>
-/* Pure minimalist styles */
-</style>

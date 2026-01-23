@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted, watch } from 'vue'
 import { useAuthStore } from '~/stores/auth'
 import { useProfilStore } from '~/stores/profil'
 import { useToastStore } from '~/stores/toast'
@@ -63,14 +63,20 @@ const form = reactive({
   organisation: ''
 })
 
-onMounted(async () => {
-  await profilStore.fetchProfile()
+const syncFormWithProfile = () => {
   if (profilStore.profile) {
     form.prenom = profilStore.profile.first_name
     form.nom = profilStore.profile.last_name
     form.email = profilStore.profile.email
     form.organisation = profilStore.profile.organization_name || 'N/A'
   }
+}
+
+watch(() => profilStore.profile, syncFormWithProfile, { deep: true })
+
+onMounted(async () => {
+  await profilStore.fetchProfile()
+  syncFormWithProfile()
 })
 
 const handleProfileUpdate = async () => {
