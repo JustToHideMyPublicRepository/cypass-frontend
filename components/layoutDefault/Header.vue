@@ -24,7 +24,13 @@
           class="flex items-center gap-3 hover:opacity-80 transition-opacity">
           <div class="text-right hidden sm:block">
             <div class="text-sm font-medium text-BtW">{{ authStore.fullName }}</div>
-            <div class="text-xs text-hsa">{{ authStore.user?.email }}</div>
+            <div class="flex items-center justify-end gap-1.5">
+              <div :class="[
+                'w-1.5 h-1.5 rounded-full',
+                profilStore.profile?.email_verified ? 'bg-green-500' : 'bg-yellow-500'
+              ]"></div>
+              <div class="text-xs text-hsa">{{ profilStore.profile?.email || authStore.user?.email }}</div>
+            </div>
           </div>
           <div class="w-10 h-10 rounded-full bg-ash overflow-hidden border border-ashAct">
             <img :src="authStore.avatarUrl" alt="Profile" class="w-full h-full object-cover" />
@@ -41,7 +47,13 @@
             class="absolute right-0 mt-2 w-56 origin-top-right rounded-xl bg-WtB border border-ash shadow-lg z-50 overflow-hidden">
             <div class="p-3 border-b border-ash">
               <p class="text-sm font-medium text-BtW">{{ authStore.fullName }}</p>
-              <p class="text-xs text-hsa truncate">{{ authStore.user?.email }}</p>
+              <div class="flex items-center gap-2">
+                <p class="text-xs text-hsa truncate">{{ profilStore.profile?.email || authStore.user?.email }}</p>
+                <div :class="[
+                  'w-1.5 h-1.5 rounded-full shrink-0',
+                  profilStore.profile?.email_verified ? 'bg-green-500' : 'bg-yellow-500'
+                ]"></div>
+              </div>
             </div>
 
             <div class="py-2">
@@ -71,9 +83,11 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import { IconMenu2, IconSearch, IconChevronDown, IconUser, IconSettings, IconHelp, IconDevices, IconLogout, IconKeyboard } from '@tabler/icons-vue'
 import { useAuthStore } from '~/stores/auth'
+import { useProfilStore } from '~/stores/profil'
 import { getLinkTooltip } from '~/data/shortcuts'
 
 const authStore = useAuthStore()
+const profilStore = useProfilStore()
 
 const isDropdownOpen = ref(false)
 const dropdownRef = ref<HTMLElement | null>(null)

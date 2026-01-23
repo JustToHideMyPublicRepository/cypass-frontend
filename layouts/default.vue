@@ -26,22 +26,29 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
+import { useAuthStore } from '~/stores/auth'
+import { useProfilStore } from '~/stores/profil'
 
 const isOpen = ref(false)
 const isCollapsed = ref(false)
+const authStore = useAuthStore()
+const profilStore = useProfilStore()
 
-onMounted(() => {
+onMounted(async () => {
   const storedState = localStorage.getItem('cps_sidebar')
   if (storedState) {
     isCollapsed.value = storedState === 'true'
+  }
+
+  if (authStore.user && !profilStore.profile) {
+    await profilStore.fetchProfile()
   }
 })
 
 watch(isCollapsed, (newVal) => {
   localStorage.setItem('cps_sidebar', String(newVal))
 })
-const authStore = useAuthStore()
 
 const user = computed(() => authStore.user)
 
