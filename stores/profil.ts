@@ -75,6 +75,32 @@ export const useProfilStore = defineStore('profil', {
       } finally {
         this.loading = false
       }
+    },
+
+    async updatePassword(current: string, newPass: string, confirm: string) {
+      this.loading = true
+      this.error = null
+      try {
+        const response = await $fetch<{ success: boolean; message: string }>('/api/profile/password', {
+          method: 'PUT',
+          body: {
+            current_password: current,
+            new_password: newPass,
+            confirm_password: confirm
+          }
+        })
+        if (response.success) {
+          this.message = response.message
+          return true
+        }
+        this.error = response.message
+        return false
+      } catch (err: any) {
+        this.error = err.data?.message || 'Une erreur est survenue'
+        return false
+      } finally {
+        this.loading = false
+      }
     }
   }
 })
