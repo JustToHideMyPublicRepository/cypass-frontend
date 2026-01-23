@@ -77,7 +77,7 @@ const syncFormWithProfile = () => {
     form.prenom = profilStore.profile.first_name
     form.nom = profilStore.profile.last_name
     form.email = profilStore.profile.email
-    form.organisation = profilStore.profile.organization_name || 'N/A'
+    form.organisation = profilStore.profile.organization_name || '-'
   }
 }
 

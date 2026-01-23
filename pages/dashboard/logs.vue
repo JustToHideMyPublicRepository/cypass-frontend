@@ -1,195 +1,196 @@
 <template>
-  <div class="p-6 max-w-7xl mx-auto">
+  <div class="space-y-6">
     <!-- Header -->
-    <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
       <div>
-        <h1 class="text-2xl font-bold text-slate-900 dark:text-white">Historique d'activité</h1>
-        <p class="text-slate-500 dark:text-slate-400 mt-1">Consultez et filtrez les actions récentes sur votre compte.
+        <h1 class="text-2xl font-bold text-BtW">Historique d'activité</h1>
+        <p class="text-hsa font-medium">Suivi en temps réel des actions sur votre compte.</p>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <UiBaseButton variant="ghost" @click="refreshLogs" :loading="loading">
+          <template #icon>
+            <IconRefresh class="w-4 h-4" />
+          </template>
+          Actualiser
+        </UiBaseButton>
+      </div>
+    </div>
+
+    <!-- Stats Widgets - Elegant & Minimalist -->
+    <div v-if="profilStore.logStatistics" class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <UiBaseCard class="bg-primary/[0.03] border-primary/10">
+        <div class="flex items-center gap-4">
+          <div class="p-3 bg-primary/10 rounded-2xl">
+            <IconActivity class="w-6 h-6 text-primary" />
+          </div>
+          <div>
+            <p class="text-[10px] font-black uppercase tracking-widest text-hsa opacity-60">Total Actions</p>
+            <p class="text-2xl font-black text-BtW leading-tight">{{ profilStore.logStatistics.total_logs }}</p>
+          </div>
+        </div>
+      </UiBaseCard>
+
+      <UiBaseCard class="bg-success/[0.03] border-success/10">
+        <div class="flex items-center gap-4">
+          <div class="p-3 bg-success/10 rounded-2xl">
+            <IconCircleCheck class="w-6 h-6 text-success" />
+          </div>
+          <div>
+            <p class="text-[10px] font-black uppercase tracking-widest text-hsa opacity-60">Succès</p>
+            <p class="text-2xl font-black text-BtW leading-tight">{{ profilStore.logStatistics.by_action['USER_LOGIN']
+              || 0
+            }}</p>
+          </div>
+        </div>
+      </UiBaseCard>
+
+      <UiBaseCard class="bg-danger/[0.03] border-danger/10">
+        <div class="flex items-center gap-4">
+          <div class="p-3 bg-danger/10 rounded-2xl">
+            <IconAlertCircle class="w-6 h-6 text-danger" />
+          </div>
+          <div>
+            <p class="text-[10px] font-black uppercase tracking-widest text-hsa opacity-60">Échecs</p>
+            <p class="text-2xl font-black text-BtW leading-tight">{{ profilStore.logStatistics.by_action['LOGIN_FAILED']
+              ||
+              0 }}</p>
+          </div>
+        </div>
+      </UiBaseCard>
+    </div>
+
+    <!-- Filters Bar -->
+    <UiBaseCard class="py-3 px-4 bg-ash/50 backdrop-blur-sm border-ashAct">
+      <div class="flex flex-wrap items-center gap-6">
+        <div class="flex items-center gap-2">
+          <IconFilter class="w-4 h-4 text-hsa" />
+          <span class="text-xs font-bold text-hsa uppercase tracking-wider">Filtres :</span>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <select v-model="filters.type" @change="applyFilters"
+            class="bg-ash border border-ashAct rounded-lg px-3 py-1.5 text-xs font-bold text-BtW outline-none focus:ring-1 focus:ring-primary transition-all">
+            <option value="all">Toutes les catégories</option>
+            <option value="user_actions">Activités utilisateur</option>
+            <option value="security">Sécurité & Accès</option>
+            <option value="system">Système</option>
+          </select>
+
+          <input type="date" v-model="filters.date" @change="applyFilters"
+            class="bg-ash border border-ashAct rounded-lg px-3 py-1.5 text-xs font-bold text-BtW outline-none focus:ring-1 focus:ring-primary transition-all" />
+        </div>
+
+        <div class="ml-auto">
+          <p class="text-[10px] text-hsa font-bold uppercase">{{ profilStore.logs.length }} résultats affichés</p>
+        </div>
+      </div>
+    </UiBaseCard>
+
+    <!-- Content Area -->
+    <div class="relative">
+      <!-- Loading Overlay -->
+      <div v-if="loading"
+        class="absolute inset-0 z-10 flex items-center justify-center bg-WtB/50 backdrop-blur-[2px] rounded-2xl py-20">
+        <div class="flex flex-col items-center gap-3">
+          <IconRefresh class="w-10 h-10 animate-spin text-primary" />
+          <p class="text-sm font-bold text-hsa animate-pulse">Chargement des activités...</p>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div v-if="!loading && (!profilStore.logs || profilStore.logs.length === 0)"
+        class="text-center py-20 bg-ash/20 rounded-2xl border-2 border-dashed border-ashAct">
+        <IconHistory class="w-16 h-16 mx-auto mb-6 opacity-20 text-hsa" />
+        <h3 class="text-lg font-black text-BtW uppercase tracking-wider">Aucune activité</h3>
+        <p class="text-hsa max-w-xs mx-auto mt-2">Nous n'avons trouvé aucun log correspondant à vos critères de
+          recherche.
         </p>
+        <UiBaseButton variant="ghost" class="mt-6" @click="resetFilters">
+          Réinitialiser les filtres
+        </UiBaseButton>
       </div>
 
-      <div class="flex items-center gap-2">
-        <button @click="refreshLogs"
-          class="flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
-          :disabled="loading">
-          <IconRefresh class="w-4 h-4" :class="{ 'animate-spin': loading }" />
-          <span>Actualiser</span>
-        </button>
-      </div>
-    </div>
-
-    <!-- Stats Widgets -->
-    <div v-if="profilStore.logStatistics" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-      <div
-        class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm transition-all duration-300 hover:shadow-md">
-        <div class="flex items-center gap-4">
-          <div class="p-3 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-xl">
-            <IconActivity class="w-6 h-6" />
+      <!-- Logs Timeline / Cards -->
+      <div v-if="!loading && profilStore.logs && profilStore.logs.length > 0" class="space-y-4">
+        <div v-for="(log, index) in profilStore.logs" :key="log.id || index" class="group">
+          <!-- Optional: Date Separator -->
+          <div v-if="isNewDay(index)" class="flex items-center gap-4 py-6 first:pt-0">
+            <div class="h-[1px] flex-grow bg-ashAct"></div>
+            <span class="text-[10px] font-black uppercase tracking-[0.3em] text-hsa opacity-50">
+              {{ formatDayHeader(log.timestamp) }}
+            </span>
+            <div class="h-[1px] flex-grow bg-ashAct"></div>
           </div>
-          <div>
-            <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Total Actions</p>
-            <h3 class="text-2xl font-bold text-slate-900 dark:text-white">{{ profilStore.logStatistics.total_logs }}
-            </h3>
-          </div>
-        </div>
-      </div>
 
-      <div
-        class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm transition-all duration-300 hover:shadow-md">
-        <div class="flex items-center gap-4">
-          <div class="p-3 bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 rounded-xl">
-            <IconCircleCheck class="w-6 h-6" />
-          </div>
-          <div>
-            <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Connexions Réussies</p>
-            <h3 class="text-2xl font-bold text-slate-900 dark:text-white">{{
-              profilStore.logStatistics.by_action['USER_LOGIN'] || 0 }}</h3>
-          </div>
-        </div>
-      </div>
+          <UiBaseCard
+            class="relative overflow-hidden hover:border-primary/30 hover:shadow-xl hover:shadow-primary/5 transition-all duration-300 border border-ashAct"
+            :class="{ 'border-l-4 border-l-danger bg-danger/[0.02]': log.status !== 'success' }">
+            <div class="flex items-center gap-4 md:gap-6">
+              <!-- Action Icon -->
+              <div class="shrink-0 p-3 rounded-2xl transition-colors" :class="getActionClass(log.action)">
+                <component :is="getActionIcon(log.action)" class="w-6 h-6" />
+              </div>
 
-      <div
-        class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm transition-all duration-300 hover:shadow-md">
-        <div class="flex items-center gap-4">
-          <div class="p-3 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-xl">
-            <IconAlertCircle class="w-6 h-6" />
-          </div>
-          <div>
-            <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Échecs de Connexion</p>
-            <h3 class="text-2xl font-bold text-slate-900 dark:text-white">{{
-              profilStore.logStatistics.by_action['LOGIN_FAILED'] || 0 }}</h3>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Filters -->
-    <div
-      class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 mb-6 flex flex-wrap gap-4 items-end">
-      <div class="flex-1 min-w-[200px]">
-        <label
-          class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Période</label>
-        <input type="date" v-model="filters.date"
-          class="w-full px-4 py-2 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all dark:text-white" />
-      </div>
-
-      <div class="flex-1 min-w-[200px]">
-        <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Type
-          d'action</label>
-        <select v-model="filters.type"
-          class="w-full px-4 py-2 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all dark:text-white">
-          <option value="all">Toutes les actions</option>
-          <option value="user_actions">Actions utilisateur</option>
-          <option value="system">Système</option>
-          <option value="security">Sécurité</option>
-        </select>
-      </div>
-
-      <div class="flex-none">
-        <button @click="applyFilters"
-          class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-all shadow-lg shadow-blue-500/20">
-          Filtrer
-        </button>
-      </div>
-    </div>
-
-    <!-- Logs Table -->
-    <div
-      class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm">
-      <div v-if="loading" class="p-12 flex justify-center">
-        <IconRefresh class="w-10 h-10 animate-spin text-blue-600" />
-      </div>
-
-      <div v-else-if="!profilStore.logs.length" class="p-12 text-center">
-        <div class="bg-slate-50 dark:bg-slate-900 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-          <IconSearch class="w-8 h-8 text-slate-400" />
-        </div>
-        <h3 class="text-lg font-semibold text-slate-900 dark:text-white">Aucun log trouvé</h3>
-        <p class="text-slate-500 dark:text-slate-400 mt-2">Essayez de modifier vos filtres pour voir plus de résultats.
-        </p>
-      </div>
-
-      <div v-else class="overflow-x-auto">
-        <table class="w-full">
-          <thead>
-            <tr class="bg-slate-50 dark:bg-slate-900/50 border-b border-slate-200 dark:border-slate-700 text-left">
-              <th class="px-6 py-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                Action</th>
-              <th class="px-6 py-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                Statut</th>
-              <th class="px-6 py-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                Détails</th>
-              <th class="px-6 py-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">IP
-                / Agent</th>
-              <th class="px-6 py-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                Date</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
-            <tr v-for="log in profilStore.logs" :key="log.id"
-              class="hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-colors">
-              <td class="px-6 py-4">
-                <div class="flex items-center gap-3">
-                  <div class="p-2 rounded-lg" :class="getActionClass(log.action)">
-                    <component :is="getActionIcon(log.action)" class="w-4 h-4" />
-                  </div>
-                  <div>
-                    <span class="block font-medium text-slate-900 dark:text-white">{{ log.action_label }}</span>
-                    <span class="block text-xs text-slate-500">{{ log.log_type }}</span>
-                  </div>
+              <!-- Main Info -->
+              <div class="flex-grow min-w-0 space-y-1">
+                <div class="flex items-center gap-2">
+                  <h3 class="font-bold text-BtW text-lg">
+                    {{ log.action_label }}
+                  </h3>
+                  <span v-if="log.status !== 'success'"
+                    class="px-2 py-0.5 text-[10px] bg-danger text-white rounded-full font-black uppercase">
+                    Échec
+                  </span>
                 </div>
-              </td>
-              <td class="px-6 py-4">
-                <span class="px-2.5 py-1 text-xs font-medium rounded-full inline-flex items-center gap-1.5"
-                  :class="log.status === 'success' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'">
-                  <span class="w-1.5 h-1.5 rounded-full"
-                    :class="log.status === 'success' ? 'bg-green-500' : 'bg-red-500'"></span>
-                  {{ log.status === 'success' ? 'Réussi' : 'Échoué' }}
-                </span>
-              </td>
-              <td class="px-6 py-4">
-                <div class="max-w-[150px] truncate text-sm text-slate-600 dark:text-slate-400"
-                  :title="formatDetails(log.details)">
-                  {{ formatDetails(log.details) }}
+
+                <div class="flex flex-wrap items-center gap-x-6 gap-y-2">
+                  <p class="text-xs text-hsa flex items-center gap-1.5 min-w-[120px]">
+                    <IconClock class="w-3.5 h-3.5" /> {{ formatTime(log.timestamp) }}
+                  </p>
+                  <p class="text-xs text-hsa flex items-center gap-1.5 font-mono">
+                    <IconMapPin class="w-3.5 h-3.5" /> {{ log.ip_address }}
+                  </p>
+                  <p class="text-xs text-hsa flex items-center gap-1.5 truncate max-w-[200px]" :title="log.user_agent">
+                    <IconDeviceDesktop class="w-3.5 h-3.5" /> {{ formatUA(log.user_agent) }}
+                  </p>
                 </div>
-              </td>
-              <td class="px-6 py-4">
-                <div class="flex flex-col gap-0.5">
-                  <span class="text-sm font-mono text-slate-700 dark:text-slate-300">{{ log.ip_address }}</span>
-                  <span class="text-xs text-slate-500 truncate max-w-[150px]" :title="log.user_agent">{{
-                    formatUA(log.user_agent) }}</span>
-                </div>
-              </td>
-              <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400 whitespace-nowrap">
-                {{ formatTimestamp(log.timestamp) }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
+              </div>
+
+              <!-- Details Toggle (simplified for now) -->
+              <div v-if="log.details && (Object.keys(log.details).length > 0)"
+                class="hidden md:block shrink-0 px-4 py-2 bg-ash/50 rounded-xl text-[10px] font-black uppercase text-hsa tracking-widest whitespace-nowrap">
+                {{ formatQuickDetails(log.details) }}
+              </div>
+            </div>
+          </UiBaseCard>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, reactive } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { useProfilStore } from '~/stores/profil'
 import {
   IconActivity,
   IconCircleCheck,
   IconAlertCircle,
   IconRefresh,
-  IconActivity as IconAction,
+  IconHistory,
+  IconClock,
+  IconMapPin,
+  IconDeviceDesktop,
+  IconFilter,
   IconLogin,
   IconLogout,
   IconUser,
   IconLock,
   IconMail,
-  IconPhoto,
-  IconSearch,
-  IconDeviceDesktop
+  IconPhoto
 } from '@tabler/icons-vue'
-import { format } from 'date-fns'
+import { format, isSameDay, parseISO } from 'date-fns'
 import { fr } from 'date-fns/locale'
 
 definePageMeta({
@@ -202,7 +203,7 @@ const loading = ref(false)
 const filters = reactive({
   date: '',
   type: 'all',
-  limit: 50
+  limit: 100
 })
 
 const fetchLogs = async () => {
@@ -223,53 +224,84 @@ const refreshLogs = () => {
   fetchLogs()
 }
 
+const resetFilters = () => {
+  filters.date = ''
+  filters.type = 'all'
+  fetchLogs()
+}
+
 onMounted(() => {
   fetchLogs()
 })
 
+// Helpers
 const getActionIcon = (action: string) => {
-  if (action.includes('LOGIN')) return IconLogin
-  if (action.includes('LOGOUT')) return IconLogout
-  if (action.includes('AVATAR')) return IconPhoto
-  if (action.includes('PASSWORD')) return IconLock
-  if (action.includes('EMAIL')) return IconMail
-  if (action.includes('PROFILE')) return IconUser
-  return IconAction
+  const a = action.toUpperCase()
+  if (a.includes('LOGIN')) return IconLogin
+  if (a.includes('LOGOUT')) return IconLogout
+  if (a.includes('AVATAR')) return IconPhoto
+  if (a.includes('PASSWORD')) return IconLock
+  if (a.includes('EMAIL')) return IconMail
+  if (a.includes('PROFILE')) return IconUser
+  return IconActivity
 }
 
 const getActionClass = (action: string) => {
-  if (action.includes('LOGIN_FAILED')) return 'bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-400'
-  if (action.includes('LOGIN')) return 'bg-green-50 text-green-600 dark:bg-green-900/20 dark:text-green-400'
-  if (action.includes('PASSWORD')) return 'bg-amber-50 text-amber-600 dark:bg-amber-900/20 dark:text-amber-400'
-  return 'bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400'
+  const a = action.toUpperCase()
+  if (a.includes('FAILED')) return 'bg-danger/10 text-danger'
+  if (a.includes('LOGIN')) return 'bg-success/10 text-success'
+  if (a.includes('PASSWORD') || a.includes('EMAIL')) return 'bg-warning/10 text-warning'
+  return 'bg-primary/10 text-primary'
 }
 
-const formatDetails = (details: any) => {
-  if (!details) return '-'
-  if (typeof details === 'string') return details
+const formatTime = (ts: string) => {
   try {
-    const keys = Object.keys(details)
-    if (keys.length === 0) return '-'
-    return keys.map(k => `${k}: ${details[k]}`).join(', ')
-  } catch (e) {
-    return '-'
-  }
-}
-
-const formatUA = (ua: string) => {
-  if (!ua) return '-'
-  if (ua.includes('Chrome')) return 'Chrome / Windows'
-  if (ua.includes('Firefox')) return 'Firefox / Desktop'
-  if (ua.includes('Safari')) return 'Safari / Apple'
-  if (ua === 'node') return 'Backend System'
-  return ua
-}
-
-const formatTimestamp = (ts: string) => {
-  try {
-    return format(new Date(ts), 'dd MMM yyyy, HH:mm', { locale: fr })
+    return format(new Date(ts), 'HH:mm', { locale: fr })
   } catch (e) {
     return ts
   }
 }
+
+const formatDayHeader = (ts: string) => {
+  try {
+    const date = new Date(ts)
+    if (isSameDay(date, new Date())) return "Aujourd'hui"
+    return format(date, 'EEEE d MMMM yyyy', { locale: fr })
+  } catch (e) {
+    return ts
+  }
+}
+
+const isNewDay = (index: number) => {
+  if (index === 0) return true
+  const current = profilStore.logs[index].timestamp
+  const previous = profilStore.logs[index - 1].timestamp
+  try {
+    return !isSameDay(new Date(current), new Date(previous))
+  } catch (e) {
+    return false
+  }
+}
+
+const formatUA = (ua: string) => {
+  if (!ua) return 'Inconnu'
+  if (ua.includes('Windows')) return 'Windows PC'
+  if (ua.includes('Mac')) return 'Mac'
+  if (ua.includes('iPhone')) return 'iPhone'
+  if (ua.includes('Android')) return 'Android'
+  if (ua === 'node') return 'Système'
+  return 'Navigateur'
+}
+
+const formatQuickDetails = (details: any) => {
+  if (!details) return ''
+  const entries = Object.entries(details)
+  if (entries.length === 0) return ''
+  const [key, value] = entries[0]
+  return `${key}: ${value}`
+}
+
+useHead({
+  title: 'Activités récentes'
+})
 </script>
