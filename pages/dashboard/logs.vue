@@ -24,7 +24,7 @@
     </div>
 
     <!-- Stats Summary (Optional, matching sessions.vue type of layout) -->
-    <div v-if="profilStore.logStatistics" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div v-if="profilStore.logStatistics" class="grid grid-cols-1 md:grid-cols-4 gap-4">
       <UiBaseCard class="bg-primary/5 border-l-4 border-l-primary">
         <div class="flex items-center gap-4">
           <div class="p-3 bg-WtB rounded-xl shadow-sm border border-ashAct">
@@ -32,7 +32,7 @@
           </div>
           <div>
             <p class="text-[10px] font-black uppercase tracking-widest text-hsa opacity-60">Total Actions</p>
-            <p class="text-xl font-bold text-BtW leading-tight">{{ profilStore.logs?.length || 0 }}</p>
+            <p class="text-xl font-bold text-BtW leading-tight">{{ profilStore.logStatistics.total_logs ?? 0 }}</p>
           </div>
         </div>
       </UiBaseCard>
@@ -170,6 +170,23 @@
             </UiBaseCard>
           </div>
         </div>
+
+        <!-- Pagination Controls -->
+        <div v-if="totalPages > 1" class="flex items-center justify-between pt-6 mt-6 border-t border-ashAct">
+          <p class="text-[10px] font-black uppercase tracking-widest text-hsa opacity-60">
+            Page {{ currentPage }} sur {{ totalPages }}
+          </p>
+          <div class="flex items-center gap-2">
+            <UiBaseButton variant="secondary" outlined size="sm" @click="prevPage" :disabled="currentPage === 1">
+              <IconChevronLeft class="w-4 h-4" /> Précédent
+            </UiBaseButton>
+            <UiBaseButton variant="secondary" outlined size="sm" @click="nextPage"
+              :disabled="currentPage === totalPages">
+              Suivant
+              <IconChevronRight class="w-4 h-4" />
+            </UiBaseButton>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -181,7 +198,7 @@ import { useProfilStore } from '~/stores/profil'
 import {
   IconActivity, IconCircleCheck, IconAlertCircle, IconRefresh, IconHistory,
   IconClock, IconPlus, IconDeviceDesktop, IconFilter, IconLogin, IconLogout,
-  IconUser, IconLock, IconMail, IconPhoto,
+  IconUser, IconLock, IconMail, IconPhoto, IconMapPin, IconChevronLeft, IconChevronRight, IconList,
 } from '@tabler/icons-vue'
 import { format, isSameDay } from 'date-fns'
 import { fr } from 'date-fns/locale'
