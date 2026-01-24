@@ -10,7 +10,7 @@
   </a>
 
   <button v-else :type="type" :class="buttonClasses" :disabled="disabled || loading">
-    <IconLoader2 v-if="loading" class="animate-spin -ml-1 mr-2 h-4 w-4 text-current" />
+    <IconLoader2 v-if="loading" class="logoClasses" />
     <slot />
   </button>
 </template>

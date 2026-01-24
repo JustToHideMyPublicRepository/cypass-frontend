@@ -28,7 +28,7 @@
         <!-- Floating Action Button -->
         <button @click="$emit('open-avatar')"
           class="absolute -bottom-1 -right-1 z-30 bg-WtB text-primary p-2.5 rounded-2xl shadow-xl hover:bg-primary hover:text-WtB transition-all duration-300 hover:scale-110 group/cam"
-          v-tooltip.bottom="'Changer la photo'">
+          title="Changer la photo">
           <IconCamera class="w-5 h-5 transition-transform group-hover/cam:rotate-12" />
         </button>
       </div>

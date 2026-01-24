@@ -86,13 +86,13 @@ const contextualShortcuts = [
 <style scoped>
 .kbd {
   padding: 0.25rem 0.5rem;
-  background-color: var(--BtW);
-  color: var(--WtB);
-  border: 1px solid var(--ash);
+  background-color: var(--color-BtW);
+  color: var(--color-WtB);
+  border: 1px solid var(--color-ash);
   border-radius: 0.25rem;
   font-size: 0.75rem;
   font-weight: 700;
-  box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 0 0 var(--color-hsa);
   min-width: 1.5rem;
   display: flex;
   align-items: center;
