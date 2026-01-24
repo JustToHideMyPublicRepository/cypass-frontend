@@ -32,12 +32,12 @@ export const useAuthStore = defineStore('auth', {
       return `${state.user.first_name} ${state.user.last_name}`.trim() || 'Utilisateur'
     },
     avatarUrl: (state) => {
-      const baseUrl = 'https://cypass-backend.alwaysdata.net'
       if (state.user?.avatar_url && state.user.avatar_url.trim() !== '') {
         const url = state.user.avatar_url
         if (url.startsWith('http')) return url
+        // Return relative path which will be handled by the Nuxt server route
         const cleanUrl = url.replace(/^\/+/, '')
-        return `${baseUrl}/${cleanUrl}`
+        return `/${cleanUrl}`
       }
       const seed = state.user ? `${state.user.first_name} ${state.user.last_name}`.trim() : 'Utilisateur'
       return `https://api.dicebear.com/9.x/icons/svg?seed=${seed}`

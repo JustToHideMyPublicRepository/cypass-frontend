@@ -33,7 +33,7 @@
             <div
               class="relative z-10 w-full h-full rounded-full p-1.5 bg-gradient-to-tr from-primary to-secondary shadow-2xl">
               <div class="w-full h-full rounded-full overflow-hidden bg-ash border-4 border-WtB shadow-inner">
-                <img v-if="fullAvatarUrl" :src="fullAvatarUrl" alt="Avatar Preview"
+                <img v-if="multiavatarUrl" :src="multiavatarUrl" alt="Avatar Preview"
                   class="w-full h-full object-cover transition-all duration-700 group-hover:scale-110" />
                 <div v-else class="w-full h-full flex items-center justify-center bg-ash">
                   <IconPhoto class="w-16 h-16 text-hsa opacity-50" />
@@ -123,14 +123,12 @@ const props = defineProps<{
   isLoading: boolean
 }>()
 
-const config = useRuntimeConfig()
-
-const fullAvatarUrl = computed(() => {
+const multiavatarUrl = computed(() => {
   if (previewUrl.value) return previewUrl.value
   if (props.currentAvatar) {
     if (props.currentAvatar.startsWith('http')) return props.currentAvatar
-    const baseUrl = config.public.cypassBaseAPI
-    return `${baseUrl}/${props.currentAvatar.replace(/^\/+/, '')}`
+    // Use local proxy path
+    return `/${props.currentAvatar.replace(/^\/+/, '')}`
   }
   return null
 })
