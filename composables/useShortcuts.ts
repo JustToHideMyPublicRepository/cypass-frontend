@@ -11,6 +11,13 @@ export const useShortcuts = (options: ShortcutOptions = {}) => {
   const router = useRouter()
 
   const handleKeyDown = (event: KeyboardEvent) => {
+    // Handle Alt Mode
+    if (event.key === 'Alt') {
+      event.preventDefault()
+      document.body.classList.add('alt-mode-active')
+      return
+    }
+
     // Prevent shortcut if user is typing in an input
     const activeElement = document.activeElement
     const isTyping = activeElement instanceof HTMLInputElement ||
@@ -35,16 +42,20 @@ export const useShortcuts = (options: ShortcutOptions = {}) => {
       }
     }
 
-    // Global Navigation Shortcuts (Shift + char)
-    if (event.shiftKey) {
+    // Global Navigation Shortcuts
+    const isAltActive = event.altKey || document.body.classList.contains('alt-mode-active')
+    if (event.shiftKey || isAltActive) {
       // Find matching shortcut in our centralized data
       const shortcut = Object.values(shortcutsData).find(s =>
         s.isGlobal && s.modifier === 'Shift' && s.key === key
       )
 
       if (shortcut?.path) {
+        if (isAltActive) event.preventDefault()
         router.push(shortcut.path)
-      } else if (key === '?') {
+        // Auto-close alt mode on use
+        document.body.classList.remove('alt-mode-active')
+      } else if ((event.shiftKey && key === '?') || (isAltActive && key === '/')) {
         router.push('/help/shortcuts')
       }
     }
@@ -57,11 +68,22 @@ export const useShortcuts = (options: ShortcutOptions = {}) => {
     }
   }
 
+  const handleKeyUp = (event: KeyboardEvent) => {
+    if (event.key === 'Alt') {
+      document.body.classList.remove('alt-mode-active')
+    }
+  }
+
   onMounted(() => {
     window.addEventListener('keydown', handleKeyDown)
+    window.addEventListener('keyup', handleKeyUp)
+    window.addEventListener('blur', () => {
+      document.body.classList.remove('alt-mode-active')
+    })
   })
 
   onUnmounted(() => {
     window.removeEventListener('keydown', handleKeyDown)
+    window.removeEventListener('keyup', handleKeyUp)
   })
 }

@@ -37,11 +37,7 @@ export default defineNuxtPlugin((nuxtApp) => {
              border: 1px solid var(--color-ashAct);
              border-radius: 0.75rem;
              box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-             color: var(--hsa);
-          }
-          .dark .kbd-wrapper {
-             background: color-mix(in srgb, var(--WtB) 70%, transparent);
-             border-color: rgba(255, 255, 255, 0.1);
+             color: var(--color-hsa);
           }
           .kbd-hint {
              display: inline-flex;
@@ -59,6 +55,36 @@ export default defineNuxtPlugin((nuxtApp) => {
              font-family: inherit;
              line-height: 1;
           }
+
+          /* Alt Mode Hints */
+          .alt-shortcut-hint {
+            position: absolute;
+            bottom: -8px;
+            right: -8px;
+            z-index: 50;
+            pointer-events: none;
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+            
+            /* KBD Style from shortcuts.vue */
+            padding: 0.25rem 0.5rem;
+            background-color: var(--color-BtW);
+            color: var(--color-WtB);
+            border: 1px solid var(--color-ash);
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            box-shadow: 0 2px 0 0 var(--color-hsa);
+            min-width: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+          .alt-mode-active .alt-shortcut-hint {
+            opacity: 1;
+            transform: scale(1);
+          }
         `
         document.head.appendChild(style)
       }
@@ -70,6 +96,27 @@ export default defineNuxtPlugin((nuxtApp) => {
         tooltipEl.id = 'global-shortcut-tooltip'
         tooltipEl.className = 'shortcut-tooltip'
         document.body.appendChild(tooltipEl)
+      }
+
+      // Extract shortcut key if present in binding value
+      const match = binding.value.match(/class="kbd-hint">([^<]+)<\/span>/g)
+      if (match && match.length > 0) {
+        const lastHint = match[match.length - 1]
+        const key = lastHint.replace(/class="kbd-hint">|<\/span>/g, '')
+
+        if (key && key.length === 1) {
+          const hint = document.createElement('div')
+          hint.className = 'alt-shortcut-hint'
+          hint.textContent = key
+
+          // Ensure parent is positioned
+          const style = window.getComputedStyle(el)
+          if (style.position === 'static') {
+            el.style.position = 'relative'
+          }
+
+          el.appendChild(hint)
+        }
       }
 
       const handleMouseEnter = () => {
@@ -109,6 +156,9 @@ export default defineNuxtPlugin((nuxtApp) => {
         el.removeEventListener('mouseenter', handleMouseEnter)
         el.removeEventListener('mouseleave', handleMouseLeave)
         el.removeEventListener('click', handleMouseLeave)
+
+        const hint = el.querySelector('.alt-shortcut-hint')
+        if (hint) hint.remove()
       }
     },
     unmounted(el) {
