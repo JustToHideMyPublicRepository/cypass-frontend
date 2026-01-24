@@ -33,7 +33,7 @@
             <div
               class="relative z-10 w-full h-full rounded-full p-1.5 bg-gradient-to-tr from-primary to-secondary shadow-2xl">
               <div class="w-full h-full rounded-full overflow-hidden bg-ash border-4 border-WtB shadow-inner">
-                <img v-if="previewUrl || currentAvatar" :src="previewUrl || currentAvatar!" alt="Avatar Preview"
+                <img v-if="fullAvatarUrl" :src="fullAvatarUrl" alt="Avatar Preview"
                   class="w-full h-full object-cover transition-all duration-700 group-hover:scale-110" />
                 <div v-else class="w-full h-full flex items-center justify-center bg-ash">
                   <IconPhoto class="w-16 h-16 text-hsa opacity-50" />
@@ -49,14 +49,14 @@
                 <div
                   class="absolute inset-0 bg-black/0 group-hover:bg-primary/20 transition-all duration-500 flex items-center justify-center rounded-full">
                   <IconCamera
-                    class="w-10 h-10 text-white opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0" />
+                    class="w-10 h-10 text-WtB opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0" />
                 </div>
               </div>
             </div>
 
             <!-- Delete Badge -->
             <div v-if="currentAvatar && !selectedFile" @click.stop="$emit('delete')"
-              class="absolute top-2 right-2 z-30 bg-danger/90 hover:bg-danger text-white p-2 rounded-full shadow-lg border-2 border-WtB transition-all hover:scale-110 cursor-pointer group/delete"
+              class="absolute top-2 right-2 z-30 bg-warning hover:bg-danger text-WtB p-2 rounded-full shadow-lg border-2 border-WtB transition-all hover:scale-110 cursor-pointer group/delete"
               title="Supprimer la photo">
               <IconTrash class="w-4 h-4" />
             </div>
@@ -71,7 +71,7 @@
           <!-- Selection Controls -->
           <div class="w-full space-y-4">
             <button @click="triggerFileInput"
-              class="w-full px-6 py-4 rounded-2xl border-2 border-dashed border-ashAct hover:border-primary/50 hover:bg-primary/5 transition-all duration-300 flex items-center justify-between group/select"
+              class="w-full px-6 py-4 rounded-2xl border-2 border-dashed border-ash hover:border-primary/10 hover:bg-primary/5 transition-all duration-300 flex items-center justify-between group/select"
               :disabled="isLoading">
               <div class="flex items-center gap-4 text-left">
                 <div class="p-3 bg-ash rounded-xl group-hover/select:bg-primary/10 transition-colors">
@@ -112,7 +112,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
 import {
   IconPhoto, IconLoader2, IconUpload, IconCamera, IconCheck, IconFileUpload, IconChevronRight, IconTrash
 } from '@tabler/icons-vue'
@@ -122,6 +122,18 @@ const props = defineProps<{
   currentAvatar?: string | null
   isLoading: boolean
 }>()
+
+const config = useRuntimeConfig()
+
+const fullAvatarUrl = computed(() => {
+  if (previewUrl.value) return previewUrl.value
+  if (props.currentAvatar) {
+    if (props.currentAvatar.startsWith('http')) return props.currentAvatar
+    const baseUrl = config.public.cypassBaseAPI
+    return `${baseUrl}/${props.currentAvatar.replace(/^\/+/, '')}`
+  }
+  return null
+})
 
 const emit = defineEmits(['close', 'submit', 'delete'])
 
