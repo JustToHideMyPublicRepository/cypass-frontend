@@ -26,7 +26,7 @@
         </div>
 
         <!-- Floating Action Button -->
-        <button @click="$emit('open-avatar')"
+        <button @click="showAvatarModal = true"
           class="absolute -bottom-1 -right-1 z-30 bg-WtB text-primary p-2.5 rounded-2xl shadow-xl hover:bg-primary hover:text-WtB transition-all duration-300 hover:scale-110 group/cam"
           title="Changer la photo">
           <IconCamera class="w-5 h-5 transition-transform group-hover/cam:rotate-12" />
@@ -61,24 +61,57 @@
         </div>
       </div>
     </UiBaseCard>
+
+    <ModalProfileAvatar :show="showAvatarModal" :current-avatar="user?.avatar_url" :is-loading="profilStore.loading"
+      @close="showAvatarModal = false" @submit="handleAvatarUpload" @delete="handleAvatarDelete" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { ref, computed } from 'vue'
 import { IconCamera } from '@tabler/icons-vue'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { useAuthStore } from '~/stores/auth'
+import { useProfilStore } from '~/stores/profil'
+import { useToastStore } from '~/stores/toast'
 
 const props = defineProps<{
   user: any
   status: 'pending' | 'active' | 'pending_delete' | 'deleted' | 'suspended'
 }>()
 
-defineEmits(['open-avatar'])
-
 const authStore = useAuthStore()
+const profilStore = useProfilStore()
+const toastStore = useToastStore()
+
+const showAvatarModal = ref(false)
+
+const handleAvatarDelete = async () => {
+  const success = await profilStore.deleteAvatar()
+  if (success) {
+    toastStore.showToast('success', 'Photo supprimée', profilStore.message || 'Votre photo de profil a été retirée.')
+    showAvatarModal.value = false
+    if (authStore.user) {
+      authStore.user.avatar_url = null
+    }
+  } else {
+    toastStore.showToast('error', 'Erreur', profilStore.error || 'Impossible de supprimer la photo.')
+  }
+}
+
+const handleAvatarUpload = async (file: File) => {
+  const success = await profilStore.uploadAvatar(file)
+  if (success) {
+    toastStore.showToast('success', 'Photo de profil', profilStore.message || 'Votre photo a été mise à jour avec succès.')
+    showAvatarModal.value = false
+    if (authStore.user && profilStore.profile) {
+      authStore.user.avatar_url = profilStore.profile.avatar_url
+    }
+  } else {
+    toastStore.showToast('error', 'Erreur d\'upload', profilStore.error || 'Impossible de mettre à jour la photo.')
+  }
+}
 
 const statusLabel = computed(() => {
   const map = {

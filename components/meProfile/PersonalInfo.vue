@@ -2,7 +2,7 @@
   <div class="space-y-6">
     <UiBaseCard title="Informations Personnelles" class="border-l-4 border-l-primary">
       <template #header>
-        <UiBaseButton variant="ghost" @click="$emit('open-edit')"
+        <UiBaseButton variant="ghost" @click="showInfoModal = true"
           class="text-xs uppercase tracking-widest font-black h-8 px-3">
           <div class="flex items-center gap-2">
             <IconEdit class="w-4 h-4" />
@@ -77,11 +77,17 @@
         </div>
       </div>
     </UiBaseCard>
+
+    <ModalProfileInfo :show="showInfoModal" :is-loading="profilStore.loading" :initial-data="modelValue"
+      @close="showInfoModal = false" @submit="handleInfoUpdate" />
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import { IconUserCircle, IconUserSquareRounded, IconEdit, IconMail, IconBuilding, IconAlertCircle } from '@tabler/icons-vue'
+import { useProfilStore } from '~/stores/profil'
+import { useToastStore } from '~/stores/toast'
 
 defineProps<{
   modelValue: {
@@ -93,5 +99,22 @@ defineProps<{
   emailVerified: boolean
 }>()
 
-defineEmits(['open-edit'])
+const profilStore = useProfilStore()
+const toastStore = useToastStore()
+
+const showInfoModal = ref(false)
+
+const handleInfoUpdate = async (data: any) => {
+  const success = await profilStore.updatePersonalInfo({
+    first_name: data.first_name,
+    last_name: data.last_name,
+    organization_name: data.organization_name
+  })
+  if (success) {
+    toastStore.showToast('success', 'Profil mis à jour', profilStore.message || 'Vos informations ont été enregistrées.')
+    showInfoModal.value = false
+  } else {
+    toastStore.showToast('error', 'Erreur de mise à jour', profilStore.error || 'Impossible d\'enregistrer les modifications.')
+  }
+}
 </script>
