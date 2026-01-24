@@ -93,113 +93,13 @@
     </UiBaseCard>
 
     <!-- Delete Account Modal -->
-    <UiBaseModal :show="showDeleteModal" title="Suppression du compte" @close="closeDeleteModal">
-      <div class="space-y-6">
-
-        <!-- Step 1: Conditions -->
-        <div v-if="deleteStep === 1" class="space-y-4">
-          <div class="p-4 bg-danger/5 border border-danger/20 rounded-xl flex gap-4">
-            <IconAlertTriangle class="w-6 h-6 text-danger shrink-0" />
-            <div class="text-sm text-BtW space-y-2">
-              <p class="font-bold text-danger">Action irréversible (après délai)</p>
-              <ul class="list-disc list-inside space-y-1 text-hsa ml-1">
-                <li>Suppression définitive après <strong>48 heures</strong>.</li>
-                <li>Possibilité d'annuler la suppression en vous reconnectant avant ce délai.</li>
-                <li>Les documents authentifiés resteront valides et vérifiables publiquement.</li>
-                <li>Vos contributions aux incidents seront anonymisées mais conservées.</li>
-                <li>Toutes les autres données de profil seront perdues.</li>
-              </ul>
-            </div>
-          </div>
-          <div class="flex justify-end">
-            <UiBaseButton variant="primary" @click="nextStep">
-              J'accepte ces conditions
-            </UiBaseButton>
-          </div>
-        </div>
-
-        <!-- Step 2: Verification -->
-        <div v-else-if="deleteStep === 2" class="space-y-4">
-          <div class="bg-primary/5 p-4 rounded-xl border border-primary/10">
-            <p class="text-sm text-BtW font-medium">Vérification de sécurité</p>
-            <p class="text-xs text-hsa mt-1">
-              Vous disposez actuellement de <strong class="text-primary">{{ profilStore.statistics?.total_documents || 0
-              }}</strong> documents et
-              <strong class="text-primary">{{ profilStore.statistics?.total_incidents || 0 }}</strong> incidents.
-            </p>
-            <p class="text-xs text-hsa mt-2">
-              Veuillez saisir ces nombres pour continuer.
-            </p>
-          </div>
-
-          <div class="grid grid-cols-2 gap-4">
-            <div class="space-y-2">
-              <label class="text-xs font-bold text-hsa uppercase">Documents</label>
-              <input type="number" v-model="verificationStats.documents" placeholder="0"
-                class="w-full px-4 py-3 rounded-xl bg-ash/30 border border-ash focus:ring-2 focus:ring-primary outline-none font-mono text-center font-bold" />
-            </div>
-            <div class="space-y-2">
-              <label class="text-xs font-bold text-hsa uppercase">Incidents</label>
-              <input type="number" v-model="verificationStats.incidents" placeholder="0"
-                class="w-full px-4 py-3 rounded-xl bg-ash/30 border border-ash focus:ring-2 focus:ring-primary outline-none font-mono text-center font-bold" />
-            </div>
-          </div>
-
-          <div v-if="profilStore.statistics" class="text-xs text-center">
-            <span v-if="isValidStats" class="text-success font-bold flex items-center justify-center gap-1">
-              <IconCheck class="w-4 h-4" /> Correspondance validée
-            </span>
-            <span v-else class="text-hsa opacity-50">
-              En attente de validation...
-            </span>
-          </div>
-
-          <div class="flex justify-end">
-            <UiBaseButton variant="primary" :disabled="!isValidStats" @click="nextStep">
-              Valider les statistiques
-            </UiBaseButton>
-          </div>
-        </div>
-
-        <!-- Step 3: Password Confirmation -->
-        <div v-else-if="deleteStep === 3" class="space-y-4">
-          <p class="text-sm text-hsa font-medium">
-            Dernière étape : saisissez votre mot de passe pour lancer la suppression.
-          </p>
-
-          <div class="space-y-2">
-            <div class="relative">
-              <input :type="showDeletePassword ? 'text' : 'password'" v-model="deletePassword"
-                placeholder="Votre mot de passe actuel"
-                class="w-full pl-4 pr-10 py-3 rounded-xl bg-ash/30 border border-ash focus:ring-2 focus:ring-danger outline-none"
-                @keyup.enter="confirmDelete" />
-              <button @click="showDeletePassword = !showDeletePassword"
-                class="absolute right-3 top-1/2 -translate-y-1/2 text-hsa hover:text-BtW focus:outline-none">
-                <component :is="showDeletePassword ? IconEyeOff : IconEye" class="w-5 h-5" />
-              </button>
-            </div>
-            <p v-if="deleteError" class="text-xs text-danger font-bold flex items-center gap-1">
-              <IconX class="w-3 h-3" /> {{ deleteError }}
-            </p>
-          </div>
-
-          <div class="flex justify-end gap-3 mt-4">
-            <UiBaseButton variant="ghost" @click="closeDeleteModal" :disabled="deleteLoading">
-              Annuler
-            </UiBaseButton>
-            <UiBaseButton variant="danger" :loading="deleteLoading" :disabled="!deletePassword" @click="confirmDelete">
-              Confirmer la suppression
-            </UiBaseButton>
-          </div>
-        </div>
-      </div>
-    </UiBaseModal>
+    <ModalProfileDelete :show="showDeleteModal" @close="showDeleteModal = false" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed } from 'vue'
-import { IconSun, IconMoon, IconLanguage, IconClock, IconAlertTriangle, IconCheck, IconX, IconFileCertificate, IconEye, IconEyeOff } from '@tabler/icons-vue'
+import { ref, reactive } from 'vue'
+import { IconSun, IconMoon, IconLanguage, IconClock } from '@tabler/icons-vue'
 import { useProfilStore } from '~/stores/profil'
 
 definePageMeta({
@@ -218,61 +118,9 @@ const notificationSettings = reactive([
   { title: 'Newsletter VigiTech', desc: 'Résumé hebdomadaire des menaces cybernétiques.', enabled: false },
 ])
 
-// -- Deletion Flow Logic --
 const showDeleteModal = ref(false)
-const deleteStep = ref(1) // 1: Conditions, 2: Stats Verification, 3: Password
-const deletePassword = ref('')
-const showDeletePassword = ref(false)
-const verificationStats = reactive({
-  documents: null as number | null,
-  incidents: null as number | null
-})
-const deleteLoading = ref(false)
-const deleteError = ref<string | null>(null)
 
 const openDeleteModal = () => {
-  // Ensure we have fresh stats
-  profilStore.fetchProfile()
   showDeleteModal.value = true
-  deleteStep.value = 1
-  deletePassword.value = ''
-  verificationStats.documents = null
-  verificationStats.incidents = null
-  deleteError.value = null
-}
-
-const closeDeleteModal = () => {
-  showDeleteModal.value = false
-  deleteStep.value = 1
-}
-
-const nextStep = () => {
-  if (deleteStep.value === 1) {
-    deleteStep.value = 2
-  } else if (deleteStep.value === 2) {
-    if (isValidStats.value) {
-      deleteStep.value = 3
-    }
-  }
-}
-
-const isValidStats = computed(() => {
-  if (!profilStore.statistics) return false
-  return verificationStats.documents === profilStore.statistics.total_documents &&
-    verificationStats.incidents === profilStore.statistics.total_incidents
-})
-
-const confirmDelete = async () => {
-  if (!deletePassword.value) return
-
-  deleteLoading.value = true
-  deleteError.value = null
-
-  const success = await profilStore.deleteAccount(deletePassword.value)
-  if (!success) {
-    deleteError.value = profilStore.error || 'Mot de passe incorrect ou erreur serveur.'
-  }
-  // On success, store handles logout/redirect
-  deleteLoading.value = false
 }
 </script>

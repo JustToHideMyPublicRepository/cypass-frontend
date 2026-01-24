@@ -146,6 +146,9 @@
         </div>
       </div>
     </Transition>
+
+    <!-- Logout Modal -->
+    <ModalLogoutConfirmation :show="showLogoutModal" @close="showLogoutModal = false" @confirm="confirmLogout" />
   </div>
 </template>
 
@@ -173,10 +176,16 @@ const NavHeader = [
 const authStore = useAuthStore()
 const isDropdownOpen = ref(false)
 const dropdownRef = ref<HTMLElement | null>(null)
+const showLogoutModal = ref(false)
 
 const handleLogout = () => {
   isDropdownOpen.value = false
   isMobileMenuOpen.value = false
+  showLogoutModal.value = true
+}
+
+const confirmLogout = () => {
+  showLogoutModal.value = false
   authStore.logout()
 }
 
