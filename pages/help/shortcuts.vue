@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-4xl mx-auto px-4 py-8 relative">
+  <div class="max-w-4xl mx-auto px-4 relative">
     <HelpShortcutsHeader @open-settings="showSettings = true" />
     <HelpShortcutsExpertMode />
 
