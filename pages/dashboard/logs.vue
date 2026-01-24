@@ -3,7 +3,7 @@
     <MeLogsHeader :user-email="profilStore.logUser?.email" :loading="loading" @refresh="refreshLogs"
       @reset="resetFilters" />
 
-    <MeLogsStats :stats="profilStore.logStatistics" :logs-count="profilStore.logs?.length || 0" />
+    <MeLogsStats :stats="profilStore.logStatistics" />
 
     <MeLogsFilters v-model="filters" :active-filters="profilStore.logFilters" @change="applyFilters" />
 

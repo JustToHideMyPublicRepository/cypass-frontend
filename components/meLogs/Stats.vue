@@ -1,5 +1,5 @@
 <template>
-  <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
     <UiBaseCard class="bg-primary/5 border-l-4 border-l-primary">
       <div class="flex items-center gap-4">
         <div class="p-3 bg-ash rounded-xl shadow-sm border border-ashAct">
@@ -8,18 +8,6 @@
         <div>
           <p class="text-[10px] font-black uppercase tracking-widest text-hsa opacity-60">Total aujourd'hui</p>
           <p class="text-xl font-bold text-BtW leading-tight">{{ stats?.total_logs ?? 0 }}</p>
-        </div>
-      </div>
-    </UiBaseCard>
-
-    <UiBaseCard class="bg-secondary/5 border-l-4 border-l-secondary">
-      <div class="flex items-center gap-4">
-        <div class="p-3 bg-ash rounded-xl shadow-sm border border-ashAct">
-          <IconList class="w-6 h-6 text-secondary" />
-        </div>
-        <div>
-          <p class="text-[10px] font-black uppercase tracking-widest text-hsa opacity-60">Logs affichés</p>
-          <p class="text-xl font-bold text-BtW leading-tight">{{ logsCount }}</p>
         </div>
       </div>
     </UiBaseCard>
@@ -55,10 +43,9 @@
 </template>
 
 <script setup lang="ts">
-import { IconActivity, IconList, IconCircleCheck, IconAlertCircle } from '@tabler/icons-vue'
+import { IconActivity, IconCircleCheck, IconAlertCircle } from '@tabler/icons-vue'
 
 defineProps<{
   stats: any
-  logsCount: number
 }>()
 </script>
