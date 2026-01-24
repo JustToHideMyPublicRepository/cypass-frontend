@@ -12,7 +12,7 @@
           <input type="checkbox" :checked="store[setting.id]" @change="store.toggleSetting(setting.id)"
             class="sr-only peer">
           <div
-            class="w-10 h-5 bg-ashAct/50 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary">
+            class="w-10 h-5 bg-ash peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary">
           </div>
         </label>
       </div>
