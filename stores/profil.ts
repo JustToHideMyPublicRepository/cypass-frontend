@@ -42,6 +42,8 @@ interface ProfilState {
   statistics: Statistics | null
   logs: LogEntry[]
   logStatistics: LogStatistics | null
+  logUser: { id: string; email: string; role: string } | null
+  logFilters: { date: string; type: string; limit: number } | null
   loading: boolean
   error: string | null
   message: string | null
@@ -53,6 +55,8 @@ export const useProfilStore = defineStore('profil', {
     statistics: null,
     logs: [],
     logStatistics: null,
+    logUser: null,
+    logFilters: null,
     loading: false,
     error: null,
     message: null
@@ -133,12 +137,22 @@ export const useProfilStore = defineStore('profil', {
       this.loading = true
       this.error = null
       try {
-        const response = await $fetch<{ success: boolean; data: { logs: LogEntry[]; statistics: LogStatistics } }>('/api/profile/logs', {
+        const response = await $fetch<{
+          success: boolean;
+          data: {
+            logs: LogEntry[];
+            statistics: LogStatistics;
+            user: { id: string; email: string; role: string };
+            filters: { date: string; type: string; limit: number };
+          }
+        }>('/api/profile/logs', {
           params
         })
         if (response.success) {
           this.logs = response.data.logs
           this.logStatistics = response.data.statistics
+          this.logUser = response.data.user
+          this.logFilters = response.data.filters
           return true
         }
         return false
@@ -171,6 +185,29 @@ export const useProfilStore = defineStore('profil', {
         return false
       } catch (err: any) {
         this.error = err.data?.message || 'Erreur lors de l’upload de l’avatar'
+        return false
+      } finally {
+        this.loading = false
+      }
+    },
+    async deleteAvatar() {
+      this.loading = true
+      this.error = null
+      try {
+        const response = await $fetch<{ success: boolean; message: string }>('/api/profile/avatar', {
+          method: 'POST',
+          body: { action: 'delete' }
+        })
+        if (response.success) {
+          this.message = response.message
+          if (this.profile) {
+            this.profile.avatar_url = null
+          }
+          return true
+        }
+        return false
+      } catch (err: any) {
+        this.error = err.data?.message || 'Erreur lors de la suppression de l’avatar'
         return false
       } finally {
         this.loading = false

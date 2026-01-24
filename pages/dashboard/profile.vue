@@ -32,7 +32,7 @@
       @submit="handlePasswordUpdate" />
 
     <ModalProfileAvatar :show="showAvatarModal" :current-avatar="user?.avatar_url" :is-loading="profilStore.loading"
-      @close="showAvatarModal = false" @submit="handleAvatarUpload" />
+      @close="showAvatarModal = false" @submit="handleAvatarUpload" @delete="handleAvatarDelete" />
 
     <ModalProfileInfo :show="showInfoModal" :is-loading="profilStore.loading" :initial-data="form"
       @close="showInfoModal = false" @submit="handleInfoUpdate" />
@@ -87,6 +87,19 @@ onMounted(async () => {
   await profilStore.fetchProfile()
   syncFormWithProfile()
 })
+
+const handleAvatarDelete = async () => {
+  const success = await profilStore.deleteAvatar()
+  if (success) {
+    toastStore.showToast('success', 'Photo supprimée', 'Votre photo de profil a été retirée.')
+    showAvatarModal.value = false
+    if (authStore.user) {
+      authStore.user.avatar_url = null
+    }
+  } else {
+    toastStore.showToast('error', 'Erreur', profilStore.error || 'Impossible de supprimer la photo.')
+  }
+}
 
 const handleAvatarUpload = async (file: File) => {
   const success = await profilStore.uploadAvatar(file)

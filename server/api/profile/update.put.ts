@@ -2,7 +2,7 @@ import { defineEventHandler, readBody, getCookie } from 'h3'
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig()
-  const token = getCookie(event, 'auth_token')
+  const token = getCookie(event, 'cypass_token')
   const body = await readBody(event)
 
   try {
@@ -12,8 +12,8 @@ export default defineEventHandler(async (event) => {
     if (body.last_name) params.append('last_name', body.last_name)
     if (body.organization_name) params.append('organization_name', body.organization_name)
 
-    const response: any = await $fetch(`${config.public.cypassBaseAPI}/profile/update_profile.php`, {
-      method: 'PUT',
+    const response: any = await $fetch(`${config.public.cypassBaseAPI}/api/profile/update_profile.php`, {
+      method: 'PUT' as 'PUT',
       headers: {
         'Authorization': `Bearer ${token}`,
         'accept': 'application/json',

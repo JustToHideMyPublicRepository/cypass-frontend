@@ -1,30 +1,50 @@
-import { defineEventHandler, readMultipartFormData, getCookie } from 'h3'
+import { defineEventHandler, readMultipartFormData, readBody, getCookie, getHeader } from 'h3'
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig()
-  const token = getCookie(event, 'auth_token')
-  const formData = await readMultipartFormData(event)
-
-  if (!formData || formData.length === 0) {
-    throw createError({
-      statusCode: 400,
-      message: 'Aucun fichier fourni'
-    })
-  }
-
-  // Create a new FormData to send to the backend
-  const backendFormData = new FormData()
-
-  for (const item of formData) {
-    if (item.name === 'avatar' && item.data) {
-      const blob = new Blob([new Uint8Array(item.data)], { type: item.type })
-      backendFormData.append('avatar', blob, item.filename)
-    }
-  }
+  const token = getCookie(event, 'cypass_token')
+  const contentType = getHeader(event, 'content-type') || ''
 
   try {
-    const response: any = await $fetch(`${config.public.cypassBaseAPI}/profile/upload_avatar.php`, {
-      method: 'POST',
+    // Handle deletion request (JSON)
+    if (contentType.includes('application/json')) {
+      const body = await readBody(event)
+      if (body.action === 'delete') {
+        const backendFormData = new FormData()
+        backendFormData.append('action', 'delete')
+
+        const response: any = await $fetch(`${config.public.cypassBaseAPI}/api/profile/upload_avatar.php`, {
+          method: 'POST' as 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'accept': 'application/json'
+          },
+          body: backendFormData
+        })
+        return response
+      }
+    }
+
+    // Handle file upload (Multipart)
+    const formData = await readMultipartFormData(event)
+
+    if (!formData || formData.length === 0) {
+      throw createError({
+        statusCode: 400,
+        message: 'Aucun fichier fourni'
+      })
+    }
+
+    const backendFormData = new FormData()
+    for (const item of formData) {
+      if (item.name === 'avatar' && item.data) {
+        const blob = new Blob([new Uint8Array(item.data)], { type: item.type })
+        backendFormData.append('avatar', blob, item.filename)
+      }
+    }
+
+    const response: any = await $fetch(`${config.public.cypassBaseAPI}/api/profile/upload_avatar.php`, {
+      method: 'POST' as 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,
         'accept': 'application/json'
@@ -36,7 +56,7 @@ export default defineEventHandler(async (event) => {
   } catch (error: any) {
     throw createError({
       statusCode: error.response?.status || 500,
-      message: error.data?.message || 'Erreur lors de l\'upload de l\'avatar'
+      message: error.data?.message || 'Erreur lors de la gestion de l\'avatar'
     })
   }
 })

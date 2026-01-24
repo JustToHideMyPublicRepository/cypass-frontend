@@ -97,7 +97,7 @@ const searchTooltip = '<span class="kbd-hint">CTRL</span> + <span class="kbd-hin
 const dropdownLinks = [
   { label: 'Mon Profil', path: '/dashboard/profile', icon: IconUser },
   { label: 'Sessions', path: '/dashboard/sessions', icon: IconDevices },
-  { label: 'Journal', path: '/dashboard/logs', icon: IconActivity },
+  { label: 'Journal d\'activité', path: '/dashboard/logs', icon: IconActivity },
   { label: 'Paramètres', path: '/dashboard/settings', icon: IconSettings },
   { label: 'Raccourcis Clavier', path: '/help/shortcuts', icon: IconKeyboard },
   { label: 'Aide & Support', path: '/support', icon: IconHelp }

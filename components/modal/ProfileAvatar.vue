@@ -51,6 +51,13 @@
               </div>
             </div>
 
+            <!-- Delete Badge -->
+            <div v-if="currentAvatar && !selectedFile" @click.stop="$emit('delete')"
+              class="absolute top-2 right-2 z-30 bg-danger/90 hover:bg-danger text-white p-2 rounded-full shadow-lg border-2 border-WtB transition-all hover:scale-110 cursor-pointer group/delete"
+              title="Supprimer la photo">
+              <IconTrash class="w-4 h-4" />
+            </div>
+
             <!-- Tiny Success Badge -->
             <div v-if="selectedFile"
               class="absolute -top-1 -right-1 z-20 bg-success text-white p-1.5 rounded-full shadow-lg border-2 border-WtB animate-in zoom-in">
@@ -85,6 +92,14 @@
 
       <!-- Action Buttons -->
       <div class="pt-6 flex justify-end gap-3">
+        <UiBaseButton v-if="currentAvatar && !selectedFile" variant="danger" @click="$emit('delete')"
+          :disabled="isLoading">
+          <template #icon>
+            <IconTrash class="w-4 h-4" />
+          </template>
+          Supprimer
+        </UiBaseButton>
+        <div class="flex-grow"></div>
         <UiBaseButton variant="ghost" @click="$emit('close')" :disabled="isLoading">
           Annuler
         </UiBaseButton>
@@ -99,7 +114,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import {
-  IconPhoto, IconLoader2, IconUpload, IconCamera, IconCheck, IconFileUpload, IconChevronRight
+  IconPhoto, IconLoader2, IconUpload, IconCamera, IconCheck, IconFileUpload, IconChevronRight, IconTrash
 } from '@tabler/icons-vue'
 
 const props = defineProps<{
@@ -108,7 +123,7 @@ const props = defineProps<{
   isLoading: boolean
 }>()
 
-const emit = defineEmits(['close', 'submit'])
+const emit = defineEmits(['close', 'submit', 'delete'])
 
 const fileInput = ref<HTMLInputElement | null>(null)
 const selectedFile = ref<File | null>(null)
