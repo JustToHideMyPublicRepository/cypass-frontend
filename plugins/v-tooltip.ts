@@ -67,6 +67,7 @@ export default defineNuxtPlugin((nuxtApp) => {
             position: absolute;
             bottom: -8px;
             right: -8px;
+            padding-right: 10px;
             z-index: 50;
             pointer-events: none;
             opacity: 0;
