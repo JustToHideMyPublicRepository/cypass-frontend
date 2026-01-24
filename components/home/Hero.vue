@@ -81,12 +81,12 @@
               <div class="grid grid-cols-2 gap-4 relative z-10">
                 <!-- Stats Card -->
                 <div
-                  class="col-span-2 bg-gradient-to-r from-primary to-secondary rounded-2xl p-6 text-white shadow-lg relative overflow-hidden group/card">
+                  class="col-span-2 bg-gradient-to-r from-primary to-secondary rounded-2xl p-6 text-ash shadow-lg relative overflow-hidden group/card">
                   <div class="absolute top-0 right-0 p-3 opacity-20">
                     <IconShieldLock class="w-24 h-24 rotate-12" />
                   </div>
-                  <h3 class="text-white text-sm font-medium mb-1">Niveau de menace</h3>
-                  <div class="text-4xl font-bold mb-4 flex items-center gap-3">
+                  <h3 class="text-sm font-medium mb-1">Niveau de menace</h3>
+                  <div class="text-WtB text-4xl font-bold mb-4 flex items-center gap-3">
                     Faible
                     <span
                       class="px-2 py-1 bg-success/20 text-success border border-success/30 text-xs rounded-full">Stable</span>
@@ -95,7 +95,7 @@
                     <div class="bg-success h-2 rounded-full w-[15%] shadow-[0_0_10px_rgba(74,222,128,0.5)]">
                     </div>
                   </div>
-                  <p class="text-xs text-blue-200">Dernière mise à jour: à l'instant</p>
+                  <p class="text-xs">Dernière mise à jour: à l'instant</p>
                 </div>
 
                 <!-- Mini Cards -->

@@ -243,6 +243,32 @@ export const useProfilStore = defineStore('profil', {
       } finally {
         this.loading = false
       }
+    },
+
+    async deleteAccount(password: string) {
+      this.loading = true
+      this.error = null
+      try {
+        const response = await $fetch<{ success: boolean; message: string }>('/api/profile/delete', {
+          method: 'DELETE',
+          body: {
+            confirm: true,
+            current_password: password
+          }
+        })
+        if (response.success) {
+          this.message = response.message
+          const authStore = useAuthStore()
+          await authStore.logout() // Force logout after deletion request
+          return true
+        }
+        return false
+      } catch (err: any) {
+        this.error = err.data?.message || 'Erreur lors de la suppression du compte'
+        return false
+      } finally {
+        this.loading = false
+      }
     }
   }
 })
