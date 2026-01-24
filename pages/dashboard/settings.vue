@@ -93,7 +93,7 @@
     </UiBaseCard>
 
     <!-- Delete Account Modal -->
-    <ModalProfileDelete :show="showDeleteModal" @close="showDeleteModal = false" />
+    <ModalSettingDelete :show="showDeleteModal" @close="showDeleteModal = false" />
   </div>
 </template>
 

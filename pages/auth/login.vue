@@ -56,7 +56,7 @@
     </form>
 
     <!-- Forgot Password Modal -->
-    <ModalPassword :show="showForgotModal" :loading="forgotLoading" @close="showForgotModal = false"
+    <ModalAuthPassword :show="showForgotModal" :loading="forgotLoading" @close="showForgotModal = false"
       @submit="handleForgot" />
   </div>
 </template>
