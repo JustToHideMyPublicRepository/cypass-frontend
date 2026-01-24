@@ -105,6 +105,7 @@
 import { ref, reactive, computed, watch } from 'vue'
 import { IconAlertTriangle, IconCheck, IconX, IconEye, IconEyeOff } from '@tabler/icons-vue'
 import { useProfilStore } from '~/stores/profil'
+import { useToastStore } from '~/stores/toast'
 
 const props = defineProps<{
   show: boolean
@@ -113,6 +114,7 @@ const props = defineProps<{
 const emit = defineEmits(['close'])
 
 const profilStore = useProfilStore()
+const toastStore = useToastStore()
 const step = ref(1)
 const password = ref('')
 const showPassword = ref(false)
@@ -171,6 +173,10 @@ const confirmDelete = async () => {
   const success = await profilStore.deleteAccount(password.value)
   if (!success) {
     error.value = profilStore.error || 'Mot de passe incorrect ou erreur serveur.'
+    toastStore.showToast('error', 'Erreur', error.value)
+  } else {
+    toastStore.showToast('success', 'Compte supprimé', profilStore.message || 'Votre demande de suppression a été prise en compte.')
+    closeModal()
   }
   // On success, store handles logout/redirect
   loading.value = false
