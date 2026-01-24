@@ -66,26 +66,17 @@
                       <p class="text-sm font-bold truncate text-BtW">{{ authStore.fullName }}</p>
                     </div>
                     <div class="py-1">
-                      <NuxtLink to="/dashboard" @click="isDropdownOpen = false"
-                        class="flex items-center gap-2 px-4 py-2 text-sm hover:bg-ash transition-colors">
-                        Tableau de bord
-                      </NuxtLink>
-                      <NuxtLink to="/dashboard/logs" @click="isDropdownOpen = false"
-                        class="flex items-center gap-2 px-4 py-2 text-sm hover:bg-ash transition-colors">
-                        Journal d'activité
-                      </NuxtLink>
-                      <NuxtLink to="/dashboard/sessions" @click="isDropdownOpen = false"
-                        class="flex items-center gap-2 px-4 py-2 text-sm hover:bg-ash transition-colors">
-                        Sessions actives
-                      </NuxtLink>
-                      <NuxtLink to="/dashboard/profile" @click="isDropdownOpen = false"
-                        class="flex items-center gap-2 px-4 py-2 text-sm hover:bg-ash transition-colors">
-                        Mon Profil
-                      </NuxtLink>
-                      <button @click="handleLogout"
-                        class="flex items-center gap-2 px-4 py-2 text-sm text-danger hover:bg-danger/10 w-full text-left transition-colors font-medium">
-                        Déconnexion
-                      </button>
+                      <template v-for="link in getAuthLinks(false)" :key="link.path">
+                        <NuxtLink v-if="link.type === 'link'" :to="link.path" @click="isDropdownOpen = false"
+                          class="flex items-center gap-2 px-4 py-2 text-sm hover:bg-ash transition-colors">
+                          {{ link.label }}
+                        </NuxtLink>
+                        <button v-else-if="link.type === 'button'" @click="link.action"
+                          class="flex items-center gap-2 px-4 py-2 text-sm w-full text-left transition-colors font-medium"
+                          :class="link.class">
+                          {{ link.label }}
+                        </button>
+                      </template>
                     </div>
                   </div>
                 </Transition>
@@ -131,12 +122,16 @@
             </UiBaseButton>
           </template>
           <template v-else>
-            <UiBaseButton to="/dashboard" @click="isMobileMenuOpen = false" class="p-4 rounded-xl text-lg font-medium">
-              Tableau de bord
-            </UiBaseButton>
-            <button @click="handleLogout" class="p-4 rounded-xl text-lg font-medium text-danger hover:bg-danger/10">
-              Déconnexion
-            </button>
+            <template v-for="link in getAuthLinks(true)" :key="link.path">
+              <UiBaseButton v-if="link.type === 'link'" :to="link.path" @click="isMobileMenuOpen = false"
+                class="p-4 rounded-xl text-lg font-medium">
+                {{ link.label }}
+              </UiBaseButton>
+              <button v-else-if="link.type === 'button'" @click="link.action"
+                class="p-4 rounded-xl text-lg font-medium transition-colors" :class="link.class">
+                {{ link.label }}
+              </button>
+            </template>
           </template>
         </div>
 
@@ -173,6 +168,26 @@ const NavHeader = [
   { label: 'À propos', path: '/about' },
   { label: 'Contact', path: '/contact' },
 ]
+
+// Auth Links
+const getAuthLinks = (forMobile: boolean) => {
+  const links = [
+    { label: 'Tableau de bord', path: '/dashboard', type: 'link', mobile: true },
+    { label: 'Mon Profil', path: '/dashboard/profile', type: 'link' },
+    { label: "Journal d'activité", path: '/dashboard/logs', type: 'link' },
+    { label: 'Sessions actives', path: '/dashboard/sessions', type: 'link' },
+    {
+      label: 'Déconnexion',
+      path: 'logout',
+      type: 'button',
+      action: handleLogout,
+      class: 'text-danger hover:bg-danger/10',
+      mobile: true
+    },
+  ]
+
+  return forMobile ? links.filter(l => l.mobile) : links
+}
 
 const authStore = useAuthStore()
 const toastStore = useToastStore()
