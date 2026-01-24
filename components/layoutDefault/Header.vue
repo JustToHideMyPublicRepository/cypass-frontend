@@ -29,7 +29,7 @@
                 'w-1.5 h-1.5 rounded-full',
                 profilStore.profile?.email_verified ? 'bg-green-500' : 'bg-yellow-500'
               ]"></div>
-              <div class="text-xs text-hsa">{{ profilStore.profile?.email || authStore.user?.email }}</div>
+              <div class="text-xs text-hsa">{{ authStore.user?.email || profilStore.profile?.email }}</div>
             </div>
           </div>
           <div class="w-10 h-10 rounded-full bg-ash overflow-hidden border border-ashAct">
@@ -48,7 +48,7 @@
             <div class="p-3 border-b border-ash">
               <p class="text-sm font-medium text-BtW">{{ authStore.fullName }}</p>
               <div class="flex items-center gap-2">
-                <p class="text-xs text-hsa truncate">{{ profilStore.profile?.email || authStore.user?.email }}</p>
+                <p class="text-xs text-hsa truncate">{{ authStore.user?.email || profilStore.profile?.email }}</p>
                 <div :class="[
                   'w-1.5 h-1.5 rounded-full shrink-0',
                   profilStore.profile?.email_verified ? 'bg-green-500' : 'bg-yellow-500'
