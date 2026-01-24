@@ -18,7 +18,7 @@
               <p id="toast-title" class="text-sm font-bold" :class="textClass">
                 {{ title }}
               </p>
-              <p id="toast-message" class="mt-1 text-sm text-hsa line-clamp-2">
+              <p id="toast-message" class="mt-1 text-sm text-hsa line-clamp-4">
                 {{ message }}
               </p>
             </div>
