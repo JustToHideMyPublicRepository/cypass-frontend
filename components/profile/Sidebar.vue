@@ -13,7 +13,7 @@
       <!-- Avatar Section -->
       <div class="relative w-36 h-36 mx-auto mb-8">
         <div
-          class="relative z-10 w-full h-full rounded-full p-1.5 bg-gradient-to-tr from-primary via-primary/20 to-secondary shadow-2xl">
+          class="relative z-10 w-full h-full rounded-full p-1.5 bg-gradient-to-tr from-primary to-secondary shadow-2xl">
           <div class="w-full h-full rounded-full overflow-hidden bg-ash border-4 border-WtB shadow-inner">
             <img :src="authStore.avatarUrl" alt="Avatar"
               class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />

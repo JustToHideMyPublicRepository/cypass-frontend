@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
         backendFormData.append('action', 'delete')
 
         const response: any = await $fetch(`${config.public.cypassBaseAPI}/api/profile/upload_avatar.php`, {
-          method: 'POST' as 'POST',
+          method: 'POST' as any,
           headers: {
             'Authorization': `Bearer ${token}`,
             'accept': 'application/json'
@@ -44,7 +44,7 @@ export default defineEventHandler(async (event) => {
     }
 
     const response: any = await $fetch(`${config.public.cypassBaseAPI}/api/profile/upload_avatar.php`, {
-      method: 'POST' as 'POST',
+      method: 'POST' as any,
       headers: {
         'Authorization': `Bearer ${token}`,
         'accept': 'application/json'

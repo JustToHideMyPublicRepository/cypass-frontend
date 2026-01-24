@@ -22,7 +22,7 @@
               </div>
               <div class="text-left">
                 <p class="text-[10px] font-bold text-hsa uppercase tracking-widest">Prénom</p>
-                <p class="font-bold text-BtW text-lg leading-none mt-1">{{ modelValue.prenom || '-' }}</p>
+                <p class="font-bold text-BtW text-lg leading-none mt-1">{{ modelValue.first_name || '-' }}</p>
               </div>
             </div>
           </div>
@@ -35,7 +35,7 @@
               </div>
               <div class="text-left">
                 <p class="text-[10px] font-bold text-hsa uppercase tracking-widest">Nom de famille</p>
-                <p class="font-bold text-BtW text-lg leading-none mt-1">{{ modelValue.nom || '-' }}</p>
+                <p class="font-bold text-BtW text-lg leading-none mt-1">{{ modelValue.last_name || '-' }}</p>
               </div>
             </div>
           </div>
@@ -62,7 +62,7 @@
               </div>
               <div class="text-left overflow-hidden">
                 <p class="text-[10px] font-bold text-hsa uppercase tracking-widest">Organisation</p>
-                <p class="font-bold text-BtW truncate">{{ modelValue.organisation || '-' }}</p>
+                <p class="font-bold text-BtW truncate">{{ modelValue.organization_name || '-' }}</p>
               </div>
             </div>
           </div>
@@ -85,10 +85,10 @@ import { IconUserCircle, IconUserSquareRounded, IconEdit, IconMail, IconBuilding
 
 defineProps<{
   modelValue: {
-    prenom: string
-    nom: string
+    first_name: string
+    last_name: string
     email: string
-    organisation: string
+    organization_name: string
   }
   emailVerified: boolean
 }>()

@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { useAuthStore } from './auth'
 
 interface UserProfile {
   id: string
@@ -225,6 +226,14 @@ export const useProfilStore = defineStore('profil', {
         if (response.success) {
           this.message = response.message
           await this.fetchProfile() // Refresh local data
+
+          // Sync with AuthStore
+          const authStore = useAuthStore()
+          if (authStore.user) {
+            if (data.first_name) authStore.user.first_name = data.first_name
+            if (data.last_name) authStore.user.last_name = data.last_name
+            if (data.organization_name) authStore.user.organization = data.organization_name
+          }
           return true
         }
         return false

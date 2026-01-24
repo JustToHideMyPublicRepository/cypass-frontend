@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
     if (body.organization_name) params.append('organization_name', body.organization_name)
 
     const response: any = await $fetch(`${config.public.cypassBaseAPI}/api/profile/update_profile.php`, {
-      method: 'PUT' as 'PUT',
+      method: 'PUT' as any,
       headers: {
         'Authorization': `Bearer ${token}`,
         'accept': 'application/json',

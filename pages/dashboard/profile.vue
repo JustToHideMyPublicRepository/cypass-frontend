@@ -66,18 +66,18 @@ const showAvatarModal = ref(false)
 const showInfoModal = ref(false)
 
 const form = reactive({
-  nom: '',
-  prenom: '',
+  first_name: '',
+  last_name: '',
   email: '',
-  organisation: ''
+  organization_name: ''
 })
 
 const syncFormWithProfile = () => {
   if (profilStore.profile) {
-    form.prenom = profilStore.profile.first_name
-    form.nom = profilStore.profile.last_name
+    form.first_name = profilStore.profile.first_name
+    form.last_name = profilStore.profile.last_name
     form.email = profilStore.profile.email
-    form.organisation = profilStore.profile.organization_name || '-'
+    form.organization_name = profilStore.profile.organization_name || '-'
   }
 }
 
@@ -117,9 +117,9 @@ const handleAvatarUpload = async (file: File) => {
 
 const handleInfoUpdate = async (data: any) => {
   const success = await profilStore.updatePersonalInfo({
-    first_name: data.prenom,
-    last_name: data.nom,
-    organization_name: data.organisation
+    first_name: data.first_name,
+    last_name: data.last_name,
+    organization_name: data.organization_name
   })
   if (success) {
     toastStore.showToast('success', 'Profil mis à jour', 'Vos informations ont été enregistrées.')
