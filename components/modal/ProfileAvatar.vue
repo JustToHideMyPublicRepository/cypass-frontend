@@ -94,17 +94,14 @@
       <div class="pt-6 flex justify-end gap-3">
         <UiBaseButton v-if="currentAvatar && !selectedFile" variant="danger" @click="$emit('delete')"
           :disabled="isLoading">
-          <template #icon>
-            <IconTrash class="w-4 h-4" />
-          </template>
-          Supprimer
+          <IconTrash class="w-4 h-4" />
         </UiBaseButton>
         <div class="flex-grow"></div>
         <UiBaseButton variant="ghost" @click="$emit('close')" :disabled="isLoading">
           Annuler
         </UiBaseButton>
         <UiBaseButton variant="primary" :loading="isLoading" :disabled="!selectedFile" @click="submit">
-          Valider le changement
+          Changer la photo
         </UiBaseButton>
       </div>
     </div>
