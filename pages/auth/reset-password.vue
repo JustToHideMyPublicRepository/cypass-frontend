@@ -116,7 +116,7 @@ const handleReset = async () => {
   })
 
   if (success) {
-    toastStore.showToast('success', 'Succès', 'Votre mot de passe a été réinitialisé.')
+    toastStore.showToast('success', 'Succès', authStore.message || 'Votre mot de passe a été réinitialisé.')
     setTimeout(() => navigateTo('/auth/login'), 2000)
   } else {
     toastStore.showToast('error', 'Erreur', authStore.error || 'Échec de la réinitialisation.')

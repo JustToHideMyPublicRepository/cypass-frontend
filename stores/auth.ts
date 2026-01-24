@@ -40,7 +40,7 @@ export const useAuthStore = defineStore('auth', {
         return `/${cleanUrl}`
       }
       const seed = state.user ? `${state.user.first_name} ${state.user.last_name}`.trim() : 'Utilisateur'
-      return `https://api.dicebear.com/9.x/icons/svg?seed=${seed}`
+      return `https://api.dicebear.com/9.x/initials/svg?seed=${seed}`
     }
   },
 

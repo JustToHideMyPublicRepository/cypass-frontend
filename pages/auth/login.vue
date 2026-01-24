@@ -90,7 +90,7 @@ const handleLogin = async () => {
   })
 
   if (success) {
-    toastStore.showToast('success', 'Bienvenue', 'Connexion réussie !')
+    toastStore.showToast('success', 'Bienvenue', authStore.message || 'Connexion réussie !')
     setTimeout(() => navigateTo('/dashboard'), 1000)
   } else {
     toastStore.showToast('error', 'Erreur de connexion', authStore.error || "Identifiants invalides.")
@@ -104,7 +104,7 @@ const handleForgot = async (forgotEmail: string) => {
   const success = await authStore.forgotPassword(forgotEmail)
 
   if (success) {
-    toastStore.showToast('success', 'Email envoyé', 'Vérifiez votre boîte de réception.')
+    toastStore.showToast('success', 'Email envoyé', authStore.message || 'Vérifiez votre boîte de réception.')
     showForgotModal.value = false
   } else {
     toastStore.showToast('error', 'Erreur', authStore.error || "Impossible d'envoyer l'email.")

@@ -91,7 +91,7 @@ onMounted(async () => {
 const handleAvatarDelete = async () => {
   const success = await profilStore.deleteAvatar()
   if (success) {
-    toastStore.showToast('success', 'Photo supprimée', 'Votre photo de profil a été retirée.')
+    toastStore.showToast('success', 'Photo supprimée', profilStore.message || 'Votre photo de profil a été retirée.')
     showAvatarModal.value = false
     if (authStore.user) {
       authStore.user.avatar_url = null
@@ -104,7 +104,7 @@ const handleAvatarDelete = async () => {
 const handleAvatarUpload = async (file: File) => {
   const success = await profilStore.uploadAvatar(file)
   if (success) {
-    toastStore.showToast('success', 'Photo de profil', 'Votre photo a été mise à jour avec succès.')
+    toastStore.showToast('success', 'Photo de profil', profilStore.message || 'Votre photo a été mise à jour avec succès.')
     showAvatarModal.value = false
     // Update local user state
     if (authStore.user && profilStore.profile) {
@@ -122,7 +122,7 @@ const handleInfoUpdate = async (data: any) => {
     organization_name: data.organization_name
   })
   if (success) {
-    toastStore.showToast('success', 'Profil mis à jour', 'Vos informations ont été enregistrées.')
+    toastStore.showToast('success', 'Profil mis à jour', profilStore.message || 'Vos informations ont été enregistrées.')
     showInfoModal.value = false
   } else {
     toastStore.showToast('error', 'Erreur de mise à jour', profilStore.error || 'Impossible d\'enregistrer les modifications.')

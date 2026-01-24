@@ -189,7 +189,7 @@ const handleLogout = () => {
 const confirmLogout = () => {
   showLogoutModal.value = false
   authStore.logout()
-  toastStore.showToast('success', 'Déconnexion réussie', 'Vous avez été déconnecté avec succès.')
+  toastStore.showToast('success', 'Déconnexion', authStore.message || 'Vous avez été déconnecté avec succès.')
 }
 
 // Close dropdown on click outside
