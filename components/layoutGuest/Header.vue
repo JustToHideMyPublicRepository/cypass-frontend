@@ -39,12 +39,19 @@
             <template v-else>
               <div class="relative" ref="dropdownRef">
                 <button @click="isDropdownOpen = !isDropdownOpen"
-                  class="flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-ash transition-colors">
+                  class="flex items-center gap-3 px-1.5 py-1.5 pr-4 rounded-full bg-primary/10 border border-ash hover:border-primary/10 over:bg-secondary/10 shadow-sm hover:shadow-md transition-all group">
                   <div
-                    class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center overflow-hidden border border-primary/20">
+                    class="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center overflow-hidden border-2 border-WtB shadow-inner group-hover:scale-105 transition-transform">
                     <img :src="authStore.avatarUrl" alt="Avatar" class="w-full h-full object-cover" />
                   </div>
-                  <span class="text-sm font-semibold hidden lg:block">{{ authStore.user.first_name }}</span>
+                  <div class="flex flex-col items-start leading-none gap-0.5">
+                    <span class="text-[10px] font-bold text-hsa uppercase tracking-wider">Compte</span>
+                    <span
+                      class="text-sm font-bold text-BtW group-hover:text-primary transition-colors max-w-[100px] truncate">
+                      {{ authStore.user.first_name }}
+                    </span>
+                  </div>
+                  <IconChevronDown class="w-4 h-4 text-hsa group-hover:text-primary transition-colors" />
                 </button>
 
                 <Transition enter-active-class="transition duration-100 ease-out"
