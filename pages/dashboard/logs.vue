@@ -32,7 +32,7 @@
           </div>
           <div>
             <p class="text-[10px] font-black uppercase tracking-widest text-hsa opacity-60">Total Actions</p>
-            <p class="text-xl font-bold text-BtW leading-tight">{{ profilStore.logStatistics.total_logs ?? 0 }}</p>
+            <p class="text-xl font-bold text-BtW leading-tight">{{ profilStore.logs?.length || 0 }}</p>
           </div>
         </div>
       </UiBaseCard>
@@ -100,7 +100,7 @@
           <p class="text-[10px] font-black text-primary uppercase tracking-widest">
             Affichage : {{ profilStore.logFilters.type === 'all' ? 'Toutes' : profilStore.logFilters.type }} |
             {{ formatDate(profilStore.logFilters.date) }} |
-            Lim : {{ profilStore.logFilters.limit }}
+            Lim : {{ itemsPerPage }}
           </p>
         </div>
       </div>
@@ -181,7 +181,7 @@ import { useProfilStore } from '~/stores/profil'
 import {
   IconActivity, IconCircleCheck, IconAlertCircle, IconRefresh, IconHistory,
   IconClock, IconPlus, IconDeviceDesktop, IconFilter, IconLogin, IconLogout,
-  IconUser, IconLock, IconMail, IconPhoto, IconMapPin
+  IconUser, IconLock, IconMail, IconPhoto,
 } from '@tabler/icons-vue'
 import { format, isSameDay } from 'date-fns'
 import { fr } from 'date-fns/locale'
@@ -197,14 +197,41 @@ const loading = ref(false)
 const filters = reactive({
   date: format(new Date(), 'yyyy-MM-dd'),
   type: 'all',
-  limit: 50
+  limit: 10
+})
+
+const currentPage = ref(1)
+const itemsPerPage = computed(() => filters.limit)
+
+// Fetch max logs for client-side pagination
+const fetchLogs = async () => {
+  loading.value = true
+  await profilStore.fetchLogs({
+    limit: 500, // Fetch max allowed by backend
+    type: filters.type,
+    date: filters.date || undefined
+  })
+  currentPage.value = 1 // Reset to first page on filter change
+  loading.value = false
+}
+
+const paginatedLogs = computed(() => {
+  if (!profilStore.logs) return []
+  const start = (currentPage.value - 1) * itemsPerPage.value
+  const end = start + itemsPerPage.value
+  return profilStore.logs.slice(start, end)
+})
+
+const totalPages = computed(() => {
+  if (!profilStore.logs) return 1
+  return Math.ceil(profilStore.logs.length / itemsPerPage.value)
 })
 
 const groupedLogs = computed(() => {
-  if (!profilStore.logs || !Array.isArray(profilStore.logs)) return {}
+  if (!paginatedLogs.value || !Array.isArray(paginatedLogs.value)) return {}
   const groups: Record<string, any[]> = {}
 
-  profilStore.logs.forEach(log => {
+  paginatedLogs.value.forEach(log => {
     try {
       if (!log.timestamp) return
 
@@ -234,16 +261,6 @@ const groupedLogs = computed(() => {
   return sortedGroups
 })
 
-const fetchLogs = async () => {
-  loading.value = true
-  await profilStore.fetchLogs({
-    limit: filters.limit,
-    type: filters.type,
-    date: filters.date || undefined
-  })
-  loading.value = false
-}
-
 const applyFilters = () => {
   fetchLogs()
 }
@@ -255,7 +272,16 @@ const refreshLogs = () => {
 const resetFilters = () => {
   filters.date = format(new Date(), 'yyyy-MM-dd')
   filters.type = 'all'
+  filters.limit = 10
   fetchLogs()
+}
+
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) currentPage.value++
+}
+
+const prevPage = () => {
+  if (currentPage.value > 1) currentPage.value--
 }
 
 onMounted(() => {
