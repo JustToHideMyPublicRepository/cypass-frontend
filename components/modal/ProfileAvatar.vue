@@ -33,8 +33,11 @@
             <div
               class="relative z-10 w-full h-full rounded-full p-1.5 bg-gradient-to-tr from-primary to-secondary shadow-2xl">
               <div class="w-full h-full rounded-full overflow-hidden bg-ash border-4 border-WtB shadow-inner">
-                <img :src="previewUrl || currentAvatar || '/images/default-avatar.png'" alt="Avatar Preview"
+                <img v-if="previewUrl || currentAvatar" :src="previewUrl || currentAvatar!" alt="Avatar Preview"
                   class="w-full h-full object-cover transition-all duration-700 group-hover:scale-110" />
+                <div v-else class="w-full h-full flex items-center justify-center bg-ash">
+                  <IconPhoto class="w-16 h-16 text-hsa opacity-50" />
+                </div>
 
                 <!-- Loading Overlay -->
                 <div v-if="isLoading"
@@ -44,7 +47,7 @@
 
                 <!-- Hover Overlay -->
                 <div
-                  class="absolute inset-0 bg-black/0 group-hover:bg-primary/20 transition-all duration-500 flex items-center justify-center">
+                  class="absolute inset-0 bg-black/0 group-hover:bg-primary/20 transition-all duration-500 flex items-center justify-center rounded-full">
                   <IconCamera
                     class="w-10 h-10 text-white opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0" />
                 </div>
