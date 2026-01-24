@@ -6,7 +6,7 @@
           <IconActivity class="w-6 h-6 text-primary" />
         </div>
         <div>
-          <p class="text-[10px] font-black uppercase tracking-widest text-hsa opacity-60">Total Actions</p>
+          <p class="text-[10px] font-black uppercase tracking-widest text-hsa opacity-60">Total aujourd'hui</p>
           <p class="text-xl font-bold text-BtW leading-tight">{{ stats?.total_logs ?? 0 }}</p>
         </div>
       </div>
@@ -18,7 +18,7 @@
           <IconList class="w-6 h-6 text-secondary" />
         </div>
         <div>
-          <p class="text-[10px] font-black uppercase tracking-widest text-hsa opacity-60">Logs Affichés</p>
+          <p class="text-[10px] font-black uppercase tracking-widest text-hsa opacity-60">Logs affichés</p>
           <p class="text-xl font-bold text-BtW leading-tight">{{ logsCount }}</p>
         </div>
       </div>
