@@ -81,7 +81,9 @@
       <!-- Links -->
       <div class="text-center text-sm">
         <span class="text-hsa">Vous avez déjà un compte ?</span>
-        <NuxtLink to="/auth/login" class="font-bold text-primary hover:underline ml-1">Se connecter</NuxtLink>
+        <NuxtLink to="/auth/login" class="font-bold text-primary hover:underline ml-1">
+          Se connecter
+        </NuxtLink>
       </div>
     </form>
   </div>
