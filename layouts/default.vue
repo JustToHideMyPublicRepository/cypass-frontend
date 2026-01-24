@@ -31,12 +31,14 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useAuthStore } from '~/stores/auth'
 import { useProfilStore } from '~/stores/profil'
+import { useToastStore } from '~/stores/toast'
 
 const isOpen = ref(false)
 const isCollapsed = ref(false)
 const showLogoutModal = ref(false)
 const authStore = useAuthStore()
 const profilStore = useProfilStore()
+const toastStore = useToastStore()
 
 onMounted(async () => {
   const storedState = localStorage.getItem('cps_sidebar')
@@ -62,5 +64,6 @@ const handleLogout = () => {
 const confirmLogout = () => {
   showLogoutModal.value = false
   authStore.logout()
+  toastStore.showToast('success', 'Déconnexion réussie', 'À bientôt sur CYPASS.')
 }
 </script>

@@ -157,6 +157,7 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import { IconMenu2, IconX, IconChevronDown } from '@tabler/icons-vue'
 import { useAuthStore } from '~/stores/auth'
 import { getLinkTooltip } from '~/data/shortcuts'
+import { useToastStore } from '~/stores/toast'
 
 const route = useRoute()
 
@@ -174,6 +175,7 @@ const NavHeader = [
 ]
 
 const authStore = useAuthStore()
+const toastStore = useToastStore()
 const isDropdownOpen = ref(false)
 const dropdownRef = ref<HTMLElement | null>(null)
 const showLogoutModal = ref(false)
@@ -187,6 +189,7 @@ const handleLogout = () => {
 const confirmLogout = () => {
   showLogoutModal.value = false
   authStore.logout()
+  toastStore.showToast('success', 'Déconnexion réussie', 'Vous avez été déconnecté avec succès.')
 }
 
 // Close dropdown on click outside
