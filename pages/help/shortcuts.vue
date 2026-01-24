@@ -108,7 +108,7 @@
     </div>
 
     <!-- Settings Modal -->
-    <ShortcutsSettingsModal :show="showSettings" @close="showSettings = false" />
+    <ModalShortcuts :show="showSettings" @close="showSettings = false" />
   </div>
 </template>
 
