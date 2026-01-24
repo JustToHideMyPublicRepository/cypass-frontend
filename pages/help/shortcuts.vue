@@ -1,13 +1,11 @@
 <template>
   <div class="max-w-4xl mx-auto px-4 py-8 relative">
     <HelpShortcutsHeader @open-settings="showSettings = true" />
-
     <HelpShortcutsExpertMode />
 
     <HelpShortcutsSearch ref="searchComp" v-model:searchQuery="searchQuery" v-model:sortBy="sortBy" />
 
     <HelpShortcutsGrid :categories="filteredShortcuts" />
-
     <HelpShortcutsFooter />
 
     <!-- Settings Modal -->
