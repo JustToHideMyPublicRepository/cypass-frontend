@@ -7,6 +7,13 @@
       </div>
       <h1 class="text-4xl font-black tracking-tight mb-4">Raccourcis Clavier</h1>
       <p class="text-lg text-hs">Naviguez plus rapidement sur CYPASS grâce à nos raccourcis.</p>
+
+      <!-- Settings Trigger -->
+      <button @click="showSettings = true"
+        class="mt-6 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-ash/50 border border-ashAct text-hsa hover:text-primary hover:border-primary/50 transition-all text-sm font-bold">
+        <IconSettings class="w-4 h-4" />
+        Configurer mes raccourcis
+      </button>
     </div>
 
     <!-- Power User Mode (Alt) -->
@@ -99,15 +106,19 @@
         <UiBaseButton to="/" variant="secondary" class="rounded-2xl">Retour à l'accueil</UiBaseButton>
       </div>
     </div>
+
+    <!-- Settings Modal -->
+    <ShortcutsSettingsModal :show="showSettings" @close="showSettings = false" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import {
-  IconKeyboard, IconSearch, IconSearchOff, IconBolt, IconInfoCircle
+  IconKeyboard, IconSearch, IconSearchOff, IconBolt, IconInfoCircle, IconSettings
 } from '@tabler/icons-vue'
 import { shortcutsData } from '@/data/shortcuts'
+import { useShortcutsStore } from '~/stores/shortcuts'
 
 definePageMeta({
   layout: 'guest'
@@ -117,9 +128,17 @@ useHead({
   title: 'Raccourcis Clavier'
 })
 
+const store = useShortcutsStore()
 const searchInput = ref<HTMLInputElement | null>(null)
 const searchQuery = ref('')
-const sortBy = ref<'name' | 'key'>('name')
+const sortBy = ref<'name' | 'key'>(store.sortBy)
+const showSettings = ref(false)
+
+// Persist sort preference to store
+watch(sortBy, (newVal) => {
+  store.sortBy = newVal
+  store.save()
+})
 
 useShortcuts({
   searchCallback: () => searchInput.value?.focus()

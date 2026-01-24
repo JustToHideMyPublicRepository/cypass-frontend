@@ -1,6 +1,7 @@
 import { onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { shortcutsData } from '@/data/shortcuts'
+import { useShortcutsStore } from '~/stores/shortcuts'
 
 interface ShortcutOptions {
   global?: boolean
@@ -9,8 +10,11 @@ interface ShortcutOptions {
 
 export const useShortcuts = (options: ShortcutOptions = {}) => {
   const router = useRouter()
+  const store = useShortcutsStore()
 
   const handleKeyDown = (event: KeyboardEvent) => {
+    if (!store.enabled && event.key !== 'Alt') return
+
     // Handle Alt Mode
     if (event.key === 'Alt') {
       event.preventDefault()

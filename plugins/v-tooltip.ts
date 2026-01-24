@@ -27,8 +27,10 @@ export default defineNuxtPlugin((nuxtApp) => {
             opacity: 1;
             transform: translateY(0) scale(1);
           }
+          
+          /* Visibility based on settings */
           .kbd-wrapper {
-             display: flex;
+             display: none; /* Hidden by default if not enabled */
              align-items: center;
              gap: 0.25rem;
              padding: 0.35rem 0.6rem;
@@ -39,6 +41,10 @@ export default defineNuxtPlugin((nuxtApp) => {
              box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
              color: var(--color-hsa);
           }
+          .shortcuts-hover-enabled .kbd-wrapper {
+             display: flex;
+          }
+
           .kbd-hint {
              display: inline-flex;
              align-items: center;
@@ -77,13 +83,15 @@ export default defineNuxtPlugin((nuxtApp) => {
             font-weight: 700;
             box-shadow: 0 2px 0 0 var(--color-hsa);
             min-width: 1.5rem;
-            display: flex;
+            display: none; /* Hidden by default */
             align-items: center;
             justify-content: center;
           }
-          .alt-mode-active .alt-shortcut-hint {
+          /* Only show if Alt mode is active AND setting is enabled */
+          .shortcuts-alt-enabled.alt-mode-active .alt-shortcut-hint {
             opacity: 1;
             transform: scale(1);
+            display: flex;
           }
         `
         document.head.appendChild(style)
