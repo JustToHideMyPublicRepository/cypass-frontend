@@ -120,32 +120,16 @@
 
         <!-- Step 2: Verification -->
         <div v-else-if="deleteStep === 2" class="space-y-4">
-          <p class="text-sm text-hsa">
-            Pour confirmer que c'est bien vous, veuillez saisir les statistiques actuelles de votre compte.
-            <span class="block text-xs opacity-60 mt-1">(Ces informations sont visibles sur votre tableau de
-              bord)</span>
-          </p>
-
-          <!-- Hints: To help user fill the form -->
-          <div v-if="profilStore.statistics" class="grid grid-cols-2 gap-4 mb-4">
-            <div class="bg-primary/5 p-3 rounded-xl border border-primary/10 flex items-center gap-3">
-              <div class="p-2 bg-primary/10 rounded-lg">
-                <IconFileCertificate class="w-5 h-5 text-primary" />
-              </div>
-              <div>
-                <p class="text-[10px] font-bold text-hsa uppercase">Documents</p>
-                <p class="text-lg font-bold text-BtW">{{ profilStore.statistics.total_documents }}</p>
-              </div>
-            </div>
-            <div class="bg-danger/5 p-3 rounded-xl border border-danger/10 flex items-center gap-3">
-              <div class="p-2 bg-danger/10 rounded-lg">
-                <IconAlertTriangle class="w-5 h-5 text-danger" />
-              </div>
-              <div>
-                <p class="text-[10px] font-bold text-hsa uppercase">Incidents</p>
-                <p class="text-lg font-bold text-BtW">{{ profilStore.statistics.total_incidents }}</p>
-              </div>
-            </div>
+          <div class="bg-primary/5 p-4 rounded-xl border border-primary/10">
+            <p class="text-sm text-BtW font-medium">Vérification de sécurité</p>
+            <p class="text-xs text-hsa mt-1">
+              Vous disposez actuellement de <strong class="text-primary">{{ profilStore.statistics?.total_documents || 0
+              }}</strong> documents et
+              <strong class="text-primary">{{ profilStore.statistics?.total_incidents || 0 }}</strong> incidents.
+            </p>
+            <p class="text-xs text-hsa mt-2">
+              Veuillez saisir ces nombres pour continuer.
+            </p>
           </div>
 
           <div class="grid grid-cols-2 gap-4">

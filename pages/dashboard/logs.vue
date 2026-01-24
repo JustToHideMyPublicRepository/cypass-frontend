@@ -188,14 +188,15 @@
           <p class="text-[10px] font-black uppercase tracking-widest text-hsa opacity-60">
             Page {{ currentPage }} sur {{ totalPages }}
           </p>
-          <div class="flex items-center gap-1">
+          <div class="flex items-center gap-2">
             <button @click="prevPage" :disabled="currentPage === 1"
-              class="p-1 rounded-lg border border-ash hover:bg-ash transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-hsa hover:text-BtW">
-              <IconChevronLeft class="w-4 h-4" />
+              class="flex items-center gap-1 px-3 py-1.5 rounded-lg border border-ash hover:bg-ash transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-xs font-medium text-hsa hover:text-BtW">
+              <IconChevronLeft class="w-3 h-3" /> Précédent
             </button>
             <button @click="nextPage" :disabled="currentPage === totalPages"
-              class="p-1 rounded-lg border border-ash hover:bg-ash transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-hsa hover:text-BtW">
-              <IconChevronRight class="w-4 h-4" />
+              class="flex items-center gap-1 px-3 py-1.5 rounded-lg border border-ash hover:bg-ash transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-xs font-medium text-hsa hover:text-BtW">
+              Suivant
+              <IconChevronRight class="w-3 h-3" />
             </button>
           </div>
         </div>
