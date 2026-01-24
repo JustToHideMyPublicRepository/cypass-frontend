@@ -22,6 +22,8 @@
       <!-- Dashboard Footer -->
       <LayoutDefaultFooter class="shrink-0" />
     </div>
+    <!-- Logout Modal -->
+    <ModalLogoutConfirmation :show="showLogoutModal" @close="showLogoutModal = false" @confirm="confirmLogout" />
   </div>
 </template>
 
@@ -32,6 +34,7 @@ import { useProfilStore } from '~/stores/profil'
 
 const isOpen = ref(false)
 const isCollapsed = ref(false)
+const showLogoutModal = ref(false)
 const authStore = useAuthStore()
 const profilStore = useProfilStore()
 
@@ -53,6 +56,11 @@ watch(isCollapsed, (newVal) => {
 const user = computed(() => authStore.user)
 
 const handleLogout = () => {
+  showLogoutModal.value = true
+}
+
+const confirmLogout = () => {
+  showLogoutModal.value = false
   authStore.logout()
 }
 </script>

@@ -169,9 +169,14 @@
 
           <div class="space-y-2">
             <div class="relative">
-              <input type="password" v-model="deletePassword" placeholder="Votre mot de passe actuel"
-                class="w-full px-4 py-3 rounded-xl bg-ash/30 border border-ash focus:ring-2 focus:ring-danger outline-none"
+              <input :type="showDeletePassword ? 'text' : 'password'" v-model="deletePassword"
+                placeholder="Votre mot de passe actuel"
+                class="w-full pl-4 pr-10 py-3 rounded-xl bg-ash/30 border border-ash focus:ring-2 focus:ring-danger outline-none"
                 @keyup.enter="confirmDelete" />
+              <button @click="showDeletePassword = !showDeletePassword"
+                class="absolute right-3 top-1/2 -translate-y-1/2 text-hsa hover:text-BtW focus:outline-none">
+                <component :is="showDeletePassword ? IconEyeOff : IconEye" class="w-5 h-5" />
+              </button>
             </div>
             <p v-if="deleteError" class="text-xs text-danger font-bold flex items-center gap-1">
               <IconX class="w-3 h-3" /> {{ deleteError }}
@@ -194,7 +199,7 @@
 
 <script setup lang="ts">
 import { ref, reactive, computed } from 'vue'
-import { IconSun, IconMoon, IconLanguage, IconClock, IconAlertTriangle, IconCheck, IconX, IconFileCertificate } from '@tabler/icons-vue'
+import { IconSun, IconMoon, IconLanguage, IconClock, IconAlertTriangle, IconCheck, IconX, IconFileCertificate, IconEye, IconEyeOff } from '@tabler/icons-vue'
 import { useProfilStore } from '~/stores/profil'
 
 definePageMeta({
@@ -217,6 +222,7 @@ const notificationSettings = reactive([
 const showDeleteModal = ref(false)
 const deleteStep = ref(1) // 1: Conditions, 2: Stats Verification, 3: Password
 const deletePassword = ref('')
+const showDeletePassword = ref(false)
 const verificationStats = reactive({
   documents: null as number | null,
   incidents: null as number | null
