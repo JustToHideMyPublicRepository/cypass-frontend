@@ -32,7 +32,7 @@ const loading = ref(false)
 const filters = reactive({
   date: format(new Date(), 'yyyy-MM-dd'),
   type: 'all',
-  limit: 10
+  limit: 50
 })
 
 const currentPage = ref(1)
@@ -100,7 +100,7 @@ const refreshLogs = () => {
 const resetFilters = () => {
   filters.date = format(new Date(), 'yyyy-MM-dd')
   filters.type = 'all'
-  filters.limit = 10
+  filters.limit = 50
   fetchLogs()
 }
 
