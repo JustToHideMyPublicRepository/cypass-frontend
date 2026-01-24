@@ -51,7 +51,8 @@
                       {{ authStore.user.first_name }}
                     </span>
                   </div>
-                  <IconChevronDown class="w-4 h-4 text-hsa group-hover:text-primary transition-colors" />
+                  <IconChevronDown class="w-4 h-4 text-hsa group-hover:text-primary transition-transform duration-300"
+                    :class="{ 'rotate-180': isDropdownOpen }" />
                 </button>
 
                 <Transition enter-active-class="transition duration-100 ease-out"
@@ -68,6 +69,14 @@
                       <NuxtLink to="/dashboard" @click="isDropdownOpen = false"
                         class="flex items-center gap-2 px-4 py-2 text-sm hover:bg-ash transition-colors">
                         Tableau de bord
+                      </NuxtLink>
+                      <NuxtLink to="/dashboard/logs" @click="isDropdownOpen = false"
+                        class="flex items-center gap-2 px-4 py-2 text-sm hover:bg-ash transition-colors">
+                        Journal d'activité
+                      </NuxtLink>
+                      <NuxtLink to="/dashboard/sessions" @click="isDropdownOpen = false"
+                        class="flex items-center gap-2 px-4 py-2 text-sm hover:bg-ash transition-colors">
+                        Sessions actives
                       </NuxtLink>
                       <NuxtLink to="/dashboard/profile" @click="isDropdownOpen = false"
                         class="flex items-center gap-2 px-4 py-2 text-sm hover:bg-ash transition-colors">
@@ -142,7 +151,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
-import { IconMenu2, IconX } from '@tabler/icons-vue'
+import { IconMenu2, IconX, IconChevronDown } from '@tabler/icons-vue'
 import { useAuthStore } from '~/stores/auth'
 import { getLinkTooltip } from '~/data/shortcuts'
 

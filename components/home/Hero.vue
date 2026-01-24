@@ -81,11 +81,11 @@
               <div class="grid grid-cols-2 gap-4 relative z-10">
                 <!-- Stats Card -->
                 <div
-                  class="col-span-2 bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden group/card">
+                  class="col-span-2 bg-gradient-to-r from-primary to-secondary rounded-2xl p-6 text-white shadow-lg relative overflow-hidden group/card">
                   <div class="absolute top-0 right-0 p-3 opacity-20">
                     <IconShieldLock class="w-24 h-24 rotate-12" />
                   </div>
-                  <h3 class="text-blue-100 text-sm font-medium mb-1">Niveau de Menace</h3>
+                  <h3 class="text-white text-sm font-medium mb-1">Niveau de menace</h3>
                   <div class="text-4xl font-bold mb-4 flex items-center gap-3">
                     Faible
                     <span

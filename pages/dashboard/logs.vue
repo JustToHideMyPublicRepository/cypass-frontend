@@ -27,7 +27,7 @@
     <div v-if="profilStore.logStatistics" class="grid grid-cols-1 md:grid-cols-4 gap-4">
       <UiBaseCard class="bg-primary/5 border-l-4 border-l-primary">
         <div class="flex items-center gap-4">
-          <div class="p-3 bg-WtB rounded-xl shadow-sm border border-ashAct">
+          <div class="p-3 bg-ash rounded-xl shadow-sm border border-ashAct">
             <IconActivity class="w-6 h-6 text-primary" />
           </div>
           <div>
@@ -37,9 +37,21 @@
         </div>
       </UiBaseCard>
 
+      <UiBaseCard class="bg-secondary/5 border-l-4 border-l-secondary">
+        <div class="flex items-center gap-4">
+          <div class="p-3 bg-ash rounded-xl shadow-sm border border-ashAct">
+            <IconList class="w-6 h-6 text-secondary" />
+          </div>
+          <div>
+            <p class="text-[10px] font-black uppercase tracking-widest text-hsa opacity-60">Logs Affichés</p>
+            <p class="text-xl font-bold text-BtW leading-tight">{{ profilStore.logs?.length || 0 }}</p>
+          </div>
+        </div>
+      </UiBaseCard>
+
       <UiBaseCard class="bg-success/5 border-l-4 border-l-success">
         <div class="flex items-center gap-4">
-          <div class="p-3 bg-WtB rounded-xl shadow-sm border border-ashAct">
+          <div class="p-3 bg-ash rounded-xl shadow-sm border border-ashAct">
             <IconCircleCheck class="w-6 h-6 text-success" />
           </div>
           <div>
@@ -54,7 +66,7 @@
 
       <UiBaseCard class="bg-danger/5 border-l-4 border-l-danger">
         <div class="flex items-center gap-4">
-          <div class="p-3 bg-WtB rounded-xl shadow-sm border border-ashAct">
+          <div class="p-3 bg-ash rounded-xl shadow-sm border border-ashAct">
             <IconAlertCircle class="w-6 h-6 text-danger" />
           </div>
           <div>
