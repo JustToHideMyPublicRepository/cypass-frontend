@@ -1,5 +1,5 @@
 <template>
-  <div class="relative min-h-[80vh] flex flex-col items-center justify-center px-4 py-20">
+  <div class="relative min-h-[80vh] flex flex-col items-center justify-center px-4">
     <!-- Background Decor -->
     <div class="absolute inset-0 -z-10 overflow-hidden">
       <div
