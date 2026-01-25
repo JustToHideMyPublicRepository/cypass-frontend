@@ -5,6 +5,7 @@ interface ShortcutSettings {
   showHover: boolean
   showAlt: boolean
   sortBy: 'name' | 'key'
+  isHelpOpen: boolean
 }
 
 export const useShortcutsStore = defineStore('shortcuts', {
@@ -12,7 +13,8 @@ export const useShortcutsStore = defineStore('shortcuts', {
     enabled: true,
     showHover: true,
     showAlt: true,
-    sortBy: 'name'
+    sortBy: 'name',
+    isHelpOpen: false
   }),
 
   actions: {
@@ -51,9 +53,13 @@ export const useShortcutsStore = defineStore('shortcuts', {
       else body.classList.remove('shortcuts-alt-enabled')
     },
 
-    toggleSetting(key: keyof Omit<ShortcutSettings, 'sortBy'>) {
+    toggleSetting(key: keyof Omit<ShortcutSettings, 'sortBy' | 'isHelpOpen'>) {
       this[key] = !this[key]
       this.save()
+    },
+
+    toggleHelp() {
+      this.isHelpOpen = !this.isHelpOpen
     }
   }
 })

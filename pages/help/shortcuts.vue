@@ -55,10 +55,11 @@ const structuredShortcuts = computed(() => {
   // Order groups
   const order = [
     'Navigation',
-    'Authentification',
-    'Dashboard',
-    'Modules',
     'Légal',
+    'Authentification',
+    'Modules',
+    'Dashboard',
+    'Actions',
     'Actions Contextuelles'
   ]
 

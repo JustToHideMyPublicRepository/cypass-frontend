@@ -104,6 +104,33 @@ export const useShortcuts = (options: ShortcutOptions = {}) => {
       if (event.key === '?') {
         router.push('/help/shortcuts')
       }
+      // Space to toggle help
+      if (event.key === ' ') {
+        event.preventDefault()
+        store.toggleHelp()
+      }
+    }
+
+    // Shift + Arrow shortcuts (scroll and history)
+    if (event.shiftKey && !event.ctrlKey && !event.metaKey && !event.altKey) {
+      switch (event.key) {
+        case 'ArrowDown':
+          event.preventDefault()
+          window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
+          break
+        case 'ArrowUp':
+          event.preventDefault()
+          window.scrollTo({ top: 0, behavior: 'smooth' })
+          break
+        case 'ArrowLeft':
+          event.preventDefault()
+          router.back()
+          break
+        case 'ArrowRight':
+          event.preventDefault()
+          router.forward()
+          break
+      }
     }
   }
 

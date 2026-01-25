@@ -1,9 +1,9 @@
 <template>
   <div class="fixed bottom-6 right-6 z-[60]">
     <!-- Trigger Button -->
-    <button @click.stop="isOpen = !isOpen"
+    <button @click.stop="store.toggleHelp()"
       class="rounded-full bg-primary text-ash shadow-2xl shadow-primary/40 flex items-center justify-center hover:scale-110 active:scale-95 transition-all duration-300 group p-2">
-      <IconHelp v-if="!isOpen" class="w-6 h-6" />
+      <IconHelp v-if="!store.isHelpOpen" class="w-6 h-6" />
       <IconX v-else class="w-6 h-6" />
 
       <!-- Pulse Effect -->
@@ -17,7 +17,7 @@
       leave-active-class="transition duration-200 ease-in"
       leave-from-class="transform scale-100 opacity-100 translate-y-0"
       leave-to-class="transform scale-95 opacity-0 translate-y-4">
-      <div v-if="isOpen"
+      <div v-if="store.isHelpOpen"
         class="absolute bottom-full right-0 mb-4 w-72 bg-WtB/90 backdrop-blur-xl border border-ash rounded-3xl shadow-2xl overflow-hidden p-2">
         <div class="p-4 border-b border-ash mb-2">
           <h3 class="font-black text-BtW tracking-tight">Centre d'Aide</h3>
@@ -25,7 +25,7 @@
         </div>
 
         <div class="space-y-1">
-          <NuxtLink v-for="link in helpLinks" :key="link.path" :to="link.path" @click="isOpen = false"
+          <NuxtLink v-for="link in helpLinks" :key="link.path" :to="link.path" @click="store.isHelpOpen = false"
             class="flex items-center gap-3 p-3 rounded-2xl hover:bg-ash transition-all group/item">
             <div
               class="w-10 h-10 rounded-xl bg-ash flex items-center justify-center text-hsa group-hover/item:bg-primary/10 group-hover/item:text-primary transition-colors">
@@ -49,9 +49,10 @@
 </template>
 
 <script setup lang="ts">
-import { IconHelp, IconX, IconLifebuoy, IconStatusChange, IconKeyboard, IconBook } from '@tabler/icons-vue'
+import { IconHelp, IconX, IconLifebuoy, IconStatusChange, IconKeyboard } from '@tabler/icons-vue'
+import { useShortcutsStore } from '~/stores/shortcuts'
 
-const isOpen = ref(false)
+const store = useShortcutsStore()
 
 const helpLinks = [
   {
@@ -78,7 +79,7 @@ const helpLinks = [
 const handleClickOutside = (e: MouseEvent) => {
   const el = e.target as HTMLElement
   if (!el.closest('.fixed.bottom-6.right-6')) {
-    isOpen.value = false
+    store.isHelpOpen = false
   }
 }
 

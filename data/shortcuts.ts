@@ -243,9 +243,45 @@ export const shortcutsData: Record<string, ShortcutEntry> = {
   },
   help: {
     keys: ['?'],
-    label: 'Aide',
+    label: 'Aide (Raccourcis clavier)',
     path: '/help/shortcuts',
     isGlobal: false
+  },
+
+  // ACTIONS
+  toggle_help: {
+    keys: ['espace'],
+    label: 'Ouvrir le centre d\'aide',
+    isGlobal: false,
+    group: 'Actions'
+  },
+  scroll_top: {
+    keys: ['↑'],
+    label: 'Aller en haut de la page',
+    isGlobal: false,
+    group: 'Actions',
+    modifier: 'Shift'
+  },
+  scroll_bottom: {
+    keys: ['↓'],
+    label: 'Aller en bas de la page',
+    isGlobal: false,
+    group: 'Actions',
+    modifier: 'Shift'
+  },
+  history_back: {
+    keys: ['←'],
+    label: 'Page précédente',
+    isGlobal: false,
+    group: 'Actions',
+    modifier: 'Shift'
+  },
+  history_forward: {
+    keys: ['→'],
+    label: 'Page suivante',
+    isGlobal: false,
+    group: 'Actions',
+    modifier: 'Shift'
   }
 }
 
