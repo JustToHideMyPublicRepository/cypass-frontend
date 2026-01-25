@@ -29,8 +29,7 @@ import { useAuthStore } from '~/stores/auth'
 import { useProfilStore } from '~/stores/profil'
 
 definePageMeta({
-  layout: 'default',
-  middleware: 'auth'
+  layout: 'default'
 })
 
 useHead({

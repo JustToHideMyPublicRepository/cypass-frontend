@@ -92,8 +92,7 @@
 import { IconShare, IconCheck, IconEye, IconBroadcast } from '@tabler/icons-vue'
 
 definePageMeta({
-  layout: 'default',
-  middleware: 'auth'
+  layout: 'default'
 })
 
 const cypassData = useCypassData()

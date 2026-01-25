@@ -48,8 +48,7 @@ import { useDocumentsStore } from '~/stores/documents'
 import { useToastStore } from '~/stores/toast'
 
 definePageMeta({
-  layout: 'default',
-  middleware: 'auth'
+  layout: 'default'
 })
 
 const store = useDocumentsStore()

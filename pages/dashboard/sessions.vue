@@ -24,8 +24,7 @@ import { useAuthStore } from '~/stores/auth'
 import { useToastStore } from '~/stores/toast'
 
 definePageMeta({
-  layout: 'default',
-  middleware: 'auth'
+  layout: 'default'
 })
 
 const authStore = useAuthStore()

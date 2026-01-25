@@ -23,8 +23,7 @@
 import { reactive } from 'vue'
 
 definePageMeta({
-  layout: 'default',
-  middleware: 'auth'
+  layout: 'default'
 })
 
 useHead({

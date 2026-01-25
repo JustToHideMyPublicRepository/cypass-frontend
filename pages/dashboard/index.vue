@@ -111,8 +111,7 @@
 import { IconFileCertificate, IconAlertTriangle, IconShieldLock } from '@tabler/icons-vue'
 
 definePageMeta({
-  layout: 'default',
-  middleware: 'auth' // Mock middleware, assuming we might implement it
+  layout: 'default'
 })
 
 const cypassData = useCypassData()

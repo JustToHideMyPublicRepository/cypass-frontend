@@ -18,8 +18,7 @@ import { useProfilStore } from '~/stores/profil'
 import { format } from 'date-fns'
 
 definePageMeta({
-  layout: 'default',
-  middleware: 'auth'
+  layout: 'default'
 })
 
 useHead({
