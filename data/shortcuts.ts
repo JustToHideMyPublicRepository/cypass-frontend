@@ -217,6 +217,22 @@ export const shortcutsData: Record<string, ShortcutEntry> = {
     group: 'Dashboard',
     modifier: 'Shift'
   },
+  docsentry: {
+    keys: ['d', 'd'],
+    label: 'Docsentry',
+    path: '/dashboard/docsentry',
+    isGlobal: true,
+    group: 'Dashboard',
+    modifier: 'Shift'
+  },
+  vigitech: {
+    keys: ['d', 'v'],
+    label: 'Vigitech',
+    path: '/dashboard/vigitech',
+    isGlobal: true,
+    group: 'Dashboard',
+    modifier: 'Shift'
+  },
 
   // SPECIFIC
   search: {
