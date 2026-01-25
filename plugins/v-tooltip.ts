@@ -118,8 +118,8 @@ export default defineNuxtPlugin((nuxtApp) => {
         // (Assuming Alt replaces Shift/Ctrl in this context)
         const contentKeys = keys.filter((k: string) => !['Shift', 'Ctrl', 'Alt', 'Cmd', 'Control'].includes(k))
 
-        // Join remaining keys (e.g. "L M" for L+M sequence)
-        const displayText = contentKeys.join(' ')
+        // Join remaining keys (e.g. "L + M" for L+M sequence)
+        const displayText = contentKeys.join(' + ')
 
         if (displayText) {
           const hint = document.createElement('div')
