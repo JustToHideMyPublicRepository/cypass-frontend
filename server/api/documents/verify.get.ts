@@ -6,12 +6,16 @@ export default defineEventHandler(async (event) => {
   const query = getQuery(event)
 
   try {
+    const headers: Record<string, string> = {
+      'accept': 'application/json'
+    }
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`
+    }
+
     const response: any = await $fetch(`${config.public.cypassBaseAPI}/api/documents/verify.php`, {
       method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'accept': 'application/json'
-      },
+      headers,
       query: {
         h: query.h
       }

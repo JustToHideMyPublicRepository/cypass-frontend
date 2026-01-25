@@ -36,12 +36,13 @@
           </p>
 
           <div class="flex flex-col sm:flex-row gap-5 justify-center lg:justify-start pt-4">
-            <UiBaseButton to="/auth/login" class="w-full sm:w-auto text-lg px-8 py-4 shadow-BtW/40">
-              Accéder au Portail
+            <UiBaseButton :to="authStore.user ? '/dashboard' : '/auth/login'"
+              class="w-full sm:w-auto text-lg px-8 py-4 shadow-BtW/40">
+              {{ authStore.user ? 'Tableau de bord' : 'Accéder au Portail' }}
               <IconArrowRight class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
             </UiBaseButton>
-            <UiBaseButton to="#features" variant="secondary" class="w-full sm:w-auto text-lg px-8 py-4">
-              Découvrir les services
+            <UiBaseButton to="/verify" variant="secondary" class="w-full sm:w-auto text-lg px-8 py-4">
+              Vérifier un document
             </UiBaseButton>
           </div>
 
@@ -158,4 +159,7 @@
 
 <script setup lang="ts">
 import { IconShieldCheck, IconServer, IconArrowRight, IconShieldLock, IconAlertTriangle, IconCheck, IconFileAnalytics } from '@tabler/icons-vue'
+import { useAuthStore } from '~/stores/auth'
+
+const authStore = useAuthStore()
 </script>
