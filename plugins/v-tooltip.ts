@@ -95,6 +95,28 @@ export default defineNuxtPlugin((nuxtApp) => {
             transform: scale(1);
             display: flex;
           }
+          /* Filter dimmed hints */
+          .alt-shortcut-hint.dimmed {
+            opacity: 0.1 !important;
+            transform: scale(0.8);
+            filter: grayscale(1);
+          }
+          
+          /* Active Keys Highlight */
+          .alt-shortcut-hint .key {
+            transition: color 0.1s ease;
+          }
+          .alt-shortcut-hint .key.active {
+            color: var(--color-primary);
+            text-shadow: 0 0 5px color-mix(in srgb, var(--color-primary) 40%, transparent);
+            transform: scale(1.2);
+            display: inline-block;
+          }
+          .alt-shortcut-hint .sep {
+            opacity: 0.5;
+            margin: 0 1px;
+            font-weight: 400;
+          }
         `
         document.head.appendChild(style)
       }
@@ -118,13 +140,19 @@ export default defineNuxtPlugin((nuxtApp) => {
         // (Assuming Alt replaces Shift/Ctrl in this context)
         const contentKeys = keys.filter((k: string) => !['Shift', 'Ctrl', 'Alt', 'Cmd', 'Control'].includes(k))
 
-        // Join remaining keys (e.g. "L + M" for L+M sequence)
-        const displayText = contentKeys.join(' + ')
-
-        if (displayText) {
+        if (contentKeys.length > 0) {
           const hint = document.createElement('div')
           hint.className = 'alt-shortcut-hint'
-          hint.textContent = displayText
+
+          // Store the full sequence for filtering logic (e.g. "l,m")
+          hint.dataset.seq = contentKeys.map((k: string) => k.toLowerCase()).join(',')
+
+          // Generate structured HTML: <span class="key" data-key="l">L</span> ...
+          const html = contentKeys
+            .map((k: string) => `<span class="key" data-key="${k.toLowerCase()}">${k}</span>`)
+            .join('<span class="sep">+</span>')
+
+          hint.innerHTML = html
 
           // Ensure parent is positioned
           const style = window.getComputedStyle(el)

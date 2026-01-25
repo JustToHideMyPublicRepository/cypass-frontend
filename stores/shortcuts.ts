@@ -7,6 +7,8 @@ interface ShortcutSettings {
   sortBy: 'name' | 'key'
   groupSort: 'az' | 'za' | 'more' | 'less'
   isHelpOpen: boolean
+  altMode: boolean
+  buffer: string[]
 }
 
 export const useShortcutsStore = defineStore('shortcuts', {
@@ -16,7 +18,9 @@ export const useShortcutsStore = defineStore('shortcuts', {
     showAlt: true,
     sortBy: 'name',
     groupSort: 'az',
-    isHelpOpen: false
+    isHelpOpen: false,
+    altMode: false,
+    buffer: []
   }),
 
   actions: {
@@ -56,7 +60,7 @@ export const useShortcutsStore = defineStore('shortcuts', {
       else body.classList.remove('shortcuts-alt-enabled')
     },
 
-    toggleSetting(key: keyof Omit<ShortcutSettings, 'sortBy' | 'groupSort' | 'isHelpOpen'>) {
+    toggleSetting(key: keyof Omit<ShortcutSettings, 'sortBy' | 'groupSort' | 'isHelpOpen' | 'altMode' | 'buffer'>) {
       this[key] = !this[key]
       this.save()
     },
@@ -67,6 +71,24 @@ export const useShortcutsStore = defineStore('shortcuts', {
 
     openHelp() {
       this.isHelpOpen = true
+    },
+
+    toggleAltMode() {
+      this.altMode = !this.altMode
+      if (!this.altMode) this.buffer = []
+    },
+
+    disableAltMode() {
+      this.altMode = false
+      this.buffer = []
+    },
+
+    addToBuffer(key: string) {
+      this.buffer.push(key)
+    },
+
+    clearBuffer() {
+      this.buffer = []
     }
   }
 })
