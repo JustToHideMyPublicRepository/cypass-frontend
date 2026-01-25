@@ -208,12 +208,14 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    async logout() {
+    async logout(shouldRedirect: boolean = true) {
       try {
         await $fetch('/api/auth/logout', { method: 'POST' })
       } finally {
         this.user = null
-        navigateTo('/auth/login')
+        if (shouldRedirect) {
+          navigateTo('/auth/login')
+        }
       }
     },
 

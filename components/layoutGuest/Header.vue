@@ -203,7 +203,7 @@ const handleLogout = () => {
 
 const confirmLogout = () => {
   showLogoutModal.value = false
-  authStore.logout()
+  authStore.logout(false)
   toastStore.showToast('success', 'Déconnexion', authStore.message || 'Vous avez été déconnecté avec succès.')
 }
 
