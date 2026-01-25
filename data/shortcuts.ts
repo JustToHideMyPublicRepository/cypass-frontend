@@ -42,7 +42,7 @@ export const shortcutsData: Record<string, ShortcutEntry> = {
     modifier: 'Shift'
   },
   developers: {
-    keys: ['d'],
+    keys: ['x'],
     label: 'Developpeur',
     path: '/developers',
     isGlobal: true,

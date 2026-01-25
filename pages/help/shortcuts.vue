@@ -47,7 +47,7 @@ const structuredShortcuts = computed(() => {
   const groups: Record<string, any[]> = {}
 
   Object.values(shortcutsData).forEach(s => {
-    const groupName = s.group || (s.isGlobal ? 'Autres' : 'Actions Contextuelles')
+    const groupName = s.group || (s.isGlobal ? 'Général' : 'Actions Contextuelles')
     if (!groups[groupName]) groups[groupName] = []
     groups[groupName].push(s)
   })

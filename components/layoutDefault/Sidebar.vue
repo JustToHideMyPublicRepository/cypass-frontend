@@ -40,8 +40,8 @@
         <div v-show="isCollapsed" class="border-t border-ash mx-2"></div>
         <nav class="space-y-1.5">
           <NuxtLink v-for="service in activeModules" :key="service.id" :to="`/dashboard/${service.id}`" class="nav-link"
-            :class="{ 'justify-center px-0': isCollapsed }" active-class="active"
-            :title="isCollapsed ? service.title : ''">
+            v-tooltip="getLinkTooltip('/dashboard/' + service.id)" :class="{ 'justify-center px-0': isCollapsed }"
+            active-class="active" :title="isCollapsed ? service.title : ''">
             <component :is="service.icon" class="w-5 h-5 icon" />
             <span v-show="!isCollapsed" class="truncate">{{ service.title }}</span>
           </NuxtLink>
