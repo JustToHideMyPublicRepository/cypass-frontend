@@ -1,5 +1,5 @@
 <template>
-  <section id="features" class="py-32 relative">
+  <section id="features" class="py-24 relative">
     <!-- Section Decor -->
     <div class="absolute top-1/4 left-0 w-full h-[500px] bg-gradient-to-r from-primary/5 to-transparent skew-y-6 -z-10">
     </div>

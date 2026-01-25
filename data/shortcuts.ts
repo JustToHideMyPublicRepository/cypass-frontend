@@ -1,100 +1,232 @@
 export interface ShortcutEntry {
-  key: string
+  keys: string[]
   label: string
   path?: string
   isGlobal: boolean
+  group?: string
   modifier?: 'Shift' | 'Ctrl' | 'Cmd'
 }
 
 export const shortcutsData: Record<string, ShortcutEntry> = {
-  // GLOBAL
+  // NAVIGATION
   home: {
-    key: 'h',
+    keys: ['/'],
     label: 'Accueil',
     path: '/',
     isGlobal: true,
-    modifier: 'Shift'
-  },
-  login: {
-    key: 'l',
-    label: 'Connexion',
-    path: '/auth/login',
-    isGlobal: true,
-    modifier: 'Shift'
-  },
-  profile: {
-    key: 'p',
-    label: 'Profil',
-    path: '/dashboard/profile',
-    isGlobal: true,
-    modifier: 'Shift'
-  },
-  mentions: {
-    key: 'm',
-    label: 'Mentions Légales',
-    path: '/legal/mentions',
-    isGlobal: true,
-    modifier: 'Shift'
-  },
-  support: {
-    key: 's',
-    label: 'Support',
-    path: '/support',
-    isGlobal: true,
+    group: 'Navigation',
     modifier: 'Shift'
   },
   about: {
-    key: 'a',
+    keys: ['b'],
     label: 'À propos',
     path: '/about',
     isGlobal: true,
+    group: 'Navigation',
+    modifier: 'Shift'
+  },
+  coming_soon: {
+    keys: ['s'],
+    label: 'Bientôt disponible',
+    path: '/coming-soon',
+    isGlobal: true,
+    group: 'Navigation',
     modifier: 'Shift'
   },
   contact: {
-    key: 'c',
+    keys: ['c'],
     label: 'Contact',
     path: '/contact',
     isGlobal: true,
-    modifier: 'Shift'
-  },
-  faq: {
-    key: 'f',
-    label: 'FAQ',
-    path: '/faq',
-    isGlobal: true,
+    group: 'Navigation',
     modifier: 'Shift'
   },
   developers: {
-    key: 'd',
-    label: 'Développeurs',
+    keys: ['d'],
+    label: 'Developpeur',
     path: '/developers',
     isGlobal: true,
+    group: 'Navigation',
+    modifier: 'Shift'
+  },
+  faq: {
+    keys: ['f'],
+    label: 'FAQ',
+    path: '/faq',
+    isGlobal: true,
+    group: 'Navigation',
+    modifier: 'Shift'
+  },
+  partners: {
+    keys: ['p'],
+    label: 'Partenaires',
+    path: '/partners',
+    isGlobal: true,
+    group: 'Navigation',
     modifier: 'Shift'
   },
   status: {
-    key: 't',
-    label: 'Status',
+    keys: ['t'],
+    label: 'État des services',
     path: '/status',
     isGlobal: true,
+    group: 'Navigation',
     modifier: 'Shift'
   },
-  modules: {
-    key: 'v',
-    label: 'Modules',
-    path: '/modules',
+  support: {
+    keys: ['h'],
+    label: 'Support',
+    path: '/support',
     isGlobal: true,
+    group: 'Navigation',
+    modifier: 'Shift'
+  },
+  verify: {
+    keys: ['v'],
+    label: 'Vérifier un document',
+    path: '/verify',
+    isGlobal: true,
+    group: 'Navigation',
     modifier: 'Shift'
   },
 
-  // SPECIFIQUE
+  // LEGAL
+  mentions: {
+    keys: ['l', 'm'],
+    label: 'Mentions Légales',
+    path: '/legal/mentions',
+    isGlobal: true,
+    group: 'Légal',
+    modifier: 'Shift'
+  },
+  privacy: {
+    keys: ['l', 'p'],
+    label: 'Politique de Confidentialité',
+    path: '/legal/privacy',
+    isGlobal: true,
+    group: 'Légal',
+    modifier: 'Shift'
+  },
+  terms: {
+    keys: ['l', 't'],
+    label: 'Conditions d\'Utilisation',
+    path: '/legal/terms',
+    isGlobal: true,
+    group: 'Légal',
+    modifier: 'Shift'
+  },
+
+  // AUTHENTIFICATION
+  login: {
+    keys: ['a', 'l'],
+    label: 'Connexion',
+    path: '/auth/login',
+    isGlobal: true,
+    group: 'Authentification',
+    modifier: 'Shift'
+  },
+  register: {
+    keys: ['a', 'r'],
+    label: 'Inscription',
+    path: '/auth/register',
+    isGlobal: true,
+    group: 'Authentification',
+    modifier: 'Shift'
+  },
+  verify_email: {
+    keys: ['a', 'm'],
+    label: 'Vérifier Email',
+    path: '/auth/verify_email',
+    isGlobal: true,
+    group: 'Authentification',
+    modifier: 'Shift'
+  },
+  reset_password: {
+    keys: ['a', 'p'],
+    label: 'Réinitialiser Mot de passe',
+    path: '/auth/reset-password',
+    isGlobal: true,
+    group: 'Authentification',
+    modifier: 'Shift'
+  },
+
+  // MODULES
+  modules_index: {
+    keys: ['m', 'i'],
+    label: 'Tous les modules',
+    path: '/modules',
+    isGlobal: true,
+    group: 'Modules',
+    modifier: 'Shift'
+  },
+  module_docsentry: {
+    keys: ['m', '1'],
+    label: 'Module Docsentry',
+    path: '/modules/docsentry',
+    isGlobal: true,
+    group: 'Modules',
+    modifier: 'Shift'
+  },
+  module_vigitech: {
+    keys: ['m', '2'],
+    label: 'Module Vigitech',
+    path: '/modules/vigitech',
+    isGlobal: true,
+    group: 'Modules',
+    modifier: 'Shift'
+  },
+
+  // DASHBOARD
+  dashboard_home: {
+    keys: ['d', 'i'],
+    label: 'Tableau de bord',
+    path: '/dashboard',
+    isGlobal: true,
+    group: 'Dashboard',
+    modifier: 'Shift'
+  },
+  profile: {
+    keys: ['d', 'p'],
+    label: 'Mon Profil',
+    path: '/dashboard/profile',
+    isGlobal: true,
+    group: 'Dashboard',
+    modifier: 'Shift'
+  },
+  logs: {
+    keys: ['d', 'l'],
+    label: 'Journal d\'activité',
+    path: '/dashboard/logs',
+    isGlobal: true,
+    group: 'Dashboard',
+    modifier: 'Shift'
+  },
+  sessions: {
+    keys: ['d', 's'],
+    label: 'Sessions actives',
+    path: '/dashboard/sessions',
+    isGlobal: true,
+    group: 'Dashboard',
+    modifier: 'Shift'
+  },
+  settings: {
+    keys: ['d', 't'],
+    label: 'Paramètres',
+    path: '/dashboard/settings',
+    isGlobal: true,
+    group: 'Dashboard',
+    modifier: 'Shift'
+  },
+
+  // SPECIFIC
   search: {
-    key: 'k',
+    keys: ['k'],
     label: 'Rechercher',
     isGlobal: false,
     modifier: 'Ctrl'
   },
   help: {
-    key: '?',
+    keys: ['?'],
     label: 'Aide',
     path: '/help/shortcuts',
     isGlobal: false
@@ -104,18 +236,22 @@ export const shortcutsData: Record<string, ShortcutEntry> = {
 export const getShortcutStr = (name: string): string => {
   const s = shortcutsData[name]
   if (!s) return ''
-  if (s.modifier) return `${s.modifier} + ${s.key.toUpperCase()}`
-  return s.key
+  const keys = s.keys.map(k => k.toUpperCase()).join(' + ')
+  if (s.modifier) return `${s.modifier} + ${keys}`
+  return keys
 }
 
 export const getLinkTooltip = (path: string) => {
   const entry = Object.values(shortcutsData).find(s => s.path === path)
   if (!entry) return null
+
   const mod = entry.modifier ? `<span class="kbd-hint">${entry.modifier}</span> + ` : ''
-  return `<span class="kbd-wrapper">${mod}<span class="kbd-hint">${entry.key.toUpperCase()}</span></span>`
+  const keys = entry.keys.map(k => `<span class="kbd-hint">${k === 'enter' ? '↵' : k.toUpperCase()}</span>`).join(' + ')
+
+  return `<span class="kbd-wrapper">${mod}${keys}</span>`
 }
 
 export const getShortcutKey = (path: string): string | null => {
   const entry = Object.values(shortcutsData).find(s => s.path === path)
-  return entry ? entry.key.toUpperCase() : null
+  return entry ? entry.keys[entry.keys.length - 1].toUpperCase() : null
 }

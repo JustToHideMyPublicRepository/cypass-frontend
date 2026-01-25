@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-4xl mx-auto px-4 relative">
+  <div class="max-w-5xl mx-auto px-4 relative">
     <HelpShortcutsHeader @open-settings="showSettings = true" />
     <HelpShortcutsExpertMode />
 
@@ -44,13 +44,37 @@ useShortcuts({
 
 // Process shortcuts data
 const structuredShortcuts = computed(() => {
-  const global = Object.values(shortcutsData).filter(s => s.isGlobal)
-  const contextual = Object.values(shortcutsData).filter(s => !s.isGlobal)
+  const groups: Record<string, any[]> = {}
 
-  return [
-    { title: 'Navigation Globale', items: global },
-    { title: 'Raccourcis Contextuels', items: contextual }
+  Object.values(shortcutsData).forEach(s => {
+    const groupName = s.group || (s.isGlobal ? 'Autres' : 'Actions Contextuelles')
+    if (!groups[groupName]) groups[groupName] = []
+    groups[groupName].push(s)
+  })
+
+  // Order groups
+  const order = [
+    'Navigation',
+    'Authentification',
+    'Dashboard',
+    'Modules',
+    'Légal',
+    'Actions Contextuelles'
   ]
+
+  return Object.keys(groups)
+    .sort((a, b) => {
+      const idxA = order.indexOf(a)
+      const idxB = order.indexOf(b)
+      if (idxA !== -1 && idxB !== -1) return idxA - idxB
+      if (idxA !== -1) return -1
+      if (idxB !== -1) return 1
+      return a.localeCompare(b)
+    })
+    .map(name => ({
+      title: name,
+      items: groups[name]
+    }))
 })
 
 const filteredShortcuts = computed(() => {
@@ -63,7 +87,7 @@ const filteredShortcuts = computed(() => {
     if (query) {
       items = items.filter(s =>
         s.label.toLowerCase().includes(query) ||
-        s.key.toLowerCase().includes(query)
+        s.keys.some((k: string) => k.toLowerCase().includes(query))
       )
     }
 
@@ -72,7 +96,9 @@ const filteredShortcuts = computed(() => {
       if (sortBy.value === 'name') {
         return a.label.localeCompare(b.label)
       } else {
-        return a.key.localeCompare(b.key)
+        const keyA = a.keys.join('')
+        const keyB = b.keys.join('')
+        return keyA.localeCompare(keyB)
       }
     })
 

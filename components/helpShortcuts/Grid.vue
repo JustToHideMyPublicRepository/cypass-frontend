@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="categories.length > 0" class="grid md:grid-cols-2 gap-8">
+    <div v-if="categories.length > 0" class="grid md:grid-cols-3 gap-8">
       <div v-for="category in categories" :key="category.title" class="animate-fade-up">
         <h2 class="flex items-center gap-3 text-lg font-bold mb-6 text-BtW">
           <span class="w-2 h-6 bg-primary rounded-full"></span>
