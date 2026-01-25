@@ -1,46 +1,5 @@
 import { defineStore } from 'pinia'
-
-interface CryptographicProof {
-  algorithm: string
-  digital_signature: string
-  key_fingerprint: string
-}
-
-interface Document {
-  id: string
-  name: string
-  hash: string
-  status: string
-  date: string
-}
-
-interface UploadResult {
-  document_id: string
-  doc_hash: string
-  cryptographic_proof: CryptographicProof
-}
-
-interface VerificationResult {
-  verified: boolean
-  verification_time: string
-  document: {
-    id: string
-    filename: string
-    hash: string
-    file_type: string
-    signer: string
-    created_at: string
-  }
-  signature_info: {
-    algorithm: string
-    key_fingerprint: string
-    signed_at: string
-    current_key_fingerprint: string
-    key_match: boolean
-  }
-  message: string
-  authenticity: string
-}
+import { type CryptographicProof, type Document, type UploadResult, type VerificationResult, type PublicKeyInfo } from '../types/documents'
 
 export const useDocumentsStore = defineStore('documents', {
   state: () => ({
@@ -49,6 +8,7 @@ export const useDocumentsStore = defineStore('documents', {
     error: null as string | null,
     uploadResult: null as UploadResult | null,
     verificationResult: null as VerificationResult | null,
+    publicKeyInfo: null as PublicKeyInfo | null,
   }),
 
   actions: {
@@ -175,6 +135,17 @@ export const useDocumentsStore = defineStore('documents', {
         console.error('Failed to fetch documents', err)
       } finally {
         this.loading = false
+      }
+    },
+
+    async fetchPublicKey() {
+      try {
+        const response = await $fetch<PublicKeyInfo>('/api/documents/public-key')
+        if (response.success) {
+          this.publicKeyInfo = response
+        }
+      } catch (err) {
+        console.error('Failed to fetch public key', err)
       }
     }
   }

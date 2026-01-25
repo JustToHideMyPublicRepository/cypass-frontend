@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia'
-
 export type ToastType = 'success' | 'error' | 'warning' | 'info'
 
 export const useToastStore = defineStore('toast', {

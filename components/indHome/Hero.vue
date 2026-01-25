@@ -142,8 +142,8 @@
             class="absolute bottom-10 -left-10 glass-panel p-4 rounded-xl flex items-center gap-3 z-30 animate-float-delayed">
             <div class="relative">
               <span class="absolute top-0 right-0 w-3 h-3 bg-success border-2 border-WtB rounded-full z-10"></span>
-              <div class="w-12 h-12 bg-ash rounded-lg flex items-center justify-center overflow-hidden">
-                <img src="https://ui-avatars.com/api/?name=Admin+User&background=0D8ABC&color=fff" alt="User" />
+              <div class="w-12 h-12 bg-ashAct rounded-full flex items-center justify-center overflow-hidden">
+                <IconUser class="w-7 h-7 text-primary" />
               </div>
             </div>
             <div>
@@ -158,7 +158,7 @@
 </template>
 
 <script setup lang="ts">
-import { IconShieldCheck, IconServer, IconArrowRight, IconShieldLock, IconAlertTriangle, IconCheck, IconFileAnalytics } from '@tabler/icons-vue'
+import { IconShieldCheck, IconServer, IconArrowRight, IconShieldLock, IconAlertTriangle, IconCheck, IconFileAnalytics, IconUser } from '@tabler/icons-vue'
 import { useAuthStore } from '~/stores/auth'
 
 const authStore = useAuthStore()

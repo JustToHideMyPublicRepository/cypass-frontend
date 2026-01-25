@@ -1,57 +1,9 @@
 import { defineStore } from 'pinia'
 import { useAuthStore } from './auth'
-
-interface UserProfile {
-  id: string
-  email: string
-  first_name: string
-  last_name: string
-  organization_name: string | null
-  avatar_url: string | null
-  role: string
-  status: 'pending' | 'active' | 'pending_delete' | 'deleted' | 'suspended'
-  email_verified: boolean
-  created_at: string
-}
-
-interface Statistics {
-  total_documents: number
-  total_incidents: number
-}
-
-interface LogEntry {
-  id: string
-  action: string
-  action_label: string
-  details: any
-  ip_address: string
-  user_agent: string
-  status: string
-  timestamp: string
-  log_type: string
-}
-
-interface LogStatistics {
-  total_logs: number
-  by_type: Record<string, number>
-  by_action: Record<string, number>
-  date_range: string
-}
-
-interface ProfilState {
-  profile: UserProfile | null
-  statistics: Statistics | null
-  logs: LogEntry[]
-  logStatistics: LogStatistics | null
-  logUser: { id: string; email: string; role: string } | null
-  logFilters: { date: string; type: string; limit: number } | null
-  loading: boolean
-  error: string | null
-  message: string | null
-}
+import { type UserProfile, type Statistics, type LogEntry, type LogStatistics, type ProfilState } from '../types/profil'
 
 export const useProfilStore = defineStore('profil', {
-  state: (): ProfilState => ({
+  state: () => ({
     profile: null,
     statistics: null,
     logs: [],
@@ -61,7 +13,7 @@ export const useProfilStore = defineStore('profil', {
     loading: false,
     error: null,
     message: null
-  }),
+  } as ProfilState),
 
   actions: {
     async fetchProfile() {

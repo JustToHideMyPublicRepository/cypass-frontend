@@ -1,41 +1,23 @@
 import { defineStore } from 'pinia'
-
-interface User {
-  id: string
-  email: string
-  first_name: string
-  last_name: string
-  organization: string | null
-  avatar_url: string | null
-  role: string
-  created_at: string
-}
-
-interface AuthState {
-  user: User | null
-  loading: boolean
-  error: string | null
-  message: string | null
-}
+import { type User, type AuthState } from '../types/auth'
 
 export const useAuthStore = defineStore('auth', {
-  state: (): AuthState => ({
+  state: () => ({
     user: null,
     loading: false,
     error: null,
     message: null
-  }),
+  } as AuthState),
 
   getters: {
     fullName: (state) => {
-      if (!state.user) return 'Utilisateur'
-      return `${state.user.first_name} ${state.user.last_name}`.trim() || 'Utilisateur'
+      if (!state.user) return 'Vous'
+      return `${state.user.first_name} ${state.user.last_name}`.trim() || 'Vous'
     },
     avatarUrl: (state) => {
       if (state.user?.avatar_url && state.user.avatar_url.trim() !== '') {
         const url = state.user.avatar_url
         if (url.startsWith('http')) return url
-        // Return relative path which will be handled by the Nuxt server route
         const cleanUrl = url.replace(/^\/+/, '')
         return `/${cleanUrl}`
       }

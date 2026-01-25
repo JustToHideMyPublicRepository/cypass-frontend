@@ -36,6 +36,7 @@ export const useShortcuts = (options: ShortcutOptions = {}) => {
       return
     }
 
+    if (!event.key) return
     const key = event.key.toLowerCase()
 
     // Contextual Search Shortcut (Ctrl+K or Cmd+K)
