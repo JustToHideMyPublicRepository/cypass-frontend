@@ -65,9 +65,8 @@ export default defineNuxtPlugin((nuxtApp) => {
           /* Alt Mode Hints */
           .alt-shortcut-hint {
             position: absolute;
-            bottom: -8px;
-            right: -8px;
-            padding-right: 10px;
+            bottom: -1px;
+            right: 5px;
             z-index: 50;
             pointer-events: none;
             opacity: 0;
@@ -75,18 +74,20 @@ export default defineNuxtPlugin((nuxtApp) => {
             transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
             
             /* KBD Style from shortcuts.vue */
-            padding: 0.25rem 0.5rem;
+            padding: 0.15rem 0.3rem;
             background-color: var(--color-BtW);
             color: var(--color-WtB);
             border: 1px solid var(--color-ash);
             border-radius: 0.25rem;
-            font-size: 0.75rem;
+            font-size: 0.5rem;
             font-weight: 700;
             box-shadow: 0 2px 0 0 var(--color-hsa);
-            min-width: 1.5rem;
+            min-width: 1.2rem;
             display: none; /* Hidden by default */
             align-items: center;
             justify-content: center;
+            white-space: nowrap;
+            line-height: 1;
           }
           /* Only show if Alt mode is active AND setting is enabled */
           .shortcuts-alt-enabled.alt-mode-active .alt-shortcut-hint {

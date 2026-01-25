@@ -68,6 +68,7 @@
                     <div class="py-1">
                       <template v-for="link in getAuthLinks(false)" :key="link.path">
                         <NuxtLink v-if="link.type === 'link'" :to="link.path" @click="isDropdownOpen = false"
+                          v-tooltip="getLinkTooltip(link.path)"
                           class="flex items-center gap-2 px-4 py-2 text-sm hover:bg-ash transition-colors">
                           {{ link.label }}
                         </NuxtLink>
