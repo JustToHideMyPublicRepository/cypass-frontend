@@ -1,111 +1,119 @@
 <template>
   <div class="space-y-6">
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-      <div>
-        <h1 class="text-2xl font-bold">DocSentry</h1>
-        <p>Gestion et certification des documents officiels</p>
-      </div>
-      <UiBaseButton>
-        <span class="mr-2">+</span> Nouveau Document
-      </UiBaseButton>
-    </div>
+    <DocsentryHeader @upload="modals.upload = true" @verify="modals.verify = true" />
 
-    <!-- Filters and Search (Mock) -->
+    <!-- Filters and Search -->
     <UiBaseCard>
       <div class="flex flex-col md:flex-row gap-4">
         <div class="flex-1 relative">
           <span class="absolute left-3 top-1/2 -translate-y-1/2 text-hsa">
             <IconSearch class="w-5 h-5" />
           </span>
-          <input type="text" placeholder="Rechercher par nom ou hash..."
+          <input v-model="searchQuery" type="text" placeholder="Rechercher par nom ou hash..."
             class="w-full pl-10 pr-4 py-2 rounded-lg border border-ash bg-ash focus:ring-2 focus:ring-primary focus:border-transparent text-sm placeholder-hsa" />
         </div>
         <div class="flex gap-2">
-          <select class="px-4 py-2 rounded-lg border border-ash bg-ash text-sm focus:ring-2 focus:ring-primary">
-            <option>Tous les statuts</option>
-            <option>Vérifié</option>
-            <option>En attente</option>
-            <option>Rejeté</option>
+          <select v-model="statusFilter"
+            class="px-4 py-2 rounded-lg border border-ash bg-ash text-sm focus:ring-2 focus:ring-primary">
+            <option value="all">Tous les statuts</option>
+            <option value="Verified">Vérifié</option>
+            <option value="Pending">En attente</option>
+            <option value="Rejected">Rejeté</option>
           </select>
           <UiBaseButton variant="secondary">
-            Filtres
+            <IconFilter class="w-4 h-4 mr-2" /> Filtres
           </UiBaseButton>
         </div>
       </div>
     </UiBaseCard>
 
-    <!-- Documents Table -->
-    <UiBaseCard class="overflow-hidden p-0">
-      <div class="overflow-x-auto">
-        <table class="w-full text-sm text-left">
-          <thead class="text-xs text-hsa uppercase bg-ash/50 border-b border-ash">
-            <tr>
-              <th class="px-6 py-4 font-semibold">Nom du Document</th>
-              <th class="px-6 py-4 font-semibold">Date d'émission</th>
-              <th class="px-6 py-4 font-semibold">Empreinte (Hash)</th>
-              <th class="px-6 py-4 font-semibold">Statut</th>
-              <th class="px-6 py-4 font-semibold text-right">Actions</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-ash">
-            <tr v-for="doc in cypassData.documents" :key="doc.id" class="hover:bg-ash/30 transition-colors">
-              <td class="px-6 py-4">
-                <div class="flex items-center gap-3">
-                  <div class="p-2 rounded bg-primary/10 text-primary">
-                    <IconFileText class="w-5 h-5" />
-                  </div>
-                  <div>
-                    <div class="font-medium">{{ doc.name }}</div>
-                    <div class="text-xs text-hsa">ID: {{ doc.id }}</div>
-                  </div>
-                </div>
-              </td>
-              <td class="px-6 py-4 text-hsa">
-                {{ doc.date }}
-              </td>
-              <td class="px-6 py-4 font-code text-xs text-hsa">
-                {{ doc.hash }}
-              </td>
-              <td class="px-6 py-4">
-                <UiStatusBadge :status="doc.status" />
-              </td>
-              <td class="px-6 py-4 text-right">
-                <button class="hover:text-primary transition-colors mx-1">
-                  <IconDownload class="w-5 h-5" />
-                </button>
-                <button class="hover:text-BtW transition-colors mx-1">
-                  <IconDotsVertical class="w-5 h-5" />
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+    <DocsentryList :documents="filteredDocuments" :loading="store.loading" />
 
-      <!-- Pagination Mock -->
-      <div class="px-6 py-4 border-t border-ash flex items-center justify-between">
-        <div class="text-sm text-hsa">Affichage de <span class="font-medium">1</span> à <span
-            class="font-medium">3</span> sur <span class="font-medium">3</span> résultats</div>
-        <div class="flex gap-2">
-          <UiBaseButton variant="secondary" size="sm" disabled>Précédent</UiBaseButton>
-          <UiBaseButton variant="secondary" size="sm" disabled>Suivant</UiBaseButton>
-        </div>
-      </div>
-    </UiBaseCard>
+    <!-- Modals -->
+    <DocsentryModalAuth :show="modals.upload" :loading="store.loading" :error="store.error"
+      :upload-result="store.uploadResult" @upload="handleUpload" @close="closeModals" />
+
+    <DocsentryModalVerify :show="modals.verify" :loading="store.loading" :error="store.error"
+      :result="store.verificationResult" @verify="handleVerify" @reset="store.verificationResult = null"
+      @close="closeModals" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { IconSearch, IconFileText, IconDownload, IconDotsVertical } from '@tabler/icons-vue'
+import { ref, reactive, computed, onMounted } from 'vue'
+import { IconSearch, IconFilter } from '@tabler/icons-vue'
+import { useDocumentsStore } from '~/stores/documents'
+import { useToastStore } from '~/stores/toast'
 
 definePageMeta({
   layout: 'default',
   middleware: 'auth'
 })
 
-const cypassData = useCypassData()
+const store = useDocumentsStore()
+const toast = useToastStore()
+
+const searchQuery = ref('')
+const statusFilter = ref('all')
+const modals = reactive({
+  upload: false,
+  verify: false
+})
+
+const filteredDocuments = computed(() => {
+  let docs = store.documents
+
+  if (statusFilter.value !== 'all') {
+    docs = docs.filter(d => d.status === statusFilter.value)
+  }
+
+  if (searchQuery.value) {
+    const q = searchQuery.value.toLowerCase()
+    docs = docs.filter(d =>
+      d.name.toLowerCase().includes(q) ||
+      d.hash.toLowerCase().includes(q) ||
+      d.id.toLowerCase().includes(q)
+    )
+  }
+
+  return docs
+})
+
+const handleUpload = async (file: File) => {
+  const success = await store.uploadDocument(file)
+  if (success) {
+    toast.showToast('success', 'Document certifié', 'Votre document a été signé et enregistré avec succès.')
+  } else {
+    toast.showToast('error', 'Échec', store.error || 'Une erreur est survenue.')
+  }
+}
+
+const handleVerify = async (file: File) => {
+  const success = await store.verifyDocument(file)
+  if (success) {
+    if (store.verificationResult?.verified) {
+      toast.showToast('success', 'Authentique', 'Le document est certifié valide par CYPASS.')
+    } else {
+      toast.showToast('warning', 'Attention', 'La signature de ce document est invalide ou corrompue.')
+    }
+  } else {
+    toast.showToast('error', 'Erreur', store.error || 'Erreur lors de la vérification.')
+  }
+}
+
+const closeModals = () => {
+  modals.upload = false
+  modals.verify = false
+  store.error = null
+  store.uploadResult = null
+  store.verificationResult = null
+}
+
+onMounted(() => {
+  store.fetchDocuments()
+})
 
 useHead({
-  title: 'DocSentry'
+  title: 'DocSentry - Gestion de documents'
 })
 </script>
