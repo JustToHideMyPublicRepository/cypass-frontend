@@ -28,7 +28,7 @@ useHead({
 const profilStore = useProfilStore()
 const loading = ref(false)
 
-const filters = reactive({
+let filters = reactive({
   date: format(new Date(), 'yyyy-MM-dd'),
   type: 'all',
   limit: 50

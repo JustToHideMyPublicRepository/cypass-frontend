@@ -7,14 +7,14 @@
       <div>
         <h3 class="font-bold text-BtW text-lg mb-1">Mode Expert (ALT)</h3>
         <p class="text-hsa text-sm leading-relaxed mb-4">
-          Maintenez la touche <kbd class="kbd-base py-0.5 px-1.5 min-w-0">ALT</kbd> de votre clavier pour voir
-          apparaître
-          instantanément les indices de raccourcis sur tous les boutons et liens concernés.
+          Appuyez une fois sur <kbd class="kbd-base py-0.5 px-1.5 min-w-0">ALT</kbd> pour activer le mode navigation.
+          Tapez ensuite la séquence de touches (ex: <kbd class="kbd-base py-0 px-1 min-w-0 mx-0.5">L</kbd> puis <kbd
+            class="kbd-base py-0 px-1 min-w-0 mx-0.5">M</kbd>) pour filtrer et accéder rapidement à la page.
         </p>
         <div
           class="flex items-center gap-2 text-xs font-bold text-primary bg-primary/10 w-fit px-3 py-1.5 rounded-full">
           <IconInfoCircle class="w-4 h-4" />
-          <span>En mode ALT, appuyez simplement sur la touche sans SHIFT</span>
+          <span>Appuyez sur Echap ou cliquez n'importe où pour quitter ce mode</span>
         </div>
       </div>
     </div>

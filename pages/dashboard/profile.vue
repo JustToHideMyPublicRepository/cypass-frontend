@@ -41,7 +41,7 @@ const profilStore = useProfilStore()
 
 const user = computed(() => authStore.user)
 
-const form = reactive({
+let form = reactive({
   first_name: '',
   last_name: '',
   email: '',
