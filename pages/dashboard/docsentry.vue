@@ -2,6 +2,8 @@
   <div class="space-y-6">
     <DocsentryHeader @upload="modals.upload = true" @verify="modals.verify = true" />
 
+    <DocsentryTrustCard />
+
     <!-- Filters and Search -->
     <UiBaseCard>
       <div class="flex flex-col md:flex-row gap-4">
@@ -111,6 +113,7 @@ const closeModals = () => {
 
 onMounted(() => {
   store.fetchDocuments()
+  store.fetchPublicKey()
 })
 
 useHead({

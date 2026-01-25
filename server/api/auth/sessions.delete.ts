@@ -4,7 +4,7 @@ export default defineEventHandler(async (event: H3Event) => {
   const body = await readBody(event)
   const token = getCookie(event, 'cypass_token')
   const config = useRuntimeConfig()
-  const baseApi = config.public.cypassBaseAPI
+  const baseApi = config.cypassBaseAPI
 
   if (!token) {
     throw createError({
@@ -14,7 +14,7 @@ export default defineEventHandler(async (event: H3Event) => {
   }
 
   try {
-    const response = await $fetch<{ success: boolean; message: string; data: any }>(`${baseApi}/api/profile/sessions.php`, {
+    const response = await $fetch<{ success: boolean; message: string; data: any }>(`${baseApi}/profile/sessions.php`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',

@@ -1,15 +1,13 @@
-import { defineEventHandler, getCookie, createError } from 'h3'
+import { defineEventHandler, createError } from 'h3'
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig()
   const baseApi = config.cypassBaseAPI
-  const token = getCookie(event, 'cypass_token')
 
   try {
-    const response: any = await $fetch(`${baseApi}/documents/list.php`, {
+    const response: any = await $fetch(`${baseApi}/documents/public-key.php`, {
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${token}`,
         'accept': 'application/json'
       }
     })
@@ -18,7 +16,7 @@ export default defineEventHandler(async (event) => {
   } catch (error: any) {
     throw createError({
       statusCode: error.response?.status || 500,
-      message: error.data?.message || 'Erreur lors de la récupération de la liste des documents'
+      message: error.data?.message || 'Erreur lors de la récupération de la clé publique'
     })
   }
 })

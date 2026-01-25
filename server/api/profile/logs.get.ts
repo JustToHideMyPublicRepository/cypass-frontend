@@ -2,11 +2,12 @@ import { defineEventHandler, getQuery, getCookie } from 'h3'
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig()
+  const baseApi = config.cypassBaseAPI
   const query = getQuery(event)
   const token = getCookie(event, 'cypass_token')
 
   try {
-    const response: any = await $fetch(`${config.public.cypassBaseAPI}/api/profile/get_user_logs.php`, {
+    const response: any = await $fetch(`${baseApi}/profile/get_user_logs.php`, {
       method: 'GET' as 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,

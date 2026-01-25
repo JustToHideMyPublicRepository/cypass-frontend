@@ -1,5 +1,5 @@
 <template>
-  <UiBaseModal :show="show" title="Vérifier un document" maxWidth="md" @close="$emit('close')">
+  <UiBaseModal :show="show" title="Vérifier un document" maxWidth="2xl" @close="$emit('close')">
     <div class="space-y-6 py-2">
       <!-- Mode Switcher -->
       <div v-if="!result && !loading" class="flex justify-center">
@@ -39,7 +39,7 @@
         </div>
       </div>
 
-      <div v-if="(file || result) && verifyMode === 'file' || result" class="space-y-6">
+      <div v-if="(file || result || (loading && verifyMode === 'hash'))" class="space-y-6">
         <!-- Selected File Header -->
         <div v-if="file && !result" class="bg-ash/20 rounded-2xl p-4 border border-ash">
           <div class="flex items-center gap-4">
@@ -53,6 +53,20 @@
             <button @click="handleReset" class="text-hsa hover:text-danger p-2 transition-colors">
               <IconX class="w-5 h-5" />
             </button>
+          </div>
+        </div>
+
+        <!-- Loading State (Progress Steps) -->
+        <div v-if="loading && !result" class="py-4 animate-fade-in">
+          <div class="mb-6 p-4 bg-primary/5 rounded-2xl border border-primary/10">
+            <p class="text-xs font-black text-primary uppercase tracking-widest mb-4 flex items-center gap-2">
+              <span class="relative flex h-2 w-2">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+              </span>
+              Vérification en cours
+            </p>
+            <UtilsStepProgress :steps="activeSteps" />
           </div>
         </div>
 
@@ -70,8 +84,12 @@
             </div>
 
             <div class="space-y-4 text-[11px] leading-relaxed relative z-10">
+              <div v-if="result.document?.filename" class="p-3 bg-primary/5 rounded-xl border border-primary/10">
+                <p class="text-[9px] text-hsa uppercase font-bold mb-1">Document vérifié</p>
+                <p class="font-black text-BtW text-sm truncate">{{ result.document.filename }}</p>
+              </div>
               <p class="text-hsa">Émis par : <strong class="text-BtW">{{ result.document?.signer || 'CYPASS Network'
-              }}</strong></p>
+                  }}</strong></p>
 
               <div class="grid grid-cols-2 gap-3 pt-2 border-t border-success/10">
                 <div v-if="result.document?.id" class="space-y-1">
@@ -168,6 +186,7 @@ import {
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { useDocumentsStore } from '~/stores/documents'
+import { verifySteps, type Step } from '~/utils/docsentry'
 
 const props = defineProps<{
   show: boolean
@@ -184,6 +203,19 @@ const hashInput = ref('')
 const file = ref<File | null>(null)
 const fileInput = ref<HTMLInputElement | null>(null)
 const copied = ref(false)
+const activeSteps = ref<Step[]>(JSON.parse(JSON.stringify(verifySteps)))
+
+const resetSteps = () => {
+  activeSteps.value = JSON.parse(JSON.stringify(verifySteps))
+}
+
+const runSteps = async () => {
+  for (let i = 0; i < activeSteps.value.length; i++) {
+    activeSteps.value[i].status = 'loading'
+    await new Promise(resolve => setTimeout(resolve, 500 + Math.random() * 300))
+    activeSteps.value[i].status = 'completed'
+  }
+}
 
 const triggerFileSelect = () => fileInput.value?.click()
 
@@ -206,15 +238,20 @@ const handleDrop = (e: DragEvent) => {
   }
 }
 
-const handleVerify = () => {
+const handleVerify = async () => {
   if (file.value) {
+    resetSteps()
     emit('verify', file.value)
+    await runSteps()
   }
 }
 
 const handleVerifyInternalHash = async () => {
   if (!hashInput.value) return
-  await store.verifyDocumentByHash(hashInput.value)
+  resetSteps()
+  const promise = store.verifyDocumentByHash(hashInput.value)
+  await runSteps()
+  await promise
 }
 
 const copy = (text: string) => {
@@ -226,6 +263,7 @@ const copy = (text: string) => {
 const close = () => {
   file.value = null
   hashInput.value = ''
+  resetSteps()
   emit('close')
 }
 

@@ -65,7 +65,7 @@
           </UiBaseButton>
         </div>
 
-        <div v-if="(file || result) && verifyMode === 'file' || result" class="space-y-8">
+        <div v-if="(file || result || (loading && verifyMode === 'hash'))" class="space-y-8">
           <!-- Selected File Header (Only for file mode) -->
           <div v-if="file && !result"
             class="flex items-center gap-4 p-4 bg-ash/20 rounded-2xl border border-ash animate-fade-in">
@@ -81,10 +81,19 @@
             </button>
           </div>
 
-          <!-- Loading State -->
-          <div v-if="loading" class="py-12 flex flex-col items-center gap-4">
-            <div class="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
-            <p class="text-sm font-bold text-hsa animate-pulse">Analyse cryptographique en cours...</p>
+          <!-- Loading State (Progress Steps) -->
+          <div v-if="loading && !result" class="py-12 animate-fade-in max-w-sm mx-auto">
+            <div class="mb-8 p-6 bg-primary/5 rounded-[32px] border border-primary/10 text-left">
+              <p class="text-xs font-black text-primary uppercase tracking-widest mb-6 flex items-center gap-2">
+                <span class="relative flex h-2 w-2">
+                  <span
+                    class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                </span>
+                Analyse Cryptographique
+              </p>
+              <UtilsStepProgress :steps="activeSteps" />
+            </div>
           </div>
 
           <!-- Result View -->
@@ -101,9 +110,13 @@
               </div>
 
               <div class="space-y-6 relative z-10">
+                <div v-if="result.document?.filename"
+                  class="p-4 bg-primary/10 rounded-2xl border border-primary/20 mb-6">
+                  <p class="text-[10px] text-hsa uppercase font-black tracking-widest mb-1">Document Certifié</p>
+                  <p class="text-xl font-black text-BtW truncate">{{ result.document.filename }}</p>
+                </div>
                 <p class="text-BtW text-lg leading-relaxed">
-                  Confirmation d'authenticité pour le document
-                  <strong class="text-primary">{{ result.document?.filename || 'Anonyme' }}</strong>.
+                  Confirmation d'authenticité pour ce document.
                 </p>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -216,6 +229,7 @@ import {
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { useDocumentsStore } from '~/stores/documents'
+import { verifySteps, type Step } from '~/utils/docsentry'
 
 definePageMeta({
   layout: 'guest'
@@ -234,6 +248,19 @@ const loading = ref(false)
 const result = ref<any>(null)
 const error = ref<string | null>(null)
 const copied = ref(false)
+const activeSteps = ref<Step[]>(JSON.parse(JSON.stringify(verifySteps)))
+
+const resetSteps = () => {
+  activeSteps.value = JSON.parse(JSON.stringify(verifySteps))
+}
+
+const runSteps = async () => {
+  for (let i = 0; i < activeSteps.value.length; i++) {
+    activeSteps.value[i].status = 'loading'
+    await new Promise(resolve => setTimeout(resolve, 500 + Math.random() * 300))
+    activeSteps.value[i].status = 'completed'
+  }
+}
 
 const triggerFileSelect = () => fileInput.value?.click()
 
@@ -258,9 +285,13 @@ const handleVerifyFile = async () => {
   if (!file.value) return
   loading.value = true
   error.value = null
+  resetSteps()
 
   try {
-    const success = await store.verifyDocument(file.value)
+    const successPromise = store.verifyDocument(file.value)
+    await runSteps()
+    const success = await successPromise
+
     if (success) {
       result.value = store.verificationResult
     } else {
@@ -275,9 +306,13 @@ const handleVerifyHash = async () => {
   if (!hashInput.value) return
   loading.value = true
   error.value = null
+  resetSteps()
 
   try {
-    const success = await store.verifyDocumentByHash(hashInput.value)
+    const successPromise = store.verifyDocumentByHash(hashInput.value)
+    await runSteps()
+    const success = await successPromise
+
     if (success) {
       result.value = store.verificationResult
     } else {
@@ -293,6 +328,7 @@ const reset = () => {
   hashInput.value = ''
   result.value = null
   error.value = null
+  resetSteps()
   store.error = null
   store.verificationResult = null
 }

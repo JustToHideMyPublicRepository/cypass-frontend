@@ -69,6 +69,19 @@
         </div>
       </div>
 
+      <div v-if="loading && !uploadResult" class="py-4 animate-fade-in">
+        <div class="mb-6 p-4 bg-primary/5 rounded-2xl border border-primary/10">
+          <p class="text-xs font-black text-primary uppercase tracking-widest mb-4 flex items-center gap-2">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+            </span>
+            Certification en cours
+          </p>
+          <UtilsStepProgress :steps="activeSteps" />
+        </div>
+      </div>
+
       <div v-if="error"
         class="p-4 rounded-2xl bg-danger/5 border border-danger/20 text-danger text-sm flex items-center gap-3">
         <IconAlertCircle class="w-5 h-5 shrink-0" />
@@ -94,6 +107,7 @@ import {
   IconUpload, IconFileText, IconCircleCheck, IconAlertCircle, IconX,
   IconCopy, IconCheck
 } from '@tabler/icons-vue'
+import { authSteps, type Step } from '~/utils/docsentry'
 
 const props = defineProps<{
   show: boolean
@@ -107,6 +121,19 @@ const emit = defineEmits(['close', 'upload'])
 const file = ref<File | null>(null)
 const fileInput = ref<HTMLInputElement | null>(null)
 const copied = ref(false)
+const activeSteps = ref<Step[]>(JSON.parse(JSON.stringify(authSteps)))
+
+const resetSteps = () => {
+  activeSteps.value = JSON.parse(JSON.stringify(authSteps))
+}
+
+const runSteps = async () => {
+  for (let i = 0; i < activeSteps.value.length; i++) {
+    activeSteps.value[i].status = 'loading'
+    await new Promise(resolve => setTimeout(resolve, 600 + Math.random() * 400))
+    activeSteps.value[i].status = 'completed'
+  }
+}
 
 const triggerFileSelect = () => fileInput.value?.click()
 
@@ -123,9 +150,11 @@ const handleDrop = (e: DragEvent) => {
   }
 }
 
-const handleUpload = () => {
+const handleUpload = async () => {
   if (file.value) {
+    resetSteps()
     emit('upload', file.value)
+    await runSteps()
   }
 }
 
@@ -138,6 +167,7 @@ const copyHash = (hash: string) => {
 const close = () => {
   file.value = null
   copied.value = false
+  resetSteps()
   emit('close')
 }
 </script>

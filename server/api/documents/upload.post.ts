@@ -2,6 +2,7 @@ import { defineEventHandler, readMultipartFormData, getCookie, createError } fro
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig()
+  const baseApi = config.cypassBaseAPI
   const token = getCookie(event, 'cypass_token')
 
   try {
@@ -22,7 +23,7 @@ export default defineEventHandler(async (event) => {
       }
     }
 
-    const response: any = await $fetch(`${config.public.cypassBaseAPI}/api/documents/upload.php`, {
+    const response: any = await $fetch(`${baseApi}/documents/upload.php`, {
       method: 'POST' as any,
       headers: {
         'Authorization': `Bearer ${token}`,

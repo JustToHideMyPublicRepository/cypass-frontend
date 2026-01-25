@@ -3,7 +3,7 @@ import { defineEventHandler, readBody, createError } from 'h3'
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
   const config = useRuntimeConfig()
-  const baseApi = config.public.cypassBaseAPI
+  const baseApi = config.cypassBaseAPI
 
   if (!body.email) {
     throw createError({
@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const response = await $fetch(`${baseApi}/api/auth/resend_verification.php`, {
+    const response = await $fetch(`${baseApi}/auth/resend_verification.php`, {
       method: 'POST',
       body: new URLSearchParams({ email: body.email })
     })

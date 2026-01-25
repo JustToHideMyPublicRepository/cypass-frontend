@@ -4,7 +4,7 @@ export default defineEventHandler(async (event) => {
   const token = getCookie(event, 'cypass_token')
   const body = await readBody(event)
   const config = useRuntimeConfig()
-  const baseApi = config.public.cypassBaseAPI
+  const baseApi = config.cypassBaseAPI
 
   if (!token) {
     throw createError({
@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const response = await $fetch(`${baseApi}/api/profile/change_password.php`, {
+    const response = await $fetch(`${baseApi}/profile/change_password.php`, {
       method: 'PUT' as any,
       headers: {
         'Authorization': `Bearer ${token}`

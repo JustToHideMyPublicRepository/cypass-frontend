@@ -3,10 +3,10 @@ import { defineEventHandler, readBody, setCookie, createError, type H3Event } fr
 export default defineEventHandler(async (event: H3Event) => {
   const body = await readBody(event)
   const config = useRuntimeConfig()
-  const baseApi = config.public.cypassBaseAPI
+  const baseApi = config.cypassBaseAPI
 
   try {
-    const response = await $fetch<{ success: boolean; message: string; data: any }>(`${baseApi}/api/auth/login.php`, {
+    const response = await $fetch<{ success: boolean; message: string; data: any }>(`${baseApi}/auth/login.php`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',

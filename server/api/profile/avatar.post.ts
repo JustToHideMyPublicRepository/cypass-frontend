@@ -2,6 +2,7 @@ import { defineEventHandler, readMultipartFormData, readBody, getCookie, getHead
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig()
+  const baseApi = config.cypassBaseAPI
   const token = getCookie(event, 'cypass_token')
   const contentType = getHeader(event, 'content-type') || ''
 
@@ -13,7 +14,7 @@ export default defineEventHandler(async (event) => {
         const backendFormData = new FormData()
         backendFormData.append('action', 'delete')
 
-        const response: any = await $fetch(`${config.public.cypassBaseAPI}/api/profile/upload_avatar.php`, {
+        const response: any = await $fetch(`${baseApi}/profile/upload_avatar.php`, {
           method: 'POST' as any,
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -43,7 +44,7 @@ export default defineEventHandler(async (event) => {
       }
     }
 
-    const response: any = await $fetch(`${config.public.cypassBaseAPI}/api/profile/upload_avatar.php`, {
+    const response: any = await $fetch(`${baseApi}/profile/upload_avatar.php`, {
       method: 'POST' as any,
       headers: {
         'Authorization': `Bearer ${token}`,
