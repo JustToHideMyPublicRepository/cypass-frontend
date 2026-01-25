@@ -63,7 +63,7 @@ export const useShortcuts = (options: ShortcutOptions = {}) => {
 
       keyBuffer.value.push(key)
       if (bufferTimeout) clearTimeout(bufferTimeout)
-      bufferTimeout = setTimeout(resetBuffer, 1000) // Reset after 1s of inactivity
+      bufferTimeout = setTimeout(resetBuffer, 1000)
 
       // Try to find a match for the current buffer
       const currentBuffer = [...keyBuffer.value]
@@ -104,10 +104,10 @@ export const useShortcuts = (options: ShortcutOptions = {}) => {
       if (event.key === '?') {
         router.push('/help/shortcuts')
       }
-      // Space to open help (closing is handled by clicking outside)
+      // Space to toggle help
       if (event.key === ' ') {
         event.preventDefault()
-        store.openHelp()
+        store.toggleHelp()
       }
     }
 

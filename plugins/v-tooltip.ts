@@ -107,16 +107,23 @@ export default defineNuxtPlugin((nuxtApp) => {
         document.body.appendChild(tooltipEl)
       }
 
-      // Extract shortcut key if present in binding value
-      const match = binding.value.match(/class="kbd-hint">([^<]+)<\/span>/g)
-      if (match && match.length > 0) {
-        const lastHint = match[match.length - 1]
-        const key = lastHint.replace(/class="kbd-hint">|<\/span>/g, '')
+      // Extract shortcut keys if present in binding value
+      const matches = binding.value.match(/class="kbd-hint">([^<]+)<\/span>/g)
+      if (matches && matches.length > 0) {
+        // Extract content from all matches
+        const keys = matches.map((m: string) => m.replace(/class="kbd-hint">|<\/span>/g, ''))
 
-        if (key && key.length === 1) {
+        // Filter out common modifiers if we want to show only the action keys
+        // (Assuming Alt replaces Shift/Ctrl in this context)
+        const contentKeys = keys.filter((k: string) => !['Shift', 'Ctrl', 'Alt', 'Cmd', 'Control'].includes(k))
+
+        // Join remaining keys (e.g. "L M" for L+M sequence)
+        const displayText = contentKeys.join(' ')
+
+        if (displayText) {
           const hint = document.createElement('div')
           hint.className = 'alt-shortcut-hint'
-          hint.textContent = key
+          hint.textContent = displayText
 
           // Ensure parent is positioned
           const style = window.getComputedStyle(el)
