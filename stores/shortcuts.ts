@@ -5,6 +5,7 @@ interface ShortcutSettings {
   showHover: boolean
   showAlt: boolean
   sortBy: 'name' | 'key'
+  groupSort: 'az' | 'za' | 'more' | 'less'
   isHelpOpen: boolean
 }
 
@@ -14,6 +15,7 @@ export const useShortcutsStore = defineStore('shortcuts', {
     showHover: true,
     showAlt: true,
     sortBy: 'name',
+    groupSort: 'az',
     isHelpOpen: false
   }),
 
@@ -36,7 +38,8 @@ export const useShortcutsStore = defineStore('shortcuts', {
 
     save() {
       if (import.meta.server) return
-      localStorage.setItem('cps_shortcuts', JSON.stringify(this.$state))
+      const { isHelpOpen, ...toSave } = this.$state
+      localStorage.setItem('cps_shortcuts', JSON.stringify(toSave))
       this.updateBodyClasses()
     },
 
@@ -53,13 +56,17 @@ export const useShortcutsStore = defineStore('shortcuts', {
       else body.classList.remove('shortcuts-alt-enabled')
     },
 
-    toggleSetting(key: keyof Omit<ShortcutSettings, 'sortBy' | 'isHelpOpen'>) {
+    toggleSetting(key: keyof Omit<ShortcutSettings, 'sortBy' | 'groupSort' | 'isHelpOpen'>) {
       this[key] = !this[key]
       this.save()
     },
 
     toggleHelp() {
       this.isHelpOpen = !this.isHelpOpen
+    },
+
+    openHelp() {
+      this.isHelpOpen = true
     }
   }
 })

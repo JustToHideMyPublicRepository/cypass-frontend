@@ -17,7 +17,7 @@
       </div>
     </div>
 
-    <!-- Sorting -->
+    <!-- Sorting Items -->
     <div class="flex items-center gap-2 bg-WtB border border-ash rounded-2xl p-1 shadow-sm">
       <button v-for="option in sortOptions" :key="option.value" @click="$emit('update:sortBy', option.value)"
         class="px-4 py-2 text-xs font-bold rounded-xl transition-all"
@@ -25,25 +25,43 @@
         {{ option.label }}
       </button>
     </div>
+
+    <!-- Sorting Groups -->
+    <div class="flex items-center gap-2 bg-WtB border border-ash rounded-2xl p-1 shadow-sm">
+      <button v-for="option in groupSortOptions" :key="option.value" @click="$emit('update:groupSort', option.value)"
+        class="px-3 py-2 text-xs font-bold rounded-xl transition-all flex items-center gap-1"
+        :class="groupSort === option.value ? 'bg-primary text-white shadow-md' : 'text-hsa hover:bg-ash'">
+        <component :is="option.icon" class="w-3.5 h-3.5" />
+        {{ option.label }}
+      </button>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { IconSearch } from '@tabler/icons-vue'
+import { ref } from 'vue'
+import { IconSearch, IconSortAscendingLetters, IconSortDescendingLetters, IconSortAscending, IconSortDescending } from '@tabler/icons-vue'
 
-const props = defineProps<{
+defineProps<{
   searchQuery: string
   sortBy: 'name' | 'key'
+  groupSort: 'az' | 'za' | 'more' | 'less'
 }>()
 
-const emit = defineEmits(['update:searchQuery', 'update:sortBy', 'focus-search'])
+defineEmits(['update:searchQuery', 'update:sortBy', 'update:groupSort'])
 
 const searchInput = ref<HTMLInputElement | null>(null)
 
 const sortOptions = [
   { label: 'Par Nom', value: 'name' },
   { label: 'Par Touche', value: 'key' }
+] as const
+
+const groupSortOptions = [
+  { label: 'A-Z', value: 'az', icon: IconSortAscendingLetters },
+  { label: 'Z-A', value: 'za', icon: IconSortDescendingLetters },
+  { label: 'Plus', value: 'more', icon: IconSortDescending },
+  { label: 'Moins', value: 'less', icon: IconSortAscending }
 ] as const
 
 defineExpose({

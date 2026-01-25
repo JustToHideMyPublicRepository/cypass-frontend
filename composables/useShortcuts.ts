@@ -104,10 +104,10 @@ export const useShortcuts = (options: ShortcutOptions = {}) => {
       if (event.key === '?') {
         router.push('/help/shortcuts')
       }
-      // Space to toggle help
+      // Space to open help (closing is handled by clicking outside)
       if (event.key === ' ') {
         event.preventDefault()
-        store.toggleHelp()
+        store.openHelp()
       }
     }
 

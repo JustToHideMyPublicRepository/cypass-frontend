@@ -3,7 +3,8 @@
     <HelpShortcutsHeader @open-settings="showSettings = true" />
     <HelpShortcutsExpertMode />
 
-    <HelpShortcutsSearch ref="searchComp" v-model:searchQuery="searchQuery" v-model:sortBy="sortBy" />
+    <HelpShortcutsSearch ref="searchComp" v-model:searchQuery="searchQuery" v-model:sortBy="sortBy"
+      v-model:groupSort="groupSort" />
 
     <HelpShortcutsGrid :categories="filteredShortcuts" />
     <HelpShortcutsFooter />
@@ -30,11 +31,17 @@ const store = useShortcutsStore()
 const searchComp = ref<any>(null)
 const searchQuery = ref('')
 const sortBy = ref<'name' | 'key'>(store.sortBy)
+const groupSort = ref<'az' | 'za' | 'more' | 'less'>(store.groupSort)
 const showSettings = ref(false)
 
-// Persist sort preference to store
+// Persist sort preferences to store
 watch(sortBy, (newVal) => {
   store.sortBy = newVal
+  store.save()
+})
+
+watch(groupSort, (newVal) => {
+  store.groupSort = newVal
   store.save()
 })
 
@@ -52,25 +59,20 @@ const structuredShortcuts = computed(() => {
     groups[groupName].push(s)
   })
 
-  // Order groups
-  const order = [
-    'Navigation',
-    'Légal',
-    'Authentification',
-    'Modules',
-    'Dashboard',
-    'Actions',
-    'Actions Contextuelles'
-  ]
-
+  // Sort groups based on groupSort preference
   return Object.keys(groups)
     .sort((a, b) => {
-      const idxA = order.indexOf(a)
-      const idxB = order.indexOf(b)
-      if (idxA !== -1 && idxB !== -1) return idxA - idxB
-      if (idxA !== -1) return -1
-      if (idxB !== -1) return 1
-      return a.localeCompare(b)
+      switch (groupSort.value) {
+        case 'za':
+          return b.localeCompare(a)
+        case 'more':
+          return groups[b].length - groups[a].length
+        case 'less':
+          return groups[a].length - groups[b].length
+        case 'az':
+        default:
+          return a.localeCompare(b)
+      }
     })
     .map(name => ({
       title: name,

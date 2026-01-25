@@ -49,10 +49,20 @@
 </template>
 
 <script setup lang="ts">
+import { watch } from 'vue'
 import { IconHelp, IconX, IconLifebuoy, IconStatusChange, IconKeyboard } from '@tabler/icons-vue'
 import { useShortcutsStore } from '~/stores/shortcuts'
 
 const store = useShortcutsStore()
+
+// Track when the menu was last opened to ignore immediate clicks
+let lastOpenedAt = 0
+
+watch(() => store.isHelpOpen, (isOpen) => {
+  if (isOpen) {
+    lastOpenedAt = Date.now()
+  }
+})
 
 const helpLinks = [
   {
@@ -75,8 +85,11 @@ const helpLinks = [
   },
 ]
 
-// Close on outside click
+// Close on outside click (with debounce to prevent immediate close after keyboard toggle)
 const handleClickOutside = (e: MouseEvent) => {
+  // Ignore clicks within 100ms of opening (keyboard toggle)
+  if (Date.now() - lastOpenedAt < 100) return
+
   const el = e.target as HTMLElement
   if (!el.closest('.fixed.bottom-6.right-6')) {
     store.isHelpOpen = false
