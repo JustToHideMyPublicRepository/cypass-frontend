@@ -55,7 +55,7 @@
           </UiBaseButton>
         </template>
 
-        <UiBaseButton to="/services" variant="secondary">
+        <UiBaseButton to="/modules" variant="secondary">
           Voir les services actifs
         </UiBaseButton>
       </div>
@@ -70,7 +70,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { services } from '@/data/services'
+import { modules } from '@/data/modules'
 import { IconRocket } from '@tabler/icons-vue'
 import { useAuthStore } from '~/stores/auth'
 
@@ -82,7 +82,7 @@ const route = useRoute()
 const authStore = useAuthStore()
 const serviceId = computed(() => route.query.service as string)
 
-const currentService = computed(() => services.find(s => s.id === serviceId.value))
+const currentService = computed(() => modules.find(s => s.id === serviceId.value))
 
 const serviceTitle = computed(() => currentService.value?.title || 'Prochainement')
 const serviceDescription = computed(() => currentService.value?.description || "Nous préparons quelque chose d'exceptionnel pour renforcer votre sécurité numérique.")

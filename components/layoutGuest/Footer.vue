@@ -82,7 +82,7 @@ const footerGroups = [
     title: 'Plateforme',
     links: [
       { label: 'À propos', path: '/about' },
-      { label: 'Services', path: '/services' },
+      { label: 'Modules', path: '/modules' },
       { label: 'Partenaires', path: '/partners' },
       { label: 'Développeurs', path: '/developers' },
       { label: 'FAQ', path: '/faq' },

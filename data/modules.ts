@@ -40,7 +40,7 @@ export interface CypassService {
   techSpecs?: ServiceTechSpec[]
 }
 
-export const services: CypassService[] = [
+export const modules: CypassService[] = [
   {
     id: 'docsentry',
     title: 'DocSentry',

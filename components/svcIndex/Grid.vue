@@ -38,7 +38,7 @@
               <component :is="service.icon" class="w-8 h-8" />
             </div>
 
-            <NuxtLink v-if="service.status === 'available'" :to="`/services/${service.id}`"
+            <NuxtLink v-if="service.status === 'available'" :to="`/modules/${service.id}`"
               class="w-10 h-10 rounded-full border border-ash flex items-center justify-center text-slate-400 hover:bg-ash hover:text-primary transition-all">
               <IconArrowRight class="w-5 h-5" />
             </NuxtLink>
@@ -64,7 +64,7 @@
 
           <!-- Action / Coming Soon -->
           <div class="relative z-10 mt-auto pt-6 border-t border-ash">
-            <NuxtLink v v-if="service.status === 'available'" :to="`/services/${service.id}`">
+            <NuxtLink v v-if="service.status === 'available'" :to="`/modules/${service.id}`">
               <button
                 class="w-full py-3 rounded-xl font-bold text-sm transition-all duration-300 group-hover:shadow-lg flex items-center justify-center gap-2"
                 :class="service.theme === 'blue'

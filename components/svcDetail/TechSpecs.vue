@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ServiceTechSpec } from '@/data/services'
+import type { ServiceTechSpec } from '@/data/modules'
 
 defineProps<{
   specs: ServiceTechSpec[]

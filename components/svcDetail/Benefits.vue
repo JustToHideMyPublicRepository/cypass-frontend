@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
 import { IconCheck } from '@tabler/icons-vue'
-import type { ServiceBenefit } from '@/data/services'
+import type { ServiceBenefit } from '@/data/modules'
 
 defineProps<{
   benefits: ServiceBenefit[]

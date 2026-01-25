@@ -37,12 +37,12 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
 import { computed } from 'vue'
-import { services } from '@/data/services'
+import { modules } from '@/data/modules'
 
 const route = useRoute()
 const serviceId = route.params.id
 
-const service = computed(() => services.find(s => s.id === serviceId))
+const service = computed(() => modules.find(s => s.id === serviceId))
 
 definePageMeta({
   layout: 'guest'

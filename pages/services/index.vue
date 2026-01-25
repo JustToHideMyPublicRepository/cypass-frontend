@@ -2,14 +2,14 @@
   <div class="relative overflow-hidden">
     <div class="max-w-7xl mx-auto space-y-24 relative z-10">
       <SvcIndexHeader />
-      <SvcIndexGrid :services="services" />
+      <SvcIndexGrid :services="modules" />
       <SvcIndexFooter />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { services } from '@/data/services'
+import { modules } from '@/data/modules'
 
 definePageMeta({
   layout: 'guest'

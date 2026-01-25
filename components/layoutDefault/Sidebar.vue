@@ -84,7 +84,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { IconLayoutDashboard as IconDashboard, IconLogout, IconChevronLeft } from '@tabler/icons-vue'
-import { services } from '@/data/services'
+import { modules } from '@/data/modules'
 import { getLinkTooltip } from '~/data/shortcuts'
 
 defineProps<{
@@ -99,8 +99,8 @@ const mainLinks = [
   { label: 'Vue d\'ensemble', path: '/dashboard', icon: IconDashboard }
 ]
 
-const activeModules = computed(() => services.filter(s => s.status === 'available'))
-const comingSoonModules = computed(() => services.filter(s => s.status !== 'available'))
+const activeModules = computed(() => modules.filter(s => s.status === 'available'))
+const comingSoonModules = computed(() => modules.filter(s => s.status !== 'available'))
 </script>
 
 <style scoped>

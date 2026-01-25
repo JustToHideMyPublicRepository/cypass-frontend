@@ -52,7 +52,7 @@
           </ul>
 
           <div class="pt-4">
-            <UiBaseButton v-if="service.status === 'available'" :to="`/services/${service.id}`" variant="secondary"
+            <UiBaseButton v-if="service.status === 'available'" :to="`/modules/${service.id}`" variant="secondary"
               class="pl-0 hover:pl-4 transition-all !bg-transparent border-none shadow-none"
               :class="service.theme === 'blue' ? 'text-primary' : 'text-success'">
               {{ service.cta }}
@@ -241,7 +241,7 @@
 
 <script setup lang="ts">
 import { IconCheck, IconArrowRight, IconFileReport, IconCertificate, IconRadar2 } from '@tabler/icons-vue'
-import { services } from '@/data/services'
+import { modules } from '@/data/modules'
 
-const featureServices = computed(() => services)
+const featureServices = computed(() => modules)
 </script>

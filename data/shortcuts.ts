@@ -78,10 +78,10 @@ export const shortcutsData: Record<string, ShortcutEntry> = {
     isGlobal: true,
     modifier: 'Shift'
   },
-  services: {
+  modules: {
     key: 'v',
-    label: 'Services',
-    path: '/services',
+    label: 'Modules',
+    path: '/modules',
     isGlobal: true,
     modifier: 'Shift'
   },

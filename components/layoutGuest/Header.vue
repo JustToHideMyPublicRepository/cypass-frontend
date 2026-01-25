@@ -163,7 +163,6 @@ const isLinkActive = (path: string) => {
 
 // Navigation Constants
 const NavHeader = [
-  { label: 'Services', path: '/services' },
   { label: 'Vérifier', path: '/verify' },
   { label: 'Support', path: '/support' },
   { label: 'À propos', path: '/about' },
