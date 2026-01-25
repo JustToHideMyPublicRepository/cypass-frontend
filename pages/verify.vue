@@ -20,7 +20,7 @@
         </p>
       </div>
 
-      <!-- Verification Zone (Standalone version of ModalVerify) -->
+      <!-- Verification Zone -->
       <div class="glass-panel p-8 md:p-12 rounded-[40px] border border-ashAct shadow-2xl relative group">
         <!-- Interactive Dropzone -->
         <div v-if="!file"
@@ -29,7 +29,7 @@
           <input type="file" ref="fileInput" class="hidden" accept=".pdf" @change="handleFileChange">
           <div
             class="w-20 h-20 bg-WtB rounded-3xl flex items-center justify-center mx-auto mb-6 text-primary shadow-xl border border-ash group-hover:scale-110 transition-transform duration-500">
-            <IconShieldCheck class="w-10 h-10" />
+            <IconRosetteDiscountCheck class="w-10 h-10" />
           </div>
           <h3 class="text-xl font-bold text-BtW mb-2">Sélectionnez le document PDF</h3>
           <p class="text-sm text-hsa">Glissez-déposez le fichier ici ou cliquez pour parcourir</p>
@@ -65,29 +65,30 @@
               </div>
 
               <div class="flex items-center gap-3 text-success mb-6 relative z-10">
-                <IconShieldCheck class="w-8 h-8" />
+                <IconRosetteDiscountCheck class="w-8 h-8" />
                 <span class="text-2xl font-black italic">DOCUMENT AUTHENTIQUE</span>
               </div>
 
               <div class="space-y-6 relative z-10">
                 <p class="text-BtW text-lg leading-relaxed">
                   Ce document est certifié conforme. Il a été signé numériquement par
-                  <strong class="text-primary">{{ result.document.signer }}</strong>
+                  <strong class="text-primary">{{ result.document?.signer || 'CYPASS' }}</strong>
                   et n'a subi aucune modification depuis son émission.
                 </p>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-success/10">
-                  <div class="space-y-1">
+                <div v-if="result.document?.id || result.document?.created_at"
+                  class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-success/10">
+                  <div v-if="result.document?.id" class="space-y-1">
                     <p class="text-[10px] text-hsa uppercase font-black tracking-widest">Identifiant Unique</p>
                     <p class="font-mono text-sm text-BtW bg-WtB/50 p-2 rounded">{{ result.document.id }}</p>
                   </div>
-                  <div class="space-y-1">
+                  <div v-if="result.document?.created_at" class="space-y-1">
                     <p class="text-[10px] text-hsa uppercase font-black tracking-widest">Horodatage</p>
                     <p class="text-sm font-bold text-BtW">{{ formatDate(result.document.created_at) }}</p>
                   </div>
                 </div>
 
-                <div class="space-y-2">
+                <div v-if="result.document?.hash" class="space-y-2">
                   <p class="text-[10px] text-hsa uppercase font-black tracking-widest">Empreinte Numérique (SHA-256)</p>
                   <div class="flex items-center gap-2 bg-WtB/50 p-3 rounded-xl border border-ash/50">
                     <span class="font-mono text-[10px] text-hsa break-all flex-1">{{ result.document.hash }}</span>
@@ -97,6 +98,9 @@
                       <IconCheck v-else class="w-4 h-4 text-success" />
                     </button>
                   </div>
+                </div>
+                <div v-else class="pt-4 text-center">
+                  <p class="text-sm italic text-success">{{ result.message }}</p>
                 </div>
               </div>
             </div>
@@ -137,7 +141,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import {
-  IconShieldCheck, IconFileText, IconShieldOff, IconX,
+  IconFileText, IconShieldOff, IconX,
   IconCopy, IconCheck, IconServer, IconLock, IconCertificate, IconRosetteDiscountCheck
 } from '@tabler/icons-vue'
 import { format } from 'date-fns'
@@ -179,11 +183,6 @@ const handleDrop = (e: DragEvent) => {
 const handleVerify = async () => {
   if (!file.value) return
   loading.value = true
-
-  // We use the same backend service. Even for public, it acts on the document content.
-  // In a real scenario, public verify might not require login token but here we proxy via Nitro.
-  // Note: For TRUE public verify, the Nitro route server/api/documents/upload.post.ts 
-  // might need to bypass getCookie check if the backend allows it.
 
   try {
     const success = await store.verifyDocument(file.value)

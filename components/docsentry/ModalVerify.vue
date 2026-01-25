@@ -30,28 +30,35 @@
 
       <!-- Result View -->
       <div v-if="result" class="animate-fade-up">
-        <div v-if="result.verified" class="p-5 rounded-2xl bg-success/5 border border-success/20">
-          <div class="flex items-center gap-3 text-success mb-4">
-            <IconShieldCheck class="w-6 h-6" />
+        <div v-if="result.verified"
+          class="p-5 rounded-2xl bg-success/5 border border-success/20 relative overflow-hidden">
+          <div class="absolute top-0 right-0 p-4 opacity-10">
+            <IconRosetteDiscountCheck class="w-16 h-16 text-success" />
+          </div>
+
+          <div class="flex items-center gap-3 text-success mb-4 relative z-10">
+            <IconRosetteDiscountCheck class="w-6 h-6" />
             <span class="font-black">DOCUMENT VÉRIFIÉ !</span>
           </div>
-          <div class="space-y-3 text-xs leading-relaxed">
+          <div class="space-y-3 text-xs leading-relaxed relative z-10">
             <p class="text-hsa">Ce document est authentique et a été émis par <strong>
-                {{ result.document.signer }}
+                {{ result.document?.signer || 'CYPASS' }}
               </strong>.</p>
             <div class="grid grid-cols-2 gap-4 pt-2 border-t border-success/10">
-              <div>
+              <div v-if="result.document?.id">
                 <p class="text-[10px] text-hsa uppercase">ID Document</p>
                 <p class="font-mono text-BtW">{{ result.document.id }}</p>
               </div>
-              <div>
+              <div v-if="result.document?.created_at">
                 <p class="text-[10px] text-hsa uppercase">Date Signature</p>
                 <p class="text-BtW">{{ formatDate(result.document.created_at) }}</p>
               </div>
             </div>
-            <div class="mt-2 p-2 bg-WtB rounded border border-ash/50 font-mono text-[9px] break-all text-hsa">
+            <div v-if="result.document?.hash"
+              class="mt-2 p-2 bg-WtB rounded border border-ash/50 font-mono text-[9px] break-all text-hsa">
               Hash: {{ result.document.hash }}
             </div>
+            <p v-else class="mt-2 text-[10px] italic text-success">{{ result.message }}</p>
           </div>
         </div>
 

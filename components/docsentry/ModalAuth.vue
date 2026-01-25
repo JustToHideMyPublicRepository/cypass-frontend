@@ -57,12 +57,12 @@
             <span class="font-bold text-BtW">{{ uploadResult.cryptographic_proof.algorithm }}</span>
           </div>
           <div class="space-y-1 mt-2 pt-2 border-t border-success/10">
-            <p class="text-[10px] text-hsa uppercase font-bold">Signature Numérique (Ed25519)</p>
+            <p class="text-[10px] text-hsa uppercase font-bold">Signature Numérique</p>
             <p class="font-mono text-[9px] break-all text-BtW bg-WtB/50 p-2 rounded border border-success/10">
               {{ uploadResult.cryptographic_proof.digital_signature }}
             </p>
           </div>
-          <div class="flex justify-between items-center mt-2">
+          <div class="flex justify-between items-center mt-1">
             <span class="text-[10px] text-hsa uppercase font-bold">Empreinte Clé</span>
             <span class="font-mono text-[10px] text-BtW">{{ uploadResult.cryptographic_proof.key_fingerprint }}</span>
           </div>
