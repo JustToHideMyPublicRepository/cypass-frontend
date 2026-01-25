@@ -28,9 +28,8 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
-    public: {
-      cypassBaseAPI: process.env.CYPASS_API_URL,
-    }
+    cypassBaseAPI: process.env.CYPASS_API_URL,
+    public: {}
   },
 
   css: ['~/assets/css/main.css'],
