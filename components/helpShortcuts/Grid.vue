@@ -16,7 +16,10 @@
                 <kbd class="kbd-base uppercase">{{ s.modifier }}</kbd>
                 <span class="text-hsa text-[10px]">+</span>
               </template>
-              <kbd class="kbd-base uppercase">{{ s.key }}</kbd>
+              <template v-for="(k, index) in s.keys" :key="index">
+                <kbd class="kbd-base uppercase">{{ k === 'enter' ? '↵' : k }}</kbd>
+                <span v-if="(index as number) < s.keys.length - 1" class="text-hsa text-[10px]">+</span>
+              </template>
             </div>
           </div>
         </div>
