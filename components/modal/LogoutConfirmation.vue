@@ -15,9 +15,13 @@
 
       <div class="flex justify-end gap-3">
         <UiBaseButton variant="ghost" @click="$emit('close')">
+          <span v-if="shortcutStore.showButtonHints"
+            class="mr-2 px-1.5 py-0.5 rounded bg-ash text-[10px] font-bold">N</span>
           Annuler
         </UiBaseButton>
         <UiBaseButton variant="danger" @click="$emit('confirm')" auto-focus>
+          <span v-if="shortcutStore.showButtonHints"
+            class="mr-2 px-1.5 py-0.5 rounded bg-WtB/20 text-[10px] font-bold">Y</span>
           Se déconnecter
         </UiBaseButton>
       </div>
@@ -26,11 +30,34 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted, onUnmounted } from 'vue'
 import { IconLogout } from '@tabler/icons-vue'
+import { useShortcutsStore } from '~/stores/shortcuts'
 
-defineProps<{
+const props = defineProps<{
   show: boolean
 }>()
 
-defineEmits(['close', 'confirm'])
+const emit = defineEmits(['close', 'confirm'])
+const shortcutStore = useShortcutsStore()
+
+const handleKeydown = (e: KeyboardEvent) => {
+  if (!props.show) return
+  const key = e.key.toLowerCase()
+  if (key === 'y') {
+    e.preventDefault()
+    emit('confirm')
+  } else if (key === 'n') {
+    e.preventDefault()
+    emit('close')
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('keydown', handleKeydown)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleKeydown)
+})
 </script>

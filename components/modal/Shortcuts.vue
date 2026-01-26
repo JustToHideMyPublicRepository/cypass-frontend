@@ -55,6 +55,11 @@ const settingsList = [
     id: 'showAlt' as const,
     title: 'Indices Mode ALT',
     desc: 'Affiche les badges d\'aide en maintenant la touche ALT.'
+  },
+  {
+    id: 'showButtonHints' as const,
+    title: 'Indices Boutons',
+    desc: 'Afficher les touches [Y/N/↵] sur les boutons d\'action.'
   }
 ]
 </script>

@@ -4,6 +4,7 @@ interface ShortcutSettings {
   enabled: boolean
   showHover: boolean
   showAlt: boolean
+  showButtonHints: boolean
   sortBy: 'name' | 'key'
   groupSort: 'az' | 'za' | 'more' | 'less'
   isHelpOpen: boolean
@@ -16,6 +17,7 @@ export const useShortcutsStore = defineStore('shortcuts', {
     enabled: true,
     showHover: true,
     showAlt: true,
+    showButtonHints: true,
     sortBy: 'name',
     groupSort: 'az',
     isHelpOpen: false,

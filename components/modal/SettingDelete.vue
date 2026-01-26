@@ -17,8 +17,15 @@
             </ul>
           </div>
         </div>
-        <div class="flex justify-end">
+        <div class="flex justify-end gap-3">
+          <UiBaseButton variant="ghost" @click="closeModal">
+            <span v-if="shortcutStore.showButtonHints"
+              class="mr-2 px-1.2 py-0.5 rounded bg-ash text-[10px] font-bold">N</span>
+            Annuler
+          </UiBaseButton>
           <UiBaseButton variant="primary" @click="nextStep">
+            <span v-if="shortcutStore.showButtonHints"
+              class="mr-2 px-1.2 py-0.5 rounded bg-WtB/20 text-[10px] font-bold">↵</span>
             J'accepte ces conditions
           </UiBaseButton>
         </div>
@@ -60,8 +67,15 @@
           </span>
         </div>
 
-        <div class="flex justify-end">
+        <div class="flex justify-end gap-3">
+          <UiBaseButton variant="ghost" @click="closeModal">
+            <span v-if="shortcutStore.showButtonHints"
+              class="mr-2 px-1.2 py-0.5 rounded bg-ash text-[10px] font-bold">N</span>
+            Annuler
+          </UiBaseButton>
           <UiBaseButton variant="primary" :disabled="!isValidStats" @click="nextStep">
+            <span v-if="shortcutStore.showButtonHints"
+              class="mr-2 px-1.2 py-0.5 rounded bg-WtB/20 text-[10px] font-bold">↵</span>
             Valider les statistiques
           </UiBaseButton>
         </div>
@@ -90,9 +104,13 @@
 
         <div class="flex justify-end gap-3 mt-4">
           <UiBaseButton variant="ghost" @click="closeModal" :disabled="loading">
+            <span v-if="shortcutStore.showButtonHints"
+              class="mr-2 px-1.2 py-0.5 rounded bg-ash text-[10px] font-bold">N</span>
             Annuler
           </UiBaseButton>
           <UiBaseButton variant="danger" :loading="loading" :disabled="!password" @click="confirmDelete">
+            <span v-if="shortcutStore.showButtonHints"
+              class="mr-2 px-1.2 py-0.5 rounded bg-WtB/20 text-[10px] font-bold">↵</span>
             Confirmer la suppression
           </UiBaseButton>
         </div>
@@ -102,10 +120,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, watch } from 'vue'
+import { ref, reactive, computed, watch, onMounted, onUnmounted } from 'vue'
 import { IconAlertTriangle, IconCheck, IconX, IconEye, IconEyeOff } from '@tabler/icons-vue'
 import { useProfilStore } from '~/stores/profil'
 import { useToastStore } from '~/stores/toast'
+import { useShortcutsStore } from '~/stores/shortcuts'
 
 const props = defineProps<{
   show: boolean
@@ -115,6 +134,8 @@ const emit = defineEmits(['close'])
 
 const profilStore = useProfilStore()
 const toastStore = useToastStore()
+const shortcutStore = useShortcutsStore()
+
 const step = ref(1)
 const password = ref('')
 const showPassword = ref(false)
@@ -124,6 +145,45 @@ const error = ref<string | null>(null)
 const verificationStats = reactive({
   documents: null as number | null,
   incidents: null as number | null
+})
+
+const handleKeydown = (e: KeyboardEvent) => {
+  if (!props.show) return
+  const key = e.key.toLowerCase()
+
+  // N to cancel
+  if (key === 'n') {
+    // Only cancel if not typing in inputs (unless focused on button/body)
+    const isTyping = document.activeElement instanceof HTMLInputElement
+    if (!isTyping) {
+      e.preventDefault()
+      closeModal()
+      return
+    }
+  }
+
+  // Enter to proceed
+  if (key === 'enter') {
+    // If typing in stats inputs, let the native enter behavior happen or handle it
+    // But for Step 1 or Step 2 (when inputs are filled), move forward
+    if (step.value === 1) {
+      e.preventDefault()
+      nextStep()
+    } else if (step.value === 2 && isValidStats.value) {
+      // If focused an input, maybe we want to let them tab, but Enter usually proceeds
+      e.preventDefault()
+      nextStep()
+    }
+    // Step 3 handle in template @keyup.enter
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('keydown', handleKeydown)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleKeydown)
 })
 
 watch(() => props.show, (newVal) => {

@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onMounted, onUnmounted, watch } from 'vue'
 import { IconCircleX } from '@tabler/icons-vue'
 
 const props = defineProps({
@@ -47,7 +47,29 @@ const props = defineProps({
   }
 })
 
-defineEmits(['close'])
+const emit = defineEmits(['close'])
+
+const handleKeydown = (e: KeyboardEvent) => {
+  if (e.key === 'Escape' && props.show) {
+    emit('close')
+  }
+}
+
+watch(() => props.show, (isVisible) => {
+  if (import.meta.client) {
+    if (isVisible) {
+      window.addEventListener('keydown', handleKeydown)
+    } else {
+      window.removeEventListener('keydown', handleKeydown)
+    }
+  }
+}, { immediate: true })
+
+onUnmounted(() => {
+  if (import.meta.client) {
+    window.removeEventListener('keydown', handleKeydown)
+  }
+})
 
 const maxWidthClass = computed(() => {
   switch (props.maxWidth) {
