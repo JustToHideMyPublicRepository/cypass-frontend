@@ -16,12 +16,12 @@
       <div class="flex justify-end gap-3">
         <UiBaseButton variant="ghost" @click="$emit('close')">
           <span v-if="shortcutStore.showButtonHints"
-            class="mr-2 px-1.5 py-0.5 rounded bg-ash text-[10px] font-bold">N</span>
+            class="kbd-hint mr-2 !bg-ash !text-hsa !shadow-[0_2px_0_0_rgba(0,0,0,0.1)]">N</span>
           Annuler
         </UiBaseButton>
         <UiBaseButton variant="danger" @click="$emit('confirm')" auto-focus>
           <span v-if="shortcutStore.showButtonHints"
-            class="mr-2 px-1.5 py-0.5 rounded bg-WtB/20 text-[10px] font-bold">Y</span>
+            class="kbd-hint mr-2 !bg-WtB/20 !text-WtB !border-WtB/30 !shadow-none">Y</span>
           Se déconnecter
         </UiBaseButton>
       </div>

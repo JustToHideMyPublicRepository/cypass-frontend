@@ -20,12 +20,12 @@
         <div class="flex justify-end gap-3">
           <UiBaseButton variant="ghost" @click="closeModal">
             <span v-if="shortcutStore.showButtonHints"
-              class="mr-2 px-1.2 py-0.5 rounded bg-ash text-[10px] font-bold">N</span>
+              class="kbd-hint mr-2 !bg-ash !text-hsa !shadow-[0_2px_0_0_rgba(0,0,0,0.1)]">N</span>
             Annuler
           </UiBaseButton>
           <UiBaseButton variant="primary" @click="nextStep">
             <span v-if="shortcutStore.showButtonHints"
-              class="mr-2 px-1.2 py-0.5 rounded bg-WtB/20 text-[10px] font-bold">↵</span>
+              class="kbd-hint mr-2 !bg-WtB/20 !text-WtB !border-WtB/30 !shadow-none">↵</span>
             J'accepte ces conditions
           </UiBaseButton>
         </div>
@@ -70,12 +70,12 @@
         <div class="flex justify-end gap-3">
           <UiBaseButton variant="ghost" @click="closeModal">
             <span v-if="shortcutStore.showButtonHints"
-              class="mr-2 px-1.2 py-0.5 rounded bg-ash text-[10px] font-bold">N</span>
+              class="kbd-hint mr-2 !bg-ash !text-hsa !shadow-[0_2px_0_0_rgba(0,0,0,0.1)]">N</span>
             Annuler
           </UiBaseButton>
           <UiBaseButton variant="primary" :disabled="!isValidStats" @click="nextStep">
             <span v-if="shortcutStore.showButtonHints"
-              class="mr-2 px-1.2 py-0.5 rounded bg-WtB/20 text-[10px] font-bold">↵</span>
+              class="kbd-hint mr-2 !bg-WtB/20 !text-WtB !border-WtB/30 !shadow-none">↵</span>
             Valider les statistiques
           </UiBaseButton>
         </div>
@@ -105,12 +105,12 @@
         <div class="flex justify-end gap-3 mt-4">
           <UiBaseButton variant="ghost" @click="closeModal" :disabled="loading">
             <span v-if="shortcutStore.showButtonHints"
-              class="mr-2 px-1.2 py-0.5 rounded bg-ash text-[10px] font-bold">N</span>
+              class="kbd-hint mr-2 !bg-ash !text-hsa !shadow-[0_2px_0_0_rgba(0,0,0,0.1)]">N</span>
             Annuler
           </UiBaseButton>
           <UiBaseButton variant="danger" :loading="loading" :disabled="!password" @click="confirmDelete">
             <span v-if="shortcutStore.showButtonHints"
-              class="mr-2 px-1.2 py-0.5 rounded bg-WtB/20 text-[10px] font-bold">↵</span>
+              class="kbd-hint mr-2 !bg-WtB/20 !text-WtB !border-WtB/30 !shadow-none">↵</span>
             Confirmer la suppression
           </UiBaseButton>
         </div>

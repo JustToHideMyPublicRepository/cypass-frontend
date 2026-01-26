@@ -13,11 +13,12 @@
             <span class="text-BtW font-medium text-sm">{{ s.label }}</span>
             <div class="flex items-center gap-1">
               <template v-if="s.modifier">
-                <kbd class="kbd-base uppercase">{{ s.modifier }}</kbd>
+                <kbd class="kbd-hint !px-2 uppercase shadow-[0_2px_0_0_rgba(0,0,0,0.5)]">{{ s.modifier }}</kbd>
                 <span class="text-hsa text-[10px]">+</span>
               </template>
               <template v-for="(k, index) in s.keys" :key="index">
-                <kbd class="kbd-base uppercase">{{ k === 'enter' ? '↵' : k }}</kbd>
+                <kbd class="kbd-hint !px-2 uppercase shadow-[0_2px_0_0_rgba(0,0,0,0.5)]">{{ k === 'enter' ? '↵' : k
+                }}</kbd>
                 <span v-if="(index as number) < s.keys.length - 1" class="text-hsa text-[10px]">+</span>
               </template>
             </div>
@@ -73,20 +74,3 @@ const getVisibleItems = (category: any) => {
   return category.items.slice(0, 3)
 }
 </script>
-
-<style scoped>
-.kbd-base {
-  padding: 0.25rem 0.5rem;
-  background-color: var(--color-BtW);
-  color: var(--color-WtB);
-  border: 1px solid var(--color-ash);
-  border-radius: 0.25rem;
-  font-size: 0.75rem;
-  font-weight: 700;
-  box-shadow: 0 2px 0 0 var(--color-hsa);
-  min-width: 1.5rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-</style>
