@@ -2,7 +2,7 @@
   <div>
     <!-- Navbar -->
     <header class="fixed w-full top-0 z-50 transition-all duration-300 border-b border-transparent" :class="[
-      scrolled ? 'bg-WtB/80 backdrop-blur-md shadow-sm border-ash h-16' : 'bg-transparent h-20'
+      scrolled ? 'bg-WtB/80 backdrop-blur-2xl shadow-sm border-ash h-16' : 'bg-transparent h-20'
     ]">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
         <div class="flex justify-between items-center h-full">

@@ -296,25 +296,25 @@ export const shortcutsData: Record<string, ShortcutEntry> = {
     keys: ['esc'],
     label: 'Fermer la modale',
     isGlobal: false,
-    group: 'Boutons'
+    group: 'Modal & Boutons'
   },
   modal_confirm: {
     keys: ['y'],
     label: 'Confirmer (Oui)',
     isGlobal: false,
-    group: 'Boutons'
+    group: 'Modal & Boutons'
   },
   modal_cancel: {
     keys: ['n'],
     label: 'Annuler (Non)',
     isGlobal: false,
-    group: 'Boutons'
+    group: 'Modal & Boutons'
   },
   modal_next: {
     keys: ['enter'],
     label: 'Étape suivante / Valider',
     isGlobal: false,
-    group: 'Boutons'
+    group: 'Modal & Boutons'
   }
 }
 

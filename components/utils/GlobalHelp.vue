@@ -18,9 +18,9 @@
       leave-from-class="transform scale-100 opacity-100 translate-y-0"
       leave-to-class="transform scale-95 opacity-0 translate-y-4">
       <div v-if="store.isHelpOpen"
-        class="absolute bottom-full right-0 mb-4 w-72 bg-WtB/90 backdrop-blur-xl border border-ash rounded-3xl shadow-2xl overflow-hidden p-2">
+        class="absolute bottom-full right-0 mb-4 w-72 bg-WtB border border-ash rounded-3xl shadow-2xl overflow-hidden p-2">
         <div class="p-4 border-b border-ash mb-2">
-          <h3 class="font-black text-BtW tracking-tight">Centre d'Aide</h3>
+          <h3 class="font-black text-BtW tracking-tight">Centre d'aide</h3>
           <p class="text-xs text-hsa">Besoin d'un coup de main ?</p>
         </div>
 

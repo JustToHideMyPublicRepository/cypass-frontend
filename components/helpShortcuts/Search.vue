@@ -21,7 +21,7 @@
     <div class="flex items-center gap-2 bg-WtB border border-ash rounded-2xl p-1 shadow-sm">
       <button v-for="option in sortOptions" :key="option.value" @click="$emit('update:sortBy', option.value)"
         class="px-4 py-2 text-xs font-bold rounded-xl transition-all"
-        :class="sortBy === option.value ? 'bg-primary text-white shadow-md' : 'text-hsa hover:bg-ash'">
+        :class="sortBy === option.value ? 'bg-primary text-WtB shadow-md' : 'hover:bg-ash'">
         {{ option.label }}
       </button>
     </div>
@@ -30,7 +30,7 @@
     <div class="flex items-center gap-2 bg-WtB border border-ash rounded-2xl p-1 shadow-sm">
       <button v-for="option in groupSortOptions" :key="option.value" @click="$emit('update:groupSort', option.value)"
         class="px-3 py-2 text-xs font-bold rounded-xl transition-all flex items-center gap-1"
-        :class="groupSort === option.value ? 'bg-primary text-white shadow-md' : 'text-hsa hover:bg-ash'">
+        :class="groupSort === option.value ? 'bg-primary text-WtB shadow-md' : 'hover:bg-ash'">
         <component :is="option.icon" class="w-3.5 h-3.5" />
         {{ option.label }}
       </button>

@@ -37,8 +37,8 @@ export const useShortcuts = (options: ShortcutOptions = {}) => {
           hint.querySelectorAll('.key').forEach(k => k.classList.remove('active'))
         } else {
           hint.classList.remove('dimmed')
-          // Highlight active keys based on progress
-          const keys = hint.querySelectorAll('.key')
+          // Highlight active keys based on progress (skipping modifiers like Shift)
+          const keys = hint.querySelectorAll('.key:not(.is-mod)')
           keys.forEach((k, i) => {
             if (i < buffer.length) k.classList.add('active')
             else k.classList.remove('active')
