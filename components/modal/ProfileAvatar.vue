@@ -127,8 +127,8 @@ const multiavatarUrl = computed(() => {
   if (previewUrl.value) return previewUrl.value
   if (props.currentAvatar) {
     if (props.currentAvatar.startsWith('http')) return props.currentAvatar
-    // Use local proxy path
-    return `/${props.currentAvatar.replace(/^\/+/, '')}`
+    const path = props.currentAvatar.replace(/^\/+/, '').replace(/^uploads\//i, '')
+    return `/uploads/${path}`
   }
   return null
 })
