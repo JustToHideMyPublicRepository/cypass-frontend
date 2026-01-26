@@ -70,7 +70,7 @@
     </div>
 
     <!-- Footer Action -->
-    <div class="absolute bottom-0 left-0 right-0 p-4 border-t border-ash bg-ash/10 overflow-hidden">
+    <div class="absolute bottom-0 left-0 right-0 p-4 border-t border-ash bg-ash/10">
       <button @click="$emit('logout')" v-tooltip="getLinkTooltip('logout')"
         class="flex items-center gap-3 px-4 py-2 w-full rounded-xl text-danger hover:bg-danger/10 hover:text-dangerAct transition-all duration-200 group-logout font-medium"
         :class="{ 'justify-center px-0': isCollapsed }" :title="isCollapsed ? 'Déconnexion' : ''">

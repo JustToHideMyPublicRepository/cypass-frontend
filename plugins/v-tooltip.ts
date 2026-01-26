@@ -141,18 +141,24 @@ export default defineNuxtPlugin((nuxtApp) => {
       const matches = binding.value.match(/class="kbd-hint">([^<]+)<\/span>/g)
       if (matches && matches.length > 0) {
         // Extract content from all matches
-        const keys = matches.map((m: string) => m.replace(/class="kbd-hint">|<\/span>/g, ''))
+        const allKeys = matches.map((m: string) => m.replace(/class="kbd-hint">|<\/span>/g, ''))
 
-        // Filter out common modifiers if we want to show only the action keys
-        // (Assuming Alt replaces Shift/Ctrl in this context)
-        const contentKeys = keys.filter((k: string) => !['Shift', 'Ctrl', 'Alt', 'Cmd', 'Control'].includes(k))
+        // Check for ANY modifiers in the shortcut
+        const hasModifiers = allKeys.some((k: string) =>
+          ['Shift', 'Ctrl', 'Alt', 'Cmd', 'Control', 'Option', 'Command'].includes(k)
+        )
+
+        // Filter out common modifiers for the visual badge
+        const contentKeys = allKeys.filter((k: string) => !['Shift', 'Ctrl', 'Alt', 'Cmd', 'Control'].includes(k))
 
         if (contentKeys.length > 0) {
           const hint = document.createElement('div')
           hint.className = 'alt-shortcut-hint'
 
-          // Detect if this is a button hint (based on element class or tag)
-          if (el.classList.contains('btn') || el.tagName === 'BUTTON') {
+          // ONLY mark as "permanent button hint" if:
+          // 1. It's a button
+          // 2. It DOES NOT have modifiers (it's a direct contextual key like Y, N, Enter)
+          if ((el.classList.contains('btn') || el.tagName === 'BUTTON') && !hasModifiers) {
             hint.classList.add('is-button-hint')
           }
 
@@ -166,10 +172,15 @@ export default defineNuxtPlugin((nuxtApp) => {
 
           hint.innerHTML = html
 
-          // Ensure parent is positioned
+          // Ensure parent is positioned and allows overflow
           const style = window.getComputedStyle(el)
           if (style.position === 'static') {
             el.style.position = 'relative'
+          }
+
+          // Disable overflow hidden to allow floating hints to be seen
+          if (style.overflow === 'hidden') {
+            el.style.overflow = 'visible'
           }
 
           el.appendChild(hint)
