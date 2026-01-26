@@ -1,5 +1,5 @@
 <template>
-  <BaseModal :show="show" title="Paramètres des raccourcis" max-width="sm" @close="$emit('close')">
+  <UiBaseModal :show="show" title="Paramètres des raccourcis" max-width="sm" @close="$emit('close')">
     <div class="space-y-6 py-2">
       <div v-for="setting in settingsList" :key="setting.id"
         class="flex items-center justify-between gap-4 p-4 rounded-2xl bg-ash/20 border border-ash/50 transition-all">
@@ -25,11 +25,10 @@
         </UiBaseButton>
       </div>
     </template>
-  </BaseModal>
+  </UiBaseModal>
 </template>
 
 <script setup lang="ts">
-import BaseModal from '../ui/BaseModal.vue'
 import { useShortcutsStore } from '~/stores/shortcuts'
 
 defineProps<{
