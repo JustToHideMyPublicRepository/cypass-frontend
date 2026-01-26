@@ -95,6 +95,12 @@ export default defineNuxtPlugin((nuxtApp) => {
             transform: scale(1);
             display: flex;
           }
+          /* ALSO show if Button Hints setting is explicitly enabled */
+          .shortcuts-button-hints-enabled .alt-shortcut-hint {
+            opacity: 1;
+            transform: scale(1);
+            display: flex;
+          }
           /* Filter dimmed hints */
           .alt-shortcut-hint.dimmed {
             opacity: 0.1 !important;

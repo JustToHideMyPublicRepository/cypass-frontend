@@ -60,6 +60,9 @@ export const useShortcutsStore = defineStore('shortcuts', {
 
       if (this.showAlt) body.classList.add('shortcuts-alt-enabled')
       else body.classList.remove('shortcuts-alt-enabled')
+
+      if (this.showButtonHints) body.classList.add('shortcuts-button-hints-enabled')
+      else body.classList.remove('shortcuts-button-hints-enabled')
     },
 
     toggleSetting(key: keyof Omit<ShortcutSettings, 'sortBy' | 'groupSort' | 'isHelpOpen' | 'altMode' | 'buffer'>) {

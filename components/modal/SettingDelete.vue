@@ -18,14 +18,10 @@
           </div>
         </div>
         <div class="flex justify-end gap-3">
-          <UiBaseButton variant="ghost" @click="closeModal">
-            <span v-if="shortcutStore.showButtonHints"
-              class="kbd-hint mr-2 !bg-ash !text-hsa !shadow-[0_2px_0_0_rgba(0,0,0,0.1)]">N</span>
+          <UiBaseButton variant="ghost" @click="closeModal" v-tooltip="getLinkTooltip('modal_cancel')">
             Annuler
           </UiBaseButton>
-          <UiBaseButton variant="primary" @click="nextStep">
-            <span v-if="shortcutStore.showButtonHints"
-              class="kbd-hint mr-2 !bg-WtB/20 !text-WtB !border-WtB/30 !shadow-none">↵</span>
+          <UiBaseButton variant="primary" @click="nextStep" v-tooltip="getLinkTooltip('modal_next')">
             J'accepte ces conditions
           </UiBaseButton>
         </div>
@@ -68,14 +64,11 @@
         </div>
 
         <div class="flex justify-end gap-3">
-          <UiBaseButton variant="ghost" @click="closeModal">
-            <span v-if="shortcutStore.showButtonHints"
-              class="kbd-hint mr-2 !bg-ash !text-hsa !shadow-[0_2px_0_0_rgba(0,0,0,0.1)]">N</span>
+          <UiBaseButton variant="ghost" @click="closeModal" v-tooltip="getLinkTooltip('modal_cancel')">
             Annuler
           </UiBaseButton>
-          <UiBaseButton variant="primary" :disabled="!isValidStats" @click="nextStep">
-            <span v-if="shortcutStore.showButtonHints"
-              class="kbd-hint mr-2 !bg-WtB/20 !text-WtB !border-WtB/30 !shadow-none">↵</span>
+          <UiBaseButton variant="primary" :disabled="!isValidStats" @click="nextStep"
+            v-tooltip="getLinkTooltip('modal_next')">
             Valider les statistiques
           </UiBaseButton>
         </div>
@@ -103,14 +96,12 @@
         </div>
 
         <div class="flex justify-end gap-3 mt-4">
-          <UiBaseButton variant="ghost" @click="closeModal" :disabled="loading">
-            <span v-if="shortcutStore.showButtonHints"
-              class="kbd-hint mr-2 !bg-ash !text-hsa !shadow-[0_2px_0_0_rgba(0,0,0,0.1)]">N</span>
+          <UiBaseButton variant="ghost" @click="closeModal" :disabled="loading"
+            v-tooltip="getLinkTooltip('modal_cancel')">
             Annuler
           </UiBaseButton>
-          <UiBaseButton variant="danger" :loading="loading" :disabled="!password" @click="confirmDelete">
-            <span v-if="shortcutStore.showButtonHints"
-              class="kbd-hint mr-2 !bg-WtB/20 !text-WtB !border-WtB/30 !shadow-none">↵</span>
+          <UiBaseButton variant="danger" :loading="loading" :disabled="!password" @click="confirmDelete"
+            v-tooltip="getLinkTooltip('modal_confirm')">
             Confirmer la suppression
           </UiBaseButton>
         </div>
@@ -125,6 +116,7 @@ import { IconAlertTriangle, IconCheck, IconX, IconEye, IconEyeOff } from '@table
 import { useProfilStore } from '~/stores/profil'
 import { useToastStore } from '~/stores/toast'
 import { useShortcutsStore } from '~/stores/shortcuts'
+import { getLinkTooltip } from '~/data/shortcuts'
 
 const props = defineProps<{
   show: boolean

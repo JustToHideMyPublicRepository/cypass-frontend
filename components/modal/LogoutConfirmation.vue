@@ -14,14 +14,10 @@
       </div>
 
       <div class="flex justify-end gap-3">
-        <UiBaseButton variant="ghost" @click="$emit('close')">
-          <span v-if="shortcutStore.showButtonHints"
-            class="kbd-hint mr-2 !bg-ash !text-hsa !shadow-[0_2px_0_0_rgba(0,0,0,0.1)]">N</span>
+        <UiBaseButton variant="ghost" @click="$emit('close')" v-tooltip="getLinkTooltip('modal_cancel')">
           Annuler
         </UiBaseButton>
-        <UiBaseButton variant="danger" @click="$emit('confirm')" auto-focus>
-          <span v-if="shortcutStore.showButtonHints"
-            class="kbd-hint mr-2 !bg-WtB/20 !text-WtB !border-WtB/30 !shadow-none">Y</span>
+        <UiBaseButton variant="danger" @click="$emit('confirm')" v-tooltip="getLinkTooltip('modal_confirm')" auto-focus>
           Se déconnecter
         </UiBaseButton>
       </div>
@@ -33,6 +29,7 @@
 import { onMounted, onUnmounted } from 'vue'
 import { IconLogout } from '@tabler/icons-vue'
 import { useShortcutsStore } from '~/stores/shortcuts'
+import { getLinkTooltip } from '~/data/shortcuts'
 
 const props = defineProps<{
   show: boolean
