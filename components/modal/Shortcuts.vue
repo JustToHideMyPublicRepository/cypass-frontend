@@ -1,6 +1,6 @@
 <template>
   <UiBaseModal :show="show" title="Paramètres des raccourcis" max-width="sm" @close="$emit('close')">
-    <div class="space-y-6 py-2">
+    <div class="space-y-6 py-2 max-h-96 overflow-y-auto px-1 -mx-1 scrollbar-hide">
       <div v-for="setting in settingsList" :key="setting.id"
         class="flex items-center justify-between gap-4 p-4 rounded-2xl bg-ash/20 border border-ash/50 transition-all">
         <div class="flex-1">
