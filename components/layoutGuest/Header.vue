@@ -73,6 +73,7 @@
                           {{ link.label }}
                         </NuxtLink>
                         <button v-else-if="link.type === 'button'" @click="link.action"
+                          v-tooltip="link.path === 'logout' ? getLinkTooltip('logout') : null"
                           class="flex items-center gap-2 px-4 py-2 text-sm w-full text-left transition-colors font-medium"
                           :class="link.class">
                           {{ link.label }}
@@ -144,7 +145,8 @@
     </Transition>
 
     <!-- Logout Modal -->
-    <ModalLogoutConfirmation :show="showLogoutModal" @close="showLogoutModal = false" @confirm="confirmLogout" />
+    <ModalLogoutConfirmation :show="authStore.isLogoutModalOpen" @close="authStore.closeLogoutModal()"
+      @confirm="confirmLogout" />
   </div>
 </template>
 
@@ -194,16 +196,15 @@ const authStore = useAuthStore()
 const toastStore = useToastStore()
 const isDropdownOpen = ref(false)
 const dropdownRef = ref<HTMLElement | null>(null)
-const showLogoutModal = ref(false)
 
 const handleLogout = () => {
   isDropdownOpen.value = false
   isMobileMenuOpen.value = false
-  showLogoutModal.value = true
+  authStore.openLogoutModal()
 }
 
 const confirmLogout = () => {
-  showLogoutModal.value = false
+  authStore.closeLogoutModal()
   authStore.logout(false)
   toastStore.showToast('success', 'Déconnexion', authStore.message || 'Vous avez été déconnecté avec succès.')
 }

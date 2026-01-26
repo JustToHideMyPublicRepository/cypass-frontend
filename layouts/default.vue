@@ -23,7 +23,8 @@
       <LayoutDefaultFooter class="shrink-0" />
     </div>
     <!-- Logout Modal -->
-    <ModalLogoutConfirmation :show="showLogoutModal" @close="showLogoutModal = false" @confirm="confirmLogout" />
+    <ModalLogoutConfirmation :show="authStore.isLogoutModalOpen" @close="authStore.closeLogoutModal()"
+      @confirm="confirmLogout" />
   </div>
 </template>
 
@@ -35,7 +36,6 @@ import { useToastStore } from '~/stores/toast'
 
 const isOpen = ref(false)
 const isCollapsed = ref(false)
-const showLogoutModal = ref(false)
 const authStore = useAuthStore()
 const profilStore = useProfilStore()
 const toastStore = useToastStore()
@@ -58,11 +58,11 @@ watch(isCollapsed, (newVal) => {
 const user = computed(() => authStore.user)
 
 const handleLogout = () => {
-  showLogoutModal.value = true
+  authStore.openLogoutModal()
 }
 
 const confirmLogout = () => {
-  showLogoutModal.value = false
+  authStore.closeLogoutModal()
   authStore.logout()
   toastStore.showToast('success', 'Déconnexion', authStore.message || 'À bientôt sur CYPASS.')
 }

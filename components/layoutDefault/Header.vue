@@ -66,7 +66,7 @@
             </div>
 
             <div class="border-t border-ash py-2">
-              <button @click="$emit('logout')"
+              <button @click="$emit('logout')" v-tooltip="getLinkTooltip('logout')"
                 class="flex items-center gap-3 px-4 py-2 w-full text-sm text-danger hover:bg-danger/10 transition-colors">
                 <IconLogout class="w-4 h-4" />
                 Déconnexion
