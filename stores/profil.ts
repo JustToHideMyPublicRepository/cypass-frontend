@@ -24,6 +24,7 @@ export const useProfilStore = defineStore('profil', {
         if (response.success) {
           this.profile = response.user
           this.statistics = response.statistics
+          this.syncAuthAvatar(response.user.avatar_url)
           return true
         }
         this.error = 'Impossible de récupérer le profil'
@@ -133,6 +134,7 @@ export const useProfilStore = defineStore('profil', {
           if (this.profile) {
             this.profile.avatar_url = response.data.avatar_url
           }
+          this.syncAuthAvatar(response.data.avatar_url)
           return true
         }
         return false
@@ -156,6 +158,7 @@ export const useProfilStore = defineStore('profil', {
           if (this.profile) {
             this.profile.avatar_url = null
           }
+          this.syncAuthAvatar(null)
           return true
         }
         return false
@@ -220,6 +223,13 @@ export const useProfilStore = defineStore('profil', {
         return false
       } finally {
         this.loading = false
+      }
+    },
+
+    syncAuthAvatar(url: string | null) {
+      const authStore = useAuthStore()
+      if (authStore.user) {
+        authStore.user.avatar_url = url
       }
     }
   }

@@ -6,7 +6,8 @@ export const useAuthStore = defineStore('auth', {
     user: null,
     loading: false,
     error: null,
-    message: null
+    message: null,
+    isLogoutModalOpen: false
   } as AuthState),
 
   getters: {
@@ -15,12 +16,13 @@ export const useAuthStore = defineStore('auth', {
       return `${state.user.first_name} ${state.user.last_name}`.trim() || 'Vous'
     },
     avatarUrl: (state) => {
-      if (state.user?.avatar_url && state.user.avatar_url.trim() !== '') {
-        const url = state.user.avatar_url
-        if (url.startsWith('http')) return url
-        const cleanUrl = url.replace(/^\/+/, '')
-        return `/${cleanUrl}`
+      const avatar = state.user?.avatar_url
+      if (avatar && avatar.trim() !== '') {
+        if (avatar.startsWith('http')) return avatar
+        const cleanPath = avatar.replace(/^\/+/, '')
+        return `/uploads/${cleanPath}`
       }
+
       const seed = state.user ? `${state.user.first_name} ${state.user.last_name}`.trim() : 'Utilisateur'
       return `https://api.dicebear.com/9.x/initials/svg?seed=${seed}`
     }
@@ -228,6 +230,14 @@ export const useAuthStore = defineStore('auth', {
       } catch (err) {
         this.user = null
       }
+    },
+
+    openLogoutModal() {
+      this.isLogoutModalOpen = true
+    },
+
+    closeLogoutModal() {
+      this.isLogoutModalOpen = false
     }
   }
 })

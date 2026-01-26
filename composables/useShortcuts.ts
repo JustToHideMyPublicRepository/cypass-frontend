@@ -8,9 +8,12 @@ interface ShortcutOptions {
   searchCallback?: () => void
 }
 
+import { useAuthStore } from '~/stores/auth'
+
 export const useShortcuts = (options: ShortcutOptions = {}) => {
   const router = useRouter()
   const store = useShortcutsStore()
+  const authStore = useAuthStore()
 
   // Visual update logic for hints
   const updateVisualHints = () => {
@@ -170,6 +173,13 @@ export const useShortcuts = (options: ShortcutOptions = {}) => {
         event.preventDefault()
         options.searchCallback()
       }
+      return
+    }
+
+    // Logout Shortcut (Ctrl + Shift + D)
+    if ((event.ctrlKey || event.metaKey) && event.shiftKey && key === 'd') {
+      event.preventDefault()
+      authStore.openLogoutModal()
       return
     }
 

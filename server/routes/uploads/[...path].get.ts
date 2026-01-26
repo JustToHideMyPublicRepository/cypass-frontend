@@ -3,7 +3,7 @@ import { defineEventHandler, getRouterParam, sendStream } from 'h3'
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig()
   const path = getRouterParam(event, 'path')
-  const targetUrl = `${config.public.cypassBaseAPI}/uploads/${path}`
+  const targetUrl = `${config.cypassBaseAPI}/uploads/${path}`
 
   try {
     const response = await $fetch.raw(targetUrl, {

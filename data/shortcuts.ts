@@ -4,7 +4,7 @@ export interface ShortcutEntry {
   path?: string
   isGlobal: boolean
   group?: string
-  modifier?: 'Shift' | 'Ctrl' | 'Cmd'
+  modifier?: string
 }
 
 export const shortcutsData: Record<string, ShortcutEntry> = {
@@ -282,6 +282,13 @@ export const shortcutsData: Record<string, ShortcutEntry> = {
     isGlobal: false,
     group: 'Actions',
     modifier: 'Shift'
+  },
+  logout: {
+    keys: ['d'],
+    label: 'Déconnexion',
+    isGlobal: true,
+    group: 'Actions',
+    modifier: 'Ctrl + Shift'
   }
 }
 
@@ -293,14 +300,17 @@ export const getShortcutStr = (name: string): string => {
   return keys
 }
 
-export const getLinkTooltip = (path: string) => {
-  const entry = Object.values(shortcutsData).find(s => s.path === path)
+export const getLinkTooltip = (pathOrName: string) => {
+  const entry = shortcutsData[pathOrName] || Object.values(shortcutsData).find(s => s.path === pathOrName)
   if (!entry) return null
 
-  const mod = entry.modifier ? `<span class="kbd-hint">${entry.modifier}</span> + ` : ''
+  const modifiers = entry.modifier
+    ? entry.modifier.split('+').map(m => `<span class="kbd-hint">${m.trim()}</span>`).join(' + ') + ' + '
+    : ''
+
   const keys = entry.keys.map(k => `<span class="kbd-hint">${k === 'enter' ? '↵' : k.toUpperCase()}</span>`).join(' + ')
 
-  return `<span class="kbd-wrapper">${mod}${keys}</span>`
+  return `<span class="kbd-wrapper">${modifiers}${keys}</span>`
 }
 
 export const getShortcutKey = (path: string): string | null => {
