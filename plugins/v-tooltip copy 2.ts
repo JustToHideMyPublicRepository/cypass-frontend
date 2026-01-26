@@ -65,7 +65,7 @@ export default defineNuxtPlugin((nuxtApp) => {
           /* Alt Mode Hints */
           .alt-shortcut-hint {
             position: absolute;
-            top: -5px;
+            bottom: -1px;
             right: 5px;
             z-index: 50;
             pointer-events: none;
@@ -90,14 +90,13 @@ export default defineNuxtPlugin((nuxtApp) => {
             line-height: 1;
           }
           /* Only show if Alt mode is active AND setting is enabled */
-          .shortcuts-alt-enabled.alt-mode-active .alt-shortcut-hint:not(.is-button-hint) {
+          .shortcuts-alt-enabled.alt-mode-active .alt-shortcut-hint {
             opacity: 1;
             transform: scale(1);
             display: flex;
           }
-          /* Show Button hints if Alt mode is active OR if Button Hints setting is enabled */
-          .shortcuts-button-hints-enabled .alt-shortcut-hint.is-button-hint,
-          .shortcuts-alt-enabled.alt-mode-active .alt-shortcut-hint.is-button-hint {
+          /* ALSO show if Button Hints setting is explicitly enabled */
+          .shortcuts-button-hints-enabled .alt-shortcut-hint {
             opacity: 1;
             transform: scale(1);
             display: flex;

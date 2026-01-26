@@ -65,41 +65,41 @@ export default defineNuxtPlugin((nuxtApp) => {
           /* Alt Mode Hints */
           .alt-shortcut-hint {
             position: absolute;
-            top: -5px;
-            right: 5px;
+            top: -14px;
+            left: -14px;
             z-index: 50;
             pointer-events: none;
             opacity: 0;
-            transform: scale(0.5);
+            transform: scale(0.4) translateY(10px);
             transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
             
-            /* KBD Style from shortcuts.vue */
-            padding: 0.15rem 0.3rem;
+            /* Physical Key Cap Style */
+            padding: 0.3rem 0.6rem;
             background-color: var(--color-BtW);
             color: var(--color-WtB);
             border: 1px solid var(--color-ash);
-            border-radius: 0.25rem;
-            font-size: 0.5rem;
-            font-weight: 700;
-            box-shadow: 0 2px 0 0 var(--color-hsa);
-            min-width: 1.2rem;
+            border-radius: 0.5rem;
+            font-size: 0.7rem;
+            font-weight: 800;
+            box-shadow: 0 4px 0 0 var(--color-hsa), 0 8px 15px -3px rgb(0 0 0 / 0.4);
+            min-width: 1.8rem;
             display: none; /* Hidden by default */
             align-items: center;
             justify-content: center;
             white-space: nowrap;
             line-height: 1;
           }
-          /* Only show if Alt mode is active AND setting is enabled */
+          /* Only show Navigation hints if Alt mode is active AND setting is enabled */
           .shortcuts-alt-enabled.alt-mode-active .alt-shortcut-hint:not(.is-button-hint) {
             opacity: 1;
-            transform: scale(1);
+            transform: scale(1) translateY(0);
             display: flex;
           }
           /* Show Button hints if Alt mode is active OR if Button Hints setting is enabled */
           .shortcuts-button-hints-enabled .alt-shortcut-hint.is-button-hint,
           .shortcuts-alt-enabled.alt-mode-active .alt-shortcut-hint.is-button-hint {
             opacity: 1;
-            transform: scale(1);
+            transform: scale(1) translateY(0);
             display: flex;
           }
           /* Filter dimmed hints */
