@@ -16,8 +16,7 @@ export const useShortcuts = (options: ShortcutOptions = {}) => {
   const updateVisualHints = () => {
     if (!import.meta.client) return
 
-    // Defer to next tick to ensure store updates are propagated if needed, 
-    // although we use local buffer state for immediate feedback
+    // Defer to next tick to ensure store updates are propagated if needed,
     requestAnimationFrame(() => {
       const hints = document.querySelectorAll('.alt-shortcut-hint')
       const buffer = store.buffer.map(k => k.toLowerCase())
@@ -58,6 +57,37 @@ export const useShortcuts = (options: ShortcutOptions = {}) => {
     }
   })
 
+  const shiftBuffer = ref<string[]>([])
+  let shiftBufferTimeout: any = null
+
+  const resetShiftBuffer = () => {
+    shiftBuffer.value = []
+    if (shiftBufferTimeout) clearTimeout(shiftBufferTimeout)
+  }
+
+  const handleShiftSequence = (key: string) => {
+    shiftBuffer.value.push(key)
+    if (shiftBufferTimeout) clearTimeout(shiftBufferTimeout)
+    shiftBufferTimeout = setTimeout(resetShiftBuffer, 1000)
+
+    const currentBuffer = [...shiftBuffer.value]
+
+    // Check for matches
+    const matches = Object.values(shortcutsData).filter(s => {
+      if (!s.isGlobal || s.modifier !== 'Shift') return false
+      return s.keys.slice(0, currentBuffer.length).every((k, i) => k.toLowerCase() === currentBuffer[i])
+    })
+
+    const exactMatch = matches.find(s => s.keys.length === currentBuffer.length)
+
+    if (exactMatch?.path) {
+      router.push(exactMatch.path)
+      resetShiftBuffer()
+    } else if (matches.length === 0) {
+      resetShiftBuffer()
+    }
+  }
+
   const handleKeyDown = (event: KeyboardEvent) => {
     if (!store.enabled && event.key !== 'Alt') return
 
@@ -96,9 +126,6 @@ export const useShortcuts = (options: ShortcutOptions = {}) => {
       // Find exact match
       const exactMatch = Object.values(shortcutsData).find(s => {
         if (!s.isGlobal) return false
-        // Filter out non-Shift shortcuts if we assume Alt replaces Shift
-        // Or strictly strictly match keys
-        // The hints generated are based on keys, so we match keys directly
         if (s.keys.length !== currentBuffer.length) return false
         return s.keys.every((k, i) => k.toLowerCase() === currentBuffer[i])
       })
@@ -123,8 +150,7 @@ export const useShortcuts = (options: ShortcutOptions = {}) => {
       return
     }
 
-    // ... Standard shortcuts logic (Space, Arrows, Help, etc) ...
-    // Prevent shortcut if user is typing in an input
+    // Standard shortcuts logic
     const activeElement = document.activeElement
     const isTyping = activeElement instanceof HTMLInputElement ||
       activeElement instanceof HTMLTextAreaElement ||
@@ -147,31 +173,29 @@ export const useShortcuts = (options: ShortcutOptions = {}) => {
       return
     }
 
-    // Legacy/Standard Shift Navigation (Shift + Key)
-    // We keep this for quick access without Sticky Alt
-    // But Sticky Alt effectively replaces "Holding Alt" interaction
+    // Help shortcut ('?') - can be typed with or without Shift
+    if (event.key === '?' && !event.ctrlKey && !event.metaKey && !event.altKey) {
+      event.preventDefault()
+      router.push('/help/shortcuts')
+      return
+    }
+
+    // Legacy/Standard Shift Navigation (Shift + Key sequence)
     if (event.shiftKey && !event.ctrlKey && !event.metaKey && !event.altKey) {
-      // ... (Existing Shift logic if needed, or remove if Alt Mode replaces it fully?)
-      // User requested "SHIFT + L + M" normally.
-      // Let's keep standard Shift behavior working too.
+      if (['shift', 'control', 'meta', 'alt'].includes(key)) return
 
-      // Find matching shortcut starting with this key? No, Shift is a modifier.
-      // We need to re-implement sequence logic for Shift if we want to keep it?
-      // The user prompt focuses on Alt Mode. Old shortcuts used shift.
-      // Let's keep simple single-key Shift shortcuts if they exist, or sequence.
-
-      // Actually, let's reuse the buffer logic for Shift sequences?
-      // The user originally asked for sequences like "SHIFT + L + M".
-      // My previous implementation used `keyBuffer` locally. 
-      // I should probably unify them or keep them separate?
-      // The prompt specifically asks about Alt behavior.
+      // Handle Arrow keys separately (scroll/history)
+      if (['arrowup', 'arrowdown', 'arrowleft', 'arrowright'].includes(key)) {
+        // Fall through to arrow logic below
+      } else {
+        event.preventDefault()
+        handleShiftSequence(key)
+        return
+      }
     }
 
     // Global Key (Single press, no modifiers)
     if (!event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey) {
-      if (event.key === '?') {
-        router.push('/help/shortcuts')
-      }
       // Space to toggle help
       if (event.key === ' ') {
         event.preventDefault()
