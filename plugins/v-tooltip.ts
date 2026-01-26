@@ -89,8 +89,8 @@ export default defineNuxtPlugin((nuxtApp) => {
             white-space: nowrap;
             line-height: 1;
           }
-          /* Only show if Alt mode is active AND setting is enabled */
-          .shortcuts-alt-enabled.alt-mode-active .alt-shortcut-hint:not(.is-button-hint) {
+          /* Only show Navigation hints if Alt mode is active AND it has NO complex modifiers (Ctrl/Cmd) */
+          .shortcuts-alt-enabled.alt-mode-active .alt-shortcut-hint:not(.is-button-hint):not(.has-complex-mods) {
             opacity: 1;
             transform: scale(1);
             display: flex;
@@ -105,24 +105,32 @@ export default defineNuxtPlugin((nuxtApp) => {
           /* Filter dimmed hints */
           .alt-shortcut-hint.dimmed {
             opacity: 0.1 !important;
-            transform: scale(0.8);
+            transform: scale(0.85);
             filter: grayscale(1);
           }
           
-          /* Active Keys Highlight */
+          /* Active Keys Highlight (Sequencing) */
           .alt-shortcut-hint .key {
-            transition: color 0.1s ease;
+            transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
           }
           .alt-shortcut-hint .key.active {
-            color: var(--color-primary);
-            text-shadow: 0 0 5px color-mix(in srgb, var(--color-primary) 40%, transparent);
-            transform: scale(1.2);
+            color: var(--color-primary) !important;
+            background: color-mix(in srgb, var(--color-primary) 20%, transparent);
+            box-shadow: 0 0 15px color-mix(in srgb, var(--color-primary) 40%, transparent);
+            transform: scale(1.35);
+            border-radius: 4px;
+            padding: 0 4px;
             display: inline-block;
+            font-weight: 900;
+          }
+          .alt-shortcut-hint .key.is-mod {
+            font-size: 0.8em;
+            font-weight: 400;
           }
           .alt-shortcut-hint .sep {
             opacity: 0.5;
-            margin: 0 1px;
-            font-weight: 400;
+            margin: 0 2px;
+            font-weight: 300;
           }
         `
         document.head.appendChild(style)
@@ -143,31 +151,40 @@ export default defineNuxtPlugin((nuxtApp) => {
         // Extract content from all matches
         const allKeys = matches.map((m: string) => m.replace(/class="kbd-hint">|<\/span>/g, ''))
 
-        // Check for ANY modifiers in the shortcut
-        const hasModifiers = allKeys.some((k: string) =>
-          ['Shift', 'Ctrl', 'Alt', 'Cmd', 'Control', 'Option', 'Command'].includes(k)
+        // Detect complex combinations (Ctrl, Cmd, Meta) to hide them in sequential ALT mode
+        const hasComplexModifiers = allKeys.some((k: string) =>
+          ['Ctrl', 'Cmd', 'Control', 'Meta', 'Command'].includes(k)
         )
 
-        // Filter out common modifiers for the visual badge
-        const contentKeys = allKeys.filter((k: string) => !['Shift', 'Ctrl', 'Alt', 'Cmd', 'Control'].includes(k))
+        // Filter out modifiers for the visual sequence display (if we want to show only action keys)
+        // But for ALT mode clarity, we now show all keys, so displayKeys = allKeys
+        const displayKeys = allKeys
 
-        if (contentKeys.length > 0) {
+        if (displayKeys.length > 0) {
           const hint = document.createElement('div')
           hint.className = 'alt-shortcut-hint'
+
+          if (hasComplexModifiers) {
+            hint.classList.add('has-complex-mods')
+          }
 
           // ONLY mark as "permanent button hint" if:
           // 1. It's a button
           // 2. It DOES NOT have modifiers (it's a direct contextual key like Y, N, Enter)
-          if ((el.classList.contains('btn') || el.tagName === 'BUTTON') && !hasModifiers) {
+          if ((el.classList.contains('btn') || el.tagName === 'BUTTON') && !hasComplexModifiers) {
             hint.classList.add('is-button-hint')
           }
 
-          // Store the full sequence for filtering logic (e.g. "l,m")
+          // Store the sequence keys for highlighting (exclude modifiers from the tracker)
+          const contentKeys = allKeys.filter((k: string) => !['Shift', 'Ctrl', 'Alt', 'Cmd', 'Control', 'Option', 'Command'].includes(k))
           hint.dataset.seq = contentKeys.map((k: string) => k.toLowerCase()).join(',')
 
           // Generate structured HTML: <span class="key" data-key="l">L</span> ...
-          const html = contentKeys
-            .map((k: string) => `<span class="key" data-key="${k.toLowerCase()}">${k}</span>`)
+          const html = displayKeys
+            .map((k: string) => {
+              const isModifier = ['Shift', 'Ctrl', 'Alt', 'Cmd', 'Control', 'Option', 'Command'].includes(k)
+              return `<span class="key ${isModifier ? 'is-mod opacity-60' : ''}" data-key="${k.toLowerCase()}">${k}</span>`
+            })
             .join('<span class="sep">+</span>')
 
           hint.innerHTML = html

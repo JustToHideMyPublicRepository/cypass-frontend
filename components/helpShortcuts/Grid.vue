@@ -13,8 +13,10 @@
             <span class="text-BtW font-medium text-sm">{{ s.label }}</span>
             <div class="flex items-center gap-1">
               <template v-if="s.modifier">
-                <kbd class="kbd-hint !px-2 uppercase shadow-[0_2px_0_0_rgba(0,0,0,0.5)]">{{ s.modifier }}</kbd>
-                <span class="text-hsa text-[10px]">+</span>
+                <template v-for="(m, midx) in s.modifier.split('+')" :key="'mod-' + midx">
+                  <kbd class="kbd-hint !px-2 uppercase shadow-[0_2px_0_0_rgba(0,0,0,0.5)]">{{ m.trim() }}</kbd>
+                  <span class="text-hsa text-[10px]">+</span>
+                </template>
               </template>
               <template v-for="(k, index) in s.keys" :key="index">
                 <kbd class="kbd-hint !px-2 uppercase shadow-[0_2px_0_0_rgba(0,0,0,0.5)]">{{ k === 'enter' ? '↵' : k
