@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { type CryptographicProof, type Document, type UploadResult, type VerificationResult, type PublicKeyInfo } from '../types/documents'
+import { type CryptographicProof, type Document, type DocumentDetail, type UploadResult, type VerificationResult, type PublicKeyInfo } from '../types/documents'
 
 export const useDocumentsStore = defineStore('documents', {
   state: () => ({
@@ -9,6 +9,7 @@ export const useDocumentsStore = defineStore('documents', {
     uploadResult: null as UploadResult | null,
     verificationResult: null as VerificationResult | null,
     publicKeyInfo: null as PublicKeyInfo | null,
+    currentDocument: null as DocumentDetail | null,
   }),
 
   actions: {
@@ -133,6 +134,26 @@ export const useDocumentsStore = defineStore('documents', {
         }
       } catch (err) {
         console.error('Failed to fetch documents', err)
+      } finally {
+        this.loading = false
+      }
+    },
+
+    async fetchDocumentById(id: string) {
+      this.loading = true
+      this.error = null
+      try {
+        const response = await $fetch<{ success: boolean; data: DocumentDetail }>('/api/documents/get', {
+          query: { id }
+        })
+        if (response.success) {
+          this.currentDocument = response.data
+          return true
+        }
+        return false
+      } catch (err: any) {
+        this.error = err.data?.message || 'Impossible de récupérer les détails du document'
+        return false
       } finally {
         this.loading = false
       }

@@ -6,10 +6,27 @@ export interface CryptographicProof {
 
 export interface Document {
   id: string
-  name: string
+  filename: string
   hash: string
-  status: string
-  date: string
+  created_at: string
+  file_type: string
+  has_certificate: boolean
+}
+
+export interface SignatureInfo {
+  algorithm: string
+  fingerprint: string
+  present: boolean
+  signed_at?: string
+}
+
+export interface DocumentDetail extends Document {
+  signed_at: string
+  signature_info: SignatureInfo
+  availability: {
+    certificate: boolean
+    original_stored: boolean
+  }
 }
 
 export interface UploadResult {

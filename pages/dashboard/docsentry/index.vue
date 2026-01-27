@@ -65,13 +65,17 @@ const filteredDocuments = computed(() => {
   let docs = store.documents
 
   if (statusFilter.value !== 'all') {
-    docs = docs.filter(d => d.status === statusFilter.value)
+    if (statusFilter.value === 'Verified') {
+      docs = docs.filter(d => d.has_certificate)
+    } else {
+      docs = docs.filter(d => !d.has_certificate)
+    }
   }
 
   if (searchQuery.value) {
     const q = searchQuery.value.toLowerCase()
     docs = docs.filter(d =>
-      d.name.toLowerCase().includes(q) ||
+      d.filename.toLowerCase().includes(q) ||
       d.hash.toLowerCase().includes(q) ||
       d.id.toLowerCase().includes(q)
     )
@@ -116,6 +120,6 @@ onMounted(() => {
 })
 
 useHead({
-  title: 'DocSentry - Gestion de documents'
+  title: 'Gestion de documents'
 })
 </script>

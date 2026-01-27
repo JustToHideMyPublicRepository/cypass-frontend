@@ -28,28 +28,30 @@
                   <IconFileText class="w-5 h-5" />
                 </div>
                 <div>
-                  <div class="font-medium text-BtW">{{ doc.name }}</div>
+                  <div class="font-medium text-BtW">{{ doc.filename }}</div>
                   <div class="text-[10px] text-hsa uppercase font-mono">ID: {{ doc.id }}</div>
                 </div>
               </div>
             </td>
             <td class="px-6 py-4 text-hsa">
-              {{ formatDate(doc.date) }}
+              {{ formatDate(doc.created_at) }}
             </td>
             <td class="px-6 py-4 font-code text-[10px] text-hsa max-w-[150px] truncate" :title="doc.hash">
               {{ doc.hash }}
             </td>
             <td class="px-6 py-4">
-              <UiStatusBadge :status="doc.status" />
+              <UiStatusBadge :status="doc.has_certificate ? 'Verified' : 'Pending'" />
             </td>
             <td class="px-6 py-4 text-right">
               <div class="flex justify-end gap-1">
+                <NuxtLink :to="`/dashboard/docsentry/${doc.id}`"
+                  class="p-2 hover:bg-primary/10 hover:text-primary rounded-lg transition-colors"
+                  title="Voir les détails">
+                  <IconEye class="w-4 h-4" />
+                </NuxtLink>
                 <button class="p-2 hover:bg-primary/10 hover:text-primary rounded-lg transition-colors"
                   title="Télécharger">
                   <IconDownload class="w-4 h-4" />
-                </button>
-                <button class="p-2 hover:bg-ashAct/20 hover:text-BtW rounded-lg transition-colors">
-                  <IconDotsVertical class="w-4 h-4" />
                 </button>
               </div>
             </td>
@@ -61,12 +63,14 @@
 </template>
 
 <script setup lang="ts">
-import { IconFileText, IconDownload, IconDotsVertical, IconFileOff } from '@tabler/icons-vue'
+import { IconFileText, IconDownload, IconFileOff, IconEye } from '@tabler/icons-vue'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 
+import type { Document } from '~/types/documents'
+
 defineProps<{
-  documents: any[]
+  documents: Document[]
   loading: boolean
 }>()
 
