@@ -1,6 +1,16 @@
-import { defineNuxtPlugin } from '#app'
+import { defineNuxtPlugin, useRouter } from '#app'
 
 export default defineNuxtPlugin((nuxtApp) => {
+  const router = useRouter()
+
+  // Global cleanup on route change
+  router.afterEach(() => {
+    if (import.meta.client) {
+      const tooltip = document.getElementById('global-shortcut-tooltip')
+      if (tooltip) tooltip.classList.remove('visible')
+    }
+  })
+
   nuxtApp.vueApp.directive('tooltip', {
     getSSRProps() {
       return {}
@@ -151,13 +161,17 @@ export default defineNuxtPlugin((nuxtApp) => {
         // Extract content from all matches
         const allKeys = matches.map((m: string) => m.replace(/class="kbd-hint">|<\/span>/g, ''))
 
+        // Detect ANY modifiers (including Shift) to exclude from permanent button hints
+        const hasAnyModifier = allKeys.some((k: string) =>
+          ['Shift', 'Ctrl', 'Alt', 'Cmd', 'Control', 'Option', 'Command', 'Opt'].includes(k)
+        )
+
         // Detect complex combinations (Ctrl, Cmd, Meta) to hide them in sequential ALT mode
         const hasComplexModifiers = allKeys.some((k: string) =>
           ['Ctrl', 'Cmd', 'Control', 'Meta', 'Command'].includes(k)
         )
 
-        // Filter out modifiers for the visual sequence display (if we want to show only action keys)
-        // But for ALT mode clarity, we now show all keys, so displayKeys = allKeys
+        // Show ALL keys in the hint for clarity, even in ALT mode
         const displayKeys = allKeys
 
         if (displayKeys.length > 0) {
@@ -170,8 +184,8 @@ export default defineNuxtPlugin((nuxtApp) => {
 
           // ONLY mark as "permanent button hint" if:
           // 1. It's a button
-          // 2. It DOES NOT have modifiers (it's a direct contextual key like Y, N, Enter)
-          if ((el.classList.contains('btn') || el.tagName === 'BUTTON') && !hasComplexModifiers) {
+          // 2. It DOES NOT have ANY modifiers (it's a direct contextual key like Y, N, Enter)
+          if ((el.classList.contains('btn') || el.tagName === 'BUTTON') && !hasAnyModifier) {
             hint.classList.add('is-button-hint')
           }
 
