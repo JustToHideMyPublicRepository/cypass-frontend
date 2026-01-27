@@ -28,7 +28,10 @@
                   <IconFileText class="w-5 h-5" />
                 </div>
                 <div>
-                  <div class="font-medium text-BtW">{{ doc.filename }}</div>
+                  <NuxtLink :to="`/dashboard/docsentry/${doc.id}`"
+                    class="font-medium text-BtW hover:text-primary transition-colors cursor-pointer">
+                    {{ doc.filename }}
+                  </NuxtLink>
                   <div class="text-[10px] text-hsa uppercase font-mono">ID: {{ doc.id }}</div>
                 </div>
               </div>

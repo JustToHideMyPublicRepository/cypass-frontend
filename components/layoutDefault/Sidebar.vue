@@ -26,8 +26,10 @@
       <!-- Main Links -->
       <nav class="space-y-1.5">
         <NuxtLink v-for="link in mainLinks" :key="link.path" :to="link.path" class="nav-link"
-          v-tooltip="getLinkTooltip(link.path)" :class="{ 'justify-center px-0': isCollapsed }" active-class="active"
-          :title="isCollapsed ? link.label : ''">
+          v-tooltip="getLinkTooltip(link.path)" :class="{
+            'justify-center px-0': isCollapsed,
+            'active': isLinkActive(link.path)
+          }" :title="isCollapsed ? link.label : ''">
           <component :is="link.icon" class="w-5 h-5 icon" />
           <span v-show="!isCollapsed" class="truncate">{{ link.label }}</span>
         </NuxtLink>
@@ -40,8 +42,10 @@
         <div v-show="isCollapsed" class="border-t border-ash mx-2"></div>
         <nav class="space-y-1.5">
           <NuxtLink v-for="service in activeModules" :key="service.id" :to="`/dashboard/${service.id}`" class="nav-link"
-            v-tooltip="getLinkTooltip('/dashboard/' + service.id)" :class="{ 'justify-center px-0': isCollapsed }"
-            active-class="active" :title="isCollapsed ? service.title : ''">
+            v-tooltip="getLinkTooltip('/dashboard/' + service.id)" :class="{
+              'justify-center px-0': isCollapsed,
+              'active': isLinkActive(`/dashboard/${service.id}`)
+            }" :title="isCollapsed ? service.title : ''">
             <component :is="service.icon" class="w-5 h-5 icon" />
             <span v-show="!isCollapsed" class="truncate">{{ service.title }}</span>
           </NuxtLink>
@@ -83,6 +87,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useRoute } from 'nuxt/app'
 import { IconLayoutDashboard as IconDashboard, IconLogout, IconChevronLeft } from '@tabler/icons-vue'
 import { modules } from '@/data/modules'
 import { getLinkTooltip } from '~/data/shortcuts'
@@ -101,6 +106,12 @@ const mainLinks = [
 
 const activeModules = computed(() => modules.filter(s => s.status === 'available'))
 const comingSoonModules = computed(() => modules.filter(s => s.status !== 'available'))
+
+const route = useRoute()
+const isLinkActive = (path: string) => {
+  if (path === '/dashboard') return route.path === '/dashboard'
+  return route.path === path || route.path.startsWith(path + '/')
+}
 </script>
 
 <style scoped>

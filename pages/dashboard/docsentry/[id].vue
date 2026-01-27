@@ -47,7 +47,13 @@
               <div class="text-BtW font-medium">{{ doc.file_type.toUpperCase() }}</div>
             </div>
             <div class="p-4 rounded-lg bg-ash/30 border border-ash/50 sm:col-span-2">
-              <div class="text-[10px] uppercase text-hsa font-semibold mb-1">Hash SHA-256</div>
+              <div class="flex justify-between items-center mb-1">
+                <div class="text-[10px] uppercase text-hsa font-semibold">Hash SHA-256</div>
+                <button @click="copyText(doc.hash)"
+                  class="text-[10px] text-primary hover:underline font-bold flex items-center gap-1">
+                  <IconCopy class="w-3 h-3" /> Copier
+                </button>
+              </div>
               <div class="text-BtW font-mono text-sm break-all">{{ doc.hash }}</div>
             </div>
           </div>
@@ -67,7 +73,13 @@
             </div>
             <div class="flex justify-between items-center py-3 border-b border-ash/50">
               <span class="text-hsa text-sm">Empreinte de la clé publique</span>
-              <span class="text-BtW font-mono text-xs">{{ doc.signature_info.fingerprint }}</span>
+              <div class="flex items-center gap-2">
+                <span class="text-BtW font-mono text-xs">{{ doc.signature_info.fingerprint }}</span>
+                <button @click="copyText(doc.signature_info.fingerprint)"
+                  class="p-1 hover:text-primary transition-colors">
+                  <IconCopy class="w-3 h-3" />
+                </button>
+              </div>
             </div>
             <div class="flex justify-between items-center py-3 border-b border-ash/50">
               <span class="text-hsa text-sm">Date de signature</span>
@@ -121,7 +133,7 @@
 <script setup lang="ts">
 import { computed, onMounted } from 'vue'
 import { useRoute } from 'nuxt/app'
-import { IconArrowLeft, IconFileText, IconShieldCheck, IconDownload, IconCertificate, IconShare, IconFingerprint, IconCheck, IconX, IconAlertCircle } from '@tabler/icons-vue'
+import { IconArrowLeft, IconFileText, IconShieldCheck, IconDownload, IconCertificate, IconShare, IconFingerprint, IconCheck, IconX, IconAlertCircle, IconCopy } from '@tabler/icons-vue'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { useDocumentsStore } from '~/stores/documents'
@@ -147,6 +159,11 @@ const formatDate = (dateStr?: string) => {
 }
 
 const toast = useToastStore()
+
+const copyText = (text: string) => {
+  navigator.clipboard.writeText(text)
+  toast.showToast('info', 'Copié', 'Texte copié dans le presse-papier.')
+}
 
 const fetchDoc = async () => {
   await store.fetchDocumentById(docId)
