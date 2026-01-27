@@ -14,7 +14,13 @@ export const useDocumentsStore = defineStore('documents', {
       total: 0,
       limit: 20,
       offset: 0,
-      has_more: false
+      has_more: false,
+      filters: {
+        filename: '',
+        file_type: '',
+        date_start: '',
+        date_end: ''
+      }
     }
   }),
 
@@ -131,9 +137,15 @@ export const useDocumentsStore = defineStore('documents', {
       return true
     },
 
-    async fetchDocuments(limit: number = 20, offset: number = 0) {
+    async fetchDocuments(limit: number = 20, offset: number = 0, filters: any = {}) {
       this.loading = true
       try {
+        const query: any = { limit, offset }
+        if (filters.filename) query.filename = filters.filename
+        if (filters.file_type && filters.file_type !== 'all') query.file_type = filters.file_type
+        if (filters.date_start) query.date_start = filters.date_start
+        if (filters.date_end) query.date_end = filters.date_end
+
         const response = await $fetch<{
           success: boolean;
           data: {
@@ -146,12 +158,15 @@ export const useDocumentsStore = defineStore('documents', {
             }
           }
         }>('/api/documents/list', {
-          query: { limit, offset }
+          query
         })
         if (response.success) {
           this.documents = response.data.documents
           if (response.data.pagination) {
-            this.pagination = response.data.pagination
+            this.pagination = {
+              ...this.pagination,
+              ...response.data.pagination
+            }
           }
         }
       } catch (err) {

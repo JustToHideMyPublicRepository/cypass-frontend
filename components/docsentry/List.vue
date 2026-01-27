@@ -46,9 +46,10 @@
                   {{ doc.hash }}
                 </div>
                 <div class="flex items-center gap-1 shrink-0">
-                  <button @click="copyHash(doc.hash)" class="p-1 hover:text-primary transition-colors"
+                  <button @click="copyHash(doc.hash, doc.id)" class="p-1 hover:text-primary transition-colors"
                     title="Copier le hash">
-                    <IconCopy class="w-3 h-3" />
+                    <IconCopy v-if="!copiedHashes.has(doc.id)" class="w-3 h-3" />
+                    <IconCheck v-else class="w-3 h-3 text-success" />
                   </button>
                   <button @click="toggleHash(doc.id)" class="p-1 hover:text-primary transition-colors"
                     :title="expandedHashes.has(doc.id) ? 'Réduire' : 'Voir tout'">
@@ -101,7 +102,7 @@
 </template>
 
 <script setup lang="ts">
-import { IconFileText, IconDownload, IconFileOff, IconEye, IconCopy, IconChevronDown, IconChevronLeft, IconChevronRight } from '@tabler/icons-vue'
+import { IconFileText, IconDownload, IconFileOff, IconEye, IconCopy, IconCheck, IconChevronDown, IconChevronLeft, IconChevronRight } from '@tabler/icons-vue'
 import { ref } from 'vue'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
@@ -120,10 +121,13 @@ const emit = defineEmits(['next-page', 'prev-page'])
 
 const toast = useToastStore()
 const expandedHashes = ref(new Set<string>())
+const copiedHashes = ref(new Set<string>())
 
-const copyHash = (hash: string) => {
+const copyHash = (hash: string, id: string) => {
   navigator.clipboard.writeText(hash)
+  copiedHashes.value.add(id)
   toast.showToast('info', 'Copié', 'Hash copié dans le presse-papier.')
+  setTimeout(() => copiedHashes.value.delete(id), 2000)
 }
 
 const toggleHash = (id: string) => {

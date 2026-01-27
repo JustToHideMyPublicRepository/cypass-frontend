@@ -1,6 +1,6 @@
 <template>
-  <UiBaseCard v-if="store.publicKeyInfo" class="overflow-hidden border-primary/20 shadow-lg shadow-primary/5">
-    <div class="flex flex-col md:flex-row gap-6 items-start">
+  <UiBaseModal :show="show" title="Certificat de Confiance" maxWidth="2xl" @close="$emit('close')">
+    <div v-if="store.publicKeyInfo" class="flex flex-col md:flex-row gap-6 items-start py-2">
       <div class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center text-primary shrink-0">
         <IconCertificate class="w-10 h-10" />
       </div>
@@ -33,7 +33,7 @@
               class="text-[10px] text-primary font-bold hover:underline flex items-center gap-1">
               <IconCopy v-if="!copied" class="w-3 h-3" />
               <IconCheck v-else class="w-3 h-3 text-success" />
-              Copier
+              {{ copied ? 'Copié' : 'Copier' }}
             </button>
           </div>
           <div
@@ -57,7 +57,7 @@
         </div>
       </div>
     </div>
-  </UiBaseCard>
+  </UiBaseModal>
 </template>
 
 <script setup lang="ts">
@@ -66,6 +66,12 @@ import { IconCertificate, IconCopy, IconCheck, IconCalendar, IconArrowUpRight } 
 import { useDocumentsStore } from '~/stores/documents'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
+
+defineProps<{
+  show: boolean
+}>()
+
+defineEmits(['close'])
 
 const store = useDocumentsStore()
 const copied = ref(false)

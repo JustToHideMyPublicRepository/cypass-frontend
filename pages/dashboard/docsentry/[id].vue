@@ -49,9 +49,11 @@
             <div class="p-4 rounded-lg bg-ash/30 border border-ash/50 sm:col-span-2">
               <div class="flex justify-between items-center mb-1">
                 <div class="text-[10px] uppercase text-hsa font-semibold">Hash SHA-256</div>
-                <button @click="copyText(doc.hash)"
+                <button @click="copyField(doc.hash, 'hash')"
                   class="text-[10px] text-primary hover:underline font-bold flex items-center gap-1">
-                  <IconCopy class="w-3 h-3" /> Copier
+                  <IconCopy v-if="!copiedFields.hash" class="w-3 h-3" />
+                  <IconCheck v-else class="w-3 h-3 text-success" />
+                  {{ copiedFields.hash ? 'Copié' : 'Copier' }}
                 </button>
               </div>
               <div class="text-BtW font-mono text-sm break-all">{{ doc.hash }}</div>
@@ -75,9 +77,10 @@
               <span class="text-hsa text-sm">Empreinte de la clé publique</span>
               <div class="flex items-center gap-2">
                 <span class="text-BtW font-mono text-xs">{{ doc.signature_info.fingerprint }}</span>
-                <button @click="copyText(doc.signature_info.fingerprint)"
+                <button @click="copyField(doc.signature_info.fingerprint, 'fingerprint')"
                   class="p-1 hover:text-primary transition-colors">
-                  <IconCopy class="w-3 h-3" />
+                  <IconCopy v-if="!copiedFields.fingerprint" class="w-3 h-3" />
+                  <IconCheck v-else class="w-3 h-3 text-success" />
                 </button>
               </div>
             </div>
@@ -131,7 +134,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, reactive } from 'vue'
 import { useRoute } from 'nuxt/app'
 import { IconArrowLeft, IconFileText, IconShieldCheck, IconDownload, IconCertificate, IconShare, IconFingerprint, IconCheck, IconX, IconAlertCircle, IconCopy } from '@tabler/icons-vue'
 import { format } from 'date-fns'
@@ -159,6 +162,17 @@ const formatDate = (dateStr?: string) => {
 }
 
 const toast = useToastStore()
+const copiedFields = reactive<Record<string, boolean>>({
+  hash: false,
+  fingerprint: false
+})
+
+const copyField = (text: string, field: string) => {
+  navigator.clipboard.writeText(text)
+  copiedFields[field] = true
+  toast.showToast('info', 'Copié', 'Texte copié dans le presse-papier.')
+  setTimeout(() => copiedFields[field] = false, 2000)
+}
 
 const copyText = (text: string) => {
   navigator.clipboard.writeText(text)

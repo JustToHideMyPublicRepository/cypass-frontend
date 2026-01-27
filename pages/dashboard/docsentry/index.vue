@@ -11,26 +11,43 @@
 
     <!-- Filters and Search -->
     <UiBaseCard>
-      <div class="flex flex-col md:flex-row gap-4">
-        <div class="flex-1 relative">
-          <span class="absolute left-3 top-1/2 -translate-y-1/2 text-hsa">
-            <IconSearch class="w-5 h-5" />
-          </span>
-          <input v-model="searchQuery" type="text" placeholder="Rechercher par nom ou hash..."
-            class="w-full pl-10 pr-4 py-2 rounded-lg border border-ash bg-ash focus:ring-2 focus:ring-primary focus:border-transparent text-sm placeholder-hsa" />
+      <div class="space-y-4">
+        <div class="flex flex-col md:flex-row gap-4">
+          <div class="flex-1 relative">
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-hsa">
+              <IconSearch class="w-5 h-5" />
+            </span>
+            <input v-model="filters.filename" type="text" placeholder="Rechercher par nom de fichier..."
+              class="w-full pl-10 pr-4 py-2 rounded-lg border border-ash bg-ash focus:ring-2 focus:ring-primary focus:border-transparent text-sm placeholder-hsa" />
+          </div>
+          <div class="flex gap-2">
+            <select v-model="filters.file_type"
+              class="px-4 py-2 rounded-lg border border-ash bg-ash text-sm focus:ring-2 focus:ring-primary">
+              <option value="all">Tous les types</option>
+              <option value="PDF">PDF</option>
+              <option value="PNG">PNG</option>
+              <option value="JPG">JPG</option>
+            </select>
+            <UiBaseButton variant="secondary" @click="showAdvancedFilters = !showAdvancedFilters">
+              <IconFilter class="w-4 h-4 mr-2" /> {{ showAdvancedFilters ? 'Réduire' : 'Filtres' }}
+            </UiBaseButton>
+          </div>
         </div>
-        <div class="flex gap-2">
-          <select v-model="statusFilter"
-            class="px-4 py-2 rounded-lg border border-ash bg-ash text-sm focus:ring-2 focus:ring-primary">
-            <option value="all">Tous les statuts</option>
-            <option value="Verified">Vérifié</option>
-            <option value="Pending">En attente</option>
-            <option value="Rejected">Rejeté</option>
-          </select>
-          <UiBaseButton variant="secondary">
-            <IconFilter class="w-4 h-4 mr-2" /> Filtres
-          </UiBaseButton>
-        </div>
+
+        <Transition name="fade">
+          <div v-if="showAdvancedFilters" class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-ash">
+            <div class="space-y-1">
+              <label class="text-[10px] font-bold text-hsa uppercase">Date de début</label>
+              <input v-model="filters.date_start" type="datetime-local"
+                class="w-full px-4 py-2 rounded-lg border border-ash bg-ash text-sm focus:ring-2 focus:ring-primary" />
+            </div>
+            <div class="space-y-1">
+              <label class="text-[10px] font-bold text-hsa uppercase">Date de fin</label>
+              <input v-model="filters.date_end" type="datetime-local"
+                class="w-full px-4 py-2 rounded-lg border border-ash bg-ash text-sm focus:ring-2 focus:ring-primary" />
+            </div>
+          </div>
+        </Transition>
       </div>
     </UiBaseCard>
 
@@ -46,20 +63,7 @@
       @close="closeModals" />
 
     <!-- Trust Card Modal -->
-    <Teleport to="body">
-      <Transition name="modal">
-        <div v-if="modals.trust" class="fixed inset-0 z-[100] flex items-center justify-center p-4">
-          <div class="absolute inset-0 bg-ashAct/60 backdrop-blur-sm" @click="closeModals"></div>
-          <div class="relative w-full max-w-2xl bg-ash border border-ashAct rounded-2xl overflow-hidden shadow-2xl">
-            <button @click="closeModals"
-              class="absolute top-4 right-4 p-2 hover:bg-ashAct rounded-lg transition-colors z-10">
-              <IconX class="w-5 h-5 text-hsa" />
-            </button>
-            <DocsentryTrustCard class="border-0 shadow-none" />
-          </div>
-        </div>
-      </Transition>
-    </Teleport>
+    <DocsentryTrustCard :show="modals.trust" @close="modals.trust = false" />
   </div>
 </template>
 
@@ -76,8 +80,14 @@ definePageMeta({
 const store = useDocumentsStore()
 const toast = useToastStore()
 
-const searchQuery = ref('')
-const statusFilter = ref('all')
+const filters = reactive({
+  filename: '',
+  file_type: 'all',
+  date_start: '',
+  date_end: ''
+})
+const showAdvancedFilters = ref(false)
+
 const modals = reactive({
   upload: false,
   verify: false,
@@ -135,13 +145,16 @@ const handlePrevPage = () => {
   }
 }
 
-watch([currentPage, statusFilter, searchQuery], () => {
+watch([currentPage, filters], () => {
   const offset = (currentPage.value - 1) * limit
-  // Here we should ideally pass filters to the backend, 
-  // but if get_all.php doesn't support them, we might need a different approach.
-  // For now, let's stick to pagination as requested.
-  store.fetchDocuments(limit, offset)
-})
+  // Pass formatted dates if they exist
+  const apiFilters = {
+    ...filters,
+    date_start: filters.date_start ? filters.date_start.replace('T', ' ') + ':00' : '',
+    date_end: filters.date_end ? filters.date_end.replace('T', ' ') + ':00' : ''
+  }
+  store.fetchDocuments(limit, offset, apiFilters)
+}, { deep: true })
 
 onMounted(() => {
   store.fetchDocuments(limit, 0)
