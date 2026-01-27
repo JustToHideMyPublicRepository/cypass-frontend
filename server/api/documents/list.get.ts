@@ -14,8 +14,7 @@ export default defineEventHandler(async (event) => {
         'accept': 'application/json'
       },
       query: {
-        limit: query.limit || 20,
-        offset: query.offset || 0
+        ...query
       }
     })
 

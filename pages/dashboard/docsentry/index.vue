@@ -24,13 +24,18 @@
             <select v-model="filters.file_type"
               class="px-4 py-2 rounded-lg border border-ash bg-ash text-sm focus:ring-2 focus:ring-primary">
               <option value="all">Tous les types</option>
-              <option value="PDF">PDF</option>
-              <option value="PNG">PNG</option>
-              <option value="JPG">JPG</option>
+              <option v-for="type in availableTypes" :key="type" :value="type">
+                {{ type }}
+              </option>
             </select>
-            <UiBaseButton variant="secondary" @click="showAdvancedFilters = !showAdvancedFilters">
+            <UiBaseButton variant="secondary" @click="showAdvancedFilters = !showAdvancedFilters"
+              :class="{ 'bg-primary/10 text-primary': showAdvancedFilters }">
               <IconFilter class="w-4 h-4 mr-2" /> {{ showAdvancedFilters ? 'Réduire' : 'Filtres' }}
             </UiBaseButton>
+            <button v-if="hasActiveFilters" @click="resetFilters"
+              class="p-2 text-hsa hover:text-danger p-2 transition-colors" title="Réinitialiser les filtres">
+              <IconX class="w-5 h-5" />
+            </button>
           </div>
         </div>
 
@@ -94,12 +99,33 @@ const modals = reactive({
   trust: false
 })
 
+const hasActiveFilters = computed(() => {
+  return filters.filename !== '' || filters.file_type !== 'all' || filters.date_start !== '' || filters.date_end !== ''
+})
+
+const resetFilters = () => {
+  filters.filename = ''
+  filters.file_type = 'all'
+  filters.date_start = ''
+  filters.date_end = ''
+  currentPage.value = 1
+}
+
 const currentPage = ref(1)
 const limit = 20
 const totalPages = computed(() => Math.ceil(store.pagination.total / limit) || 1)
 
 const filteredDocuments = computed(() => {
   return store.documents
+})
+
+const availableTypes = computed(() => {
+  const types = new Set(store.documents.map(d => d.file_type.toUpperCase()))
+  // Ensure the currently selected type is also in the list even if no results are found
+  if (filters.file_type !== 'all') {
+    types.add(filters.file_type.toUpperCase())
+  }
+  return Array.from(types).sort()
 })
 
 const handleUpload = async (file: File) => {
@@ -145,15 +171,18 @@ const handlePrevPage = () => {
   }
 }
 
+let debounceTimeout: NodeJS.Timeout
 watch([currentPage, filters], () => {
-  const offset = (currentPage.value - 1) * limit
-  // Pass formatted dates if they exist
-  const apiFilters = {
-    ...filters,
-    date_start: filters.date_start ? filters.date_start.replace('T', ' ') + ':00' : '',
-    date_end: filters.date_end ? filters.date_end.replace('T', ' ') + ':00' : ''
-  }
-  store.fetchDocuments(limit, offset, apiFilters)
+  clearTimeout(debounceTimeout)
+  debounceTimeout = setTimeout(() => {
+    const offset = (currentPage.value - 1) * limit
+    const apiFilters = {
+      ...filters,
+      date_start: filters.date_start ? filters.date_start.replace('T', ' ') + ':00' : '',
+      date_end: filters.date_end ? filters.date_end.replace('T', ' ') + ':00' : ''
+    }
+    store.fetchDocuments(limit, offset, apiFilters)
+  }, 300)
 }, { deep: true })
 
 onMounted(() => {

@@ -12,16 +12,30 @@
           </tr>
         </thead>
         <tbody class="divide-y divide-ash">
-          <tr v-if="loading" v-for="i in 3" :key="i" class="animate-pulse">
-            <td colspan="5" class="px-6 py-8 text-center text-hsa">Chargement...</td>
-          </tr>
+          <!-- Loading State -->
+          <template v-if="loading">
+            <tr v-for="i in 3" :key="i" class="animate-pulse">
+              <td colspan="5" class="px-6 py-8 text-center text-hsa">
+                <div class="flex items-center justify-center gap-2">
+                  <div class="w-2 h-2 bg-primary rounded-full animate-bounce"></div>
+                  <div class="w-2 h-2 bg-primary rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                  <div class="w-2 h-2 bg-primary rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                  <span class="ml-2">Chargement...</span>
+                </div>
+              </td>
+            </tr>
+          </template>
+
+          <!-- Empty State -->
           <tr v-else-if="documents.length === 0">
             <td colspan="5" class="px-6 py-12 text-center text-hsa">
               <IconFileOff class="w-12 h-12 mx-auto mb-2 opacity-20" />
               <p>Aucun document trouvé</p>
             </td>
           </tr>
-          <tr v-for="doc in documents" :key="doc.id" class="hover:bg-ash/30 transition-colors">
+
+          <!-- Data State -->
+          <tr v-else v-for="doc in documents" :key="doc.id" class="hover:bg-ash/30 transition-colors">
             <td class="px-6 py-4">
               <div class="flex items-center gap-3">
                 <div class="p-2 rounded bg-primary/10 text-primary">
