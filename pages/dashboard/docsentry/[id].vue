@@ -33,7 +33,8 @@
                 <p class="text-sm text-hsa">ID: {{ doc.id }}</p>
               </div>
             </div>
-            <UiStatusBadge :status="doc.has_certificate ? 'Verified' : 'Pending'" />
+            <UiStatusBadge
+              :status="(doc.availability?.certificate || doc.signature_info?.present) ? 'Verified' : 'Pending'" />
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -74,10 +75,10 @@
             </div>
             <div class="flex justify-between items-center py-3">
               <span class="text-hsa text-sm">Statut de la signature</span>
-              <span v-if="doc.signature_info.present" class="text-green-500 flex items-center gap-1 font-medium">
+              <span v-if="doc.signature_info.present" class="text-success flex items-center gap-1 font-medium">
                 <IconCheck class="w-4 h-4" /> Valide
               </span>
-              <span v-else class="text-red-500 flex items-center gap-1 font-medium">
+              <span v-else class="text-danger flex items-center gap-1 font-medium">
                 <IconX class="w-4 h-4" /> Invalide
               </span>
             </div>
@@ -90,13 +91,11 @@
         <UiBaseCard>
           <h3 class="font-bold text-BtW mb-4">Actions</h3>
           <div class="space-y-3">
-            <UiBaseButton class="w-full justify-start" variant="secondary">
-              <IconDownload class="w-4 h-4 mr-2" /> Télécharger l'original
-            </UiBaseButton>
-            <UiBaseButton v-if="doc.availability.certificate" class="w-full justify-start" variant="secondary">
+            <UiBaseButton v-if="doc.availability?.certificate" @click="downloadCertificate" class="w-full justify-start"
+              variant="secondary">
               <IconCertificate class="w-4 h-4 mr-2" /> Télécharger le certificat
             </UiBaseButton>
-            <UiBaseButton class="w-full justify-start" variant="primary">
+            <UiBaseButton @click="shareDocument" class="w-full justify-start" variant="primary">
               <IconShare class="w-4 h-4 mr-2" /> Partager le document
             </UiBaseButton>
           </div>
@@ -104,7 +103,7 @@
 
         <UiBaseCard class="bg-primary/5 border-primary/20">
           <div class="flex items-center gap-3 mb-4">
-            <div class="p-2 rounded bg-primary text-white">
+            <div class="p-2 rounded bg-primary text-WtB">
               <IconFingerprint class="w-5 h-5" />
             </div>
             <h3 class="font-bold text-BtW">Souveraineté</h3>
@@ -126,6 +125,7 @@ import { IconArrowLeft, IconFileText, IconShieldCheck, IconDownload, IconCertifi
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { useDocumentsStore } from '~/stores/documents'
+import { useToastStore } from '~/stores/toast'
 
 definePageMeta({
   layout: 'default'
@@ -146,8 +146,49 @@ const formatDate = (dateStr?: string) => {
   }
 }
 
+const toast = useToastStore()
+
 const fetchDoc = async () => {
   await store.fetchDocumentById(docId)
+}
+
+const downloadCertificate = async () => {
+  if (!doc.value) return
+  try {
+    const response = await $fetch('/api/documents/download', {
+      query: { id: doc.value.id, type: 'certificate' },
+      responseType: 'blob'
+    })
+    const url = window.URL.createObjectURL(response as Blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.setAttribute('download', `Certificat_${doc.value.filename}`)
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  } catch (err) {
+    toast.showToast('error', 'Erreur', 'Impossible de télécharger le certificat.')
+  }
+}
+
+const shareDocument = async () => {
+  if (!doc.value) return
+  const shareData = {
+    title: `Document CYPASS: ${doc.value.filename}`,
+    text: `Vérifiez l'authenticité de ce document sur CYPASS. Hash: ${doc.value.hash}`,
+    url: window.location.href
+  }
+
+  try {
+    if (navigator.share) {
+      await navigator.share(shareData)
+    } else {
+      await navigator.clipboard.writeText(window.location.href)
+      toast.showToast('success', 'Lien copié', 'Le lien vers ce document a été copié dans le presse-papier.')
+    }
+  } catch (err) {
+    console.warn('Share failed', err)
+  }
 }
 
 onMounted(() => {

@@ -10,6 +10,12 @@ export const useDocumentsStore = defineStore('documents', {
     verificationResult: null as VerificationResult | null,
     publicKeyInfo: null as PublicKeyInfo | null,
     currentDocument: null as DocumentDetail | null,
+    pagination: {
+      total: 0,
+      limit: 20,
+      offset: 0,
+      has_more: false
+    }
   }),
 
   actions: {
@@ -125,12 +131,28 @@ export const useDocumentsStore = defineStore('documents', {
       return true
     },
 
-    async fetchDocuments() {
+    async fetchDocuments(limit: number = 20, offset: number = 0) {
       this.loading = true
       try {
-        const response = await $fetch<{ success: boolean; data: { documents: Document[] } }>('/api/documents/list')
+        const response = await $fetch<{
+          success: boolean;
+          data: {
+            documents: Document[],
+            pagination: {
+              total: number,
+              limit: number,
+              offset: number,
+              has_more: boolean
+            }
+          }
+        }>('/api/documents/list', {
+          query: { limit, offset }
+        })
         if (response.success) {
           this.documents = response.data.documents
+          if (response.data.pagination) {
+            this.pagination = response.data.pagination
+          }
         }
       } catch (err) {
         console.error('Failed to fetch documents', err)

@@ -1,8 +1,13 @@
 <template>
   <div class="space-y-6">
-    <DocsentryHeader @upload="modals.upload = true" @verify="modals.verify = true" />
-
-    <DocsentryTrustCard />
+    <div class="flex items-center justify-between">
+      <DocsentryHeader @upload="modals.upload = true" @verify="modals.verify = true" />
+      <button @click="modals.trust = true"
+        class="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary/10 text-primary hover:bg-primary/20 transition-all font-bold text-xs uppercase tracking-widest border border-primary/20">
+        <IconInfoCircle class="w-4 h-4" />
+        Pourquoi DocSentry ?
+      </button>
+    </div>
 
     <!-- Filters and Search -->
     <UiBaseCard>
@@ -29,7 +34,8 @@
       </div>
     </UiBaseCard>
 
-    <DocsentryList :documents="filteredDocuments" :loading="store.loading" />
+    <DocsentryList :documents="filteredDocuments" :loading="store.loading" :current-page="currentPage"
+      :total-pages="totalPages" @next-page="handleNextPage" @prev-page="handlePrevPage" />
 
     <!-- Modals -->
     <DocsentryModalAuth :show="modals.upload" :loading="store.loading" :error="store.error"
@@ -38,12 +44,28 @@
     <DocsentryModalVerify :show="modals.verify" :loading="store.loading" :error="store.error"
       :result="store.verificationResult" @verify="handleVerify" @reset="store.verificationResult = null"
       @close="closeModals" />
+
+    <!-- Trust Card Modal -->
+    <Teleport to="body">
+      <Transition name="modal">
+        <div v-if="modals.trust" class="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <div class="absolute inset-0 bg-ashAct/60 backdrop-blur-sm" @click="closeModals"></div>
+          <div class="relative w-full max-w-2xl bg-ash border border-ashAct rounded-2xl overflow-hidden shadow-2xl">
+            <button @click="closeModals"
+              class="absolute top-4 right-4 p-2 hover:bg-ashAct rounded-lg transition-colors z-10">
+              <IconX class="w-5 h-5 text-hsa" />
+            </button>
+            <DocsentryTrustCard class="border-0 shadow-none" />
+          </div>
+        </div>
+      </Transition>
+    </Teleport>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, onMounted } from 'vue'
-import { IconSearch, IconFilter } from '@tabler/icons-vue'
+import { ref, reactive, computed, onMounted, watch } from 'vue'
+import { IconSearch, IconFilter, IconInfoCircle, IconX } from '@tabler/icons-vue'
 import { useDocumentsStore } from '~/stores/documents'
 import { useToastStore } from '~/stores/toast'
 
@@ -58,30 +80,16 @@ const searchQuery = ref('')
 const statusFilter = ref('all')
 const modals = reactive({
   upload: false,
-  verify: false
+  verify: false,
+  trust: false
 })
 
+const currentPage = ref(1)
+const limit = 20
+const totalPages = computed(() => Math.ceil(store.pagination.total / limit) || 1)
+
 const filteredDocuments = computed(() => {
-  let docs = store.documents
-
-  if (statusFilter.value !== 'all') {
-    if (statusFilter.value === 'Verified') {
-      docs = docs.filter(d => d.has_certificate)
-    } else {
-      docs = docs.filter(d => !d.has_certificate)
-    }
-  }
-
-  if (searchQuery.value) {
-    const q = searchQuery.value.toLowerCase()
-    docs = docs.filter(d =>
-      d.filename.toLowerCase().includes(q) ||
-      d.hash.toLowerCase().includes(q) ||
-      d.id.toLowerCase().includes(q)
-    )
-  }
-
-  return docs
+  return store.documents
 })
 
 const handleUpload = async (file: File) => {
@@ -109,13 +117,34 @@ const handleVerify = async (file: File) => {
 const closeModals = () => {
   modals.upload = false
   modals.verify = false
+  modals.trust = false
   store.error = null
   store.uploadResult = null
   store.verificationResult = null
 }
 
+const handleNextPage = () => {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++
+  }
+}
+
+const handlePrevPage = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--
+  }
+}
+
+watch([currentPage, statusFilter, searchQuery], () => {
+  const offset = (currentPage.value - 1) * limit
+  // Here we should ideally pass filters to the backend, 
+  // but if get_all.php doesn't support them, we might need a different approach.
+  // For now, let's stick to pagination as requested.
+  store.fetchDocuments(limit, offset)
+})
+
 onMounted(() => {
-  store.fetchDocuments()
+  store.fetchDocuments(limit, 0)
   store.fetchPublicKey()
 })
 
