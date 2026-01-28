@@ -22,6 +22,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useToastStore } from '~/stores/toast'
 
 definePageMeta({
   layout: 'guest'
@@ -31,6 +32,7 @@ useHead({
   title: 'Contact'
 })
 
+const toast = useToastStore()
 const loading = ref(false)
 const form = ref({
   name: '',
@@ -41,10 +43,27 @@ const form = ref({
 
 const submitForm = async () => {
   loading.value = true
-  // Simulate API call
-  await new Promise(resolve => setTimeout(resolve, 2000))
-  loading.value = false
-  alert('Message envoyé ! Nous vous répondrons sous 24h.')
-  form.value = { name: '', email: '', subject: '', message: '' }
+  try {
+    const response = await $fetch<{ success: boolean; message: string; data: any }>('/api/support/contact', {
+      method: 'POST',
+      body: {
+        full_name: form.value.name,
+        email: form.value.email,
+        subject: form.value.subject,
+        message: form.value.message
+      }
+    })
+
+    if (response.success) {
+      toast.showToast('success', 'Message envoyé', response.message || 'Nous avons bien reçu votre message. Nous vous répondrons sous 24h.')
+      form.value = { name: '', email: '', subject: '', message: '' }
+    } else {
+      toast.showToast('error', 'Échec de l\'envoi', response.message || 'Une erreur est survenue.')
+    }
+  } catch (err) {
+    toast.showToast('error', 'Erreur de connexion', 'Impossible de joindre le serveur. Veuillez réessayer.')
+  } finally {
+    loading.value = false
+  }
 }
 </script>
