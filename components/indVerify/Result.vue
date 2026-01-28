@@ -76,12 +76,19 @@
           </div>
         </div>
 
-        <div class="pt-4 flex flex-col md:flex-row justify-between items-center gap-4 text-xs">
-          <div class="flex items-center gap-2 text-success font-black uppercase">
-            <IconRosetteDiscountCheck class="w-4 h-4" />
-            Vérifié le {{ formatDate(result.verification_time) }}
+        <div v-if="result.verified" class="space-y-4">
+          <UiBaseButton variant="primary" block size="lg" @click="downloadCertificate">
+            <IconDownload class="w-5 h-5 mr-2" /> Télécharger le Certificat CYPASS
+          </UiBaseButton>
+
+          <div class="pt-4 flex flex-col md:flex-row justify-between items-center gap-4 text-xs italic">
+            <div class="flex items-center gap-2 text-success font-black uppercase">
+              <IconRosetteDiscountCheck class="w-4 h-4" />
+              Vérifié le {{ formatDate(result.verification_time) }}
+            </div>
+            <button @click="$emit('reset')" class="text-primary font-bold hover:underline">Nouvelle
+              vérification</button>
           </div>
-          <button @click="$emit('reset')" class="text-primary font-bold hover:underline">Nouvelle vérification</button>
         </div>
       </div>
     </div>
@@ -102,9 +109,10 @@
 </template>
 
 <script setup lang="ts">
-import { IconRosetteDiscountCheck, IconLock, IconShieldOff } from '@tabler/icons-vue'
+import { IconRosetteDiscountCheck, IconLock, IconShieldOff, IconDownload } from '@tabler/icons-vue'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
+import { useToastStore } from '~/stores/toast'
 
 defineProps<{
   result: any
@@ -112,6 +120,35 @@ defineProps<{
 }>()
 
 defineEmits(['reset'])
+
+const toast = useToastStore()
+
+const downloadCertificate = async () => {
+  const id = props.result.document?.id || props.result.id
+  const filename = props.result.document?.filename || 'document'
+
+  if (!id) {
+    toast.showToast('error', 'Erreur', 'Identifiant du document manquant.')
+    return
+  }
+
+  try {
+    const response = await $fetch('/api/documents/download', {
+      query: { id, type: 'certificate' },
+      responseType: 'blob'
+    })
+    const url = window.URL.createObjectURL(response as Blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.setAttribute('download', `Certificat_${filename}`)
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    window.URL.revokeObjectURL(url)
+  } catch (err) {
+    toast.showToast('error', 'Erreur', 'Impossible de télécharger le certificat.')
+  }
+}
 
 const formatDate = (dateStr: string) => {
   if (!dateStr) return '-'

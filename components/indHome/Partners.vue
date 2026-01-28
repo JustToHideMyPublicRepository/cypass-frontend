@@ -4,7 +4,7 @@
       <p class="text-center text-xs font-bold text-hsa uppercase tracking-[0.2em] mb-8">Partenaires de
         Confiance & Institutionnels</p>
       <div
-        class="flex items-center gap-8 md:gap-16 overflow-x-auto md:overflow-x-visible md:flex-wrap md:justify-center no-scrollbar pb-4 md:pb-0 px-4 md:px-0">
+        class="flex items-center gap-8 md:gap-16 overflow-x-auto md:overflow-x-visible md:flex-wrap md:justify-center no-scrollbar pb-6 md:pb-0 px-4 md:px-0 snap-x">
         <template v-for="partner in partners" :key="partner.name">
           <a :href="partner.website" target="_blank" :title="partner.name"
             class="flex-shrink-0 h-10 md:h-12 w-auto flex items-center justify-center grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300 hover:scale-110">
