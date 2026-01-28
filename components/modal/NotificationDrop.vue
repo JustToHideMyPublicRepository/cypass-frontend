@@ -3,7 +3,8 @@
     <!-- Bell Button -->
     <button @click="toggleDropdown" class="p-2 rounded-xl text-hsa hover:bg-ash transition-all relative group"
       title="Notifications">
-      <IconBell v-if="store.unreadCount > 0" class="w-6 h-6 group-hover:scale-110 transition-transform text-primary" />
+      <IconBellPlus v-if="store.unreadCount > 0"
+        class="w-6 h-6 group-hover:scale-110 transition-transform text-primary" />
       <IconBell v-else class="w-6 h-6 group-hover:scale-110 transition-transform" />
       <div v-if="store.unreadCount > 0"
         class="absolute top-1 right-1 min-w-[18px] h-[18px] px-1 bg-red-500 text-white text-[10px] font-bold rounded-full border-2 border-WtB flex items-center justify-center">
@@ -12,13 +13,14 @@
     </button>
 
     <!-- Dropdown -->
-    <Teleport to="body">
+    <Teleport to="body" :disabled="!isMobile">
       <Transition enter-active-class="transition duration-200 ease-out"
         enter-from-class="opacity-0 scale-95 -translate-y-2" enter-to-class="opacity-100 scale-100 translate-y-0"
         leave-active-class="transition duration-150 ease-in" leave-from-class="opacity-100 scale-100 translate-y-0"
         leave-to-class="opacity-0 scale-95 -translate-y-2">
         <div v-if="isOpen" :style="dynamicPosition" id="notification-dropdown"
-          class="fixed md:absolute mt-3 w-[calc(100vw-2rem)] md:w-[380px] bg-WtB border border-ash rounded-2xl shadow-2xl z-[999] overflow-hidden flex flex-col max-h-[500px]">
+          class="mt-3 w-[calc(100vw-2rem)] md:w-[380px] bg-WtB border border-ash rounded-2xl shadow-2xl z-[999] overflow-hidden flex flex-col max-h-[500px]"
+          :class="isMobile ? 'fixed' : 'absolute right-0'">
 
           <!-- Header -->
           <div class="p-4 border-b border-ash flex items-center justify-between bg-ash/10">
@@ -86,7 +88,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import {
-  IconBell, IconBellOff, IconCheck, IconCircleCheck, IconAlertTriangle, IconInfoCircle, IconShieldCheck
+  IconBell, IconBellPlus, IconBellOff, IconCheck, IconCircleCheck, IconAlertTriangle, IconInfoCircle, IconShieldCheck
 } from '@tabler/icons-vue'
 import { useNotificationsStore } from '~/stores/notifications'
 import { useToastStore } from '~/stores/toast'
@@ -166,10 +168,7 @@ const dynamicPosition = computed(() => {
       position: 'fixed' as const
     }
   }
-  return {
-    right: '0',
-    top: '100%'
-  }
+  return {}
 })
 
 const handleClickOutside = (event: MouseEvent) => {
