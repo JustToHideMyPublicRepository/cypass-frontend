@@ -14,7 +14,7 @@
         <tbody class="divide-y divide-ash">
           <!-- Loading State -->
           <template v-if="loading">
-            <tr v-for="i in 3" :key="i" class="animate-pulse">
+            <tr class="animate-pulse">
               <td colspan="5" class="px-6 py-8 text-center text-hsa">
                 <div class="flex items-center justify-center gap-2">
                   <div class="w-2 h-2 bg-primary rounded-full animate-bounce"></div>

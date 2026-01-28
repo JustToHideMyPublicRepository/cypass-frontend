@@ -10,51 +10,7 @@
     </div>
 
     <!-- Filters and Search -->
-    <UiBaseCard>
-      <div class="space-y-4">
-        <div class="flex flex-col md:flex-row gap-4">
-          <div class="flex-1 relative">
-            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-hsa">
-              <IconSearch class="w-5 h-5" />
-            </span>
-            <input v-model="filters.filename" type="text" placeholder="Rechercher par nom de fichier..."
-              class="w-full pl-10 pr-4 py-2 rounded-lg border border-ash bg-ash focus:ring-2 focus:ring-primary focus:border-transparent text-sm placeholder-hsa" />
-          </div>
-          <div class="flex gap-2">
-            <select v-model="filters.file_type"
-              class="px-4 py-2 rounded-lg border border-ash bg-ash text-sm focus:ring-2 focus:ring-primary">
-              <option value="all">Tous les types</option>
-              <option v-for="type in availableTypes" :key="type" :value="type">
-                {{ type }}
-              </option>
-            </select>
-            <UiBaseButton variant="secondary" @click="showAdvancedFilters = !showAdvancedFilters"
-              :class="{ 'bg-primary/10 text-primary': showAdvancedFilters }">
-              <IconFilter class="w-4 h-4 mr-2" /> {{ showAdvancedFilters ? 'Réduire' : 'Filtres' }}
-            </UiBaseButton>
-            <button v-if="hasActiveFilters" @click="resetFilters"
-              class="p-2 text-hsa hover:text-danger p-2 transition-colors" title="Réinitialiser les filtres">
-              <IconX class="w-5 h-5" />
-            </button>
-          </div>
-        </div>
-
-        <Transition name="fade">
-          <div v-if="showAdvancedFilters" class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-ash">
-            <div class="space-y-1">
-              <label class="text-[10px] font-bold text-hsa uppercase">Date de début</label>
-              <input v-model="filters.date_start" type="datetime-local"
-                class="w-full px-4 py-2 rounded-lg border border-ash bg-ash text-sm focus:ring-2 focus:ring-primary" />
-            </div>
-            <div class="space-y-1">
-              <label class="text-[10px] font-bold text-hsa uppercase">Date de fin</label>
-              <input v-model="filters.date_end" type="datetime-local"
-                class="w-full px-4 py-2 rounded-lg border border-ash bg-ash text-sm focus:ring-2 focus:ring-primary" />
-            </div>
-          </div>
-        </Transition>
-      </div>
-    </UiBaseCard>
+    <DocsentryFilters v-model="filters" :available-types="availableTypes" @reset="resetFilters" />
 
     <DocsentryList :documents="filteredDocuments" :loading="store.loading" :current-page="currentPage"
       :total-pages="totalPages" @next-page="handleNextPage" @prev-page="handlePrevPage" />
@@ -74,7 +30,7 @@
 
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted, watch } from 'vue'
-import { IconSearch, IconFilter, IconInfoCircle, IconX } from '@tabler/icons-vue'
+import { IconInfoCircle } from '@tabler/icons-vue'
 import { useDocumentsStore } from '~/stores/documents'
 import { useToastStore } from '~/stores/toast'
 
@@ -91,16 +47,11 @@ const filters = reactive({
   date_start: '',
   date_end: ''
 })
-const showAdvancedFilters = ref(false)
 
 const modals = reactive({
   upload: false,
   verify: false,
   trust: false
-})
-
-const hasActiveFilters = computed(() => {
-  return filters.filename !== '' || filters.file_type !== 'all' || filters.date_start !== '' || filters.date_end !== ''
 })
 
 const resetFilters = () => {
