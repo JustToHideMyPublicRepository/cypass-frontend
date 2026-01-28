@@ -21,8 +21,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useToastStore } from '~/stores/toast'
+import { useAuthStore } from '~/stores/auth'
 
 definePageMeta({
   layout: 'guest'
@@ -33,12 +34,20 @@ useHead({
 })
 
 const toast = useToastStore()
+const authStore = useAuthStore()
 const loading = ref(false)
 const form = ref({
   name: '',
   email: '',
   subject: '',
   message: ''
+})
+
+onMounted(() => {
+  if (authStore.user) {
+    form.value.name = authStore.fullName
+    form.value.email = authStore.user.email
+  }
 })
 
 const submitForm = async () => {

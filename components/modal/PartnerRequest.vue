@@ -35,8 +35,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { useToastStore } from '~/stores/toast'
+import { useAuthStore } from '~/stores/auth'
 
 defineProps<{
   show: boolean
@@ -44,6 +45,7 @@ defineProps<{
 
 const emit = defineEmits(['close', 'success'])
 const toast = useToastStore()
+const authStore = useAuthStore()
 const loading = ref(false)
 
 const form = reactive({
@@ -51,6 +53,13 @@ const form = reactive({
   contact_name: '',
   email: '',
   message: ''
+})
+
+onMounted(() => {
+  if (authStore.user) {
+    form.contact_name = authStore.fullName
+    form.email = authStore.user.email
+  }
 })
 
 const handleSubmit = async () => {
