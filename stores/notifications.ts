@@ -16,19 +16,26 @@ export const useNotificationsStore = defineStore('notifications', {
   }),
 
   actions: {
-    async fetchNotifications(limit: number = 20, offset: number = 0) {
+    async fetchNotifications(limit: number = 20, offset: number = 0, append: boolean = false) {
       this.loading = true
       try {
         const response = await $fetch<{ success: boolean; data: NotificationResponse }>('/api/notifications/list', {
           query: { limit, offset }
         })
         if (response.success) {
-          this.notifications = response.data.notifications
+          if (append) {
+            this.notifications = [...this.notifications, ...response.data.notifications]
+          } else {
+            this.notifications = response.data.notifications
+          }
           this.pagination = response.data.pagination
           this.unreadCount = response.data.meta.unread_count
+          return true
         }
+        return false
       } catch (err: any) {
         this.error = 'Erreur lors de la récupération des notifications'
+        return false
       } finally {
         this.loading = false
       }
@@ -68,9 +75,12 @@ export const useNotificationsStore = defineStore('notifications', {
             const notif = this.notifications.find(n => n.id === id)
             if (notif) notif.is_read = 1
           }
+          return true
         }
+        return false
       } catch (err) {
         console.error('Failed to mark notification as read')
+        return false
       }
     },
 
@@ -82,10 +92,12 @@ export const useNotificationsStore = defineStore('notifications', {
         })
         if (response.success) {
           this.notifications = this.notifications.filter(n => n.id !== id)
-          // Refresh count might be needed or just decrement if it was unread
+          return true
         }
+        return false
       } catch (err) {
         console.error('Failed to delete notification')
+        return false
       }
     }
   }

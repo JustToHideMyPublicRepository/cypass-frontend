@@ -3,7 +3,7 @@
     <div class="flex items-center justify-between">
       <h1 class="text-3xl font-black text-BtW">Notifications</h1>
       <div class="flex gap-2">
-        <button @click="store.markAsRead('all')"
+        <button v-if="store.unreadCount > 0" @click="handleMarkAllAsRead"
           class="px-4 py-2 rounded-xl bg-primary/10 text-primary hover:bg-primary/20 transition-all font-bold text-xs uppercase tracking-widest border border-primary/20">
           Tout marquer comme lu
         </button>
@@ -40,16 +40,16 @@
 
       <div v-else class="divide-y divide-ash">
         <div v-for="notif in store.notifications" :key="notif.id"
-          :class="['p-6 flex gap-4 transition-colors relative group', !notif.is_read ? 'bg-primary/5' : 'hover:bg-ash/20']"
+          :class="['p-6 flex gap-4 transition-colors relative group cursor-pointer', !notif.is_read ? 'bg-primary/5 hover:bg-primary/10' : 'hover:bg-ash/20']"
           @click="goToDetail(notif.id)">
 
           <div v-if="!notif.is_read" class="absolute left-0 top-0 bottom-0 w-1 bg-primary"></div>
 
           <div :class="[
             'w-12 h-12 rounded-2xl flex items-center justify-center shrink-0',
-            getTypeStyles(notif.type)
+            !notif.is_read ? getTypeStyles(notif.type) : 'bg-ash/50 text-hsa'
           ]">
-            <component :is="getTypeIcon(notif.type)" class="w-6 h-6" />
+            <component :is="notif.is_read ? IconCheck : getTypeIcon(notif.type)" class="w-6 h-6" />
           </div>
 
           <div class="flex-1 min-w-0">
@@ -60,11 +60,11 @@
             <p class="text-sm text-hsa line-clamp-2">{{ notif.message }}</p>
 
             <div class="flex items-center gap-4 mt-4">
-              <button v-if="!notif.is_read" @click.stop="store.markAsRead(notif.id)"
+              <button v-if="!notif.is_read" @click.stop="handleMarkAsRead(notif.id)"
                 class="text-[10px] font-black uppercase tracking-widest text-primary hover:underline">
                 Marquer comme lu
               </button>
-              <button @click.stop="store.deleteNotification(notif.id)"
+              <button @click.stop="handleDelete(notif.id)"
                 class="text-[10px] font-black uppercase tracking-widest text-danger opacity-0 group-hover:opacity-100 transition-opacity">
                 Supprimer
               </button>
@@ -86,18 +86,19 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import {
-  IconBell, IconBellOff, IconCircleCheck,
+  IconBell, IconBellOff, IconCircleCheck, IconCheck,
   IconAlertTriangle, IconInfoCircle, IconShieldCheck
 } from '@tabler/icons-vue'
 import { useNotificationsStore } from '~/stores/notifications'
+import { useToastStore } from '~/stores/toast'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 
 definePageMeta({
   layout: 'default'
 })
-
 const store = useNotificationsStore()
+const toastStore = useToastStore()
 
 const getTypeIcon = (type: string) => {
   switch (type) {
@@ -125,9 +126,32 @@ const formatDate = (date: string) => {
   }
 }
 
+const handleMarkAllAsRead = async () => {
+  const success = await store.markAsRead('all')
+  if (success) {
+    toastStore.showToast('success', 'Élément mis à jour', 'Toutes les notifications ont été marquées comme lues.')
+  }
+}
+
+const handleMarkAsRead = async (id: string) => {
+  const success = await store.markAsRead(id)
+  if (success) {
+    toastStore.showToast('success', 'Élément mis à jour', 'La notification a été marquée comme lue.')
+  }
+}
+
+const handleDelete = async (id: string) => {
+  if (confirm('Supprimer cette notification ?')) {
+    const success = await store.deleteNotification(id)
+    if (success) {
+      toastStore.showToast('success', 'Supprimé', 'La notification a été supprimée.')
+    }
+  }
+}
+
 const loadMore = () => {
   const newOffset = store.pagination.offset + store.pagination.limit
-  store.fetchNotifications(store.pagination.limit, newOffset)
+  store.fetchNotifications(store.pagination.limit, newOffset, true)
 }
 
 const goToDetail = (id: string) => {

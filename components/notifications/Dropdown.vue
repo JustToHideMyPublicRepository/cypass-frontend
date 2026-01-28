@@ -3,7 +3,8 @@
     <!-- Bell Button -->
     <button @click="toggleDropdown" class="p-2 rounded-xl text-hsa hover:bg-ash transition-all relative group"
       title="Notifications">
-      <IconBell class="w-6 h-6 group-hover:scale-110 transition-transform" />
+      <IconBell v-if="store.unreadCount > 0" class="w-6 h-6 group-hover:scale-110 transition-transform text-primary" />
+      <IconBell v-else class="w-6 h-6 group-hover:scale-110 transition-transform" />
       <div v-if="store.unreadCount > 0"
         class="absolute top-1 right-1 min-w-[18px] h-[18px] px-1 bg-red-500 text-white text-[10px] font-bold rounded-full border-2 border-WtB flex items-center justify-center">
         {{ formattedCount }}
@@ -21,7 +22,7 @@
         <!-- Header -->
         <div class="p-4 border-b border-ash flex items-center justify-between bg-ash/10">
           <h3 class="font-bold text-BtW">Notifications</h3>
-          <button v-if="store.unreadCount > 0" @click="store.markAsRead('all')"
+          <button v-if="store.unreadCount > 0" @click="handleMarkAllAsRead"
             class="text-[10px] font-black uppercase tracking-widest text-primary hover:text-secondary transition-colors">
             Tout lire
           </button>
@@ -53,9 +54,9 @@
               <div class="flex gap-3 pl-2">
                 <div :class="[
                   'w-10 h-10 rounded-xl flex items-center justify-center shrink-0',
-                  getTypeStyles(notif.type)
+                  !notif.is_read ? getTypeStyles(notif.type) : 'bg-ash/50 text-hsa'
                 ]">
-                  <component :is="getTypeIcon(notif.type)" class="w-5 h-5" />
+                  <component :is="notif.is_read ? IconCheck : getTypeIcon(notif.type)" class="w-5 h-5" />
                 </div>
                 <div class="flex-1 min-w-0">
                   <div class="flex justify-between items-start gap-2">
@@ -83,14 +84,15 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import {
-  IconBell, IconBellOff, IconCheck, IconX, IconCircleCheck,
-  IconAlertTriangle, IconInfoCircle, IconShieldCheck, IconLogout
+  IconBell, IconBellOff, IconCheck, IconCircleCheck, IconAlertTriangle, IconInfoCircle, IconShieldCheck
 } from '@tabler/icons-vue'
 import { useNotificationsStore } from '~/stores/notifications'
+import { useToastStore } from '~/stores/toast'
 import { formatDistanceToNow } from 'date-fns'
 import { fr } from 'date-fns/locale'
 
 const store = useNotificationsStore()
+const toastStore = useToastStore()
 const isOpen = ref(false)
 const notificationRef = ref<HTMLElement | null>(null)
 
@@ -98,6 +100,13 @@ const formattedCount = computed(() => {
   if (store.unreadCount > 20) return '20+'
   return store.unreadCount.toString()
 })
+
+const handleMarkAllAsRead = async () => {
+  const success = await store.markAsRead('all')
+  if (success) {
+    toastStore.showToast('success', 'Notifications lues', 'Toutes vos notifications sont marquées comme lues.')
+  }
+}
 
 const toggleDropdown = () => {
   isOpen.value = !isOpen.value
