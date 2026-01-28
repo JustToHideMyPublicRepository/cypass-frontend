@@ -95,8 +95,11 @@ import { useToastStore } from '~/stores/toast'
 import { formatDistanceToNow } from 'date-fns'
 import { fr } from 'date-fns/locale'
 
+import { useNotificationStyles } from '~/composables/useNotificationStyles'
+
 const store = useNotificationsStore()
 const toastStore = useToastStore()
+const { getTypeIcon, getTypeStyles } = useNotificationStyles()
 const isOpen = ref(false)
 const notificationRef = ref<HTMLElement | null>(null)
 let refreshInterval: any = null
@@ -120,24 +123,6 @@ const toggleDropdown = () => {
 const goToNotification = (id: string) => {
   isOpen.value = false
   navigateTo(`/dashboard/notifications/${id}`)
-}
-
-const getTypeIcon = (type: string) => {
-  switch (type) {
-    case 'SEC_LOGIN': return IconShieldCheck
-    case 'DOC_CERTIFIED': return IconCircleCheck
-    case 'ALERT': return IconAlertTriangle
-    default: return IconInfoCircle
-  }
-}
-
-const getTypeStyles = (type: string) => {
-  switch (type) {
-    case 'SEC_LOGIN': return 'bg-blue-500/10 text-blue-500'
-    case 'DOC_CERTIFIED': return 'bg-green-500/10 text-green-500'
-    case 'ALERT': return 'bg-amber-500/10 text-amber-500'
-    default: return 'bg-primary/10 text-primary'
-  }
 }
 
 const formatRelativeDate = (date: string) => {
