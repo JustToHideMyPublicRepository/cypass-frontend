@@ -114,7 +114,7 @@ import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { useToastStore } from '~/stores/toast'
 
-defineProps<{
+const props = defineProps<{
   result: any
   error: string | null
 }>()
