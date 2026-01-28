@@ -54,10 +54,43 @@ export const useNotificationStyles = () => {
     }
   }
 
+  const getSecurityMessage = (type: string) => {
+    if (type === 'SEC_LOGIN') {
+      return "Si vous ne reconnaissez pas cette activité de connexion, nous vous recommandons de changer votre mot de passe immédiatement dans l'onglet Sécurité et de déconnecter les autres sessions."
+    }
+    if (type === 'SEC_PWD_CHG') {
+      return "Le mot de passe de votre compte a été modifié. Si vous n'êtes pas à l'origine de cette action, votre compte est peut-être compromis."
+    }
+    return "Une activité liée à la sécurité de votre compte a été détectée. Veuillez vérifier l'historique de vos connexions."
+  }
+
+  const getDocumentMessage = (type: string) => {
+    if (type === 'DOC_SUCCESS') {
+      return "Votre document a été traité et vérifié avec succès. Vous pouvez maintenant consulter le certificat associé."
+    }
+    if (type === 'DOC_FAILURE') {
+      return "Le traitement de votre document a échoué. Veuillez vérifier l'intégrité du fichier ou contacter le support technique."
+    }
+    return "Nouvelle activité enregistrée dans votre coffre-fort numérique DocSentry."
+  }
+
+  const getProfileMessage = (type: string) => {
+    if (type === 'PRF_AVATAR') {
+      return "Votre photo de profil a été mise à jour avec succès. Elle est désormais visible sur votre compte."
+    }
+    if (type === 'PRF_EML_VFD') {
+      return "Votre adresse email a été vérifiée. Votre compte est désormais pleinement sécurisé."
+    }
+    return "Votre profil a été mis à jour avec de nouveaux paramètres. Assurez-vous que vos informations sont toujours correctes."
+  }
+
   return {
     getCategory,
     getTypeIcon,
     getTypeStyles,
-    getCategoryLabel
+    getCategoryLabel,
+    getSecurityMessage,
+    getDocumentMessage,
+    getProfileMessage
   }
 }

@@ -91,8 +91,7 @@
               <div class="space-y-1">
                 <p class="text-sm font-bold text-BtW">Mise à jour du profil</p>
                 <p class="text-xs text-hsa leading-relaxed">
-                  Votre profil a été mis à jour avec de nouveaux paramètres. Assurez-vous que vos informations sont
-                  toujours correctes.
+                  {{ getProfileMessage(notif.type) }}
                 </p>
                 <NuxtLink to="/dashboard/profile"
                   class="inline-block mt-2 text-[10px] font-black uppercase text-primary hover:underline">
@@ -142,7 +141,7 @@ definePageMeta({
 const route = useRoute()
 const store = useNotificationsStore()
 const toastStore = useToastStore()
-const { getTypeIcon, getTypeStyles, getCategory, getCategoryLabel } = useNotificationStyles()
+const { getTypeIcon, getTypeStyles, getCategory, getCategoryLabel, getSecurityMessage, getDocumentMessage, getProfileMessage } = useNotificationStyles()
 const id = route.params.id as string
 
 const notif = computed(() => store.currentNotification)
@@ -155,26 +154,6 @@ const getCategoryBadgeClass = (type: string) => {
     case 'PRF': return 'bg-blue-500/10 text-blue-600'
     default: return 'bg-ash text-hsa'
   }
-}
-
-const getSecurityMessage = (type: string) => {
-  if (type === 'SEC_LOGIN') {
-    return "Si vous ne reconnaissez pas cette activité de connexion, nous vous recommandons de changer votre mot de passe immédiatement dans l'onglet Sécurité et de déconnecter les autres sessions."
-  }
-  if (type === 'SEC_PWD_CHG') {
-    return "Le mot de passe de votre compte a été modifié. Si vous n'êtes pas à l'origine de cette action, votre compte est peut-être compromis."
-  }
-  return "Une activité liée à la sécurité de votre compte a été détectée. Veuillez vérifier l'historique de vos connexions."
-}
-
-const getDocumentMessage = (type: string) => {
-  if (type === 'DOC_SUCCESS') {
-    return "Votre document a été traité et vérifié avec succès. Vous pouvez maintenant consulter le certificat associé."
-  }
-  if (type === 'DOC_FAILURE') {
-    return "Le traitement de votre document a échoué. Veuillez vérifier l'intégrité du fichier ou contacter le support technique."
-  }
-  return "Nouvelle activité enregistrée dans votre coffre-fort numérique DocSentry."
 }
 
 const formatDate = (date: string) => {
