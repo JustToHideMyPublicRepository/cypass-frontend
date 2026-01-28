@@ -1,15 +1,15 @@
 <template>
-  <NuxtLink v-if="to" :to="to" :class="buttonClasses" :aria-disabled="disabled || loading">
+  <NuxtLink v-if="to" :to="to" :class="[buttonClasses, $attrs.class]" :aria-disabled="disabled || loading">
     <IconLoader2 v-if="loading" class="logoClasses" />
     <slot />
   </NuxtLink>
 
-  <a v-else-if="href" :href="href" :class="buttonClasses" :aria-disabled="disabled || loading">
+  <a v-else-if="href" :href="href" :class="[buttonClasses, $attrs.class]" :aria-disabled="disabled || loading">
     <IconLoader2 v-if="loading" class="logoClasses" />
     <slot />
   </a>
 
-  <button v-else :type="type" :class="buttonClasses" :disabled="disabled || loading">
+  <button v-else :type="type" :class="[buttonClasses, $attrs.class]" :disabled="disabled || loading">
     <IconLoader2 v-if="loading" class="logoClasses" />
     <slot />
   </button>

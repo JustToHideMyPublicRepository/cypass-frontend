@@ -5,30 +5,32 @@
         <div class="flex-1 flex gap-2">
           <div class="relative flex-1">
             <span class="absolute left-3 top-1/2 -translate-y-1/2 text-hsa">
-              <IconSearch class="w-5 h-5" />
+              <IconSearch class="w-5 h-5 transition-colors group-focus-within:text-primary" />
             </span>
             <input v-model="localFilename" @keyup.enter="applySearch" type="text"
               placeholder="Rechercher par nom de fichier..."
-              class="w-full pl-10 pr-4 py-2 rounded-lg border border-ash bg-ash focus:ring-2 focus:ring-primary focus:border-transparent text-sm placeholder-hsa" />
+              class="w-full h-11 pl-10 pr-4 rounded-xl border border-ash bg-ash/50 focus:ring-2 focus:ring-primary focus:border-transparent text-sm placeholder-hsa transition-all" />
           </div>
-          <UiBaseButton @click="applySearch" class="px-4">
+          <UiBaseButton @click="applySearch" class="h-11 px-6 rounded-xl shadow-sm hover:shadow-md transition-all">
             Rechercher
           </UiBaseButton>
         </div>
         <div class="flex gap-2">
           <select v-model="model.file_type"
-            class="px-4 py-2 rounded-lg border border-ash bg-ash text-sm focus:ring-2 focus:ring-primary">
+            class="h-11 px-4 rounded-xl border border-ash bg-ash/50 text-sm focus:ring-2 focus:ring-primary outline-none transition-all cursor-pointer">
             <option value="all">Tous les types</option>
             <option v-for="type in availableTypes" :key="type" :value="type">
               {{ type }}
             </option>
           </select>
           <UiBaseButton variant="secondary" @click="showAdvancedFilters = !showAdvancedFilters"
-            :class="{ 'bg-primary/10 text-primary': showAdvancedFilters }">
+            class="h-11 px-4 rounded-xl"
+            :class="{ 'bg-primary/10 text-primary border-primary/20': showAdvancedFilters }">
             <IconFilter class="w-4 h-4 mr-2" /> {{ showAdvancedFilters ? 'Réduire' : 'Filtres' }}
           </UiBaseButton>
           <button v-if="hasActiveFilters" @click="$emit('reset')"
-            class="p-2 text-hsa hover:text-danger p-2 transition-colors" title="Réinitialiser les filtres">
+            class="h-11 w-11 flex items-center justify-center text-hsa hover:text-danger hover:bg-danger/10 rounded-xl transition-all"
+            title="Réinitialiser les filtres">
             <IconX class="w-5 h-5" />
           </button>
         </div>
@@ -37,14 +39,14 @@
       <Transition name="fade">
         <div v-if="showAdvancedFilters" class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-ash">
           <div class="space-y-1">
-            <label class="text-[10px] font-bold text-hsa uppercase">Date de début</label>
+            <label class="text-[10px] font-bold text-hsa uppercase tracking-[0.1em]">Date de début</label>
             <input v-model="model.date_start" type="datetime-local"
-              class="w-full px-4 py-2 rounded-lg border border-ash bg-ash text-sm focus:ring-2 focus:ring-primary" />
+              class="w-full h-11 px-4 rounded-xl border border-ash bg-ash/50 text-sm focus:ring-2 focus:ring-primary outline-none transition-all" />
           </div>
           <div class="space-y-1">
-            <label class="text-[10px] font-bold text-hsa uppercase">Date de fin</label>
+            <label class="text-[10px] font-bold text-hsa uppercase tracking-[0.1em]">Date de fin</label>
             <input v-model="model.date_end" type="datetime-local"
-              class="w-full px-4 py-2 rounded-lg border border-ash bg-ash text-sm focus:ring-2 focus:ring-primary" />
+              class="w-full h-11 px-4 rounded-xl border border-ash bg-ash/50 text-sm focus:ring-2 focus:ring-primary outline-none transition-all" />
           </div>
         </div>
       </Transition>

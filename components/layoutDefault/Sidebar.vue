@@ -25,7 +25,7 @@
     <div class="h-[calc(100vh-8rem)] overflow-y-auto px-3 py-6 space-y-8 scrollbar-hide">
       <!-- Main Links -->
       <nav class="space-y-1.5">
-        <NuxtLink v-for="link in mainLinks" :key="link.path" :to="link.path" class="nav-link"
+        <NuxtLink v-for="link in mainLinks" :key="link.path" :to="link.path" class="nav-link" @click="$emit('close')"
           v-tooltip="getLinkTooltip(link.path)" :class="{
             'justify-center px-0': isCollapsed,
             'active': isLinkActive(link.path)
@@ -42,7 +42,7 @@
         <div v-show="isCollapsed" class="border-t border-ash mx-2"></div>
         <nav class="space-y-1.5">
           <NuxtLink v-for="service in activeModules" :key="service.id" :to="`/dashboard/${service.id}`" class="nav-link"
-            v-tooltip="getLinkTooltip('/dashboard/' + service.id)" :class="{
+            @click="$emit('close')" v-tooltip="getLinkTooltip('/dashboard/' + service.id)" :class="{
               'justify-center px-0': isCollapsed,
               'active': isLinkActive(`/dashboard/${service.id}`)
             }" :title="isCollapsed ? service.title : ''">
@@ -97,7 +97,7 @@ defineProps<{
   isCollapsed: boolean
 }>()
 
-defineEmits(['logout', 'toggle-collapse'])
+defineEmits(['logout', 'toggle-collapse', 'close'])
 
 
 const mainLinks = [

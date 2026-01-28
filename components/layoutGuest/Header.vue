@@ -50,7 +50,12 @@
           </nav>
 
           <!-- Mobile Controls -->
-          <div class="md:hidden flex items-center gap-4">
+          <div class="md:hidden flex items-center gap-2">
+            <!-- Notifications (if authenticated) -->
+            <ClientOnly v-if="authStore.user">
+              <NotificationsDropdown />
+            </ClientOnly>
+
             <UiThemeToggle />
 
             <button @click="isMobileMenuOpen = !isMobileMenuOpen"
@@ -98,8 +103,7 @@
         </div>
 
         <div class="mt-8 pt-8 border-t border-ash w-full text-center">
-          <p class="text-sm text-hsa mb-4">Préférences</p>
-          <UiThemeToggle />
+          <p class="text-sm text-hsa mb-4">CYPASS &copy; 2024</p>
         </div>
       </div>
     </Transition>

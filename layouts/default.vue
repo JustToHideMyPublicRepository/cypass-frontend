@@ -2,7 +2,7 @@
   <div class="flex min-h-screen bg-bgClr transition-colors duration-300">
     <!-- Sidebar -->
     <LayoutDefaultSidebar :isOpen="isOpen" :isCollapsed="isCollapsed" @logout="handleLogout"
-      @toggle-collapse="isCollapsed = !isCollapsed" />
+      @toggle-collapse="isCollapsed = !isCollapsed" @close="isOpen = false" />
 
     <!-- Overlay for mobile -->
     <div v-if="isOpen" @click="isOpen = false" class="fixed inset-0 bg-black/50 z-40 md:hidden animate-fade-in"></div>

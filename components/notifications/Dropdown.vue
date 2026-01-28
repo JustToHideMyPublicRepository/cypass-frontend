@@ -17,7 +17,7 @@
       leave-active-class="transition duration-150 ease-in" leave-from-class="opacity-100 scale-100 translate-y-0"
       leave-to-class="opacity-0 scale-95 -translate-y-2">
       <div v-if="isOpen"
-        class="absolute right-0 mt-3 w-[380px] bg-WtB border border-ash rounded-2xl shadow-2xl z-50 overflow-hidden flex flex-col max-h-[500px]">
+        class="absolute right-0 mt-3 w-[calc(100vw-2rem)] md:w-[380px] bg-WtB border border-ash rounded-2xl shadow-2xl z-50 overflow-hidden flex flex-col max-h-[500px]">
 
         <!-- Header -->
         <div class="p-4 border-b border-ash flex items-center justify-between bg-ash/10">

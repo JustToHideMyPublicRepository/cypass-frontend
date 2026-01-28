@@ -355,8 +355,21 @@ const formatDate = (dateStr: string) => {
 }
 
 const publicBenefits = [
-  { icon: IconLock, title: 'Confidentialité', desc: 'Le document est analysé puis immédiatement supprimé de nos serveurs.' },
-  { icon: IconServer, title: 'Infrastructures d\'État', desc: 'Vérification effectuée sur les serveurs souverains du Bénin.' },
-  { icon: IconCertificate, title: 'Preuve Légale', desc: 'Validité juridique conforme aux normes de signature électronique.' }
+  {
+    icon: IconLock,
+    title: 'Confidentialité',
+    desc: 'Le document est analysé puis immédiatement supprimé de nos serveurs.'
+  },
+  {
+    icon: IconServer,
+    title: 'Infrastructures d\'État',
+    desc: 'Vérification effectuée sur les serveurs souverains du Bénin.'
+  },
+  {
+    icon:
+      IconCertificate,
+    title: 'Preuve Légale',
+    desc: 'Validité juridique conforme aux normes de signature électronique.'
+  }
 ]
 </script>
