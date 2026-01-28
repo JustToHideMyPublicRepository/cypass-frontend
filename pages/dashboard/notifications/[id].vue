@@ -58,11 +58,17 @@
         </div>
       </div>
     </div>
+
+    <!-- Confirmation Modal -->
+    <UiConfirmModal :show="confirmShow" title="Supprimer la notification"
+      message="Êtes-vous sûr de vouloir supprimer cette notification ? Cette action est irréversible."
+      confirm-text="Supprimer" variant="danger" :icon="IconTrash" :loading="confirmLoading" @confirm="confirmDelete"
+      @cancel="confirmShow = false" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'nuxt/app'
 import {
   IconArrowLeft, IconCalendar, IconCircleCheck, IconTrash,
@@ -108,11 +114,19 @@ const formatDate = (date: string) => {
   }
 }
 
-const handleDelete = async () => {
-  if (confirm('Supprimer cette notification ?')) {
-    await store.deleteNotification(id)
-    navigateTo('/dashboard/notifications')
-  }
+const confirmShow = ref(false)
+const confirmLoading = ref(false)
+
+const handleDelete = () => {
+  confirmShow.value = true
+}
+
+const confirmDelete = async () => {
+  confirmLoading.value = true
+  await store.deleteNotification(id)
+  confirmLoading.value = false
+  confirmShow.value = false
+  navigateTo('/dashboard/notifications')
 }
 
 onMounted(() => {

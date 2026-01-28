@@ -80,14 +80,20 @@
         </UiBaseButton>
       </div>
     </UiBaseCard>
+
+    <!-- Confirmation Modal -->
+    <UiConfirmModal :show="confirmModal.show" title="Supprimer la notification"
+      message="Êtes-vous sûr de vouloir supprimer cette notification ? Cette action est irréversible."
+      confirm-text="Supprimer" variant="danger" :icon="IconTrash" :loading="confirmModal.loading"
+      @confirm="confirmDelete" @cancel="confirmModal.show = false" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, reactive } from 'vue'
 import {
   IconBell, IconBellOff, IconCircleCheck, IconCheck,
-  IconAlertTriangle, IconInfoCircle, IconShieldCheck
+  IconAlertTriangle, IconInfoCircle, IconShieldCheck, IconTrash
 } from '@tabler/icons-vue'
 import { useNotificationsStore } from '~/stores/notifications'
 import { useToastStore } from '~/stores/toast'
@@ -140,12 +146,24 @@ const handleMarkAsRead = async (id: string) => {
   }
 }
 
-const handleDelete = async (id: string) => {
-  if (confirm('Supprimer cette notification ?')) {
-    const success = await store.deleteNotification(id)
-    if (success) {
-      toastStore.showToast('success', 'Supprimé', 'La notification a été supprimée.')
-    }
+const confirmModal = reactive({
+  show: false,
+  id: '',
+  loading: false
+})
+
+const handleDelete = (id: string) => {
+  confirmModal.id = id
+  confirmModal.show = true
+}
+
+const confirmDelete = async () => {
+  confirmModal.loading = true
+  const success = await store.deleteNotification(confirmModal.id)
+  confirmModal.loading = false
+  confirmModal.show = false
+  if (success) {
+    toastStore.showToast('success', 'Supprimé', 'La notification a été supprimée.')
   }
 }
 
