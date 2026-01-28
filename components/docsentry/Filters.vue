@@ -2,12 +2,18 @@
   <UiBaseCard>
     <div class="space-y-4">
       <div class="flex flex-col md:flex-row gap-4">
-        <div class="flex-1 relative">
-          <span class="absolute left-3 top-1/2 -translate-y-1/2 text-hsa">
-            <IconSearch class="w-5 h-5" />
-          </span>
-          <input v-model="model.filename" type="text" placeholder="Rechercher par nom de fichier..."
-            class="w-full pl-10 pr-4 py-2 rounded-lg border border-ash bg-ash focus:ring-2 focus:ring-primary focus:border-transparent text-sm placeholder-hsa" />
+        <div class="flex-1 flex gap-2">
+          <div class="relative flex-1">
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-hsa">
+              <IconSearch class="w-5 h-5" />
+            </span>
+            <input v-model="localFilename" @keyup.enter="applySearch" type="text"
+              placeholder="Rechercher par nom de fichier..."
+              class="w-full pl-10 pr-4 py-2 rounded-lg border border-ash bg-ash focus:ring-2 focus:ring-primary focus:border-transparent text-sm placeholder-hsa" />
+          </div>
+          <UiBaseButton @click="applySearch" class="px-4">
+            Rechercher
+          </UiBaseButton>
         </div>
         <div class="flex gap-2">
           <select v-model="model.file_type"
@@ -47,7 +53,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { IconSearch, IconFilter, IconX } from '@tabler/icons-vue'
 
 interface Filters {
@@ -66,6 +72,15 @@ const emit = defineEmits(['reset'])
 const model = defineModel<Filters>({ required: true })
 
 const showAdvancedFilters = ref(false)
+const localFilename = ref(model.value.filename)
+
+watch(() => model.value.filename, (newVal) => {
+  localFilename.value = newVal
+})
+
+const applySearch = () => {
+  model.value.filename = localFilename.value
+}
 
 const hasActiveFilters = computed(() => {
   return model.value.filename !== '' ||
