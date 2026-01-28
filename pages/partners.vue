@@ -6,7 +6,7 @@
     </div>
 
     <!-- Partner Modal -->
-    <ModalPartnerRequest :show="isModalOpen" @close="isModalOpen = false" @submit="handlePartnerRequest" />
+    <ModalPartnerRequest :show="isModalOpen" @close="isModalOpen = false" />
   </div>
 </template>
 
@@ -23,14 +23,4 @@ useHead({
 })
 
 const isModalOpen = ref(false)
-
-const handlePartnerRequest = () => {
-  // Simulate API call log
-  console.log('Partner request submitted')
-  // Modal handles its own feedback/close logic via the component internal state if needed, 
-  // but here we just show how the page handles the event.
-  setTimeout(() => {
-    isModalOpen.value = false
-  }, 1000)
-}
 </script>

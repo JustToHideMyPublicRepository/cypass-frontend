@@ -24,6 +24,7 @@
 import { ref, onMounted } from 'vue'
 import { useToastStore } from '~/stores/toast'
 import { useAuthStore } from '~/stores/auth'
+import { useSupportStore } from '~/stores/support'
 
 definePageMeta({
   layout: 'guest'
@@ -35,6 +36,7 @@ useHead({
 
 const toast = useToastStore()
 const authStore = useAuthStore()
+const supportStore = useSupportStore()
 const loading = ref(false)
 const form = ref({
   name: '',
@@ -52,27 +54,19 @@ onMounted(() => {
 
 const submitForm = async () => {
   loading.value = true
-  try {
-    const response = await $fetch<{ success: boolean; message: string; data: any }>('/api/support/contact', {
-      method: 'POST',
-      body: {
-        full_name: form.value.name,
-        email: form.value.email,
-        subject: form.value.subject,
-        message: form.value.message
-      }
-    })
+  const response = await supportStore.contactRequest({
+    full_name: form.value.name,
+    email: form.value.email,
+    subject: form.value.subject,
+    message: form.value.message
+  })
 
-    if (response.success) {
-      toast.showToast('success', 'Message envoyé', response.message || 'Nous avons bien reçu votre message. Nous vous répondrons sous 24h.')
-      form.value = { name: '', email: '', subject: '', message: '' }
-    } else {
-      toast.showToast('error', 'Échec de l\'envoi', response.message || 'Une erreur est survenue.')
-    }
-  } catch (err) {
-    toast.showToast('error', 'Erreur de connexion', 'Impossible de joindre le serveur. Veuillez réessayer.')
-  } finally {
-    loading.value = false
+  if (response.success) {
+    toast.showToast('success', 'Message envoyé', response.message || 'Nous avons bien reçu votre message. Nous vous répondrons sous 24h.')
+    form.value = { name: '', email: '', subject: '', message: '' }
+  } else {
+    toast.showToast('error', 'Échec de l\'envoi', response.message || 'Une erreur est survenue.')
   }
+  loading.value = false
 }
 </script>

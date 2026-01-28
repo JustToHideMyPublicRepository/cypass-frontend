@@ -38,6 +38,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { useToastStore } from '~/stores/toast'
 import { useAuthStore } from '~/stores/auth'
+import { useSupportStore } from '~/stores/support'
 
 defineProps<{
   show: boolean
@@ -46,6 +47,7 @@ defineProps<{
 const emit = defineEmits(['close', 'success'])
 const toast = useToastStore()
 const authStore = useAuthStore()
+const supportStore = useSupportStore()
 const loading = ref(false)
 
 const form = reactive({
@@ -64,33 +66,25 @@ onMounted(() => {
 
 const handleSubmit = async () => {
   loading.value = true
-  try {
-    const response = await $fetch<{ success: boolean; message: string; data: any }>('/api/support/partnership', {
-      method: 'POST',
-      body: {
-        organization_name: form.organization_name,
-        contact_name: form.contact_name,
-        email: form.email,
-        message: form.message
-      }
-    })
+  const response = await supportStore.partnershipRequest({
+    organization_name: form.organization_name,
+    contact_name: form.contact_name,
+    email: form.email,
+    message: form.message
+  })
 
-    if (response.success) {
-      toast.showToast('success', 'Demande envoyée', response.message || 'Votre demande a été transmise avec succès.')
-      // Reset form
-      form.organization_name = ''
-      form.contact_name = ''
-      form.email = ''
-      form.message = ''
-      emit('success')
-      emit('close')
-    } else {
-      toast.showToast('error', 'Erreur', response.message || 'Une erreur est survenue lors de l\'envoi.')
-    }
-  } catch (err) {
-    toast.showToast('error', 'Erreur de connexion', 'Impossible de joindre le serveur. Veuillez réessayer.')
-  } finally {
-    loading.value = false
+  if (response.success) {
+    toast.showToast('success', 'Demande envoyée', response.message || 'Votre demande a été transmise avec succès.')
+    // Reset form
+    form.organization_name = ''
+    form.contact_name = ''
+    form.email = ''
+    form.message = ''
+    emit('success')
+    emit('close')
+  } else {
+    toast.showToast('error', 'Erreur', response.message || 'Une erreur est survenue lors de l\'envoi.')
   }
+  loading.value = false
 }
 </script>
