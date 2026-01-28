@@ -99,6 +99,7 @@ const store = useNotificationsStore()
 const toastStore = useToastStore()
 const isOpen = ref(false)
 const notificationRef = ref<HTMLElement | null>(null)
+let refreshInterval: any = null
 
 const formattedCount = computed(() => {
   if (store.unreadCount > 20) return '20+'
@@ -114,9 +115,6 @@ const handleMarkAllAsRead = async () => {
 
 const toggleDropdown = () => {
   isOpen.value = !isOpen.value
-  if (isOpen.value) {
-    store.fetchNotifications(20, 0)
-  }
 }
 
 const goToNotification = (id: string) => {
@@ -186,10 +184,16 @@ onMounted(() => {
   window.addEventListener('resize', checkMobile)
   document.addEventListener('click', handleClickOutside)
   store.fetchNotifications(5, 0)
+
+  // Setup background refresh every 60 seconds
+  refreshInterval = setInterval(() => {
+    store.fetchNotifications(5, 0)
+  }, 60000)
 })
 
 onUnmounted(() => {
   window.removeEventListener('resize', checkMobile)
   document.removeEventListener('click', handleClickOutside)
+  if (refreshInterval) clearInterval(refreshInterval)
 })
 </script>

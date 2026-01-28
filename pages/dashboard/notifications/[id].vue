@@ -75,6 +75,7 @@ import {
   IconAlertTriangle, IconInfoCircle, IconShieldCheck, IconShieldExclamation
 } from '@tabler/icons-vue'
 import { useNotificationsStore } from '~/stores/notifications'
+import { useToastStore } from '~/stores/toast'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 
@@ -84,6 +85,7 @@ definePageMeta({
 
 const route = useRoute()
 const store = useNotificationsStore()
+const toastStore = useToastStore()
 const id = route.params.id as string
 
 const notif = computed(() => store.currentNotification)
@@ -123,10 +125,13 @@ const handleDelete = () => {
 
 const confirmDelete = async () => {
   confirmLoading.value = true
-  await store.deleteNotification(id)
+  const success = await store.deleteNotification(id)
   confirmLoading.value = false
   confirmShow.value = false
-  navigateTo('/dashboard/notifications')
+  if (success) {
+    toastStore.showToast('success', 'Supprimé', 'La notification a été supprimée.')
+    navigateTo('/dashboard/notifications')
+  }
 }
 
 onMounted(() => {

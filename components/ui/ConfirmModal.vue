@@ -2,7 +2,7 @@
   <UiBaseModal :show="show" :max-width="maxWidth" @close="$emit('cancel')">
     <div class="p-2 text-center space-y-6">
       <!-- Icon Header -->
-      <div v-if="icon"
+      <div v-if="icon && (typeof icon === 'object' || typeof icon === 'function')"
         :class="['w-16 h-16 rounded-full mx-auto flex items-center justify-center mb-2 transition-all', iconBgClass]">
         <component :is="icon" class="w-8 h-8" />
       </div>

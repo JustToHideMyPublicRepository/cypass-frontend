@@ -1,63 +1,64 @@
 <template>
-  <div class="max-w-4xl mx-auto space-y-6">
-    <div class="flex items-center justify-between">
-      <h1 class="text-3xl font-black text-BtW">Notifications</h1>
+  <div class="max-w-4xl mx-auto space-y-4 md:space-y-6">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-4 sm:px-0">
+      <h1 class="text-2xl md:text-3xl font-black text-BtW">Notifications</h1>
       <div class="flex gap-2">
         <button v-if="store.unreadCount > 0" @click="handleMarkAllAsRead"
-          class="px-4 py-2 rounded-xl bg-primary/10 text-primary hover:bg-primary/20 transition-all font-bold text-xs uppercase tracking-widest border border-primary/20">
+          class="flex-1 sm:flex-none px-4 py-2 rounded-xl bg-primary/10 text-primary hover:bg-primary/20 transition-all font-bold text-[10px] md:text-xs uppercase tracking-widest border border-primary/20">
           Tout marquer comme lu
         </button>
       </div>
     </div>
 
     <!-- Filters/Stats -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <UiBaseCard class="bg-primary/5 border-primary/20">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 px-4 sm:px-0">
+      <UiBaseCard class="bg-primary/5 border-primary/20 p-4 md:p-6">
         <div class="flex items-center gap-4">
-          <div class="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
-            <IconBell class="w-6 h-6" />
+          <div
+            class="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
+            <IconBell class="w-5 h-5 md:w-6 md:h-6" />
           </div>
           <div>
-            <p class="text-[10px] font-black uppercase tracking-widest text-hsa">Non lues</p>
-            <p class="text-2xl font-black text-BtW">{{ store.unreadCount }}</p>
+            <p class="text-[9px] md:text-[10px] font-black uppercase tracking-widest text-hsa">Non lues</p>
+            <p class="text-xl md:text-2xl font-black text-BtW">{{ store.unreadCount }}</p>
           </div>
         </div>
       </UiBaseCard>
     </div>
 
     <!-- List -->
-    <UiBaseCard class="p-0 overflow-hidden">
-      <div v-if="store.loading && !store.notifications.length" class="p-20 text-center">
-        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-        <p class="text-hsa">Chargement de vos notifications...</p>
+    <UiBaseCard class="p-0 overflow-hidden sm:rounded-2xl border-x-0 sm:border-x">
+      <div v-if="store.loading && !store.notifications.length" class="p-12 md:p-20 text-center">
+        <div class="animate-spin rounded-full h-10 md:h-12 w-10 md:w-12 border-b-2 border-primary mx-auto mb-4"></div>
+        <p class="text-sm text-hsa">Chargement de vos notifications...</p>
       </div>
 
-      <div v-else-if="!store.notifications.length" class="p-20 text-center">
-        <IconBellOff class="w-16 h-16 mx-auto mb-4 opacity-10" />
-        <h3 class="text-xl font-bold text-BtW">Aucune notification</h3>
-        <p class="text-hsa mt-2">Vous recevrez des alertes ici lors de nouvelles activités.</p>
+      <div v-else-if="!store.notifications.length" class="p-12 md:p-20 text-center">
+        <IconBellOff class="w-12 md:w-16 h-12 md:h-16 mx-auto mb-4 opacity-10" />
+        <h3 class="text-lg md:text-xl font-bold text-BtW">Aucune notification</h3>
+        <p class="text-xs md:text-sm text-hsa mt-2">Vous recevrez des alertes ici lors de nouvelles activités.</p>
       </div>
 
       <div v-else class="divide-y divide-ash">
         <div v-for="notif in store.notifications" :key="notif.id"
-          :class="['p-6 flex gap-4 transition-colors relative group cursor-pointer', !notif.is_read ? 'bg-primary/5 hover:bg-primary/10' : 'hover:bg-ash/20']"
+          :class="['p-4 md:p-6 flex gap-3 md:gap-4 transition-colors relative group cursor-pointer', !notif.is_read ? 'bg-primary/5 hover:bg-primary/10' : 'hover:bg-ash/20']"
           @click="goToDetail(notif.id)">
 
           <div v-if="!notif.is_read" class="absolute left-0 top-0 bottom-0 w-1 bg-primary"></div>
 
           <div :class="[
-            'w-12 h-12 rounded-2xl flex items-center justify-center shrink-0',
+            'w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl flex items-center justify-center shrink-0',
             !notif.is_read ? getTypeStyles(notif.type) : 'bg-ash/50 text-hsa'
           ]">
-            <component :is="notif.is_read ? IconCheck : getTypeIcon(notif.type)" class="w-6 h-6" />
+            <component :is="notif.is_read ? IconCheck : getTypeIcon(notif.type)" class="w-5 h-5 md:w-6 md:h-6" />
           </div>
 
           <div class="flex-1 min-w-0">
-            <div class="flex justify-between items-start mb-1">
-              <h3 class="font-bold text-BtW truncate">{{ notif.title }}</h3>
-              <span class="text-xs text-hsa">{{ formatDate(notif.created_at) }}</span>
+            <div class="flex justify-between items-start mb-1 gap-4">
+              <h3 class="font-bold text-BtW truncate text-sm md:text-base">{{ notif.title }}</h3>
+              <span class="text-[10px] md:text-xs text-hsa whitespace-nowrap">{{ formatDate(notif.created_at) }}</span>
             </div>
-            <p class="text-sm text-hsa line-clamp-2">{{ notif.message }}</p>
+            <p class="text-xs md:text-sm text-hsa line-clamp-2 leading-relaxed">{{ notif.message }}</p>
 
             <div class="flex items-center gap-4 mt-4">
               <button v-if="!notif.is_read" @click.stop="handleMarkAsRead(notif.id)"
@@ -65,7 +66,8 @@
                 Marquer comme lu
               </button>
               <button @click.stop="handleDelete(notif.id)"
-                class="text-[10px] font-black uppercase tracking-widest text-danger opacity-0 group-hover:opacity-100 transition-opacity">
+                class="text-[10px] font-black uppercase tracking-widest text-danger transition-opacity"
+                :class="isMobile ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'">
                 Supprimer
               </button>
             </div>
@@ -75,7 +77,7 @@
 
       <!-- Pagination -->
       <div v-if="store.pagination.has_more" class="p-6 border-t border-ash text-center">
-        <UiBaseButton variant="secondary" @click="loadMore" :loading="store.loading">
+        <UiBaseButton variant="secondary" @click="loadMore" :loading="store.loading" block class="sm:w-auto">
           Charger plus
         </UiBaseButton>
       </div>
@@ -90,7 +92,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive } from 'vue'
+import { onMounted, reactive, ref, onUnmounted } from 'vue'
 import {
   IconBell, IconBellOff, IconCircleCheck, IconCheck,
   IconAlertTriangle, IconInfoCircle, IconShieldCheck, IconTrash
@@ -176,8 +178,19 @@ const goToDetail = (id: string) => {
   navigateTo(`/dashboard/notifications/${id}`)
 }
 
+const isMobile = ref(false)
+const checkMobile = () => {
+  if (import.meta.client) isMobile.value = window.innerWidth < 768
+}
+
 onMounted(() => {
+  checkMobile()
+  window.addEventListener('resize', checkMobile)
   store.fetchNotifications(20, 0)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', checkMobile)
 })
 
 useHead({

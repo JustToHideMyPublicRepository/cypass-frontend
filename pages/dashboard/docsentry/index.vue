@@ -1,9 +1,10 @@
 <template>
-  <div class="space-y-6">
-    <div class="flex items-center justify-between">
+  <div class="space-y-6 md:space-y-8 px-4 sm:px-0">
+    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
       <DocsentryHeader @upload="modals.upload = true" @verify="modals.verify = true" />
+
       <button @click="modals.trust = true"
-        class="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary/10 text-primary hover:bg-primary/20 transition-all font-bold text-xs uppercase tracking-widest border border-primary/20">
+        class="flex items-center justify-center gap-2 px-4 py-3 md:py-2 rounded-xl bg-primary/10 text-primary hover:bg-primary/20 transition-all font-bold text-[10px] md:text-xs uppercase tracking-widest border border-primary/20 shrink-0">
         <IconInfoCircle class="w-4 h-4" />
         Pourquoi DocSentry ?
       </button>
