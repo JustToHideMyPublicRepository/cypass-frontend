@@ -10,7 +10,7 @@
           <IconUpload class="w-8 h-8" />
         </div>
         <p class="font-bold text-BtW">Cliquez ou glissez un fichier</p>
-        <p class="text-xs text-hsa mt-1">PDF uniquement (Max 10MB)</p>
+        <p class="text-xs text-hsa mt-1">PDF uniquement (Max 3MB)</p>
       </div>
 
       <div v-else class="bg-ash/20 rounded-2xl p-4 border border-ash">
@@ -116,7 +116,7 @@ const props = defineProps<{
   uploadResult: any
 }>()
 
-const emit = defineEmits(['close', 'upload'])
+const emit = defineEmits(['close', 'upload', 'update:error', 'error-clear'])
 
 const file = ref<File | null>(null)
 const fileInput = ref<HTMLInputElement | null>(null)
@@ -137,16 +137,43 @@ const runSteps = async () => {
 
 const triggerFileSelect = () => fileInput.value?.click()
 
+const validateFile = (selectedFile: File): boolean => {
+  emit('error-clear')
+
+  if (selectedFile.type !== 'application/pdf') {
+    emit('update:error', 'Seuls les fichiers PDF sont acceptés.')
+    return false
+  }
+
+  if (selectedFile.size > 3 * 1024 * 1024) {
+    emit('update:error', 'La taille du fichier ne doit pas dépasser 3 Mo.')
+    return false
+  }
+
+  return true
+}
+
 const handleFileChange = (e: Event) => {
   const target = e.target as HTMLInputElement
   if (target.files?.length) {
-    file.value = target.files[0]
+    const selectedFile = target.files[0]
+    if (validateFile(selectedFile)) {
+      file.value = selectedFile
+    } else {
+      file.value = null
+      if (fileInput.value) fileInput.value.value = ''
+    }
   }
 }
 
 const handleDrop = (e: DragEvent) => {
   if (e.dataTransfer?.files.length) {
-    file.value = e.dataTransfer.files[0]
+    const selectedFile = e.dataTransfer.files[0]
+    if (validateFile(selectedFile)) {
+      file.value = selectedFile
+    } else {
+      file.value = null
+    }
   }
 }
 

@@ -2,7 +2,7 @@
   <div class="space-y-4">
     <div v-for="(step, index) in steps" :key="step.id" class="relative">
       <!-- Line between steps -->
-      <div v-if="index < steps.length - 1" 
+      <div v-if="index < steps.length - 1"
         class="absolute left-[15px] top-8 w-[2px] h-[calc(100%-8px)] transition-colors duration-500"
         :class="step.status === 'completed' ? 'bg-success' : 'bg-ash'">
       </div>
@@ -31,7 +31,7 @@
             :class="step.status === 'pending' ? 'text-hsa/50' : 'text-BtW'">
             {{ step.label }}
           </h4>
-          <p class="text-xs text-hsa leading-tight mt-0.5" 
+          <p class="text-xs text-hsa leading-tight mt-0.5"
             :class="step.status === 'pending' ? 'opacity-40' : 'opacity-100'">
             {{ step.description }}
           </p>

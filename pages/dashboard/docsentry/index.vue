@@ -17,7 +17,8 @@
 
     <!-- Modals -->
     <DocsentryModalAuth :show="modals.upload" :loading="store.loading" :error="store.error"
-      :upload-result="store.uploadResult" @upload="handleUpload" @close="closeModals" />
+      :upload-result="store.uploadResult" @upload="handleUpload" @update:error="(val) => store.error = val"
+      @error-clear="store.error = null" @close="closeModals" />
 
     <DocsentryModalVerify :show="modals.verify" :loading="store.loading" :error="store.error"
       :result="store.verificationResult" @verify="handleVerify" @reset="store.verificationResult = null"
