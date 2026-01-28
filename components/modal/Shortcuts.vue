@@ -19,7 +19,11 @@
     </div>
 
     <template #footer>
-      <div class="flex justify-end">
+      <div class="flex justify-between items-center w-full">
+        <UiBaseButton variant="ghost" size="sm" class="rounded-xl text-xs" @click="store.resetSettings()">
+          <IconRotate class="w-3.5 h-3.5 mr-1.5" />
+          Restaurer par défaut
+        </UiBaseButton>
         <UiBaseButton variant="secondary" size="sm" class="rounded-xl" @click="$emit('close')">
           Fermer
         </UiBaseButton>
@@ -30,6 +34,7 @@
 
 <script setup lang="ts">
 import { useShortcutsStore } from '~/stores/shortcuts'
+import { IconRotate } from '@tabler/icons-vue'
 
 defineProps<{
   show: boolean

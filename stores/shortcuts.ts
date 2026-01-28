@@ -94,6 +94,19 @@ export const useShortcutsStore = defineStore('shortcuts', {
 
     clearBuffer() {
       this.buffer = []
+    },
+
+    resetSettings() {
+      this.enabled = true
+      this.showHover = false
+      this.showAlt = true
+      this.showButtonHints = true
+      this.sortBy = 'name'
+      this.groupSort = 'az'
+      this.altMode = false
+      this.buffer = []
+
+      this.save()
     }
   }
 })

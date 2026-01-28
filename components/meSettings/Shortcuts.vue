@@ -51,12 +51,21 @@
           </div>
         </label>
       </div>
+
+      <div class="pt-4 flex justify-end">
+        <button @click="shortcutsStore.resetSettings()"
+          class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-ash/30 border border-ashAct text-hsa hover:text-primary hover:border-primary/50 transition-all text-[11px] font-bold uppercase tracking-wider">
+          <IconRotate class="w-3.5 h-3.5" />
+          Restaurer Defaults
+        </button>
+      </div>
     </div>
   </UiBaseCard>
 </template>
 
 <script setup lang="ts">
 import { useShortcutsStore } from '~/stores/shortcuts'
+import { IconRotate } from '@tabler/icons-vue'
 
 const shortcutsStore = useShortcutsStore()
 </script>
