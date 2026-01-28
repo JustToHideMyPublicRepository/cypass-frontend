@@ -64,6 +64,6 @@ const handleLogout = () => {
 const confirmLogout = () => {
   authStore.closeLogoutModal()
   authStore.logout()
-  toastStore.showToast('success', 'Déconnexion', authStore.message || 'À bientôt sur CYPASS.')
+  toastStore.showToast('success', 'Déconnexion', authStore.message || 'À bientôt.')
 }
 </script>

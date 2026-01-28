@@ -236,6 +236,10 @@
     background-color: color-mix(in srgb, var(--color-danger) 20%, transparent);
   }
 
+  .bg-ash\/30 {
+    background-color: color-mix(in srgb, var(--color-ash) 30%, transparent);
+  }
+
   .bg-ash\/80 {
     background-color: color-mix(in srgb, var(--color-ash) 80%, transparent);
   }

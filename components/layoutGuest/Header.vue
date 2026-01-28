@@ -87,6 +87,11 @@
 
             <!-- Theme Toggle -->
             <UiThemeToggle class="ml-2" />
+
+            <!-- Notifications (if authenticated) -->
+            <ClientOnly v-if="authStore.user">
+              <NotificationsDropdown />
+            </ClientOnly>
           </nav>
 
           <!-- Mobile Controls -->

@@ -16,6 +16,7 @@
     <div class="flex items-center gap-4">
       <ClientOnly>
         <UiThemeToggle />
+        <NotificationsDropdown />
       </ClientOnly>
 
       <!-- Profile Dropdown -->

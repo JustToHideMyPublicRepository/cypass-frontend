@@ -15,7 +15,7 @@ interface ShortcutSettings {
 export const useShortcutsStore = defineStore('shortcuts', {
   state: (): ShortcutSettings => ({
     enabled: true,
-    showHover: true,
+    showHover: false,
     showAlt: true,
     showButtonHints: true,
     sortBy: 'name',
