@@ -2,7 +2,7 @@
   <div class="space-y-6">
     <div class="flex items-center justify-between">
       <h1 class="text-2xl font-bold">Vue d'ensemble</h1>
-      <div class="text-sm text-hsa">Dernière mise à jour: Aujourd'hui à 12:45</div>
+      <div class="text-sm text-hsa">Dernière mise à jour: {{ currentTime }}</div>
     </div>
 
     <!-- Stats Grid -->
@@ -108,13 +108,22 @@
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted } from 'vue'
 import { IconFileCertificate, IconAlertTriangle, IconShieldLock } from '@tabler/icons-vue'
+import { format } from 'date-fns'
 
 definePageMeta({
   layout: 'default'
 })
 
 const cypassData = useCypassData()
+
+const currentTime = ref('')
+
+onMounted(() => {
+  const now = new Date()
+  currentTime.value = `${format(now, 'dd/MM/yyyy')} à ${format(now, 'HH:mm')}`
+})
 
 // Basic date formatter for mock data
 const formatTime = (ts: string) => {

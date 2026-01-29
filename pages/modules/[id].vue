@@ -15,22 +15,22 @@
       <div class="grid lg:grid-cols-12 gap-12">
         <!-- Left Content -->
         <div class="lg:col-span-7 space-y-12">
-          <SvcDetailHeader :service="service" />
-          <SvcDetailBenefits :benefits="service.benefits || []" :theme="service.theme" />
-          <SvcDetailTechSpecs :specs="service.techSpecs || []" />
+          <RootModuleDetailHeader :service="service" />
+          <RootModuleDetailBenefits :benefits="service.benefits || []" :theme="service.theme" />
+          <RootModuleDetailTechSpecs :specs="service.techSpecs || []" />
         </div>
 
         <!-- Right Visual (Sticky) -->
         <div class="lg:col-span-5 relative hidden lg:block">
           <div class="sticky top-32">
-            <SvcDetailVisual :service="service" />
+            <RootModuleDetailVisual :service="service" />
           </div>
         </div>
       </div>
     </div>
 
     <!-- 404 State -->
-    <SvcDetailNotFound v-else />
+    <RootModuleDetailNotFound v-else />
   </div>
 </template>
 

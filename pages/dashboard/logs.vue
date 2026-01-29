@@ -28,21 +28,21 @@ useHead({
 const profilStore = useProfilStore()
 const loading = ref(false)
 
-let filters = reactive({
+const filters = ref({
   date: format(new Date(), 'yyyy-MM-dd'),
   type: 'all',
   limit: 50
 })
 
 const currentPage = ref(1)
-const itemsPerPage = computed(() => filters.limit)
+const itemsPerPage = computed(() => filters.value.limit)
 
 const fetchLogs = async () => {
   loading.value = true
   await profilStore.fetchLogs({
     limit: 500,
-    type: filters.type,
-    date: filters.date || undefined
+    type: filters.value.type,
+    date: filters.value.date || undefined
   })
   currentPage.value = 1
   loading.value = false
@@ -97,9 +97,9 @@ const refreshLogs = () => {
 }
 
 const resetFilters = () => {
-  filters.date = format(new Date(), 'yyyy-MM-dd')
-  filters.type = 'all'
-  filters.limit = 50
+  filters.value.date = format(new Date(), 'yyyy-MM-dd')
+  filters.value.type = 'all'
+  filters.value.limit = 50
   fetchLogs()
 }
 

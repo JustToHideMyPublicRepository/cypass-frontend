@@ -12,7 +12,9 @@
       </div>
 
       <h1 class="text-5xl md:text-7xl font-black tracking-tighter leading-tight">
-        Solutions de <br class="md:hidden" />
+        Solutions de
+        <!-- <br class="md:hidden" /> -->
+        <br />
         <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary via-success to-secondary relative">
           Confiance Numérique
           <svg class="absolute w-full h-3 -bottom-1 left-0 text-primary opacity-30 hidden md:block" viewBox="0 0 200 9"

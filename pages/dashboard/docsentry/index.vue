@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-6 md:space-y-8 px-4 sm:px-0">
     <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-      <DocsentryHeader @upload="modals.upload = true" @verify="modals.verify = true" />
+      <MeDocsentryHeader @upload="modals.upload = true" @verify="modals.verify = true" />
 
       <button @click="modals.trust = true"
         class="flex items-center justify-center gap-2 px-4 py-3 md:py-2 rounded-xl bg-primary/10 text-primary hover:bg-primary/20 transition-all font-bold text-[10px] md:text-xs uppercase tracking-widest border border-primary/20 shrink-0">
@@ -11,22 +11,22 @@
     </div>
 
     <!-- Filters and Search -->
-    <DocsentryFilters v-model="filters" :available-types="availableTypes" @reset="resetFilters" />
+    <MeDocsentryFilters v-model="filters" :available-types="availableTypes" @reset="resetFilters" />
 
-    <DocsentryList :documents="filteredDocuments" :loading="store.loading" :current-page="currentPage"
+    <MeDocsentryList :documents="filteredDocuments" :loading="store.loading" :current-page="currentPage"
       :total-pages="totalPages" @next-page="handleNextPage" @prev-page="handlePrevPage" />
 
     <!-- Modals -->
-    <DocsentryModalAuth :show="modals.upload" :loading="store.loading" :error="store.error"
+    <MeDocsentryModalAuth :show="modals.upload" :loading="store.loading" :error="store.error"
       :upload-result="store.uploadResult" @upload="handleUpload" @update:error="(val) => store.error = val"
       @error-clear="store.error = null" @close="closeModals" />
 
-    <DocsentryModalVerify :show="modals.verify" :loading="store.loading" :error="store.error"
+    <MeDocsentryModalVerify :show="modals.verify" :loading="store.loading" :error="store.error"
       :result="store.verificationResult" @verify="handleVerify" @reset="store.verificationResult = null"
       @close="closeModals" />
 
     <!-- Trust Card Modal -->
-    <DocsentryTrustCard :show="modals.trust" @close="modals.trust = false" />
+    <MeDocsentryTrustCard :show="modals.trust" @close="modals.trust = false" />
   </div>
 </template>
 
