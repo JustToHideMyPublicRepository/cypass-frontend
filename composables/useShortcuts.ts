@@ -186,7 +186,7 @@ export const useShortcuts = (options: ShortcutOptions = {}) => {
     // Help shortcut ('?') - can be typed with or without Shift
     if (event.key === '?' && !event.ctrlKey && !event.metaKey && !event.altKey) {
       event.preventDefault()
-      router.push('/help/shortcuts')
+      router.push('/shortcuts')
       return
     }
 

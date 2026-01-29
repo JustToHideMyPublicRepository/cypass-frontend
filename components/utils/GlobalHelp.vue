@@ -82,7 +82,7 @@ const helpLinks = [
   {
     label: 'Raccourcis Clavier',
     desc: 'Naviguez plus vite',
-    path: '/help/shortcuts',
+    path: '/shortcuts',
     icon: IconKeyboard
   },
 ]

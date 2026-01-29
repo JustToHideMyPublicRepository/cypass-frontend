@@ -1,13 +1,13 @@
 <template>
   <div class="max-w-5xl mx-auto px-4 relative">
-    <HelpShortcutsHeader @open-settings="showSettings = true" />
-    <HelpShortcutsExpertMode />
+    <RootShortcutsHeader @open-settings="showSettings = true" />
+    <RootShortcutsExpertMode />
 
-    <HelpShortcutsSearch ref="searchComp" v-model:searchQuery="searchQuery" v-model:sortBy="sortBy"
+    <RootShortcutsSearch ref="searchComp" v-model:searchQuery="searchQuery" v-model:sortBy="sortBy"
       v-model:groupSort="groupSort" />
 
-    <HelpShortcutsGrid :categories="filteredShortcuts" />
-    <HelpShortcutsFooter />
+    <RootShortcutsGrid :categories="filteredShortcuts" />
+    <RootShortcutsFooter />
 
     <!-- Settings Modal -->
     <ModalShortcuts :show="showSettings" @close="showSettings = false" />
