@@ -2,7 +2,8 @@
   <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
     <div>
       <h1 class="text-2xl font-bold text-BtW">Sessions actives</h1>
-      <p class="text-hsa text-sm sm:text-base">Gérez vos sessions actives sur d'autres appareils. ({{ sessionsCount || 0
+      <p class="text-hsa text-sm sm:text-base truncate max-w-xs sm:max-w-none">Gérez vos sessions actives sur d'autres
+        appareils. ({{ sessionsCount || 0
         }} au total)</p>
     </div>
     <div class="flex flex-col sm:flex-row gap-3">
