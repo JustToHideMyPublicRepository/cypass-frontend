@@ -1,8 +1,8 @@
 <template>
   <div class="relative">
     <div class="max-w-5xl mx-auto space-y-16">
-      <IndPartnersHeader @open-modal="isModalOpen = true" />
-      <IndPartnersGrid :partners="partners" />
+      <RootPartnersHeader @open-modal="isModalOpen = true" />
+      <RootPartnersGrid :partners="partners" />
     </div>
 
     <!-- Partner Modal -->

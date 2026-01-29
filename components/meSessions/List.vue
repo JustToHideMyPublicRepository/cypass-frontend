@@ -93,7 +93,24 @@
 </template>
 
 <script setup lang="ts">
-import { IconDeviceDesktop, IconDeviceMobile, IconShieldCheck, IconClock, IconHistory, IconPlus, IconLogout } from '@tabler/icons-vue'
+import { markRaw } from 'vue'
+import {
+  IconDeviceDesktop as IconDeviceDesktopRaw,
+  IconDeviceMobile as IconDeviceMobileRaw,
+  IconShieldCheck as IconShieldCheckRaw,
+  IconClock as IconClockRaw,
+  IconHistory as IconHistoryRaw,
+  IconPlus as IconPlusRaw,
+  IconLogout as IconLogoutRaw
+} from '@tabler/icons-vue'
+
+const IconDeviceDesktop = markRaw(IconDeviceDesktopRaw)
+const IconDeviceMobile = markRaw(IconDeviceMobileRaw)
+const IconShieldCheck = markRaw(IconShieldCheckRaw)
+const IconClock = markRaw(IconClockRaw)
+const IconHistory = markRaw(IconHistoryRaw)
+const IconPlus = markRaw(IconPlusRaw)
+const IconLogout = markRaw(IconLogoutRaw)
 import { format, formatDistanceToNow } from 'date-fns'
 import { fr } from 'date-fns/locale'
 

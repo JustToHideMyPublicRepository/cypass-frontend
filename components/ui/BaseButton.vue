@@ -16,8 +16,10 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { IconLoader2 } from '@tabler/icons-vue'
+import { computed, markRaw } from 'vue'
+import { IconLoader2 as IconLoader2Raw } from '@tabler/icons-vue'
+
+const IconLoader2 = markRaw(IconLoader2Raw)
 
 const props = withDefaults(defineProps<{
   variant?: 'primary' | 'secondary' | 'danger' | 'ghost'

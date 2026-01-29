@@ -1,11 +1,11 @@
 <template>
   <div class="relative pb-20 px-4 sm:px-6 lg:px-8">
     <div class="max-w-7xl mx-auto space-y-16">
-      <IndSupportHeader ref="headerComp" v-model:searchQuery="searchQuery" />
-      <IndSupportCategories :categories="categories" />
-      <IndSupportFaqTeaser />
-      <IndSupportDevelopers />
-      <IndSupportFooter />
+      <RootSupportHeader ref="headerComp" v-model:searchQuery="searchQuery" />
+      <RootSupportCategories :categories="categories" />
+      <RootSupportFaqTeaser />
+      <RootSupportDevelopers />
+      <RootSupportFooter />
     </div>
   </div>
 </template>

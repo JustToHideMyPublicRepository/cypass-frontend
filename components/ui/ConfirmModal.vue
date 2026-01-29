@@ -28,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, markRaw } from 'vue'
 import { IconAlertTriangle } from '@tabler/icons-vue'
 
 const props = withDefaults(defineProps<{
@@ -48,7 +48,7 @@ const props = withDefaults(defineProps<{
   cancelText: 'Annuler',
   loading: false,
   variant: 'primary',
-  icon: IconAlertTriangle,
+  icon: () => markRaw(IconAlertTriangle),
   maxWidth: 'sm'
 })
 

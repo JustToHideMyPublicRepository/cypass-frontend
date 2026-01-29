@@ -2,18 +2,18 @@
   <div class="relative">
     <div class="max-w-7xl mx-auto">
       <!-- Header -->
-      <IndContactHeader />
+      <RootContactHeader />
 
       <div class="grid lg:grid-cols-12 gap-12 lg:gap-20">
         <!-- Contact Form (Left) -->
         <div class="lg:col-span-7 animate-fade-up" style="animation-delay: 100ms;">
-          <IndContactForm :form="form" :loading="loading" @submit="submitForm" />
+          <RootContactForm :form="form" :loading="loading" @submit="submitForm" />
         </div>
 
         <!-- Info & Map (Right) -->
         <div class="lg:col-span-5 space-y-8 animate-fade-left" style="animation-delay: 200ms;">
-          <IndContactInfo />
-          <IndContactMap />
+          <RootContactInfo />
+          <RootContactMap />
         </div>
       </div>
     </div>

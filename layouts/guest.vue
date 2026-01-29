@@ -1,10 +1,12 @@
 <template>
   <div class="flex flex-col ">
-    <LayoutGuestHeader />
+    <LytGuestHeader />
+
     <!-- Content -->
     <main class="flex-grow pt-24">
       <slot />
     </main>
-    <LayoutGuestFooter />
+
+    <LytGuestFooter />
   </div>
 </template>

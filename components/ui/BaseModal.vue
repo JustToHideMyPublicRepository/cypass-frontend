@@ -11,9 +11,10 @@
             <slot name="header">
               <h3 class="text-xl font-bold text-BtW">{{ title }}</h3>
             </slot>
-            <button @click="$emit('close')"
-              class="text-hsa hover:text-danger transition-colors p-1 rounded-lg hover:bg-danger/10">
-              <IconCircleX class="w-6 h-6" />
+
+            <button @click="$emit('close')" class="top-3 right-3 p-1 hover:bg-WtBAct rounded-full">
+              <IconX
+                class="h-5 w-5 sm:h-6 sm:w-6 transform transition duration-300 ease-in-out hover:rotate-90 hover:text-danger" />
             </button>
           </div>
           <div class="relative max-h-[70vh] overflow-y-auto px-1 -mx-1">
@@ -30,7 +31,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, watch } from 'vue'
-import { IconCircleX } from '@tabler/icons-vue'
+import { IconX } from '@tabler/icons-vue'
 
 const props = defineProps({
   show: {

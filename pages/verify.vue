@@ -1,21 +1,13 @@
 <template>
   <div class="relative min-h-[80vh] flex flex-col items-center justify-center px-4">
-    <!-- Background Decor -->
-    <div class="absolute inset-0 -z-10 overflow-hidden">
-      <div
-        class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[120px]">
-      </div>
-      <div class="absolute bottom-0 right-0 w-[500px] h-[500px] bg-secondary/5 rounded-full blur-[100px]"></div>
-    </div>
-
     <div class="max-w-3xl w-full space-y-12 text-center animate-fade-up">
-      <IndVerifyHeader />
+      <RootVerifyHeader />
 
-      <IndVerifyZone v-model:verifyMode="verifyMode" v-model:hashInput="hashInput" :file="file" :loading="loading"
+      <RootVerifyZone v-model:verifyMode="verifyMode" v-model:hashInput="hashInput" :file="file" :loading="loading"
         :result="result" :error="error" :activeSteps="activeSteps" @trigger-file="triggerFileSelect"
         @verify-hash="handleVerifyHash" @verify-file="handleVerifyFile" @reset="reset" />
 
-      <IndVerifyBenefits v-if="!result" />
+      <RootVerifyBenefits v-if="!result" />
 
       <input type="file" ref="fileInput" class="hidden" accept=".pdf" @change="handleFileChange">
     </div>
@@ -35,7 +27,7 @@ definePageMeta({
 })
 
 useHead({
-  title: 'Vérifier un document | CYPASS'
+  title: 'Vérifier un document'
 })
 
 const store = useDocumentsStore()

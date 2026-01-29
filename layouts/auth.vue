@@ -4,18 +4,18 @@
     <div
       class="w-full lg:w-1/3 h-full z-10 bg-WtB shadow-2xl lg:shadow-none relative flex flex-col border-r border-ash">
 
-      <!-- Theme Toggle (Fixed relative to column) -->
+      <!-- Theme Toggle -->
       <div class="absolute top-6 right-6 z-30">
         <UiThemeToggle />
       </div>
 
       <!-- Scrollable Content -->
-      <LayoutAuthFormContainer>
+      <LytAuthFormContainer>
         <slot />
-      </LayoutAuthFormContainer>
+      </LytAuthFormContainer>
     </div>
 
     <!-- Right Column: Visual Area (2/3) -->
-    <LayoutAuthVisual />
+    <LytAuthVisual />
   </div>
 </template>

@@ -1,7 +1,7 @@
 <template>
   <div class="flex min-h-screen bg-bgClr transition-colors duration-300">
     <!-- Sidebar -->
-    <LayoutDefaultSidebar :isOpen="isOpen" :isCollapsed="isCollapsed" @logout="handleLogout"
+    <LytDefaultSidebar :isOpen="isOpen" :isCollapsed="isCollapsed" @logout="handleLogout"
       @toggle-collapse="isCollapsed = !isCollapsed" @close="isOpen = false" />
 
     <!-- Overlay for mobile -->
@@ -10,7 +10,7 @@
     <!-- Main Content Area -->
     <div class="flex-1 flex flex-col min-w-0 h-screen overflow-hidden transition-all duration-300">
       <!-- Topbar -->
-      <LayoutDefaultHeader :user="user" @toggle-menu="isOpen = !isOpen" @logout="handleLogout" />
+      <LytDefaultHeader :user="user" @toggle-menu="isOpen = !isOpen" @logout="handleLogout" />
 
       <!-- Page Content -->
       <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 scrollbar-hide">
@@ -20,7 +20,7 @@
       </main>
 
       <!-- Dashboard Footer -->
-      <LayoutDefaultFooter class="shrink-0" />
+      <LytDefaultFooter class="shrink-0" />
     </div>
     <!-- Logout Modal -->
     <ModalLogoutConfirmation :show="authStore.isLogoutModalOpen" @close="authStore.closeLogoutModal()"

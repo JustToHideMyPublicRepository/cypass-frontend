@@ -1,14 +1,14 @@
 <template>
   <div class="relative overflow-x-hidden">
-    <IndHomeBackground />
-    <IndHomeHero />
-    <IndHomePartners />
-    <IndHomeHowItWorks />
-    <IndHomeFeatures />
-    <IndHomeStats />
-    <IndHomeTestimonials />
-    <IndHomeFaq />
-    <IndHomeCta />
+    <RootHomeBackground />
+    <RootHomeHero />
+    <RootHomePartners />
+    <RootHomeHowItWorks />
+    <RootHomeFeatures />
+    <RootHomeStats />
+    <RootHomeTestimonials />
+    <RootHomeFaq />
+    <RootHomeCta />
   </div>
 </template>
 

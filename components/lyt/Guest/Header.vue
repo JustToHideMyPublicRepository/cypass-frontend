@@ -37,7 +37,7 @@
               </UiBaseButton>
             </template>
             <template v-else>
-              <LayoutGuestDropdown :auth-links="getAuthLinks(false)" />
+              <LytGuestDropdown :auth-links="getAuthLinks(false)" />
             </template>
 
             <!-- Theme Toggle -->
@@ -116,7 +116,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
-import { IconMenu2, IconX, IconChevronDown } from '@tabler/icons-vue'
+import { IconMenu2, IconX } from '@tabler/icons-vue'
 import { useAuthStore } from '~/stores/auth'
 import { getLinkTooltip } from '~/data/shortcuts'
 import { useToastStore } from '~/stores/toast'

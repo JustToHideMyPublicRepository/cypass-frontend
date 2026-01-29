@@ -1,16 +1,16 @@
 <template>
   <div class="relative">
     <div class="max-w-7xl mx-auto">
-      <IndLegalHeader badge="Légal" title="Mentions <span class='text-primary'>Légales</span>"
+      <RootLegalHeader badge="Légal" title="Mentions <span class='text-primary'>Légales</span>"
         subtitle="Informations réglementaires relatives à l'éditeur du service CYPASS, conformément à la loi sur la confiance dans l'économie numérique."
         lastUpdate="15 Janvier 2026" />
 
       <div class="grid lg:grid-cols-4 gap-12">
-        <IndLegalSidebar :toc="toc" />
+        <RootLegalSidebar :toc="toc" />
 
         <!-- Main Content -->
         <div class="lg:col-span-3 space-y-8 animate-fade-up" style="animation-delay: 100ms">
-          <IndLegalSection id="editor" title="Éditeur du Service" :index="1">
+          <RootLegalSection id="editor" title="Éditeur du Service" :index="1">
             <p>
               La plateforme <strong>CYPASS</strong> est éditée par l'Agence des Systèmes d'Information et du Numérique
               (ASIN), établissement public à caractère administratif doté de la personnalité morale et de l'autonomie
@@ -33,9 +33,9 @@
                 </p>
               </div>
             </div>
-          </IndLegalSection>
+          </RootLegalSection>
 
-          <IndLegalSection id="hosting" title="Hébergement" :index="2">
+          <RootLegalSection id="hosting" title="Hébergement" :index="2">
             <p>
               Le service est hébergé sur les infrastructures souveraines de l'État béninois, opérées par la Société
               Béninoise d'Infrastructures Numériques (SBIN).
@@ -50,9 +50,9 @@
                 Conforme au norme ISO 18004
               </li>
             </ul>
-          </IndLegalSection>
+          </RootLegalSection>
 
-          <IndLegalSection id="ip" title="Propriété Intellectuelle" :index="3">
+          <RootLegalSection id="ip" title="Propriété Intellectuelle" :index="3">
             <p>
               L'ensemble des contenus (structure, design, textes, images, logo, base de données) présents sur le
               portail CYPASS est la propriété exclusive de l'État béninois, sauf mention contraire.
@@ -62,7 +62,7 @@
               du site, quel que soit le moyen ou le procédé utilisé, est interdite, sauf autorisation écrite préalable
               de l'ASIN.
             </p>
-          </IndLegalSection>
+          </RootLegalSection>
         </div>
       </div>
     </div>

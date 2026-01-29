@@ -1,11 +1,11 @@
 <template>
   <div class="relative overflow-x-hidden">
-    <IndAboutHero />
-    <IndAboutMission />
-    <IndAboutValues />
-    <IndAboutStory />
-    <IndAboutTeam />
-    <IndAboutCta />
+    <RootAboutHero />
+    <RootAboutMission />
+    <RootAboutValues />
+    <RootAboutStory />
+    <RootAboutTeam />
+    <RootAboutCta />
   </div>
 </template>
 
