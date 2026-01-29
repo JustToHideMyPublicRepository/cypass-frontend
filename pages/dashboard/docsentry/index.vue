@@ -43,7 +43,7 @@ definePageMeta({
 const store = useDocumentsStore()
 const toast = useToastStore()
 
-const filters = reactive({
+const filters = ref({
   filename: '',
   file_type: 'all',
   date_start: '',
@@ -57,10 +57,10 @@ const modals = reactive({
 })
 
 const resetFilters = () => {
-  filters.filename = ''
-  filters.file_type = 'all'
-  filters.date_start = ''
-  filters.date_end = ''
+  filters.value.filename = ''
+  filters.value.file_type = 'all'
+  filters.value.date_start = ''
+  filters.value.date_end = ''
   currentPage.value = 1
 }
 
@@ -75,8 +75,8 @@ const filteredDocuments = computed(() => {
 const availableTypes = computed(() => {
   const types = new Set(store.documents.map(d => d.file_type.toUpperCase()))
   // Ensure the currently selected type is also in the list even if no results are found
-  if (filters.file_type !== 'all') {
-    types.add(filters.file_type.toUpperCase())
+  if (filters.value.file_type !== 'all') {
+    types.add(filters.value.file_type.toUpperCase())
   }
   return Array.from(types).sort()
 })
@@ -130,9 +130,9 @@ watch([currentPage, filters], () => {
   debounceTimeout = setTimeout(() => {
     const offset = (currentPage.value - 1) * limit
     const apiFilters = {
-      ...filters,
-      date_start: filters.date_start ? filters.date_start.replace('T', ' ') + ':00' : '',
-      date_end: filters.date_end ? filters.date_end.replace('T', ' ') + ':00' : ''
+      ...filters.value,
+      date_start: filters.value.date_start ? filters.value.date_start.replace('T', ' ') + ':00' : '',
+      date_end: filters.value.date_end ? filters.value.date_end.replace('T', ' ') + ':00' : ''
     }
     store.fetchDocuments(limit, offset, apiFilters)
   }, 300)
