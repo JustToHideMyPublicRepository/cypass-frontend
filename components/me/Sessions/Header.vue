@@ -3,8 +3,7 @@
     <div>
       <h1 class="text-2xl font-bold text-BtW">Sessions actives</h1>
       <p class="text-hsa text-sm sm:text-base truncate max-w-xs sm:max-w-none">Gérez vos sessions actives sur d'autres
-        appareils. ({{ sessionsCount || 0
-        }} au total)</p>
+        appareils. ({{ sessionsCount || 0 }} au total)</p>
     </div>
     <div class="flex flex-col sm:flex-row gap-3">
       <UiBaseButton variant="ghost" @click="$emit('refresh')" :loading="loading"
@@ -12,8 +11,8 @@
         Actualiser
       </UiBaseButton>
       <UiBaseButton v-if="hasOtherSessions" variant="danger" outlined @click="$emit('revoke-all')"
-        :loading="revokingAll" class="w-full sm:w-auto justify-center text-center">
-        Déconnecter toutes les autres sessions
+        :loading="revokingAll" class="w-full sm:w-auto justify-center text-center truncate">
+        <span class="truncate">Déconnecter toutes les autres sessions</span>
       </UiBaseButton>
     </div>
   </div>
