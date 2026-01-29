@@ -1,13 +1,13 @@
 <template>
   <div class="space-y-6">
-    <MeLogsHeader :user-email="profilStore.logUser?.email" :loading="loading" @refresh="refreshLogs"
+    <MeActivitiesHeader :user-email="profilStore.logUser?.email" :loading="loading" @refresh="refreshLogs"
       @reset="resetFilters" />
 
-    <MeLogsStats :stats="profilStore.logStatistics" />
+    <MeActivitiesStats :stats="profilStore.logStatistics" />
 
-    <MeLogsFilters v-model="filters" :active-filters="profilStore.logFilters" @change="applyFilters" />
+    <MeActivitiesFilters v-model="filters" :active-filters="profilStore.logFilters" @change="applyFilters" />
 
-    <MeLogsList :logs="paginatedLogs" :grouped-logs="groupedLogs" :loading="loading" :current-page="currentPage"
+    <MeActivitiesList :logs="paginatedLogs" :grouped-logs="groupedLogs" :loading="loading" :current-page="currentPage"
       :total-pages="totalPages" @next-page="nextPage" @prev-page="prevPage" />
   </div>
 </template>
