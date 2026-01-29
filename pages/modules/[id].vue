@@ -12,6 +12,10 @@
     </div>
 
     <div v-if="service" class="max-w-7xl mx-auto relative z-10">
+      <UiBreadcrumbs :items="[
+        { label: 'Services', path: '/modules' },
+        { label: service.title }
+      ]" />
       <div class="grid lg:grid-cols-12 gap-12">
         <!-- Left Content -->
         <div class="lg:col-span-7 space-y-12">

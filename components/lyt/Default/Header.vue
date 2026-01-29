@@ -60,7 +60,11 @@
             <div class="py-2">
               <NuxtLink v-for="link in dropdownLinks" :key="link.path" :to="link.path" @click="isDropdownOpen = false"
                 v-tooltip="getLinkTooltip(link.path)"
-                class="flex items-center gap-3 px-4 py-2 text-sm text-hsa hover:bg-ash hover:text-BtW transition-colors">
+                class="flex items-center gap-3 px-4 py-2.5 text-sm transition-all duration-200" :class="[
+                  isLinkActive(link.path)
+                    ? 'bg-primary text-WtB font-semibold shadow-sm mx-2 rounded-lg'
+                    : 'text-hsa hover:bg-ash hover:text-BtW'
+                ]">
                 <component :is="link.icon" class="w-4 h-4" />
                 {{ link.label }}
               </NuxtLink>
@@ -82,6 +86,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
+import { useRoute } from 'nuxt/app'
 import { IconMenu2, IconSearch, IconChevronDown, IconUser, IconSettings, IconHelp, IconDevices, IconLogout, IconKeyboard, IconActivity } from '@tabler/icons-vue'
 import { useAuthStore } from '~/stores/auth'
 import { useProfilStore } from '~/stores/profil'
@@ -89,6 +94,11 @@ import { getLinkTooltip } from '~/data/shortcuts'
 
 const authStore = useAuthStore()
 const profilStore = useProfilStore()
+const route = useRoute()
+
+const isLinkActive = (path: string) => {
+  return route.path === path || (path !== '/dashboard' && route.path.startsWith(path))
+}
 
 const isDropdownOpen = ref(false)
 const dropdownRef = ref<HTMLElement | null>(null)
