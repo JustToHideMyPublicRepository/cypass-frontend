@@ -71,7 +71,7 @@ const helpLinks = [
   {
     label: 'Support WhatsApp',
     desc: 'Réponse rapide par message',
-    path: 'https://wa.me/2290166523639',
+    path: 'https://wa.me/2290166523639?text=Bonjour%20CYPASS%2C%20j%27aimerais%20avoir%20de%20l%27aide',
     icon: IconBrandWhatsapp,
     external: true
   },
