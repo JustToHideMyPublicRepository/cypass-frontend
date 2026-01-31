@@ -26,7 +26,8 @@
           </div>
 
           <div class="space-y-1">
-            <NuxtLink v-for="link in helpLinks" :key="link.path" :to="link.path" @click="store.isHelpOpen = false"
+            <NuxtLink v-for="link in helpLinks" :key="link.path" :to="link.path"
+              :target="link.external ? '_blank' : undefined" @click="store.isHelpOpen = false"
               class="flex items-center gap-3 p-3 rounded-2xl hover:bg-ash transition-all group/item">
               <div
                 class="w-10 h-10 rounded-xl bg-ash flex items-center justify-center text-hsa group-hover/item:bg-primary/10 group-hover/item:text-primary transition-colors">
@@ -52,7 +53,7 @@
 
 <script setup lang="ts">
 import { watch } from 'vue'
-import { IconHelp, IconX, IconLifebuoy, IconStatusChange, IconKeyboard } from '@tabler/icons-vue'
+import { IconHelp, IconX, IconLifebuoy, IconStatusChange, IconKeyboard, IconBrandWhatsapp } from '@tabler/icons-vue'
 import { useShortcutsStore } from '~/stores/shortcuts'
 
 const store = useShortcutsStore()
@@ -67,6 +68,13 @@ watch(() => store.isHelpOpen, (isOpen) => {
 })
 
 const helpLinks = [
+  {
+    label: 'Support WhatsApp',
+    desc: 'Réponse rapide par message',
+    path: 'https://wa.me/2290166523639',
+    icon: IconBrandWhatsapp,
+    external: true
+  },
   {
     label: 'Support & Aide',
     desc: 'Contactez notre assistance',
