@@ -16,7 +16,7 @@
 
           <div class="flex gap-4 pt-4">
             <UiBaseButton to="/support#developers">Lire la Documentation</UiBaseButton>
-            <UiBaseButton variant="secondary">Obtenir une Clé API</UiBaseButton>
+            <UiBaseButton variant="secondary" @click="handleApiKey">Obtenir une Clé API</UiBaseButton>
           </div>
         </div>
 
@@ -42,9 +42,17 @@
 </template>
 
 <script setup lang="ts">
+import { useToastStore } from '~/stores/toast'
+
 definePageMeta({
   layout: 'guest'
 })
+
+const toastStore = useToastStore()
+
+const handleApiKey = () => {
+  toastStore.showToast('info', 'Bientôt disponible', 'La génération automatique de clés API sera disponible dans la prochaine mise à jour.', 4000)
+}
 
 useHead({
   title: 'Développeurs'

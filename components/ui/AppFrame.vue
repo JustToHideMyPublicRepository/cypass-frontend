@@ -1,12 +1,13 @@
 <template>
-  <div class="relative overflow-hidden transition-all duration-300" :class="[
-    glass ? 'glass-panel backdrop-blur-md' : 'bg-slate-900 border border-slate-700/50',
-    roundedClass,
-    shadowClass
+  <div class="relative overflow-hidden transition-all duration-300 group/frame" :class="[
+    glass ? 'glass-panel backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.36)]' : 'bg-slate-900 border border-slate-800', roundedClass, shadowClass, 'hover:border-primary/30'
   ]">
+    <!-- Shine Effect -->
+    <div v-if="glass"
+      class="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent opacity-0 group-hover/frame:opacity-100 transition-opacity duration-700 pointer-events-none">
+    </div>
     <!-- Header / Bar -->
-    <div v-if="type !== 'simple'" class="flex items-center gap-2 border-b px-4 py-3" :class="[
-      glass ? 'bg-slate-900/90 border-white/10' : 'bg-slate-800 border-slate-700',
+    <div v-if="type !== 'simple'" class="relative flex items-center gap-2 border-b px-4 py-3 z-10" :class="[glass ? 'bg-slate-900/90 border-white/10' : 'bg-slate-800 border-ashAct',
       headerClass
     ]">
       <!-- Controls (Traffic Lights) -->
