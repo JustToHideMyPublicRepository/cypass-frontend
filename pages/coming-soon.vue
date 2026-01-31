@@ -87,4 +87,8 @@ const currentService = computed(() => modules.find(s => s.id === serviceId.value
 const serviceTitle = computed(() => currentService.value?.title || 'Prochainement')
 const serviceDescription = computed(() => currentService.value?.description || "Nous préparons quelque chose d'exceptionnel pour renforcer votre sécurité numérique.")
 const serviceIcon = computed(() => currentService.value?.icon || IconRocket)
+
+useHead({
+  title: computed(() => currentService.value?.title || 'Bientôt disonible')
+})
 </script>

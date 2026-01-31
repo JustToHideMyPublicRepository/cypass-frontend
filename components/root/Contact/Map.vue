@@ -29,7 +29,3 @@
     </div>
   </UiAppFrame>
 </template>
-
-<script setup lang="ts">
-// Visual only
-</script>

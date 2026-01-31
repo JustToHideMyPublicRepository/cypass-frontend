@@ -1,5 +1,5 @@
 <template>
-  <div class="grid lg:grid-cols-2 gap-10">
+  <div class="grid lg:grid-cols-4 gap-10">
     <div v v-for="(service, index) in services" :key="service.id" class="group perspective-1000 animate-fade-up"
       :style="{ animationDelay: `${index * 150}ms` }">
 
@@ -21,7 +21,7 @@
           </div>
         </template>
 
-        <div class="p-8 h-full flex flex-col relative overflow-hidden group-hover:bg-ash/50 transition-colors">
+        <div class="p-1 h-full flex flex-col relative overflow-hidden group-hover:bg-ash/50 transition-colors">
           <!-- Background Gradient -->
           <div
             class="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-10 transition-opacity duration-500"

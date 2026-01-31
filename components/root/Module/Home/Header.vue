@@ -31,7 +31,7 @@
     </div>
 
     <!-- Trust Stats -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 py-8 border-y border-ash/50 backdrop-blur-sm animate-fade-up"
+    <div class="grid grid-cols-2 md:grid-cols-2 gap-8 py-8 border-y border-ash/50 backdrop-blur-sm animate-fade-up"
       style="animation-delay: 100ms;">
       <div v-for="stat in stats" :key="stat.label" class="text-center">
         <div class="text-3xl font-bold mb-1">{{ stat.value }}</div>

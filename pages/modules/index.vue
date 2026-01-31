@@ -16,7 +16,7 @@ definePageMeta({
 })
 
 useHead({
-  title: 'Services'
+  title: 'Modules'
 })
 </script>
 
