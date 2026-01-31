@@ -4,7 +4,7 @@
     <div class="relative h-[350px] overflow-hidden bg-WtB flex items-center justify-center">
       <!-- Radar Background -->
       <div
-        class="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--color-success)_1px,transparent_1px)] opacity-20 bg-[length:24px_24px]">
+        class="absolute inset-0 bg-[radial-gradient(circle_at_center,#22c55e_1px,transparent_1px)] opacity-40 bg-[length:24px_24px]">
       </div>
       <div class="absolute inset-0 bg-gradient-to-b from-transparent via-WtB/50 to-WtB"></div>
 
