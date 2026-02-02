@@ -87,9 +87,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import {
-  IconBell, IconBellPlus, IconBellOff, IconCheck, IconCircleCheck, IconAlertTriangle, IconInfoCircle, IconShieldCheck
-} from '@tabler/icons-vue'
+import { IconBell, IconBellPlus, IconBellOff, IconCheck } from '@tabler/icons-vue'
 import { useNotificationsStore } from '~/stores/notifications'
 import { useToastStore } from '~/stores/toast'
 import { formatDistanceToNow } from 'date-fns'
