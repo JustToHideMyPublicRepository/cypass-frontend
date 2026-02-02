@@ -75,7 +75,7 @@
         </div>
       </div>
 
-      <IndVerifyResult v-if="result" :result="result" :error="error" @reset="$emit('reset')" />
+      <RootVerifyResult v-if="result" :result="result" :error="error" @reset="$emit('reset')" />
 
       <div v-if="!loading && !result && file" class="flex justify-center pt-4">
         <UiBaseButton size="lg" class="px-12" @click="$emit('verify-file')">Vérifier le document</UiBaseButton>
