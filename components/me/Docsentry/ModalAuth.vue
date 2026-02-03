@@ -2,7 +2,7 @@
   <UiBaseModal :show="show" title="Authentifier un document" maxWidth="md" @close="$emit('close')">
     <div class="space-y-6 py-2">
       <div v-if="!file"
-        class="relative border-2 border-dashed border-ashAct rounded-3xl p-12 text-center hover:border-primary/50 transition-colors cursor-pointer group overflow-hidden"
+        class="relative border-2 border-dashed border-primary/20 rounded-3xl p-12 text-center hover:border-primary/50 transition-all cursor-pointer bg-WtB/50 hover:bg-primary/5 group overflow-hidden"
         @click="triggerFileSelect" @dragenter.prevent="handleDragEnter" @dragover.prevent
         @dragleave.prevent="handleDragLeave" @drop.prevent="handleDrop">
 
