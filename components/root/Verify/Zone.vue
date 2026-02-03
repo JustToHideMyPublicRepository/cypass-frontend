@@ -19,12 +19,12 @@
     <!-- Interactive Dropzone -->
     <div v-if="!file && verifyMode === 'file' && !result"
       class="relative border-2 border-dashed border-primary/20 rounded-3xl p-12 text-center hover:border-primary/50 transition-all cursor-pointer bg-WtB/50 hover:bg-primary/5 group overflow-hidden"
-      @click="$emit('trigger-file')" @dragenter.prevent="handleDragOver" @dragover.prevent="handleDragOver"
+      @click="$emit('trigger-file')" @dragenter.prevent="handleDragEnter" @dragover.prevent
       @dragleave.prevent="handleDragLeave" @drop.prevent="handleDrop">
 
       <!-- Drag Overlay -->
       <div v-if="isDragging"
-        class="absolute inset-0 z-10 bg-primary/95 backdrop-blur-md flex flex-col items-center justify-center animate-in fade-in zoom-in duration-300">
+        class="absolute inset-0 z-10 bg-primary/95 backdrop-blur-md flex flex-col items-center justify-center animate-in fade-in zoom-in duration-300 pointer-events-none">
         <IconRosetteDiscountCheck class="w-16 h-16 text-WtB mb-4 animate-bounce" />
         <h3 class="text-2xl font-black text-WtB uppercase tracking-widest">Lâcher pour analyser</h3>
       </div>
@@ -103,7 +103,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { IconRosetteDiscountCheck, IconHash, IconFileText, IconX } from '@tabler/icons-vue'
 import type { Step } from '~/utils/docsentry'
 
@@ -124,6 +124,11 @@ const emit = defineEmits(['update:verifyMode', 'update:hashInput', 'trigger-file
 const fileInput = ref<HTMLInputElement | null>(null)
 const isDragging = ref(false)
 const dragCounter = ref(0) // Counter to fix flickering issue
+
+watch([() => props.file, () => props.result, () => props.verifyMode], () => {
+  isDragging.value = false
+  dragCounter.value = 0
+})
 
 // Error modal state
 const showFileError = ref(false)
@@ -165,7 +170,7 @@ const validateFile = (file: File): boolean => {
   return true
 }
 
-const handleDragOver = (e: DragEvent) => {
+const handleDragEnter = (e: DragEvent) => {
   e.preventDefault()
   if (props.verifyMode === 'file' && !props.result) {
     dragCounter.value++

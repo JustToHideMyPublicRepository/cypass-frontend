@@ -3,12 +3,12 @@
     <div class="space-y-6 py-2">
       <div v-if="!file"
         class="relative border-2 border-dashed border-ashAct rounded-3xl p-12 text-center hover:border-primary/50 transition-colors cursor-pointer group overflow-hidden"
-        @click="triggerFileSelect" @dragenter.prevent="handleDragOver" @dragover.prevent="handleDragOver"
+        @click="triggerFileSelect" @dragenter.prevent="handleDragEnter" @dragover.prevent
         @dragleave.prevent="handleDragLeave" @drop.prevent="handleDrop">
 
         <!-- Drag Overlay -->
         <div v-if="isDragging"
-          class="absolute inset-0 z-10 bg-primary/95 backdrop-blur-md flex flex-col items-center justify-center animate-in fade-in zoom-in duration-300">
+          class="absolute inset-0 z-10 bg-primary/95 backdrop-blur-md flex flex-col items-center justify-center animate-in fade-in zoom-in duration-300 pointer-events-none">
           <IconUpload class="w-12 h-12 text-WtB mb-4 animate-bounce" />
           <p class="text-xl font-black text-WtB uppercase tracking-widest">Déposer le PDF ici</p>
         </div>
@@ -110,18 +110,20 @@
       </div>
     </template>
   </UiBaseModal>
+
+  <!-- File Error Modal -->
+  <ModalFileError :show="showFileError" :title="fileErrorTitle" :message="fileErrorMessage" :file-name="errorFileName"
+    :file-type="errorFileType" :file-size="errorFileSize" :accepted-formats="'PDF uniquement (Max 3 Mo)'"
+    @close="showFileError = false" />
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import {
   IconUpload, IconFileText, IconCircleCheck, IconAlertCircle, IconX,
   IconCopy, IconCheck
 } from '@tabler/icons-vue'
 import { authSteps, type Step } from '~/utils/docsentry'
-import { useToastStore } from '~/stores/toast'
-
-const toast = useToastStore()
 
 const props = defineProps<{
   show: boolean
@@ -139,9 +141,33 @@ const activeSteps = ref<Step[]>(JSON.parse(JSON.stringify(authSteps)))
 const isDragging = ref(false)
 const dragCounter = ref(0) // Counter to fix flickering
 
+// Error modal state
+const showFileError = ref(false)
+const fileErrorTitle = ref('Format non supporté')
+const fileErrorMessage = ref('')
+const errorFileName = ref('')
+const errorFileType = ref('')
+const errorFileSize = ref('')
+
+const showError = (title: string, message: string, file: File) => {
+  fileErrorTitle.value = title
+  fileErrorMessage.value = message
+  errorFileName.value = file.name
+  errorFileType.value = file.name.split('.').pop()?.toUpperCase() || 'Inconnu'
+  errorFileSize.value = (file.size / 1024 / 1024).toFixed(2) + ' Mo'
+  showFileError.value = true
+}
+
 const resetSteps = () => {
   activeSteps.value = JSON.parse(JSON.stringify(authSteps))
 }
+
+watch(() => props.show, (newVal) => {
+  if (!newVal) {
+    isDragging.value = false
+    dragCounter.value = 0
+  }
+})
 
 const runSteps = async () => {
   for (let i = 0; i < activeSteps.value.length; i++) {
@@ -153,7 +179,7 @@ const runSteps = async () => {
 
 const triggerFileSelect = () => fileInput.value?.click()
 
-const handleDragOver = () => {
+const handleDragEnter = () => {
   dragCounter.value++
   isDragging.value = true
 }
@@ -170,22 +196,20 @@ const validateFile = (selectedFile: File): boolean => {
   emit('error-clear')
 
   if (selectedFile.type !== 'application/pdf') {
-    const fileExt = selectedFile.name.split('.').pop()?.toUpperCase() || 'inconnu'
-    toast.showToast(
-      'error',
+    showError(
       'Format non supporté',
-      `Le fichier "${selectedFile.name}" est de type ${fileExt}. Seuls les fichiers PDF sont acceptés.`
+      `Le fichier "${selectedFile.name}" n'est pas un PDF. Seuls les fichiers PDF sont acceptés pour l'authentification.`,
+      selectedFile
     )
     emit('update:error', 'Seuls les fichiers PDF sont acceptés.')
     return false
   }
 
   if (selectedFile.size > 3 * 1024 * 1024) {
-    const sizeMB = (selectedFile.size / 1024 / 1024).toFixed(2)
-    toast.showToast(
-      'error',
+    showError(
       'Fichier trop volumineux',
-      `Le fichier fait ${sizeMB} Mo. La taille maximale autorisée est de 3 Mo.`
+      `Le fichier fait ${(selectedFile.size / 1024 / 1024).toFixed(2)} Mo. La taille maximale autorisée est de 3 Mo.`,
+      selectedFile
     )
     emit('update:error', 'La taille du fichier ne doit pas dépasser 3 Mo.')
     return false
@@ -237,6 +261,8 @@ const copyHash = (hash: string) => {
 const close = () => {
   file.value = null
   copied.value = false
+  isDragging.value = false
+  dragCounter.value = 0
   resetSteps()
   emit('close')
 }

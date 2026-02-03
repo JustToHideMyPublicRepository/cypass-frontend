@@ -17,7 +17,7 @@
         @dragleave.prevent="handleDragLeave" @drop.prevent="handleDrop">
         <!-- Background Drag State UI -->
         <div v-if="isDragging"
-          class="absolute inset-0 z-20 bg-primary/95 backdrop-blur-md border-4 border-dashed border-WtB rounded-3xl flex flex-col items-center justify-center animate-in fade-in zoom-in duration-300">
+          class="absolute inset-0 z-20 bg-primary/95 backdrop-blur-md border-4 border-dashed border-WtB rounded-3xl flex flex-col items-center justify-center animate-in fade-in zoom-in duration-300 pointer-events-none">
           <div class="bg-WtB p-6 rounded-full shadow-2xl scale-110 mb-4">
             <IconUpload class="w-12 h-12 text-primary animate-bounce" />
           </div>
@@ -110,6 +110,11 @@
       </div>
     </div>
   </UiBaseModal>
+
+  <!-- File Error Modal -->
+  <ModalFileError :show="showFileError" :title="fileErrorTitle" :message="fileErrorMessage" :file-name="errorFileName"
+    :file-type="errorFileType" :file-size="errorFileSize" :accepted-formats="'JPG, PNG, WebP, GIF (Max 2 Mo)'"
+    @close="showFileError = false" />
 </template>
 
 <script setup lang="ts">
@@ -117,9 +122,6 @@ import { ref, watch, computed } from 'vue'
 import {
   IconPhoto, IconLoader2, IconUpload, IconCamera, IconCheck, IconFileUpload, IconChevronRight, IconTrash
 } from '@tabler/icons-vue'
-import { useToastStore } from '~/stores/toast'
-
-const toast = useToastStore()
 
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
 const MAX_FILE_SIZE = 2 * 1024 * 1024 // 2MB
@@ -147,6 +149,35 @@ const selectedFile = ref<File | null>(null)
 const previewUrl = ref<string | null>(null)
 const isDragging = ref(false)
 const dragCounter = ref(0) // Counter to fix flickering
+
+watch(() => props.show, (newVal) => {
+  if (!newVal) {
+    isDragging.value = false
+    dragCounter.value = 0
+    selectedFile.value = null
+    if (previewUrl.value) {
+      URL.revokeObjectURL(previewUrl.value)
+      previewUrl.value = null
+    }
+  }
+})
+
+// Error modal state
+const showFileError = ref(false)
+const fileErrorTitle = ref('Format non supporté')
+const fileErrorMessage = ref('')
+const errorFileName = ref('')
+const errorFileType = ref('')
+const errorFileSize = ref('')
+
+const showError = (title: string, message: string, file: File) => {
+  fileErrorTitle.value = title
+  fileErrorMessage.value = message
+  errorFileName.value = file.name
+  errorFileType.value = file.name.split('.').pop()?.toUpperCase() || 'Inconnu'
+  errorFileSize.value = (file.size / 1024 / 1024).toFixed(2) + ' Mo'
+  showFileError.value = true
+}
 
 const triggerFileInput = () => {
   fileInput.value?.click()
@@ -182,22 +213,20 @@ const handleDrop = (event: DragEvent) => {
 const processFile = (file: File) => {
   // Validate file type
   if (!ACCEPTED_IMAGE_TYPES.includes(file.type)) {
-    const fileExt = file.name.split('.').pop()?.toUpperCase() || 'inconnu'
-    toast.showToast(
-      'error',
+    showError(
       'Format non supporté',
-      `Le fichier "${file.name}" est de type ${fileExt}. Seuls les formats JPG, PNG, WebP et GIF sont acceptés.`
+      `Le fichier "${file.name}" n'est pas une image acceptée. Seuls les formats JPG, PNG, WebP et GIF sont autorisés.`,
+      file
     )
     return
   }
 
   // Validate file size
   if (file.size > MAX_FILE_SIZE) {
-    const sizeMB = (file.size / 1024 / 1024).toFixed(2)
-    toast.showToast(
-      'error',
+    showError(
       'Fichier trop volumineux',
-      `Le fichier fait ${sizeMB} Mo. La taille maximale autorisée est de 2 Mo.`
+      `Le fichier fait ${(file.size / 1024 / 1024).toFixed(2)} Mo. La taille maximale autorisée est de 2 Mo.`,
+      file
     )
     return
   }
@@ -212,14 +241,4 @@ const submit = () => {
     emit('submit', selectedFile.value)
   }
 }
-
-watch(() => props.show, (newVal) => {
-  if (!newVal) {
-    selectedFile.value = null
-    if (previewUrl.value) {
-      URL.revokeObjectURL(previewUrl.value)
-      previewUrl.value = null
-    }
-  }
-})
 </script>
