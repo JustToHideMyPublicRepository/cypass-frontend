@@ -13,16 +13,8 @@
       </div>
 
       <!-- Main Interaction Area -->
-      <div class="relative group" @dragenter.prevent="handleDragEnter" @dragover.prevent
-        @dragleave.prevent="handleDragLeave" @drop.prevent="handleDrop">
-        <!-- Background Drag State UI -->
-        <div v-if="isDragging"
-          class="absolute inset-0 z-20 bg-primary/95 backdrop-blur-md border-4 border-dashed border-WtB rounded-3xl flex flex-col items-center justify-center animate-in fade-in zoom-in duration-300 pointer-events-none">
-          <div class="bg-WtB p-6 rounded-full shadow-2xl scale-110 mb-4">
-            <IconUpload class="w-12 h-12 text-primary animate-bounce" />
-          </div>
-          <h3 class="text-2xl font-black text-WtB uppercase tracking-widest">Déposer l'image ici</h3>
-        </div>
+      <div class="relative group">
+
 
         <div class="flex flex-col items-center gap-8 py-4 pointer-events-none">
           <!-- Avatar Preview Circle -->
@@ -118,7 +110,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, computed } from 'vue'
+import { ref, watch, computed, onUnmounted } from 'vue'
 import {
   IconPhoto, IconLoader2, IconUpload, IconCamera, IconCheck, IconFileUpload, IconChevronRight, IconTrash
 } from '@tabler/icons-vue'
@@ -144,22 +136,34 @@ const multiavatarUrl = computed(() => {
 
 const emit = defineEmits(['close', 'submit', 'delete'])
 
+import { useGlobalDropZone } from '~/composables/useDropZone'
+const { enable, disable } = useGlobalDropZone()
+
+const onDroppedFile = (droppedFile: File) => {
+  if (props.show && !props.isLoading) {
+    processFile(droppedFile)
+  }
+}
+
 const fileInput = ref<HTMLInputElement | null>(null)
 const selectedFile = ref<File | null>(null)
 const previewUrl = ref<string | null>(null)
-const isDragging = ref(false)
-const dragCounter = ref(0) // Counter to fix flickering
 
 watch(() => props.show, (newVal) => {
-  if (!newVal) {
-    isDragging.value = false
-    dragCounter.value = 0
-    selectedFile.value = null
+  if (newVal) {
+    enable(onDroppedFile)
+  } else {
+    disable(onDroppedFile)
+    if (selectedFile.value) selectedFile.value = null
     if (previewUrl.value) {
       URL.revokeObjectURL(previewUrl.value)
       previewUrl.value = null
     }
   }
+}, { immediate: true })
+
+onUnmounted(() => {
+  disable(onDroppedFile)
 })
 
 // Error modal state
@@ -187,27 +191,6 @@ const handleFileChange = (event: Event) => {
   const input = event.target as HTMLInputElement
   if (!input.files?.length) return
   processFile(input.files[0])
-}
-
-const handleDragEnter = () => {
-  dragCounter.value++
-  isDragging.value = true
-}
-
-const handleDragLeave = () => {
-  dragCounter.value--
-  if (dragCounter.value <= 0) {
-    dragCounter.value = 0
-    isDragging.value = false
-  }
-}
-
-const handleDrop = (event: DragEvent) => {
-  isDragging.value = false
-  dragCounter.value = 0
-  if (event.dataTransfer?.files?.length) {
-    processFile(event.dataTransfer.files[0])
-  }
 }
 
 const processFile = (file: File) => {

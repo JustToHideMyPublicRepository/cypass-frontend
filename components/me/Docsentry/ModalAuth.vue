@@ -3,15 +3,8 @@
     <div class="space-y-6 py-2">
       <div v-if="!file"
         class="relative border-2 border-dashed border-primary/20 rounded-3xl p-12 text-center hover:border-primary/50 transition-all cursor-pointer bg-WtB/50 hover:bg-primary/5 group overflow-hidden"
-        @click="triggerFileSelect" @dragenter.prevent="handleDragEnter" @dragover.prevent
-        @dragleave.prevent="handleDragLeave" @drop.prevent="handleDrop">
+        @click="triggerFileSelect">
 
-        <!-- Drag Overlay -->
-        <div v-if="isDragging"
-          class="absolute inset-0 z-10 bg-primary/95 backdrop-blur-md flex flex-col items-center justify-center animate-in fade-in zoom-in duration-300 pointer-events-none">
-          <IconUpload class="w-12 h-12 text-WtB mb-4 animate-bounce" />
-          <p class="text-xl font-black text-WtB uppercase tracking-widest">Déposer le PDF ici</p>
-        </div>
 
         <input type="file" ref="fileInput" class="hidden" accept=".pdf" @change="handleFileChange">
         <div class="pointer-events-none">
@@ -118,7 +111,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, onUnmounted } from 'vue'
 import {
   IconUpload, IconFileText, IconCircleCheck, IconAlertCircle, IconX,
   IconCopy, IconCheck
@@ -138,8 +131,30 @@ const file = ref<File | null>(null)
 const fileInput = ref<HTMLInputElement | null>(null)
 const copied = ref(false)
 const activeSteps = ref<Step[]>(JSON.parse(JSON.stringify(authSteps)))
-const isDragging = ref(false)
-const dragCounter = ref(0) // Counter to fix flickering
+
+import { useGlobalDropZone } from '~/composables/useDropZone'
+const { enable, disable } = useGlobalDropZone()
+
+const onDroppedFile = (droppedFile: File) => {
+  if (!props.loading) {
+    if (validateFile(droppedFile)) {
+      file.value = droppedFile
+      emit('error-clear')
+    }
+  }
+}
+
+watch(() => props.show, (newVal) => {
+  if (newVal) {
+    enable(onDroppedFile)
+  } else {
+    disable(onDroppedFile)
+  }
+}, { immediate: true })
+
+onUnmounted(() => {
+  disable(onDroppedFile)
+})
 
 // Error modal state
 const showFileError = ref(false)
@@ -162,13 +177,6 @@ const resetSteps = () => {
   activeSteps.value = JSON.parse(JSON.stringify(authSteps))
 }
 
-watch(() => props.show, (newVal) => {
-  if (!newVal) {
-    isDragging.value = false
-    dragCounter.value = 0
-  }
-})
-
 const runSteps = async () => {
   for (let i = 0; i < activeSteps.value.length; i++) {
     activeSteps.value[i].status = 'loading'
@@ -178,19 +186,6 @@ const runSteps = async () => {
 }
 
 const triggerFileSelect = () => fileInput.value?.click()
-
-const handleDragEnter = () => {
-  dragCounter.value++
-  isDragging.value = true
-}
-
-const handleDragLeave = () => {
-  dragCounter.value--
-  if (dragCounter.value <= 0) {
-    dragCounter.value = 0
-    isDragging.value = false
-  }
-}
 
 const validateFile = (selectedFile: File): boolean => {
   emit('error-clear')
@@ -231,19 +226,6 @@ const handleFileChange = (e: Event) => {
   }
 }
 
-const handleDrop = (e: DragEvent) => {
-  isDragging.value = false
-  dragCounter.value = 0
-  if (e.dataTransfer?.files.length) {
-    const selectedFile = e.dataTransfer.files[0]
-    if (validateFile(selectedFile)) {
-      file.value = selectedFile
-    } else {
-      file.value = null
-    }
-  }
-}
-
 const handleUpload = async () => {
   if (file.value) {
     resetSteps()
@@ -261,8 +243,6 @@ const copyHash = (hash: string) => {
 const close = () => {
   file.value = null
   copied.value = false
-  isDragging.value = false
-  dragCounter.value = 0
   resetSteps()
   emit('close')
 }

@@ -3,8 +3,8 @@
     <div class="max-w-3xl w-full space-y-12 text-center animate-fade-up">
       <RootVerifyHeader />
 
-      <RootVerifyZone v-model:verifyMode="verifyMode" v-model:hashInput="hashInput" :file="file" :loading="loading"
-        :result="result" :error="error" :activeSteps="activeSteps" @trigger-file="triggerFileSelect"
+      <RootVerifyZone v-model:verifyMode="verifyMode" v-model:hashInput="hashInput" v-model:file="file"
+        :loading="loading" :result="result" :error="error" :activeSteps="activeSteps" @trigger-file="triggerFileSelect"
         @verify-hash="handleVerifyHash" @verify-file="handleVerifyFile" @reset="reset" />
 
       <RootVerifyBenefits v-if="!result" />
@@ -41,6 +41,14 @@ const error = ref<string | null>(null)
 const copied = ref(false)
 const activeSteps = ref<Step[]>(JSON.parse(JSON.stringify(verifySteps)))
 
+watch(file, (newFile) => {
+  if (newFile) {
+    result.value = null
+    error.value = null
+    resetSteps()
+  }
+})
+
 const resetSteps = () => {
   activeSteps.value = JSON.parse(JSON.stringify(verifySteps))
 }
@@ -59,14 +67,6 @@ const handleFileChange = (e: Event) => {
   const target = e.target as HTMLInputElement
   if (target.files?.length) {
     file.value = target.files[0]
-    result.value = null
-    error.value = null
-  }
-}
-
-const handleDrop = (e: DragEvent) => {
-  if (e.dataTransfer?.files.length) {
-    file.value = e.dataTransfer.files[0]
     result.value = null
     error.value = null
   }

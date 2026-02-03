@@ -19,15 +19,8 @@
     <!-- Interactive Dropzone -->
     <div v-if="!file && verifyMode === 'file' && !result"
       class="relative border-2 border-dashed border-primary/20 rounded-3xl p-12 text-center hover:border-primary/50 transition-all cursor-pointer bg-WtB/50 hover:bg-primary/5 group overflow-hidden"
-      @click="$emit('trigger-file')" @dragenter.prevent="handleDragEnter" @dragover.prevent
-      @dragleave.prevent="handleDragLeave" @drop.prevent="handleDrop">
+      @click="$emit('trigger-file')">
 
-      <!-- Drag Overlay -->
-      <div v-if="isDragging"
-        class="absolute inset-0 z-10 bg-primary/95 backdrop-blur-md flex flex-col items-center justify-center animate-in fade-in zoom-in duration-300 pointer-events-none">
-        <IconRosetteDiscountCheck class="w-16 h-16 text-WtB mb-4 animate-bounce" />
-        <h3 class="text-2xl font-black text-WtB uppercase tracking-widest">Lâcher pour analyser</h3>
-      </div>
 
       <div class="pointer-events-none">
         <div
@@ -103,9 +96,30 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted, onUnmounted } from 'vue'
 import { IconRosetteDiscountCheck, IconHash, IconFileText, IconX } from '@tabler/icons-vue'
 import type { Step } from '~/utils/docsentry'
+import ModalFileError from '~/components/modal/FileError.vue'
+
+import { useGlobalDropZone } from '~/composables/useDropZone'
+
+const { enable, disable } = useGlobalDropZone()
+
+const onDroppedFile = (droppedFile: File) => {
+  if (props.verifyMode === 'file' && !props.loading) {
+    if (validateFile(droppedFile)) {
+      emit('update:file', droppedFile)
+    }
+  }
+}
+
+onMounted(() => {
+  enable(onDroppedFile)
+})
+
+onUnmounted(() => {
+  disable(onDroppedFile)
+})
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB for PDF files
 
@@ -122,13 +136,6 @@ const props = defineProps<{
 const emit = defineEmits(['update:verifyMode', 'update:hashInput', 'trigger-file', 'verify-hash', 'verify-file', 'reset', 'update:file'])
 
 const fileInput = ref<HTMLInputElement | null>(null)
-const isDragging = ref(false)
-const dragCounter = ref(0) // Counter to fix flickering issue
-
-watch([() => props.file, () => props.result, () => props.verifyMode], () => {
-  isDragging.value = false
-  dragCounter.value = 0
-})
 
 // Error modal state
 const showFileError = ref(false)
@@ -170,37 +177,8 @@ const validateFile = (file: File): boolean => {
   return true
 }
 
-const handleDragEnter = (e: DragEvent) => {
-  e.preventDefault()
-  if (props.verifyMode === 'file' && !props.result) {
-    dragCounter.value++
-    isDragging.value = true
-  }
-}
-
-const handleDragLeave = (e: DragEvent) => {
-  e.preventDefault()
-  dragCounter.value--
-  if (dragCounter.value <= 0) {
-    dragCounter.value = 0
-    isDragging.value = false
-  }
-}
-
-const handleDrop = (e: DragEvent) => {
-  e.preventDefault()
-  isDragging.value = false
-  dragCounter.value = 0
-
-  if (e.dataTransfer?.files.length) {
-    const file = e.dataTransfer.files[0]
-    if (validateFile(file)) {
-      emit('update:file', file)
-    }
-  }
-}
-
 const handleFileChange = (e: Event) => {
+
   const target = e.target as HTMLInputElement
   if (target.files?.length) {
     const file = target.files[0]

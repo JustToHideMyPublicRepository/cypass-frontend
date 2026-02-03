@@ -1,5 +1,6 @@
 <template>
   <div class="min-h-screen bg-gradient-premium text-textClr font-body">
+    <UiGlobalDropZone />
     <NuxtLayout>
       <div class="py-8">
         <NuxtPage />

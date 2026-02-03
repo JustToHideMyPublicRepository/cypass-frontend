@@ -18,7 +18,7 @@
       <!-- File Zone -->
       <div v-if="!file && verifyMode === 'file' && !result"
         class="border-2 border-dashed border-primary/20 rounded-3xl p-12 text-center hover:border-primary/50 transition-colors cursor-pointer group bg-primary/5"
-        @click="triggerFileSelect" @dragover.prevent @drop.prevent="handleDrop">
+        @click="triggerFileSelect">
         <input type="file" ref="fileInput" class="hidden" accept=".pdf" @change="handleFileChange">
         <div
           class="w-16 h-16 bg-WtB rounded-2xl flex items-center justify-center mx-auto mb-4 text-primary shadow-sm border border-ash group-hover:scale-110 transition-transform">
@@ -89,7 +89,7 @@
                 <p class="font-black text-BtW text-sm truncate">{{ result.document.filename }}</p>
               </div>
               <p class="text-hsa">Émis par : <strong class="text-BtW">{{ result.document?.signer || 'CYPASS Network'
-                  }}</strong></p>
+              }}</strong></p>
 
               <div class="grid grid-cols-2 gap-3 pt-2 border-t border-success/10">
                 <div v-if="result.document?.id" class="space-y-1">
@@ -178,7 +178,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onUnmounted, watch } from 'vue'
 import {
   IconSearch, IconFileText, IconShieldOff, IconX, IconHash,
   IconCopy, IconCheck, IconRosetteDiscountCheck
@@ -187,6 +187,9 @@ import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { useDocumentsStore } from '~/stores/documents'
 import { verifySteps, type Step } from '~/utils/docsentry'
+import { useGlobalDropZone } from '~/composables/useDropZone'
+
+const { enable, disable } = useGlobalDropZone()
 
 const props = defineProps<{
   show: boolean
@@ -232,9 +235,28 @@ const handleFileChange = (e: Event) => {
   }
 }
 
+const onDroppedFile = (droppedFile: File) => {
+  if (verifyMode.value === 'file' && !props.loading) {
+    file.value = droppedFile
+    emit('reset')
+  }
+}
+
+watch(() => props.show, (newVal) => {
+  if (newVal) {
+    enable(onDroppedFile)
+  } else {
+    disable(onDroppedFile)
+  }
+}, { immediate: true })
+
+onUnmounted(() => {
+  disable(onDroppedFile)
+})
+
 const handleDrop = (e: DragEvent) => {
   if (e.dataTransfer?.files.length) {
-    file.value = e.dataTransfer.files[0]
+    onDroppedFile(e.dataTransfer.files[0])
   }
 }
 
