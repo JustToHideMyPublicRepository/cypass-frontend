@@ -8,51 +8,51 @@
     <!-- Stats Grid -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       <!-- Docs Stat -->
-      <UiBaseCard class="bg-gradient-to-br from-blue-500 to-blue-600 border-none text-white">
+      <UiBaseCard class="bg-gradient-to-br from-primary to-secondary border-none text-WtB">
         <div class="flex justify-between items-start">
           <div>
-            <p class="text-blue-100 font-medium mb-1">Documents Certifiés</p>
+            <p class="font-medium mb-1">Documents Certifiés</p>
             <h3 class="text-3xl font-bold">1,248</h3>
           </div>
           <div class="p-2 bg-white/20 rounded-lg">
             <IconFileCertificate class="w-6 h-6" />
           </div>
         </div>
-        <div class="mt-4 flex items-center text-sm text-blue-100">
+        <div class="mt-4 flex items-center text-sm">
           <span class="bg-white/20 px-1.5 py-0.5 rounded mr-2">+12%</span>
           depuis le mois dernier
         </div>
       </UiBaseCard>
 
       <!-- Alerts Stat -->
-      <UiBaseCard class="bg-gradient-to-br from-red-500 to-red-600 border-none text-white">
+      <UiBaseCard class="bg-gradient-to-br from-danger to-dangerAct border-none text-WtB">
         <div class="flex justify-between items-start">
           <div>
-            <p class="text-red-100 font-medium mb-1">Alertes Critiques</p>
+            <p class="font-medium mb-1">Alertes Critiques</p>
             <h3 class="text-3xl font-bold">3</h3>
           </div>
           <div class="p-2 bg-white/20 rounded-lg">
             <IconAlertTriangle class="w-6 h-6" />
           </div>
         </div>
-        <div class="mt-4 flex items-center text-sm text-red-100">
+        <div class="mt-4 flex items-center text-sm">
           <span class="bg-white/20 px-1.5 py-0.5 rounded mr-2">+1 new</span>
           cette semaine
         </div>
       </UiBaseCard>
 
       <!-- Vuln Stat -->
-      <UiBaseCard class="bg-gradient-to-br from-emerald-500 to-emerald-600 border-none text-white">
+      <UiBaseCard class="bg-gradient-to-br from-success to-successAct border-none text-BtW">
         <div class="flex justify-between items-start">
           <div>
-            <p class="text-emerald-100 font-medium mb-1">Score Sécurité</p>
+            <p class="font-medium mb-1">Score Sécurité</p>
             <h3 class="text-3xl font-bold">A+</h3>
           </div>
           <div class="p-2 bg-white/20 rounded-lg">
             <IconShieldLock class="w-6 h-6" />
           </div>
         </div>
-        <div class="mt-4 flex items-center text-sm text-emerald-100">
+        <div class="mt-4 flex items-center text-sm">
           Base infrastructure saine
         </div>
       </UiBaseCard>
