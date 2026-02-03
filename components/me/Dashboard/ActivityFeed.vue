@@ -11,8 +11,10 @@
       <div v-else-if="!logs.length" class="py-10 text-center text-hsa">
         Aucune activité enregistrée
       </div>
-      <div v-for="log in logs" :key="log.id" class="flex gap-3 text-sm">
-        <div class="h-8 w-8 rounded-lg bg-ash flex items-center justify-center shrink-0">
+      <div v-for="log in logs" :key="log.id"
+        class="flex gap-3 text-sm p-2 rounded-xl hover:bg-ash/50 transition-all cursor-pointer group">
+        <div
+          class="h-8 w-8 rounded-lg bg-ash flex items-center justify-center shrink-0 transition-transform group-hover:scale-110">
           <IconHistory class="w-4 h-4 text-hsa" />
         </div>
         <div class="min-w-0 flex-1">
