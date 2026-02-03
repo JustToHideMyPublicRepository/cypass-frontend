@@ -52,6 +52,6 @@ defineEmits(['upload', 'verify'])
 const quickLinks = [
   { label: 'Mes documents', path: '/dashboard/docsentry', icon: IconFiles },
   { label: 'Sessions actives', path: '/dashboard/sessions', icon: IconDevices },
-  { label: 'Paramètres', path: '/dashboard/profile', icon: IconSettings }
+  { label: 'Profil', path: '/dashboard/profile', icon: IconSettings }
 ]
 </script>

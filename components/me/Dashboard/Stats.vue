@@ -15,10 +15,6 @@
         </div>
 
         <div class="mt-4 flex items-center justify-between gap-2">
-          <div :class="[stat.subLabelClass || '', 'text-[10px] font-semibold opacity-90 leading-tight']">
-            {{ stat.displaySubLabel }}
-          </div>
-
           <div v-if="stat.trend !== undefined"
             class="flex items-center gap-1 px-1.5 py-1 rounded-lg bg-white/20 backdrop-blur-md">
             <component :is="stat.trend >= 0 ? IconTrendingUp : IconTrendingDown" class="w-3.5 h-3.5 text-WtB" />
@@ -27,6 +23,10 @@
           <div v-else-if="stat.advice"
             class="px-2 py-1 rounded-lg bg-white/20 backdrop-blur-sm text-[9px] font-bold uppercase tracking-wider text-center text-WtB">
             {{ stat.advice }}
+          </div>
+
+          <div :class="[stat.subLabelClass || '', 'text-[10px] font-semibold opacity-90 leading-tight']">
+            {{ stat.displaySubLabel }}
           </div>
         </div>
       </div>
