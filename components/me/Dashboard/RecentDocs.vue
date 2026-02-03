@@ -1,5 +1,5 @@
 <template>
-  <UiBaseCard title="Documents Orphelins" subtitle="Derniers documents certifiés">
+  <UiBaseCard title="Derniers documents" subtitle="Derniers documents certifiés">
     <template #header>
       <UiBaseButton variant="secondary" size="sm" class="!px-2 !py-1 !text-[10px]"
         @click="navigateTo('/dashboard/docsentry')">Gérer</UiBaseButton>

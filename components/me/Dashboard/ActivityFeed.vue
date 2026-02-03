@@ -1,5 +1,5 @@
 <template>
-  <UiBaseCard title="Journal d'Activité">
+  <UiBaseCard title="Journal d'activité">
     <template #header>
       <UiBaseButton variant="secondary" size="sm" class="!px-2 !py-1 !text-[10px]"
         @click="navigateTo('/dashboard/logs')">Logs</UiBaseButton>
