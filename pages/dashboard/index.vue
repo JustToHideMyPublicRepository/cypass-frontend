@@ -76,7 +76,8 @@
       <!-- Recent Alerts -->
       <UiBaseCard title="Alertes Récentes">
         <template #header>
-          <UiBaseButton variant="secondary" size="sm" @click="navigateTo('/dashboard/notifications')">Voir tout
+          <UiBaseButton variant="secondary" size="sm" class="!px-2 !py-1 !text-[10px]"
+            @click="navigateTo('/dashboard/notifications')">Voir tout
           </UiBaseButton>
         </template>
         <div class="space-y-4">
@@ -104,7 +105,8 @@
       <!-- Recent Docs -->
       <UiBaseCard title="Documents Orphelins" subtitle="Derniers documents certifiés">
         <template #header>
-          <UiBaseButton variant="secondary" size="sm" @click="navigateTo('/dashboard/docsentry')">Gérer</UiBaseButton>
+          <UiBaseButton variant="secondary" size="sm" class="!px-2 !py-1 !text-[10px]"
+            @click="navigateTo('/dashboard/docsentry')">Gérer</UiBaseButton>
         </template>
         <div class="space-y-1">
           <div v-if="documentsStore.loading && !documentsStore.documents.length" class="py-10 text-center">
@@ -113,7 +115,7 @@
           <div v-else-if="!documentsStore.documents.length" class="py-10 text-center text-hsa">
             Aucun document récent
           </div>
-          <div v-for="doc in documentsStore.documents.slice(0, 5)" :key="doc.id"
+          <div v-for="doc in documentsStore.documents.slice(0, 4)" :key="doc.id"
             class="flex items-center justify-between p-3 rounded-xl hover:bg-ash/50 transition-all cursor-pointer group"
             @click="navigateTo(`/dashboard/docsentry/${doc.id}`)">
             <div class="flex items-center gap-3 min-w-0">
@@ -121,11 +123,11 @@
                 <IconFileCertificate class="w-4 h-4 text-hsa group-hover:text-primary" />
               </div>
               <div class="min-w-0">
-                <p class="text-sm font-bold text-BtW truncate">{{ doc.name }}</p>
-                <p class="text-[10px] text-hsa">{{ formatTime(doc.created_at) }}</p>
+                <h4 class="text-sm font-bold text-BtW truncate">{{ doc.filename }}</h4>
+                <p class="text-[10px] text-hsa mt-0.5">{{ formatTime(doc.created_at) }}</p>
               </div>
             </div>
-            <UiStatusBadge :status="doc.status" size="sm" />
+            <UiStatusBadge :status="getDocStatus(doc)" size="sm" />
           </div>
         </div>
       </UiBaseCard>
@@ -133,7 +135,8 @@
       <!-- Activity Feed -->
       <UiBaseCard title="Journal d'Activité">
         <template #header>
-          <UiBaseButton variant="secondary" size="sm" @click="navigateTo('/dashboard/logs')">Logs</UiBaseButton>
+          <UiBaseButton variant="secondary" size="sm" class="!px-2 !py-1 !text-[10px]"
+            @click="navigateTo('/dashboard/logs')">Logs</UiBaseButton>
         </template>
         <div class="space-y-4">
           <div v-if="loading && !profilStore.logs.length" class="py-10 text-center">
@@ -142,13 +145,13 @@
           <div v-else-if="!profilStore.logs.length" class="py-10 text-center text-hsa">
             Aucune activité enregistrée
           </div>
-          <div v-for="log in profilStore.logs.slice(0, 5)" :key="log.id" class="flex gap-3 text-sm">
+          <div v-for="log in profilStore.logs.slice(0, 4)" :key="log.id" class="flex gap-3 text-sm">
             <div class="h-8 w-8 rounded-lg bg-ash flex items-center justify-center shrink-0">
               <IconHistory class="w-4 h-4 text-hsa" />
             </div>
-            <div class="min-w-0">
-              <p class="text-xs text-BtW break-words"><span class="font-bold">{{ log.action }}</span></p>
-              <p class="text-[10px] text-hsa">{{ formatTime(log.timestamp) }}</p>
+            <div class="min-w-0 flex-1">
+              <h4 class="text-xs font-bold text-BtW truncate">{{ log.action }}</h4>
+              <p class="text-[10px] text-hsa mt-0.5">{{ formatTime(log.timestamp) }}</p>
             </div>
           </div>
         </div>
@@ -178,6 +181,11 @@ const authStore = useAuthStore()
 const currentTime = ref('')
 const activeSessionsCount = ref(0)
 const loading = ref(true)
+
+// Helper to determine doc status string for badge
+const getDocStatus = (doc: any) => {
+  return doc.has_certificate ? 'Verified' : 'Pending'
+}
 
 onMounted(async () => {
   const now = new Date()
