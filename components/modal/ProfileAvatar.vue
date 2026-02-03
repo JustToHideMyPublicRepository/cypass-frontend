@@ -13,19 +13,20 @@
       </div>
 
       <!-- Main Interaction Area -->
-      <div class="relative group" @dragover.prevent="isDragging = true" @dragleave.prevent="isDragging = false"
-        @drop.prevent="handleDrop">
+      <div class="relative group" @dragenter.prevent="handleDragEnter" @dragover.prevent
+        @dragleave.prevent="handleDragLeave" @drop.prevent="handleDrop">
         <!-- Background Drag State UI -->
         <div v-if="isDragging"
-          class="absolute inset-0 z-20 bg-primary/10 backdrop-blur-sm border-2 border-dashed border-primary rounded-3xl flex items-center justify-center animate-in fade-in zoom-in duration-300">
-          <div class="bg-WtB p-6 rounded-full shadow-2xl scale-110">
-            <IconUpload class="w-10 h-10 text-primary animate-bounce" />
+          class="absolute inset-0 z-20 bg-primary/95 backdrop-blur-md border-4 border-dashed border-WtB rounded-3xl flex flex-col items-center justify-center animate-in fade-in zoom-in duration-300">
+          <div class="bg-WtB p-6 rounded-full shadow-2xl scale-110 mb-4">
+            <IconUpload class="w-12 h-12 text-primary animate-bounce" />
           </div>
+          <h3 class="text-2xl font-black text-WtB uppercase tracking-widest">Déposer l'image ici</h3>
         </div>
 
-        <div class="flex flex-col items-center gap-8 py-4">
+        <div class="flex flex-col items-center gap-8 py-4 pointer-events-none">
           <!-- Avatar Preview Circle -->
-          <div class="relative w-44 h-44 cursor-pointer" @click="triggerFileInput">
+          <div class="relative w-44 h-44 cursor-pointer pointer-events-auto" @click="triggerFileInput">
             <div
               class="absolute inset-0 bg-gradient-to-tr from-primary via-primary/20 to-secondary rounded-full blur-xl opacity-20 group-hover:opacity-40 transition-opacity duration-700">
             </div>
@@ -69,7 +70,7 @@
           </div>
 
           <!-- Selection Controls -->
-          <div class="w-full space-y-4">
+          <div class="w-full space-y-4 pointer-events-auto">
             <button @click="triggerFileInput"
               class="w-full px-6 py-4 rounded-2xl border-2 border-dashed border-ash hover:border-primary/10 hover:bg-primary/5 transition-all duration-300 flex items-center justify-between group/select"
               :disabled="isLoading">
@@ -116,6 +117,12 @@ import { ref, watch, computed } from 'vue'
 import {
   IconPhoto, IconLoader2, IconUpload, IconCamera, IconCheck, IconFileUpload, IconChevronRight, IconTrash
 } from '@tabler/icons-vue'
+import { useToastStore } from '~/stores/toast'
+
+const toast = useToastStore()
+
+const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
+const MAX_FILE_SIZE = 2 * 1024 * 1024 // 2MB
 
 const props = defineProps<{
   show: boolean
@@ -139,6 +146,7 @@ const fileInput = ref<HTMLInputElement | null>(null)
 const selectedFile = ref<File | null>(null)
 const previewUrl = ref<string | null>(null)
 const isDragging = ref(false)
+const dragCounter = ref(0) // Counter to fix flickering
 
 const triggerFileInput = () => {
   fileInput.value?.click()
@@ -150,22 +158,50 @@ const handleFileChange = (event: Event) => {
   processFile(input.files[0])
 }
 
+const handleDragEnter = () => {
+  dragCounter.value++
+  isDragging.value = true
+}
+
+const handleDragLeave = () => {
+  dragCounter.value--
+  if (dragCounter.value <= 0) {
+    dragCounter.value = 0
+    isDragging.value = false
+  }
+}
+
 const handleDrop = (event: DragEvent) => {
   isDragging.value = false
+  dragCounter.value = 0
   if (event.dataTransfer?.files?.length) {
     processFile(event.dataTransfer.files[0])
   }
 }
 
 const processFile = (file: File) => {
-  if (!file.type.startsWith('image/')) {
+  // Validate file type
+  if (!ACCEPTED_IMAGE_TYPES.includes(file.type)) {
+    const fileExt = file.name.split('.').pop()?.toUpperCase() || 'inconnu'
+    toast.showToast(
+      'error',
+      'Format non supporté',
+      `Le fichier "${file.name}" est de type ${fileExt}. Seuls les formats JPG, PNG, WebP et GIF sont acceptés.`
+    )
     return
   }
-  // Check size (2MB)
-  if (file.size > 2 * 1024 * 1024) {
-    // Parent could handle toast if we emit an error
+
+  // Validate file size
+  if (file.size > MAX_FILE_SIZE) {
+    const sizeMB = (file.size / 1024 / 1024).toFixed(2)
+    toast.showToast(
+      'error',
+      'Fichier trop volumineux',
+      `Le fichier fait ${sizeMB} Mo. La taille maximale autorisée est de 2 Mo.`
+    )
     return
   }
+
   selectedFile.value = file
   if (previewUrl.value) URL.revokeObjectURL(previewUrl.value)
   previewUrl.value = URL.createObjectURL(file)

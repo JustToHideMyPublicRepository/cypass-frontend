@@ -248,6 +248,10 @@
     background-color: color-mix(in srgb, var(--color-ash) 80%, transparent);
   }
 
+  .bg-WtB\/90 {
+    background-color: color-mix(in srgb, var(--color-WtB) 90%, transparent);
+  }
+
   /* Hide scrollbar for Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar,
   .scrollbar-hide::-webkit-scrollbar {

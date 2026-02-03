@@ -18,18 +18,31 @@
 
     <!-- Interactive Dropzone -->
     <div v-if="!file && verifyMode === 'file' && !result"
-      class="border-2 border-dashed border-primary/20 rounded-3xl p-12 text-center hover:border-primary/50 transition-all cursor-pointer bg-WtB/50 hover:bg-primary/5 group"
-      @click="$emit('trigger-file')">
-      <div
-        class="w-20 h-20 bg-WtB rounded-3xl flex items-center justify-center mx-auto mb-6 text-primary shadow-xl border border-ash group-hover:scale-110 transition-transform duration-500">
-        <IconRosetteDiscountCheck class="w-10 h-10" />
+      class="relative border-2 border-dashed border-primary/20 rounded-3xl p-12 text-center hover:border-primary/50 transition-all cursor-pointer bg-WtB/50 hover:bg-primary/5 group overflow-hidden"
+      @click="$emit('trigger-file')" @dragenter.prevent="handleDragOver" @dragover.prevent="handleDragOver"
+      @dragleave.prevent="handleDragLeave" @drop.prevent="handleDrop">
+
+      <!-- Drag Overlay -->
+      <div v-if="isDragging"
+        class="absolute inset-0 z-10 bg-primary/95 backdrop-blur-md flex flex-col items-center justify-center animate-in fade-in zoom-in duration-300">
+        <IconRosetteDiscountCheck class="w-16 h-16 text-WtB mb-4 animate-bounce" />
+        <h3 class="text-2xl font-black text-WtB uppercase tracking-widest">Lâcher pour analyser</h3>
       </div>
-      <h3 class="text-xl font-bold text-BtW mb-2">Sélectionnez le document PDF</h3>
-      <p class="text-sm text-hsa">Glissez-déposez le fichier ici ou cliquez pour parcourir</p>
+
+      <div class="pointer-events-none">
+        <div
+          class="w-20 h-20 bg-WtB rounded-3xl flex items-center justify-center mx-auto mb-6 text-primary shadow-xl border border-ash group-hover:scale-110 transition-transform duration-500">
+          <IconRosetteDiscountCheck class="w-10 h-10" />
+        </div>
+        <h3 class="text-xl font-bold text-BtW mb-2">Sélectionnez le document PDF</h3>
+        <p class="text-sm text-hsa">Glissez-déposez le fichier ici ou cliquez pour parcourir</p>
+      </div>
+
+      <input type="file" ref="fileInput" class="hidden" accept=".pdf,application/pdf" @change="handleFileChange">
     </div>
 
     <!-- Hash Input Zone -->
-    <div v-else-if="verifyMode === 'hash' && !result" class="max-w-md mx-auto space-y-4 py-8">
+    <div v-if="verifyMode === 'hash' && !result && !file" class="max-w-md mx-auto space-y-4 py-8">
       <div class="space-y-2 text-left">
         <label class="text-xs font-black text-hsa uppercase tracking-widest px-1">Code SHA-256 du document</label>
         <div class="relative">
@@ -81,14 +94,22 @@
         <UiBaseButton size="lg" class="px-12" @click="$emit('verify-file')">Vérifier le document</UiBaseButton>
       </div>
     </div>
+
+    <!-- File Error Modal -->
+    <ModalFileError :show="showFileError" :title="fileErrorTitle" :message="fileErrorMessage" :file-name="errorFileName"
+      :file-type="errorFileType" :file-size="errorFileSize" :accepted-formats="acceptedFormats"
+      @close="showFileError = false" />
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import { IconRosetteDiscountCheck, IconHash, IconFileText, IconX } from '@tabler/icons-vue'
 import type { Step } from '~/utils/docsentry'
 
-defineProps<{
+const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB for PDF files
+
+const props = defineProps<{
   verifyMode: 'file' | 'hash'
   hashInput: string
   file: File | null
@@ -98,5 +119,90 @@ defineProps<{
   activeSteps: Step[]
 }>()
 
-defineEmits(['update:verifyMode', 'update:hashInput', 'trigger-file', 'verify-hash', 'verify-file', 'reset'])
+const emit = defineEmits(['update:verifyMode', 'update:hashInput', 'trigger-file', 'verify-hash', 'verify-file', 'reset', 'update:file'])
+
+const fileInput = ref<HTMLInputElement | null>(null)
+const isDragging = ref(false)
+const dragCounter = ref(0) // Counter to fix flickering issue
+
+// Error modal state
+const showFileError = ref(false)
+const fileErrorTitle = ref('Format non supporté')
+const fileErrorMessage = ref('')
+const errorFileName = ref('')
+const errorFileType = ref('')
+const errorFileSize = ref('')
+const acceptedFormats = ref('PDF uniquement (Max 10 Mo)')
+
+const showError = (title: string, message: string, file: File) => {
+  fileErrorTitle.value = title
+  fileErrorMessage.value = message
+  errorFileName.value = file.name
+  errorFileType.value = file.name.split('.').pop()?.toUpperCase() || 'Inconnu'
+  errorFileSize.value = (file.size / 1024 / 1024).toFixed(2) + ' Mo'
+  showFileError.value = true
+}
+
+const validateFile = (file: File): boolean => {
+  if (file.type !== 'application/pdf') {
+    showError(
+      'Format non supporté',
+      `Le fichier "${file.name}" n'est pas un PDF. Seuls les fichiers PDF sont acceptés pour la vérification.`,
+      file
+    )
+    return false
+  }
+
+  if (file.size > MAX_FILE_SIZE) {
+    showError(
+      'Fichier trop volumineux',
+      `Le fichier fait ${(file.size / 1024 / 1024).toFixed(2)} Mo. La taille maximale autorisée est de 10 Mo.`,
+      file
+    )
+    return false
+  }
+
+  return true
+}
+
+const handleDragOver = (e: DragEvent) => {
+  e.preventDefault()
+  if (props.verifyMode === 'file' && !props.result) {
+    dragCounter.value++
+    isDragging.value = true
+  }
+}
+
+const handleDragLeave = (e: DragEvent) => {
+  e.preventDefault()
+  dragCounter.value--
+  if (dragCounter.value <= 0) {
+    dragCounter.value = 0
+    isDragging.value = false
+  }
+}
+
+const handleDrop = (e: DragEvent) => {
+  e.preventDefault()
+  isDragging.value = false
+  dragCounter.value = 0
+
+  if (e.dataTransfer?.files.length) {
+    const file = e.dataTransfer.files[0]
+    if (validateFile(file)) {
+      emit('update:file', file)
+    }
+  }
+}
+
+const handleFileChange = (e: Event) => {
+  const target = e.target as HTMLInputElement
+  if (target.files?.length) {
+    const file = target.files[0]
+    if (validateFile(file)) {
+      emit('update:file', file)
+    }
+    target.value = '' // Reset input
+  }
+}
 </script>

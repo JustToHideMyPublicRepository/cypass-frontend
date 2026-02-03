@@ -2,15 +2,26 @@
   <UiBaseModal :show="show" title="Authentifier un document" maxWidth="md" @close="$emit('close')">
     <div class="space-y-6 py-2">
       <div v-if="!file"
-        class="border-2 border-dashed border-ashAct rounded-3xl p-12 text-center hover:border-primary/50 transition-colors cursor-pointer group"
-        @click="triggerFileSelect" @dragover.prevent @drop.prevent="handleDrop">
-        <input type="file" ref="fileInput" class="hidden" accept=".pdf" @change="handleFileChange">
-        <div
-          class="w-16 h-16 bg-primary/5 rounded-2xl flex items-center justify-center mx-auto mb-4 text-primary group-hover:scale-110 transition-transform">
-          <IconUpload class="w-8 h-8" />
+        class="relative border-2 border-dashed border-ashAct rounded-3xl p-12 text-center hover:border-primary/50 transition-colors cursor-pointer group overflow-hidden"
+        @click="triggerFileSelect" @dragenter.prevent="handleDragOver" @dragover.prevent="handleDragOver"
+        @dragleave.prevent="handleDragLeave" @drop.prevent="handleDrop">
+
+        <!-- Drag Overlay -->
+        <div v-if="isDragging"
+          class="absolute inset-0 z-10 bg-primary/95 backdrop-blur-md flex flex-col items-center justify-center animate-in fade-in zoom-in duration-300">
+          <IconUpload class="w-12 h-12 text-WtB mb-4 animate-bounce" />
+          <p class="text-xl font-black text-WtB uppercase tracking-widest">Déposer le PDF ici</p>
         </div>
-        <p class="font-bold text-BtW">Cliquez ou glissez un fichier</p>
-        <p class="text-xs text-hsa mt-1">PDF uniquement (Max 3MB)</p>
+
+        <input type="file" ref="fileInput" class="hidden" accept=".pdf" @change="handleFileChange">
+        <div class="pointer-events-none">
+          <div
+            class="w-16 h-16 bg-primary/5 rounded-2xl flex items-center justify-center mx-auto mb-4 text-primary group-hover:scale-110 transition-transform">
+            <IconUpload class="w-8 h-8" />
+          </div>
+          <p class="font-bold text-BtW">Cliquez ou glissez un fichier</p>
+          <p class="text-xs text-hsa mt-1">PDF uniquement (Max 3MB)</p>
+        </div>
       </div>
 
       <div v-else class="bg-ash/20 rounded-2xl p-4 border border-ash">
@@ -108,6 +119,9 @@ import {
   IconCopy, IconCheck
 } from '@tabler/icons-vue'
 import { authSteps, type Step } from '~/utils/docsentry'
+import { useToastStore } from '~/stores/toast'
+
+const toast = useToastStore()
 
 const props = defineProps<{
   show: boolean
@@ -122,6 +136,8 @@ const file = ref<File | null>(null)
 const fileInput = ref<HTMLInputElement | null>(null)
 const copied = ref(false)
 const activeSteps = ref<Step[]>(JSON.parse(JSON.stringify(authSteps)))
+const isDragging = ref(false)
+const dragCounter = ref(0) // Counter to fix flickering
 
 const resetSteps = () => {
   activeSteps.value = JSON.parse(JSON.stringify(authSteps))
@@ -137,15 +153,40 @@ const runSteps = async () => {
 
 const triggerFileSelect = () => fileInput.value?.click()
 
+const handleDragOver = () => {
+  dragCounter.value++
+  isDragging.value = true
+}
+
+const handleDragLeave = () => {
+  dragCounter.value--
+  if (dragCounter.value <= 0) {
+    dragCounter.value = 0
+    isDragging.value = false
+  }
+}
+
 const validateFile = (selectedFile: File): boolean => {
   emit('error-clear')
 
   if (selectedFile.type !== 'application/pdf') {
+    const fileExt = selectedFile.name.split('.').pop()?.toUpperCase() || 'inconnu'
+    toast.showToast(
+      'error',
+      'Format non supporté',
+      `Le fichier "${selectedFile.name}" est de type ${fileExt}. Seuls les fichiers PDF sont acceptés.`
+    )
     emit('update:error', 'Seuls les fichiers PDF sont acceptés.')
     return false
   }
 
   if (selectedFile.size > 3 * 1024 * 1024) {
+    const sizeMB = (selectedFile.size / 1024 / 1024).toFixed(2)
+    toast.showToast(
+      'error',
+      'Fichier trop volumineux',
+      `Le fichier fait ${sizeMB} Mo. La taille maximale autorisée est de 3 Mo.`
+    )
     emit('update:error', 'La taille du fichier ne doit pas dépasser 3 Mo.')
     return false
   }
@@ -167,6 +208,8 @@ const handleFileChange = (e: Event) => {
 }
 
 const handleDrop = (e: DragEvent) => {
+  isDragging.value = false
+  dragCounter.value = 0
   if (e.dataTransfer?.files.length) {
     const selectedFile = e.dataTransfer.files[0]
     if (validateFile(selectedFile)) {

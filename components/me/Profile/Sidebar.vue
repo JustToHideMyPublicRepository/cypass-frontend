@@ -12,8 +12,8 @@
 
       <!-- Avatar Section -->
       <div class="relative w-36 h-36 mx-auto mb-8">
-        <div
-          class="relative z-10 w-full h-full rounded-full p-1.5 bg-gradient-to-tr from-primary to-secondary shadow-2xl">
+        <div @click="showImageViewer = true"
+          class="relative z-10 w-full h-full rounded-full p-1.5 bg-gradient-to-tr from-primary to-secondary shadow-2xl cursor-pointer hover:scale-105 transition-transform duration-300">
           <div class="w-full h-full rounded-full overflow-hidden bg-ash border-4 border-WtB shadow-inner">
             <img :src="authStore.avatarUrl" alt="Avatar"
               class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
@@ -64,6 +64,9 @@
 
     <ModalProfileAvatar :show="showAvatarModal" :current-avatar="user?.avatar_url" :is-loading="profilStore.loading"
       @close="showAvatarModal = false" @submit="handleAvatarUpload" @delete="handleAvatarDelete" />
+
+    <ModalImageViewer v-if="authStore.avatarUrl" :show="showImageViewer" :image-url="authStore.avatarUrl"
+      @close="showImageViewer = false" />
   </div>
 </template>
 
@@ -86,6 +89,7 @@ const profilStore = useProfilStore()
 const toastStore = useToastStore()
 
 const showAvatarModal = ref(false)
+const showImageViewer = ref(false)
 
 const handleAvatarDelete = async () => {
   const success = await profilStore.deleteAvatar()

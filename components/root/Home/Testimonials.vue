@@ -17,7 +17,7 @@
       </div>
 
       <!-- Marquee / Grid Container -->
-      <div class="relative mask-linear-gradient">
+      <div class="relative">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div v-for="(testimonial, index) in testimonials" :key="index"
             class="glass-panel p-8 rounded-2xl relative group hover:-translate-y-2 transition-transform duration-300 border border-ash/50 animate-fade-up"
@@ -97,10 +97,3 @@ const testimonials: Testimonial[] = [
   }
 ]
 </script>
-
-<style scoped>
-/* Optional: fade out edges if implementing a marquee later */
-/* .mask-linear-gradient {
-  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-} */
-</style>
