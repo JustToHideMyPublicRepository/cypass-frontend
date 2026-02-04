@@ -52,7 +52,7 @@
       :result="store.verificationResult" @verify="handleVerify" @reset="store.verificationResult = null"
       @close="closeModals" />
 
-    <!-- Trust Card Modal (Keeping it for detailed info) -->
+    <!-- Trust Card Modal -->
     <MeDocsentryHomeTrustCard :show="modals.trust" @close="modals.trust = false" />
   </div>
 </template>
