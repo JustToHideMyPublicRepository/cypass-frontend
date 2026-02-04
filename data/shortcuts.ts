@@ -185,10 +185,10 @@ export const shortcutsData: Record<string, ShortcutEntry> = {
     group: 'Dashboard',
     modifier: 'Shift'
   },
-  profile: {
-    keys: ['d', 'p'],
-    label: 'Mon Profil',
-    path: '/dashboard/profile',
+  docsentry: {
+    keys: ['d', 'd'],
+    label: 'Docsentry',
+    path: '/dashboard/docsentry',
     isGlobal: true,
     group: 'Dashboard',
     modifier: 'Shift'
@@ -197,6 +197,22 @@ export const shortcutsData: Record<string, ShortcutEntry> = {
     keys: ['d', 'l'],
     label: 'Journal d\'activité',
     path: '/dashboard/logs',
+    isGlobal: true,
+    group: 'Dashboard',
+    modifier: 'Shift'
+  },
+  notification: {
+    keys: ['d', 'n'],
+    label: 'Notification',
+    path: '/dashboard/notifications',
+    isGlobal: true,
+    group: 'Dashboard',
+    modifier: 'Shift'
+  },
+  profile: {
+    keys: ['d', 'p'],
+    label: 'Mon Profil',
+    path: '/dashboard/profile',
     isGlobal: true,
     group: 'Dashboard',
     modifier: 'Shift'
@@ -213,14 +229,6 @@ export const shortcutsData: Record<string, ShortcutEntry> = {
     keys: ['d', 't'],
     label: 'Paramètres',
     path: '/dashboard/settings',
-    isGlobal: true,
-    group: 'Dashboard',
-    modifier: 'Shift'
-  },
-  docsentry: {
-    keys: ['d', 'd'],
-    label: 'Docsentry',
-    path: '/dashboard/docsentry',
     isGlobal: true,
     group: 'Dashboard',
     modifier: 'Shift'
