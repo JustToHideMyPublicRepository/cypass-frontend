@@ -34,7 +34,7 @@
         <div class="relative">
           <IconHash class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-hsa" />
           <input v-model="hashInput" type="text"
-            class="w-full pl-10 pr-4 py-3 rounded-xl bg-ash border border-ashAct focus:ring-2 focus:ring-primary outline-none transition-all font-mono text-xs"
+            class="w-full pl-10 pr-4 py-3 rounded-xl bg-ash border border-ashAct focus:ring-2 focus:ring-primary outline-none transition-all font-code text-xs"
             placeholder="Entrez le hash du document...">
         </div>
       </div>
@@ -89,12 +89,12 @@
                 <p class="font-black text-BtW text-sm truncate">{{ result.document.filename }}</p>
               </div>
               <p class="text-hsa">Émis par : <strong class="text-BtW">{{ result.document?.signer || 'CYPASS Network'
-              }}</strong></p>
+                  }}</strong></p>
 
               <div class="grid grid-cols-2 gap-3 pt-2 border-t border-success/10">
                 <div v-if="result.document?.id" class="space-y-1">
                   <p class="text-[9px] text-hsa uppercase font-bold">Identifiant</p>
-                  <p class="font-mono text-BtW bg-ash/50 p-1 rounded">{{ result.document.id }}</p>
+                  <p class="font-code text-BtW bg-ash/50 p-1 rounded">{{ result.document.id }}</p>
                 </div>
                 <div v-if="result.document?.created_at" class="space-y-1">
                   <p class="text-[9px] text-hsa uppercase font-bold">Date Émission</p>
@@ -113,7 +113,7 @@
                     Copier
                   </button>
                 </div>
-                <div class="p-2 bg-WtB/50 rounded-lg border border-ash/50 font-mono text-[10px] break-all text-hsa">
+                <div class="p-2 bg-WtB/50 rounded-lg border border-ash/50 font-code text-[10px] break-all text-hsa">
                   {{ result.document?.hash || result.doc_hash || 'Hash indisponible' }}
                 </div>
               </div>
@@ -127,7 +127,7 @@
                 <div class="space-y-1">
                   <p class="text-hsa">Algorithme : <span class="text-BtW uppercase font-bold">{{
                     result.signature_info.algorithm }}</span></p>
-                  <p class="text-hsa">Empreinte Clé : <span class="font-mono text-BtW select-all">{{
+                  <p class="text-hsa">Empreinte Clé : <span class="font-code text-BtW select-all">{{
                     result.signature_info.key_fingerprint || 'N/A' }}</span></p>
                   <p class="text-hsa">Signé à : <span class="text-BtW font-bold">{{
                     formatDate(result.signature_info.signed_at) }}</span></p>
@@ -147,7 +147,7 @@
               <span class="font-black">ÉCHEC DE VÉRIFICATION</span>
             </div>
             <p class="text-xs text-hsa leading-relaxed">Le document n'est pas certifié ou a été modifié.</p>
-            <div v-if="error" class="mt-3 p-2 bg-danger/10 rounded-lg text-[10px] font-mono text-danger">{{ error }}
+            <div v-if="error" class="mt-3 p-2 bg-danger/10 rounded-lg text-[10px] font-code text-danger">{{ error }}
             </div>
           </div>
         </div>

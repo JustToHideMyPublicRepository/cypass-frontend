@@ -13,7 +13,7 @@
       <div class="flex justify-between items-center py-3 border-b border-ash/50">
         <span class="text-hsa text-sm">Empreinte de la clé publique</span>
         <div class="flex items-center gap-2">
-          <span class="text-BtW font-mono text-xs">{{ doc.signature_info.fingerprint }}</span>
+          <span class="text-BtW font-code text-xs">{{ doc.signature_info.fingerprint }}</span>
           <button @click="$emit('copy', doc.signature_info.fingerprint, 'fingerprint')"
             class="p-1 hover:text-primary transition-colors">
             <IconCopy v-if="!copiedFields.fingerprint" class="w-3 h-3" />

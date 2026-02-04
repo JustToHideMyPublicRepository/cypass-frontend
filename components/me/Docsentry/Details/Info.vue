@@ -32,7 +32,7 @@
             {{ copiedFields.hash ? 'Copié' : 'Copier' }}
           </button>
         </div>
-        <div class="text-BtW font-mono text-sm break-all">{{ doc.hash }}</div>
+        <div class="text-BtW font-code text-sm break-all">{{ doc.hash }}</div>
       </div>
     </div>
   </UiBaseCard>

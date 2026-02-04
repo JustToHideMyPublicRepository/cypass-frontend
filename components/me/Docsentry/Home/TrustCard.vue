@@ -37,7 +37,7 @@
             </button>
           </div>
           <div
-            class="p-3 bg-WtB/50 rounded-xl border border-ashAct font-mono text-[11px] text-BtW break-all leading-tight">
+            class="p-3 bg-WtB/50 rounded-xl border border-ashAct font-code text-[11px] text-BtW break-all leading-tight">
             {{ store.publicKeyInfo.public_key.fingerprint }}
           </div>
         </div>

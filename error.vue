@@ -77,15 +77,15 @@
 
         <!-- Technical Metadata -->
         <div class="pt-8 border-t border-ash/30 flex flex-wrap items-center gap-6 justify-center lg:justify-start">
-          <div class="flex items-center gap-2 text-[10px] font-mono text-hsa">
+          <div class="flex items-center gap-2 text-[10px] font-code text-hsa">
             <IconBug class="w-3 h-3 opacity-50" />
             REF-{{ error?.statusCode || 'UNKNOWN' }}
           </div>
-          <div class="flex items-center gap-2 text-[10px] font-mono text-hsa">
+          <div class="flex items-center gap-2 text-[10px] font-code text-hsa">
             <IconClock class="w-3 h-3 opacity-50" />
             {{ formatDate(new Date()) }}
           </div>
-          <div v-if="error?.message" class="text-[10px] font-mono text-primary truncate max-w-[200px]">
+          <div v-if="error?.message" class="text-[10px] font-code text-primary truncate max-w-[200px]">
             {{ error.message }}
           </div>
         </div>

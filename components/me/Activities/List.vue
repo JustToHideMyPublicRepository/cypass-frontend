@@ -48,7 +48,7 @@
                   <p class="text-[11px] text-hsa flex items-center gap-1.5">
                     <IconClock class="w-3.5 h-3.5 opacity-40" /> {{ formatTime(log.timestamp) }}
                   </p>
-                  <p class="text-[11px] font-mono text-hsa flex items-center gap-1.5 opacity-60">
+                  <p class="text-[11px] font-code text-hsa flex items-center gap-1.5 opacity-60">
                     <IconPlus class="w-3.5 h-3.5 opacity-40" /> {{ log.ip_address }}
                   </p>
                   <p class="text-[11px] text-hsa flex items-center gap-1.5 truncate max-w-[200px]"

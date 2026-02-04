@@ -76,7 +76,7 @@
             </td>
             <td class="px-6 py-5">
               <div class="flex items-center gap-3 bg-ash/40 p-2 rounded-lg border border-ash/50 max-w-[240px]">
-                <code class="font-mono text-[10px] text-hsa truncate flex-1 leading-none">
+                <code class="font-code text-[10px] text-hsa truncate flex-1 leading-none">
         {{ doc.hash }}
       </code>
                 <div class="flex items-center gap-1 shrink-0 border-l border-BtW/20 pl-2 ml-1">

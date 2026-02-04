@@ -20,7 +20,7 @@
         <button @click="zoomOut" class="btnClasses" title="Dézoomer">
           <IconZoomOut class="w-5 h-5" />
         </button>
-        <span class="text-xs font-mono font-bold text-primary min-w-[3rem] text-center">{{ Math.round(scale * 100)
+        <span class="text-xs font-code font-bold text-primary min-w-[3rem] text-center">{{ Math.round(scale * 100)
         }}%</span>
         <button @click="zoomIn" class="btnClasses" title="Zoomer">
           <IconZoomIn class="w-5 h-5" />

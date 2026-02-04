@@ -42,7 +42,7 @@
           <IconHash class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-hsa" />
           <input :value="hashInput" @input="$emit('update:hashInput', ($event.target as HTMLInputElement).value)"
             type="text"
-            class="w-full h-12 pl-12 pr-4 py-4 rounded-2xl bg-WtB border border-ash focus:ring-2 focus:ring-primary outline-none transition-all font-mono text-sm"
+            class="w-full h-12 pl-12 pr-4 py-4 rounded-2xl bg-WtB border border-ash focus:ring-2 focus:ring-primary outline-none transition-all font-code text-sm"
             placeholder="Entrez l'empreinte numérique...">
         </div>
       </div>

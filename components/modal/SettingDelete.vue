@@ -45,12 +45,12 @@
           <div class="space-y-2">
             <label class="text-xs font-bold text-hsa uppercase">Documents</label>
             <input type="number" v-model="verificationStats.documents" placeholder="0"
-              class="w-full px-4 py-3 rounded-xl bg-ash/30 border border-ash focus:ring-2 focus:ring-primary outline-none font-mono text-center font-bold" />
+              class="w-full px-4 py-3 rounded-xl bg-ash/30 border border-ash focus:ring-2 focus:ring-primary outline-none font-code text-center font-bold" />
           </div>
           <div class="space-y-2">
             <label class="text-xs font-bold text-hsa uppercase">Incidents</label>
             <input type="number" v-model="verificationStats.incidents" placeholder="0"
-              class="w-full px-4 py-3 rounded-xl bg-ash/30 border border-ash focus:ring-2 focus:ring-primary outline-none font-mono text-center font-bold" />
+              class="w-full px-4 py-3 rounded-xl bg-ash/30 border border-ash focus:ring-2 focus:ring-primary outline-none font-code text-center font-bold" />
           </div>
         </div>
 

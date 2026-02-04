@@ -27,7 +27,7 @@
                 </h3>
                 <span class="px-2 py-0.5 text-xs bg-success text-white rounded-full font-bold">ACTUELLE</span>
               </div>
-              <p class="text-sm font-mono text-hsa bg-ash px-2 py-0.5 rounded inline-block">
+              <p class="text-sm font-code text-hsa bg-ash px-2 py-0.5 rounded inline-block">
                 {{ currentSession.ip_address }}
               </p>
               <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-1 pt-2">
@@ -65,7 +65,7 @@
               <h3 class="font-bold text-BtW truncate">
                 {{ formatUserAgent(session.user_agent) }}
               </h3>
-              <p class="text-xs font-mono text-hsa mb-2">
+              <p class="text-xs font-code text-hsa mb-2">
                 {{ session.ip_address }}
               </p>
 

@@ -35,14 +35,14 @@
           </div>
           <div class="p-4 bg-WtB/50 rounded-2xl border border-ash/50 space-y-1">
             <p class="text-[10px] text-hsa uppercase font-black">Identifiant (ID)</p>
-            <p class="font-mono text-xs text-BtW">{{ result.document?.id || 'N/A' }}</p>
+            <p class="font-code text-xs text-BtW">{{ result.document?.id || 'N/A' }}</p>
           </div>
         </div>
 
         <div class="space-y-2">
           <p class="text-[10px] text-hsa uppercase font-black tracking-widest px-1">Empreinte Numérique (SHA-256)</p>
           <div
-            class="p-3 bg-ash/30 rounded-xl border border-ash/50 font-mono text-[10px] text-hsa break-all opacity-80 select-none">
+            class="p-3 bg-ash/30 rounded-xl border border-ash/50 font-code text-[10px] text-hsa break-all opacity-80 select-none">
             {{ truncateHash(result.document?.hash || result.doc_hash || '') }}
           </div>
         </div>
@@ -65,7 +65,7 @@
             </div>
             <div class="md:col-span-2">
               <span class="text-hsa">Empreinte de la Clé publique</span>
-              <p class="font-mono text-[10px] text-BtW truncate">
+              <p class="font-code text-[10px] text-BtW truncate">
                 {{ result.signature_info.key_fingerprint || 'N/A' }}
               </p>
             </div>
@@ -102,7 +102,7 @@
         Attention, ce document ne peut pas être authentifié. <br>
         Causes possibles : modification du contenu, altération des métadonnées ou document non émis par CYPASS.
       </p>
-      <div v-if="error" class="mb-6 p-4 bg-danger/10 rounded-xl text-xs text-danger font-mono">{{ error }}</div>
+      <div v-if="error" class="mb-6 p-4 bg-danger/10 rounded-xl text-xs text-danger font-code">{{ error }}</div>
       <UiBaseButton variant="danger" block @click="$emit('reset')">Réessayer</UiBaseButton>
     </div>
   </div>

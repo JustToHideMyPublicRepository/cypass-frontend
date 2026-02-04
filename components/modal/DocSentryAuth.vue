@@ -40,12 +40,12 @@
         <div class="space-y-2 text-[11px]">
           <div class="flex justify-between">
             <span class="text-hsa">ID Document:</span>
-            <span class="font-mono text-BtW">{{ uploadResult.document_id }}</span>
+            <span class="font-code text-BtW">{{ uploadResult.document_id }}</span>
           </div>
           <div class="flex justify-between items-center group/hash">
             <span class="text-hsa">Hash (SHA-256):</span>
             <div class="flex items-center gap-2">
-              <span class="font-mono text-BtW truncate max-w-[120px]" :title="uploadResult.doc_hash">
+              <span class="font-code text-BtW truncate max-w-[120px]" :title="uploadResult.doc_hash">
                 {{ uploadResult.doc_hash }}
               </span>
               <button @click="copyHash(uploadResult.doc_hash)"
@@ -62,13 +62,13 @@
           </div>
           <div class="space-y-1 mt-2 pt-2 border-t border-success/10">
             <p class="text-[10px] text-hsa uppercase font-bold">Signature Numérique</p>
-            <p class="font-mono text-[9px] break-all text-BtW bg-WtB/50 p-2 rounded border border-success/10">
+            <p class="font-code text-[9px] break-all text-BtW bg-WtB/50 p-2 rounded border border-success/10">
               {{ uploadResult.cryptographic_proof.digital_signature }}
             </p>
           </div>
           <div class="flex justify-between items-center mt-1">
             <span class="text-[10px] text-hsa uppercase font-bold">Empreinte Clé</span>
-            <span class="font-mono text-[10px] text-BtW">{{ uploadResult.cryptographic_proof.key_fingerprint }}</span>
+            <span class="font-code text-[10px] text-BtW">{{ uploadResult.cryptographic_proof.key_fingerprint }}</span>
           </div>
         </div>
       </div>
