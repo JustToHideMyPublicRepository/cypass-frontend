@@ -68,8 +68,8 @@
       </div>
 
       <!-- Loading State (Progress Steps) -->
-      <div v-if="loading && !result" class="py-12 animate-fade-in max-w-sm mx-auto">
-        <div class="mb-8 p-6 bg-primary/5 rounded-[32px] border border-primary/10 text-left">
+      <div v-if="loading && !result" class="py-12 animate-fade-in max-w-2xl mx-auto">
+        <div class="mb-8 p-6 bg-primary/5 rounded-[32px] border border-primary/10 text-left overflow-hidden">
           <p class="text-xs font-black text-primary uppercase tracking-widest mb-6 flex items-center gap-2">
             <span class="relative flex h-2 w-2">
               <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
