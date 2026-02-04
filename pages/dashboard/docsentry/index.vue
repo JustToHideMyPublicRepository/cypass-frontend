@@ -7,14 +7,15 @@
       <!-- Main Content: Document List -->
       <div class="lg:col-span-3 space-y-6">
         <MeDocsentryList :documents="filteredDocuments" :loading="store.loading" :current-page="currentPage"
-          :total-pages="totalPages" @next-page="handleNextPage" @prev-page="handlePrevPage" />
+          :totalPages="totalPages" @next-page="handleNextPage" @prev-page="handlePrevPage" />
       </div>
 
       <!-- Sidebar: Filters & Info -->
       <div class="space-y-6">
         <!-- Stats Gadget -->
         <MeDocsentrySidebarStats :total="store.pagination.total"
-          :verified="store.documents.filter(d => d.has_certificate).length" :usage="24" />
+          :verified="store.documents.filter(d => d.has_certificate).length"
+          :usage="Math.min(Math.round((store.pagination.total / 50) * 100), 100)" />
 
         <!-- Filters -->
         <MeDocsentryFilters v-model="filters" :available-types="availableTypes" @reset="resetFilters" />
