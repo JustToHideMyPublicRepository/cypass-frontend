@@ -266,7 +266,7 @@ export const shortcutsData: Record<string, ShortcutEntry> = {
     group: 'Actions'
   },
   toggle_theme: {
-    keys: ['t'],
+    keys: ['l'],
     label: 'Changer le thème',
     isGlobal: true,
     group: 'Actions',

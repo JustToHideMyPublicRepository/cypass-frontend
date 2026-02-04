@@ -183,8 +183,8 @@ export const useShortcuts = (options: ShortcutOptions = {}) => {
       return
     }
 
-    // Theme Toggle (Ctrl + Shift + T)
-    if ((event.ctrlKey || event.metaKey) && event.shiftKey && key === 't') {
+    // Theme Toggle (Ctrl + Shift + L)
+    if ((event.ctrlKey || event.metaKey) && event.shiftKey && key === 'l') {
       event.preventDefault()
       const colorMode = useColorMode()
       colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
