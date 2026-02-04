@@ -1,5 +1,5 @@
 <template>
-  <UiBaseModal :show="show" title="Authentifier un document" maxWidth="md" @close="$emit('close')">
+  <UiBaseModal :show="show" title="Authentifier un document" maxWidth="2xl" @close="$emit('close')">
     <div class="space-y-6 py-2">
       <div v-if="!file"
         class="relative border-2 border-dashed border-primary/20 rounded-3xl p-12 text-center hover:border-primary/50 transition-all cursor-pointer bg-WtB/50 hover:bg-primary/5 group overflow-hidden"

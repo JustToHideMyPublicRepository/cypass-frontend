@@ -1,20 +1,46 @@
 <template>
-  <div class="space-y-6 md:space-y-8 px-4 sm:px-0">
-    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-      <MeDocsentryHeader @upload="modals.upload = true" @verify="modals.verify = true" />
+  <div class="space-y-6">
+    <!-- Header Section -->
+    <MeDocsentryHeader @upload="modals.upload = true" @verify="modals.verify = true" />
 
-      <button @click="modals.trust = true"
-        class="flex items-center justify-center gap-2 px-4 py-3 md:py-2 rounded-xl bg-primary/10 text-primary hover:bg-primary/20 transition-all font-bold text-[10px] md:text-xs uppercase tracking-widest border border-primary/20 shrink-0">
-        <IconInfoCircle class="w-4 h-4" />
-        Pourquoi DocSentry ?
-      </button>
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      <!-- Main Content: Document List -->
+      <div class="lg:col-span-3 space-y-6">
+        <MeDocsentryList :documents="filteredDocuments" :loading="store.loading" :current-page="currentPage"
+          :total-pages="totalPages" @next-page="handleNextPage" @prev-page="handlePrevPage" />
+      </div>
+
+      <!-- Sidebar: Filters & Info -->
+      <div class="space-y-6">
+        <!-- Stats Gadget -->
+        <MeDocsentrySidebarStats :total="store.pagination.total"
+          :verified="store.documents.filter(d => d.has_certificate).length" :usage="24" />
+
+        <!-- Filters -->
+        <MeDocsentryFilters v-model="filters" :available-types="availableTypes" @reset="resetFilters" />
+
+        <!-- Info/Trust Section -->
+        <UiBaseCard class="bg-gradient-to-br from-BtW to-hsa border-none relative overflow-hidden group">
+          <div class="relative z-10 space-y-3">
+            <h3 class="font-bold flex items-center gap-2 text-WtB">
+              <IconInfoCircle class="w-5 h-5 text-primary" />
+              DocSentry Trust
+            </h3>
+            <p class="text-[11px] leading-relaxed text-WtB">
+              Vos documents sont protégés par une signature cryptographique immuable sur la blockchain CYPASS.
+            </p>
+            <button @click="modals.trust = true"
+              class="w-full py-2 px-3 rounded-lg bg-WtB/5 border border-WtB/10 text-[10px] font-bold uppercase tracking-wider hover:bg-WtB/10 transition-colors text-WtB">
+              En savoir plus
+            </button>
+          </div>
+          <!-- Decorative element -->
+          <div
+            class="absolute -right-4 -bottom-4 w-24 h-24 bg-primary/20 blur-3xl rounded-full group-hover:bg-primary/30 transition-colors">
+          </div>
+        </UiBaseCard>
+      </div>
     </div>
-
-    <!-- Filters and Search -->
-    <MeDocsentryFilters v-model="filters" :available-types="availableTypes" @reset="resetFilters" />
-
-    <MeDocsentryList :documents="filteredDocuments" :loading="store.loading" :current-page="currentPage"
-      :total-pages="totalPages" @next-page="handleNextPage" @prev-page="handlePrevPage" />
 
     <!-- Modals -->
     <MeDocsentryModalAuth :show="modals.upload" :loading="store.loading" :error="store.error"
@@ -25,7 +51,7 @@
       :result="store.verificationResult" @verify="handleVerify" @reset="store.verificationResult = null"
       @close="closeModals" />
 
-    <!-- Trust Card Modal -->
+    <!-- Trust Card Modal (Keeping it for detailed info) -->
     <MeDocsentryTrustCard :show="modals.trust" @close="modals.trust = false" />
   </div>
 </template>
