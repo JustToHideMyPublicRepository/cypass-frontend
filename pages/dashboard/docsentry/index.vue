@@ -1,24 +1,24 @@
 <template>
   <div class="space-y-6">
     <!-- Header Section -->
-    <MeDocsentryHeader @upload="modals.upload = true" @verify="modals.verify = true" />
+    <MeDocsentryHomeHeader @upload="modals.upload = true" @verify="modals.verify = true" />
 
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
       <!-- Main Content: Document List -->
       <div class="lg:col-span-3 space-y-6">
-        <MeDocsentryList :documents="filteredDocuments" :loading="store.loading" :current-page="currentPage"
+        <MeDocsentryHomeList :documents="filteredDocuments" :loading="store.loading" :current-page="currentPage"
           :totalPages="totalPages" @next-page="handleNextPage" @prev-page="handlePrevPage" />
       </div>
 
       <!-- Sidebar: Filters & Info -->
       <div class="space-y-6">
         <!-- Stats Gadget -->
-        <MeDocsentrySidebarStats :total="store.pagination.total"
+        <MeDocsentryHomeSidebarStats :total="store.pagination.total"
           :verified="store.documents.filter(d => d.has_certificate).length"
           :usage="Math.min(Math.round((store.pagination.total / 50) * 100), 100)" />
 
         <!-- Filters -->
-        <MeDocsentryFilters v-model="filters" :available-types="availableTypes" @reset="resetFilters" />
+        <MeDocsentryHomeFilters v-model="filters" :available-types="availableTypes" @reset="resetFilters" />
 
         <!-- Info/Trust Section -->
         <UiBaseCard class="bg-gradient-to-br from-BtW to-hsa border-none relative overflow-hidden group">
@@ -44,16 +44,16 @@
     </div>
 
     <!-- Modals -->
-    <MeDocsentryModalAuth :show="modals.upload" :loading="store.loading" :error="store.error"
+    <MeDocsentryHomeModalAuth :show="modals.upload" :loading="store.loading" :error="store.error"
       :upload-result="store.uploadResult" @upload="handleUpload" @update:error="(val) => store.error = val"
       @error-clear="store.error = null" @close="closeModals" />
 
-    <MeDocsentryModalVerify :show="modals.verify" :loading="store.loading" :error="store.error"
+    <MeDocsentryHomeModalVerify :show="modals.verify" :loading="store.loading" :error="store.error"
       :result="store.verificationResult" @verify="handleVerify" @reset="store.verificationResult = null"
       @close="closeModals" />
 
     <!-- Trust Card Modal (Keeping it for detailed info) -->
-    <MeDocsentryTrustCard :show="modals.trust" @close="modals.trust = false" />
+    <MeDocsentryHomeTrustCard :show="modals.trust" @close="modals.trust = false" />
   </div>
 </template>
 

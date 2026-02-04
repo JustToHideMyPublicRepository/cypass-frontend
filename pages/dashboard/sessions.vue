@@ -4,8 +4,17 @@
       :loading="loading" :revoking-all="revokingAll" @refresh="loadSessions" @revoke-all="revokeAll" />
 
     <!-- Loading State -->
-    <div v-if="loading" class="space-y-4">
-      <UiAppSkeleton v-for="i in 3" :key="i" height="100px" />
+    <div v-if="loading" class="space-y-8">
+      <div>
+        <UiAppSkeleton width="150px" height="16px" class="mb-4" />
+        <UiAppSkeleton height="160px" />
+      </div>
+      <div>
+        <UiAppSkeleton width="200px" height="16px" class="mb-4" />
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <UiAppSkeleton v-for="i in 2" :key="i" height="140px" />
+        </div>
+      </div>
     </div>
 
     <MeSessionsList v-else :sessions="sessions" :current-session="currentSession" :other-sessions="otherSessions"

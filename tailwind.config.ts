@@ -37,7 +37,7 @@ export default {
       fontFamily: {
         heading: ['Montserrat', 'Roboto'],
         body: ['Inter', '"Open Sans"'],
-        code: ['"JetBrains+Mono"', '"Fira+Code"']
+        code: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', '"Liberation Mono"', '"Courier New"', 'monospace']
       },
       keyframes: {
         'fade-up': {

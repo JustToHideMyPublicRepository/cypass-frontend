@@ -1,17 +1,6 @@
 <template>
   <div class="space-y-6">
-    <UiBreadcrumbs :items="[
-      { label: 'Tableau de bord', path: '/dashboard' },
-      { label: 'DocSentry', path: '/dashboard/docsentry' },
-      { label: doc?.filename || 'Détails' }
-    ]" />
-
-    <div class="flex items-center gap-4">
-      <NuxtLink to="/dashboard/docsentry" class="p-2 hover:bg-ash/50 rounded-lg transition-colors text-hsa">
-        <IconArrowLeft class="w-5 h-5" />
-      </NuxtLink>
-      <h1 class="text-2xl font-bold text-BtW">Détails du document</h1>
-    </div>
+    <MeDocsentryDetailsHeader :filename="doc?.filename" />
 
     <!-- Skeleton Loading -->
     <div v-if="store.loading" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -56,116 +45,15 @@
     <div v-else-if="doc" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <!-- Main Info -->
       <div class="lg:col-span-2 space-y-6">
-        <UiBaseCard>
-          <div class="flex items-start justify-between mb-6">
-            <div class="flex items-center gap-4">
-              <div class="p-3 rounded-xl bg-primary/10 text-primary">
-                <IconFileText class="w-8 h-8" />
-              </div>
-              <div>
-                <h2 class="text-xl font-bold text-BtW">{{ doc.filename }}</h2>
-                <p class="text-sm text-hsa">ID: {{ doc.id }}</p>
-              </div>
-            </div>
-            <UiStatusBadge
-              :status="(doc.availability?.certificate || doc.signature_info?.present) ? 'Verified' : 'Pending'" />
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div class="p-4 rounded-lg bg-ash/30 border border-ash/50">
-              <div class="text-[10px] uppercase text-hsa font-semibold mb-1">Date d'émission</div>
-              <div class="text-BtW font-medium">{{ formatDate(doc.created_at) }}</div>
-            </div>
-            <div class="p-4 rounded-lg bg-ash/30 border border-ash/50">
-              <div class="text-[10px] uppercase text-hsa font-semibold mb-1">Type de fichier</div>
-              <div class="text-BtW font-medium">{{ doc.file_type.toUpperCase() }}</div>
-            </div>
-            <div class="p-4 rounded-lg bg-ash/30 border border-ash/50 sm:col-span-2">
-              <div class="flex justify-between items-center mb-1">
-                <div class="text-[10px] uppercase text-hsa font-semibold">Hash SHA-256</div>
-                <button @click="copyField(doc.hash, 'hash')"
-                  class="text-[10px] text-primary hover:underline font-bold flex items-center gap-1">
-                  <IconCopy v-if="!copiedFields.hash" class="w-3 h-3" />
-                  <IconCheck v-else class="w-3 h-3 text-success" />
-                  {{ copiedFields.hash ? 'Copié' : 'Copier' }}
-                </button>
-              </div>
-              <div class="text-BtW font-mono text-sm break-all">{{ doc.hash }}</div>
-            </div>
-          </div>
-        </UiBaseCard>
+        <MeDocsentryDetailsInfo :doc="doc" :is-verified="isVerified" :copied-fields="copiedFields" @copy="copyField" />
 
         <!-- Cryptographic Proof -->
-        <UiBaseCard v-if="doc.signature_info">
-          <div class="flex items-center gap-2 mb-6 text-BtW">
-            <IconShieldCheck class="w-5 h-5 text-primary" />
-            <h3 class="font-bold">Preuve Cryptographique</h3>
-          </div>
-
-          <div class="space-y-4">
-            <div class="flex justify-between items-center py-3 border-b border-ash/50">
-              <span class="text-hsa text-sm">Algorithme de signature</span>
-              <span class="text-BtW font-medium">{{ doc.signature_info.algorithm }}</span>
-            </div>
-            <div class="flex justify-between items-center py-3 border-b border-ash/50">
-              <span class="text-hsa text-sm">Empreinte de la clé publique</span>
-              <div class="flex items-center gap-2">
-                <span class="text-BtW font-mono text-xs">{{ doc.signature_info.fingerprint }}</span>
-                <button @click="copyField(doc.signature_info.fingerprint, 'fingerprint')"
-                  class="p-1 hover:text-primary transition-colors">
-                  <IconCopy v-if="!copiedFields.fingerprint" class="w-3 h-3" />
-                  <IconCheck v-else class="w-3 h-3 text-success" />
-                </button>
-              </div>
-            </div>
-            <div class="flex justify-between items-center py-3 border-b border-ash/50">
-              <span class="text-hsa text-sm">Date de signature</span>
-              <span class="text-BtW font-medium">{{ formatDate(doc.signed_at) }}</span>
-            </div>
-            <div class="flex justify-between items-center py-3">
-              <span class="text-hsa text-sm">Statut de la signature</span>
-              <span v-if="doc.signature_info.present" class="text-success flex items-center gap-1 font-medium">
-                <IconCheck class="w-4 h-4" /> Valide
-              </span>
-              <span v-else class="text-danger flex items-center gap-1 font-medium">
-                <IconX class="w-4 h-4" /> Invalide
-              </span>
-            </div>
-          </div>
-        </UiBaseCard>
+        <MeDocsentryDetailsProof :doc="doc" :copied-fields="copiedFields" @copy="copyField" />
       </div>
 
       <!-- Actions & Sidebar -->
-      <div class="space-y-6">
-        <UiBaseCard>
-          <h3 class="font-bold text-BtW mb-4">Actions</h3>
-          <div class="space-y-3">
-            <UiBaseButton @click="redirectToVerify" class="w-full justify-start" variant="primary">
-              <IconShieldCheck class="w-4 h-4 mr-2" /> Vérifier l'authenticité
-            </UiBaseButton>
-            <UiBaseButton v-if="doc.availability?.certificate" @click="downloadCertificate" class="w-full justify-start"
-              variant="secondary">
-              <IconCertificate class="w-4 h-4 mr-2" /> Télécharger le certificat
-            </UiBaseButton>
-            <UiBaseButton @click="shareDocument" class="w-full justify-start" variant="ghost">
-              <IconShare class="w-4 h-4 mr-2" /> Partager le document
-            </UiBaseButton>
-          </div>
-        </UiBaseCard>
-
-        <UiBaseCard class="bg-primary/5 border-primary/20">
-          <div class="flex items-center gap-3 mb-4">
-            <div class="p-2 rounded bg-primary text-WtB">
-              <IconFingerprint class="w-5 h-5" />
-            </div>
-            <h3 class="font-bold text-BtW">Souveraineté</h3>
-          </div>
-          <p class="text-sm text-hsa leading-relaxed">
-            Ce document est certifié par l'infrastructure de confiance CYPASS, garantissant son origine et son intégrité
-            immuable sur le territoire national.
-          </p>
-        </UiBaseCard>
-      </div>
+      <MeDocsentryDetailsSidebar :has-certificate="!!doc.availability?.certificate" @verify="redirectToVerify"
+        @download="downloadCertificate" @share="shareDocument" />
     </div>
   </div>
 </template>
@@ -173,9 +61,7 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive } from 'vue'
 import { useRoute } from 'nuxt/app'
-import { IconArrowLeft, IconFileText, IconShieldCheck, IconCertificate, IconShare, IconFingerprint, IconCheck, IconX, IconAlertCircle, IconCopy } from '@tabler/icons-vue'
-import { format } from 'date-fns'
-import { fr } from 'date-fns/locale'
+import { IconAlertCircle } from '@tabler/icons-vue'
 import { useDocumentsStore } from '~/stores/documents'
 import { useToastStore } from '~/stores/toast'
 
@@ -188,15 +74,7 @@ const store = useDocumentsStore()
 const docId = route.params.id as string
 
 const doc = computed(() => store.currentDocument)
-
-const formatDate = (dateStr?: string) => {
-  if (!dateStr) return '-'
-  try {
-    return format(new Date(dateStr), 'dd MMMM yyyy HH:mm', { locale: fr })
-  } catch (e) {
-    return dateStr
-  }
-}
+const isVerified = computed(() => (doc.value?.availability?.certificate || doc.value?.signature_info?.present))
 
 const toast = useToastStore()
 const copiedFields = reactive<Record<string, boolean>>({
@@ -209,11 +87,6 @@ const copyField = (text: string, field: string) => {
   copiedFields[field] = true
   toast.showToast('info', 'Copié', 'Texte copié dans le presse-papier.')
   setTimeout(() => copiedFields[field] = false, 2000)
-}
-
-const copyText = (text: string) => {
-  navigator.clipboard.writeText(text)
-  toast.showToast('info', 'Copié', 'Texte copié dans le presse-papier.')
 }
 
 const fetchDoc = async () => {

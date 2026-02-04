@@ -25,12 +25,12 @@
     </div>
 
     <!-- Modals -->
-    <MeDocsentryModalAuth :show="modals.upload" :loading="documentsStore.loading" :error="documentsStore.error"
+    <MeDocsentryHomeModalAuth :show="modals.upload" :loading="documentsStore.loading" :error="documentsStore.error"
       :upload-result="documentsStore.uploadResult" @upload="handleUpload"
       @update:error="(val) => documentsStore.error = val" @error-clear="documentsStore.error = null"
       @close="closeModals" />
 
-    <MeDocsentryModalVerify :show="modals.verify" :loading="documentsStore.loading" :error="documentsStore.error"
+    <MeDocsentryHomeModalVerify :show="modals.verify" :loading="documentsStore.loading" :error="documentsStore.error"
       :result="documentsStore.verificationResult" @verify="handleVerify"
       @reset="documentsStore.verificationResult = null" @close="closeModals" />
   </div>
