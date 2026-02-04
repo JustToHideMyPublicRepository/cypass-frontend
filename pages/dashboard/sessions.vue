@@ -4,8 +4,8 @@
       :loading="loading" :revoking-all="revokingAll" @refresh="loadSessions" @revoke-all="revokeAll" />
 
     <!-- Loading State -->
-    <div v-if="loading" class="flex items-center justify-center py-12">
-      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+    <div v-if="loading" class="space-y-4">
+      <UiAppSkeleton v-for="i in 3" :key="i" height="100px" />
     </div>
 
     <MeSessionsList v-else :sessions="sessions" :current-session="currentSession" :other-sessions="otherSessions"

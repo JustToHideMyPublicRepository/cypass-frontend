@@ -13,9 +13,37 @@
       <h1 class="text-2xl font-bold text-BtW">Détails du document</h1>
     </div>
 
-    <div v-if="store.loading" class="flex flex-col items-center justify-center py-20">
-      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mb-4"></div>
-      <p class="text-hsa">Chargement des informations du document...</p>
+    <!-- Skeleton Loading -->
+    <div v-if="store.loading" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div class="lg:col-span-2 space-y-6">
+        <UiBaseCard>
+          <div class="flex items-center gap-4 mb-6">
+            <UiAppSkeleton type="avatar" width="60px" height="60px" />
+            <div class="space-y-2 flex-1">
+              <UiAppSkeleton width="40%" height="24px" />
+              <UiAppSkeleton width="20%" height="12px" />
+            </div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <UiAppSkeleton v-for="i in 3" :key="i" height="80px" />
+          </div>
+        </UiBaseCard>
+        <UiBaseCard>
+          <UiAppSkeleton width="30%" height="20px" class="mb-6" />
+          <div class="space-y-4">
+            <UiAppSkeleton v-for="i in 4" :key="i" height="40px" />
+          </div>
+        </UiBaseCard>
+      </div>
+      <div class="space-y-6">
+        <UiBaseCard>
+          <UiAppSkeleton width="40%" height="20px" class="mb-4" />
+          <div class="space-y-3">
+            <UiAppSkeleton v-for="i in 3" :key="i" height="45px" />
+          </div>
+        </UiBaseCard>
+        <UiAppSkeleton height="150px" />
+      </div>
     </div>
 
     <div v-else-if="store.error" class="bg-red-500/10 border border-red-500/20 p-6 rounded-xl text-center">
