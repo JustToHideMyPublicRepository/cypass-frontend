@@ -30,7 +30,7 @@
       @update:error="(val) => documentsStore.error = val" @error-clear="documentsStore.error = null"
       @close="closeModals" />
 
-    <<ModalDocSentryVerify :show="modals.verify" :loading="documentsStore.loading" :error="documentsStore.error"
+    <ModalDocSentryVerify :show="modals.verify" :loading="documentsStore.loading" :error="documentsStore.error"
       :result="documentsStore.verificationResult" @verify="handleVerify"
       @reset="documentsStore.verificationResult = null" @close="closeModals" />
   </div>

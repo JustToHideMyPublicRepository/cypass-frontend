@@ -20,26 +20,8 @@
         <!-- Filters -->
         <MeDocsentryHomeFilters v-model="filters" :available-types="availableTypes" @reset="resetFilters" />
 
-        <!-- Info/Trust Section -->
-        <UiBaseCard class="bg-gradient-to-br from-BtW to-hsa border-none relative overflow-hidden group">
-          <div class="relative z-10 space-y-3">
-            <h3 class="font-bold flex items-center gap-2 text-WtB">
-              <IconInfoCircle class="w-5 h-5 text-primary" />
-              DocSentry Trust
-            </h3>
-            <p class="text-[11px] leading-relaxed text-WtB">
-              Vos documents sont protégés par une signature cryptographique immuable sur la blockchain CYPASS.
-            </p>
-            <button @click="modals.trust = true"
-              class="w-full py-2 px-3 rounded-lg bg-WtB/5 border border-WtB/10 text-[10px] font-bold uppercase tracking-wider hover:bg-WtB/10 transition-colors text-WtB">
-              En savoir plus
-            </button>
-          </div>
-          <!-- Decorative element -->
-          <div
-            class="absolute -right-4 -bottom-4 w-24 h-24 bg-primary/20 blur-3xl rounded-full group-hover:bg-primary/30 transition-colors">
-          </div>
-        </UiBaseCard>
+        <!-- Trust Info Section -->
+        <MeDocsentryHomeTrustInfo @open-trust="modals.trust = true" />
       </div>
     </div>
 
@@ -48,18 +30,17 @@
       :upload-result="store.uploadResult" @upload="handleUpload" @update:error="(val) => store.error = val"
       @error-clear="store.error = null" @close="closeModals" />
 
-    <<ModalDocSentryVerify :show="modals.verify" :loading="store.loading" :error="store.error"
+    <ModalDocSentryVerify :show="modals.verify" :loading="store.loading" :error="store.error"
       :result="store.verificationResult" @verify="handleVerify" @reset="store.verificationResult = null"
       @close="closeModals" />
 
     <!-- Trust Card Modal -->
-    <MeDocsentryHomeTrustCard :show="modals.trust" @close="modals.trust = false" />
+    <ModalDocSentryTrust :show="modals.trust" @close="modals.trust = false" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted, watch } from 'vue'
-import { IconInfoCircle } from '@tabler/icons-vue'
 import { useDocumentsStore } from '~/stores/documents'
 import { useToastStore } from '~/stores/toast'
 
