@@ -87,13 +87,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import {
-  IconAlertTriangle,
-  IconMoodSad,
-  IconArrowLeft,
-  IconRefresh,
-  IconLock,
-  IconBug,
-  IconServer
+  IconAlertTriangle, IconMoodSad, IconArrowLeft, IconRefresh, IconLock, IconBug, IconServer
 } from '@tabler/icons-vue'
 
 // Props (Nuxt automatically provides 'error')
@@ -152,4 +146,13 @@ const handleRefresh = () => {
 const formatDate = (date: Date) => {
   return date.toISOString().split('T')[0]
 }
+
+// SEO for Error Page
+useSeoMeta({
+  title: errorTitle.value,
+  ogTitle: `${errorTitle.value} | CYPASS`,
+  description: errorMessage.value,
+  ogDescription: errorMessage.value,
+  twitterCard: 'summary',
+})
 </script>

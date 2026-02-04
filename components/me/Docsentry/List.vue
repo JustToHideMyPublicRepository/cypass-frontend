@@ -56,7 +56,7 @@
                     {{ doc.filename }}
                   </NuxtLink>
                   <span class="text-[10px] text-hsa font-medium uppercase tracking-wider block mt-0.5">
-                    UUID: {{ doc.id.split('-')[0] }}...
+                    {{ doc.id.split('-')[0] }}...
                   </span>
                 </div>
               </div>
@@ -65,7 +65,7 @@
               <div class="inline-flex flex-col items-center">
                 <span class="text-BtW font-medium">{{ formatDate(doc.created_at).split(' ')[0] }}</span>
                 <span class="text-[10px] text-hsa uppercase">{{ formatDate(doc.created_at).split(' ').slice(1).join(' ')
-                  }}</span>
+                }}</span>
               </div>
             </td>
             <td class="px-6 py-5">

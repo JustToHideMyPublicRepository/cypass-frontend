@@ -4,6 +4,11 @@ export default defineNuxtConfig({
   devtools: { enabled: false },
 
   modules: [
+    ['nuxt-gtag', {
+      // CHNAGER
+      id: 'G-S2H4ZNE84G',
+      enabled: true
+    }],
     '@pinia/nuxt',
     '@nuxtjs/tailwindcss',
     '@nuxtjs/color-mode',
@@ -44,13 +49,12 @@ export default defineNuxtConfig({
   app: {
     head: {
       title: 'Souveraineté numérique & sécurité',
+      htmlAttrs: {
+        lang: 'fr'
+      },
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: 'L\'infrastructure de confiance protégeant l\'écosystème numérique du Bénin. Certification, Veille & Audit en temps réel.' },
-        { name: 'author', content: 'CYPASS' },
-        { name: 'keywords', content: 'cybersécurité, bénin, souveraineté numérique, pki, audit, veille, sécurité, cypass, protection données' },
-        { name: 'google-site-verification', content: 'OdKxHpVkBSxk0mj4vD4OTmZPdVi5pWzyCu4QPIMHy9A' }
       ],
       link: [
         { rel: 'icon', type: 'image/png', href: '/favicon.ico' },
