@@ -1,8 +1,13 @@
 <template>
   <div class="relative min-h-[400px]">
-    <div v-if="loading" class="flex flex-col items-center justify-center py-20 animate-pulse">
-      <IconRefresh class="w-12 h-12 animate-spin text-primary opacity-20 mb-4" />
-      <p class="text-hsa font-bold uppercase tracking-widest text-xs">Chargement en cours...</p>
+    <div v-if="loading" class="space-y-6">
+      <div v-for="i in 5" :key="i" class="flex items-center gap-4">
+        <UiAppSkeleton type="avatar" />
+        <div class="space-y-2 flex-1">
+          <UiAppSkeleton width="60%" height="16px" />
+          <UiAppSkeleton width="40%" height="10px" />
+        </div>
+      </div>
     </div>
 
     <div v-else-if="!logs || logs.length === 0"
