@@ -142,7 +142,7 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive } from 'vue'
 import { useRoute } from 'nuxt/app'
-import { IconArrowLeft, IconFileText, IconShieldCheck, IconDownload, IconCertificate, IconShare, IconFingerprint, IconCheck, IconX, IconAlertCircle, IconCopy } from '@tabler/icons-vue'
+import { IconArrowLeft, IconFileText, IconShieldCheck, IconCertificate, IconShare, IconFingerprint, IconCheck, IconX, IconAlertCircle, IconCopy } from '@tabler/icons-vue'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { useDocumentsStore } from '~/stores/documents'
