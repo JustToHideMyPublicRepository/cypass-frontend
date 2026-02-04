@@ -15,17 +15,23 @@
         </div>
 
         <div class="mt-4 flex items-center justify-between gap-2">
-          <div v-if="stat.trend !== undefined"
-            class="flex items-center gap-1 px-1.5 py-1 rounded-lg bg-white/20 backdrop-blur-md">
-            <component :is="stat.trend >= 0 ? IconTrendingUp : IconTrendingDown" class="w-3.5 h-3.5 text-WtB" />
+          <!-- Trend Icon + Difference Badge -->
+          <div v-if="stat.trend" class="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-white/20 backdrop-blur-md">
+            <component :is="stat.trend.difference >= 0 ? IconTrendingUp : IconTrendingDown"
+              class="w-3.5 h-3.5 text-WtB" />
+            <span class="text-[10px] font-bold text-WtB">
+              {{ stat.trend.difference >= 0 ? '+' : '' }}{{ stat.trend.difference }}
+            </span>
           </div>
 
+          <!-- Advice Text Badge -->
           <div v-else-if="stat.advice"
             class="px-2 py-1 rounded-lg bg-white/20 backdrop-blur-sm text-[9px] font-bold uppercase tracking-wider text-center text-WtB">
             {{ stat.advice }}
           </div>
 
-          <div :class="[stat.subLabelClass || '', 'text-[10px] font-semibold opacity-90 leading-tight']">
+          <div
+            :class="[stat.subLabelClass || '', 'text-[10px] font-semibold opacity-90 leading-tight text-right flex-1']">
             {{ stat.displaySubLabel }}
           </div>
         </div>
@@ -43,13 +49,18 @@
 import { computed } from 'vue'
 import { IconFileCertificate, IconAlertTriangle, IconDevices, IconShieldLock, IconTrendingUp, IconTrendingDown, type Icon } from '@tabler/icons-vue'
 
+interface Trend {
+  percentage: number
+  difference: number
+}
+
 interface StatCard {
   label: string
   value: string | number
   icon: Icon
   bgClass: string
   displaySubLabel: string
-  trend?: number
+  trend?: Trend
   advice?: string
   iconBgClass?: string
   iconClass?: string
@@ -59,9 +70,9 @@ interface StatCard {
 
 const props = defineProps<{
   documentsCount: number
-  documentsTrend?: number
+  documentsTrend?: Trend
   unreadCount: number
-  unreadTrend?: number
+  unreadTrend?: Trend
   activeSessions: number
 }>()
 
@@ -72,8 +83,8 @@ const statsConfig = computed<StatCard[]>(() => [
     icon: IconFileCertificate,
     bgClass: 'bg-gradient-to-br from-primary to-secondary',
     trend: props.documentsTrend,
-    displaySubLabel: props.documentsTrend !== undefined
-      ? `${props.documentsTrend >= 0 ? '+' : ''}${props.documentsTrend}% cette semaine`
+    displaySubLabel: props.documentsTrend
+      ? `${props.documentsTrend.percentage >= 0 ? '+' : ''}${props.documentsTrend.percentage}% par rapport à la semaine dernière`
       : 'Documents sécurisés'
   },
   {
@@ -81,8 +92,10 @@ const statsConfig = computed<StatCard[]>(() => [
     value: props.unreadCount,
     icon: IconAlertTriangle,
     bgClass: 'bg-gradient-to-br from-dangerAct to-danger',
-    trend: props.unreadTrend ?? -21,
-    displaySubLabel: `${(props.unreadTrend ?? -21) >= 0 ? '+' : ''}${props.unreadTrend ?? -21}% cette semaine`
+    trend: props.unreadTrend,
+    displaySubLabel: props.unreadTrend
+      ? `${props.unreadTrend.percentage >= 0 ? '+' : ''}${props.unreadTrend.percentage}% par rapport à la semaine dernière`
+      : 'Action requise immédiate'
   },
   {
     label: 'Score sécurité',
@@ -90,7 +103,7 @@ const statsConfig = computed<StatCard[]>(() => [
     icon: IconShieldLock,
     bgClass: 'bg-gradient-to-br from-successAct to-success',
     advice: 'Excellent',
-    displaySubLabel: 'Score optimal atteint'
+    displaySubLabel: 'Infrastructure saine et protégée'
   },
   {
     label: 'Appareils actifs',
@@ -100,7 +113,7 @@ const statsConfig = computed<StatCard[]>(() => [
     iconBgClass: 'bg-white/10',
     advice: props.activeSessions > 1 ? 'Vérifier' : 'Sécurisé',
     displaySubLabel: props.activeSessions > 1
-      ? `${props.activeSessions} appareils connectés`
+      ? `${props.activeSessions} sessions actives détectées`
       : 'Connecté sur un seul appareil'
   },
 ])
