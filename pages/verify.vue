@@ -15,7 +15,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch, onMounted } from 'vue'
+import { useRoute } from 'nuxt/app'
 import { IconServer, IconLock, IconCertificate } from '@tabler/icons-vue'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
@@ -30,6 +31,7 @@ useHead({
   title: 'Vérifier un document'
 })
 
+const route = useRoute()
 const store = useDocumentsStore()
 const verifyMode = ref<'file' | 'hash'>('file')
 const hashInput = ref('')
@@ -40,6 +42,18 @@ const result = ref<any>(null)
 const error = ref<string | null>(null)
 const copied = ref(false)
 const activeSteps = ref<Step[]>(JSON.parse(JSON.stringify(verifySteps)))
+
+onMounted(() => {
+  const h = route.query.h as string
+  if (h) {
+    verifyMode.value = 'hash'
+    hashInput.value = h
+    // Small delay to let the UI settle before starting animation
+    setTimeout(() => {
+      handleVerifyHash()
+    }, 100)
+  }
+})
 
 watch(file, (newFile) => {
   if (newFile) {

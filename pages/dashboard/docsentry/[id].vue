@@ -210,21 +210,25 @@ const downloadCertificate = async () => {
 
 const shareDocument = async () => {
   if (!doc.value) return
+
+  const publicUrl = `${window.location.origin}/verify?h=${doc.value.hash}`
   const shareData = {
     title: `Document CYPASS: ${doc.value.filename}`,
-    text: `Vérifiez l'authenticité de ce document sur CYPASS. Hash: ${doc.value.hash}`,
-    url: window.location.href
+    text: `Vérifiez l'authenticité de ce document certifié par CYPASS.`,
+    url: publicUrl
   }
 
   try {
     if (navigator.share) {
       await navigator.share(shareData)
     } else {
-      await navigator.clipboard.writeText(window.location.href)
-      toast.showToast('success', 'Lien copié', 'Le lien vers ce document a été copié dans le presse-papier.')
+      await navigator.clipboard.writeText(publicUrl)
+      toast.showToast('success', 'Lien public copié', 'Le lien de vérification a été copié dans le presse-papier.')
     }
   } catch (err) {
-    console.warn('Share failed', err)
+    if (err instanceof Error && err.name !== 'AbortError') {
+      console.warn('Share failed', err)
+    }
   }
 }
 
