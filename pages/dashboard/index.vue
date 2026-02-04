@@ -38,7 +38,7 @@
 
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
-import { format, subDays, isAfter } from 'date-fns'
+import { format, startOfWeek, endOfWeek, subWeeks, isWithinInterval } from 'date-fns'
 import { useDocumentsStore } from '~/stores/documents'
 import { useNotificationsStore } from '~/stores/notifications'
 import { useProfilStore } from '~/stores/profil'
@@ -106,8 +106,12 @@ const closeModals = () => {
 const calculateDocTrend = async () => {
   try {
     const now = new Date()
-    const sevenDaysAgo = subDays(now, 7)
-    const fourteenDaysAgo = subDays(now, 14)
+    // Current Week: Monday 00:00 to Now
+    const currentWeekStart = startOfWeek(now, { weekStartsOn: 1 })
+
+    // Previous Week: Previous Monday 00:00 to Previous Sunday 23:59
+    const previousWeekStart = startOfWeek(subWeeks(now, 1), { weekStartsOn: 1 })
+    const previousWeekEnd = endOfWeek(subWeeks(now, 1), { weekStartsOn: 1 })
 
     const response = await $fetch<any>('/api/documents/list', {
       query: { limit: 100, offset: 0 }
@@ -115,10 +119,14 @@ const calculateDocTrend = async () => {
 
     const docs = response?.data?.documents || []
 
-    const currentWeekCount = docs.filter((d: any) => isAfter(new Date(d.created_at), sevenDaysAgo)).length
+    const currentWeekCount = docs.filter((d: any) => {
+      const date = new Date(d.created_at)
+      return isWithinInterval(date, { start: currentWeekStart, end: now })
+    }).length
+
     const previousWeekCount = docs.filter((d: any) => {
       const date = new Date(d.created_at)
-      return isAfter(date, fourteenDaysAgo) && !isAfter(date, sevenDaysAgo)
+      return isWithinInterval(date, { start: previousWeekStart, end: previousWeekEnd })
     }).length
 
     const diff = currentWeekCount - previousWeekCount
@@ -134,18 +142,25 @@ const calculateDocTrend = async () => {
 const calculateUnreadTrend = async () => {
   try {
     const now = new Date()
-    const sevenDaysAgo = subDays(now, 7)
-    const fourteenDaysAgo = subDays(now, 14)
+    const currentWeekStart = startOfWeek(now, { weekStartsOn: 1 })
+    const previousWeekStart = startOfWeek(subWeeks(now, 1), { weekStartsOn: 1 })
+    const previousWeekEnd = endOfWeek(subWeeks(now, 1), { weekStartsOn: 1 })
 
-    // Using notifications from store or fetch 
     const response = await $fetch<any>('/api/notifications/list', {
       query: { limit: 100, offset: 0 }
     })
 
     const notifications = response?.data?.notifications || []
 
-    const currentUnread = notifications.filter((n: any) => !n.is_read && isAfter(new Date(n.created_at), sevenDaysAgo)).length
-    const previousUnread = notifications.filter((n: any) => !n.is_read && isAfter(new Date(n.created_at), fourteenDaysAgo) && !isAfter(new Date(n.created_at), sevenDaysAgo)).length
+    const currentUnread = notifications.filter((n: any) => {
+      const date = new Date(n.created_at)
+      return !n.is_read && isWithinInterval(date, { start: currentWeekStart, end: now })
+    }).length
+
+    const previousUnread = notifications.filter((n: any) => {
+      const date = new Date(n.created_at)
+      return !n.is_read && isWithinInterval(date, { start: previousWeekStart, end: previousWeekEnd })
+    }).length
 
     const diff = currentUnread - previousUnread
     unreadTrend.value = {
