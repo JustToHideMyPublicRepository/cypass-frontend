@@ -14,13 +14,19 @@
         <tbody class="divide-y divide-ash/50">
           <!-- Loading State -->
           <template v-if="loading">
-            <tr v-for="i in 3" :key="i" class="animate-pulse">
-              <td colspan="5" class="px-6 py-6">
-                <div class="flex items-center gap-3">
-                  <div class="w-10 h-10 bg-ash rounded-xl"></div>
+            <tr v-for="i in 5" :key="i">
+              <td colspan="5" class="px-6 py-4">
+                <div class="flex items-center gap-4">
+                  <UiAppSkeleton type="avatar" />
                   <div class="space-y-2 flex-1">
-                    <div class="h-4 bg-ash rounded w-1/3"></div>
-                    <div class="h-3 bg-ash rounded w-1/4"></div>
+                    <UiAppSkeleton width="40%" height="12px" />
+                    <UiAppSkeleton width="20%" height="8px" />
+                  </div>
+                  <div class="hidden md:block w-32">
+                    <UiAppSkeleton height="10px" />
+                  </div>
+                  <div class="hidden md:block w-24">
+                    <UiAppSkeleton height="10px" />
                   </div>
                 </div>
               </td>
@@ -69,11 +75,11 @@
               </div>
             </td>
             <td class="px-6 py-5">
-              <div class="flex items-center gap-3 bg-ash/30 p-2 rounded-lg border border-ash/50 max-w-[240px]">
+              <div class="flex items-center gap-3 bg-ash/40 p-2 rounded-lg border border-ash/50 max-w-[240px]">
                 <code class="font-mono text-[10px] text-hsa truncate flex-1 leading-none">
         {{ doc.hash }}
       </code>
-                <div class="flex items-center gap-1 shrink-0 border-l border-ash/50 pl-2 ml-1">
+                <div class="flex items-center gap-1 shrink-0 border-l border-BtW/20 pl-2 ml-1">
                   <button @click="copyHash(doc.hash, doc.id)" class="p-1 hover:text-primary transition-colors">
                     <IconCopy v-if="!copiedHashes.has(doc.id)" class="w-3.5 h-3.5" />
                     <IconCheck v-else class="w-3.5 h-3.5 text-success" />

@@ -1,96 +1,111 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center p-4 overflow-hidden relative bg-bgClr">
+  <div
+    class="min-h-screen bg-bgClr text-textClr font-body overflow-hidden relative flex items-center justify-center p-4">
+    <!-- Animated Background Elements -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+      <div
+        class="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-primary/10 rounded-full blur-[120px] animate-pulse">
+      </div>
+      <div
+        class="absolute -bottom-[10%] -right-[10%] w-[40%] h-[40%] bg-secondary/10 rounded-full blur-[120px] animate-pulse"
+        style="animation-delay: 2s"></div>
+    </div>
+
     <!-- Theme Toggle (Top Right) -->
-    <div class="absolute top-4 right-4 z-50">
+    <div class="absolute top-6 right-6 z-50">
       <UiThemeToggle />
     </div>
 
-    <!-- Main Card -->
-    <div
-      class="w-full max-w-2xl bg-WtB/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-ash p-8 md:p-12 text-center transform transition-all hover:scale-[1.01] duration-500 relative z-10 animate-fade-up">
+    <!-- Content Container -->
+    <div class="max-w-4xl w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
 
-      <!-- Icon Container -->
-      <div class="mb-8 relative inline-flex animate-fade-down" style="animation-delay: 200ms">
-        <div
-          class="absolute inset-0 bg-gradient-to-br from-red-500/20 to-pink-500/20 rounded-3xl blur-xl animate-pulse">
-        </div>
-        <div
-          class="relative w-28 h-28 mx-auto bg-gradient-to-br from-red-500 to-pink-600 rounded-3xl flex items-center justify-center text-white shadow-xl shadow-red-500/20 transform rotate-3 hover:rotate-0 transition-all duration-300 group">
+      <!-- Left side: Visual -->
+      <div class="hidden lg:flex justify-center items-center">
+        <div class="relative w-full aspect-square max-w-sm group">
+          <!-- Geometric Shapes Animation -->
           <div
-            class="absolute inset-0 bg-white/20 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            class="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-[4rem] rotate-6 group-hover:rotate-12 transition-transform duration-700">
           </div>
-          <component :is="errorIcon" class="w-14 h-14" stroke-width="1.5" />
+          <div
+            class="absolute inset-0 bg-WtB/10 backdrop-blur-md border border-ash/30 rounded-[4rem] -rotate-3 group-hover:-rotate-6 transition-transform duration-700 flex items-center justify-center">
+            <div class="text-center">
+              <div class="text-[10rem] font-black tracking-tighter text-BtW opacity-10 select-none leading-none">
+                {{ error?.statusCode || '404' }}
+              </div>
+              <component :is="errorIcon" class="w-32 h-32 text-primary -mt-16 mx-auto animate-bounce-slow"
+                stroke-width="1" />
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- Error Code -->
-      <h1
-        class="text-9xl font-black text-ash tracking-tighter select-none mb-6 leading-none animate-fade-up mix-blend-overlay dark:mix-blend-normal opacity-20"
-        style="animation-delay: 300ms">
-        {{ error?.statusCode || 'ERR' }}
-      </h1>
-
-      <!-- Message -->
-      <div class="relative -mt-16 space-y-6 mb-12 animate-fade-up" style="animation-delay: 400ms">
-        <h2 class="text-4xl md:text-5xl font-black tracking-tight">
-          {{ errorTitle }}
-        </h2>
-        <p class="text-xl text-hsa max-w-lg mx-auto leading-relaxed font-medium">
-          {{ errorMessage }}
-        </p>
-      </div>
-
-      <!-- Actions -->
-      <div class="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-up"
-        style="animation-delay: 500ms">
-        <button @click="handleClearError"
-          class="group relative px-8 py-4 bg-BtW text-WtB font-bold rounded-2xl shadow-xl shadow-ash/20 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 overflow-hidden">
+      <!-- Right side: Content -->
+      <div class="space-y-8 text-center lg:text-left">
+        <div class="space-y-4">
           <div
-            class="absolute inset-0 bg-white/20 dark:bg-black/10 translate-y-[100%] group-hover:translate-y-0 transition-transform duration-300">
+            class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold uppercase tracking-widest animate-fade-in">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+            </span>
+            Incident Détecté
           </div>
-          <span class="relative flex items-center gap-3">
-            <IconArrowLeft class="w-5 h-5 transition-transform group-hover:-translate-x-1" />
-            Retour à l'accueil
-          </span>
-        </button>
+          <h1 class="text-5xl md:text-7xl font-black text-BtW tracking-tight leading-none">
+            {{ errorTitle }}
+          </h1>
+          <p class="text-xl text-hsa leading-relaxed max-w-lg mx-auto lg:mx-0">
+            {{ errorMessage }}
+          </p>
+        </div>
 
-        <button v-if="error?.statusCode !== 404" @click="handleRefresh"
-          class="group px-8 py-4 bg-WtB font-bold rounded-2xl border border-ash hover:bg-ash/10 transition-all duration-300 hover:border-primary/50">
-          <span class="flex items-center gap-3">
-            <IconRefresh class="w-5 h-5 transition-transform group-hover:rotate-180 duration-500" />
+        <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+          <button @click="handleClearError"
+            class="group relative px-8 py-4 bg-primary text-ash font-bold rounded-2xl shadow-xl shadow-primary/20 hover:shadow-2xl hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3 overflow-hidden">
+            <div
+              class="absolute inset-0 bg-white/20 -translate-x-full group-hover:translate-x-0 transition-transform duration-500">
+            </div>
+            <IconArrowLeft class="w-5 h-5 relative z-10" />
+            <span class="relative z-10">Retour à l'accueil</span>
+          </button>
+
+          <button v-if="error?.statusCode !== 404" @click="handleRefresh"
+            class="px-8 py-4 bg-BtW text-WtB font-bold rounded-2xl hover:opacity-90 transition-all flex items-center justify-center gap-3">
+            <IconRefresh class="w-5 h-5" />
             Réessayer
-          </span>
-        </button>
-      </div>
+          </button>
+        </div>
 
-      <!-- Technical Details -->
-      <div v-if="error?.message && error?.statusCode !== 404" class="mt-12 pt-8 border-t border-ash animate-fade-up"
-        style="animation-delay: 600ms">
-        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-ash/50 text-xs font-mono text-hsa">
-          <IconBug class="w-3 h-3" />
-          Code: {{ error?.statusCode }} • ID: {{ formatDate(new Date()) }}
+        <!-- Technical Metadata -->
+        <div class="pt-8 border-t border-ash/30 flex flex-wrap items-center gap-6 justify-center lg:justify-start">
+          <div class="flex items-center gap-2 text-[10px] font-mono text-hsa">
+            <IconBug class="w-3 h-3 opacity-50" />
+            REF-{{ error?.statusCode || 'UNKNOWN' }}
+          </div>
+          <div class="flex items-center gap-2 text-[10px] font-mono text-hsa">
+            <IconClock class="w-3 h-3 opacity-50" />
+            {{ formatDate(new Date()) }}
+          </div>
+          <div v-if="error?.message" class="text-[10px] font-mono text-primary truncate max-w-[200px]">
+            {{ error.message }}
+          </div>
         </div>
       </div>
-
     </div>
 
-    <!-- Footer Copyright -->
-    <div class="absolute bottom-8 w-full text-center">
-      <p class="text-sm font-medium text-hsa">
-        &copy; {{ new Date().getFullYear() }} CYPASS. Tous droits réservés.
-      </p>
+    <!-- Footer decoration -->
+    <div
+      class="absolute bottom-8 text-[10px] font-black uppercase tracking-[0.5em] text-hsa opacity-20 pointer-events-none">
+      Infrastructure de Confiance CYPASS
     </div>
-
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
 import {
-  IconAlertTriangle, IconMoodSad, IconArrowLeft, IconRefresh, IconLock, IconBug, IconServer
+  IconAlertTriangle, IconMoodSad, IconArrowLeft, IconRefresh, IconLock, IconBug, IconServer, IconClock
 } from '@tabler/icons-vue'
 
-// Props (Nuxt automatically provides 'error')
 const props = defineProps({
   error: {
     type: Object,
@@ -98,29 +113,28 @@ const props = defineProps({
   }
 })
 
-// Determine Title & Message based on standard HTTP codes
 const errorTitle = computed(() => {
   switch (props.error?.statusCode) {
-    case 404: return "Page introuvable"
-    case 403: return "Accès refusé"
-    case 500: return "Erreur Serveur"
+    case 404: return "Destination Introuvable"
+    case 403: return "Accès Restreint"
+    case 500: return "Défaut Système"
     case 503: return "Maintenance"
-    default: return "Erreur Inattendue"
+    default: return "Anomalie Inattendue"
   }
 })
 
 const errorMessage = computed(() => {
   switch (props.error?.statusCode) {
     case 404:
-      return "Oups ! La destination que vous recherchez semble avoir disparu du cyberespace."
+      return "Le segment de données que vous recherchez semble s'être volatilisé du réseau CYPASS."
     case 403:
-      return "Zone sécurisée. Vos identifiants ne vous permettent pas d'accéder à cette ressource."
+      return "Zone hautement sécurisée. Vos protocoles d'accès actuels ne permettent pas l'entrée."
     case 500:
-      return "Nos protocoles ont rencontré une anomalie critique. L'équipe d'intervention est alertée."
+      return "Une exception fatale a été interceptée par nos couches de sécurité. L'équipe technique est sur le pont."
     case 503:
-      return "Nos systèmes effectuent une mise à jour de sécurité. Service rétabli sous peu."
+      return "Mise à jour majeure des systèmes de confiance en cours. Disponibilité imminente."
     default:
-      return "Une exception non gérée a interrompu votre session. Veuillez rafraîchir la page."
+      return "Un flux de données irrégulier a interrompu la session. Nos systèmes se réinitialisent."
   }
 })
 
@@ -133,7 +147,6 @@ const errorIcon = computed(() => {
   }
 })
 
-// Actions
 const handleClearError = () => {
   clearError({ redirect: '/' })
 }
@@ -142,17 +155,50 @@ const handleRefresh = () => {
   window.location.reload()
 }
 
-// Helper
 const formatDate = (date: Date) => {
   return date.toISOString().split('T')[0]
 }
 
-// SEO for Error Page
+// SEO
 useSeoMeta({
   title: errorTitle.value,
   ogTitle: `${errorTitle.value} | CYPASS`,
   description: errorMessage.value,
   ogDescription: errorMessage.value,
-  twitterCard: 'summary',
+  twitterCard: 'summary_large_image',
 })
 </script>
+
+<style scoped>
+@keyframes bounce-slow {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.animate-bounce-slow {
+  animation: bounce-slow 4s ease-in-out infinite;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.8s ease-out forwards;
+}
+</style>
