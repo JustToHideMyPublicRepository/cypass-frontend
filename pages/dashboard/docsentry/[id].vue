@@ -112,11 +112,14 @@
         <UiBaseCard>
           <h3 class="font-bold text-BtW mb-4">Actions</h3>
           <div class="space-y-3">
+            <UiBaseButton @click="redirectToVerify" class="w-full justify-start" variant="primary">
+              <IconShieldCheck class="w-4 h-4 mr-2" /> Vérifier l'authenticité
+            </UiBaseButton>
             <UiBaseButton v-if="doc.availability?.certificate" @click="downloadCertificate" class="w-full justify-start"
               variant="secondary">
               <IconCertificate class="w-4 h-4 mr-2" /> Télécharger le certificat
             </UiBaseButton>
-            <UiBaseButton @click="shareDocument" class="w-full justify-start" variant="primary">
+            <UiBaseButton @click="shareDocument" class="w-full justify-start" variant="ghost">
               <IconShare class="w-4 h-4 mr-2" /> Partager le document
             </UiBaseButton>
           </div>
@@ -187,6 +190,11 @@ const copyText = (text: string) => {
 
 const fetchDoc = async () => {
   await store.fetchDocumentById(docId)
+}
+
+const redirectToVerify = () => {
+  if (!doc.value) return
+  navigateTo(`/verify?h=${doc.value.hash}`)
 }
 
 const downloadCertificate = async () => {
