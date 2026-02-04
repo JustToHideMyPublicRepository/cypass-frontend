@@ -130,12 +130,12 @@
 
   /* --- Keyboard Hints --- */
   .kbd-wrapper {
-    @apply inline-flex items-center gap-1 px-1.5 py-1 backdrop-blur-md border border-ashAct rounded-xl shadow-lg text-hsa;
+    @apply inline-flex items-center gap-1.5 px-2 py-1.5 backdrop-blur-md border border-ashAct rounded-xl shadow-lg text-hsa;
     background-color: rgb(var(--color-ash) / 0.8);
   }
 
   .kbd-hint {
-    @apply inline-flex items-center justify-center px-1.5 py-0.5 bg-BtW text-WtB border border-ash rounded-lg text-[10px] font-extrabold shadow-[0_2px_0_0_rgb(var(--color-hsa))] min-w-[1.4rem] font-sans leading-none;
+    @apply inline-flex items-center justify-center px-1.5 py-0.5 bg-BtW text-WtB border border-ash rounded-lg text-[10px] font-extrabold shadow-[0_2px_0_0_rgb(var(--color-hsa))] min-w-[1.4rem] font-code leading-none uppercase transition-all duration-200;
   }
 }
 

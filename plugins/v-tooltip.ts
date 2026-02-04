@@ -44,12 +44,12 @@ export default defineNuxtPlugin((nuxtApp) => {
              align-items: center;
              gap: 0.25rem;
              padding: 0.35rem 0.6rem;
-             background: color-mix(in srgb, var(--color-ash) 80%, transparent);
+             background: color-mix(in srgb, rgb(var(--color-ash)) 80%, transparent);
              backdrop-filter: blur(12px);
-             border: 1px solid var(--color-ashAct);
+             border: 1px solid rgb(var(--color-ashAct));
              border-radius: 0.75rem;
              box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-             color: var(--color-hsa);
+             color: rgb(var(--color-hsa));
           }
           .shortcuts-hover-enabled .kbd-wrapper {
              display: flex;
@@ -59,17 +59,18 @@ export default defineNuxtPlugin((nuxtApp) => {
              display: inline-flex;
              align-items: center;
              justify-content: center;
-             padding: 0.2rem 0.4rem;
-             background-color: var(--color-BtW);
-             color: var(--color-WtB);
-             border: 1px solid var(--color-ash);
-             border-radius: 0.35rem;
-             font-size: 0.7rem;
+             padding: 0.2rem 0.45rem;
+             background-color: rgb(var(--color-BtW));
+             color: rgb(var(--color-WtB));
+             border: 1px solid rgb(var(--color-ash));
+             border-radius: 0.4rem;
+             font-size: 0.65rem;
              font-weight: 800;
-             box-shadow: 0 2px 0 0 var(--color-hsa);
+             box-shadow: 0 2px 0 0 rgb(var(--color-hsa));
              min-width: 1.4rem;
-             font-family: inherit;
+             font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
              line-height: 1;
+             text-transform: uppercase;
           }
 
           /* Alt Mode Hints */
@@ -83,21 +84,22 @@ export default defineNuxtPlugin((nuxtApp) => {
             transform: scale(0.5);
             transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
             
-            /* KBD Style from shortcuts.vue */
-            padding: 0.15rem 0.3rem;
-            background-color: var(--color-BtW);
-            color: var(--color-WtB);
-            border: 1px solid var(--color-ash);
-            border-radius: 0.25rem;
-            font-size: 0.5rem;
-            font-weight: 700;
-            box-shadow: 0 2px 0 0 var(--color-hsa);
+            /* KBD Style */
+            padding: 0.2rem 0.4rem;
+            background-color: rgb(var(--color-BtW));
+            color: rgb(var(--color-WtB));
+            border: 1px solid rgb(var(--color-ash));
+            border-radius: 0.35rem;
+            font-size: 0.55rem;
+            font-weight: 800;
+            box-shadow: 0 2px 0 0 rgb(var(--color-hsa));
             min-width: 1.2rem;
             display: none; /* Hidden by default */
             align-items: center;
             justify-content: center;
             white-space: nowrap;
             line-height: 1;
+            text-transform: uppercase;
           }
           /* Only show Navigation hints if Alt mode is active AND it has NO complex modifiers (Ctrl/Cmd) */
           .shortcuts-alt-enabled.alt-mode-active .alt-shortcut-hint:not(.is-button-hint):not(.has-complex-mods) {
@@ -124,9 +126,9 @@ export default defineNuxtPlugin((nuxtApp) => {
             transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
           }
           .alt-shortcut-hint .key.active {
-            color: var(--color-primary) !important;
-            background: color-mix(in srgb, var(--color-primary) 20%, transparent);
-            box-shadow: 0 0 15px color-mix(in srgb, var(--color-primary) 40%, transparent);
+            color: rgb(var(--color-primary)) !important;
+            background: color-mix(in srgb, rgb(var(--color-primary)) 20%, transparent);
+            box-shadow: 0 0 15px color-mix(in srgb, rgb(var(--color-primary)) 40%, transparent);
             transform: scale(1.35);
             border-radius: 4px;
             padding: 0 4px;
@@ -135,7 +137,8 @@ export default defineNuxtPlugin((nuxtApp) => {
           }
           .alt-shortcut-hint .key.is-mod {
             font-size: 0.8em;
-            font-weight: 400;
+            font-weight: 500;
+            opacity: 0.7;
           }
           .alt-shortcut-hint .sep {
             opacity: 0.5;

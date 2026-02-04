@@ -14,13 +14,12 @@
             <div class="flex items-center gap-1">
               <template v-if="s.modifier">
                 <template v-for="(m, midx) in s.modifier.split('+')" :key="'mod-' + midx">
-                  <kbd class="kbd-hint !px-2 uppercase shadow-[0_2px_0_0_rgba(0,0,0,0.5)]">{{ m.trim() }}</kbd>
+                  <kbd class="kbd-hint">{{ m.trim() }}</kbd>
                   <span class="text-hsa text-[10px]">+</span>
                 </template>
               </template>
               <template v-for="(k, index) in s.keys" :key="index">
-                <kbd class="kbd-hint !px-2 uppercase shadow-[0_2px_0_0_rgba(0,0,0,0.5)]">{{ k === 'enter' ? '↵' : k
-                }}</kbd>
+                <kbd class="kbd-hint">{{ k === 'enter' ? '↵' : k }}</kbd>
                 <span v-if="(index as number) < s.keys.length - 1" class="text-hsa text-[10px]">+</span>
               </template>
             </div>

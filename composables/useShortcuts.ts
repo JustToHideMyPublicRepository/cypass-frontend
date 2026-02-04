@@ -183,6 +183,14 @@ export const useShortcuts = (options: ShortcutOptions = {}) => {
       return
     }
 
+    // Theme Toggle (Ctrl + Shift + T)
+    if ((event.ctrlKey || event.metaKey) && event.shiftKey && key === 't') {
+      event.preventDefault()
+      const colorMode = useColorMode()
+      colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
+      return
+    }
+
     // Help shortcut ('?') - can be typed with or without Shift
     if (event.key === '?' && !event.ctrlKey && !event.metaKey && !event.altKey) {
       event.preventDefault()

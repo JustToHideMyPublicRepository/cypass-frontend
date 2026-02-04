@@ -247,13 +247,15 @@ export const shortcutsData: Record<string, ShortcutEntry> = {
     keys: ['k'],
     label: 'Rechercher',
     isGlobal: false,
+    group: 'Actions',
     modifier: 'Ctrl'
   },
   help: {
     keys: ['?'],
     label: 'Aide (Raccourcis clavier)',
     path: '/shortcuts',
-    isGlobal: false
+    isGlobal: false,
+    group: 'Actions'
   },
 
   // ACTIONS
@@ -262,6 +264,13 @@ export const shortcutsData: Record<string, ShortcutEntry> = {
     label: 'Ouvrir le centre d\'aide',
     isGlobal: false,
     group: 'Actions'
+  },
+  toggle_theme: {
+    keys: ['t'],
+    label: 'Changer le thème',
+    isGlobal: true,
+    group: 'Actions',
+    modifier: 'Ctrl + Shift'
   },
   scroll_top: {
     keys: ['↑'],
