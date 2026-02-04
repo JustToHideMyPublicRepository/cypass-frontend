@@ -44,11 +44,11 @@
     </div>
 
     <!-- Modals -->
-    <MeDocsentryHomeModalAuth :show="modals.upload" :loading="store.loading" :error="store.error"
+    <ModalDocSentryAuth :show="modals.upload" :loading="store.loading" :error="store.error"
       :upload-result="store.uploadResult" @upload="handleUpload" @update:error="(val) => store.error = val"
       @error-clear="store.error = null" @close="closeModals" />
 
-    <MeDocsentryHomeModalVerify :show="modals.verify" :loading="store.loading" :error="store.error"
+    <<ModalDocSentryVerify :show="modals.verify" :loading="store.loading" :error="store.error"
       :result="store.verificationResult" @verify="handleVerify" @reset="store.verificationResult = null"
       @close="closeModals" />
 

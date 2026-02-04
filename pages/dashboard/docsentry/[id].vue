@@ -74,7 +74,7 @@ const store = useDocumentsStore()
 const docId = route.params.id as string
 
 const doc = computed(() => store.currentDocument)
-const isVerified = computed(() => (doc.value?.availability?.certificate || doc.value?.signature_info?.present))
+const isVerified = computed(() => !!(doc.value?.availability?.certificate || doc.value?.signature_info?.present))
 
 const toast = useToastStore()
 const copiedFields = reactive<Record<string, boolean>>({
