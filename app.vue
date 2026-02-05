@@ -2,9 +2,7 @@
   <div class="min-h-screen bg-gradient-premium text-textClr font-body">
     <UiGlobalDropZone />
     <NuxtLayout>
-      <div class="py-8">
-        <NuxtPage />
-      </div>
+      <NuxtPage />
       <UtilsGlobalHelp />
       <UiAppToast :model-value="toastStore.show" @update:model-value="val => toastStore.show = val"
         :type="toastStore.type" :title="toastStore.title" :message="toastStore.message"

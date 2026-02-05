@@ -1,17 +1,5 @@
 <template>
   <div class="relative">
-    <!-- Décor de Fond -->
-    <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
-      <div v-if="service"
-        class="absolute top-[-10%] right-[-5%] w-[300px] md:w-[600px] h-[300px] md:h-[600px] rounded-full blur-[80px] md:blur-[120px] opacity-20"
-        :class="service.theme === 'blue' ? 'bg-blue-500' : 'bg-green-500'">
-      </div>
-      <div
-        class="absolute bottom-[-10%] left-[-10%] w-[250px] md:w-[500px] h-[250px] md:h-[500px] bg-purple-500/10 rounded-full blur-[60px] md:blur-[100px]">
-      </div>
-      <div class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
-    </div>
-
     <div v-if="service" class="max-w-7xl mx-auto relative z-10 px-4 sm:px-6 lg:px-8">
       <UiBreadcrumbs :items="[
         { label: 'Services', path: '/modules' },
