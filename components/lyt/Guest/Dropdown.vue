@@ -34,7 +34,7 @@
             </NuxtLink>
             <UiBaseButton v-else-if="link.type === 'button'" @click="link.action?.(); isOpen = false"
               v-tooltip="link.path === 'logout' ? getLinkTooltip('logout') : null" variant="ghost"
-              class="text-sm !flex !items-center !justify-start gap-2 px-4 py-2 w-full text-danger hover:!bg-danger/10 hover:text-dangerAct transition-all duration-200 font-medium !rounded-none border-none"
+              class="text-sm !flex !items-center !justify-start gap-2 px-4 py-2 w-full text-danger hover:!bg-danger/10 hover:text-dangerAct transition-all duration-200 font-medium !rounded-none"
               :class="link.class">
               {{ link.label }}
             </UiBaseButton>

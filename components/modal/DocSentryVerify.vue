@@ -5,12 +5,12 @@
       <div v-if="!result && !loading" class="flex justify-center">
         <div class="flex p-1 bg-ash rounded-xl border border-ash gap-4">
           <UiBaseButton @click="verifyMode = 'file'" variant="ghost"
-            class="!px-4 !py-1.5 !text-xs !font-bold !rounded-lg transition-all !h-auto border-none"
+            class="!px-4 !py-1.5 !text-xs !font-bold !rounded-lg transition-all !h-auto"
             :class="verifyMode === 'file' ? '!bg-WtB !text-primary shadow-sm' : 'text-hsa hover:!text-BtW'">
             Fichier
           </UiBaseButton>
           <UiBaseButton @click="verifyMode = 'hash'" variant="ghost"
-            class="!px-4 !py-1.5 !text-xs !font-bold !rounded-lg transition-all !h-auto border-none"
+            class="!px-4 !py-1.5 !text-xs !font-bold !rounded-lg transition-all !h-auto"
             :class="verifyMode === 'hash' ? '!bg-WtB !text-primary shadow-sm' : 'text-hsa hover:!text-BtW'">
             Hash
           </UiBaseButton>
@@ -92,7 +92,7 @@
                 <p class="font-black text-BtW text-sm truncate">{{ result.document.filename }}</p>
               </div>
               <p class="text-hsa">Émis par : <strong class="text-BtW">{{ result.document?.signer || 'CYPASS Network'
-                  }}</strong></p>
+              }}</strong></p>
 
               <div class="grid grid-cols-2 gap-3 pt-2 border-t border-success/10">
                 <div v-if="result.document?.id" class="space-y-1">

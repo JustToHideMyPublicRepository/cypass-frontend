@@ -53,8 +53,7 @@
 
           <div class="pt-4">
             <UiBaseButton v-if="service.status === 'available'" :to="`/modules/${service.id}`" variant="secondary"
-              class="transition-all border-none shadow-none"
-              :class="service.theme === 'blue' ? 'text-primary' : 'text-success'">
+              class="transition-all shadow-none" :class="service.theme === 'blue' ? 'text-primary' : 'text-success'">
               {{ service.cta }}
               <IconArrowRight class="w-4 h-4 ml-2" />
             </UiBaseButton>

@@ -69,7 +69,7 @@
       <div class="flex items-center gap-2 bg-ash/30 p-1 rounded-xl border border-ash">
         <UiBaseButton v-for="status in ['all', 'unread', 'read']" :key="status" @click="filterState.status = status"
           variant="ghost"
-          class="!px-3 !py-1.5 !rounded-lg !text-[10px] !font-black uppercase tracking-tighter transition-all !h-auto border-none"
+          class="!px-3 !py-1.5 !rounded-lg !text-[10px] !font-black uppercase tracking-tighter transition-all !h-auto"
           :class="filterState.status === status ? '!bg-WtB !text-primary shadow-sm' : 'text-hsa hover:!text-BtW'">
           {{ status === 'all' ? 'Toutes' : status === 'unread' ? 'Non lues' : 'Lues' }}
         </UiBaseButton>
@@ -92,7 +92,7 @@
       <div class="flex-1"></div>
 
       <UiBaseButton v-if="hasActiveFilters" @click="resetFilters" variant="ghost"
-        class="!text-[9px] !font-black uppercase text-hsa hover:!text-danger !flex !items-center !gap-1 transition-colors !p-0 !bg-transparent hover:!bg-transparent !h-auto border-none">
+        class="!text-[9px] !font-black uppercase text-hsa hover:!text-danger !flex !items-center !gap-1 transition-colors !p-0 !bg-transparent hover:!bg-transparent !h-auto">
         <IconX class="w-3 h-3" />
         Réinitialiser
       </UiBaseButton>

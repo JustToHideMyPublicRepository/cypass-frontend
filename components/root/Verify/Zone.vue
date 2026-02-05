@@ -4,12 +4,12 @@
     <div v-if="!result && !loading" class="flex justify-center mb-6 md:mb-8">
       <div class="flex p-1 bg-ash/50 rounded-xl border border-ash gap-2 md:gap-4">
         <UiBaseButton @click="$emit('update:verifyMode', 'file')" variant="ghost"
-          class="!px-3 md:!px-4 !py-1.5 md:!py-2 !text-xs md:!text-sm !font-bold !rounded-lg transition-all !h-auto border-none"
+          class="!px-3 md:!px-4 !py-1.5 md:!py-2 !text-xs md:!text-sm !font-bold !rounded-lg transition-all !h-auto"
           :class="verifyMode === 'file' ? '!bg-WtB !text-primary shadow-sm' : 'text-hsa hover:!text-BtW'">
           Fichier PDF
         </UiBaseButton>
         <UiBaseButton @click="$emit('update:verifyMode', 'hash')" variant="ghost"
-          class="!px-3 md:!px-4 !py-1.5 md:!py-2 !text-xs md:!text-sm !font-bold !rounded-lg transition-all !h-auto border-none"
+          class="!px-3 md:!px-4 !py-1.5 md:!py-2 !text-xs md:!text-sm !font-bold !rounded-lg transition-all !h-auto"
           :class="verifyMode === 'hash' ? '!bg-WtB !text-primary shadow-sm' : 'text-hsa hover:!text-BtW'">
           Empreinte (Hash)
         </UiBaseButton>

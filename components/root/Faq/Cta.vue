@@ -13,7 +13,7 @@
           <p class="text-slate-300 text-sm md:text-base mb-6 md:mb-8">Notre équipe de support est disponible 24/7 pour
             vous accompagner.</p>
           <div class="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center">
-            <NuxtLink to="/support" class="btn bg-white text-slate-900 hover:bg-slate-100 border-none px-6 py-2.5">
+            <NuxtLink to="/support" class="btn bg-white text-slate-900 hover:bg-slate-100 px-6 py-2.5">
               <IconMessageCircle class="w-5 h-5 mr-2" />
               Ouvrir un ticket
             </NuxtLink>

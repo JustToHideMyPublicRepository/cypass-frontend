@@ -2,7 +2,7 @@
   <div class="relative" ref="notificationRef">
     <!-- Bell Button -->
     <UiBaseButton @click="toggleDropdown" variant="ghost"
-      class="!p-2 !rounded-xl text-hsa hover:!bg-ash transition-all relative group !h-auto !w-auto border-none"
+      class="!p-2 !rounded-xl text-hsa hover:!bg-ash transition-all relative group !h-auto !w-auto"
       title="Notifications">
       <IconBellPlus v-if="store.unreadCount > 0"
         class="w-6 h-6 group-hover:scale-110 transition-transform text-primary" />
@@ -27,7 +27,7 @@
           <div class="p-4 border-b border-ash flex items-center justify-between bg-ash/10">
             <h3 class="font-bold text-BtW">Notifications</h3>
             <UiBaseButton v-if="store.unreadCount > 0" @click="handleMarkAllAsRead" variant="ghost"
-              class="!text-[10px] !font-black !uppercase tracking-widest !text-primary hover:!text-secondary transition-colors !p-0 !bg-transparent hover:!bg-transparent !h-auto border-none">
+              class="!text-[10px] !font-black !uppercase tracking-widest !text-primary hover:!text-secondary transition-colors !p-0 !bg-transparent hover:!bg-transparent !h-auto">
               Tout lire
             </UiBaseButton>
           </div>

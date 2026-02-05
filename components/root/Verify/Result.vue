@@ -87,7 +87,7 @@
               Vérifié le {{ formatDate(result.verification_time) }}
             </div>
             <UiBaseButton @click="$emit('reset')" variant="ghost"
-              class="!text-primary !font-bold hover:!underline !p-0 !min-h-0 !h-auto !bg-transparent hover:!bg-transparent border-none">
+              class="!text-primary !font-bold hover:!underline !p-0 !min-h-0 !h-auto !bg-transparent hover:!bg-transparent">
               Nouvelle vérification
             </UiBaseButton>
           </div>

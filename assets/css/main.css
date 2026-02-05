@@ -84,7 +84,7 @@
   }
 
   .btn-ghost {
-    @apply text-BtW hover:text-primary bg-transparent hover:bg-WtBAct border border-white/20;
+    @apply text-BtW hover:text-primary bg-transparent hover:bg-WtBAct;
   }
 
   .btn-danger {
