@@ -73,7 +73,7 @@
               <span>Explorer le module</span>
               <IconArrowRight class="w-3.5 h-3.5 md:w-4 md:h-4" />
             </UiBaseButton>
-            <UiBaseButton v-else :to="`/coming-soon?service=${service.id}`" variant="ghost"
+            <UiBaseButton v-else :to="`/modules/${service.id}`" variant="ghost"
               class="!w-full !py-2.5 md:!py-3 !rounded-xl !bg-ash !text-slate-400 !font-bold !text-xs md:!text-sm !text-center !border border-ash hover:!bg-ashAct/10 hover:!text-hsa transition-colors !h-auto">
               Bientôt Disponible
             </UiBaseButton>

@@ -12,7 +12,7 @@
         <!-- Contenu Texte -->
         <div :class="['space-y-6 md:space-y-8', index % 2 === 1 ? 'lg:order-1' : 'lg:order-2']" class="animate-fade-up">
           <span class="badge"
-            :class="service.status === 'available' ? (service.theme === 'blue' ? 'badge-primary' : 'badge-success') : 'bg-ash text-hsa border-ash'">
+            :class="service.status === 'available' ? (service.theme === 'blue' ? 'badge-primary' : 'badge-success') : 'bg-hsa text-ash border-hsa'">
             {{ service.status === 'available' ? service.badge : 'Bientôt Disponible' }}
           </span>
 
@@ -53,13 +53,12 @@
 
           <div class="pt-4">
             <UiBaseButton v-if="service.status === 'available'" :to="`/modules/${service.id}`" variant="secondary"
-              class="pl-0 hover:pl-4 transition-all !bg-transparent border-none shadow-none"
+              class="transition-all border-none shadow-none"
               :class="service.theme === 'blue' ? 'text-primary' : 'text-success'">
               {{ service.cta }}
               <IconArrowRight class="w-4 h-4 ml-2" />
             </UiBaseButton>
-            <UiBaseButton v-else :to="`/coming-soon?service=${service.id}`" variant="ghost"
-              class="text-hsa hover:text-primary">
+            <UiBaseButton v-else :to="`/modules/${service.id}`" variant="ghost" class="text-hsa hover:text-primary">
               Disponible prochainement
             </UiBaseButton>
           </div>
@@ -85,7 +84,7 @@
 
           <div v-if="service.status !== 'available'"
             class="absolute inset-0 flex items-center justify-center bg-WtB/50 backdrop-blur-[1px] z-20 rounded-3xl group-hover:bg-WtB/40 transition-colors">
-            <NuxtLink :to="`/coming-soon?service=${service.id}`"
+            <NuxtLink :to="`/modules/${service.id}`"
               class="px-6 py-3 bg-BtW text-WtB rounded-full font-bold shadow-xl border border-ash hover:scale-105 transition-transform">
               Bientôt Disponible
             </NuxtLink>
