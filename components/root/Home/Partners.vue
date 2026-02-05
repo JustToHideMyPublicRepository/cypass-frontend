@@ -1,13 +1,13 @@
 <template>
-  <section class="py-12 border-y border-ash/50 bg-WtB/30 backdrop-blur-sm overflow-hidden">
+  <section class="py-8 md:py-12 border-y border-ash/50 bg-WtB/30 backdrop-blur-sm overflow-hidden">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
       <p class="text-center text-xs font-bold text-hsa uppercase tracking-[0.2em]">Partenaires de
         Confiance & Institutionnels</p>
     </div>
 
     <div class="relative">
-      <div class="flex items-center gap-12 md:gap-24 animate-scroll whitespace-nowrap px-4 hover:pause-scroll">
-        <!-- Double the list for seamless loop -->
+      <div class="flex items-center gap-8 md:gap-24 animate-scroll whitespace-nowrap px-4 hover:pause-scroll">
+        <!-- Liste doublée pour une boucle infinie fluide -->
         <template v-for="i in 2" :key="i">
           <template v-for="partner in partners" :key="partner.name + i">
             <a :href="partner.website" target="_blank" :title="partner.name"
@@ -55,21 +55,7 @@ const handleImageError = (name: string) => {
   }
 
   100% {
-    /* 
-       We translate by half since we doubled the content. 
-       This ensures the list loops perfectly.
-    */
     transform: translateX(-50%);
   }
-}
-
-/* Hide scrollbar but allow functional scrolling just in case */
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
 }
 </style>

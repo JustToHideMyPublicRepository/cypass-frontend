@@ -54,7 +54,7 @@
     @apply font-heading;
   }
 
-  /* Custom Scrollbar */
+  /* Barre de défilement */
   ::-webkit-scrollbar {
     width: 8px;
   }
@@ -70,7 +70,7 @@
 
 @layer components {
 
-  /* Buttons */
+  /* Boutons */
   .btn {
     @apply inline-flex items-center justify-center px-6 py-3 rounded-xl font-bold transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer select-none;
   }
@@ -91,12 +91,12 @@
     @apply bg-danger text-white hover:bg-dangerAct shadow-lg shadow-red-500/30 hover:-translate-y-1 relative;
   }
 
-  /* Inputs */
+  /* Champs de saisie */
   .input {
     @apply w-full px-4 py-3 rounded-xl bg-ash border border-WtBAct placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300;
   }
 
-  /* Cards */
+  /* Cartes */
   .card {
     @apply bg-WtB rounded-3xl p-6 shadow-xl shadow-ashAct border border-ash;
   }
@@ -105,7 +105,7 @@
     @apply bg-ash backdrop-blur-xl border border-hsa shadow-2xl;
   }
 
-  /* --- Badges --- */
+  /* Badges */
   .badge {
     @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider;
   }
@@ -128,7 +128,7 @@
     border-color: rgb(var(--color-secondary) / 0.2);
   }
 
-  /* --- Keyboard Hints --- */
+  /* Indices de clavier */
   .kbd-wrapper {
     @apply inline-flex items-center gap-1.5 px-2 py-1.5 backdrop-blur-md border border-ashAct rounded-xl shadow-lg text-hsa;
     background-color: rgb(var(--color-ash) / 0.8);
@@ -183,18 +183,18 @@
     }
   }
 
-  /* Gradient utilities */
+  /* Utilitaires de dégradé */
   .bg-gradient-premium {
     @apply bg-gradient-to-br from-bgClr to-WtB;
   }
 
-  /* Hide scrollbar for Chrome, Safari and Opera */
+  /* Cacher la barre de défilement pour Chrome, Safari et Opera */
   .no-scrollbar::-webkit-scrollbar,
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
 
-  /* Hide scrollbar for IE, Edge and Firefox */
+  /* Cacher la barre de défilement pour IE, Edge et Firefox */
   .no-scrollbar,
   .scrollbar-hide {
     -ms-overflow-style: none;
@@ -203,7 +203,7 @@
     /* Firefox */
   }
 
-  /* Marquee Animation */
+  /* Animation Marquee (Défilement horizontal) */
   @keyframes marquee {
     0% {
       transform: translateX(0);

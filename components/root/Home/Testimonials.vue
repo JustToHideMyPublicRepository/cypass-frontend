@@ -1,29 +1,29 @@
 <template>
-  <section class="py-24 relative overflow-hidden bg-bgClr">
-    <!-- Decor element -->
+  <section class="py-16 md:py-24 relative overflow-hidden bg-bgClr">
+    <!-- Élément de décoration -->
     <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-ash to-transparent">
     </div>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-      <div class="text-center mb-16 animate-fade-up">
+      <div class="text-center mb-10 md:mb-16 animate-fade-up">
         <span class="badge badge-success mb-4">Confiance Accordée</span>
-        <h2 class="text-3xl md:text-5xl font-black tracking-tight mb-4">
+        <h2 class="text-2xl md:text-5xl font-black tracking-tight mb-4">
           Ils sécurisent leur avenir avec <span class="text-primary">CYPASS</span>
         </h2>
-        <p class="text-lg text-hsa max-w-2xl mx-auto">
+        <p class="text-base md:text-lg text-hsa max-w-2xl mx-auto">
           Des institutions publiques aux leaders du secteur privé, découvrez ceux qui nous font confiance pour leur
           souveraineté numérique.
         </p>
       </div>
 
-      <!-- Marquee / Grid Container -->
+      <!-- Conteneur de grille -->
       <div class="relative">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div v-for="(testimonial, index) in testimonials" :key="index"
-            class="glass-panel p-8 rounded-2xl relative group hover:-translate-y-2 transition-transform duration-300 border border-ash/50 animate-fade-up"
+            class="glass-panel p-6 md:p-8 rounded-2xl relative group hover:-translate-y-2 transition-transform duration-300 border border-ash/50 animate-fade-up"
             :style="{ animationDelay: `${index * 150}ms` }">
 
-            <!-- Quote Icon -->
+            <!-- Icône de citation -->
             <div
               class="absolute top-6 right-8 text-6xl font-serif text-primary opacity-50 group-hover:text-primary/20 transition-colors">
               ”</div>
@@ -52,7 +52,6 @@
           </div>
         </div>
       </div>
-
     </div>
   </section>
 </template>

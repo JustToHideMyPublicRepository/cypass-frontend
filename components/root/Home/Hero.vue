@@ -2,8 +2,8 @@
   <section class="relative py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       <div class="grid lg:grid-cols-2 gap-16 items-center">
-        <!-- Text -->
-        <div class="text-center lg:text-left space-y-8 animate-fade-right">
+        <!-- Texte -->
+        <div class="text-center lg:text-left space-y-6 lg:space-y-8 animate-fade-right">
           <div
             class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-panel border border-BtW shadow-lg backdrop-blur-md">
             <span class="relative flex h-2 w-2">
@@ -15,7 +15,7 @@
           </div>
 
           <h1
-            class="text-5xl md:text-7xl font-extrabold tracking-tight leading-[1.1] text-transparent bg-clip-text bg-gradient-to-r from-textClr via-hsa to-BtW leading-tight">
+            class="text-4xl md:text-7xl font-extrabold tracking-tight leading-[1.1] text-transparent bg-clip-text bg-gradient-to-r from-textClr via-hsa to-BtW leading-tight">
             Souveraineté <br />
             <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-success relative">
               Numérique
@@ -29,58 +29,61 @@
             & Sécurité
           </h1>
 
-          <p class="text-xl md:text-2xl text-hsa max-w-2xl mx-auto lg:mx-0 leading-relaxed font-light">
+          <p class="text-lg md:text-2xl text-hsa max-w-2xl mx-auto lg:mx-0 leading-relaxed font-light">
             L'infrastructure de confiance protégeant l'écosystème numérique du Bénin.
             <span class="font-semibold text-primary">Certification, Veille & Audit</span>
             en temps réel.
           </p>
 
-          <div class="flex flex-col sm:flex-row gap-5 justify-center lg:justify-start pt-4">
+          <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-4">
             <UiBaseButton :to="authStore.user ? '/dashboard' : '/auth/login'"
-              class="w-full sm:w-auto text-lg px-8 py-4 shadow-BtW/40">
+              class="w-full sm:w-auto text-base md:text-lg px-6 md:px-8 py-3 md:py-4 shadow-BtW/40">
               {{ authStore.user ? 'Tableau de bord' : 'Accéder au Portail' }}
               <IconArrowRight class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
             </UiBaseButton>
-            <UiBaseButton to="/verify" variant="secondary" class="w-full sm:w-auto text-lg px-8 py-4">
+            <UiBaseButton to="/verify" variant="secondary"
+              class="w-full sm:w-auto text-base md:text-lg px-6 md:px-8 py-3 md:py-4">
               Vérifier un document
             </UiBaseButton>
           </div>
 
           <div
-            class="pt-10 flex flex-wrap items-center justify-center lg:justify-start gap-6 text-sm font-semibold text-hsa">
-            <div class="flex items-center gap-2 bg-WtB/50 px-4 py-2 rounded-lg backdrop-blur-sm border border-ash/50">
+            class="pt-10 grid grid-cols-2 lg:flex lg:flex-wrap items-center justify-center lg:justify-start gap-4 lg:gap-6 text-xs md:text-sm font-semibold text-hsa">
+            <div
+              class="flex items-center gap-2 bg-WtB/50 px-3 md:px-4 py-2 rounded-lg backdrop-blur-sm border border-ash/50">
               <IconShieldCheck class="w-5 h-5 text-primary" />
               <span>Données Chiffrées</span>
             </div>
-            <div class="flex items-center gap-2 bg-WtB/50 px-4 py-2 rounded-lg backdrop-blur-sm border border-ash/50">
+            <div
+              class="flex items-center gap-2 bg-WtB/50 px-3 md:px-4 py-2 rounded-lg backdrop-blur-sm border border-ash/50">
               <IconServer class="w-5 h-5 text-primary" />
               <span>Hébergé au Bénin</span>
             </div>
           </div>
         </div>
 
-        <!-- 3D Glass Card Composition -->
+        <!-- Composition de Carte de Verre 3D -->
         <div class="relative hidden lg:block perspective-1000 animate-fade-left">
 
-          <!-- Floating Background Elements -->
+          <!-- Éléments d'arrière-plan flottants -->
           <div
             class="absolute -top-20 -right-20 w-64 h-64 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full blur-[80px] opacity-40 animate-pulse-slow">
           </div>
 
-          <!-- Main Dashboard Card -->
+          <!-- Carte principale du Tableau de Bord -->
           <UiAppFrame type="browser" url="https://secure.cypass.bj/dashboard" :glass="true" rounded="rounded-3xl"
             padding="p-0"
             class="transform rotate-y-12 rotate-x-6 hover:rotate-0 transition-all duration-700 ease-out z-20 group">
-            <!-- Dashboard Content -->
+            <!-- Contenu du Tableau de Bord -->
             <div class="bg-bgClr p-6 rounded-b-2xl h-[450px] relative overflow-hidden">
 
-              <!-- Decorative Grid -->
+              <!-- Grille décorative -->
               <div
                 class="absolute inset-0 bg-[url('https://heropatterns.com/img/patterns/circuit-board.png')] opacity-5">
               </div>
 
               <div class="grid grid-cols-2 gap-4 relative z-10">
-                <!-- Stats Card -->
+                <!-- Carte de statistiques -->
                 <div
                   class="col-span-2 bg-gradient-to-r from-primary to-secondary rounded-2xl p-6 text-ash shadow-lg relative overflow-hidden group/card">
                   <div class="absolute top-0 right-0 p-3 opacity-20">
@@ -99,7 +102,7 @@
                   <p class="text-xs">Dernière mise à jour: à l'instant</p>
                 </div>
 
-                <!-- Mini Cards -->
+                <!-- Mini cartes -->
                 <div
                   class="bg-WtB p-4 rounded-2xl shadow-sm border border-ash flex flex-col items-center justify-center gap-2 hover:scale-105 transition-transform duration-300">
                   <div class="w-12 h-12 rounded-xl bg-warning/20 flex items-center justify-center">
@@ -118,7 +121,7 @@
                   <span class="text-xs text-hsa">Conformité</span>
                 </div>
 
-                <!-- List Item -->
+                <!-- Élément de liste -->
                 <div
                   class="col-span-2 bg-WtB p-4 rounded-2xl shadow-sm border border-ash flex items-center justify-between">
                   <div class="flex items-center gap-3">
@@ -137,7 +140,7 @@
             </div>
           </UiAppFrame>
 
-          <!-- Floating Badge -->
+          <!-- Badge flottant -->
           <div
             class="absolute bottom-10 -left-10 glass-panel p-4 rounded-xl flex items-center gap-3 z-30 animate-float-delayed">
             <div class="relative">

@@ -1,6 +1,6 @@
 <template>
-  <section class="py-24 relative overflow-hidden bg-bgClr">
-    <!-- Background Elements -->
+  <section class="py-16 md:py-24 relative overflow-hidden bg-bgClr">
+    <!-- Éléments d'arrière-plan -->
     <div
       class="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[length:24px_24px]">
     </div>
@@ -8,8 +8,8 @@
     </div>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-      <!-- Header -->
-      <div class="text-center max-w-3xl mx-auto mb-20 animate-fade-up">
+      <!-- En-tête -->
+      <div class="text-center max-w-3xl mx-auto mb-12 md:mb-20 animate-fade-up">
         <span
           class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold uppercase tracking-wider mb-4">
           <span class="relative flex h-2 w-2">
@@ -18,18 +18,18 @@
           </span>
           Pipeline de Sécurité
         </span>
-        <h2 class="text-3xl md:text-5xl font-bold text-BtW mb-6">
+        <h2 class="text-2xl md:text-5xl font-bold text-BtW mb-4 md:mb-6">
           Protection en <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-success">
             temps réel</span>
         </h2>
-        <p class="text-lg text-hsa">
+        <p class="text-base md:text-lg text-hsa">
           Une approche systémique pour sécuriser, certifier et surveiller votre infrastructure critique.
         </p>
       </div>
 
-      <!-- Pipeline Container -->
-      <div class="relative grid md:grid-cols-3 gap-8">
-        <!-- Connecting Line (Desktop) -->
+      <!-- Conteneur du Pipeline -->
+      <div class="relative grid md:grid-cols-3 gap-12 md:gap-8">
+        <!-- Ligne de connexion (Desktop) -->
         <div
           class="hidden md:block absolute top-[25%] left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent">
         </div>
@@ -37,7 +37,7 @@
           class="hidden md:block absolute top-[25%] left-0 h-0.5 w-[30%] bg-gradient-to-r from-transparent to-primary blur-[2px] animate-beam">
         </div>
 
-        <!-- Metric Floating Elements -->
+        <!-- Éléments métriques flottants -->
         <div class="absolute -top-10 left-10 hidden lg:block animate-float-slow">
           <div class="font-code text-[10px] text-primary/40">RX: 104.2 Mb/s</div>
         </div>
@@ -45,10 +45,10 @@
           <div class="font-code text-[10px] text-success/40">SYS: STABLE</div>
         </div>
 
-        <!-- Step 1: Audit (Terminal) -->
-        <div class="group relative pt-12 md:pt-0">
+        <!-- Étape 1 : Audit (Terminal) -->
+        <div class="group relative">
           <div class="relative z-10 mx-auto w-full max-w-[320px]">
-            <!-- Terminal Window -->
+            <!-- Fenêtre Terminal -->
             <UiAppFrame type="terminal" title="secuscan_audit.sh" rounded="rounded-lg" shadow="shadow-2xl"
               class="transform transition-all duration-300 group-hover:-translate-y-2 group-hover:shadow-primary/20"
               body-class="h-[180px] flex flex-col">
@@ -75,26 +75,26 @@
                 class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-primary/10 text-primary mb-3 group-hover:bg-primary group-hover:text-white transition-colors duration-300">
                 <span class="font-bold">01</span>
               </div>
-              <h3 class="text-lg font-bold text-BtW mb-2">Audit SecuScan</h3>
+              <h3 class="text-base md:text-lg font-bold text-BtW mb-2">Audit SecuScan</h3>
               <p class="text-sm text-hsa">Analyse automatique de votre surface d'attaque et
                 identification des vulnérabilités.</p>
             </div>
           </div>
         </div>
 
-        <!-- Step 2: Certification (Digital ID) -->
-        <div class="group relative pt-12 md:pt-0">
+        <!-- Étape 2 : Certification (ID Numérique) -->
+        <div class="group relative">
           <div class="relative z-10 mx-auto w-full max-w-[320px]">
-            <!-- ID Card -->
+            <!-- Carte d'identité -->
             <div
               class="bg-WtB rounded-xl shadow-2xl border border-ash p-1 relative overflow-hidden transform transition-all duration-300 group-hover:-translate-y-2 group-hover:shadow-secondary/20 h-[213px]">
-              <!-- Scanning Light Effect -->
+              <!-- Effet de balayage lumineux -->
               <div
                 class="absolute inset-0 bg-gradient-to-b from-transparent via-secondary/10 to-transparent -translate-y-full group-hover:animate-scan z-20 pointer-events-none">
               </div>
 
               <div class="h-full bg-bgClr rounded-lg p-4 relative overflow-hidden flex flex-col justify-between">
-                <!-- Card Header -->
+                <!-- En-tête de carte -->
                 <div class="flex justify-between items-start">
                   <div class="flex items-center gap-2">
                     <div class="w-8 h-8 rounded bg-secondary/10 flex items-center justify-center text-secondary">
@@ -108,7 +108,7 @@
                   <IconVersions class="w-8 h-8 text-ashAct" />
                 </div>
 
-                <!-- Chip -->
+                <!-- Puce -->
                 <div class="my-4 flex items-center gap-4">
                   <div
                     class="w-10 h-8 rounded border border-ashAct bg-gradient-to-br from-yellow-200 to-yellow-400 relative overflow-hidden opacity-80">
@@ -122,7 +122,7 @@
                   </div>
                 </div>
 
-                <!-- Status Footer -->
+                <!-- Pied de page statut -->
                 <div class="flex items-center justify-between border-t border-ash pt-3">
                   <div class="flex items-center gap-1.5">
                     <div class="w-2 h-2 rounded-full bg-success animate-pulse"></div>
@@ -141,26 +141,26 @@
                 class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-secondary/10 text-secondary mb-3 group-hover:bg-secondary group-hover:text-white transition-colors duration-300">
                 <span class="font-bold">02</span>
               </div>
-              <h3 class="text-lg font-bold text-BtW mb-2">Certification</h3>
+              <h3 class="text-base md:text-lg font-bold text-BtW mb-2">Certification</h3>
               <p class="text-sm text-hsa">Émission de certificats numériques qualifiés et
                 identité organisationnelle.</p>
             </div>
           </div>
         </div>
 
-        <!-- Step 3: Monitoring (Radar) -->
-        <div class="group relative pt-12 md:pt-0">
+        <!-- Étape 3 : Monitoring (Radar) -->
+        <div class="group relative">
           <div class="relative z-10 mx-auto w-full max-w-[320px]">
-            <!-- Radar Interface -->
+            <!-- Interface Radar -->
             <div
               class="bg-slate-900 rounded-xl shadow-2xl border border-slate-700/50 p-4 h-[213px] relative overflow-hidden transform transition-all duration-300 group-hover:-translate-y-2 group-hover:shadow-success/20">
 
-              <!-- Radar Grid Background -->
+              <!-- Arrière-plan de la grille radar -->
               <div
                 class="absolute inset-0 bg-[radial-gradient(circle_at_center,theme(colors.slate.800)_1px,transparent_1px)] bg-[length:10px_10px] opacity-20">
               </div>
 
-              <!-- Rotating Radar -->
+              <!-- Radar rotatif -->
               <div class="absolute inset-0 flex items-center justify-center">
                 <div class="w-32 h-32 rounded-full border border-success/30 relative">
                   <div class="absolute inset-0 rounded-full border border-success/10 animate-[ping_3s_linear_infinite]">
@@ -171,7 +171,7 @@
                 </div>
               </div>
 
-              <!-- Overlay UI -->
+              <!-- Interface UI Superposée -->
               <div class="relative z-10 h-full flex flex-col justify-between">
                 <div class="flex justify-between items-start">
                   <div class="text-[10px] font-code text-success/80">SYSTEM_ACTIVE</div>
@@ -201,7 +201,7 @@
                 class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-success/10 text-success mb-3 group-hover:bg-success group-hover:text-white transition-colors duration-300">
                 <span class="font-bold">03</span>
               </div>
-              <h3 class="text-lg font-bold text-BtW mb-2">Protection Continue</h3>
+              <h3 class="text-base md:text-lg font-bold text-BtW mb-2">Protection Continue</h3>
               <p class="text-sm text-hsa">Surveillance 24/7 par VigiTech et alerting en temps
                 réel.</p>
             </div>

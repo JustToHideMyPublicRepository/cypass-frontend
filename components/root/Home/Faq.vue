@@ -1,28 +1,29 @@
 <template>
-	<section class="py-24 relative">
+	<section class="py-16 md:py-24 relative">
 		<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-			<div class="text-center mb-16 animate-fade-up">
+			<div class="text-center mb-10 md:mb-16 animate-fade-up">
 				<h2 class="text-3xl md:text-4xl font-bold mb-4">Questions fréquentes</h2>
 				<p>Tout ce que vous devez savoir sur la plateforme CYPASS.
 				</p>
 			</div>
 
-			<!-- Split Layout -->
-			<div class="grid lg:grid-cols-12 gap-12 items-start">
-				<!-- Left Column: FAQ Content (Larger) -->
+			<!-- Disposition divisée -->
+			<div class="grid lg:grid-cols-12 gap-8 md:gap-12 items-start">
+				<!-- Colonne gauche : Contenu FAQ -->
 				<div class="lg:col-span-7 space-y-4">
 					<div v-for="(item, index) in faqItems" :key="index"
 						class="glass-panel rounded-2xl overflow-hidden transition-all duration-300 animate-fade-right"
 						:class="{ 'ring-2 ring-primary/50 bg-WtB/80': activeIndex === index }"
 						:style="{ animationDelay: `${index * 100}ms` }">
 						<button @click="toggle(index)"
-							class="w-full flex items-center justify-between p-6 text-left focus:outline-none group">
+							class="w-full flex items-center justify-between p-4 md:p-6 text-left focus:outline-none group">
 							<div class="flex flex-col gap-2 pr-8">
 								<UiStatusBadge v-if="item.category" :status="item.category" class="w-fit">
 									{{ truncate(item.category, 15) }}
 								</UiStatusBadge>
-								<span class="font-bold text-BtW text-lg group-hover:text-primary transition-colors">{{
-									item.question }}</span>
+								<span class="font-bold text-BtW text-base md:text-lg group-hover:text-primary transition-colors">
+									{{ item.question }}
+								</span>
 							</div>
 							<span class="p-2 rounded-full bg-ashAct transition-all duration-300 flex-shrink-0"
 								:class="{ 'rotate-180': activeIndex === index, 'group-hover:bg-primary/20': activeIndex !== index }">
@@ -30,20 +31,21 @@
 							</span>
 						</button>
 
-						<div v-show="activeIndex === index" class="px-6 pb-6 text-hsa leading-relaxed border-t border-ash/50 pt-4">
+						<div v-show="activeIndex === index"
+							class="px-4 pb-4 md:px-6 md:pb-6 text-sm md:text-base text-hsa leading-relaxed border-t border-ash/50 pt-4">
 							{{ item.answer }}
 						</div>
 					</div>
 				</div>
 
-				<!-- Right Column: Visual (Knowledge Base / Help Center) -->
+				<!-- Colonne droite : Visuel -->
 				<div class="lg:col-span-5 relative lg:sticky lg:top-24 animate-fade-left hidden lg:block">
 					<div class="absolute -inset-4 bg-purple-500/20 blur-3xl opacity-20 rounded-full"></div>
 
 					<UiAppFrame type="browser" url="https://help.cypass.bj" :glass="true" class="shadow-2xl">
 						<div class="flex flex-col h-[450px] bg-bgClr overflow-hidden">
 
-							<!-- Hero Search Banner -->
+							<!-- Bannière de recherche Hero -->
 							<div class="bg-gradient-to-r from-primary/10 to-blue-500/10 p-8 text-center border-b border-ash">
 								<h3 class="text-sm font-bold text-primary mb-3 uppercase tracking-wider">Centre d'aide</h3>
 								<div class="relative max-w-xs mx-auto">
@@ -53,10 +55,10 @@
 								</div>
 							</div>
 
-							<!-- Knowledge Base Content -->
+							<!-- Contenu de la Base de Connaissances -->
 							<div class="p-6 overflow-hidden relative flex-1">
 								<div class="space-y-6">
-									<!-- Quick Links Grid -->
+									<!-- Grille de liens rapides -->
 									<div class="grid grid-cols-2 gap-3">
 										<div
 											class="p-3 bg-WtB rounded-lg border border-ash shadow-sm flex flex-col items-center text-center gap-2">
@@ -74,7 +76,7 @@
 										</div>
 									</div>
 
-									<!-- Popular Articles -->
+									<!-- Articles populaires -->
 									<div class="space-y-3">
 										<div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Articles populaires</div>
 
@@ -104,7 +106,7 @@
 									</div>
 								</div>
 
-								<!-- Hover Effect Helper -->
+								<!-- Aide à l'effet de survol -->
 								<div
 									class="absolute bottom-6 left-6 right-6 p-3 bg-primary/10 border border-primary/20 rounded-lg flex items-center gap-3">
 									<div class="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
@@ -137,12 +139,12 @@ const toggle = (index: number) => {
 	activeIndex.value = activeIndex.value === index ? null : index
 }
 
-// Function to truncate strings
+// Fonction pour tronquer les chaînes de caractères
 const truncate = (text: string, length: number) => {
 	return text.length > length ? text.substring(0, length) + '...' : text
 }
 
-// Randomly shuffle and take 4 items
+// Mélange aléatoirement et prend 4 éléments
 const faqItems = computed(() => {
 	return [...popularFaqItems]
 		.sort(() => Math.random() - 0.5)

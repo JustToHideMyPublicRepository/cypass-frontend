@@ -1,34 +1,34 @@
 <template>
-  <section id="features" class="py-24 relative">
-    <!-- Section Decor -->
+  <section id="features" class="py-16 md:py-24 relative">
+    <!-- Décoration de section -->
     <div class="absolute top-1/4 left-0 w-full h-[500px] bg-gradient-to-r from-primary/5 to-transparent skew-y-6 -z-10">
     </div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-24 md:space-y-40">
 
       <div v-for="(service, index) in featureServices" :key="service.id"
-        class="grid lg:grid-cols-2 gap-20 items-center group">
+        class="grid lg:grid-cols-2 gap-12 md:gap-20 items-center group">
 
-        <!-- Text Content -->
-        <div :class="['space-y-8', index % 2 === 1 ? 'lg:order-1' : 'lg:order-2']" class="animate-fade-up">
+        <!-- Contenu Texte -->
+        <div :class="['space-y-6 md:space-y-8', index % 2 === 1 ? 'lg:order-1' : 'lg:order-2']" class="animate-fade-up">
           <span class="badge"
             :class="service.status === 'available' ? (service.theme === 'blue' ? 'badge-primary' : 'badge-success') : 'bg-ash text-hsa border-ash'">
             {{ service.status === 'available' ? service.badge : 'Bientôt Disponible' }}
           </span>
 
-          <h2 class="text-4xl md:text-5xl font-bold leading-tight">
+          <h2 class="text-3xl md:text-5xl font-bold leading-tight">
             {{ service.title }}<span :class="service.theme === 'blue' ? 'text-primary' : 'text-success'">.</span>
           </h2>
 
-          <h3 class="text-2xl text-hsa font-light">
+          <h3 class="text-xl md:text-2xl text-hsa font-light">
             {{ service.subtitle }}
           </h3>
 
-          <p class="text-lg text-hsa leading-relaxed">
+          <p class="text-base md:text-lg text-hsa leading-relaxed">
             {{ service.description }}
           </p>
 
-          <!-- Features List -->
+          <!-- Liste des fonctionnalités -->
           <div v-if="service.features" class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div v-for="feature in service.features" :key="feature.title" class="flex items-start gap-4">
               <div :class="[
@@ -65,19 +65,19 @@
           </div>
         </div>
 
-        <!-- Visual Content -->
+        <!-- Contenu Visuel -->
         <div class="relative" :class="index % 2 === 1 ? 'lg:order-2' : 'lg:order-1'">
           <div
             :class="['absolute inset-0 blur-[120px] opacity-10 rounded-full group-hover:opacity-20 transition-opacity duration-700', service.theme === 'blue' ? 'bg-primary' : 'bg-success']">
           </div>
 
-          <!-- Component Visuals -->
+          <!-- Visuels des composants -->
           <RootHomeFeaturesDocSentry v-if="service.id === 'docsentry'" />
           <RootHomeFeaturesVigiTech v-else-if="service.id === 'vigitech'" />
           <RootHomeFeaturesSecuScan v-else-if="service.id === 'secuscan'" />
           <RootHomeFeaturesLeakMonitor v-else-if="service.id === 'leakmonitor'" />
 
-          <!-- Fallback Image (just in case) -->
+          <!-- Image de secours (au cas où) -->
           <img v-else-if="service.image" :src="service.image" :alt="service.title"
             class="rounded-3xl w-full object-cover h-[400px] shadow-2xl"
             :class="{ 'grayscale opacity-60': service.status !== 'available' }" />
