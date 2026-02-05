@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-5xl mx-auto px-4 relative">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative">
     <RootShortcutsHeader @open-settings="showSettings = true" />
     <RootShortcutsExpertMode />
 
@@ -9,7 +9,7 @@
     <RootShortcutsGrid :categories="filteredShortcuts" />
     <RootShortcutsFooter />
 
-    <!-- Settings Modal -->
+    <!-- Paramètres Modale -->
     <ModalShortcuts :show="showSettings" @close="showSettings = false" />
   </div>
 </template>

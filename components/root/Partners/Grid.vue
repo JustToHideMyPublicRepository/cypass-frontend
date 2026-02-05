@@ -3,7 +3,7 @@
     <div v-for="(partner, index) in partners" :key="partner.name" class="animate-fade-up"
       :style="{ animationDelay: `${index * 100}ms` }">
       <UiAppFrame type="card" :glass="true" class="h-full hover:scale-[1.02] transition-transform duration-300"
-        padding="p-8">
+        padding="p-6 md:p-8">
         <div class="flex flex-col items-center text-center">
           <div
             class="w-24 h-24 rounded-full bg-ash/50 flex items-center justify-center mb-6 text-2xl font-bold text-hsa border border-ashAct overflow-hidden p-4">

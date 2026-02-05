@@ -1,11 +1,11 @@
 <template>
   <div class="relative">
-    <div class="max-w-5xl mx-auto space-y-16">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 md:space-y-16">
       <RootPartnersHeader @open-modal="isModalOpen = true" />
       <RootPartnersGrid :partners="partners" />
     </div>
 
-    <!-- Partner Modal -->
+    <!-- Modal -->
     <ModalPartnerRequest :show="isModalOpen" @close="isModalOpen = false" />
   </div>
 </template>
