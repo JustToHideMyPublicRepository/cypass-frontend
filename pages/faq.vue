@@ -1,10 +1,12 @@
 <template>
   <div class="relative">
-    <RootFaqHeader ref="headerComp" v-model:searchQuery="searchQuery" />
-    <RootFaqCategories :categories="faqCategories" v-model:selectedCategory="selectedCategoryText" />
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <RootFaqHeader ref="headerComp" v-model:searchQuery="searchQuery" />
+      <RootFaqCategories :categories="faqCategories" v-model:selectedCategory="selectedCategoryText" />
 
-    <RootFaqList :categories="filteredCategories" />
-    <RootFaqCta />
+      <RootFaqList :categories="filteredCategories" />
+      <RootFaqCta />
+    </div>
   </div>
 </template>
 

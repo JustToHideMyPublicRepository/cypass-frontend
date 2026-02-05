@@ -76,11 +76,11 @@
   }
 
   .btn-primary {
-    @apply bg-gradient-to-r from-primary to-secondary text-WtB shadow-lg shadow-blue-500/30 hover:shadow-secondary hover:-translate-y-1 relative;
+    @apply bg-gradient-to-r from-primary to-secondary text-WtB shadow-lg shadow-blue-500/30 hover:shadow-secondary hover:scale-[1.02] relative;
   }
 
   .btn-secondary {
-    @apply bg-WtB text-BtW hover:-translate-y-1 relative border border-BtW hover:bg-WtBAct;
+    @apply bg-WtB text-BtW hover:scale-[1.02] relative border border-BtW hover:bg-WtBAct;
   }
 
   .btn-ghost {
@@ -88,7 +88,7 @@
   }
 
   .btn-danger {
-    @apply bg-danger text-white hover:bg-dangerAct shadow-lg shadow-red-500/30 hover:-translate-y-1 relative;
+    @apply bg-danger text-white hover:bg-dangerAct shadow-lg shadow-red-500/30 hover:scale-[1.02] relative;
   }
 
   /* Champs de saisie */
