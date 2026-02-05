@@ -85,10 +85,10 @@
             <input :type="showPassword ? 'text' : 'password'" v-model="password" placeholder="Votre mot de passe actuel"
               class="w-full pl-4 pr-10 py-3 rounded-xl bg-ash/30 border border-ash focus:ring-2 focus:ring-danger outline-none"
               @keyup.enter="confirmDelete" />
-            <button @click="showPassword = !showPassword"
-              class="absolute right-3 top-1/2 -translate-y-1/2 text-hsa hover:text-BtW focus:outline-none">
+            <UiBaseButton @click="showPassword = !showPassword" variant="ghost"
+              class="!absolute !right-3 !top-1/2 !-translate-y-1/2 text-hsa hover:!text-BtW focus:outline-none !p-0 !bg-transparent hover:!bg-transparent !h-auto !w-auto">
               <component :is="showPassword ? IconEyeOff : IconEye" class="w-5 h-5" />
-            </button>
+            </UiBaseButton>
           </div>
           <p v-if="error" class="text-xs text-danger font-bold flex items-center gap-1">
             <IconX class="w-3 h-3" /> {{ error }}

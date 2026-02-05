@@ -18,18 +18,20 @@
           <div class="flex justify-between items-center mb-1">
             <label for="password" class="block text-sm font-medium text-BtW">Mot de
               passe</label>
-            <button type="button" @click="showForgotModal = true" class="text-xs text-primary hover:underline">Oublié
-              ?</button>
+            <UiBaseButton type="button" @click="showForgotModal = true" variant="ghost"
+              class="!text-xs !text-primary hover:!underline !p-0 !min-h-0 !h-auto !bg-transparent hover:!bg-transparent">
+              Oublié
+              ?</UiBaseButton>
           </div>
           <div class="relative">
             <IconLock class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-hsa" />
             <input v-model="password" id="password" :type="showPassword ? 'text' : 'password'" required
               class="w-full pl-12 pr-12 py-2 rounded-lg border border-ashAct focus:ring-2 focus:ring-primary focus:border-transparent bg-ash transition-shadow outline-none" />
-            <button type="button" @click="showPassword = !showPassword"
-              class="absolute right-4 top-1/2 -translate-y-1/2 text-hsa hover:text-primary focus:outline-none">
+            <UiBaseButton type="button" @click="showPassword = !showPassword" variant="ghost"
+              class="!absolute !right-4 !top-1/2 !-translate-y-1/2 text-hsa hover:!text-primary focus:outline-none !p-0 !bg-transparent hover:!bg-transparent !h-auto !w-auto">
               <IconEye v-if="showPassword" class="w-5 h-5" />
               <IconEyeOff v-else class="w-5 h-5" />
-            </button>
+            </UiBaseButton>
           </div>
         </div>
       </div>

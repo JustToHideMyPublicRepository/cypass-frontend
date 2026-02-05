@@ -23,12 +23,12 @@
               </p>
             </div>
             <div class="ml-4 flex-shrink-0 flex">
-              <button type="button"
-                class="rounded-md inline-flex text-hsa hover:text-BtW focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors"
+              <UiBaseButton variant="ghost"
+                class="!rounded-md !inline-flex text-hsa hover:!text-BtW focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors !p-1 !h-auto !w-auto"
                 @click="close">
                 <span class="sr-only">Fermer</span>
                 <IconX class="h-5 w-5" aria-hidden="true" />
-              </button>
+              </UiBaseButton>
             </div>
           </div>
         </div>

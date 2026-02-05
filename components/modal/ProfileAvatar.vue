@@ -63,8 +63,8 @@
 
           <!-- Selection Controls -->
           <div class="w-full space-y-4 pointer-events-auto">
-            <button @click="triggerFileInput"
-              class="w-full px-6 py-4 rounded-2xl border-2 border-dashed border-ash hover:border-primary/10 hover:bg-primary/5 transition-all duration-300 flex items-center justify-between group/select"
+            <UiBaseButton @click="triggerFileInput" variant="ghost"
+              class="!w-full !px-6 !py-4 !rounded-2xl !border-2 !border-dashed border-ash hover:!border-primary/10 hover:!bg-primary/5 transition-all duration-300 !flex !items-center !justify-between group/select !h-auto"
               :disabled="isLoading">
               <div class="flex items-center gap-4 text-left">
                 <div class="p-3 bg-ash rounded-xl group-hover/select:bg-primary/10 transition-colors">
@@ -80,7 +80,7 @@
                 </div>
               </div>
               <IconChevronRight class="w-5 h-5 text-hsa opacity-40 group-hover/select:translate-x-1 transition-all" />
-            </button>
+            </UiBaseButton>
             <input type="file" ref="fileInput" class="hidden" accept="image/*" @change="handleFileChange" />
           </div>
         </div>

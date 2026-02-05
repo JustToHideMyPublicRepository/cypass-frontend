@@ -94,10 +94,10 @@
                 class="p-4 rounded-xl text-lg font-medium">
                 {{ link.label }}
               </UiBaseButton>
-              <button v-else-if="link.type === 'button'" @click="link.action"
-                class="p-4 rounded-xl text-lg font-medium transition-colors" :class="link.class">
+              <UiBaseButton v-else-if="link.type === 'button'" @click="link.action" variant="ghost"
+                class="!p-4 rounded-xl !text-lg !font-medium" :class="link.class">
                 {{ link.label }}
-              </button>
+              </UiBaseButton>
             </template>
           </template>
         </div>

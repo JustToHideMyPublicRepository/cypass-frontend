@@ -20,11 +20,11 @@
             <IconLock class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-hsa" />
             <input :type="showCurrent ? 'text' : 'password'" v-model="form.current" required placeholder="••••••••"
               class="w-full pl-10 pr-12 py-2.5 rounded-lg bg-ash border border-ashAct focus:ring-2 focus:ring-primary outline-none text-BtW" />
-            <button type="button" @click="showCurrent = !showCurrent"
-              class="absolute right-3 top-1/2 -translate-y-1/2 text-hsa hover:text-BtW transition-colors">
+            <UiBaseButton type="button" @click="showCurrent = !showCurrent" variant="ghost"
+              class="!absolute !right-3 !top-1/2 !-translate-y-1/2 text-hsa hover:!text-BtW transition-colors !p-0 !bg-transparent hover:!bg-transparent !h-auto !w-auto">
               <IconEye v-if="showCurrent" class="w-5 h-5" />
               <IconEyeOff v-else class="w-5 h-5" />
-            </button>
+            </UiBaseButton>
           </div>
         </div>
 
@@ -37,11 +37,11 @@
             <IconLock class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-hsa" />
             <input :type="showNew ? 'text' : 'password'" v-model="form.new" required placeholder="••••••••"
               class="w-full pl-10 pr-12 py-2.5 rounded-lg bg-ash border border-ashAct focus:ring-2 focus:ring-primary outline-none text-BtW" />
-            <button type="button" @click="showNew = !showNew"
-              class="absolute right-3 top-1/2 -translate-y-1/2 text-hsa hover:text-BtW transition-colors">
+            <UiBaseButton type="button" @click="showNew = !showNew" variant="ghost"
+              class="!absolute !right-3 !top-1/2 !-translate-y-1/2 text-hsa hover:!text-BtW transition-colors !p-0 !bg-transparent hover:!bg-transparent !h-auto !w-auto">
               <IconEye v-if="showNew" class="w-5 h-5" />
               <IconEyeOff v-else class="w-5 h-5" />
-            </button>
+            </UiBaseButton>
           </div>
           <UtilsPasswordValidator v-if="form.new && form.new.length > 0" :password="form.new" />
         </div>
@@ -53,11 +53,11 @@
             <IconLock class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-hsa" />
             <input :type="showConfirm ? 'text' : 'password'" v-model="form.confirm" required placeholder="••••••••"
               class="w-full pl-10 pr-12 py-2.5 rounded-lg bg-ash border border-ashAct focus:ring-2 focus:ring-primary outline-none text-BtW" />
-            <button type="button" @click="showConfirm = !showConfirm"
-              class="absolute right-3 top-1/2 -translate-y-1/2 text-hsa hover:text-BtW transition-colors">
+            <UiBaseButton type="button" @click="showConfirm = !showConfirm" variant="ghost"
+              class="!absolute !right-3 !top-1/2 !-translate-y-1/2 text-hsa hover:!text-BtW transition-colors !p-0 !bg-transparent hover:!bg-transparent !h-auto !w-auto">
               <IconEye v-if="showConfirm" class="w-5 h-5" />
               <IconEyeOff v-else class="w-5 h-5" />
-            </button>
+            </UiBaseButton>
           </div>
           <p v-if="form.confirm && form.new !== form.confirm" class="text-xs text-danger font-medium">
             Les mots de passe ne correspondent pas.

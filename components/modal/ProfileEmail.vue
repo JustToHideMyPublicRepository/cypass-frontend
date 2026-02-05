@@ -27,11 +27,11 @@
             <IconLock class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-hsa" />
             <input :type="showPassword ? 'text' : 'password'" v-model="form.password" required placeholder="••••••••"
               class="w-full pl-10 pr-12 py-2.5 rounded-lg bg-ash border border-ashAct focus:ring-2 focus:ring-primary outline-none text-BtW" />
-            <button type="button" @click="showPassword = !showPassword"
-              class="absolute right-3 top-1/2 -translate-y-1/2 text-hsa hover:text-BtW transition-colors">
+            <UiBaseButton type="button" @click="showPassword = !showPassword" variant="ghost"
+              class="!absolute !right-3 !top-1/2 !-translate-y-1/2 text-hsa hover:!text-BtW transition-colors !p-0 !bg-transparent hover:!bg-transparent !h-auto !w-auto">
               <IconEye v-if="showPassword" class="w-5 h-5" />
               <IconEyeOff v-else class="w-5 h-5" />
-            </button>
+            </UiBaseButton>
           </div>
         </div>
       </div>

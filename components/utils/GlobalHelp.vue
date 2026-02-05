@@ -2,14 +2,14 @@
   <Teleport to="body">
     <div class="fixed bottom-6 right-6 z-[60]">
       <!-- Trigger Button -->
-      <button @click.stop="store.toggleHelp()"
-        class="rounded-full bg-primary text-ash shadow-2xl shadow-primary/40 flex items-center justify-center hover:scale-110 active:scale-95 transition-all duration-300 group p-2">
+      <UiBaseButton @click.stop="store.toggleHelp()" variant="ghost"
+        class="!rounded-full !bg-primary !text-ash shadow-2xl shadow-primary/40 !flex !items-center !justify-center hover:scale-110 active:scale-95 transition-all duration-300 group !p-2 !h-auto !w-auto">
         <IconHelp v-if="!store.isHelpOpen" class="w-6 h-6" />
         <IconX v-else class="w-6 h-6" />
 
         <!-- Pulse Effect -->
         <span class="absolute inset-0 rounded-full bg-primary animate-ping opacity-20 pointer-events-none"></span>
-      </button>
+      </UiBaseButton>
 
       <!-- Overlay Menu -->
       <Transition enter-active-class="transition duration-300 ease-out"

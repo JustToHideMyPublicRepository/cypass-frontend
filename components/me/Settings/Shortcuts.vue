@@ -53,11 +53,11 @@
       </div>
 
       <div class="pt-4 flex justify-end">
-        <button @click="shortcutsStore.resetSettings()"
-          class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-ash/30 border border-ashAct text-hsa hover:text-primary hover:border-primary/50 transition-all text-[11px] font-bold uppercase tracking-wider">
+        <UiBaseButton @click="shortcutsStore.resetSettings()" variant="ghost"
+          class="!inline-flex !items-center !gap-2 !px-3 !py-1.5 !text-[11px] !font-bold !uppercase tracking-wider">
           <IconRotate class="w-3.5 h-3.5" />
           Restaurer Defaults
-        </button>
+        </UiBaseButton>
       </div>
     </div>
   </UiBaseCard>

@@ -45,11 +45,11 @@
         <UiBaseButton @click="applySearch" class="flex-1 h-10 rounded-xl font-bold text-xs uppercase tracking-wider">
           Appliquer
         </UiBaseButton>
-        <button v-if="hasActiveFilters" @click="$emit('reset')"
-          class="h-10 px-3 flex items-center justify-center text-hsa hover:text-danger hover:bg-danger/10 border border-ash rounded-xl transition-all"
+        <UiBaseButton v-if="hasActiveFilters" @click="$emit('reset')" variant="ghost"
+          class="!h-10 !px-3 !flex !items-center !justify-center text-hsa hover:!text-danger hover:!bg-danger/10 border border-ash !rounded-xl transition-all"
           title="Réinitialiser">
           <IconX class="w-4 h-4" />
-        </button>
+        </UiBaseButton>
       </div>
     </div>
   </UiBaseCard>

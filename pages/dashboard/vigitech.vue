@@ -32,19 +32,21 @@
                 <p class="text-hsa mt-2">{{ alert.description }}</p>
               </div>
             </div>
-            <button class="text-hsa hover:text-primary">
+            <UiBaseButton variant="ghost" class="text-hsa hover:!text-primary !p-1 !h-auto !w-auto">
               <IconShare class="w-5 h-5" />
-            </button>
+            </UiBaseButton>
           </div>
 
           <!-- Mock comments/actions -->
           <div class="mt-4 pt-4 border-t border-ash flex gap-4 text-sm text-hsa">
-            <button class="flex items-center gap-1 hover:text-BtW">
+            <UiBaseButton variant="ghost"
+              class="!flex !items-center !gap-1 hover:!text-BtW !p-0 !min-h-0 !h-auto !text-inherit !font-inherit !bg-transparent hover:!bg-transparent">
               <IconCheck class="w-4 h-4" /> Marquer comme lu
-            </button>
-            <button class="flex items-center gap-1 hover:text-BtW">
+            </UiBaseButton>
+            <UiBaseButton variant="ghost"
+              class="!flex !items-center !gap-1 hover:!text-BtW !p-0 !min-h-0 !h-auto !text-inherit !font-inherit !bg-transparent hover:!bg-transparent">
               <IconEye class="w-4 h-4" /> Voir log brut
-            </button>
+            </UiBaseButton>
           </div>
         </UiBaseCard>
       </div>

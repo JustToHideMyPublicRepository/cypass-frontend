@@ -7,11 +7,11 @@
     <p class="text-lg text-hs">Naviguez plus rapidement sur CYPASS grâce à nos raccourcis.</p>
 
     <!-- Settings Trigger -->
-    <button @click="$emit('open-settings')"
-      class="mt-6 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-ash/50 border border-ashAct text-hsa hover:text-primary hover:border-primary/50 transition-all text-sm font-bold">
+    <UiBaseButton @click="$emit('open-settings')" variant="ghost"
+      class="mt-6 !inline-flex !items-center !gap-2 !px-4 !py-2 !rounded-xl !bg-ash/50 border border-ashAct text-hsa hover:!text-primary hover:!border-primary/50 transition-all !text-sm !font-bold !h-auto">
       <IconSettings class="w-4 h-4" />
       Configurer mes raccourcis
-    </button>
+    </UiBaseButton>
   </div>
 </template>
 

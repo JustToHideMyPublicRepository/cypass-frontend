@@ -40,11 +40,11 @@
           <input :type="showPassword ? 'text' : 'password'" v-model="form.password" required
             class="w-full pl-12 pr-12 py-3 rounded-lg bg-ash border border-ashAct focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none text-BtW"
             placeholder="••••••••" />
-          <button type="button" @click="showPassword = !showPassword"
-            class="absolute right-4 top-1/2 -translate-y-1/2 text-hsa hover:focus:outline-none">
+          <UiBaseButton type="button" @click="showPassword = !showPassword" variant="ghost"
+            class="!absolute !right-4 !top-1/2 !-translate-y-1/2 text-hsa hover:focus:outline-none !p-0 !bg-transparent hover:!bg-transparent !h-auto !w-auto">
             <IconEye v-if="showPassword" class="w-5 h-5" />
             <IconEyeOff v-else class="w-5 h-5" />
-          </button>
+          </UiBaseButton>
         </div>
         <UtilsPasswordValidator v-if="form.password && form.password.length > 0" :password="form.password"
           class="mt-2" />

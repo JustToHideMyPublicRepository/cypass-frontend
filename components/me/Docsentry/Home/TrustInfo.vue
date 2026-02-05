@@ -8,10 +8,10 @@
       <p class="text-[11px] leading-relaxed text-WtB">
         Vos documents sont protégés par une signature cryptographique immuable sur la blockchain CYPASS.
       </p>
-      <button @click="$emit('open-trust')"
-        class="w-full py-2 px-3 rounded-lg bg-WtB/5 border border-WtB/10 text-[10px] font-bold uppercase tracking-wider hover:bg-WtB/10 transition-colors text-WtB">
+      <UiBaseButton @click="$emit('open-trust')" variant="ghost"
+        class="w-full !py-2 !px-3 rounded-lg !bg-WtB/5 border border-WtB/10 !text-[10px] !font-bold !uppercase tracking-wider hover:!bg-WtB/10 transition-colors !text-WtB">
         En savoir plus
-      </button>
+      </UiBaseButton>
     </div>
     <!-- Decorative element -->
     <div

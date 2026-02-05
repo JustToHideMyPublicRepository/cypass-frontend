@@ -3,15 +3,17 @@
     <div class="space-y-6 py-2">
       <!-- Mode Switcher -->
       <div v-if="!result && !loading" class="flex justify-center">
-        <div class="flex p-1 bg-ash rounded-xl border border-ash">
-          <button @click="verifyMode = 'file'" class="px-4 py-1.5 text-xs font-bold rounded-lg transition-all"
-            :class="verifyMode === 'file' ? 'bg-WtB text-primary shadow-sm' : 'text-hsa hover:text-BtW'">
+        <div class="flex p-1 bg-ash rounded-xl border border-ash gap-4">
+          <UiBaseButton @click="verifyMode = 'file'" variant="ghost"
+            class="!px-4 !py-1.5 !text-xs !font-bold !rounded-lg transition-all !h-auto border-none"
+            :class="verifyMode === 'file' ? '!bg-WtB !text-primary shadow-sm' : 'text-hsa hover:!text-BtW'">
             Fichier
-          </button>
-          <button @click="verifyMode = 'hash'" class="px-4 py-1.5 text-xs font-bold rounded-lg transition-all"
-            :class="verifyMode === 'hash' ? 'bg-WtB text-primary shadow-sm' : 'text-hsa hover:text-BtW'">
+          </UiBaseButton>
+          <UiBaseButton @click="verifyMode = 'hash'" variant="ghost"
+            class="!px-4 !py-1.5 !text-xs !font-bold !rounded-lg transition-all !h-auto border-none"
+            :class="verifyMode === 'hash' ? '!bg-WtB !text-primary shadow-sm' : 'text-hsa hover:!text-BtW'">
             Hash
-          </button>
+          </UiBaseButton>
         </div>
       </div>
 
@@ -50,9 +52,10 @@
               <p class="font-bold text-BtW truncate">{{ file.name }}</p>
               <p class="text-xs text-hsa">Prêt pour vérification</p>
             </div>
-            <button @click="handleReset" class="text-hsa hover:text-danger p-2 transition-colors">
+            <UiBaseButton @click="handleReset" variant="ghost"
+              class="text-hsa hover:!text-danger !p-2 transition-colors !h-auto !w-auto">
               <IconX class="w-5 h-5" />
-            </button>
+            </UiBaseButton>
           </div>
         </div>
 
@@ -105,13 +108,13 @@
               <div class="space-y-1.5">
                 <div class="flex justify-between items-center group/hash px-1">
                   <p class="text-[9px] text-hsa uppercase font-bold">Empreinte SHA-256</p>
-                  <button v-if="result.document?.hash || result.doc_hash"
-                    @click="copy(result.document?.hash || result.doc_hash)"
-                    class="text-primary hover:underline font-bold flex items-center gap-1">
+                  <UiBaseButton v-if="result.document?.hash || result.doc_hash"
+                    @click="copy(result.document?.hash || result.doc_hash)" variant="ghost"
+                    class="!text-primary hover:!underline !font-bold !flex !items-center !gap-1 !p-0 !h-auto !bg-transparent hover:!bg-transparent">
                     <IconCopy v-if="!copied" class="w-3 h-3" />
                     <IconCheck v-else class="w-3 h-3 text-success" />
                     Copier
-                  </button>
+                  </UiBaseButton>
                 </div>
                 <div class="p-2 bg-WtB/50 rounded-lg border border-ash/50 font-code text-[10px] break-all text-hsa">
                   {{ result.document?.hash || result.doc_hash || 'Hash indisponible' }}
@@ -135,8 +138,9 @@
               </div>
 
               <div class="pt-2 text-center">
-                <button @click="handleReset"
-                  class="text-primary text-[10px] font-black uppercase hover:underline">Nouvelle vérification</button>
+                <UiBaseButton @click="handleReset" variant="ghost"
+                  class="!text-primary !text-[10px] !font-black !uppercase hover:!underline !bg-transparent !p-0 !h-auto">
+                  Nouvelle vérification</UiBaseButton>
               </div>
             </div>
           </div>

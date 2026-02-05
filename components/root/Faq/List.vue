@@ -14,8 +14,8 @@
               class="group bg-WtB rounded-xl md:rounded-2xl border border-ash overflow-hidden transition-all duration-300 hover:border-primary/50"
               :class="{ 'shadow-lg ring-1 ring-primary/20': activeIndex === `${catIndex}-${index}` }">
 
-              <button @click="toggle(`${catIndex}-${index}`)"
-                class="w-full flex items-center justify-between p-4 md:p-6 text-left focus:outline-none">
+              <UiBaseButton @click="toggle(`${catIndex}-${index}`)" variant="ghost"
+                class="!w-full !flex !items-center !justify-between !p-4 md:!p-6 !text-left focus:outline-none !h-auto !bg-transparent hover:!bg-transparent">
                 <span
                   class="font-bold text-base md:text-lg pr-4 group-hover:text-primary transition-colors leading-snug">{{
                     item.question }}</span>
@@ -24,7 +24,7 @@
                   <IconChevronDown class="w-4 h-4 md:w-5 h-5 text-hsa transition-transform duration-300"
                     :class="{ 'rotate-180 text-primary': activeIndex === `${catIndex}-${index}` }" />
                 </div>
-              </button>
+              </UiBaseButton>
 
               <div v-show="activeIndex === `${catIndex}-${index}`"
                 class="px-4 md:px-6 pb-6 md:pb-8 text-hsa leading-relaxed max-w-none text-sm md:text-base prose prose-slate">
@@ -34,9 +34,13 @@
                   class="mt-4 pt-4 border-t border-dashed border-ash flex items-center gap-2 text-[10px] md:text-xs text-hsa">
                   <IconBulb class="w-3.5 h-3.5 md:w-4 md:h-4 text-yellow-500" />
                   <span>Cela a-t-il répondu à votre question ?</span>
-                  <button class="hover:text-primary underline">Oui</button>
+                  <UiBaseButton variant="ghost"
+                    class="hover:!text-primary !underline !p-0 !h-auto !text-inherit !font-inherit !bg-transparent">Oui
+                  </UiBaseButton>
                   <span>•</span>
-                  <button class="hover:text-primary underline">Non</button>
+                  <UiBaseButton variant="ghost"
+                    class="hover:!text-primary !underline !p-0 !h-auto !text-inherit !font-inherit !bg-transparent">Non
+                  </UiBaseButton>
                 </div>
               </div>
             </div>

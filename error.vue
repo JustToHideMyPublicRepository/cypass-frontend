@@ -59,20 +59,16 @@
         </div>
 
         <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-          <button @click="handleClearError"
-            class="group relative px-8 py-4 bg-primary text-ash font-bold rounded-2xl shadow-xl shadow-primary/20 hover:shadow-2xl hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3 overflow-hidden">
-            <div
-              class="absolute inset-0 bg-white/20 -translate-x-full group-hover:translate-x-0 transition-transform duration-500">
-            </div>
+          <UiBaseButton @click="handleClearError" class="px-8 py-4 !rounded-2xl shadow-xl shadow-primary/20 flex gap-3">
             <IconArrowLeft class="w-5 h-5 relative z-10" />
             <span class="relative z-10">Retour à l'accueil</span>
-          </button>
+          </UiBaseButton>
 
-          <button v-if="error?.statusCode !== 404" @click="handleRefresh"
-            class="px-8 py-4 bg-BtW text-WtB font-bold rounded-2xl hover:opacity-90 transition-all flex items-center justify-center gap-3">
+          <UiBaseButton v-if="error?.statusCode !== 404" @click="handleRefresh" variant="secondary"
+            class="px-8 py-4 !bg-BtW !text-WtB !rounded-2xl hover:!opacity-90 flex gap-3">
             <IconRefresh class="w-5 h-5" />
             Réessayer
-          </button>
+          </UiBaseButton>
         </div>
 
         <!-- Technical Metadata -->
@@ -115,11 +111,11 @@ const props = defineProps({
 
 const errorTitle = computed(() => {
   switch (props.error?.statusCode) {
-    case 404: return "Destination Introuvable"
-    case 403: return "Accès Restreint"
-    case 500: return "Défaut Système"
+    case 404: return "Destination introuvable"
+    case 403: return "Accès restreint"
+    case 500: return "Défaut système"
     case 503: return "Maintenance"
-    default: return "Anomalie Inattendue"
+    default: return "Anomalie inattendue"
   }
 })
 

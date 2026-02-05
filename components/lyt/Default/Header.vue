@@ -71,11 +71,11 @@
             </div>
 
             <div class="border-t border-ash py-2">
-              <button @click="$emit('logout')" v-tooltip="getLinkTooltip('logout')"
-                class="flex items-center gap-3 px-4 py-2 w-full text-sm text-danger hover:bg-danger/10 transition-colors">
+              <UiBaseButton @click="$emit('logout')" v-tooltip="getLinkTooltip('logout')" variant="ghost"
+                class="!text-sm !flex !items-center !justify-start gap-3 px-4 py-2 w-full text-danger hover:!bg-danger/10 hover:text-dangerAct transition-all duration-200 font-medium !rounded-none border-none">
                 <IconLogout class="w-4 h-4" />
                 Déconnexion
-              </button>
+              </UiBaseButton>
             </div>
           </div>
         </Transition>

@@ -14,11 +14,11 @@
         <span class="text-hsa text-sm">Empreinte de la clé publique</span>
         <div class="flex items-center gap-2">
           <span class="text-BtW font-code text-xs">{{ doc.signature_info.fingerprint }}</span>
-          <button @click="$emit('copy', doc.signature_info.fingerprint, 'fingerprint')"
-            class="p-1 hover:text-primary transition-colors">
+          <UiBaseButton @click="$emit('copy', doc.signature_info.fingerprint, 'fingerprint')" variant="ghost"
+            class="!p-1 hover:!text-primary transition-colors !h-auto !w-auto">
             <IconCopy v-if="!copiedFields.fingerprint" class="w-3 h-3" />
             <IconCheck v-else class="w-3 h-3 text-success" />
-          </button>
+          </UiBaseButton>
         </div>
       </div>
       <div class="flex justify-between items-center py-3 border-b border-ash/50">

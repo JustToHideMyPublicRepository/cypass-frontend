@@ -2,17 +2,17 @@
   <div class="glass-panel p-8 md:p-12 rounded-[40px] border border-ashAct shadow-2xl relative group">
     <!-- Mode Switcher -->
     <div v-if="!result && !loading" class="flex justify-center mb-8">
-      <div class="flex p-1 bg-ash/50 rounded-xl border border-ash">
-        <button @click="$emit('update:verifyMode', 'file')"
-          class="px-4 py-2 text-sm font-bold rounded-lg transition-all"
-          :class="verifyMode === 'file' ? 'bg-WtB text-primary shadow-sm' : 'text-hsa hover:text-BtW'">
+      <div class="flex p-1 bg-ash/50 rounded-xl border border-ash gap-4">
+        <UiBaseButton @click="$emit('update:verifyMode', 'file')" variant="ghost"
+          class="!px-4 !py-2 !text-sm !font-bold !rounded-lg transition-all !h-auto border-none"
+          :class="verifyMode === 'file' ? '!bg-WtB !text-primary shadow-sm' : 'text-hsa hover:!text-BtW'">
           Fichier PDF
-        </button>
-        <button @click="$emit('update:verifyMode', 'hash')"
-          class="px-4 py-2 text-sm font-bold rounded-lg transition-all"
-          :class="verifyMode === 'hash' ? 'bg-WtB text-primary shadow-sm' : 'text-hsa hover:text-BtW'">
+        </UiBaseButton>
+        <UiBaseButton @click="$emit('update:verifyMode', 'hash')" variant="ghost"
+          class="!px-4 !py-2 !text-sm !font-bold !rounded-lg transition-all !h-auto border-none"
+          :class="verifyMode === 'hash' ? '!bg-WtB !text-primary shadow-sm' : 'text-hsa hover:!text-BtW'">
           Empreinte (Hash)
-        </button>
+        </UiBaseButton>
       </div>
     </div>
 
@@ -62,9 +62,10 @@
           <p class="font-bold text-BtW truncate">{{ file.name }}</p>
           <p class="text-xs text-hsa">{{ (file.size / 1024 / 1024).toFixed(2) }} MB</p>
         </div>
-        <button @click="$emit('reset')" class="text-hsa hover:text-danger p-2 transition-colors">
+        <UiBaseButton @click="$emit('reset')" variant="ghost"
+          class="text-hsa hover:!text-danger !p-2 transition-colors !h-auto !w-auto">
           <IconX class="w-5 h-5" />
-        </button>
+        </UiBaseButton>
       </div>
 
       <!-- Loading State (Progress Steps) -->

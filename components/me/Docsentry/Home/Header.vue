@@ -13,17 +13,16 @@
     </div>
 
     <div class="flex items-center gap-3">
-      <button @click="$emit('verify')"
-        class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-ash border border-ashAct text-BtW hover:bg-ashAct transition-all font-bold text-xs uppercase tracking-wider">
-        <IconShieldCheck class="w-4 h-4 text-primary" />
+      <UiBaseButton variant="secondary" @click="$emit('verify')"
+        class="!px-4 !py-2.5 !text-xs !uppercase !tracking-wider gap-2">
+        <IconShieldCheck class="w-4 h-4" />
         Vérifier
-      </button>
+      </UiBaseButton>
 
-      <button @click="$emit('upload')"
-        class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary text-WtB hover:bg-primary/90 transition-all font-bold text-xs uppercase tracking-wider shadow-lg shadow-primary/20 hover:-translate-y-0.5">
+      <UiBaseButton @click="$emit('upload')" class="!px-4 !py-2.5 !text-xs !uppercase !tracking-wider gap-2">
         <IconPlus class="w-4 h-4" />
         Nouveau
-      </button>
+      </UiBaseButton>
     </div>
   </div>
 </template>

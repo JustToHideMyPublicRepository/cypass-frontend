@@ -4,9 +4,9 @@
       <div class="space-y-6">
         <!-- Change Actions -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <button @click="showEmailModal = true"
-            class="flex items-center justify-between p-4 rounded-xl bg-ash border border-ashAct hover:border-primary/50 transition-all group">
-            <div class="flex items-center gap-3">
+          <UiBaseButton @click="showEmailModal = true" variant="ghost"
+            class="!flex !items-center !justify-between !p-4 !rounded-xl !bg-ash border border-ashAct hover:!border-primary/50 transition-all group !h-auto w-full">
+            <div class="flex items-center gap-3 text-left">
               <div class="p-2 bg-primary/10 rounded-lg group-hover:bg-primary/20 transition-colors">
                 <IconMail class="w-5 h-5 text-primary" />
               </div>
@@ -16,11 +16,11 @@
               </div>
             </div>
             <IconChevronRight class="w-5 h-5 text-hsa group-hover:text-primary transition-colors" />
-          </button>
+          </UiBaseButton>
 
-          <button @click="showPasswordModal = true"
-            class="flex items-center justify-between p-4 rounded-xl bg-ash border border-ashAct hover:border-warning/50 transition-all group">
-            <div class="flex items-center gap-3">
+          <UiBaseButton @click="showPasswordModal = true" variant="ghost"
+            class="!flex !items-center !justify-between !p-4 !rounded-xl !bg-ash border border-ashAct hover:!border-warning/50 transition-all group !h-auto w-full">
+            <div class="flex items-center gap-3 text-left">
               <div class="p-2 bg-warning/10 rounded-lg group-hover:bg-warning/20 transition-colors">
                 <IconLock class="w-5 h-5 text-warning" />
               </div>
@@ -30,7 +30,7 @@
               </div>
             </div>
             <IconChevronRight class="w-5 h-5 text-hsa group-hover:text-warning transition-colors" />
-          </button>
+          </UiBaseButton>
         </div>
 
         <hr class="border-ashAct" />

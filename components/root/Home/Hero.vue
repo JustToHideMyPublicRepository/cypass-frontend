@@ -134,7 +134,9 @@
                       <div class="text-xs text-hsa">Généré le 14 Janv.</div>
                     </div>
                   </div>
-                  <button class="px-3 py-1 text-xs font-bold text-primary bg-ash rounded-lg">Voir</button>
+                  <UiBaseButton variant="ghost"
+                    class="!px-3 !py-1 !text-xs !font-bold !text-primary !bg-ash !rounded-lg !h-auto !w-auto">Voir
+                  </UiBaseButton>
                 </div>
               </div>
             </div>

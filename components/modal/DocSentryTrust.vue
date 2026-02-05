@@ -29,12 +29,12 @@
         <div class="space-y-2">
           <div class="flex justify-between items-center px-1">
             <p class="text-[9px] text-hsa uppercase font-black">Empreinte de la Clé (Fingerprint)</p>
-            <button @click="copy(store.publicKeyInfo.public_key.fingerprint)"
-              class="text-[10px] text-primary font-bold hover:underline flex items-center gap-1">
+            <UiBaseButton @click="copy(store.publicKeyInfo.public_key.fingerprint)" variant="ghost"
+              class="!text-[10px] !text-primary !font-bold hover:!underline !flex !items-center !gap-1 !p-0 !h-auto !bg-transparent hover:!bg-transparent">
               <IconCopy v-if="!copied" class="w-3 h-3" />
               <IconCheck v-else class="w-3 h-3 text-success" />
               {{ copied ? 'Copié' : 'Copier' }}
-            </button>
+            </UiBaseButton>
           </div>
           <div
             class="p-3 bg-WtB/50 rounded-xl border border-ashAct font-code text-[11px] text-BtW break-all leading-tight">

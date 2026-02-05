@@ -13,26 +13,36 @@
       <!-- Toolbar -->
       <div
         class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-WtB/90 backdrop-blur-2xl px-4 py-2 rounded-2xl shadow-xl flex items-center gap-2 border border-ash opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-        <button @click="rotate(-90)" class="btnClasses" title="Pivoter à gauche">
+        <UiBaseButton @click="rotate(-90)" variant="ghost"
+          class="!p-2 hover:!bg-primary/10 !rounded-xl hover:!text-primary transition-colors !h-auto !w-auto"
+          title="Pivoter à gauche">
           <IconRotate2 class="w-5 h-5" />
-        </button>
+        </UiBaseButton>
         <div class="w-px h-6 bg-ash/50"></div>
-        <button @click="zoomOut" class="btnClasses" title="Dézoomer">
+        <UiBaseButton @click="zoomOut" variant="ghost"
+          class="!p-2 hover:!bg-primary/10 !rounded-xl hover:!text-primary transition-colors !h-auto !w-auto"
+          title="Dézoomer">
           <IconZoomOut class="w-5 h-5" />
-        </button>
+        </UiBaseButton>
         <span class="text-xs font-code font-bold text-primary min-w-[3rem] text-center">{{ Math.round(scale * 100)
         }}%</span>
-        <button @click="zoomIn" class="btnClasses" title="Zoomer">
+        <UiBaseButton @click="zoomIn" variant="ghost"
+          class="!p-2 hover:!bg-primary/10 !rounded-xl hover:!text-primary transition-colors !h-auto !w-auto"
+          title="Zoomer">
           <IconZoomIn class="w-5 h-5" />
-        </button>
+        </UiBaseButton>
         <div class="w-px h-6 bg-ash/50"></div>
-        <button @click="rotate(90)" class="btnClasses" title="Pivoter à droite">
+        <UiBaseButton @click="rotate(90)" variant="ghost"
+          class="!p-2 hover:!bg-primary/10 !rounded-xl hover:!text-primary transition-colors !h-auto !w-auto"
+          title="Pivoter à droite">
           <IconRotateClockwise2 class="w-5 h-5" />
-        </button>
+        </UiBaseButton>
         <div class="w-px h-6 bg-ash/50"></div>
-        <button @click="reset" class="btnClasses" title="Réinitialiser">
+        <UiBaseButton @click="reset" variant="ghost"
+          class="!p-2 hover:!bg-primary/10 !rounded-xl hover:!text-primary transition-colors !h-auto !w-auto"
+          title="Réinitialiser">
           <IconRefresh class="w-5 h-5" />
-        </button>
+        </UiBaseButton>
       </div>
 
       <!-- Helper Text -->
@@ -137,9 +147,3 @@ watch(() => props.show, (newVal) => {
   if (newVal) reset()
 })
 </script>
-
-<style scoped>
-.btnClasses {
-  @apply p-2 hover:bg-primary/10 rounded-xl hover:text-primary transition-colors;
-}
-</style>

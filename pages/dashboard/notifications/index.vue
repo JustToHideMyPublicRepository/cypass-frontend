@@ -3,10 +3,10 @@
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-4 sm:px-0">
       <h1 class="text-2xl md:text-3xl font-black text-BtW">Notifications</h1>
       <div class="flex gap-2">
-        <button v-if="store.unreadCount > 0" @click="handleMarkAllAsRead"
-          class="flex-1 sm:flex-none px-4 py-2 rounded-xl bg-primary/10 text-primary hover:bg-primary/20 transition-all font-bold text-[10px] md:text-xs uppercase tracking-widest border border-primary/20">
+        <UiBaseButton v-if="store.unreadCount > 0" @click="handleMarkAllAsRead" variant="ghost"
+          class="flex-1 sm:flex-none !px-4 !py-2 !rounded-xl !bg-primary/10 !text-primary hover:!bg-primary/20 transition-all !font-bold !text-[10px] md:!text-xs uppercase tracking-widest border border-primary/20 !h-auto">
           Tout marquer comme lu
-        </button>
+        </UiBaseButton>
       </div>
     </div>
 
@@ -67,12 +67,12 @@
     <!-- Filters Bar -->
     <div class="px-4 sm:px-0 flex flex-wrap gap-2 items-center">
       <div class="flex items-center gap-2 bg-ash/30 p-1 rounded-xl border border-ash">
-        <button v-for="status in ['all', 'unread', 'read']" :key="status" @click="filterState.status = status" :class="[
-          'px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-tighter transition-all',
-          filterState.status === status ? 'bg-WtB text-primary shadow-sm' : 'text-hsa hover:text-BtW'
-        ]">
+        <UiBaseButton v-for="status in ['all', 'unread', 'read']" :key="status" @click="filterState.status = status"
+          variant="ghost"
+          class="!px-3 !py-1.5 !rounded-lg !text-[10px] !font-black uppercase tracking-tighter transition-all !h-auto border-none"
+          :class="filterState.status === status ? '!bg-WtB !text-primary shadow-sm' : 'text-hsa hover:!text-BtW'">
           {{ status === 'all' ? 'Toutes' : status === 'unread' ? 'Non lues' : 'Lues' }}
-        </button>
+        </UiBaseButton>
       </div>
 
       <select v-model="filterState.priority"
@@ -83,19 +83,19 @@
         <option value="high">Haute</option>
       </select>
 
-      <button @click="toggleSort"
-        class="bg-ash/30 border border-ash rounded-xl px-3 py-1.5 text-[10px] font-black uppercase tracking-tighter text-hsa flex items-center gap-1.5 hover:border-primary/30 transition-all">
+      <UiBaseButton @click="toggleSort" variant="ghost"
+        class="!bg-ash/30 border border-ash !rounded-xl !px-3 !py-1.5 !text-[10px] !font-black uppercase tracking-tighter text-hsa !flex !items-center !gap-1.5 hover:!border-primary/30 transition-all !h-auto">
         <IconArrowsSort class="w-3 h-3" />
         {{ filterState.order === 'desc' ? 'Plus récents' : 'Plus anciens' }}
-      </button>
+      </UiBaseButton>
 
       <div class="flex-1"></div>
 
-      <button v-if="hasActiveFilters" @click="resetFilters"
-        class="text-[9px] font-black uppercase text-hsa hover:text-danger flex items-center gap-1 transition-colors">
+      <UiBaseButton v-if="hasActiveFilters" @click="resetFilters" variant="ghost"
+        class="!text-[9px] !font-black uppercase text-hsa hover:!text-danger !flex !items-center !gap-1 transition-colors !p-0 !bg-transparent hover:!bg-transparent !h-auto border-none">
         <IconX class="w-3 h-3" />
         Réinitialiser
-      </button>
+      </UiBaseButton>
     </div>
 
     <!-- List -->
@@ -144,15 +144,15 @@
             <p class="text-xs md:text-sm text-hsa line-clamp-2 leading-relaxed">{{ notif.message }}</p>
 
             <div class="flex items-center gap-4 mt-4">
-              <button v-if="!notif.is_read" @click.stop="handleMarkAsRead(notif.id)"
-                class="text-[10px] font-black uppercase tracking-widest text-primary hover:underline">
+              <UiBaseButton v-if="!notif.is_read" @click.stop="handleMarkAsRead(notif.id)" variant="ghost"
+                class="!text-[10px] !font-black uppercase tracking-widest !text-primary hover:!underline !p-0 !min-h-0 !h-auto !bg-transparent hover:!bg-transparent">
                 Marquer comme lu
-              </button>
-              <button @click.stop="handleDelete(notif.id)"
-                class="text-[10px] font-black uppercase tracking-widest text-danger transition-opacity"
+              </UiBaseButton>
+              <UiBaseButton @click.stop="handleDelete(notif.id)" variant="ghost"
+                class="!text-[10px] !font-black uppercase tracking-widest text-danger transition-opacity !p-0 !min-h-0 !h-auto !bg-transparent hover:!bg-transparent"
                 :class="isMobile ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'">
                 Supprimer
-              </button>
+              </UiBaseButton>
             </div>
           </div>
         </div>

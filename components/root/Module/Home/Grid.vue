@@ -64,22 +64,18 @@
 
           <!-- Action / Coming Soon -->
           <div class="relative z-10 mt-auto pt-6 border-t border-ash">
-            <NuxtLink v v-if="service.status === 'available'" :to="`/modules/${service.id}`">
-              <button
-                class="w-full py-3 rounded-xl font-bold text-sm transition-all duration-300 group-hover:shadow-lg flex items-center justify-center gap-2"
-                :class="service.theme === 'blue'
-                  ? 'bg-primary/10 text-primary hover:bg-primary hover:text-white'
-                  : 'bg-success/10 text-success hover:bg-success hover:text-white'">
-                <span>Explorer le module</span>
-                <IconArrowRight class="w-4 h-4" />
-              </button>
-            </NuxtLink>
-            <NuxtLink v-else :to="`/coming-soon?service=${service.id}`">
-              <button
-                class="w-full py-3 rounded-xl bg-ash text-slate-400 font-bold text-sm text-center border border-ash hover:bg-ashAct/10 hover:text-hsa transition-colors">
-                Bientôt Disponible
-              </button>
-            </NuxtLink>
+            <UiBaseButton v-if="service.status === 'available'" :to="`/modules/${service.id}`" variant="ghost"
+              class="!w-full !py-3 !rounded-xl !font-bold !text-sm transition-all duration-300 group-hover:shadow-lg !flex !items-center !justify-center !gap-2 !h-auto"
+              :class="service.theme === 'blue'
+                ? '!bg-primary/10 !text-primary hover:!bg-primary hover:!text-white'
+                : '!bg-success/10 !text-success hover:!bg-success hover:!text-white'">
+              <span>Explorer le module</span>
+              <IconArrowRight class="w-4 h-4" />
+            </UiBaseButton>
+            <UiBaseButton v-else :to="`/coming-soon?service=${service.id}`" variant="ghost"
+              class="!w-full !py-3 !rounded-xl !bg-ash !text-slate-400 !font-bold !text-sm !text-center !border border-ash hover:!bg-ashAct/10 hover:!text-hsa transition-colors !h-auto">
+              Bientôt Disponible
+            </UiBaseButton>
           </div>
 
         </div>

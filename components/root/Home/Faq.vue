@@ -15,8 +15,8 @@
 						class="glass-panel rounded-2xl overflow-hidden transition-all duration-300 animate-fade-right"
 						:class="{ 'ring-2 ring-primary/50 bg-WtB/80': activeIndex === index }"
 						:style="{ animationDelay: `${index * 100}ms` }">
-						<button @click="toggle(index)"
-							class="w-full flex items-center justify-between p-4 md:p-6 text-left focus:outline-none group">
+						<UiBaseButton @click="toggle(index)" variant="ghost"
+							class="!w-full !flex !items-center !justify-between !p-4 md:!p-6 !text-left focus:outline-none group !h-auto !bg-transparent hover:!bg-transparent">
 							<div class="flex flex-col gap-2 pr-8">
 								<UiStatusBadge v-if="item.category" :status="item.category" class="w-fit">
 									{{ truncate(item.category, 15) }}
@@ -29,7 +29,7 @@
 								:class="{ 'rotate-180': activeIndex === index, 'group-hover:bg-primary/20': activeIndex !== index }">
 								<IconChevronDown class="w-5 h-5" />
 							</span>
-						</button>
+						</UiBaseButton>
 
 						<div v-show="activeIndex === index"
 							class="px-4 pb-4 md:px-6 md:pb-6 text-sm md:text-base text-hsa leading-relaxed border-t border-ash/50 pt-4">

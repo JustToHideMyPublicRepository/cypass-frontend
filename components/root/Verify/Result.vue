@@ -86,8 +86,10 @@
               <IconRosetteDiscountCheck class="w-4 h-4" />
               Vérifié le {{ formatDate(result.verification_time) }}
             </div>
-            <button @click="$emit('reset')" class="text-primary font-bold hover:underline">Nouvelle
-              vérification</button>
+            <UiBaseButton @click="$emit('reset')" variant="ghost"
+              class="!text-primary !font-bold hover:!underline !p-0 !min-h-0 !h-auto !bg-transparent hover:!bg-transparent">
+              Nouvelle vérification
+            </UiBaseButton>
           </div>
         </div>
       </div>

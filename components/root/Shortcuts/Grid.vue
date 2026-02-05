@@ -28,11 +28,11 @@
 
         <!-- Toggle Button -->
         <div v-if="category.items.length > 3" class="mt-4">
-          <button @click="toggleCategory(category.title)"
-            class="flex items-center gap-2 text-xs font-bold text-hsa hover:text-primary transition-colors px-4 py-2 rounded-xl hover:bg-ash">
+          <UiBaseButton @click="toggleCategory(category.title)" variant="ghost"
+            class="!flex !items-center !gap-2 !text-xs !font-bold text-hsa hover:!text-primary transition-colors !px-4 !py-2 !rounded-xl hover:!bg-ash !h-auto">
             <component :is="isExpanded(category.title) ? IconChevronUp : IconChevronDown" class="w-4 h-4" />
             {{ isExpanded(category.title) ? 'Voir moins' : `Voir plus (${category.items.length - 3} de plus)` }}
-          </button>
+          </UiBaseButton>
         </div>
       </div>
     </div>

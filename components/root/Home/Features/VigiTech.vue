@@ -37,8 +37,9 @@
             </div>
             <div class="text-[8px] md:text-[10px] text-hsa font-code truncate">IP: 192.168.X.X • Port Scan</div>
           </div>
-          <button
-            class="px-2 md:px-3 py-1 bg-danger/10 text-danger text-[10px] md:text-xs font-bold rounded hover:bg-danger/20 transition-colors">Bloquer</button>
+          <UiBaseButton variant="ghost"
+            class="!px-2 md:!px-3 !py-1 !bg-danger/10 !text-danger !text-[10px] md:!text-xs !font-bold !rounded hover:!bg-danger/20 transition-colors !h-auto !w-auto">
+            Bloquer</UiBaseButton>
         </div>
       </div>
     </div>

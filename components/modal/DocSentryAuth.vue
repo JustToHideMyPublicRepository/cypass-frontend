@@ -26,9 +26,9 @@
             <p class="font-bold text-BtW truncate">{{ file.name }}</p>
             <p class="text-xs text-hsa">{{ (file.size / 1024 / 1024).toFixed(2) }} MB</p>
           </div>
-          <button @click="file = null" class="text-hsa hover:text-danger p-2">
+          <UiBaseButton @click="file = null" variant="ghost" class="text-hsa hover:!text-danger !p-2 !h-auto !w-auto">
             <IconX class="w-5 h-5" />
-          </button>
+          </UiBaseButton>
         </div>
       </div>
 
@@ -48,12 +48,12 @@
               <span class="font-code text-BtW truncate max-w-[120px]" :title="uploadResult.doc_hash">
                 {{ uploadResult.doc_hash }}
               </span>
-              <button @click="copyHash(uploadResult.doc_hash)"
-                class="p-1 hover:bg-primary/10 text-hsa hover:text-primary rounded transition-colors"
+              <UiBaseButton @click="copyHash(uploadResult.doc_hash)" variant="ghost"
+                class="!p-1 hover:!bg-primary/10 text-hsa hover:!text-primary rounded transition-colors !h-auto !w-auto"
                 title="Copier le hash">
                 <IconCopy v-if="!copied" class="w-3.5 h-3.5" />
                 <IconCheck v-else class="w-3.5 h-3.5 text-success" />
-              </button>
+              </UiBaseButton>
             </div>
           </div>
           <div class="flex justify-between">

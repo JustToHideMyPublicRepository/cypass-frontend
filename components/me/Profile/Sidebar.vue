@@ -26,11 +26,11 @@
         </div>
 
         <!-- Floating Action Button -->
-        <button @click="showAvatarModal = true"
-          class="absolute -bottom-1 -right-1 z-30 bg-WtB text-primary p-2.5 rounded-2xl shadow-xl hover:bg-primary hover:text-WtB transition-all duration-300 hover:scale-110 group/cam"
+        <UiBaseButton @click="showAvatarModal = true" variant="ghost"
+          class="absolute -bottom-1 -right-1 z-30 !bg-WtB text-primary !p-2.5 !rounded-2xl shadow-xl hover:!bg-primary hover:!text-WtB transition-all duration-300 hover:scale-110 group/cam !h-auto !w-auto"
           title="Changer la photo">
           <IconCamera class="w-5 h-5 transition-transform group-hover/cam:rotate-12" />
-        </button>
+        </UiBaseButton>
       </div>
 
       <!-- User Info - Free Layout -->

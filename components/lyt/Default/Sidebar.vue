@@ -75,12 +75,12 @@
 
     <!-- Footer Action -->
     <div class="absolute bottom-0 left-0 right-0 p-4 border-t border-ash bg-ash/10">
-      <button @click="$emit('logout')" v-tooltip="getLinkTooltip('logout')"
-        class="flex items-center gap-3 px-4 py-2 w-full rounded-xl text-danger hover:bg-danger/10 hover:text-dangerAct transition-all duration-200 group-logout font-medium"
-        :class="{ 'justify-center px-0': isCollapsed }" :title="isCollapsed ? 'Déconnexion' : ''">
+      <UiBaseButton @click="$emit('logout')" v-tooltip="getLinkTooltip('logout')" variant="ghost"
+        class="!flex !items-center !justify-start gap-3 px-4 py-2 w-full !rounded-xl text-danger hover:!bg-danger/10 hover:text-dangerAct transition-all duration-200 group-logout font-medium"
+        :class="{ '!justify-center !px-0': isCollapsed }" :title="isCollapsed ? 'Déconnexion' : ''">
         <IconLogout class="w-5 h-5 group-logout-hover:scale-110 transition-transform shrink-0" />
         <span v-show="!isCollapsed" class="truncate">Déconnexion</span>
-      </button>
+      </UiBaseButton>
     </div>
   </aside>
 </template>

@@ -80,11 +80,11 @@
               </div>
             </div>
 
-            <button @click="$emit('confirm-revoke', session.id)"
-              class="absolute top-4 right-4 p-2 text-hsa hover:text-danger hover:bg-danger/10 rounded-lg transition-all opacity-0 group-hover:opacity-100 focus:opacity-100"
+            <UiBaseButton @click="$emit('confirm-revoke', session.id)" variant="ghost"
+              class="!absolute !top-4 !right-4 !p-2 !text-hsa hover:!text-danger hover:!bg-danger/10 !rounded-lg transition-all opacity-0 group-hover:opacity-100 focus:opacity-100"
               title="Déconnecter cet appareil">
               <IconLogout class="w-5 h-5" />
-            </button>
+            </UiBaseButton>
           </div>
         </UiBaseCard>
       </div>

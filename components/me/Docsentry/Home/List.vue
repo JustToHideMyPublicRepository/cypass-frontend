@@ -80,10 +80,11 @@
         {{ doc.hash }}
       </code>
                 <div class="flex items-center gap-1 shrink-0 border-l border-BtW/20 pl-2 ml-1">
-                  <button @click="copyHash(doc.hash, doc.id)" class="p-1 hover:text-primary transition-colors">
+                  <UiBaseButton @click="copyHash(doc.hash, doc.id)" variant="ghost"
+                    class="!p-1 hover:!text-primary transition-colors !h-auto !w-auto">
                     <IconCopy v-if="!copiedHashes.has(doc.id)" class="w-3.5 h-3.5" />
                     <IconCheck v-else class="w-3.5 h-3.5 text-success" />
-                  </button>
+                  </UiBaseButton>
                 </div>
               </div>
             </td>
@@ -97,11 +98,11 @@
                   title="Consulter">
                   <IconEye class="w-4 h-4" />
                 </NuxtLink>
-                <button @click="downloadCertificate(doc.id, doc.filename)"
-                  class="w-9 h-9 flex items-center justify-center bg-ash/50 hover:bg-success hover:text-white rounded-xl transition-all"
+                <UiBaseButton @click="downloadCertificate(doc.id, doc.filename)" variant="ghost"
+                  class="!w-9 !h-9 !flex !items-center !justify-center !bg-ash/50 hover:!bg-success hover:!text-white !rounded-xl transition-all !p-0"
                   title="Certificat">
                   <IconDownload class="w-4 h-4" />
-                </button>
+                </UiBaseButton>
               </div>
             </td>
           </tr>
@@ -118,14 +119,14 @@
         </p>
       </div>
       <div class="flex items-center gap-3">
-        <button @click="$emit('prev-page')" :disabled="currentPage === 1"
-          class="flex items-center justify-center p-2 rounded-xl border border-ash bg-WtB text-hsa hover:bg-ash hover:text-BtW transition-all disabled:opacity-30 disabled:cursor-not-allowed">
+        <UiBaseButton @click="$emit('prev-page')" :disabled="currentPage === 1" variant="ghost"
+          class="!flex !items-center !justify-center !p-2 !rounded-xl border border-ash !bg-WtB text-hsa hover:!bg-ash hover:!text-BtW transition-all disabled:opacity-30 disabled:cursor-not-allowed !h-auto !w-auto">
           <IconChevronLeft class="w-4 h-4" />
-        </button>
-        <button @click="$emit('next-page')" :disabled="currentPage === totalPages"
-          class="flex items-center justify-center p-2 rounded-xl border border-ash bg-WtB text-hsa hover:bg-ash hover:text-BtW transition-all disabled:opacity-30 disabled:cursor-not-allowed">
+        </UiBaseButton>
+        <UiBaseButton @click="$emit('next-page')" :disabled="currentPage === totalPages" variant="ghost"
+          class="!flex !items-center !justify-center !p-2 !rounded-xl border border-ash !bg-WtB text-hsa hover:!bg-ash hover:!text-BtW transition-all disabled:opacity-30 disabled:cursor-not-allowed !h-auto !w-auto">
           <IconChevronRight class="w-4 h-4" />
-        </button>
+        </UiBaseButton>
       </div>
     </div>
   </UiBaseCard>

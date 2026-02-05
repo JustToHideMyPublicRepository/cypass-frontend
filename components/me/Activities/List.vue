@@ -74,15 +74,15 @@
           Page {{ currentPage }} sur {{ totalPages }}
         </p>
         <div class="flex items-center gap-2">
-          <button @click="$emit('prev-page')" :disabled="currentPage === 1"
-            class="flex items-center gap-1 px-3 py-1.5 rounded-lg border border-ash hover:bg-ash transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-xs font-medium text-hsa hover:text-BtW">
+          <UiBaseButton @click="$emit('prev-page')" :disabled="currentPage === 1" variant="secondary"
+            class="flex items-center gap-1 !px-3 !py-1.5 !text-xs !font-medium">
             <IconChevronLeft class="w-3 h-3" /> Précédent
-          </button>
-          <button @click="$emit('next-page')" :disabled="currentPage === totalPages"
-            class="flex items-center gap-1 px-3 py-1.5 rounded-lg border border-ash hover:bg-ash transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-xs font-medium text-hsa hover:text-BtW">
+          </UiBaseButton>
+          <UiBaseButton @click="$emit('next-page')" :disabled="currentPage === totalPages" variant="secondary"
+            class="flex items-center gap-1 !px-3 !py-1.5 !text-xs !font-medium">
             Suivant
             <IconChevronRight class="w-3 h-3" />
-          </button>
+          </UiBaseButton>
         </div>
       </div>
     </div>
