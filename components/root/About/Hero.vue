@@ -2,24 +2,26 @@
   <section class="relative">
     <!-- Background Elements -->
     <div class="absolute top-0 left-0 w-full h-full overflow-hidden -z-10">
-      <div class="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-primary rounded-full blur-[100px]">
+      <div
+        class="absolute top-[-10%] right-[-5%] w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-primary rounded-full blur-[80px] md:blur-[100px] opacity-20 md:opacity-100">
       </div>
-      <div class="absolute bottom-[-10%] left-[-5%] w-[500px] h-[500px] bg-purple-500 rounded-full blur-[100px]">
+      <div
+        class="absolute bottom-[-10%] left-[-5%] w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-purple-500 rounded-full blur-[80px] md:blur-[100px] opacity-20 md:opacity-100">
       </div>
     </div>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
       <div class="animate-fade-up">
         <span
-          class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-ash text-secondary text-xs font-bold uppercase tracking-wider mb-6 border border-ash">
+          class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-ash text-secondary text-[10px] md:text-xs font-bold uppercase tracking-wider mb-6 border border-ash">
           Qui sommes-nous ?
         </span>
-        <h1 class="text-5xl md:text-7xl font-black text-BtW tracking-tight mb-6 leading-tight">
+        <h1 class="text-3xl md:text-7xl font-black text-BtW tracking-tight mb-6 leading-tight">
           L'Architecte de votre <br />
           <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-success">Souveraineté
             Numérique</span>
         </h1>
-        <p class="text-xl text-hsa max-w-3xl mx-auto leading-relaxed">
+        <p class="text-base md:text-xl text-hsa max-w-3xl mx-auto leading-relaxed">
           Née de la volonté de sécuriser l'avenir numérique du Bénin, CYPASS est la première plateforme
           unifiée garantissant confiance, sécurité et conformité pour tous les acteurs de l'écosystème.
         </p>

@@ -1,22 +1,22 @@
 <template>
-  <section class="py-20 bg-bgClr">
+  <section class="py-12 md:py-20 bg-bgClr">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center max-w-3xl mx-auto mb-16 animate-fade-up">
-        <h2 class="text-3xl md:text-4xl font-bold text-BtW mb-4">Nos valeurs fondatrices
+      <div class="text-center max-w-3xl mx-auto mb-10 md:mb-16 animate-fade-up">
+        <h2 class="text-2xl md:text-4xl font-bold text-BtW mb-4">Nos valeurs fondatrices
         </h2>
-        <p class="text-hsa">Ce qui guide nos décisions et façonne notre technologie.
+        <p class="text-sm md:text-base text-hsa">Ce qui guide nos décisions et façonne notre technologie.
         </p>
       </div>
 
-      <div class="grid md:grid-cols-3 gap-8">
+      <div class="grid md:grid-cols-3 gap-6 md:gap-8">
         <div v-for="(value, index) in values" :key="value.title"
-          class="card p-8 hover:-translate-y-2 transition-transform duration-300 animate-fade-up"
+          class="card p-6 md:p-8 hover:-translate-y-2 transition-transform duration-300 animate-fade-up"
           :style="{ animationDelay: `${index * 100}ms` }">
-          <div class="w-14 h-14 rounded-xl flex items-center justify-center mb-6" :class="value.iconBg">
-            <component :is="value.icon" class="w-7 h-7" :class="value.iconColor" />
+          <div class="w-12 h-12 md:w-14 md:h-14 rounded-xl flex items-center justify-center mb-6" :class="value.iconBg">
+            <component :is="value.icon" class="w-6 h-6 md:w-7 md:h-7" :class="value.iconColor" />
           </div>
-          <h3 class="text-xl font-bold text-BtW mb-3">{{ value.title }}</h3>
-          <p class="text-hsa leading-relaxed">{{ value.desc }}</p>
+          <h3 class="text-lg md:text-xl font-bold text-BtW mb-3">{{ value.title }}</h3>
+          <p class="text-sm md:text-base text-hsa leading-relaxed">{{ value.desc }}</p>
         </div>
       </div>
     </div>

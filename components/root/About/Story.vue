@@ -1,31 +1,33 @@
 <template>
-  <section class="py-20">
+  <section class="py-12 md:py-20">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-      <div class="grid lg:grid-cols-2 gap-16">
+      <div class="grid lg:grid-cols-2 gap-12 md:gap-16">
         <div class="animate-fade-right">
-          <h2 class="text-3xl md:text-4xl font-bold mb-6">Notre Histoire</h2>
-          <div class="space-y-8 relative pl-8 border-l-2 border-ash">
+          <h2 class="text-2xl md:text-4xl font-bold mb-6">Notre Histoire</h2>
+          <div class="space-y-8 relative pl-6 md:pl-8 border-l-2 border-ash">
             <div v-for="event in timeline" :key="event.year" class="relative">
-              <div class="absolute -left-[41px] top-0 w-5 h-5 rounded-full border-4 border-WtB bg-primary">
+              <div
+                class="absolute -left-[33px] md:-left-[41px] top-0 w-4 h-4 md:w-5 md:h-5 rounded-full border-4 border-WtB bg-primary">
               </div>
               <span class="text-primary font-bold text-sm block mb-1">{{ event.year }}</span>
-              <h3 class="font-bold text-lg mb-2">{{ event.title }}</h3>
-              <p class="text-hsa text-sm leading-relaxed">{{ event.desc }}</p>
+              <h3 class="font-bold text-base md:text-lg mb-2">{{ event.title }}</h3>
+              <p class="text-xs md:text-sm text-hsa leading-relaxed">{{ event.desc }}</p>
             </div>
           </div>
         </div>
 
         <div class="relative animate-fade-left">
           <UiAppFrame type="browser" url="https://cypass.bj/history" :glass="true"
-            class="transform rotate-2 hover:rotate-0 transition-transform duration-700 shadow-2xl">
-            <div class="h-[400px] bg-slate-950 p-0 overflow-hidden font-code text-xs relative">
-              <!-- Terminal Header -->
+            class="transform rotate-0 md:rotate-2 hover:rotate-0 transition-transform duration-700 shadow-2xl">
+            <div
+              class="h-[300px] md:h-[400px] bg-slate-950 p-0 overflow-hidden font-code text-[10px] md:text-xs relative">
+              <!-- En-tête du terminal -->
               <div class="flex items-center justify-between px-4 py-2 bg-slate-900 border-b border-slate-800">
                 <div class="text-slate-400">bash — 80x24</div>
               </div>
 
-              <div class="p-6 space-y-4 text-slate-300">
+              <div class="p-4 md:p-6 space-y-3 md:space-y-4 text-slate-300">
                 <div class="flex">
                   <span class="text-green-400 mr-2">root@cypass:~$</span>
                   <span class="typing-effect">./init_protocol.sh --verbose</span>
@@ -34,18 +36,19 @@
                 <div class="space-y-2 pl-4 border-l border-slate-800 ml-1">
                   <div class="text-slate-500">2023-01-15 09:00:00 [INFO] Initializing Core Systems...</div>
                   <div class="flex items-center gap-2">
-                    <span class="text-blue-400">➜</span>
-                    <span>Loading Module: <span class="text-yellow-300">DocSentry v1.0</span></span>
+                    <span class="text-blue-400 text-[8px] md:text-xs">➜</span>
+                    <span>Chargement du Module : <span class="text-yellow-300">DocSentry v1.0</span></span>
                     <span class="text-green-500">[OK]</span>
                   </div>
                   <div class="flex items-center gap-2">
-                    <span class="text-blue-400">➜</span>
-                    <span>Establishing Secure Node </span>
-                    <div class="w-16 h-1 bg-slate-800 rounded overflow-hidden">
+                    <span class="text-blue-400 text-[8px] md:text-xs">➜</span>
+                    <span>Établissement du Nœud Sécurisé </span>
+                    <div class="w-12 md:w-16 h-1 bg-slate-800 rounded overflow-hidden">
                       <div class="h-full bg-green-500 w-full animate-pulse"></div>
                     </div>
                   </div>
-                  <div class="text-slate-500">2024-06-20 14:30:12 [INFO] Deployment to Government Cloud Complete.</div>
+                  <div class="text-slate-500">2024-06-20 14:30:12 [INFO] Déploiement sur le Cloud Gouvernemental
+                    terminé.</div>
 
                   <br />
                   <div class="flex">
@@ -54,16 +57,16 @@
                   </div>
 
                   <div class="text-purple-300">
-                    > 2024: 50+ Public Entities Connected<br />
-                    > 2025: Private Sector Integration [PENDING]<br />
-                    > 2026: AI Threat Detection [SCHEDULED]
+                    > 2024: 50+ Entités Publiques Connectées<br />
+                    > 2025: Intégration du Secteur Privé [EN ATTENTE]<br />
+                    > 2026: Détection de menaces par IA [PROGRAMMÉ]
                   </div>
 
                   <div class="animate-pulse">_</div>
                 </div>
               </div>
 
-              <!-- Matrix Rain Effect Overlay (Subtle) -->
+              <!-- Effet Matrix Rain Overlay (Subtil) -->
               <div class="absolute inset-0 bg-gradient-to-b from-transparent to-slate-950/50 pointer-events-none"></div>
             </div>
           </UiAppFrame>

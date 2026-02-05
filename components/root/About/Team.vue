@@ -1,11 +1,11 @@
 <template>
-  <section class="py-20 relative overflow-hidden">
+  <section class="py-12 md:py-20 relative overflow-hidden">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-      <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6 animate-fade-up">
+      <div class="flex flex-col md:flex-row justify-between items-end mb-10 md:mb-12 gap-6 animate-fade-up">
         <div>
-          <h2 class="text-3xl md:text-4xl font-bold text-BtW mb-2">L'Équipe CYPASS</h2>
-          <p class="text-hsa max-w-xl">Des experts passionnés par la sécurité et
+          <h2 class="text-2xl md:text-4xl font-bold text-BtW mb-2">L'Équipe CYPASS</h2>
+          <p class="text-sm md:text-base text-hsa max-w-xl">Des experts passionnés par la sécurité et
             déterminés à faire la différence.</p>
         </div>
       </div>
