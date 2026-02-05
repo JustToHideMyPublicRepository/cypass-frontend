@@ -1,8 +1,8 @@
 <template>
   <UiAppFrame type="browser" url="https://monitor.cypass.bj/alerts"
-    class="transform transition-transform duration-500 hover:scale-[1.02] hover:-rotate-1" :glass="true"
-    padding="p-2 md:p-4">
-    <div class="h-[300px] md:h-[350px] bg-bgClr p-3 md:p-4 overflow-hidden relative">
+    class="w-full max-w-full transform transition-transform duration-500 hover:scale-[1.02] md:hover:-rotate-1"
+    :glass="true" padding="p-1 md:p-4">
+    <div class="h-[280px] md:h-[350px] bg-bgClr p-2 md:p-4 overflow-hidden relative">
       <!-- Statistiques d'en-tête -->
       <div class="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-3 mb-4">
         <div class="bg-WtB p-2 md:p-3 rounded-lg shadow-sm border border-ash">
