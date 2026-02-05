@@ -66,7 +66,8 @@
         </div>
 
         <!-- Contenu Visuel -->
-        <div class="relative" :class="index % 2 === 1 ? 'lg:order-2' : 'lg:order-1'">
+        <div class="relative overflow-hidden md:overflow-visible"
+          :class="index % 2 === 1 ? 'lg:order-2' : 'lg:order-1'">
           <div
             :class="['absolute inset-0 blur-[120px] opacity-10 rounded-full group-hover:opacity-20 transition-opacity duration-700', service.theme === 'blue' ? 'bg-primary' : 'bg-success']">
           </div>
