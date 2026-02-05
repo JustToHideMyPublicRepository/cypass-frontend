@@ -1,6 +1,6 @@
 <template>
-  <div class="relative min-h-[80vh] flex flex-col items-center justify-center px-4">
-    <div class="max-w-3xl w-full space-y-12 text-center animate-fade-up">
+  <div class="relative min-h-[80vh] flex flex-col items-center justify-center px-4 py-12 md:py-20">
+    <div class="max-w-3xl w-full space-y-8 md:space-y-12 text-center animate-fade-up">
       <RootVerifyHeader />
 
       <RootVerifyZone v-model:verifyMode="verifyMode" v-model:hashInput="hashInput" v-model:file="file"

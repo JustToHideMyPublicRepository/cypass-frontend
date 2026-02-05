@@ -1,15 +1,15 @@
 <template>
-  <div class="glass-panel p-8 md:p-12 rounded-[40px] border border-ashAct shadow-2xl relative group">
+  <div class="glass-panel p-6 md:p-12 rounded-3xl md:rounded-[40px] border border-ashAct shadow-2xl relative group">
     <!-- Mode Switcher -->
-    <div v-if="!result && !loading" class="flex justify-center mb-8">
-      <div class="flex p-1 bg-ash/50 rounded-xl border border-ash gap-4">
+    <div v-if="!result && !loading" class="flex justify-center mb-6 md:mb-8">
+      <div class="flex p-1 bg-ash/50 rounded-xl border border-ash gap-2 md:gap-4">
         <UiBaseButton @click="$emit('update:verifyMode', 'file')" variant="ghost"
-          class="!px-4 !py-2 !text-sm !font-bold !rounded-lg transition-all !h-auto border-none"
+          class="!px-3 md:!px-4 !py-1.5 md:!py-2 !text-xs md:!text-sm !font-bold !rounded-lg transition-all !h-auto border-none"
           :class="verifyMode === 'file' ? '!bg-WtB !text-primary shadow-sm' : 'text-hsa hover:!text-BtW'">
           Fichier PDF
         </UiBaseButton>
         <UiBaseButton @click="$emit('update:verifyMode', 'hash')" variant="ghost"
-          class="!px-4 !py-2 !text-sm !font-bold !rounded-lg transition-all !h-auto border-none"
+          class="!px-3 md:!px-4 !py-1.5 md:!py-2 !text-xs md:!text-sm !font-bold !rounded-lg transition-all !h-auto border-none"
           :class="verifyMode === 'hash' ? '!bg-WtB !text-primary shadow-sm' : 'text-hsa hover:!text-BtW'">
           Empreinte (Hash)
         </UiBaseButton>
@@ -18,17 +18,17 @@
 
     <!-- Interactive Dropzone -->
     <div v-if="!file && verifyMode === 'file' && !result"
-      class="relative border-2 border-dashed border-primary/20 rounded-3xl p-12 text-center hover:border-primary/50 transition-all cursor-pointer bg-WtB/50 hover:bg-primary/5 group overflow-hidden"
+      class="relative border-2 border-dashed border-primary/20 rounded-2xl md:rounded-3xl p-6 md:p-12 text-center hover:border-primary/50 transition-all cursor-pointer bg-WtB/50 hover:bg-primary/5 group overflow-hidden"
       @click="$emit('trigger-file')">
 
 
       <div class="pointer-events-none">
         <div
-          class="w-20 h-20 bg-WtB rounded-3xl flex items-center justify-center mx-auto mb-6 text-primary shadow-xl border border-ash group-hover:scale-110 transition-transform duration-500">
-          <IconRosetteDiscountCheck class="w-10 h-10" />
+          class="w-16 h-16 md:w-20 md:h-20 bg-WtB rounded-2xl md:rounded-3xl flex items-center justify-center mx-auto mb-4 md:mb-6 text-primary shadow-xl border border-ash group-hover:scale-110 transition-transform duration-500">
+          <IconRosetteDiscountCheck class="w-8 h-8 md:w-10 md:h-10" />
         </div>
-        <h3 class="text-xl font-bold text-BtW mb-2">Sélectionnez le document PDF</h3>
-        <p class="text-sm text-hsa">Glissez-déposez le fichier ici ou cliquez pour parcourir</p>
+        <h3 class="text-lg md:text-xl font-bold text-BtW mb-2">Sélectionnez le document PDF</h3>
+        <p class="text-xs md:text-sm text-hsa">Glissez-déposez le fichier ici ou cliquez pour parcourir</p>
       </div>
 
       <input type="file" ref="fileInput" class="hidden" accept=".pdf,application/pdf" @change="handleFileChange">

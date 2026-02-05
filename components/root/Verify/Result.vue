@@ -1,14 +1,14 @@
 <template>
   <div class="animate-fade-up text-left">
     <div v-if="result.verified"
-      class="p-6 md:p-8 rounded-3xl bg-success/5 border border-success/20 overflow-hidden relative">
+      class="p-5 md:p-8 rounded-2xl md:rounded-3xl bg-success/5 border border-success/20 overflow-hidden relative">
       <div class="absolute top-0 right-0 p-8 opacity-10">
-        <IconRosetteDiscountCheck class="w-32 h-32 text-success" />
+        <IconRosetteDiscountCheck class="w-24 h-24 md:w-32 md:h-32 text-success" />
       </div>
 
-      <div class="flex items-center gap-3 text-success mb-6 relative z-10">
-        <IconRosetteDiscountCheck class="w-8 h-8" />
-        <span class="text-2xl font-black italic">DOCUMENT AUTHENTIQUE</span>
+      <div class="flex items-center gap-2 md:gap-3 text-success mb-4 md:mb-6 relative z-10">
+        <IconRosetteDiscountCheck class="w-6 h-6 md:w-8 md:h-8" />
+        <span class="text-xl md:text-2xl font-black italic">DOCUMENT AUTHENTIQUE</span>
       </div>
 
       <div class="space-y-6 relative z-10">
@@ -87,7 +87,7 @@
               Vérifié le {{ formatDate(result.verification_time) }}
             </div>
             <UiBaseButton @click="$emit('reset')" variant="ghost"
-              class="!text-primary !font-bold hover:!underline !p-0 !min-h-0 !h-auto !bg-transparent hover:!bg-transparent">
+              class="!text-primary !font-bold hover:!underline !p-0 !min-h-0 !h-auto !bg-transparent hover:!bg-transparent border-none">
               Nouvelle vérification
             </UiBaseButton>
           </div>

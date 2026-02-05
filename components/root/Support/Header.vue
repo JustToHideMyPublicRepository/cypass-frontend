@@ -1,7 +1,7 @@
 <template>
-  <div class="text-center space-y-8 animate-fade-up">
+  <div class="text-center space-y-6 md:space-y-8 animate-fade-up">
     <span class="badge badge-primary">Centre d'Aide</span>
-    <h1 class="text-4xl md:text-5xl font-black tracking-tight">
+    <h1 class="text-3xl md:text-5xl font-black tracking-tight leading-tight">
       Comment pouvons-nous <span class="text-primary">vous aider ?</span>
     </h1>
 
@@ -12,9 +12,9 @@
       </div>
       <input ref="searchInput" :value="searchQuery"
         @input="$emit('update:searchQuery', ($event.target as HTMLInputElement).value)" type="text"
-        class="block w-full pl-12 pr-16 py-4 bg-WtB border border-ash rounded-2xl shadow-lg shadow-ash/50 focus:ring-2 focus:ring-primary focus:border-primary transition-all outline-none"
+        class="block w-full pl-12 pr-12 md:pr-16 py-3.5 md:py-4 bg-WtB border border-ash rounded-xl md:rounded-2xl shadow-lg shadow-ash/50 focus:ring-2 focus:ring-primary focus:border-primary transition-all outline-none text-sm md:text-base"
         placeholder="Rechercher une réponse, une API ou un guide...">
-      <div class="hidden sm:flex items-center gap-1 absolute right-4 top-1/2 -translate-y-1/2">
+      <div class="hidden md:flex items-center gap-1 absolute right-4 top-1/2 -translate-y-1/2">
         <kbd
           class="px-1.5 py-0.5 rounded bg-ash text-[10px] font-bold text-hsa border border-ashAct uppercase">CTRL</kbd>
         <span class="text-[10px] text-hsa">+</span>

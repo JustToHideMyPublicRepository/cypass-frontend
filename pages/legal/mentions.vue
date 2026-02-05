@@ -28,8 +28,8 @@
               <div class="p-4 rounded-2xl bg-ash/50 border border-ash">
                 <h4 class="font-bold mb-2">Contact</h4>
                 <p class="text-sm text-hsa">
-                  Tél : +229 21 31 00 00<br>
-                  Email : contact@asin.bj
+                  Tél : +229 01XXXXXXXX<br>
+                  Email : support@cypass.bj
                 </p>
               </div>
             </div>

@@ -1,6 +1,6 @@
 <template>
-  <div class="relative pb-20 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-7xl mx-auto space-y-16">
+  <div class="relative pb-12 md:pb-20 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto space-y-12 md:space-y-16">
       <RootSupportHeader ref="headerComp" v-model:searchQuery="searchQuery" />
       <RootSupportCategories :categories="categories" />
       <RootSupportFaqTeaser />

@@ -1,12 +1,12 @@
 <template>
-  <div class="text-center space-y-6 pt-12 border-t border-ash">
-    <p class="text-hsa">Besoin d'une assistance personnalisée ?</p>
-    <div class="flex flex-wrap justify-center gap-4">
-      <UiBaseButton href="mailto:support@cypass.bj" variant="secondary" class="border border-ash">
+  <div class="text-center space-y-4 md:space-y-6 pt-8 md:pt-12 border-t border-ash">
+    <p class="text-hsa text-sm md:text-base">Besoin d'une assistance personnalisée ?</p>
+    <div class="flex flex-col sm:flex-row justify-center gap-3 md:gap-4">
+      <UiBaseButton href="mailto:support@cypass.bj" variant="secondary" class="border border-ash justify-center">
         <IconMail class="w-5 h-5 mr-2" /> Envoyer un email
       </UiBaseButton>
-      <UiBaseButton href="tel:+22921310000" variant="secondary" class="border border-ash">
-        <IconPhone class="w-5 h-5 mr-2" /> +229 21 31 00 00
+      <UiBaseButton href="tel:+22901XXXXXXXX" variant="ghost" class="border border-ash justify-center">
+        <IconPhone class="w-5 h-5 mr-2" /> +229 01XXXXXXXX
       </UiBaseButton>
     </div>
   </div>
