@@ -1,6 +1,6 @@
 <template>
   <div class="relative overflow-hidden">
-    <div class="max-w-7xl mx-auto space-y-24 relative z-10">
+    <div class="max-w-7xl mx-auto space-y-16 md:space-y-24 relative z-10 px-4 sm:px-6 lg:px-8">
       <RootModuleHomeHeader />
       <RootModuleHomeGrid :services="modules" />
       <RootModuleHomeFooter />

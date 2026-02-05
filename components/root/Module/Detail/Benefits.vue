@@ -1,15 +1,15 @@
 <template>
-  <div class="grid sm:grid-cols-2 gap-6">
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
     <div v-for="(benefit, index) in benefits" :key="index"
-      class="glass-panel p-6 rounded-2xl animate-fade-up border border-ash/50 group hover:border-primary/20 transition-colors"
+      class="glass-panel p-5 md:p-6 rounded-2xl animate-fade-up border border-ash/50 group hover:border-primary/20 transition-colors"
       :style="{ animationDelay: `${index * 100}ms` }">
       <div
-        class="w-10 h-10 rounded-lg flex items-center justify-center mb-4 transition-colors group-hover:scale-110 duration-300"
+        class="w-10 h-10 rounded-lg flex items-center justify-center mb-3 md:mb-4 transition-colors group-hover:scale-110 duration-300"
         :class="theme === 'blue' ? 'bg-primary/10 text-primary' : 'bg-success/10 text-success'">
         <IconCheck class="w-5 h-5" />
       </div>
-      <h3 class="font-bold text-lg mb-2">{{ benefit.title }}</h3>
-      <p class="text-hsa text-sm leading-relaxed">{{ benefit.qty }}</p>
+      <h3 class="font-bold text-base md:text-lg mb-1 md:mb-2">{{ benefit.title }}</h3>
+      <p class="text-hsa text-xs md:text-sm leading-relaxed">{{ benefit.qty }}</p>
     </div>
   </div>
 </template>
