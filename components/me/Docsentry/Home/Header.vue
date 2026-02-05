@@ -20,7 +20,7 @@
       </button>
 
       <button @click="$emit('upload')"
-        class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary text-white hover:bg-primary/90 transition-all font-bold text-xs uppercase tracking-wider shadow-lg shadow-primary/20 hover:-translate-y-0.5">
+        class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary text-WtB hover:bg-primary/90 transition-all font-bold text-xs uppercase tracking-wider shadow-lg shadow-primary/20 hover:-translate-y-0.5">
         <IconPlus class="w-4 h-4" />
         Nouveau
       </button>

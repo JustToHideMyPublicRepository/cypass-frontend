@@ -10,7 +10,7 @@
 
     <div class="grid md:grid-cols-3 gap-6">
       <div v v-for="(item, index) in devResources" :key="index"
-        class="group relative overflow-hidden glass-panel p-8 rounded-3xl border border-ash/50 hover:border-primary/50 transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-primary/10 cursor-pointer">
+        class="group relative overflow-hidden glass-panel p-8 rounded-3xl border border-ash/50 hover:border-primary/50 transition-all duration-300 hover:scale-[1.01] shadow-lg hover:shadow-primary/10 cursor-pointer">
         <div
           class="w-12 h-12 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300"
           :class="item.colorBg">
@@ -23,7 +23,7 @@
         </p>
         <span class="flex items-center text-sm font-bold text-primary" :class="item.colorText">
           {{ item.action }}
-          <IconArrowRight class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+          <IconArrowRight class="w-4 h-4 ml-1 transition-transform" />
         </span>
       </div>
     </div>

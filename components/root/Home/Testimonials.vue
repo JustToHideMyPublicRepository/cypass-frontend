@@ -20,7 +20,7 @@
       <div class="relative">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div v-for="(testimonial, index) in testimonials" :key="index"
-            class="glass-panel p-6 md:p-8 rounded-2xl relative group hover:-translate-y-2 transition-transform duration-300 border border-ash/50 animate-fade-up"
+            class="glass-panel p-6 md:p-8 rounded-2xl relative group hover:scale-[1.01] transition-transform duration-300 border border-ash/50 animate-fade-up"
             :style="{ animationDelay: `${index * 150}ms` }">
 
             <!-- Icône de citation -->

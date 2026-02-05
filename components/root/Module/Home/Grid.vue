@@ -5,7 +5,7 @@
 
       <UiAppFrame :type="service.status === 'available' ? (service.id === 'secuscan' ? 'terminal' : 'card') : 'card'"
         :title="service.title" :glass="true" :class="[
-          'h-full transform transition-all duration-500 hover:rotate-x-2 hover:translate-y-[-5px] hover:shadow-2xl',
+          'h-full transform transition-all duration-500 hover:scale-[1.01] hover:shadow-2xl',
           service.theme === 'blue' ? 'hover:shadow-blue-500/20' : 'hover:shadow-green-500/20'
         ]" :header-class="service.status !== 'available' ? 'opacity-50' : ''">
         <template #headerActions>
@@ -31,7 +31,7 @@
           <!-- Icon & Content -->
           <div class="flex items-start justify-between mb-8 relative z-10">
             <div
-              class="w-16 h-16 rounded-2xl flex items-center justify-center text-white shadow-lg transform group-hover:scale-110 transition-transform duration-300"
+              class="w-16 h-16 rounded-2xl flex items-center justify-center text-white shadow-lg transform group-hover:scale-105 transition-transform duration-300"
               :class="service.theme === 'blue'
                 ? 'bg-gradient-to-br from-primary to-secondary shadow-blue-500/30'
                 : 'bg-gradient-to-br from-success to-teal-600 shadow-emerald-500/30'">

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="bg-slate-900 rounded-xl shadow-2xl border border-slate-700/50 p-4 h-[213px] relative overflow-hidden transform transition-all duration-300 group-hover:-translate-y-2 group-hover:shadow-success/20">
+    class="bg-slate-900 rounded-xl shadow-2xl border border-slate-700/50 p-4 h-[213px] relative overflow-hidden transform transition-all duration-300 group-hover:scale-[1.01] group-hover:shadow-success/20">
 
     <!-- Arrière-plan de la grille radar -->
     <div

@@ -1,7 +1,7 @@
 <template>
   <div class="grid md:grid-cols-3 gap-8">
     <div v v-for="(category, index) in categories" :key="index"
-      class="glass-panel p-8 rounded-3xl hover:-translate-y-2 transition-transform duration-300 cursor-pointer group animate-fade-up border border-ash/50"
+      class="glass-panel p-8 rounded-3xl hover:scale-[1.01] transition-transform duration-300 cursor-pointer group animate-fade-up border border-ash/50"
       :style="{ animationDelay: `${index * 100}ms` }">
       <div class="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 text-xl shadow-lg"
         :class="category.colorClass">

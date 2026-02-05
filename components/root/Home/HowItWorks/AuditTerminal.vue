@@ -1,6 +1,6 @@
 <template>
   <UiAppFrame type="terminal" title="secuscan_audit.sh" rounded="rounded-lg" shadow="shadow-2xl"
-    class="transform transition-all duration-300 group-hover:-translate-y-2 group-hover:shadow-primary/20"
+    class="transform transition-all duration-300 group-hover:scale-[1.01] group-hover:shadow-primary/20"
     body-class="h-[180px] flex flex-col">
     <div class="text-success space-y-1">
       <p>> init_secuscan --target=all</p>

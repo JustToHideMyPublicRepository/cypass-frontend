@@ -1,6 +1,6 @@
 <template>
   <div
-    class="bg-WtB rounded-xl shadow-2xl border border-ash p-1 relative overflow-hidden transform transition-all duration-300 group-hover:-translate-y-2 group-hover:shadow-secondary/20 h-[213px]">
+    class="bg-WtB rounded-xl shadow-2xl border border-ash p-1 relative overflow-hidden transform transition-all duration-300 group-hover:scale-[1.01] group-hover:shadow-secondary/20 h-[213px]">
     <!-- Effet de balayage lumineux -->
     <div
       class="absolute inset-0 bg-gradient-to-b from-transparent via-secondary/10 to-transparent -translate-y-full group-hover:animate-scan z-20 pointer-events-none">

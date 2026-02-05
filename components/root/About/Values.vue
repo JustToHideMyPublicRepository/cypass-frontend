@@ -10,7 +10,7 @@
 
       <div class="grid md:grid-cols-3 gap-6 md:gap-8">
         <div v-for="(value, index) in values" :key="value.title"
-          class="card p-6 md:p-8 hover:-translate-y-2 transition-transform duration-300 animate-fade-up"
+          class="card p-6 md:p-8 hover:scale-[1.01] transition-transform duration-300 animate-fade-up"
           :style="{ animationDelay: `${index * 100}ms` }">
           <div class="w-12 h-12 md:w-14 md:h-14 rounded-xl flex items-center justify-center mb-6" :class="value.iconBg">
             <component :is="value.icon" class="w-6 h-6 md:w-7 md:h-7" :class="value.iconColor" />
