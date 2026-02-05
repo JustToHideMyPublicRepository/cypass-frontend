@@ -1,17 +1,17 @@
 <template>
   <Teleport to="body">
     <div class="fixed bottom-6 right-6 z-[60]">
-      <!-- Trigger Button -->
+      <!-- Bouton de déclenchement -->
       <UiBaseButton @click.stop="store.toggleHelp()" variant="ghost"
         class="!rounded-full !bg-primary !text-ash shadow-2xl shadow-primary/40 !flex !items-center !justify-center hover:scale-110 active:scale-95 transition-all duration-300 group !p-2 !h-auto !w-auto">
         <IconHelp v-if="!store.isHelpOpen" class="w-6 h-6" />
         <IconX v-else class="w-6 h-6" />
 
-        <!-- Pulse Effect -->
+        <!-- Effet de pulsation -->
         <span class="absolute inset-0 rounded-full bg-primary animate-ping opacity-20 pointer-events-none"></span>
       </UiBaseButton>
 
-      <!-- Overlay Menu -->
+      <!-- Menu flottant d'aide -->
       <Transition enter-active-class="transition duration-300 ease-out"
         enter-from-class="transform scale-95 opacity-0 translate-y-4"
         enter-to-class="transform scale-100 opacity-100 translate-y-0"
@@ -25,6 +25,7 @@
             <p class="text-xs text-hsa">Besoin d'un coup de main ?</p>
           </div>
 
+          <!-- Liste des liens d'aide -->
           <div class="space-y-1">
             <NuxtLink v-for="link in helpLinks" :key="link.path" :to="link.path"
               :target="link.external ? '_blank' : undefined" @click="store.isHelpOpen = false"
@@ -41,8 +42,9 @@
             </NuxtLink>
           </div>
 
-          <div class="mt-4 p-4 bg-ash/30 rounded-2xl border border-ash Act flex items-center justify-between">
-            <span class="text-xs font-medium text-hsa">Raccourcis</span>
+          <!-- Section Raccourcis -->
+          <div class="mt-4 p-4 bg-primary/5 rounded-2xl border border-primary/10 flex items-center justify-between">
+            <span class="text-xs font-medium text-primary">Raccourcis</span>
             <kbd class="px-2 py-1 rounded bg-BtW text-WtB text-[10px] font-black shadow-sm">?</kbd>
           </div>
         </div>
@@ -52,13 +54,13 @@
 </template>
 
 <script setup lang="ts">
-import { watch } from 'vue'
+import { watch, onMounted, onUnmounted } from 'vue'
 import { IconHelp, IconX, IconLifebuoy, IconStatusChange, IconKeyboard, IconBrandWhatsapp } from '@tabler/icons-vue'
 import { useShortcutsStore } from '~/stores/shortcuts'
 
 const store = useShortcutsStore()
 
-// Track when the menu was last opened to ignore immediate clicks
+// Horodatage de l'ouverture pour éviter les fermetures immédiates
 let lastOpenedAt = 0
 
 watch(() => store.isHelpOpen, (isOpen) => {
@@ -67,6 +69,7 @@ watch(() => store.isHelpOpen, (isOpen) => {
   }
 })
 
+// Définition des liens d'assistance
 const helpLinks = [
   {
     label: 'Support WhatsApp',
@@ -95,9 +98,8 @@ const helpLinks = [
   },
 ]
 
-// Close on outside click (with debounce to prevent immediate close after keyboard toggle)
+// Gestion du clic à l'extérieur pour fermer le menu
 const handleClickOutside = (e: MouseEvent) => {
-  // Ignore clicks within 100ms of opening (keyboard toggle)
   if (Date.now() - lastOpenedAt < 100) return
 
   const el = e.target as HTMLElement

@@ -61,7 +61,7 @@
         <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
           <UiBaseButton @click="handleClearError" class="px-8 py-4 !rounded-2xl shadow-xl shadow-primary/20 flex gap-3">
             <IconArrowLeft class="w-5 h-5 relative z-10" />
-            <span class="relative z-10">Retour à l'accueil</span>
+            <span class="relative z-10">Accueil</span>
           </UiBaseButton>
 
           <UiBaseButton v-if="error?.statusCode !== 404" @click="handleRefresh" variant="secondary"
