@@ -12,9 +12,9 @@
     ]">
       <!-- Controls (Traffic Lights) -->
       <div v-if="controls" class="flex gap-2 mr-2">
-        <div class="h-3 w-3 rounded-full bg-green-500/80"></div>
-        <div class="h-3 w-3 rounded-full bg-yellow-500/80"></div>
-        <div class="h-3 w-3 rounded-full bg-red-500/80"></div>
+        <div class="h-3 w-3 rounded-full bg-success"></div>
+        <div class="h-3 w-3 rounded-full bg-warning"></div>
+        <div class="h-3 w-3 rounded-full bg-danger"></div>
       </div>
 
       <!-- Browser Address Bar -->
