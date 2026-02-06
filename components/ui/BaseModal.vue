@@ -5,6 +5,7 @@
       leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-95">
       <div v-if="show" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
         @click.self="$emit('close')">
+        <!-- Conteneur de la Modal -->
         <div
           :class="['bg-WtB rounded-2xl shadow-2xl w-full p-6 space-y-4 border border-ash transition-all', maxWidthClass]">
           <div v-if="title || $slots.header" class="flex justify-between items-center">
@@ -17,10 +18,14 @@
                 class="h-5 w-5 sm:h-6 sm:w-6 transform transition duration-300 ease-in-out hover:rotate-90 hover:text-danger" />
             </button>
           </div>
-          <div class="relative max-h-[70vh] overflow-y-auto px-1 -mx-1">
+
+          <!-- Corps de la Modal -->
+          <div class="relative max-h-[70vh] overflow-y-auto px-1 -mx-1 no-scrollbar">
             <slot />
           </div>
-          <div v-if="$slots.footer" class="pt-2">
+
+          <!-- Pied de page de la Modal -->
+          <div v-if="$slots.footer" class="pt-4 border-t border-ash/30 flex justify-end gap-3">
             <slot name="footer" />
           </div>
         </div>
@@ -30,9 +35,10 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, watch } from 'vue'
+import { computed, onUnmounted, watch } from 'vue'
 import { IconX } from '@tabler/icons-vue'
 
+// Propriétés de la modal
 const props = defineProps({
   show: {
     type: Boolean,
@@ -50,12 +56,14 @@ const props = defineProps({
 
 const emit = defineEmits(['close'])
 
+// Gestion de la touche Échap
 const handleKeydown = (e: KeyboardEvent) => {
   if (e.key === 'Escape' && props.show) {
     emit('close')
   }
 }
 
+// Surveillance de la visibilité pour attacher l'écouteur clavier
 watch(() => props.show, (isVisible) => {
   if (import.meta.client) {
     if (isVisible) {
@@ -72,6 +80,7 @@ onUnmounted(() => {
   }
 })
 
+// Définition de la largeur maximale de la modal
 const maxWidthClass = computed(() => {
   switch (props.maxWidth) {
     case 'xs': return 'max-w-xs'
@@ -84,3 +93,14 @@ const maxWidthClass = computed(() => {
   }
 })
 </script>
+
+<style scoped>
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+</style>

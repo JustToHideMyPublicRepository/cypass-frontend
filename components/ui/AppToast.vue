@@ -14,6 +14,8 @@
             <div class="flex-shrink-0">
               <component :is="icon" class="h-6 w-6" :class="iconClass" aria-hidden="true" />
             </div>
+
+            <!-- Contenu textuel -->
             <div class="ml-3 w-0 flex-1 pt-0.5">
               <p id="toast-title" class="text-sm font-bold" :class="textClass">
                 {{ title }}
@@ -22,6 +24,8 @@
                 {{ message }}
               </p>
             </div>
+
+            <!-- Bouton de fermeture -->
             <div class="ml-4 flex-shrink-0 flex">
               <UiBaseButton variant="ghost"
                 class="!rounded-md !inline-flex text-hsa hover:!text-BtW focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors !p-1 !h-auto !w-auto"
@@ -32,7 +36,7 @@
             </div>
           </div>
         </div>
-        <!-- Progress Bar (Optional) -->
+        <!-- Barre de progression temporelle -->
         <div class="h-1 bg-ash overflow-hidden">
           <div class="h-full transition-all duration-100 ease-linear" :class="progressClass"
             :style="{ width: `${progress}%` }"></div>
@@ -46,6 +50,7 @@
 import { ref, watch, computed, onMounted, onUnmounted } from 'vue'
 import { IconCheck, IconX, IconAlertTriangle, IconInfoCircle, IconCircleX } from '@tabler/icons-vue'
 
+// Interface des propriétés du Toast
 interface Props {
   modelValue: boolean
   type?: 'success' | 'error' | 'warning' | 'info'
@@ -67,11 +72,13 @@ const progress = ref(100)
 let timer: any = null
 let progressInterval: any = null
 
+// Fermeture manuelle du toast
 const close = () => {
   emit('update:modelValue', false)
   emit('close')
 }
 
+// Lancement du minuteur de disparition
 const startTimer = () => {
   if (timer) clearTimeout(timer)
   if (progressInterval) clearInterval(progressInterval)
@@ -91,6 +98,7 @@ const startTimer = () => {
   }
 }
 
+// Surveillance de la visibilité
 watch(() => props.modelValue, (newVal) => {
   if (newVal) {
     startTimer()
@@ -100,6 +108,7 @@ watch(() => props.modelValue, (newVal) => {
   }
 })
 
+// Détermination de l'icône selon le type
 const icon = computed(() => {
   switch (props.type) {
     case 'success': return IconCheck
@@ -109,6 +118,7 @@ const icon = computed(() => {
   }
 })
 
+// Classes de bordure selon le type
 const containerClass = computed(() => {
   switch (props.type) {
     case 'success': return 'border-success/30'
@@ -118,6 +128,7 @@ const containerClass = computed(() => {
   }
 })
 
+// Classes de couleur d'icône
 const iconClass = computed(() => {
   switch (props.type) {
     case 'success': return 'text-success'
@@ -127,6 +138,7 @@ const iconClass = computed(() => {
   }
 })
 
+// Classes de couleur de texte
 const textClass = computed(() => {
   switch (props.type) {
     case 'success': return 'text-success'
@@ -136,6 +148,7 @@ const textClass = computed(() => {
   }
 })
 
+// Classes de couleur de la barre de progression
 const progressClass = computed(() => {
   switch (props.type) {
     case 'success': return 'bg-success'

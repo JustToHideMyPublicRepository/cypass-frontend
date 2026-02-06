@@ -1,16 +1,17 @@
 <template>
+  <!-- Conteneur principal du Skeleton -->
   <div :class="[
     'bg-ash relative overflow-hidden',
     animated ? 'animate-pulse' : '',
     typeClasses[type],
     customClass
   ]" :style="style">
-    <!-- Shimmer Effect -->
+    <!-- Effet de balayage -->
     <div v-if="animated"
       class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-ash/20 to-transparent shimmer animate-shimmer">
     </div>
 
-    <!-- Recursive items for count > 1 -->
+    <!-- Éléments récursifs si count > 1 -->
     <template v-if="count > 1">
       <div v-for="i in count" :key="i" :class="[
         'bg-ash/80 relative overflow-hidden mb-2 last:mb-0',
@@ -23,6 +24,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
+// Interface des propriétés du Skeleton
 interface Props {
   type?: 'text' | 'avatar' | 'rect' | 'heading' | 'card' | 'table-row' | 'circle'
   width?: string
@@ -42,6 +44,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const customClass = computed(() => props.class)
 
+// Classes de styles prédéfinies selon le type
 const typeClasses = {
   text: 'h-4 w-full rounded',
   avatar: 'h-12 w-12 rounded-full shrink-0',
@@ -52,6 +55,7 @@ const typeClasses = {
   circle: 'rounded-full'
 }
 
+// Calcul dynamique des styles inline
 const style = computed(() => {
   const s: Record<string, string> = {}
   if (props.width) s.width = props.width
@@ -69,6 +73,6 @@ const style = computed(() => {
 }
 
 .animate-shimmer {
-  animation: shimmer 1.5s infinite;
+  animation: shimmer 1.8s infinite cubic-bezier(0.4, 0, 0.2, 1);
 }
 </style>

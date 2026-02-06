@@ -1,21 +1,32 @@
 <template>
   <Teleport to="body">
-    <Transition enter-active-class="transition duration-300 ease-out" enter-from-class="opacity-0 scale-95"
-      enter-to-class="opacity-100 scale-100" leave-active-class="transition duration-200 ease-in"
+    <Transition enter-active-class="transition duration-500 ease-out" enter-from-class="opacity-0 scale-110"
+      enter-to-class="opacity-100 scale-100" leave-active-class="transition duration-300 ease-in"
       leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-95">
-      <div v-if="isDragging && activeHandlers.length > 0" class="fixed inset-0 z-[9999] pointer-events-none">
-        <!-- Backdrop Blur -->
-        <div class="absolute inset-0 bg-primary/20 backdrop-blur-xl transition-all duration-500"></div>
 
-        <!-- Center Content -->
-        <div class="absolute inset-0 flex items-center justify-center p-6">
+      <!-- Overlay de Drop Zone Global -->
+      <div v-if="isDragging && activeHandlers.length > 0" class="fixed inset-0 z-[9999] pointer-events-none">
+        <!-- Arrière-plan flouté avec teinte primaire -->
+        <div class="absolute inset-0 bg-primary/10 backdrop-blur-[40px] transition-all duration-700"></div>
+
+        <!-- Contenu central interactif -->
+        <div class="absolute inset-0 flex items-center justify-center p-8">
           <div
-            class="w-full max-w-xl aspect-video rounded-[60px] border-8 border-dashed border-WtB/40 flex flex-col items-center justify-center bg-primary/80 shadow-[0_0_100px_rgba(var(--color-primary),0.3)] animate-pulse-gentle">
-            <div class="w-32 h-32 bg-WtB rounded-full flex items-center justify-center mb-8 shadow-2xl scale-125">
-              <IconUpload class="w-16 h-16 text-primary animate-bounce" />
+            class="w-full max-w-2xl aspect-[16/10] rounded-[4rem] border-8 border-dashed border-white/20 flex flex-col items-center justify-center bg-primary/40 shadow-[0_0_150px_rgba(var(--color-primary),0.4)] animate-pulse-ultra">
+
+            <!-- Conteneur d'icône flottante -->
+            <div
+              class="w-40 h-40 bg-WtB rounded-[2.5rem] flex items-center justify-center mb-10 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)] scale-125 border-4 border-primary/20">
+              <IconUpload class="w-20 h-20 text-primary animate-bounce-slow" />
             </div>
-            <h2 class="text-4xl font-black text-WtB uppercase tracking-tighter mb-4">Déposez votre fichier</h2>
-            <p class="text-WtB font-bold text-lg">Relâchez pour déposer le fichier</p>
+
+            <!-- Textes d'instruction -->
+            <h2 class="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter mb-4 text-center">
+              Déposez pour analyser
+            </h2>
+            <p class="text-white/80 font-black uppercase tracking-[0.3em] text-xs md:text-sm">
+              Relâchez votre document ici
+            </p>
           </div>
         </div>
       </div>
@@ -30,6 +41,7 @@ import { useGlobalDropZone } from '~/composables/useDropZone'
 
 const { isDragging, dragCounter, activeHandlers, handleGlobalDrop } = useGlobalDropZone()
 
+// Gestion de l'entrée d'un fichier dans la zone de survol
 const onDragEnter = (e: DragEvent) => {
   e.preventDefault()
   if (activeHandlers.value.length === 0) return
@@ -37,6 +49,7 @@ const onDragEnter = (e: DragEvent) => {
   isDragging.value = true
 }
 
+// Gestion de la sortie de la zone de survol
 const onDragLeave = (e: DragEvent) => {
   e.preventDefault()
   dragCounter.value--
@@ -46,10 +59,12 @@ const onDragLeave = (e: DragEvent) => {
   }
 }
 
+// Empêcher le comportement par défaut du navigateur
 const onDragOver = (e: DragEvent) => {
   e.preventDefault()
 }
 
+// Traitement du dépôt (drop) final
 const onDrop = (e: DragEvent) => {
   e.preventDefault()
   isDragging.value = false
@@ -60,6 +75,7 @@ const onDrop = (e: DragEvent) => {
   }
 }
 
+// Enregistrement des écouteurs globaux au montage
 onMounted(() => {
   window.addEventListener('dragenter', onDragEnter)
   window.addEventListener('dragleave', onDragLeave)
@@ -67,6 +83,7 @@ onMounted(() => {
   window.addEventListener('drop', onDrop)
 })
 
+// Nettoyage des écouteurs au démontage
 onUnmounted(() => {
   window.removeEventListener('dragenter', onDragEnter)
   window.removeEventListener('dragleave', onDragLeave)
@@ -76,21 +93,39 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-@keyframes pulse-gentle {
+@keyframes pulse-ultra {
 
   0%,
   100% {
-    opacity: 1;
     transform: scale(1);
+    opacity: 1;
   }
 
   50% {
-    opacity: 0.95;
-    transform: scale(0.98);
+    transform: scale(0.97);
+    opacity: 0.9;
   }
 }
 
-.animate-pulse-gentle {
-  animation: pulse-gentle 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+.animate-pulse-ultra {
+  animation: pulse-ultra 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-bounce-slow {
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+
+  0%,
+  100% {
+    transform: translateY(-10%);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+
+  50% {
+    transform: none;
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
 }
 </style>
