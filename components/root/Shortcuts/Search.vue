@@ -36,8 +36,36 @@
           class="!px-2.5 md:!px-3 !py-1.5 md:!py-2 !text-[11px] md:!text-xs !font-bold !rounded-lg md:!rounded-xl transition-all !flex !items-center !gap-1 !h-auto"
           :class="groupSort === option.value ? '!bg-primary !text-WtB shadow-md' : 'hover:!bg-ash'">
           <component :is="option.icon" class="w-3.5 h-3.5" />
-          {{ option.label }}
+          <span class="hidden sm:inline">{{ option.label }}</span>
         </UiBaseButton>
+      </div>
+
+      <!-- Actions Globales -->
+      <div class="flex items-center gap-1 bg-WtB border border-ash rounded-xl md:rounded-2xl p-1 shadow-sm shrink-0">
+        <UiBaseButton @click="handleResetAll" variant="ghost"
+          class="!px-3 !py-1.5 md:!py-2 !text-[11px] md:!text-xs !font-bold !rounded-lg md:!rounded-xl hover:!bg-danger/10 hover:!text-danger transition-all !flex !items-center !gap-1.5 !h-auto"
+          title="Tout réinitialiser par défaut">
+          <IconRotate class="w-3.5 h-3.5" />
+          <span class="hidden lg:inline">Reset</span>
+        </UiBaseButton>
+
+        <div class="w-[1px] h-4 bg-ash mx-1"></div>
+
+        <UiBaseButton @click="store.exportConfig" variant="ghost"
+          class="!px-3 !py-1.5 md:!py-2 !text-[11px] md:!text-xs !font-bold !rounded-lg md:!rounded-xl hover:!bg-ash transition-all !flex !items-center !gap-1.5 !h-auto"
+          title="Exporter ma configuration (JSON)">
+          <IconDownload class="w-3.5 h-3.5" />
+          <span class="hidden lg:inline">Export</span>
+        </UiBaseButton>
+
+        <UiBaseButton @click="triggerImport" variant="ghost"
+          class="!px-3 !py-1.5 md:!py-2 !text-[11px] md:!text-xs !font-bold !rounded-lg md:!rounded-xl hover:!bg-ash transition-all !flex !items-center !gap-1.5 !h-auto"
+          title="Importer une configuration">
+          <IconUpload class="w-3.5 h-3.5" />
+          <span class="hidden lg:inline">Import</span>
+        </UiBaseButton>
+
+        <input type="file" ref="fileInput" @change="handleImport" accept=".json" class="hidden">
       </div>
     </div>
   </div>
@@ -45,7 +73,21 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { IconSearch, IconSortAscendingLetters, IconSortDescendingLetters, IconSortAscending, IconSortDescending } from '@tabler/icons-vue'
+import {
+  IconSearch,
+  IconSortAscendingLetters,
+  IconSortDescendingLetters,
+  IconSortAscending,
+  IconSortDescending,
+  IconRotate,
+  IconDownload,
+  IconUpload
+} from '@tabler/icons-vue'
+import { useShortcutsStore } from '~/stores/shortcuts'
+import { useToastStore } from '~/stores/toast'
+
+const store = useShortcutsStore()
+const toast = useToastStore()
 
 defineProps<{
   searchQuery: string
@@ -68,6 +110,37 @@ const groupSortOptions = [
   { label: 'Plus', value: 'more', icon: IconSortDescending },
   { label: 'Moins', value: 'less', icon: IconSortAscending }
 ] as const
+
+const fileInput = ref<HTMLInputElement | null>(null)
+
+const handleResetAll = () => {
+  if (confirm('Voulez-vous vraiment réinitialiser TOUS les raccourcis par défaut ?')) {
+    store.resetAllShortcuts()
+    toast.showToast('info', 'Réinitialisation', 'Tous les raccourcis ont été remis à zéro.')
+  }
+}
+
+const triggerImport = () => {
+  fileInput.value?.click()
+}
+
+const handleImport = (event: Event) => {
+  const file = (event.target as HTMLInputElement).files?.[0]
+  if (!file) return
+
+  const reader = new FileReader()
+  reader.onload = (e) => {
+    const content = e.target?.result as string
+    if (store.importConfig(content)) {
+      toast.showToast('success', 'Importation réussie', 'Votre configuration a été appliquée.')
+    } else {
+      toast.showToast('error', 'Erreur d\'importation', 'Le fichier JSON est invalide.')
+    }
+  }
+  reader.readAsText(file)
+  // Reset input
+  if (fileInput.value) fileInput.value.value = ''
+}
 
 defineExpose({
   focus: () => searchInput.value?.focus()

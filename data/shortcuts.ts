@@ -250,21 +250,10 @@ export const shortcutsData: Record<string, ShortcutEntry> = {
     group: 'Actions',
     modifier: 'Ctrl'
   },
-  help: {
-    keys: ['?'],
-    label: 'Aide (Raccourcis clavier)',
-    path: '/shortcuts',
-    isGlobal: false,
-    group: 'Actions'
-  },
+
 
   // ACTIONS
-  toggle_help: {
-    keys: ['espace'],
-    label: 'Ouvrir le centre d\'aide',
-    isGlobal: false,
-    group: 'Actions'
-  },
+
   toggle_theme: {
     keys: ['l'],
     label: 'Changer le thème',
@@ -308,6 +297,21 @@ export const shortcutsData: Record<string, ShortcutEntry> = {
     modifier: 'Ctrl + Shift'
   },
 
+  // GLOBAL ACTIONS
+  help: {
+    keys: ['?'],
+    label: 'Aide et raccourcis',
+    path: '/shortcuts',
+    isGlobal: true,
+    group: 'Général'
+  },
+  toggle_help_modal: {
+    keys: [' '],
+    label: 'Afficher l\'aide rapide (Overlay)',
+    isGlobal: true,
+    group: 'Général'
+  },
+
   // BOUTONS
   modal_close: {
     keys: ['esc'],
@@ -335,16 +339,18 @@ export const shortcutsData: Record<string, ShortcutEntry> = {
   }
 }
 
-export const getShortcutStr = (name: string): string => {
-  const s = shortcutsData[name]
+export const getShortcutStr = (name: string, customShortcuts?: Record<string, ShortcutEntry>): string => {
+  const data = customShortcuts || shortcutsData
+  const s = data[name]
   if (!s) return ''
   const keys = s.keys.map(k => k.toUpperCase()).join(' + ')
   if (s.modifier) return `${s.modifier} + ${keys}`
   return keys
 }
 
-export const getLinkTooltip = (pathOrName: string) => {
-  const entry = shortcutsData[pathOrName] || Object.values(shortcutsData).find(s => s.path === pathOrName)
+export const getLinkTooltip = (pathOrName: string, customShortcuts?: Record<string, ShortcutEntry>) => {
+  const data = customShortcuts || shortcutsData
+  const entry = data[pathOrName] || Object.values(data).find(s => s.path === pathOrName)
   if (!entry) return null
 
   const modifiers = entry.modifier
@@ -356,7 +362,8 @@ export const getLinkTooltip = (pathOrName: string) => {
   return `<span class="kbd-wrapper">${modifiers}${keys}</span>`
 }
 
-export const getShortcutKey = (path: string): string | null => {
-  const entry = Object.values(shortcutsData).find(s => s.path === path)
+export const getShortcutKey = (path: string, customShortcuts?: Record<string, ShortcutEntry>): string | null => {
+  const data = customShortcuts || shortcutsData
+  const entry = Object.values(data).find(s => s.path === path)
   return entry ? entry.keys[entry.keys.length - 1].toUpperCase() : null
 }

@@ -1,7 +1,6 @@
 <template>
   <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-    <RootShortcutsHeader @open-settings="showSettings = true" />
-    <RootShortcutsExpertMode />
+    <RootShortcutsHeader @open-settings="showSettings = true" @open-expert="showExpert = true" />
 
     <RootShortcutsSearch ref="searchComp" v-model:searchQuery="searchQuery" v-model:sortBy="sortBy"
       v-model:groupSort="groupSort" />
@@ -10,14 +9,15 @@
     <RootShortcutsFooter />
 
     <!-- Paramètres Modale -->
-    <ModalShortcuts :show="showSettings" @close="showSettings = false" />
+    <ModalShortcutsSetting :show="showSettings" @close="showSettings = false" />
+    <ModalShortcutsExpertDetails :show="showExpert" @close="showExpert = false" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
-import { shortcutsData } from '@/data/shortcuts'
 import { useShortcutsStore } from '~/stores/shortcuts'
+import { useShortcuts } from '~/composables/useShortcuts'
 
 definePageMeta({
   layout: 'guest'
@@ -33,8 +33,9 @@ const searchQuery = ref('')
 const sortBy = ref<'name' | 'key'>(store.sortBy)
 const groupSort = ref<'az' | 'za' | 'more' | 'less'>(store.groupSort)
 const showSettings = ref(false)
+const showExpert = ref(false)
 
-// Persist sort preferences to store
+// Conserver les préférences de tri dans le stockage
 watch(sortBy, (newVal) => {
   store.sortBy = newVal
   store.save()
@@ -49,17 +50,17 @@ useShortcuts({
   searchCallback: () => searchComp.value?.focus()
 })
 
-// Process shortcuts data
+// Données de raccourcis de traitement
 const structuredShortcuts = computed(() => {
   const groups: Record<string, any[]> = {}
 
-  Object.values(shortcutsData).forEach(s => {
+  Object.entries(store.mergedShortcuts).forEach(([id, s]) => {
     const groupName = s.group || (s.isGlobal ? 'Général' : 'Actions Contextuelles')
     if (!groups[groupName]) groups[groupName] = []
-    groups[groupName].push(s)
+    groups[groupName].push({ ...s, id })
   })
 
-  // Sort groups based on groupSort preference
+  // Trier les groupes selon la préférence groupSort
   return Object.keys(groups)
     .sort((a, b) => {
       switch (groupSort.value) {
@@ -86,7 +87,7 @@ const filteredShortcuts = computed(() => {
   return structuredShortcuts.value.map(cat => {
     let items = [...cat.items]
 
-    // Search filter
+    // Filtre de recherche
     if (query) {
       items = items.filter(s =>
         s.label.toLowerCase().includes(query) ||
@@ -94,7 +95,7 @@ const filteredShortcuts = computed(() => {
       )
     }
 
-    // Sorting
+    // Tri
     items.sort((a, b) => {
       if (sortBy.value === 'name') {
         return a.label.localeCompare(b.label)

@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { shortcutsData } from '@/data/shortcuts'
 
 interface ShortcutSettings {
   enabled: boolean
@@ -10,6 +11,7 @@ interface ShortcutSettings {
   isHelpOpen: boolean
   altMode: boolean
   buffer: string[]
+  customShortcuts: Record<string, { keys: string[], modifier?: string }>
 }
 
 export const useShortcutsStore = defineStore('shortcuts', {
@@ -22,8 +24,28 @@ export const useShortcutsStore = defineStore('shortcuts', {
     groupSort: 'az',
     isHelpOpen: false,
     altMode: false,
-    buffer: []
+    buffer: [],
+    customShortcuts: {}
   }),
+
+  getters: {
+    /**
+     * Fusionne les raccourcis par défaut avec les personnalisations utilisateur
+     */
+    mergedShortcuts: (state) => {
+      const merged = { ...shortcutsData }
+      Object.entries(state.customShortcuts).forEach(([id, custom]) => {
+        if (merged[id]) {
+          merged[id] = {
+            ...merged[id],
+            keys: custom.keys,
+            modifier: custom.modifier
+          }
+        }
+      })
+      return merged
+    }
+  },
 
   actions: {
     init() {
@@ -65,7 +87,7 @@ export const useShortcutsStore = defineStore('shortcuts', {
       else body.classList.remove('shortcuts-button-hints-enabled')
     },
 
-    toggleSetting(key: keyof Omit<ShortcutSettings, 'sortBy' | 'groupSort' | 'isHelpOpen' | 'altMode' | 'buffer'>) {
+    toggleSetting(key: keyof Omit<ShortcutSettings, 'sortBy' | 'groupSort' | 'isHelpOpen' | 'altMode' | 'buffer' | 'customShortcuts'>) {
       this[key] = !this[key]
       this.save()
     },
@@ -105,8 +127,77 @@ export const useShortcutsStore = defineStore('shortcuts', {
       this.groupSort = 'az'
       this.altMode = false
       this.buffer = []
+      this.customShortcuts = {}
 
       this.save()
+    },
+
+    /**
+     * Met à jour un raccourci spécifique
+     */
+    updateShortcut(id: string, keys: string[], modifier?: string) {
+      this.customShortcuts[id] = { keys, modifier }
+      this.save()
+    },
+
+    /**
+     * Réinitialise un raccourci spécifique vers sa valeur par défaut
+     */
+    resetShortcut(id: string) {
+      delete this.customShortcuts[id]
+      this.save()
+    },
+
+    /**
+     * Réinitialise tous les raccourcis vers leurs valeurs par défaut
+     */
+    resetAllShortcuts() {
+      this.customShortcuts = {}
+      this.save()
+    },
+
+    /**
+     * Exporte la configuration actuelle en JSON
+     */
+    exportConfig() {
+      if (import.meta.server) return
+      const config = JSON.stringify({
+        customShortcuts: this.customShortcuts,
+        settings: {
+          enabled: this.enabled,
+          showHover: this.showHover,
+          showAlt: this.showAlt,
+          showButtonHints: this.showButtonHints
+        }
+      }, null, 2)
+
+      const blob = new Blob([config], { type: 'application/json' })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `cypass-shortcuts-${new Date().toISOString().split('T')[0]}.json`
+      a.click()
+      URL.revokeObjectURL(url)
+    },
+
+    /**
+     * Importe une configuration depuis un JSON
+     */
+    importConfig(json: string) {
+      try {
+        const parsed = JSON.parse(json)
+        if (parsed.customShortcuts) {
+          this.customShortcuts = parsed.customShortcuts
+        }
+        if (parsed.settings) {
+          Object.assign(this.$state, parsed.settings)
+        }
+        this.save()
+        return true
+      } catch (e) {
+        console.error('Failed to import shortcuts config', e)
+        return false
+      }
     }
   }
 })

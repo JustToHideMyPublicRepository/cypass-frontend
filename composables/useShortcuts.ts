@@ -76,7 +76,7 @@ export const useShortcuts = (options: ShortcutOptions = {}) => {
     const currentBuffer = [...shiftBuffer.value]
 
     // Check for matches
-    const matches = Object.values(shortcutsData).filter(s => {
+    const matches = Object.values(store.mergedShortcuts).filter(s => {
       if (!s.isGlobal || s.modifier !== 'Shift') return false
       return s.keys.slice(0, currentBuffer.length).every((k, i) => k.toLowerCase() === currentBuffer[i])
     })
@@ -127,7 +127,7 @@ export const useShortcuts = (options: ShortcutOptions = {}) => {
       const currentBuffer = store.buffer.map(k => k.toLowerCase())
 
       // Find exact match
-      const exactMatch = Object.values(shortcutsData).find(s => {
+      const exactMatch = Object.values(store.mergedShortcuts).find(s => {
         if (!s.isGlobal) return false
         if (s.keys.length !== currentBuffer.length) return false
         return s.keys.every((k, i) => k.toLowerCase() === currentBuffer[i])
@@ -139,7 +139,7 @@ export const useShortcuts = (options: ShortcutOptions = {}) => {
         updateVisualHints()
       } else {
         // Check if any valid sequence remains
-        const potentialMatches = Object.values(shortcutsData).filter(s => {
+        const potentialMatches = Object.values(store.mergedShortcuts).filter(s => {
           if (!s.isGlobal) return false
           return s.keys.length > currentBuffer.length &&
             s.keys.slice(0, currentBuffer.length).every((k, i) => k.toLowerCase() === currentBuffer[i])
@@ -176,8 +176,12 @@ export const useShortcuts = (options: ShortcutOptions = {}) => {
       return
     }
 
-    // Logout Shortcut (Ctrl + Shift + D)
-    if ((event.ctrlKey || event.metaKey) && event.shiftKey && key === 'd') {
+    // Logout Shortcut (Ctrl + Shift + D by default)
+    const logoutShortcut = store.mergedShortcuts.logout
+    const lKeys = logoutShortcut.keys[0].toLowerCase()
+    const lModifier = logoutShortcut.modifier
+
+    if (lModifier === 'Ctrl + Shift' && (event.ctrlKey || event.metaKey) && event.shiftKey && key === lKeys) {
       event.preventDefault()
       if (authStore.user) {
         authStore.openLogoutModal()
@@ -185,18 +189,33 @@ export const useShortcuts = (options: ShortcutOptions = {}) => {
       return
     }
 
-    // Theme Toggle (Ctrl + Shift + L)
-    if ((event.ctrlKey || event.metaKey) && event.shiftKey && key === 'l') {
+    // Theme Toggle (Ctrl + Shift + L by default)
+    const toggleThemeShortcut = store.mergedShortcuts.toggle_theme
+    const ttKeys = toggleThemeShortcut.keys[0].toLowerCase()
+    const ttModifier = toggleThemeShortcut.modifier
+
+    if (ttModifier === 'Ctrl + Shift' && (event.ctrlKey || event.metaKey) && event.shiftKey && key === ttKeys) {
       event.preventDefault()
       const colorMode = useColorMode()
       colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
       return
     }
 
-    // Help shortcut ('?') - can be typed with or without Shift
-    if (event.key === '?' && !event.ctrlKey && !event.metaKey && !event.altKey) {
+    // Help shortcut (Dynamic)
+    const helpShortcut = store.mergedShortcuts.help
+    const hKeys = helpShortcut.keys[0].toLowerCase()
+    const hMod = helpShortcut.modifier
+
+    let isMatch = false
+    if (!hMod && !event.ctrlKey && !event.metaKey && !event.altKey && !event.shiftKey && key === hKeys) isMatch = true
+    else if (hMod === 'Shift' && event.shiftKey && !event.ctrlKey && !event.metaKey && !event.altKey && key === hKeys) isMatch = true
+
+    // Special case for '?' which often requires shift but event.key is '?'
+    if (event.key === hKeys && !event.ctrlKey && !event.metaKey && !event.altKey) isMatch = true
+
+    if (isMatch) {
       event.preventDefault()
-      router.push('/shortcuts')
+      router.push(helpShortcut.path || '/shortcuts')
       return
     }
 
@@ -214,13 +233,14 @@ export const useShortcuts = (options: ShortcutOptions = {}) => {
       }
     }
 
-    // Global Key (Single press, no modifiers)
-    if (!event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey) {
-      // Space to toggle help
-      if (event.key === ' ') {
-        event.preventDefault()
-        store.toggleHelp()
-      }
+    // Global toggle (Dynamic)
+    const toggleShortcut = store.mergedShortcuts.toggle_help_modal
+    const tKeys = toggleShortcut.keys[0].toLowerCase()
+    const tMod = toggleShortcut.modifier
+
+    if (!tMod && !event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey && (key === tKeys || event.key === ' ')) {
+      event.preventDefault()
+      store.toggleHelp()
     }
 
     // Shift + Arrow shortcuts (scroll and history)
