@@ -179,7 +179,9 @@ export const useShortcuts = (options: ShortcutOptions = {}) => {
     // Logout Shortcut (Ctrl + Shift + D)
     if ((event.ctrlKey || event.metaKey) && event.shiftKey && key === 'd') {
       event.preventDefault()
-      authStore.openLogoutModal()
+      if (authStore.user) {
+        authStore.openLogoutModal()
+      }
       return
     }
 
