@@ -1,5 +1,5 @@
 <template>
-  <div class="relative">
+  <div class="relative pb-8">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
 
       <div class="grid lg:grid-cols-2 gap-10 md:gap-16 items-center">

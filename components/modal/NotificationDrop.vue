@@ -1,6 +1,6 @@
 <template>
   <div class="relative" ref="notificationRef">
-    <!-- Bell Button -->
+    <!-- Bouton Cloche -->
     <UiBaseButton @click="toggleDropdown" variant="ghost"
       class="!p-2 !rounded-xl text-hsa hover:!bg-ash transition-all relative group !h-auto !w-auto"
       title="Notifications">
@@ -13,7 +13,7 @@
       </div>
     </UiBaseButton>
 
-    <!-- Dropdown -->
+    <!-- Menu Déroulant -->
     <Teleport to="body" :disabled="!isMobile">
       <Transition enter-active-class="transition duration-200 ease-out"
         enter-from-class="opacity-0 scale-95 -translate-y-2" enter-to-class="opacity-100 scale-100 translate-y-0"
@@ -23,23 +23,25 @@
           class="mt-3 w-[calc(100vw-2rem)] md:w-[380px] bg-WtB border border-ash rounded-2xl shadow-2xl z-[999] overflow-hidden flex flex-col max-h-[500px]"
           :class="isMobile ? 'fixed' : 'absolute right-0'">
 
-          <!-- Header -->
+          <!-- En-tête du Dropdown -->
           <div class="p-4 border-b border-ash flex items-center justify-between bg-ash/10">
             <h3 class="font-bold text-BtW">Notifications</h3>
             <UiBaseButton v-if="store.unreadCount > 0" @click="handleMarkAllAsRead" variant="ghost"
               class="!text-[10px] !font-black !uppercase tracking-widest !text-primary hover:!text-secondary transition-colors !p-0 !bg-transparent hover:!bg-transparent !h-auto">
-              Tout lire
+              Tout marquer lu
             </UiBaseButton>
           </div>
 
-          <!-- List -->
+          <!-- Liste des notifications -->
           <div class="overflow-y-auto flex-1 scrollbar-hide">
+            <!-- État : Chargement -->
             <div v-if="store.loading && !store.notifications.length" class="p-8 text-center">
               <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-2"></div>
-              <p class="text-xs text-hsa text-BtW">Chargement...</p>
+              <p class="text-xs text-hsa text-BtW">Synchronisation...</p>
             </div>
 
             <div v-else-if="!store.notifications.length" class="p-12 text-center">
+              <!-- État : Vide -->
               <div
                 class="w-16 h-16 bg-ash/30 rounded-full flex items-center justify-center mx-auto mb-4 grayscale opacity-20">
                 <IconBellOff class="w-8 h-8" />
@@ -48,14 +50,18 @@
               <p class="text-xs text-hsa mt-1">Vous êtes à jour !</p>
             </div>
 
+            <!-- Liste effective -->
             <div v-else class="divide-y divide-ash/50">
               <div v-for="notif in store.notifications.slice(0, 5)" :key="notif.id"
                 :class="['p-4 transition-all cursor-pointer relative group', !notif.is_read ? 'bg-primary/5 hover:bg-primary/10' : 'hover:bg-ash/30']"
                 @click="goToNotification(notif.id)">
+
+                <!-- Indicateur de message non lu -->
                 <div v-if="!notif.is_read"
                   class="absolute left-1 top-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-primary rounded-full"></div>
 
-                <div class="flex gap-3 pl-2">
+                <div class="flex gap-4 pl-2">
+                  <!-- Icône de type (Dynamique) -->
                   <div :class="[
                     'w-10 h-10 rounded-xl flex items-center justify-center shrink-0',
                     !notif.is_read ? getTypeStyles(notif.type) : 'bg-ash/50 text-hsa'
@@ -75,10 +81,10 @@
             </div>
           </div>
 
-          <!-- Footer -->
+          <!-- Pied de page : Tout voir -->
           <NuxtLink to="/dashboard/notifications" @click="isOpen = false"
             class="p-4 border-t border-ash text-center text-xs font-black uppercase tracking-[0.2em] text-hsa hover:text-primary hover:bg-ash/10 transition-all">
-            Tout voir
+            Explorer tout le journal
           </NuxtLink>
         </div>
       </Transition>
@@ -103,27 +109,42 @@ const isOpen = ref(false)
 const notificationRef = ref<HTMLElement | null>(null)
 let refreshInterval: any = null
 
+/**
+ * Formate le compteur de notifications (plafonné à 20+)
+ */
 const formattedCount = computed(() => {
   if (store.unreadCount > 20) return '20+'
   return store.unreadCount.toString()
 })
 
+/**
+ * Marque toutes les notifications comme lues via le store
+ */
 const handleMarkAllAsRead = async () => {
   const success = await store.markAsRead('all')
   if (success) {
-    toastStore.showToast('success', 'Notifications lues', 'Toutes vos notifications sont marquées comme lues.')
+    toastStore.showToast('success', 'Journal synchronisé', 'Toutes vos notifications sont marquées comme lues.')
   }
 }
 
+/**
+ * Bascule l'affichage du menu déroulant
+ */
 const toggleDropdown = () => {
   isOpen.value = !isOpen.value
 }
 
+/**
+ * Redirige vers le détail d'une notification et ferme le menu
+ */
 const goToNotification = (id: string) => {
   isOpen.value = false
   navigateTo(`/dashboard/notifications/${id}`)
 }
 
+/**
+ * Formate la date relative en français (ex: "il y a 5 min")
+ */
 const formatRelativeDate = (date: string) => {
   try {
     return formatDistanceToNow(new Date(date), { addSuffix: true, locale: fr })
@@ -134,12 +155,18 @@ const formatRelativeDate = (date: string) => {
 
 const isMobile = ref(false)
 
+/**
+ * Détection du mode mobile pour l'ajustement du Teleport
+ */
 const checkMobile = () => {
   if (import.meta.client) {
     isMobile.value = window.innerWidth < 768
   }
 }
 
+/**
+ * Calcul de la position dynamique pour le mode mobile
+ */
 const dynamicPosition = computed(() => {
   if (isMobile.value) {
     return {
@@ -153,9 +180,11 @@ const dynamicPosition = computed(() => {
   return {}
 })
 
+/**
+ * Ferme le menu lors d'un clic à l'extérieur
+ */
 const handleClickOutside = (event: MouseEvent) => {
   const target = event.target as HTMLElement
-  // Check if click is on the bell button or within the dropdown
   const dropdown = document.getElementById('notification-dropdown')
 
   if (notificationRef.value && !notificationRef.value.contains(target) && dropdown && !dropdown.contains(target)) {
@@ -163,18 +192,20 @@ const handleClickOutside = (event: MouseEvent) => {
   }
 }
 
+// Cycle de vie : Initialisation
 onMounted(() => {
   checkMobile()
   window.addEventListener('resize', checkMobile)
   document.addEventListener('click', handleClickOutside)
   store.fetchNotifications(5, 0)
 
-  // Setup background refresh every 60 seconds
+  // Rafraîchissement automatique toutes les 60 secondes
   refreshInterval = setInterval(() => {
     store.fetchNotifications(5, 0)
   }, 60000)
 })
 
+// Cycle de vie : Nettoyage
 onUnmounted(() => {
   window.removeEventListener('resize', checkMobile)
   document.removeEventListener('click', handleClickOutside)

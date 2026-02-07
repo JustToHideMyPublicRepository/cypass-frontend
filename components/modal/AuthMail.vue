@@ -1,25 +1,29 @@
 <template>
-  <UiBaseModal :show="show" title="Renvoyer l'email de vérification" @close="$emit('close')">
-    <form @submit.prevent="handleSubmit" class="space-y-4">
-      <p class="text-sm text-hsa">
-        Veuillez entrer votre adresse email pour recevoir un nouveau lien de vérification.
+  <UiBaseModal :show="show" title="Email de vérification" @close="$emit('close')">
+    <form @submit.prevent="handleSubmit" class="space-y-6 py-2">
+      <!-- Message d'instruction -->
+      <p class="text-sm text-hsa font-medium leading-relaxed">
+        Veuillez entrer votre adresse email pour recevoir un nouveau lien de vérification sécurisé.
       </p>
 
-      <div class="space-y-1">
-        <label class="text-xs font-bold text-hsa uppercase">Adresse Email</label>
-        <div class="relative">
-          <IconMail class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-hsa" />
-          <input type="email" v-model="email" required placeholder="votre@email.com"
-            class="w-full pl-10 pr-4 py-2.5 rounded-lg bg-ash border border-ashAct focus:ring-2 focus:ring-primary outline-none text-BtW"
-            autofocus />
+      <!-- Champ de saisie de l'email -->
+      <div class="space-y-2">
+        <label class="text-[10px] font-black text-hsa uppercase tracking-[0.2em] ml-1">Adresse Email</label>
+        <div class="relative group">
+          <div
+            class="absolute left-4 top-1/2 -translate-y-1/2 text-hsa group-focus-within:text-primary transition-colors">
+            <IconMail class="w-5 h-5" />
+          </div>
+          <input type="email" v-model="email" required placeholder="votre@email.com" class="input pl-12" autofocus />
         </div>
       </div>
 
-      <div class="pt-4 flex justify-end gap-3">
-        <UiBaseButton variant="ghost" type="button" @click="$emit('close')">
+      <!-- Actions de la modale -->
+      <div class="pt-4 flex flex-col sm:flex-row justify-end gap-3">
+        <UiBaseButton variant="ghost" type="button" @click="$emit('close')" class="!rounded-2xl border-none">
           Annuler
         </UiBaseButton>
-        <UiBaseButton type="submit" variant="primary" :loading="loading">
+        <UiBaseButton type="submit" variant="primary" :loading="loading" class="!rounded-2xl shadow-lg">
           Envoyer le lien
         </UiBaseButton>
       </div>
@@ -31,6 +35,7 @@
 import { ref } from 'vue'
 import { IconMail } from '@tabler/icons-vue'
 
+// Propriétés de la modale AuthMail
 const props = defineProps<{
   show: boolean
   loading?: boolean
@@ -39,8 +44,10 @@ const props = defineProps<{
 
 const emit = defineEmits(['close', 'submit'])
 
+// État local de l'email
 const email = ref(props.initialEmail || '')
 
+// Gestion de la soumission du formulaire
 const handleSubmit = () => {
   if (email.value) {
     emit('submit', email.value)

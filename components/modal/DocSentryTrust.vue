@@ -1,11 +1,14 @@
 <template>
   <UiBaseModal :show="show" title="Certificat de Confiance" maxWidth="2xl" @close="$emit('close')">
     <div v-if="store.publicKeyInfo" class="flex flex-col md:flex-row gap-6 items-start py-2">
-      <div class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center text-primary shrink-0">
-        <IconCertificate class="w-10 h-10" />
+      <!-- Icône de certification premium -->
+      <div
+        class="w-24 h-24 bg-primary/10 rounded-[2rem] flex items-center justify-center text-primary shrink-0 shadow-lg shadow-primary/5 animate-fade-in border border-primary/10">
+        <IconCertificate class="w-12 h-12" />
       </div>
 
       <div class="flex-1 space-y-4">
+        <!-- Titre et statut -->
         <div>
           <h3 class="text-lg font-black text-BtW flex items-center gap-2">
             Certificat de Confiance National
@@ -14,6 +17,7 @@
           <p class="text-xs text-hsa">{{ store.publicKeyInfo.usage }}</p>
         </div>
 
+        <!-- Informations clés -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div class="p-3 bg-ash/30 rounded-xl border border-ash/50">
             <p class="text-[9px] text-hsa uppercase font-black mb-1">Organisation Émettrice</p>
@@ -26,6 +30,7 @@
           </div>
         </div>
 
+        <!-- Empreinte de la clé (Fingerprint) -->
         <div class="space-y-2">
           <div class="flex justify-between items-center px-1">
             <p class="text-[9px] text-hsa uppercase font-black">Empreinte de la Clé (Fingerprint)</p>
@@ -42,6 +47,7 @@
           </div>
         </div>
 
+        <!-- Footer du certificat -->
         <div class="flex flex-wrap items-center justify-between gap-4 pt-2 text-[10px]">
           <div class="flex items-center gap-4 text-hsa">
             <span class="flex items-center gap-1">
@@ -67,6 +73,7 @@ import { useDocumentsStore } from '~/stores/documents'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 
+// Propriétés de la modale DocSentryTrust
 defineProps<{
   show: boolean
 }>()
@@ -76,12 +83,18 @@ defineEmits(['close'])
 const store = useDocumentsStore()
 const copied = ref(false)
 
+/**
+ * Copie le fingerprint dans le presse-papier
+ */
 const copy = (text: string) => {
   navigator.clipboard.writeText(text)
   copied.value = true
   setTimeout(() => copied.value = false, 2000)
 }
 
+/**
+ * Formate la date selon les standards français
+ */
 const formatDate = (dateStr: string) => {
   if (!dateStr) return '-'
   try {

@@ -1,7 +1,7 @@
 <template>
   <UiBaseModal :show="show" title="Aperçu de la photo" maxWidth="xl" @close="$emit('close')">
     <div class="relative bg-black/5 rounded-2xl overflow-hidden group">
-      <!-- Image Container with Transformations -->
+      <!-- Conteneur d'image avec transformations interactives -->
       <div class="h-[400px] flex items-center justify-center overflow-hidden cursor-move active:cursor-grabbing"
         @mousedown="startDrag" @mousemove="onDrag" @mouseup="stopDrag" @mouseleave="stopDrag"
         @wheel.prevent="handleWheel">
@@ -10,34 +10,45 @@
           :style="imageStyle" draggable="false" />
       </div>
 
-      <!-- Toolbar -->
+      <!-- Barre d'outils flottante premium -->
       <div
         class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-WtB/90 backdrop-blur-2xl px-4 py-2 rounded-2xl shadow-xl flex items-center gap-2 border border-ash opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <!-- Rotation gauche -->
         <UiBaseButton @click="rotate(-90)" variant="ghost"
           class="!p-2 hover:!bg-primary/10 !rounded-xl hover:!text-primary transition-colors !h-auto !w-auto"
           title="Pivoter à gauche">
           <IconRotate2 class="w-5 h-5" />
         </UiBaseButton>
         <div class="w-px h-6 bg-ash/50"></div>
+
+        <!-- Zoom arrière -->
         <UiBaseButton @click="zoomOut" variant="ghost"
           class="!p-2 hover:!bg-primary/10 !rounded-xl hover:!text-primary transition-colors !h-auto !w-auto"
           title="Dézoomer">
           <IconZoomOut class="w-5 h-5" />
         </UiBaseButton>
+
+        <!-- Indicateur de Zoom -->
         <span class="text-xs font-code font-bold text-primary min-w-[3rem] text-center">{{ Math.round(scale * 100)
         }}%</span>
+
+        <!-- Zoom avant -->
         <UiBaseButton @click="zoomIn" variant="ghost"
           class="!p-2 hover:!bg-primary/10 !rounded-xl hover:!text-primary transition-colors !h-auto !w-auto"
           title="Zoomer">
           <IconZoomIn class="w-5 h-5" />
         </UiBaseButton>
         <div class="w-px h-6 bg-ash/50"></div>
+
+        <!-- Rotation droite -->
         <UiBaseButton @click="rotate(90)" variant="ghost"
           class="!p-2 hover:!bg-primary/10 !rounded-xl hover:!text-primary transition-colors !h-auto !w-auto"
           title="Pivoter à droite">
           <IconRotateClockwise2 class="w-5 h-5" />
         </UiBaseButton>
         <div class="w-px h-6 bg-ash/50"></div>
+
+        <!-- Renitialiser -->
         <UiBaseButton @click="reset" variant="ghost"
           class="!p-2 hover:!bg-primary/10 !rounded-xl hover:!text-primary transition-colors !h-auto !w-auto"
           title="Réinitialiser">
@@ -45,7 +56,7 @@
         </UiBaseButton>
       </div>
 
-      <!-- Helper Text -->
+      <!-- Aide contextuelle -->
       <div
         class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
         <span class="px-3 py-1 bg-black/50 backdrop-blur-md rounded-full text-[10px] text-white font-bold">
@@ -54,6 +65,7 @@
       </div>
     </div>
 
+    <!-- Actions de la modale -->
     <template #footer>
       <div class="flex justify-between w-full">
         <UiBaseButton variant="ghost" @click="$emit('close')">Fermer</UiBaseButton>
@@ -72,6 +84,7 @@ import {
   IconRefresh, IconDownload
 } from '@tabler/icons-vue'
 
+// Propriétés de la visionneuse d'images
 const props = defineProps<{
   show: boolean
   imageUrl: string
@@ -79,6 +92,7 @@ const props = defineProps<{
 
 const emit = defineEmits(['close'])
 
+// États locaux pour les transformations
 const scale = ref(1)
 const rotation = ref(0)
 const translateX = ref(0)
@@ -87,6 +101,9 @@ const isDragging = ref(false)
 const startX = ref(0)
 const startY = ref(0)
 
+/**
+ * Calcule le style CSS dynamique pour l'image
+ */
 const imageStyle = computed(() => ({
   transform: `translate(${translateX.value}px, ${translateY.value}px) rotate(${rotation.value}deg) scale(${scale.value})`
 }))
@@ -99,6 +116,9 @@ const zoomOut = () => {
   scale.value = Math.max(scale.value - 0.25, 0.5)
 }
 
+/**
+ * Gère le zoom via la molette de la souris
+ */
 const handleWheel = (e: WheelEvent) => {
   if (e.deltaY < 0) zoomIn()
   else zoomOut()
@@ -108,6 +128,9 @@ const rotate = (deg: number) => {
   rotation.value += deg
 }
 
+/**
+ * Réinitialise toutes les transformations de l'image
+ */
 const reset = () => {
   scale.value = 1
   rotation.value = 0
@@ -115,6 +138,9 @@ const reset = () => {
   translateY.value = 0
 }
 
+/**
+ * Initialise le drag & drop pour le déplacement de l'image zoomée
+ */
 const startDrag = (e: MouseEvent) => {
   if (scale.value > 1) {
     isDragging.value = true
@@ -123,6 +149,9 @@ const startDrag = (e: MouseEvent) => {
   }
 }
 
+/**
+ * Met à jour la position de l'image lors du déplacement
+ */
 const onDrag = (e: MouseEvent) => {
   if (isDragging.value) {
     translateX.value = e.clientX - startX.value
@@ -134,15 +163,19 @@ const stopDrag = () => {
   isDragging.value = false
 }
 
+/**
+ * Déclenche le téléchargement de l'image affichée
+ */
 const downloadImage = () => {
   const link = document.createElement('a')
   link.href = props.imageUrl
-  link.download = 'profile-image'
+  link.download = `cypass-img-${Date.now()}`
   document.body.appendChild(link)
   link.click()
   document.body.removeChild(link)
 }
 
+// Réinitialisation à l'ouverture/fermeture
 watch(() => props.show, (newVal) => {
   if (newVal) reset()
 })

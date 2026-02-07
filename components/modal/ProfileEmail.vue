@@ -1,34 +1,45 @@
 <template>
-  <UiBaseModal :show="show" title="Changer l'adresse email" @close="$emit('close')">
-    <form @submit.prevent="handleSubmit" class="space-y-4">
-      <div class="p-4 rounded-xl bg-primary/10 border border-primary/20">
-        <div class="flex gap-3">
-          <IconAlertCircle class="w-5 h-5 text-primary shrink-0 mt-0.5" />
-          <p class="text-sm text-hsa">
+  <UiBaseModal :show="show" title="Email" @close="$emit('close')">
+    <form @submit.prevent="handleSubmit" class="space-y-6 py-2">
+      <!-- Alerte de sécurité -->
+      <div class="p-5 rounded-[1.5rem] bg-primary/5 border border-primary/20 backdrop-blur-sm">
+        <div class="flex gap-4">
+          <div class="shrink-0 p-2 bg-primary/10 rounded-xl h-fit text-primary shadow-inner">
+            <IconAlertCircle class="w-6 h-6" />
+          </div>
+          <p class="text-sm text-hsa font-medium leading-relaxed">
             Un email de vérification sera envoyé à votre nouvelle adresse. Vous devrez le confirmer pour finaliser le
-            changement.
+            changement de compte.
           </p>
         </div>
       </div>
 
-      <div class="space-y-4">
-        <div class="space-y-1">
-          <label class="text-xs font-bold text-hsa uppercase">Nouvel Email</label>
-          <div class="relative">
-            <IconMail class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-hsa" />
+      <div class="space-y-5">
+        <!-- Champ Nouvel Email -->
+        <div class="space-y-2">
+          <label class="text-[10px] font-black text-hsa uppercase tracking-[0.2em] ml-1">Nouvel Email</label>
+          <div class="relative group">
+            <div
+              class="absolute left-4 top-1/2 -translate-y-1/2 text-hsa group-focus-within:text-primary transition-colors">
+              <IconMail class="w-5 h-5" />
+            </div>
             <input type="email" v-model="form.newEmail" required placeholder="nouveau@exemple.com"
-              class="w-full pl-10 pr-4 py-2.5 rounded-lg bg-ash border border-ashAct focus:ring-2 focus:ring-primary outline-none text-BtW" />
+              class="input pl-12" />
           </div>
         </div>
 
-        <div class="space-y-1">
-          <label class="text-xs font-bold text-hsa uppercase">Mot de passe actuel</label>
-          <div class="relative">
-            <IconLock class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-hsa" />
+        <!-- Champ Mot de passe actuel -->
+        <div class="space-y-2">
+          <label class="text-[10px] font-black text-hsa uppercase tracking-[0.2em] ml-1">Mot de passe actuel</label>
+          <div class="relative group">
+            <div
+              class="absolute left-4 top-1/2 -translate-y-1/2 text-hsa group-focus-within:text-primary transition-colors">
+              <IconLock class="w-5 h-5" />
+            </div>
             <input :type="showPassword ? 'text' : 'password'" v-model="form.password" required placeholder="••••••••"
-              class="w-full pl-10 pr-12 py-2.5 rounded-lg bg-ash border border-ashAct focus:ring-2 focus:ring-primary outline-none text-BtW" />
+              class="input pl-12 pr-14" />
             <UiBaseButton type="button" @click="showPassword = !showPassword" variant="ghost"
-              class="!absolute !right-3 !top-1/2 !-translate-y-1/2 text-hsa hover:!text-BtW transition-colors !p-0 !bg-transparent hover:!bg-transparent !h-auto !w-auto">
+              class="!absolute !right-2 !top-1/2 !-translate-y-1/2 text-hsa hover:!text-BtW transition-colors !p-2 !bg-transparent hover:!bg-transparent !h-auto !w-auto !rounded-xl">
               <IconEye v-if="showPassword" class="w-5 h-5" />
               <IconEyeOff v-else class="w-5 h-5" />
             </UiBaseButton>
@@ -36,12 +47,14 @@
         </div>
       </div>
 
-      <div class="pt-4 flex justify-end gap-3">
-        <UiBaseButton variant="ghost" type="button" @click="$emit('close')">
+      <!-- Actions -->
+      <div class="pt-6 flex flex-col sm:flex-row justify-end gap-3">
+        <UiBaseButton variant="ghost" type="button" @click="$emit('close')" class="!rounded-2xl border-none font-bold">
           Annuler
         </UiBaseButton>
-        <UiBaseButton type="submit" variant="primary" :loading="loading">
-          Lancer le changement
+        <UiBaseButton type="submit" variant="primary" :loading="loading"
+          class="!rounded-2xl font-black tracking-widest shadow-xl">
+          Confirmer
         </UiBaseButton>
       </div>
     </form>
@@ -52,6 +65,7 @@
 import { ref, reactive } from 'vue'
 import { IconMail, IconLock, IconAlertCircle, IconEye, IconEyeOff } from '@tabler/icons-vue'
 
+// Propriétés de la modale ProfileEmail
 defineProps<{
   show: boolean
   loading: boolean
@@ -59,13 +73,16 @@ defineProps<{
 
 const emit = defineEmits(['close', 'submit'])
 
+// Visibilité du mot de passe
 const showPassword = ref(false)
 
+// État local du formulaire
 const form = reactive({
   newEmail: '',
   password: ''
 })
 
+// Gestion de la soumission sécurisée
 const handleSubmit = () => {
   emit('submit', { ...form })
 }

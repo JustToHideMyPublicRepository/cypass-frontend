@@ -1,7 +1,7 @@
 <template>
   <UiBaseModal :show="show" maxWidth="sm" @close="$emit('close')">
     <div class="p-2 text-center space-y-6">
-      <!-- Icon Header -->
+      <!-- En-tête avec Icône Premium -->
       <div class="w-16 h-16 rounded-full mx-auto flex items-center justify-center mb-2 bg-danger/10 text-danger">
         <IconFileOff class="w-8 h-8" />
       </div>
@@ -11,7 +11,7 @@
         <p class="text-sm text-hsa leading-relaxed px-4">{{ message }}</p>
       </div>
 
-      <!-- File Info -->
+      <!-- Informations sur le fichier érroné -->
       <div v-if="fileName" class="p-3 bg-ash/20 rounded-xl border border-ash text-left">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 bg-danger/10 rounded-lg flex items-center justify-center text-danger shrink-0">
@@ -24,12 +24,13 @@
         </div>
       </div>
 
-      <!-- Accepted formats -->
+      <!-- Formats acceptés -->
       <div class="p-3 bg-primary/5 rounded-xl border border-primary/10 text-left">
         <p class="text-[10px] font-black text-primary uppercase tracking-widest mb-1">Formats acceptés</p>
         <p class="text-sm text-hsa">{{ acceptedFormats }}</p>
       </div>
 
+      <!-- Action finale -->
       <div class="pt-2">
         <UiBaseButton variant="primary" block @click="$emit('close')">
           Compris
@@ -42,6 +43,9 @@
 <script setup lang="ts">
 import { IconFileOff, IconFile } from '@tabler/icons-vue'
 
+/**
+ * Propriétés de la modale d'erreur de fichier
+ */
 withDefaults(defineProps<{
   show: boolean
   title?: string
