@@ -5,8 +5,8 @@
         @click="navigateTo('/dashboard/docsentry')">Gérer</UiBaseButton>
     </template>
     <div class="space-y-1">
-      <div v-if="loading && !documents.length" class="py-10 text-center">
-        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+      <div v-if="loading && !documents.length" class="py-10">
+        <UiLogoLoader size="sm" />
       </div>
       <div v-else-if="!documents.length" class="py-10 text-center text-hsa">
         Aucun document récent

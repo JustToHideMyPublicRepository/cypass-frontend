@@ -5,8 +5,8 @@
         @click="navigateTo('/dashboard/logs')">Logs</UiBaseButton>
     </template>
     <div class="space-y-4">
-      <div v-if="loading && !logs.length" class="py-10 text-center">
-        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+      <div v-if="loading && !logs.length" class="py-10">
+        <UiLogoLoader size="sm" />
       </div>
       <div v-else-if="!logs.length" class="py-10 text-center text-hsa">
         Aucune activité enregistrée

@@ -13,9 +13,8 @@
       <h1 class="text-2xl font-bold text-BtW">Détail de la notification</h1>
     </div>
 
-    <div v-if="store.loading && !notif" class="py-20 text-center">
-      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-      <p class="text-hsa">Chargement...</p>
+    <div v-if="store.loading && !notif" class="py-10">
+      <UiLogoLoader size="sm" />
     </div>
 
     <div v-else-if="notif" class="animate-fade-up">
