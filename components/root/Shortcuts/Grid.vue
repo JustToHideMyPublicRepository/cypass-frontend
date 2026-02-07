@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="categories.length > 0" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 items-start">
+    <div v-if="categories.length > 0" class="grid md:grid-cols-2 lg:grid-cols-2 gap-6 md:gap-8 items-start">
       <div v-for="category in categories" :key="category.title" class="animate-fade-up">
         <h2 class="flex items-center gap-2 md:gap-3 text-base md:text-lg font-bold mb-4 md:mb-6 text-BtW">
           <span class="w-1.5 h-5 md:w-2 md:h-6 bg-primary rounded-full"></span>
@@ -9,15 +9,21 @@
 
         <div class="space-y-2.5 md:space-y-3">
           <div v-for="s in getVisibleItems(category)" :key="s.label"
-            class="flex items-center justify-between p-3.5 md:p-4 rounded-xl md:rounded-2xl bg-WtB border border-ash hover:border-primary/30 hover:shadow-md transition-all group">
+            class="flex items-center justify-between p-3.5 md:p-4 rounded-xl md:rounded-2xl transition-all group relative"
+            :class="[
+              hasCustom(s.id)
+                ? 'bg-primary/5 border border-primary/20 shadow-sm'
+                : 'bg-WtB border border-ash hover:border-primary/30 hover:shadow-md'
+            ]">
+            <!-- Badge personnalisé -->
+            <span v-if="hasCustom(s.id)"
+              class="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-primary text-WtB flex items-center justify-center shadow-lg border-2 border-WtB z-10"
+              title="Personnalisé par l'utilisateur">
+              <IconKeyboardShow class="w-3 h-3" />
+            </span>
+
             <div class="flex items-center gap-2">
               <span class="text-BtW font-medium text-xs md:text-sm">{{ s.label }}</span>
-              <!-- Badge personnalisé -->
-              <span v-if="hasCustom(s.id)"
-                class="px-1.5 py-0.5 rounded-full bg-primary/10 text-primary flex items-center justify-center"
-                title="Personnalisé par l'utilisateur">
-                <IconKeyboardShow class="w-2.5 h-2.5" />
-              </span>
             </div>
             <div class="flex items-center gap-3">
               <!-- Affichage des touches -->
