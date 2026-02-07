@@ -1,13 +1,13 @@
 <template>
   <Teleport to="body">
     <Transition enter-active-class="transform ease-out duration-300 transition"
-      enter-from-class="translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-2"
+      enter-from-class="-translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-2"
       enter-to-class="translate-y-0 opacity-100 sm:translate-x-0" leave-active-class="transition ease-in duration-100"
       leave-from-class="opacity-100" leave-to-class="opacity-0">
       <div v-if="modelValue" :role="type === 'error' || type === 'warning' ? 'alert' : 'status'"
         :aria-live="type === 'error' || type === 'warning' ? 'assertive' : 'polite'" aria-labelledby="toast-title"
         aria-describedby="toast-message"
-        class="fixed top-5 right-5 z-[9999] max-w-sm w-full bg-WtB shadow-2xl rounded-2xl border pointer-events-auto overflow-hidden text-left"
+        class="fixed top-5 left-1/2 -translate-x-1/2 sm:left-auto sm:translate-x-0 sm:right-5 z-[9999] max-w-[calc(100%-2.5rem)] sm:max-w-sm w-full bg-WtB shadow-2xl rounded-2xl border pointer-events-auto overflow-hidden text-left"
         :class="containerClass">
         <div class="p-4">
           <div class="flex items-start">
@@ -36,6 +36,7 @@
             </div>
           </div>
         </div>
+
         <!-- Barre de progression temporelle -->
         <div class="h-1 bg-ash overflow-hidden">
           <div class="h-full transition-all duration-100 ease-linear" :class="progressClass"
