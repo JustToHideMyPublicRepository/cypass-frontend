@@ -3,19 +3,23 @@
     class="!relative !p-2 !rounded-full hover:!bg-ash transition-colors duration-300 !h-auto !w-auto"
     aria-label="Toggle Theme">
     <Transition name="fade" mode="out-in">
-      <IconSun v-if="colorMode.value === 'dark'" class="w-5 h-5 text-yellow-500" />
+      <IconDeviceDesktop v-if="colorMode.preference === 'system'" class="w-5 h-5 text-primary" />
+      <IconSun v-else-if="colorMode.preference === 'light'" class="w-5 h-5 text-yellow-500" />
       <IconMoon v-else class="w-5 h-5 text-slate-600" />
     </Transition>
   </UiBaseButton>
 </template>
 
 <script setup lang="ts">
-import { IconSun, IconMoon } from '@tabler/icons-vue'
+import { IconSun, IconMoon, IconDeviceDesktop } from '@tabler/icons-vue'
 
 const colorMode = useColorMode()
 
 const toggleTheme = () => {
-  colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
+  const modes = ['system', 'light', 'dark']
+  const currentIndex = modes.indexOf(colorMode.preference)
+  const nextIndex = (currentIndex + 1) % modes.length
+  colorMode.preference = modes[nextIndex]
 }
 </script>
 

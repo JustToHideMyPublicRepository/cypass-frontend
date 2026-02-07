@@ -4,7 +4,8 @@
       <div class="flex items-center justify-between p-4 rounded-xl bg-ash/30 border border-ash">
         <div class="flex items-center gap-4">
           <div class="p-2 bg-WtB rounded-lg shadow-sm">
-            <IconMoon v-if="$colorMode.value === 'dark'" class="w-6 h-6 text-primary" />
+            <IconDeviceDesktop v-if="$colorMode.preference === 'system'" class="w-6 h-6 text-primary" />
+            <IconMoon v-else-if="$colorMode.preference === 'dark'" class="w-6 h-6 text-primary" />
             <IconSun v-else class="w-6 h-6 text-warning" />
           </div>
           <div>
@@ -26,5 +27,5 @@
 </template>
 
 <script setup lang="ts">
-import { IconSun, IconMoon } from '@tabler/icons-vue'
+import { IconSun, IconMoon, IconDeviceDesktop } from '@tabler/icons-vue'
 </script>

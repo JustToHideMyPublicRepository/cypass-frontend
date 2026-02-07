@@ -1,6 +1,6 @@
 <template>
   <UiBaseModal :show="show" title="Authentifier un document" maxWidth="2xl" @close="$emit('close')">
-    <div class="space-y-6 py-2">
+    <div class="max-h-[60vh] overflow-y-auto pr-2 no-scrollbar space-y-6 py-2">
       <!-- Zone de dépôt de fichier -->
       <div v-if="!file"
         class="relative border-4 border-dashed border-primary/10 rounded-[2.5rem] p-12 text-center hover:border-primary/40 transition-all cursor-pointer bg-ash/20 hover:bg-primary/5 group overflow-hidden"

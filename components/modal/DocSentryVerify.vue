@@ -1,6 +1,6 @@
 <template>
   <UiBaseModal :show="show" title="Vérifier un document" maxWidth="3xl" @close="$emit('close')">
-    <div class="space-y-6 py-2">
+    <div class="max-h-[60vh] overflow-y-auto pr-2 no-scrollbar space-y-6 py-2">
       <!-- Sélecteur de mode de vérification -->
       <div v-if="!result && !loading" class="flex justify-center">
         <div class="flex p-1.5 bg-ash/50 rounded-2xl border-2 border-ashAct/20 gap-2 backdrop-blur-md">
@@ -229,6 +229,11 @@
       </div>
     </template>
   </UiBaseModal>
+
+  <!-- Modale d'erreur de fichier -->
+  <ModalFileError :show="showFileError" :title="fileErrorTitle" :message="fileErrorMessage" :file-name="errorFileName"
+    :file-type="errorFileType" :file-size="errorFileSize" :accepted-formats="'PDF uniquement (Max 10 Mo)'"
+    @close="showFileError = false" />
 </template>
 
 <script setup lang="ts">
@@ -242,6 +247,7 @@ import { fr } from 'date-fns/locale'
 import { useDocumentsStore } from '~/stores/documents'
 import { verifySteps, type Step } from '~/utils/docsentry'
 import { useGlobalDropZone } from '~/composables/useDropZone'
+import ModalFileError from '~/components/modal/FileError.vue'
 
 const { enable, disable } = useGlobalDropZone()
 
@@ -262,6 +268,51 @@ const file = ref<File | null>(null)
 const fileInput = ref<HTMLInputElement | null>(null)
 const copied = ref(false)
 const activeSteps = ref<Step[]>(JSON.parse(JSON.stringify(verifySteps)))
+
+// États pour la modale d'erreur spécifique au fichier
+const showFileError = ref(false)
+const fileErrorTitle = ref('Format non supporté')
+const fileErrorMessage = ref('')
+const errorFileName = ref('')
+const errorFileType = ref('')
+const errorFileSize = ref('')
+
+/**
+ * Affiche la modale d'erreur personnalisée
+ */
+const showError = (title: string, message: string, f: File) => {
+  fileErrorTitle.value = title
+  fileErrorMessage.value = message
+  errorFileName.value = f.name
+  errorFileType.value = f.name.split('.').pop()?.toUpperCase() || 'Inconnu'
+  errorFileSize.value = (f.size / 1024 / 1024).toFixed(2) + ' Mo'
+  showFileError.value = true
+}
+
+/**
+ * Validation robuste du fichier sélectionné
+ */
+const validateFile = (selectedFile: File): boolean => {
+  if (selectedFile.type !== 'application/pdf') {
+    showError(
+      'Format non supporté',
+      `Le fichier "${selectedFile.name}" n'est pas un PDF. Seuls les fichiers PDF sont acceptés pour la vérification.`,
+      selectedFile
+    )
+    return false
+  }
+
+  if (selectedFile.size > 10 * 1024 * 1024) {
+    showError(
+      'Fichier trop volumineux',
+      `Le fichier fait ${(selectedFile.size / 1024 / 1024).toFixed(2)} Mo. La taille maximale autorisée est de 10 Mo.`,
+      selectedFile
+    )
+    return false
+  }
+
+  return true
+}
 
 /**
  * Réinitialise les étapes de progression visuelle
@@ -298,7 +349,13 @@ const handleReset = () => {
 const handleFileChange = (e: Event) => {
   const target = e.target as HTMLInputElement
   if (target.files?.length) {
-    file.value = target.files[0]
+    const selectedFile = target.files[0]
+    if (validateFile(selectedFile)) {
+      file.value = selectedFile
+    } else {
+      file.value = null
+      if (fileInput.value) fileInput.value.value = ''
+    }
   }
 }
 
@@ -307,8 +364,10 @@ const handleFileChange = (e: Event) => {
  */
 const onDroppedFile = (droppedFile: File) => {
   if (verifyMode.value === 'file' && !props.loading) {
-    file.value = droppedFile
-    emit('reset')
+    if (validateFile(droppedFile)) {
+      file.value = droppedFile
+      emit('reset')
+    }
   }
 }
 

@@ -70,6 +70,7 @@
 import { ref } from 'vue'
 import { IconCertificate, IconCopy, IconCheck, IconCalendar, IconArrowUpRight } from '@tabler/icons-vue'
 import { useDocumentsStore } from '~/stores/documents'
+import { useToastStore } from '~/stores/toast'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 
@@ -83,12 +84,15 @@ defineEmits(['close'])
 const store = useDocumentsStore()
 const copied = ref(false)
 
+const toast = useToastStore()
+
 /**
  * Copie le fingerprint dans le presse-papier
  */
 const copy = (text: string) => {
   navigator.clipboard.writeText(text)
   copied.value = true
+  toast.showToast('success', 'Copié', 'L\'empreinte a été copiée dans le presse-papier.')
   setTimeout(() => copied.value = false, 2000)
 }
 

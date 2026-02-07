@@ -13,7 +13,7 @@
       <!-- Éléments de navigation dynamiques -->
       <li v-for="(item, index) in items" :key="index" class="group/item">
         <div class="flex items-center">
-          <IconChevronRight class="w-4 h-4 text-ashAct/50 mx-1 md:mx-2" />
+          <IconChevronRight class="w-4 h-4 text-hsa/40 mx-1 md:mx-2" />
 
           <NuxtLink v-if="item.path" :to="item.path"
             class="text-[10px] md:text-xs font-black uppercase tracking-widest text-hsa hover:text-primary transition-all duration-300 relative after:content-[''] after:absolute after:bottom-[-2px] after:left-0 after:w-0 after:h-[1px] after:bg-primary hover:after:w-full after:transition-all after:duration-300">

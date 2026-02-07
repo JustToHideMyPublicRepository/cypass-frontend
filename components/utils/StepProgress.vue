@@ -1,6 +1,6 @@
 <template>
   <div class="w-full py-6 px-2 overflow-x-auto no-scrollbar">
-    <div class="flex items-start justify-between relative gap-4 min-w-max md:min-w-0">
+    <div class="flex items-start justify-between relative gap-4 min-w-max">
 
       <!-- Ligne de progression en arrière-plan (Inactif) -->
       <div class="absolute top-[20px] left-8 right-8 h-1 bg-ashAct/30 rounded-full z-0"></div>
@@ -142,15 +142,6 @@ const getStatusClasses = (status: string) => {
 
 .animate-shake {
   animation: shake 0.3s ease-in-out 3;
-}
-
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
 }
 
 h4,
