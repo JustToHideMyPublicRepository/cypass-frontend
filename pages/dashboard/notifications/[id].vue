@@ -14,7 +14,7 @@
     </div>
 
     <div v-if="store.loading && !notif" class="py-10">
-      <UiLogoLoader size="sm" />
+      <UiLogoLoader size="xl" />
     </div>
 
     <div v-else-if="notif" class="animate-fade-up">
