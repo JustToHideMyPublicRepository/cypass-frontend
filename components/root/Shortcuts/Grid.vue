@@ -14,8 +14,9 @@
               <span class="text-BtW font-medium text-xs md:text-sm">{{ s.label }}</span>
               <!-- Badge personnalisé -->
               <span v-if="hasCustom(s.id)"
-                class="px-1.5 py-0.5 rounded-full bg-primary/10 text-primary text-[9px] font-black uppercase tracking-tighter">
-                Custom
+                class="px-1.5 py-0.5 rounded-full bg-primary/10 text-primary flex items-center justify-center"
+                title="Personnalisé par l'utilisateur">
+                <IconKeyboardShow class="w-2.5 h-2.5" />
               </span>
             </div>
             <div class="flex items-center gap-3">
@@ -96,7 +97,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
-import { IconSearchOff, IconChevronDown, IconChevronUp, IconPencil, IconRotate, IconCheck, IconX } from '@tabler/icons-vue'
+import { IconSearchOff, IconChevronDown, IconChevronUp, IconPencil, IconRotate, IconCheck, IconX, IconKeyboardShow } from '@tabler/icons-vue'
 import { useShortcutsStore } from '~/stores/shortcuts'
 import { useToastStore } from '~/stores/toast'
 

@@ -68,6 +68,12 @@
         <input type="file" ref="fileInput" @change="handleImport" accept=".json" class="hidden">
       </div>
     </div>
+
+    <!-- Modal de confirmation pour Reset All -->
+    <UiConfirmModal :show="showResetConfirm" title="Réinitialiser tout ?"
+      message="Voulez-vous vraiment réinitialiser TOUS les raccourcis vers leurs valeurs par défaut ? Cette action est irréversible."
+      confirmText="Tout réinitialiser" cancelText="Annuler" variant="danger" :icon="IconRotate"
+      @confirm="executeResetAll" @cancel="showResetConfirm = false" />
   </div>
 </template>
 
@@ -88,6 +94,8 @@ import { useToastStore } from '~/stores/toast'
 
 const store = useShortcutsStore()
 const toast = useToastStore()
+
+const showResetConfirm = ref(false)
 
 defineProps<{
   searchQuery: string
@@ -114,10 +122,13 @@ const groupSortOptions = [
 const fileInput = ref<HTMLInputElement | null>(null)
 
 const handleResetAll = () => {
-  if (confirm('Voulez-vous vraiment réinitialiser TOUS les raccourcis par défaut ?')) {
-    store.resetAllShortcuts()
-    toast.showToast('info', 'Réinitialisation', 'Tous les raccourcis ont été remis à zéro.')
-  }
+  showResetConfirm.value = true
+}
+
+const executeResetAll = () => {
+  store.resetAllShortcuts()
+  toast.showToast('info', 'Réinitialisation', 'Tous les raccourcis ont été remis à zéro.')
+  showResetConfirm.value = false
 }
 
 const triggerImport = () => {
