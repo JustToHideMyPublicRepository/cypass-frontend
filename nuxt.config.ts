@@ -18,7 +18,7 @@ export default defineNuxtConfig({
   ],
 
   site: {
-    url: 'https://cypass.bj',
+    url: 'https://cypass.netlify.app/',
     name: 'CYPASS',
   },
 
@@ -49,16 +49,15 @@ export default defineNuxtConfig({
   app: {
     head: {
       title: 'Souveraineté numérique & sécurité',
-      htmlAttrs: {
-        lang: 'fr'
-      },
+      htmlAttrs: { lang: 'fr' },
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+        { name: 'google-site-verification', content: 'OdKxHpVkBSxk0mj4vD4OTmZPdVi5pWzyCu4QPIMHy9A' }
       ],
       link: [
         { rel: 'icon', type: 'image/png', href: '/favicon.ico' },
-        { rel: 'canonical', href: 'https://cypass.bj' }
+        { rel: 'canonical', href: 'https://cypass.netlify.app/' }
       ]
     },
   },
