@@ -15,7 +15,49 @@ export default defineNuxtConfig({
     '@nuxtjs/google-fonts',
     '@nuxtjs/robots',
     '@nuxtjs/sitemap',
+    '@vite-pwa/nuxt',
   ],
+
+  pwa: {
+    registerType: 'autoUpdate',
+    manifest: {
+      name: 'CYPASS',
+      short_name: 'CYPASS',
+      description: 'Souveraineté numérique & sécurité',
+      theme_color: '#020617',
+      background_color: '#020617',
+      display: 'standalone',
+      orientation: 'portrait',
+      scope: '/',
+      start_url: '/',
+      icons: [
+        {
+          src: 'pwa-192x192.png',
+          sizes: '192x192',
+          type: 'image/png'
+        },
+        {
+          src: 'pwa-512x512.png',
+          sizes: '512x512',
+          type: 'image/png'
+        },
+        {
+          src: 'maskable-icon.png',
+          sizes: '512x512',
+          type: 'image/png',
+          purpose: 'maskable'
+        }
+      ]
+    },
+    workbox: {
+      navigateFallback: '/',
+      globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
+    },
+    devOptions: {
+      enabled: true,
+      type: 'classic'
+    }
+  },
 
   site: {
     url: 'https://cypass.netlify.app/',

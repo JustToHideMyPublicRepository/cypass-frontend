@@ -1,5 +1,6 @@
 <template>
   <div class="min-h-screen bg-gradient-premium text-textClr font-body">
+    <VitePwaManifest />
     <UiGlobalDropZone />
     <NuxtLayout>
       <NuxtPage />
