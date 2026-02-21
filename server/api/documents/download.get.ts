@@ -6,13 +6,6 @@ export default defineEventHandler(async (event) => {
   const token = getCookie(event, 'cypass_token')
   const query = getQuery(event)
 
-  if (!query.id) {
-    throw createError({
-      statusCode: 400,
-      message: 'ID du document manquant'
-    })
-  }
-
   try {
     const response = await $fetch.raw(`${baseApi}/documents/download.php`, {
       method: 'GET',
@@ -20,8 +13,7 @@ export default defineEventHandler(async (event) => {
         'Authorization': `Bearer ${token}`
       },
       query: {
-        id: query.id,
-        type: query.type || 'certificate'
+        id: query.id
       }
     })
 

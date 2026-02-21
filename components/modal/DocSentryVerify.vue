@@ -14,23 +14,52 @@
             :class="verifyMode === 'hash' ? '!bg-WtB !text-primary shadow-lg ring-1 ring-ashAct/10' : 'text-hsa hover:!text-BtW'">
             Hash
           </UiBaseButton>
+          <UiBaseButton @click="verifyMode = 'qr'" variant="ghost"
+            class="!px-6 !py-2.5 !text-[10px] !font-black !tracking-widest !rounded-xl transition-all duration-300 !h-auto"
+            :class="verifyMode === 'qr' ? '!bg-WtB !text-primary shadow-lg ring-1 ring-ashAct/10' : 'text-hsa hover:!text-BtW'">
+            Code QR
+          </UiBaseButton>
         </div>
       </div>
 
-      <!-- Zone de dépôt pour fichier -->
-      <div v-if="!file && verifyMode === 'file' && !result"
+      <!-- Sélecteur de sous-mode PDF (Liste déroulante) -->
+      <div v-if="!result && !loading && verifyMode === 'file'" class="max-w-xs mx-auto mb-6 px-2">
+        <div class="space-y-2 text-left">
+          <label class="text-[9px] font-black text-hsa uppercase tracking-[0.2em] px-1 opacity-60">Type de
+            document</label>
+          <div class="relative group">
+            <select v-model="pdfSubMode"
+              class="w-full h-11 pl-4 pr-10 py-2 rounded-xl bg-ash/30 border border-ashAct/20 focus:ring-2 focus:ring-primary outline-none transition-all font-black text-[10px] appearance-none cursor-pointer tracking-widest">
+              <option value="original">Document Original</option>
+              <option value="certificate">Certificat CYPASS</option>
+            </select>
+            <IconChevronDown
+              class="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-hsa pointer-events-none group-focus-within:text-primary transition-colors" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Zone de dépôt pour fichier / QR -->
+      <div v-if="!file && (verifyMode === 'file' || verifyMode === 'qr') && !result"
         class="border-4 border-dashed border-primary/10 rounded-[2.5rem] p-12 text-center hover:border-primary/40 transition-all cursor-pointer group bg-ash/20 hover:bg-primary/5 overflow-hidden relative"
         @click="triggerFileSelect">
-        <input type="file" ref="fileInput" class="hidden" accept=".pdf" @change="handleFileChange">
+        <input type="file" ref="fileInput" class="hidden" :accept="verifyMode === 'file' ? '.pdf' : 'image/*'"
+          @change="handleFileChange">
 
         <div class="relative z-10 scale-110">
           <div
             class="w-20 h-20 bg-WtB rounded-3xl flex items-center justify-center mx-auto mb-6 text-primary shadow-xl border border-ash group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
-            <IconRosetteDiscountCheck class="w-10 h-10" />
+            <IconRosetteDiscountCheck v-if="verifyMode === 'file'" class="w-10 h-10" />
+            <IconQrcode v-else class="w-10 h-10" />
           </div>
-          <p class="font-black text-BtW text-xl tracking-tighter">Vérifier par fichier PDF</p>
-          <p class="text-[10px] text-hsa mt-2 tracking-[0.3em] font-black opacity-60">Glissez le document
-            signé ici</p>
+          <p class="font-black text-BtW text-xl tracking-tighter">
+            {{ verifyMode === 'file'
+              ? (pdfSubMode === 'original' ? 'Vérifier par document complet' : 'Vérifier par certificat PDF')
+              : 'Vérifier par image QR' }}
+          </p>
+          <p class="text-[10px] text-hsa mt-2 tracking-[0.3em] font-black opacity-60">
+            {{ verifyMode === 'file' ? 'Glissez le fichier PDF ici' : 'Glissez l\'image du QR ici' }}
+          </p>
         </div>
 
         <div
@@ -113,7 +142,7 @@
               <div class="flex items-center justify-between px-2">
                 <p class="text-hsa font-bold tracking-widest opacity-60">Émetteur Certifié</p>
                 <strong class="text-BtW font-black text-xs">
-                  {{ result.document?.signer || 'CYPASS TRUST NETWORK' }}</strong>
+                  {{ result.document?.signer || 'CYPASS' }}</strong>
               </div>
 
               <div class="grid grid-cols-2 gap-4 pt-4 border-t border-success/10">
@@ -141,7 +170,7 @@
                 </div>
                 <div
                   class="p-4 bg-ash/20 rounded-[1.5rem] border border-ashAct/30 font-code text-[10px] break-all text-hsa shadow-inner leading-relaxed">
-                  {{ result.document?.hash || result.doc_hash || 'Hash indisponible' }}
+                  {{ result.document?.hash || result.doc_hash || 'non chargé' }}
                 </div>
               </div>
 
@@ -213,8 +242,9 @@
       <div v-if="!result" class="flex flex-col sm:flex-row gap-4 w-full">
         <UiBaseButton variant="ghost" class="flex-1 !rounded-2xl font-bold py-4 h-auto border-none" @click="close">
           Annuler</UiBaseButton>
-        <UiBaseButton v-if="verifyMode === 'file' && file" variant="primary"
-          class="flex-1 !rounded-2xl font-black py-4 h-auto shadow-xl" :loading="loading" @click="handleVerify">
+        <UiBaseButton v-if="(verifyMode === 'file' || verifyMode === 'qr') && file" variant="primary"
+          class="flex-1 !rounded-2xl font-black py-4 h-auto shadow-xl" :loading="loading"
+          @click="handleVerifyInternalFile">
           Analyser le document
         </UiBaseButton>
         <UiBaseButton v-else-if="verifyMode === 'hash'" variant="primary"
@@ -233,14 +263,14 @@
   <!-- Modale d'erreur de fichier -->
   <ModalGlobalFileError :show="showFileError" :title="fileErrorTitle" :message="fileErrorMessage"
     :file-name="errorFileName" :file-type="errorFileType" :file-size="errorFileSize"
-    :accepted-formats="'PDF uniquement (Max 10 Mo)'" @close="showFileError = false" />
+    :accepted-formats="'PDF, PNG, JPG (Max 3 Mo)'" @close="showFileError = false" />
 </template>
 
 <script setup lang="ts">
 import { ref, onUnmounted, watch } from 'vue'
 import {
   IconSearch, IconFileText, IconShieldOff, IconX, IconHash,
-  IconCopy, IconCheck, IconRosetteDiscountCheck
+  IconCopy, IconCheck, IconRosetteDiscountCheck, IconQrcode, IconChevronDown
 } from '@tabler/icons-vue'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
@@ -261,7 +291,8 @@ const props = defineProps<{
 const emit = defineEmits(['close', 'verify', 'reset'])
 
 const store = useDocumentsStore()
-const verifyMode = ref<'file' | 'hash'>('file')
+const verifyMode = ref<'file' | 'hash' | 'qr'>('file')
+const pdfSubMode = ref<'original' | 'certificate'>('original')
 const hashInput = ref('')
 const file = ref<File | null>(null)
 const fileInput = ref<HTMLInputElement | null>(null)
@@ -292,19 +323,30 @@ const showError = (title: string, message: string, f: File) => {
  * Validation robuste du fichier sélectionné
  */
 const validateFile = (selectedFile: File): boolean => {
-  if (selectedFile.type !== 'application/pdf') {
-    showError(
-      'Format non supporté',
-      `Le fichier "${selectedFile.name}" n'est pas un PDF. Seuls les fichiers PDF sont acceptés pour la vérification.`,
-      selectedFile
-    )
-    return false
+  if (verifyMode.value === 'file') {
+    if (selectedFile.type !== 'application/pdf') {
+      showError(
+        'Format non supporté',
+        `Le fichier "${selectedFile.name}" n'est pas un PDF. Seuls les fichiers PDF sont acceptés pour la vérification de document.`,
+        selectedFile
+      )
+      return false
+    }
+  } else if (verifyMode.value === 'qr') {
+    if (!selectedFile.type.startsWith('image/')) {
+      showError(
+        'Format non supporté',
+        `Le fichier "${selectedFile.name}" n'est pas une image. Seuls les fichiers images (JPG, PNG) sont acceptés pour la vérification QR.`,
+        selectedFile
+      )
+      return false
+    }
   }
 
-  if (selectedFile.size > 10 * 1024 * 1024) {
+  if (selectedFile.size > 3 * 1024 * 1024) {
     showError(
       'Fichier trop volumineux',
-      `Le fichier fait ${(selectedFile.size / 1024 / 1024).toFixed(2)} Mo. La taille maximale autorisée est de 10 Mo.`,
+      `Le fichier fait ${(selectedFile.size / 1024 / 1024).toFixed(2)} Mo. La taille maximale autorisée est de 3 Mo.`,
       selectedFile
     )
     return false
@@ -384,13 +426,26 @@ onUnmounted(() => {
 })
 
 /**
- * Lance la vérification par fichier
+ * Lance la vérification par fichier ou QR
  */
-const handleVerify = async () => {
+const handleVerifyInternalFile = async () => {
   if (file.value) {
     resetSteps()
-    emit('verify', file.value)
-    await runSteps()
+    if (verifyMode.value === 'qr') {
+      const promise = store.verifyDocumentByQR(file.value)
+      await runSteps()
+      await promise
+    } else {
+      // Pour le mode fichier PDF
+      let promise: Promise<boolean>
+      if (pdfSubMode.value === 'original') {
+        promise = store.verifyDocumentFull(file.value, null)
+      } else {
+        promise = store.verifyDocumentFull(null, file.value)
+      }
+      await runSteps()
+      await promise
+    }
   }
 }
 

@@ -117,6 +117,63 @@ export const useDocumentsStore = defineStore('documents', {
       }
     },
 
+    async verifyDocumentFull(originalFile: File | null, certificateFile: File | null) {
+      this.loading = true
+      this.error = null
+      this.verificationResult = null
+
+      try {
+        const formData = new FormData()
+        if (originalFile) formData.append('original_file', originalFile)
+        if (certificateFile) formData.append('certificate_file', certificateFile)
+
+        const response = await $fetch<VerificationResult & { success: boolean }>('/api/documents/verify', {
+          method: 'POST',
+          body: formData
+        })
+
+        if (response.success || response.verified) {
+          this.verificationResult = response
+          return true
+        }
+
+        return false
+      } catch (err: any) {
+        this.error = err.data?.message || 'Erreur lors de la vérification du document'
+        return false
+      } finally {
+        this.loading = false
+      }
+    },
+
+    async verifyDocumentByQR(file: File) {
+      this.loading = true
+      this.error = null
+      this.verificationResult = null
+
+      try {
+        const formData = new FormData()
+        formData.append('file', file)
+
+        const response = await $fetch<VerificationResult & { success: boolean }>('/api/documents/verify-qr', {
+          method: 'POST',
+          body: formData
+        })
+
+        if (response.success || response.verified) {
+          this.verificationResult = response
+          return true
+        }
+
+        return false
+      } catch (err: any) {
+        this.error = err.data?.message || 'Erreur lors de la vérification du QR Code'
+        return false
+      } finally {
+        this.loading = false
+      }
+    },
+
     handleAlreadyCertified(filename: string) {
       this.verificationResult = {
         verified: true,
