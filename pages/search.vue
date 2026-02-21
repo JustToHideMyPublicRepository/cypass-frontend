@@ -12,13 +12,13 @@
           <div class="space-y-2">
             <button @click="activeFilter = 'all'"
               class="w-full flex items-center justify-between px-3 py-2 rounded-xl transition-all text-sm font-medium"
-              :class="activeFilter === 'all' ? 'bg-primary text-white' : 'text-BtW hover:bg-ash'">
+              :class="activeFilter === 'all' ? 'bg-primary text-WtB' : 'text-BtW hover:bg-ash'">
               <span>Tous</span>
               <span class="text-[10px] opacity-70">{{ totalCount }}</span>
             </button>
             <button v-for="(count, cat) in categoryCounts" :key="cat" @click="activeFilter = cat"
               class="w-full flex items-center justify-between px-3 py-2 rounded-xl transition-all text-sm font-medium"
-              :class="activeFilter === cat ? 'bg-primary text-white' : 'text-BtW hover:bg-ash'">
+              :class="activeFilter === cat ? 'bg-primary text-WtB' : 'text-BtW hover:bg-ash'">
               <span>{{ cat }}</span>
               <span class="text-[10px] opacity-70">{{ count }}</span>
             </button>
