@@ -10,10 +10,9 @@
         class="block w-full pl-12 pr-12 md:pr-16 py-3.5 md:py-4 bg-WtB border border-ash rounded-2xl md:rounded-3xl shadow-sm focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none text-sm md:text-base font-medium placeholder-slate-400"
         placeholder="Rechercher un raccourci clavier par nom, touche ou catégorie...">
       <div class="hidden md:flex items-center gap-1.5 absolute right-5 top-1/2 -translate-y-1/2 opacity-40">
-        <kbd
-          class="px-2 py-0.5 rounded-lg bg-ash text-[10px] font-bold text-hsa border border-ashAct uppercase">Ctrl</kbd>
+        <kbd class="kbd-tip">Ctrl</kbd>
         <span class="text-[10px] text-hsa font-bold">+</span>
-        <kbd class="px-2 py-0.5 rounded-lg bg-ash text-[10px] font-bold text-hsa border border-ashAct uppercase">K</kbd>
+        <kbd class="kbd-tip">K</kbd>
       </div>
     </div>
 

@@ -15,10 +15,9 @@
         class="block w-full pl-12 pr-12 md:pr-16 py-3.5 md:py-4 bg-WtB border border-ash rounded-xl md:rounded-2xl shadow-lg shadow-ash/50 focus:ring-2 focus:ring-primary focus:border-primary transition-all outline-none text-sm md:text-base"
         placeholder="Rechercher une réponse, une API ou un guide...">
       <div class="hidden md:flex items-center gap-1 absolute right-4 top-1/2 -translate-y-1/2">
-        <kbd
-          class="px-1.5 py-0.5 rounded bg-ash text-[10px] font-bold text-hsa border border-ashAct uppercase">Ctrl</kbd>
+        <kbd class="kbd-tip">Ctrl</kbd>
         <span class="text-[10px] text-hsa">+</span>
-        <kbd class="px-1.5 py-0.5 rounded bg-ash text-[10px] font-bold text-hsa border border-ashAct uppercase">K</kbd>
+        <kbd class="kbd-tip">K</kbd>
       </div>
     </div>
   </div>

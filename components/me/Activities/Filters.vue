@@ -36,11 +36,9 @@
                 class="block w-full pl-9 pr-16 py-1.5 rounded-lg bg-WtB border border-ash text-xs font-bold text-BtW outline-none focus:ring-1 focus:ring-primary transition-all" />
               <div
                 class="absolute right-2 top-1/2 -translate-y-1/2 hidden md:flex items-center gap-0.5 pointer-events-none">
-                <kbd
-                  class="px-1 py-0.5 rounded bg-ash text-[8px] font-bold text-hsa border border-ash uppercase">Ctrl</kbd>
+                <kbd class="kbd-tip">Ctrl</kbd>
                 <span class="text-[10px] text-hsa">+</span>
-                <kbd
-                  class="px-1 py-0.5 rounded bg-ash text-[8px] font-bold text-hsa border border-ash uppercase">K</kbd>
+                <kbd class="kbd-tip">K</kbd>
               </div>
             </div>
           </div>

@@ -18,8 +18,7 @@
               class="w-full pl-12 pr-12 py-3 bg-transparent text-BtW text-lg placeholder-slate-500 outline-none"
               @input="handleInput" @keydown="handleKeydown" />
             <div class="absolute right-6 top-1/2 -translate-y-1/2 flex items-center gap-1">
-              <kbd
-                class="px-1.5 py-0.5 rounded bg-ash text-[10px] font-bold text-hsa border border-ashAct uppercase">Esc</kbd>
+              <kbd class="kbd-hint">Esc</kbd>
             </div>
           </div>
 
@@ -103,13 +102,13 @@
             class="p-3 bg-ash/30 border-t border-ash/50 flex flex-col sm:flex-row items-center justify-between gap-3 text-[10px] font-medium text-hsa">
             <div class="flex items-center gap-4 flex-wrap justify-center">
               <span class="flex items-center gap-1.5 shrink-0">
-                <kbd class="px-1 py-0.5 rounded bg-WtB border border-ash text-[10px] font-bold">↑</kbd>
+                <kbd class="kbd-hint">↑</kbd>
                 ou
-                <kbd class="px-1 py-0.5 rounded bg-WtB border border-ash text-[10px] font-bold">↓</kbd>
+                <kbd class="kbd-hint">↓</kbd>
                 Naviguer
               </span>
               <span class="flex items-center gap-1.5 shrink-0">
-                <kbd class="px-1 py-0.5 rounded bg-WtB border border-ash text-[10px] font-bold">↵</kbd> Sélectionner
+                <kbd class="kbd-hint">↵</kbd> Sélectionner
               </span>
             </div>
             <div class="opacity-60">Moteur de recherche CYPASS</div>
@@ -128,6 +127,7 @@ import { IconSearch, IconFileDescription, IconLayoutDashboard, IconSettings, Ico
 
 const searchStore = useSearchStore()
 const router = useRouter()
+const route = useRoute()
 const searchQuery = ref('')
 const selectedIndex = ref(0)
 const inputRef = ref<HTMLInputElement | null>(null)
@@ -203,7 +203,14 @@ const getIcon = (type: string) => {
 // Réinitialisation lors de l'ouverture
 watch(() => searchStore.isOpen, (val) => {
   if (val) {
-    searchQuery.value = ''
+    // Pré-remplir avec le paramètre de recherche de l'URL si présent
+    const urlQuery = route.query.q as string
+    searchQuery.value = urlQuery || ''
+
+    if (searchQuery.value) {
+      searchStore.performSearch(searchQuery.value)
+    }
+
     selectedIndex.value = 0
     nextTick(() => {
       inputRef.value?.focus()
@@ -211,9 +218,3 @@ watch(() => searchStore.isOpen, (val) => {
   }
 })
 </script>
-
-<style scoped>
-.kbd-hint {
-  @apply bg-ash px-1.5 py-0.5 rounded text-[10px] font-bold;
-}
-</style>

@@ -45,7 +45,7 @@
           <!-- Section Raccourcis -->
           <div class="mt-4 p-4 bg-primary/5 rounded-2xl border border-primary/10 flex items-center justify-between">
             <span class="text-xs font-medium text-primary">Raccourcis</span>
-            <kbd class="px-2 py-1 rounded bg-BtW text-WtB text-[10px] font-black shadow-sm">?</kbd>
+            <kbd class="kbd-hint">?</kbd>
           </div>
         </div>
       </Transition>

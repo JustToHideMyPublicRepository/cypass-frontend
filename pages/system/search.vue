@@ -8,8 +8,8 @@
         :categoryCounts="categoryCounts" />
 
       <!-- Results Main -->
-      <RootSystemSearchResult :results="filteredResults" :loading="loading" :query="query"
-        @navigate="navigateToResult" />
+      <RootSystemSearchResult :results="filteredResults" :loading="loading" :query="query" @navigate="navigateToResult"
+        @modify="searchStore.openSearch()" @reset="performSearch" />
     </div>
   </div>
 </template>

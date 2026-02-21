@@ -62,7 +62,7 @@ defineProps<{
   query: string
 }>()
 
-defineEmits(['navigate'])
+defineEmits(['navigate', 'modify', 'reset'])
 
 const getIcon = (type: string) => {
   switch (type) {
