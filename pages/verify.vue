@@ -3,13 +3,15 @@
     <div class="max-w-3xl w-full space-y-8 md:space-y-12 text-center animate-fade-up">
       <RootVerifyHeader />
 
-      <RootVerifyZone v-model:verifyMode="verifyMode" v-model:hashInput="hashInput" v-model:file="file"
-        :loading="loading" :result="result" :error="error" :activeSteps="activeSteps" @trigger-file="triggerFileSelect"
-        @verify-hash="handleVerifyHash" @verify-file="handleVerifyFile" @reset="reset" />
+      <RootVerifyZone v-model:verifyMode="verifyMode" v-model:pdfSubMode="pdfSubMode" v-model:hashInput="hashInput"
+        v-model:pdfFile="pdfFile" v-model:qrFile="qrFile" :loading="loading" :result="result" :error="error"
+        :activeSteps="activeSteps" @trigger-file="triggerFileSelect" @verify-hash="handleVerifyHash"
+        @verify-file="handleVerifyFile" @reset="reset" />
 
       <RootVerifyBenefits v-if="!result" />
 
-      <input type="file" ref="fileInput" class="hidden" accept=".pdf" @change="handleFileChange">
+      <input type="file" ref="fileInput" class="hidden" :accept="verifyMode === 'qr' ? '.jpg,.jpeg,.png' : '.pdf'"
+        @change="handleFileChange">
     </div>
   </div>
 </template>
@@ -33,9 +35,11 @@ useHead({
 
 const route = useRoute()
 const store = useDocumentsStore()
-const verifyMode = ref<'file' | 'hash'>('file')
+const verifyMode = ref<'file' | 'hash' | 'qr'>('file')
+const pdfSubMode = ref<'original' | 'certificate'>('original')
 const hashInput = ref('')
-const file = ref<File | null>(null)
+const pdfFile = ref<File | null>(null)
+const qrFile = ref<File | null>(null)
 const fileInput = ref<HTMLInputElement | null>(null)
 const loading = ref(false)
 const result = ref<any>(null)
@@ -55,12 +59,16 @@ onMounted(() => {
   }
 })
 
-watch(file, (newFile) => {
-  if (newFile) {
-    result.value = null
-    error.value = null
-    resetSteps()
-  }
+watch(pdfFile, () => {
+  result.value = null
+  error.value = null
+  resetSteps()
+})
+
+watch(qrFile, () => {
+  result.value = null
+  error.value = null
+  resetSteps()
 })
 
 const resetSteps = () => {
@@ -80,20 +88,36 @@ const triggerFileSelect = () => fileInput.value?.click()
 const handleFileChange = (e: Event) => {
   const target = e.target as HTMLInputElement
   if (target.files?.length) {
-    file.value = target.files[0]
+    if (verifyMode.value === 'qr') {
+      qrFile.value = target.files[0]
+    } else {
+      pdfFile.value = target.files[0]
+    }
     result.value = null
     error.value = null
   }
 }
 
 const handleVerifyFile = async () => {
-  if (!file.value) return
+  const currentFile = verifyMode.value === 'qr' ? qrFile.value : pdfFile.value
+  if (!currentFile) return
   loading.value = true
   error.value = null
   resetSteps()
 
   try {
-    const successPromise = store.verifyDocument(file.value)
+    let successPromise: Promise<boolean>
+
+    if (verifyMode.value === 'qr') {
+      successPromise = store.verifyDocumentByQR(currentFile)
+    } else {
+      if (pdfSubMode.value === 'original') {
+        successPromise = store.verifyDocumentFull(currentFile, null)
+      } else {
+        successPromise = store.verifyDocumentFull(null, currentFile)
+      }
+    }
+
     await runSteps()
     const success = await successPromise
 
@@ -129,7 +153,8 @@ const handleVerifyHash = async () => {
 }
 
 const reset = () => {
-  file.value = null
+  pdfFile.value = null
+  qrFile.value = null
   hashInput.value = ''
   result.value = null
   error.value = null

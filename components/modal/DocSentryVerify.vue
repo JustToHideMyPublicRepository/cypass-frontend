@@ -40,10 +40,11 @@
       </div>
 
       <!-- Zone de dépôt pour fichier / QR -->
-      <div v-if="!file && (verifyMode === 'file' || verifyMode === 'qr') && !result"
+      <div v-if="!activeFile && (verifyMode === 'file' || verifyMode === 'qr') && !result"
         class="border-4 border-dashed border-primary/10 rounded-[2.5rem] p-12 text-center hover:border-primary/40 transition-all cursor-pointer group bg-ash/20 hover:bg-primary/5 overflow-hidden relative"
         @click="triggerFileSelect">
-        <input type="file" ref="fileInput" class="hidden" :accept="verifyMode === 'file' ? '.pdf' : 'image/*'"
+        <input type="file" ref="fileInput" class="hidden"
+          :accept="verifyMode === 'file' ? '.pdf,application/pdf' : '.png,.jpg,.jpeg,image/*'"
           @change="handleFileChange">
 
         <div class="relative z-10 scale-110">
@@ -80,24 +81,23 @@
         </div>
       </div>
 
-      <div v-if="(file || result || (loading && verifyMode === 'hash'))" class="space-y-6">
-        <!-- Entête du fichier sélectionné -->
-        <div v-if="file && !result"
-          class="bg-ash/30 rounded-[2rem] p-5 border border-ashAct/30 backdrop-blur-sm animate-scale-in">
-          <div class="flex items-center gap-5">
-            <div class="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center text-primary shadow-inner">
-              <IconFileText class="w-7 h-7" />
-            </div>
-            <div class="flex-1 min-w-0">
-              <p class="font-black text-BtW truncate text-sm tracking-tight">{{ file.name }}</p>
-              <p class="text-[10px] text-hsa font-black tracking-widest opacity-60">Prêt pour l'analyse
-                cryptographique</p>
-            </div>
-            <UiBaseButton @click="handleReset" variant="ghost"
-              class="!text-hsa hover:!text-danger !p-3 transition-colors !h-auto !w-auto !rounded-xl">
-              <IconX class="w-6 h-6" />
-            </UiBaseButton>
+      <div v-if="(activeFile || result || (loading && verifyMode === 'hash'))" class="space-y-6">
+        <!-- Affichage du fichier sélectionné -->
+        <div v-if="activeFile && !result"
+          class="p-6 bg-ash/30 rounded-[2rem] border border-ashAct/20 flex items-center gap-6 animate-fade-in text-left">
+          <div class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center text-primary shrink-0">
+            <IconFileText v-if="verifyMode === 'file'" class="w-10 h-10" />
+            <IconQrcode v-else class="w-10 h-10" />
           </div>
+          <div class="flex-1 min-w-0">
+            <p class="font-black text-BtW truncate">{{ activeFile.name }}</p>
+            <p class="text-xs text-hsa uppercase tracking-widest opacity-60 mt-1">{{ (activeFile.size / 1024 /
+              1024).toFixed(2) }} MO</p>
+          </div>
+          <UiBaseButton @click="resetCurrentFile" variant="ghost"
+            class="!p-3 !h-auto !w-auto text-hsa hover:!text-danger transition-colors opacity-40 hover:opacity-100">
+            <IconX class="w-6 h-6" />
+          </UiBaseButton>
         </div>
 
         <!-- État de chargement (Progression) -->
@@ -148,7 +148,7 @@
               <div class="grid grid-cols-2 gap-4 pt-4 border-t border-success/10">
                 <div v-if="result.document?.id" class="space-y-1.5 p-3 bg-ash/20 rounded-xl border border-ashAct/20">
                   <p class="text-[9px] text-hsa font-black tracking-widest opacity-60">ID Certification</p>
-                  <p class="font-code text-BtW break-all">{{ result.document.id }}</p>
+                  <p class="font-code text-BtW break-all">{{ result.document?.id || result.id || 'N/A' }}</p>
                 </div>
                 <div v-if="result.document?.created_at"
                   class="space-y-1.5 p-3 bg-ash/20 rounded-xl border border-ashAct/20">
@@ -170,7 +170,7 @@
                 </div>
                 <div
                   class="p-4 bg-ash/20 rounded-[1.5rem] border border-ashAct/30 font-code text-[10px] break-all text-hsa shadow-inner leading-relaxed">
-                  {{ result.document?.hash || result.doc_hash || 'non chargé' }}
+                  {{ result.document?.hash || result.doc_hash || result.calculated_hash || 'Invalide' }}
                 </div>
               </div>
 
@@ -223,9 +223,11 @@
             </div>
             <p class="text-sm text-hsa font-bold leading-relaxed px-1">Le document fourni n'est pas certifié par notre
               réseau ou a subi des modifications post-signature.</p>
-            <div v-if="error"
-              class="mt-5 p-4 bg-danger/10 rounded-2xl text-[11px] font-code text-danger border border-danger/20">{{
-                error }}</div>
+            <div v-if="error || result.error || result.message"
+              class="mt-5 p-4 bg-danger/10 rounded-2xl text-[11px] font-code text-danger border border-danger/20">
+              <p class="font-bold mb-1">{{ error || result.error || result.message }}</p>
+              <p v-if="result.details" class="opacity-80">{{ result.details }}</p>
+            </div>
           </div>
         </div>
       </div>
@@ -242,7 +244,7 @@
       <div v-if="!result" class="flex flex-col sm:flex-row gap-4 w-full">
         <UiBaseButton variant="ghost" class="flex-1 !rounded-2xl font-bold py-4 h-auto border-none" @click="close">
           Annuler</UiBaseButton>
-        <UiBaseButton v-if="(verifyMode === 'file' || verifyMode === 'qr') && file" variant="primary"
+        <UiBaseButton v-if="(verifyMode === 'file' || verifyMode === 'qr') && activeFile" variant="primary"
           class="flex-1 !rounded-2xl font-black py-4 h-auto shadow-xl" :loading="loading"
           @click="handleVerifyInternalFile">
           Analyser le document
@@ -267,7 +269,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onUnmounted, watch } from 'vue'
+import { ref, onUnmounted, watch, computed } from 'vue'
 import {
   IconSearch, IconFileText, IconShieldOff, IconX, IconHash,
   IconCopy, IconCheck, IconRosetteDiscountCheck, IconQrcode, IconChevronDown
@@ -283,8 +285,6 @@ const { enable, disable } = useGlobalDropZone()
 // Propriétés de la modale DocSentryVerify
 const props = defineProps<{
   show: boolean
-  loading: boolean
-  error: string | null
   result: any
 }>()
 
@@ -294,10 +294,15 @@ const store = useDocumentsStore()
 const verifyMode = ref<'file' | 'hash' | 'qr'>('file')
 const pdfSubMode = ref<'original' | 'certificate'>('original')
 const hashInput = ref('')
-const file = ref<File | null>(null)
+const pdfFile = ref<File | null>(null)
+const qrFile = ref<File | null>(null)
 const fileInput = ref<HTMLInputElement | null>(null)
 const copied = ref(false)
 const activeSteps = ref<Step[]>(JSON.parse(JSON.stringify(verifySteps)))
+
+const result = ref<any>(props.result)
+const loading = ref(false)
+const error = ref<string | null>(null)
 
 // États pour la modale d'erreur spécifique au fichier
 const showFileError = ref(false)
@@ -375,13 +380,56 @@ const runSteps = async () => {
 
 const triggerFileSelect = () => fileInput.value?.click()
 
+const activeFile = computed(() => {
+  if (verifyMode.value === 'file') return pdfFile.value
+  if (verifyMode.value === 'qr') return qrFile.value
+  return null
+})
+
+watch(() => props.result, (newVal) => {
+  result.value = newVal
+})
+
+const resetCurrentFile = () => {
+  if (verifyMode.value === 'file') pdfFile.value = null
+  else if (verifyMode.value === 'qr') qrFile.value = null
+  if (fileInput.value) fileInput.value.value = '' // Clear the file input
+}
+
+watch(verifyMode, () => {
+  // Clear files and results when mode changes
+  pdfFile.value = null
+  qrFile.value = null
+  hashInput.value = ''
+  error.value = null
+  result.value = null
+  emit('reset') // This will clear props.result
+  if (fileInput.value) fileInput.value.value = '' // Clear the file input
+})
+
+watch(pdfFile, () => {
+  error.value = null
+  result.value = null
+  emit('reset')
+})
+
+watch(qrFile, () => {
+  error.value = null
+  result.value = null
+  emit('reset')
+})
+
 /**
  * Réinitialise l'état local et global de vérification
  */
 const handleReset = () => {
-  file.value = null
+  pdfFile.value = null
+  qrFile.value = null
   hashInput.value = ''
+  error.value = null
+  result.value = null
   emit('reset')
+  if (fileInput.value) fileInput.value.value = '' // Clear the file input
 }
 
 /**
@@ -392,9 +440,10 @@ const handleFileChange = (e: Event) => {
   if (target.files?.length) {
     const selectedFile = target.files[0]
     if (validateFile(selectedFile)) {
-      file.value = selectedFile
+      if (verifyMode.value === 'file') pdfFile.value = selectedFile
+      else if (verifyMode.value === 'qr') qrFile.value = selectedFile
     } else {
-      file.value = null
+      // If validation fails, clear the input
       if (fileInput.value) fileInput.value.value = ''
     }
   }
@@ -404,11 +453,12 @@ const handleFileChange = (e: Event) => {
  * Gère les fichiers déposés via DropZone
  */
 const onDroppedFile = (droppedFile: File) => {
-  if (verifyMode.value === 'file' && !props.loading) {
-    if (validateFile(droppedFile)) {
-      file.value = droppedFile
-      emit('reset')
-    }
+  if (loading.value) return
+  if (validateFile(droppedFile)) {
+    if (verifyMode.value === 'file') pdfFile.value = droppedFile
+    else if (verifyMode.value === 'qr') qrFile.value = droppedFile
+    error.value = null // Clear any previous error
+    emit('reset') // This will clear props.result
   }
 }
 
@@ -429,23 +479,37 @@ onUnmounted(() => {
  * Lance la vérification par fichier ou QR
  */
 const handleVerifyInternalFile = async () => {
-  if (file.value) {
-    resetSteps()
+  if (!activeFile.value) return
+
+  loading.value = true
+  error.value = null
+  resetSteps()
+
+  try {
+    let promise: Promise<boolean>
+
     if (verifyMode.value === 'qr') {
-      const promise = store.verifyDocumentByQR(file.value)
-      await runSteps()
-      await promise
+      promise = store.verifyDocumentByQR(activeFile.value)
     } else {
-      // Pour le mode fichier PDF
-      let promise: Promise<boolean>
       if (pdfSubMode.value === 'original') {
-        promise = store.verifyDocumentFull(file.value, null)
+        promise = store.verifyDocumentFull(activeFile.value, null)
       } else {
-        promise = store.verifyDocumentFull(null, file.value)
+        promise = store.verifyDocumentFull(null, activeFile.value)
       }
-      await runSteps()
-      await promise
     }
+
+    await runSteps()
+    const success = await promise
+
+    if (success) {
+      result.value = store.verificationResult
+    } else {
+      error.value = store.error
+    }
+  } catch (err: any) {
+    error.value = err.message || 'Erreur de vérification'
+  } finally {
+    loading.value = false
   }
 }
 
@@ -454,10 +518,25 @@ const handleVerifyInternalFile = async () => {
  */
 const handleVerifyInternalHash = async () => {
   if (!hashInput.value) return
+  loading.value = true
+  error.value = null
   resetSteps()
-  const promise = store.verifyDocumentByHash(hashInput.value)
-  await runSteps()
-  await promise
+
+  try {
+    const successPromise = store.verifyDocumentByHash(hashInput.value)
+    await runSteps()
+    const success = await successPromise
+
+    if (success) {
+      result.value = store.verificationResult
+    } else {
+      error.value = store.error
+    }
+  } catch (err: any) {
+    error.value = err.message || 'Erreur de vérification'
+  } finally {
+    loading.value = false
+  }
 }
 
 /**
@@ -473,9 +552,7 @@ const copy = (text: string) => {
  * Ferme la modale et réinitialise tout
  */
 const close = () => {
-  file.value = null
-  hashInput.value = ''
-  resetSteps()
+  handleReset()
   emit('close')
 }
 

@@ -55,6 +55,11 @@ export interface VerificationResult {
   }
   message: string
   authenticity: string
+  error?: string
+  details?: string
+  doc_hash?: string
+  calculated_hash?: string
+  success?: boolean
 }
 
 export interface PublicKeyInfo {

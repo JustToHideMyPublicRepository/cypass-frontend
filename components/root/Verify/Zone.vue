@@ -13,28 +13,60 @@
           :class="verifyMode === 'hash' ? '!bg-WtB !text-primary shadow-sm' : 'text-hsa hover:!text-BtW'">
           Empreinte (Hash)
         </UiBaseButton>
+        <UiBaseButton @click="$emit('update:verifyMode', 'qr')" variant="ghost"
+          class="!px-3 md:!px-4 !py-1.5 md:!py-2 !text-xs md:!text-sm !font-bold !rounded-lg transition-all !h-auto"
+          :class="verifyMode === 'qr' ? '!bg-WtB !text-primary shadow-sm' : 'text-hsa hover:!text-BtW'">
+          Code QR
+        </UiBaseButton>
+      </div>
+    </div>
+
+    <!-- Sélecteur de sous-mode PDF (Liste déroulante) -->
+    <div v-if="!result && !loading && verifyMode === 'file'" class="flex justify-center mb-8 animate-fade-in">
+      <div class="flex items-center gap-4 bg-ash/5 p-2 pr-4 rounded-2xl border border-ash">
+        <label class="text-[10px] font-black text-hsa uppercase tracking-[0.2em] px-2 whitespace-nowrap">Méthode de
+          vérification</label>
+        <div class="relative group min-w-[180px]">
+          <select :value="pdfSubMode"
+            @change="$emit('update:pdfSubMode', ($event.target as HTMLSelectElement).value as any)"
+            class="w-full h-10 pl-4 pr-10 py-2 rounded-xl bg-WtB border border-ash/50 focus:ring-2 focus:ring-primary outline-none transition-all font-bold text-[11px] appearance-none cursor-pointer">
+            <option value="original">Document Original</option>
+            <option value="certificate">Certificat CYPASS</option>
+          </select>
+          <IconChevronDown
+            class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-hsa pointer-events-none group-focus-within:text-primary transition-colors" />
+        </div>
       </div>
     </div>
 
     <!-- Zone de dépôt interactive (Drag & Drop) -->
-    <div v-if="!file && verifyMode === 'file' && !result"
+    <div v-if="!activeFile && (verifyMode === 'file' || verifyMode === 'qr') && !result"
       class="relative border-2 border-dashed border-primary/20 rounded-2xl md:rounded-3xl p-6 md:p-12 text-center hover:border-primary/50 transition-all cursor-pointer bg-WtB/50 hover:bg-primary/5 group overflow-hidden"
       @click="$emit('trigger-file')">
 
       <div class="pointer-events-none">
         <div
           class="w-16 h-16 md:w-20 md:h-20 bg-WtB rounded-2xl md:rounded-3xl flex items-center justify-center mx-auto mb-4 md:mb-6 text-primary shadow-xl border border-ash group-hover:scale-110 transition-transform duration-500">
-          <IconRosetteDiscountCheck class="w-8 h-8 md:w-10 md:h-10" />
+          <IconRosetteDiscountCheck v-if="verifyMode === 'file'" class="w-8 h-8 md:w-10 md:h-10" />
+          <IconQrcode v-else class="w-8 h-8 md:w-10 md:h-10" />
         </div>
-        <h3 class="text-lg md:text-xl font-bold text-BtW mb-2">Sélectionnez le document PDF</h3>
-        <p class="text-xs md:text-sm text-hsa">Glissez-déposez le fichier ici ou cliquez pour parcourir</p>
+        <h3 class="text-lg md:text-xl font-bold text-BtW mb-2">
+          {{ verifyMode === 'file'
+            ? (pdfSubMode === 'original' ? 'Sélectionnez le document complet' : 'Sélectionnez le certificat PDF')
+            : 'Sélectionnez l\'image du QR Code' }}
+        </h3>
+        <p class="text-xs md:text-sm text-hsa">
+          {{ verifyMode === 'file'
+            ? 'Glissez-déposez le fichier PDF ici ou cliquez pour parcourir'
+            : 'Glissez - déposez l\'image (PNG, JPG) ici ou cliquez pour parcourir' }}</p>
       </div>
 
-      <input type="file" ref="fileInput" class="hidden" accept=".pdf,application/pdf" @change="handleFileChange">
+      <input type="file" ref="fileInput" class="hidden"
+        :accept="verifyMode === 'file' ? '.pdf,application/pdf' : '.png,.jpg,.jpeg,image/*'" @change="handleFileChange">
     </div>
 
     <!-- Zone de saisie d'empreinte (Hash) -->
-    <div v-if="verifyMode === 'hash' && !result && !file" class="max-w-md mx-auto space-y-4 py-8">
+    <div v-if="verifyMode === 'hash' && !result && !activeFile" class="max-w-md mx-auto space-y-4 py-8">
       <div class="space-y-2 text-left">
         <label class="text-xs font-black text-hsa uppercase tracking-widest px-1">Code SHA-256 du document</label>
         <div class="relative">
@@ -50,16 +82,17 @@
       </UiBaseButton>
     </div>
 
-    <div v-if="(file || result || (loading && verifyMode === 'hash'))" class="space-y-8">
+    <div v-if="(activeFile || result || (loading && verifyMode === 'hash'))" class="space-y-8">
       <!-- En-tête du fichier sélectionné (Uniquement pour le mode fichier) -->
-      <div v-if="file && !result"
-        class="flex items-center gap-4 p-4 bg-ash/20 rounded-2xl border border-ash animate-fade-in">
+      <div v-if="activeFile && !result"
+        class="flex items-center gap-4 p-4 bg-ash/20 rounded-2xl border border-ash animate-fade-in text-left">
         <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center text-primary">
-          <IconFileText class="w-6 h-6" />
+          <IconFileText v-if="verifyMode === 'file'" class="w-6 h-6" />
+          <IconQrcode v-else class="w-6 h-6" />
         </div>
-        <div class="flex-1 text-left min-w-0">
-          <p class="font-bold text-BtW truncate">{{ file.name }}</p>
-          <p class="text-xs text-hsa">{{ (file.size / 1024 / 1024).toFixed(2) }} MB</p>
+        <div class="flex-1 min-w-0">
+          <p class="font-bold text-BtW truncate">{{ activeFile.name }}</p>
+          <p class="text-xs text-hsa">{{ (activeFile.size / 1024 / 1024).toFixed(2) }} MB</p>
         </div>
         <UiBaseButton @click="$emit('reset')" variant="ghost"
           class="text-hsa hover:!text-danger !p-2 transition-colors !h-auto !w-auto">
@@ -83,7 +116,7 @@
 
       <RootVerifyResult v-if="result" :result="result" :error="error" @reset="$emit('reset')" />
 
-      <div v-if="!loading && !result && file" class="flex justify-center pt-4">
+      <div v-if="!loading && !result && activeFile" class="flex justify-center pt-4">
         <UiBaseButton size="lg" class="px-12" @click="$emit('verify-file')">Vérifier le document</UiBaseButton>
       </div>
     </div>
@@ -96,8 +129,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted, onUnmounted } from 'vue'
-import { IconRosetteDiscountCheck, IconHash, IconFileText, IconX } from '@tabler/icons-vue'
+import { ref, watch, onMounted, onUnmounted, computed } from 'vue'
+import { IconRosetteDiscountCheck, IconHash, IconFileText, IconX, IconQrcode, IconChevronDown } from '@tabler/icons-vue'
 import type { Step } from '~/utils/docsentry'
 
 import { useGlobalDropZone } from '~/composables/useDropZone'
@@ -105,9 +138,13 @@ import { useGlobalDropZone } from '~/composables/useDropZone'
 const { enable, disable } = useGlobalDropZone()
 
 const onDroppedFile = (droppedFile: File) => {
-  if (props.verifyMode === 'file' && !props.loading) {
-    if (validateFile(droppedFile)) {
-      emit('update:file', droppedFile)
+  if (props.loading) return
+
+  if (validateFile(droppedFile)) {
+    if (props.verifyMode === 'file') {
+      emit('update:pdfFile', droppedFile)
+    } else if (props.verifyMode === 'qr') {
+      emit('update:qrFile', droppedFile)
     }
   }
 }
@@ -123,16 +160,24 @@ onUnmounted(() => {
 const MAX_FILE_SIZE = 3 * 1024 * 1024 // 3MB for PDF files
 
 const props = defineProps<{
-  verifyMode: 'file' | 'hash'
+  verifyMode: 'file' | 'hash' | 'qr'
+  pdfSubMode: 'original' | 'certificate'
   hashInput: string
-  file: File | null
+  pdfFile: File | null
+  qrFile: File | null
   loading: boolean
   result: any
   error: string | null
   activeSteps: Step[]
 }>()
 
-const emit = defineEmits(['update:verifyMode', 'update:hashInput', 'trigger-file', 'verify-hash', 'verify-file', 'reset', 'update:file'])
+const activeFile = computed(() => {
+  if (props.verifyMode === 'file') return props.pdfFile
+  if (props.verifyMode === 'qr') return props.qrFile
+  return null
+})
+
+const emit = defineEmits(['update:verifyMode', 'update:pdfSubMode', 'update:hashInput', 'trigger-file', 'verify-hash', 'verify-file', 'reset', 'update:pdfFile', 'update:qrFile'])
 
 const fileInput = ref<HTMLInputElement | null>(null)
 
@@ -143,7 +188,7 @@ const fileErrorMessage = ref('')
 const errorFileName = ref('')
 const errorFileType = ref('')
 const errorFileSize = ref('')
-const acceptedFormats = ref('PDF uniquement (Max 10 Mo)')
+const acceptedFormats = ref('PDF, PNG, JPG (Max 3 Mo)')
 
 const showError = (title: string, message: string, file: File) => {
   fileErrorTitle.value = title
@@ -155,13 +200,24 @@ const showError = (title: string, message: string, file: File) => {
 }
 
 const validateFile = (file: File): boolean => {
-  if (file.type !== 'application/pdf') {
-    showError(
-      'Format non supporté',
-      `Le fichier "${file.name}" n'est pas un PDF. Seuls les fichiers PDF sont acceptés pour la vérification.`,
-      file
-    )
-    return false
+  if (props.verifyMode === 'file') {
+    if (file.type !== 'application/pdf') {
+      showError(
+        'Format non supporté',
+        `Le fichier "${file.name}" n'est pas un PDF. Seuls les fichiers PDF sont acceptés pour la vérification de document.`,
+        file
+      )
+      return false
+    }
+  } else if (props.verifyMode === 'qr') {
+    if (!file.type.startsWith('image/')) {
+      showError(
+        'Format non supporté',
+        `Le fichier "${file.name}" n'est pas une image. Seuls les fichiers images (JPG, PNG) sont acceptés pour la vérification QR.`,
+        file
+      )
+      return false
+    }
   }
 
   if (file.size > MAX_FILE_SIZE) {
@@ -177,14 +233,18 @@ const validateFile = (file: File): boolean => {
 }
 
 const handleFileChange = (e: Event) => {
-
   const target = e.target as HTMLInputElement
   if (target.files?.length) {
-    const file = target.files[0]
-    if (validateFile(file)) {
-      emit('update:file', file)
+    const selectedFile = target.files[0]
+    if (validateFile(selectedFile)) {
+      if (props.verifyMode === 'file') {
+        emit('update:pdfFile', selectedFile)
+      } else if (props.verifyMode === 'qr') {
+        emit('update:qrFile', selectedFile)
+      }
     }
     target.value = '' // Réinitialisation de l'input
   }
 }
 </script>
+```

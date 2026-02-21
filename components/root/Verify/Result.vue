@@ -1,5 +1,6 @@
 <template>
   <div class="animate-fade-up text-left">
+    <!-- Succès -->
     <div v-if="result.verified"
       class="p-5 md:p-8 rounded-2xl md:rounded-3xl bg-success/5 border border-success/20 overflow-hidden relative">
       <div class="absolute top-0 right-0 p-8 opacity-10">
@@ -23,7 +24,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="p-4 bg-WtB/50 rounded-2xl border border-ash/50 space-y-1">
             <p class="text-[10px] text-hsa uppercase font-black">Émetteur du Document</p>
-            <p class="font-bold text-BtW">{{ result.document?.signer || 'CYPASS Network' }}</p>
+            <p class="font-bold text-BtW">{{ result.document?.signer || 'CYPASS' }}</p>
           </div>
           <div class="p-4 bg-WtB/50 rounded-2xl border border-ash/50 space-y-1">
             <p class="text-[10px] text-hsa uppercase font-black">Type / Format</p>
@@ -35,7 +36,7 @@
           </div>
           <div class="p-4 bg-WtB/50 rounded-2xl border border-ash/50 space-y-1">
             <p class="text-[10px] text-hsa uppercase font-black">Identifiant (ID)</p>
-            <p class="font-code text-xs text-BtW">{{ result.document?.id || 'N/A' }}</p>
+            <p class="font-code text-xs text-BtW">{{ result.document?.id || result.id || 'N/A' }}</p>
           </div>
         </div>
 
@@ -43,7 +44,7 @@
           <p class="text-[10px] text-hsa uppercase font-black tracking-widest px-1">Empreinte Numérique (SHA-256)</p>
           <div
             class="p-3 bg-ash/30 rounded-xl border border-ash/50 font-code text-[10px] text-hsa break-all opacity-80 select-none">
-            {{ truncateHash(result.document?.hash || result.doc_hash || '') }}
+            {{ truncateHash(result.document?.hash || result.doc_hash || result.calculated_hash || 'Invalide') }}
           </div>
         </div>
 
@@ -95,16 +96,22 @@
       </div>
     </div>
 
+    <!-- Echec -->
     <div v-else class="p-8 rounded-3xl bg-danger/5 border border-danger/20">
       <div class="flex items-center gap-3 text-danger mb-4">
         <IconShieldOff class="w-8 h-8" />
         <span class="text-xl font-black">ÉCHEC DE LA VÉRIFICATION</span>
       </div>
       <p class="text-hsa leading-relaxed mb-6">
-        Attention, ce document ne peut pas être authentifié. <br>
-        Causes possibles : modification du contenu, altération des métadonnées ou document non émis par CYPASS.
+        Attention, ce document n'a pas été trouvé dans la base de données CYPASS. <br>
+        <strong>Causes possibles :</strong> modification du contenu, altération des métadonnées ou certificat non émis
+        par CYPASS.
       </p>
-      <div v-if="error" class="mb-6 p-4 bg-danger/10 rounded-xl text-xs text-danger font-code">{{ error }}</div>
+      <div v-if="error || result.error || result.message"
+        class="mb-4 p-4 bg-danger/10 rounded-xl text-xs text-danger font-code border border-danger/20">
+        <p class="font-bold mb-1">{{ error || result.error || result.message }}</p>
+        <p v-if="result.details" class="opacity-80">{{ result.details }}</p>
+      </div>
       <UiBaseButton variant="danger" block @click="$emit('reset')">Réessayer</UiBaseButton>
     </div>
   </div>

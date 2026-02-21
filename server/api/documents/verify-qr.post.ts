@@ -11,22 +11,19 @@ export default defineEventHandler(async (event) => {
     if (!formData || formData.length === 0) {
       throw createError({
         statusCode: 400,
-        message: 'Aucun document ou certificat fourni'
+        message: 'Aucun fichier QR fourni'
       })
     }
 
     const backendFormData = new FormData()
-    backendFormData.append('original_file', '')
-    backendFormData.append('certificate_file', '')
-
     for (const item of formData) {
-      if (item.data && (item.name === 'original_file' || item.name === 'certificate_file')) {
+      if (item.name === 'file' && item.data) {
         const blob = new Blob([new Uint8Array(item.data)], { type: item.type })
-        backendFormData.set(item.name, blob, item.filename)
+        backendFormData.append('file', blob, item.filename)
       }
     }
 
-    const response: any = await $fetch(`${baseApi}/documents/verify.php`, {
+    const response: any = await $fetch(`${baseApi}/documents/verify-qr-image.php`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -37,10 +34,10 @@ export default defineEventHandler(async (event) => {
 
     return response
   } catch (error: any) {
-    console.error('Document Verify Proxy Error:', error)
+    console.error('QR Verify Proxy Error:', error)
     throw createError({
       statusCode: error.response?.status || 500,
-      message: error.data?.message || error.message || 'Erreur lors de la vérification du document',
+      message: error.data?.message || error.message || 'Erreur lors de la vérification du QR code sur le serveur',
       data: error.data
     })
   }

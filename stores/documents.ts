@@ -104,13 +104,19 @@ export const useDocumentsStore = defineStore('documents', {
           query: { h: hash }
         })
 
-        if (response.success || response.verified) {
+        if (response.success || response.verified !== undefined) {
           this.verificationResult = response
           return true
         }
+
         return false
       } catch (err: any) {
-        this.error = err.data?.message || 'Hash invalide ou document inconnu'
+        const failureData = err.data?.data || err.data
+        if (failureData && (failureData.verified !== undefined || failureData.success !== undefined)) {
+          this.verificationResult = failureData
+          return true
+        }
+        this.error = err.data?.message || err.message || 'Hash invalide ou document inconnu'
         return false
       } finally {
         this.loading = false
@@ -132,14 +138,19 @@ export const useDocumentsStore = defineStore('documents', {
           body: formData
         })
 
-        if (response.success || response.verified) {
+        if (response.success || response.verified !== undefined) {
           this.verificationResult = response
           return true
         }
 
         return false
       } catch (err: any) {
-        this.error = err.data?.message || 'Erreur lors de la vérification du document'
+        const failureData = err.data?.data || err.data
+        if (failureData && (failureData.verified !== undefined || failureData.success !== undefined)) {
+          this.verificationResult = failureData
+          return true
+        }
+        this.error = err.data?.message || err.message || 'Erreur lors de la vérification du document'
         return false
       } finally {
         this.loading = false
@@ -160,14 +171,19 @@ export const useDocumentsStore = defineStore('documents', {
           body: formData
         })
 
-        if (response.success || response.verified) {
+        if (response.success || response.verified !== undefined) {
           this.verificationResult = response
           return true
         }
 
         return false
       } catch (err: any) {
-        this.error = err.data?.message || 'Erreur lors de la vérification du QR Code'
+        const failureData = err.data?.data || err.data
+        if (failureData && (failureData.verified !== undefined || failureData.success !== undefined)) {
+          this.verificationResult = failureData
+          return true
+        }
+        this.error = err.data?.message || err.message || 'Erreur lors de la vérification du QR Code'
         return false
       } finally {
         this.loading = false

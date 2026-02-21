@@ -26,7 +26,8 @@ export default defineEventHandler(async (event) => {
   } catch (error: any) {
     throw createError({
       statusCode: error.response?.status || 500,
-      message: error.data?.message || 'Erreur lors de la vérification du document'
+      message: error.data?.message || error.message || 'Erreur lors de la vérification du document',
+      data: error.data
     })
   }
 })
