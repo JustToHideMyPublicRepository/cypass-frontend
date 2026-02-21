@@ -1,6 +1,7 @@
 <template>
   <div class="max-w-6xl mx-auto px-4 py-8">
-    <RootSystemSearchHeader :query="query" />
+    <RootSystemSearchHeader :query="query" :resultsCount="totalCount" @modify="searchStore.openSearch()"
+      @reset="performSearch" />
 
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
       <!-- Sidebar Filters -->

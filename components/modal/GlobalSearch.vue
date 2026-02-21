@@ -3,7 +3,7 @@
     <Transition enter-active-class="transition duration-200 ease-out" enter-from-class="opacity-0 scale-95"
       enter-to-class="opacity-100 scale-100" leave-active-class="transition duration-150 ease-in"
       leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-95">
-      <div v-if="searchStore.isOpen" class="fixed inset-0 z-[100] flex items-start justify-center pt-20 px-4 sm:pt-32">
+      <div v-if="searchStore.isOpen" class="fixed inset-0 z-[100] flex items-center justify-center p-4">
         <!-- Arrière-plan sombre -->
         <div class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm" @click="searchStore.closeSearch()"></div>
 
@@ -45,7 +45,7 @@
             <!-- Aucun résultat trouvé -->
             <div v-else-if="searchStore.results.length === 0 && !searchStore.isLoading" class="p-8 text-center">
               <p class="text-hsa">Aucun résultat trouvé pour "<span class="text-BtW font-medium">{{ searchQuery
-                  }}</span>"
+              }}</span>"
               </p>
             </div>
 
