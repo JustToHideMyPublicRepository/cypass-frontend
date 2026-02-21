@@ -90,9 +90,9 @@
     </div>
 
     <!-- File Error Modal -->
-    <ModalFileError :show="showFileError" :title="fileErrorTitle" :message="fileErrorMessage" :file-name="errorFileName"
-      :file-type="errorFileType" :file-size="errorFileSize" :accepted-formats="acceptedFormats"
-      @close="showFileError = false" />
+    <ModalGlobalFileError :show="showFileError" :title="fileErrorTitle" :message="fileErrorMessage"
+      :file-name="errorFileName" :file-type="errorFileType" :file-size="errorFileSize"
+      :accepted-formats="acceptedFormats" @close="showFileError = false" />
   </div>
 </template>
 

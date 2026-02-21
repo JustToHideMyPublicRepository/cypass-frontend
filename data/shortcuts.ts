@@ -304,7 +304,7 @@ export const shortcutsData: Record<string, ShortcutEntry> = {
   help: {
     keys: ['?'],
     label: 'Aide et raccourcis',
-    path: '/shortcuts',
+    path: '/system/shortcuts',
     isGlobal: true,
     group: 'Général'
   },

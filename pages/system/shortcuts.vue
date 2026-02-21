@@ -1,12 +1,12 @@
 <template>
   <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-    <RootShortcutsHeader @open-settings="showSettings = true" @open-expert="showExpert = true" />
+    <RootSystemShortcutsHeader @open-settings="showSettings = true" @open-expert="showExpert = true" />
 
-    <RootShortcutsSearch ref="searchComp" v-model:searchQuery="searchQuery" v-model:sortBy="sortBy"
+    <RootSystemShortcutsSearch ref="searchComp" v-model:searchQuery="searchQuery" v-model:sortBy="sortBy"
       v-model:groupSort="groupSort" />
 
-    <RootShortcutsGrid :categories="filteredShortcuts" />
-    <RootShortcutsFooter />
+    <RootSystemShortcutsGrid :categories="filteredShortcuts" />
+    <RootSystemShortcutsFooter />
 
     <!-- Paramètres Modale -->
     <ModalShortcutsSetting :show="showSettings" @close="showSettings = false" />

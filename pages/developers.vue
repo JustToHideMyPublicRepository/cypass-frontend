@@ -39,7 +39,6 @@
           </UiAppFrame>
         </div>
       </div>
-
     </div>
   </div>
 </template>

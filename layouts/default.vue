@@ -23,7 +23,7 @@
       <LytDefaultFooter class="shrink-0" />
     </div>
     <!-- Logout Modal -->
-    <ModalLogoutConfirmation :show="authStore.isLogoutModalOpen" @close="authStore.closeLogoutModal()"
+    <ModalGlobalLogout :show="authStore.isLogoutModalOpen" @close="authStore.closeLogoutModal()"
       @confirm="confirmLogout" />
   </div>
 </template>

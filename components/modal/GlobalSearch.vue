@@ -172,7 +172,7 @@ const selectResult = (result: any) => {
 }
 
 const viewAllResults = () => {
-  router.push({ path: '/search', query: { q: searchQuery.value } })
+  router.push({ path: '/system/search', query: { q: searchQuery.value } })
   searchStore.closeSearch()
 }
 

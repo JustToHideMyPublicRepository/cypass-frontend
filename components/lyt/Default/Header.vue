@@ -1,9 +1,15 @@
 <template>
   <header
     class="h-16 bg-WtB border-b border-ash flex items-center justify-between px-4 sm:px-6 lg:px-8 transition-colors duration-300">
-    <button @click="$emit('toggle-menu')" class="md:hidden text-hsa hover:text-BtW">
-      <IconMenu2 class="w-6 h-6" />
-    </button>
+    <div class="flex items-center gap-2 md:hidden">
+      <button @click="$emit('toggle-menu')" class="text-hsa hover:text-BtW">
+        <IconMenu2 class="w-6 h-6" />
+      </button>
+      <button @click="searchStore.openSearch()"
+        class="p-1 rounded-lg text-hsa hover:bg-ash hover:text-primary transition-colors">
+        <IconSearch class="w-6 h-6" />
+      </button>
+    </div>
 
     <!-- Search -->
     <div @click="searchStore.openSearch()" class="hidden md:flex flex-1 max-w-md ml-8 relative cursor-pointer group">
@@ -26,7 +32,7 @@
     <div class="flex items-center gap-4">
       <ClientOnly>
         <UiThemeToggle />
-        <ModalNotificationDrop />
+        <ModalGlobalNotificationDrop />
       </ClientOnly>
 
       <!-- Profile Dropdown -->
@@ -122,7 +128,7 @@ const dropdownLinks = [
   { label: 'Sessions', path: '/dashboard/sessions', icon: IconDevices },
   { label: 'Journal d\'activité', path: '/dashboard/logs', icon: IconActivity },
   { label: 'Paramètres', path: '/dashboard/settings', icon: IconSettings },
-  { label: 'Raccourcis Clavier', path: '/shortcuts', icon: IconKeyboard },
+  { label: 'Raccourcis Clavier', path: '/system/shortcuts', icon: IconKeyboard },
   { label: 'Aide & Support', path: '/support', icon: IconHelp }
 ]
 

@@ -1,6 +1,5 @@
 import { onMounted, onUnmounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { shortcutsData } from '@/data/shortcuts'
 import { useShortcutsStore } from '~/stores/shortcuts'
 
 interface ShortcutsOptions {
@@ -226,7 +225,7 @@ export const useShortcuts = (options: ShortcutsOptions = {}) => {
 
     if (isMatch) {
       event.preventDefault()
-      router.push(helpShortcut.path || '/shortcuts')
+      router.push(helpShortcut.path || '/system/shortcuts')
       return
     }
 
