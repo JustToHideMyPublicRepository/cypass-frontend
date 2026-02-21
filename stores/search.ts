@@ -98,7 +98,7 @@ export const useSearchStore = defineStore('search', {
                 id: `doc-${doc.id}`,
                 title: doc.filename,
                 description: `Document ${(doc.file_type || '').toUpperCase()}`,
-                path: `/dashboard/docsentry?id=${doc.id}`,
+                path: `/dashboard/docsentry/${doc.id}`,
                 type: 'document',
                 category: 'DocSentry'
               })
