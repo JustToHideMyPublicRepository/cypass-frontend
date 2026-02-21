@@ -109,6 +109,8 @@
       </p>
       <div v-if="error || result.error || result.message"
         class="mb-4 p-4 bg-danger/10 rounded-xl text-xs text-danger font-code border border-danger/20">
+        <p v-if="result.mode" class="mb-2 opacity-60 uppercase font-black tracking-tighter">[ MODE: {{ result.mode }} ]
+        </p>
         <p class="font-bold mb-1">{{ error || result.error || result.message }}</p>
         <p v-if="result.details" class="opacity-80">{{ result.details }}</p>
       </div>

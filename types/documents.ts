@@ -60,6 +60,7 @@ export interface VerificationResult {
   doc_hash?: string
   calculated_hash?: string
   success?: boolean
+  mode?: string
 }
 
 export interface PublicKeyInfo {

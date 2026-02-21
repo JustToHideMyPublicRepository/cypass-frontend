@@ -1,5 +1,5 @@
 <template>
-  <UiBaseModal :show="show" title="Vérifier un document" maxWidth="3xl" @close="$emit('close')">
+  <UiBaseModal :show="show" title="Vérifier un document" maxWidth="2xl" @close="$emit('close')">
     <div class="max-h-[60vh] overflow-y-auto pr-2 no-scrollbar space-y-6 py-2">
       <!-- Sélecteur de mode de vérification -->
       <div v-if="!result && !loading" class="flex justify-center">
@@ -225,6 +225,8 @@
               réseau ou a subi des modifications post-signature.</p>
             <div v-if="error || result.error || result.message"
               class="mt-5 p-4 bg-danger/10 rounded-2xl text-[11px] font-code text-danger border border-danger/20">
+              <p v-if="result.mode" class="mb-2 opacity-60 uppercase font-black tracking-tighter">[ MODE: {{ result.mode
+              }} ]</p>
               <p class="font-bold mb-1">{{ error || result.error || result.message }}</p>
               <p v-if="result.details" class="opacity-80">{{ result.details }}</p>
             </div>
@@ -397,9 +399,7 @@ const resetCurrentFile = () => {
 }
 
 watch(verifyMode, () => {
-  // Clear files and results when mode changes
-  pdfFile.value = null
-  qrFile.value = null
+  // Clear only transient states when mode changes
   hashInput.value = ''
   error.value = null
   result.value = null
