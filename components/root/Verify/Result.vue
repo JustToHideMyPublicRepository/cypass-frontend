@@ -49,33 +49,7 @@
         </div>
 
         <!-- Signature Details -->
-        <div v-if="result.signature_info" class="p-5 bg-ash/5 rounded-2xl border border-ash/50 space-y-4">
-          <h4 class="text-xs font-bold text-BtW flex items-center gap-2">
-            <IconLock class="w-4 h-4 text-primary" /> Détails Techniques de la Signature
-          </h4>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-y-3 text-[11px]">
-            <div class="flex justify-between md:block">
-              <span class="text-hsa">Algorithme</span>
-              <p class="font-bold text-BtW">{{ result.signature_info.algorithm || 'Ed25519' }}</p>
-            </div>
-            <div class="flex justify-between md:block">
-              <span class="text-hsa">Statut de la Clé</span>
-              <p class="font-bold" :class="result.signature_info.key_match ? 'text-success' : 'text-danger'">
-                {{ result.signature_info.key_match ? 'Clé Correspondante ✓' : 'Conflit de Clé ✗' }}
-              </p>
-            </div>
-            <div class="md:col-span-2">
-              <span class="text-hsa">Empreinte de la Clé publique</span>
-              <p class="font-code text-[10px] text-BtW truncate">
-                {{ result.signature_info.key_fingerprint || 'N/A' }}
-              </p>
-            </div>
-            <div class="md:col-span-2">
-              <span class="text-hsa">Date de Signature</span>
-              <p class="font-bold text-BtW">{{ formatDate(result.signature_info.signed_at) }}</p>
-            </div>
-          </div>
-        </div>
+        <RootVerifySignatureDetails :signatureInfo="result.signature_info" />
 
         <div v-if="result.verified" class="space-y-4">
           <UiBaseButton variant="primary" block size="lg" @click="downloadCertificate">

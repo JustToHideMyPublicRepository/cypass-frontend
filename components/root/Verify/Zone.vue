@@ -1,43 +1,12 @@
 <template>
   <div class="glass-panel p-6 md:p-12 rounded-3xl md:rounded-[40px] border border-ashAct shadow-2xl relative group">
     <!-- Sélecteur de mode -->
-    <div v-if="!result && !loading" class="flex justify-center mb-6 md:mb-8">
-      <div class="flex p-1 bg-ash/50 rounded-xl border border-ash gap-2 md:gap-4">
-        <UiBaseButton @click="$emit('update:verifyMode', 'file')" variant="ghost"
-          class="!px-3 md:!px-4 !py-1.5 md:!py-2 !text-xs md:!text-sm !font-bold !rounded-lg transition-all !h-auto"
-          :class="verifyMode === 'file' ? '!bg-WtB !text-primary shadow-sm' : 'text-hsa hover:!text-BtW'">
-          Fichier PDF
-        </UiBaseButton>
-        <UiBaseButton @click="$emit('update:verifyMode', 'hash')" variant="ghost"
-          class="!px-3 md:!px-4 !py-1.5 md:!py-2 !text-xs md:!text-sm !font-bold !rounded-lg transition-all !h-auto"
-          :class="verifyMode === 'hash' ? '!bg-WtB !text-primary shadow-sm' : 'text-hsa hover:!text-BtW'">
-          Empreinte (Hash)
-        </UiBaseButton>
-        <UiBaseButton @click="$emit('update:verifyMode', 'qr')" variant="ghost"
-          class="!px-3 md:!px-4 !py-1.5 md:!py-2 !text-xs md:!text-sm !font-bold !rounded-lg transition-all !h-auto"
-          :class="verifyMode === 'qr' ? '!bg-WtB !text-primary shadow-sm' : 'text-hsa hover:!text-BtW'">
-          Code QR
-        </UiBaseButton>
-      </div>
-    </div>
+    <RootVerifyModeSelector v-if="!result && !loading" :modelValue="verifyMode"
+      @update:modelValue="$emit('update:verifyMode', $event as any)" />
 
-    <!-- Sélecteur de sous-mode PDF (Liste déroulante) -->
-    <div v-if="!result && !loading && verifyMode === 'file'" class="flex justify-center mb-8 animate-fade-in">
-      <div class="flex items-center gap-4 bg-ash/5 p-2 pr-4 rounded-2xl border border-ash">
-        <label class="text-[10px] font-black text-hsa uppercase tracking-[0.2em] px-2 whitespace-nowrap">Méthode de
-          vérification</label>
-        <div class="relative group min-w-[180px]">
-          <select :value="pdfSubMode"
-            @change="$emit('update:pdfSubMode', ($event.target as HTMLSelectElement).value as any)"
-            class="w-full h-10 pl-4 pr-10 py-2 rounded-xl bg-WtB border border-ash/50 focus:ring-2 focus:ring-primary outline-none transition-all font-bold text-[11px] appearance-none cursor-pointer">
-            <option value="original">Document Original</option>
-            <option value="certificate">Certificat CYPASS</option>
-          </select>
-          <IconChevronDown
-            class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-hsa pointer-events-none group-focus-within:text-primary transition-colors" />
-        </div>
-      </div>
-    </div>
+    <!-- Sélecteur de sous-mode PDF -->
+    <RootVerifySubModeSelector v-if="!result && !loading && verifyMode === 'file'" :modelValue="pdfSubMode"
+      @update:modelValue="$emit('update:pdfSubMode', $event as any)" />
 
     <!-- Zone de dépôt interactive (Drag & Drop) -->
     <div v-if="!activeFile && (verifyMode === 'file' || verifyMode === 'qr') && !result"
@@ -84,35 +53,11 @@
 
     <div v-if="(activeFile || result || (loading && verifyMode === 'hash'))" class="space-y-8">
       <!-- En-tête du fichier sélectionné (Uniquement pour le mode fichier) -->
-      <div v-if="activeFile && !result"
-        class="flex items-center gap-4 p-4 bg-ash/20 rounded-2xl border border-ash animate-fade-in text-left">
-        <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center text-primary">
-          <IconFileText v-if="verifyMode === 'file'" class="w-6 h-6" />
-          <IconQrcode v-else class="w-6 h-6" />
-        </div>
-        <div class="flex-1 min-w-0">
-          <p class="font-bold text-BtW truncate">{{ activeFile.name }}</p>
-          <p class="text-xs text-hsa">{{ (activeFile.size / 1024 / 1024).toFixed(2) }} MB</p>
-        </div>
-        <UiBaseButton @click="$emit('reset')" variant="ghost"
-          class="text-hsa hover:!text-danger !p-2 transition-colors !h-auto !w-auto">
-          <IconX class="w-5 h-5" />
-        </UiBaseButton>
-      </div>
+      <RootVerifyFilePreview :file="activeFile" :mode="verifyMode" @reset="$emit('reset')"
+        v-if="activeFile && !result" />
 
       <!-- État de chargement (Étapes de progression) -->
-      <div v-if="loading && !result" class="py-12 animate-fade-in max-w-2xl mx-auto">
-        <div class="mb-8 p-6 bg-primary/5 rounded-[32px] border border-primary/10 text-left overflow-hidden">
-          <p class="text-xs font-black text-primary uppercase tracking-widest mb-6 flex items-center gap-2">
-            <span class="relative flex h-2 w-2">
-              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-              <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
-            </span>
-            Analyse Cryptographique
-          </p>
-          <UtilsStepProgress :steps="activeSteps" />
-        </div>
-      </div>
+      <RootVerifyProgressSteps v-if="loading && !result" :steps="activeSteps" />
 
       <RootVerifyResult v-if="result" :result="result" :error="error" @reset="$emit('reset')" />
 

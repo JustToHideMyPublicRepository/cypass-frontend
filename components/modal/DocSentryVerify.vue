@@ -2,42 +2,10 @@
   <UiBaseModal :show="show" title="Vérifier un document" maxWidth="2xl" @close="$emit('close')">
     <div class="max-h-[60vh] overflow-y-auto pr-2 no-scrollbar space-y-6 py-2">
       <!-- Sélecteur de mode de vérification -->
-      <div v-if="!result && !loading" class="flex justify-center">
-        <div class="flex p-1.5 bg-ash/50 rounded-2xl border-2 border-ashAct/20 gap-2 backdrop-blur-md">
-          <UiBaseButton @click="verifyMode = 'file'" variant="ghost"
-            class="!px-6 !py-2.5 !text-[10px] !font-black !tracking-widest !rounded-xl transition-all duration-300 !h-auto"
-            :class="verifyMode === 'file' ? '!bg-WtB !text-primary shadow-lg ring-1 ring-ashAct/10' : 'text-hsa hover:!text-BtW'">
-            Fichier
-          </UiBaseButton>
-          <UiBaseButton @click="verifyMode = 'hash'" variant="ghost"
-            class="!px-6 !py-2.5 !text-[10px] !font-black !tracking-widest !rounded-xl transition-all duration-300 !h-auto"
-            :class="verifyMode === 'hash' ? '!bg-WtB !text-primary shadow-lg ring-1 ring-ashAct/10' : 'text-hsa hover:!text-BtW'">
-            Hash
-          </UiBaseButton>
-          <UiBaseButton @click="verifyMode = 'qr'" variant="ghost"
-            class="!px-6 !py-2.5 !text-[10px] !font-black !tracking-widest !rounded-xl transition-all duration-300 !h-auto"
-            :class="verifyMode === 'qr' ? '!bg-WtB !text-primary shadow-lg ring-1 ring-ashAct/10' : 'text-hsa hover:!text-BtW'">
-            Code QR
-          </UiBaseButton>
-        </div>
-      </div>
+      <RootVerifyModeSelector v-if="!result && !loading" v-model="verifyMode" />
 
-      <!-- Sélecteur de sous-mode PDF (Liste déroulante) -->
-      <div v-if="!result && !loading && verifyMode === 'file'" class="max-w-xs mx-auto mb-6 px-2">
-        <div class="space-y-2 text-left">
-          <label class="text-[9px] font-black text-hsa uppercase tracking-[0.2em] px-1 opacity-60">Type de
-            document</label>
-          <div class="relative group">
-            <select v-model="pdfSubMode"
-              class="w-full h-11 pl-4 pr-10 py-2 rounded-xl bg-ash/30 border border-ashAct/20 focus:ring-2 focus:ring-primary outline-none transition-all font-black text-[10px] appearance-none cursor-pointer tracking-widest">
-              <option value="original">Document Original</option>
-              <option value="certificate">Certificat CYPASS</option>
-            </select>
-            <IconChevronDown
-              class="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-hsa pointer-events-none group-focus-within:text-primary transition-colors" />
-          </div>
-        </div>
-      </div>
+      <!-- Sélecteur de sous-mode PDF -->
+      <RootVerifySubModeSelector v-if="!result && !loading && verifyMode === 'file'" v-model="pdfSubMode" />
 
       <!-- Zone de dépôt pour fichier / QR -->
       <div v-if="!activeFile && (verifyMode === 'file' || verifyMode === 'qr') && !result"
@@ -83,36 +51,11 @@
 
       <div v-if="(activeFile || result || (loading && verifyMode === 'hash'))" class="space-y-6">
         <!-- Affichage du fichier sélectionné -->
-        <div v-if="activeFile && !result"
-          class="p-6 bg-ash/30 rounded-[2rem] border border-ashAct/20 flex items-center gap-6 animate-fade-in text-left">
-          <div class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center text-primary shrink-0">
-            <IconFileText v-if="verifyMode === 'file'" class="w-10 h-10" />
-            <IconQrcode v-else class="w-10 h-10" />
-          </div>
-          <div class="flex-1 min-w-0">
-            <p class="font-black text-BtW truncate">{{ activeFile.name }}</p>
-            <p class="text-xs text-hsa uppercase tracking-widest opacity-60 mt-1">{{ (activeFile.size / 1024 /
-              1024).toFixed(2) }} MO</p>
-          </div>
-          <UiBaseButton @click="resetCurrentFile" variant="ghost"
-            class="!p-3 !h-auto !w-auto text-hsa hover:!text-danger transition-colors opacity-40 hover:opacity-100">
-            <IconX class="w-6 h-6" />
-          </UiBaseButton>
-        </div>
+        <RootVerifyFilePreview :file="activeFile" :mode="verifyMode" @reset="resetCurrentFile"
+          v-if="activeFile && !result" />
 
         <!-- État de chargement (Progression) -->
-        <div v-if="loading && !result" class="py-4 animate-fade-in">
-          <div class="mb-6 p-6 bg-primary/5 rounded-[2.5rem] border-2 border-primary/10 shadow-xl shadow-primary/5">
-            <p class="text-xs font-black text-primary tracking-[0.2em] mb-8 flex items-center gap-3">
-              <span class="relative flex h-3 w-3">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                <span class="relative inline-flex rounded-full h-3 w-3 bg-primary"></span>
-              </span>
-              Vérification de l'intégrité globale
-            </p>
-            <UtilsStepProgress :steps="activeSteps" />
-          </div>
-        </div>
+        <RootVerifyProgressSteps v-if="loading && !result" :steps="activeSteps" />
 
         <!-- Vue des Résultats -->
         <div v-if="result" class="animate-fade-up">
