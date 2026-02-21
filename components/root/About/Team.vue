@@ -1,5 +1,6 @@
 <template>
   <section class="py-12 md:py-20 relative overflow-hidden">
+    <!-- Contenu de la section Équipe -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
       <div class="flex flex-col md:flex-row justify-between items-end mb-10 md:mb-12 gap-6 animate-fade-up">
@@ -41,6 +42,7 @@
 <script setup lang="ts">
 import { IconBrandLinkedin, IconBrandX, IconBrandFacebook } from '@tabler/icons-vue'
 
+// Membres de l'équipe
 const team = [
   {
     name: "Charmaine YEBADOKPO",

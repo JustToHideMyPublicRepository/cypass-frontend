@@ -79,16 +79,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import {
-  IconSearch,
-  IconSortAscendingLetters,
-  IconSortDescendingLetters,
-  IconSortAscending,
-  IconSortDescending,
-  IconRotate,
-  IconDownload,
-  IconUpload
-} from '@tabler/icons-vue'
+import { IconSearch, IconSortAscendingLetters, IconSortDescendingLetters, IconSortAscending, IconSortDescending, IconRotate, IconDownload, IconUpload } from '@tabler/icons-vue'
 import { useShortcutsStore } from '~/stores/shortcuts'
 import { useToastStore } from '~/stores/toast'
 

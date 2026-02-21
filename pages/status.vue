@@ -1,5 +1,6 @@
 <template>
   <div class="max-w-3xl mx-auto space-y-8 md:space-y-12 relative z-10 px-4 sm:px-6">
+    <!-- En-tête de la page d'état -->
     <div class="text-center space-y-3 md:space-y-4 animate-fade-up">
       <h1 class="text-3xl md:text-5xl font-black tracking-tight">
         État du <span class="text-green-500">Système</span>
@@ -9,7 +10,7 @@
       </p>
     </div>
 
-    <!-- Main Status Card -->
+    <!-- Carte d'état principale -->
     <div
       class="glass-panel p-6 md:p-8 rounded-2xl md:rounded-3xl animate-fade-up border-l-4 border-success flex flex-col sm:flex-row items-center gap-4 md:gap-6 shadow-lg shadow-success/10 text-center sm:text-left">
       <div
@@ -22,7 +23,7 @@
       </div>
     </div>
 
-    <!-- Components Grid -->
+    <!-- Grille des composants système -->
     <div class="space-y-3 md:space-y-4 animate-fade-up" style="animation-delay: 100ms">
       <h3 class="text-base md:text-lg font-bold pl-2">Composants</h3>
 
@@ -36,7 +37,7 @@
       </div>
     </div>
 
-    <!-- Incidents History -->
+    <!-- Historique des incidents récents -->
     <div class="space-y-3 md:space-y-4 animate-fade-up" style="animation-delay: 200ms">
       <h3 class="text-base md:text-lg font-bold pl-2">Historique des incidents</h3>
       <div class="glass-panel p-6 md:p-8 rounded-xl md:rounded-2xl text-center py-8 md:py-12 border border-ash/50">
@@ -49,10 +50,12 @@
 <script setup lang="ts">
 import { IconCheck } from '@tabler/icons-vue'
 
+// Métadonnées de la page
 definePageMeta({
   layout: 'guest'
 })
 
+// Liste des composants système et leur état actuel
 const components = [
   { name: 'API Gateway', status: 'Opérationnel' },
   { name: 'Base de Données', status: 'Opérationnel' },

@@ -1,5 +1,6 @@
 <template>
   <div class="bg-WtB rounded-2xl md:rounded-3xl p-6 md:p-8 border border-ash shadow-lg">
+    <!-- Liste des informations de contact -->
     <h3 class="text-lg md:text-xl font-bold mb-6">Coordonnées</h3>
 
     <div class="space-y-5 md:space-y-6">

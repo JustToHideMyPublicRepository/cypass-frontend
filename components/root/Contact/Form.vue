@@ -5,6 +5,7 @@
       class="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2 group-hover:bg-primary/10 transition-colors duration-700">
     </div>
 
+    <!-- Titre du formulaire -->
     <h3 class="text-xl md:text-2xl font-bold mb-6 md:mb-8">Envoyez-nous un message</h3>
 
     <form @submit.prevent="$emit('submit')" class="space-y-4 md:space-y-6 relative z-10">
@@ -64,6 +65,7 @@
 <script setup lang="ts">
 import { IconUser, IconMail, IconMessage, IconChevronDown, IconSend } from '@tabler/icons-vue'
 
+// Définition des props pour le formulaire et son état de chargement
 defineProps<{
   form: {
     name: string
@@ -74,5 +76,6 @@ defineProps<{
   loading: boolean
 }>()
 
+// Émet l'événement de soumission au composant parent
 defineEmits(['submit'])
 </script>

@@ -1,6 +1,6 @@
 <template>
   <section class="relative">
-    <!-- Background Elements -->
+    <!-- Éléments d'arrière-plan (Dégradés et flous) -->
     <div class="absolute top-0 left-0 w-full h-full overflow-hidden -z-10">
       <div
         class="absolute top-[-10%] right-[-5%] w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-primary rounded-full blur-[80px] md:blur-[100px] opacity-20 md:opacity-100">
@@ -10,6 +10,7 @@
       </div>
     </div>
 
+    <!-- Contenu Hero -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
       <div class="animate-fade-up">
         <span

@@ -1,5 +1,6 @@
 <template>
   <div class="relative pb-8">
+    <!-- Contenu principal des développeurs -->
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
 
       <div class="grid lg:grid-cols-2 gap-10 md:gap-16 items-center">
@@ -46,16 +47,22 @@
 <script setup lang="ts">
 import { useToastStore } from '~/stores/toast'
 
+// Configuration de la page
 definePageMeta({
   layout: 'guest'
 })
 
 const toastStore = useToastStore()
 
+/**
+ * Gère la demande de clé API
+ * Affiche une notification d'information car la fonctionnalité est en cours de développement
+ */
 const handleApiKey = () => {
   toastStore.showToast('info', 'Bientôt disponible', 'La génération automatique de clés API sera disponible dans la prochaine mise à jour.', 4000)
 }
 
+// Métadonnées SEO
 useHead({
   title: 'Développeurs'
 })

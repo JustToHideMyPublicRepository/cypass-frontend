@@ -4,13 +4,13 @@
       enter-to-class="opacity-100 scale-100" leave-active-class="transition duration-150 ease-in"
       leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-95">
       <div v-if="searchStore.isOpen" class="fixed inset-0 z-[100] flex items-start justify-center pt-20 px-4 sm:pt-32">
-        <!-- Backdrop -->
+        <!-- Arrière-plan sombre -->
         <div class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm" @click="searchStore.closeSearch()"></div>
 
-        <!-- Modal Content -->
+        <!-- Contenu de la modale -->
         <div
           class="relative w-full max-w-2xl bg-WtB border border-ash/50 shadow-2xl rounded-2xl overflow-hidden ring-1 ring-white/10">
-          <!-- Search Input -->
+          <!-- Barre de recherche -->
           <div class="relative p-4 border-b border-ash/50">
             <IconSearch class="absolute left-6 top-1/2 -translate-y-1/2 w-6 h-6 text-primary" />
             <input ref="inputRef" v-model="searchQuery" type="text"
@@ -23,9 +23,9 @@
             </div>
           </div>
 
-          <!-- Results Area -->
+          <!-- Zone des résultats -->
           <div class="max-h-[60vh] overflow-y-auto p-2">
-            <!-- Empty State / No Query -->
+            <!-- État vide / Pas de recherche en cours -->
             <div v-if="!searchQuery" class="p-8 text-center">
               <div class="w-16 h-16 bg-ash/30 rounded-full flex items-center justify-center mx-auto mb-4">
                 <IconSearch class="w-8 h-8 text-hsa" />
@@ -34,19 +34,19 @@
               <p class="text-hsa text-sm">Trouvez instantanément vos documents, alertes et paramètres.</p>
             </div>
 
-            <!-- No Results -->
+            <!-- Aucun résultat trouvé -->
             <div v-else-if="searchStore.results.length === 0 && !searchStore.isLoading" class="p-8 text-center">
               <p class="text-hsa">Aucun résultat trouvé pour "<span class="text-BtW font-medium">{{ searchQuery
-                  }}</span>"
+              }}</span>"
               </p>
             </div>
 
-            <!-- Loading State -->
+            <!-- État de chargement -->
             <div v-else-if="searchStore.isLoading" class="p-8">
               <UiLogoLoader size="lg" />
             </div>
 
-            <!-- Results List -->
+            <!-- Liste des résultats -->
             <div v-else class="space-y-4">
               <div v-for="(group, gIndex) in groupedResults" :key="group.name">
                 <div class="px-3 py-2 text-[10px] font-black text-slate-500 uppercase tracking-widest">{{ group.name }}
@@ -78,7 +78,7 @@
                 </div>
               </div>
 
-              <!-- View All Link -->
+              <!-- Lien pour voir tous les résultats -->
               <div class="p-2">
                 <button @click="viewAllResults"
                   class="w-full py-3 rounded-xl border-2 border-dashed border-ash hover:border-primary/30 hover:bg-primary/5 text-sm font-bold text-hsa hover:text-primary transition-all flex items-center justify-center gap-2">
@@ -89,7 +89,7 @@
             </div>
           </div>
 
-          <!-- Footer / Shortcuts Info -->
+          <!-- Pied de page / Informations sur les raccourcis -->
           <div
             class="p-3 bg-ash/30 border-t border-ash/50 flex items-center justify-between text-[10px] font-medium text-hsa">
             <div class="flex items-center gap-4">
@@ -142,13 +142,16 @@ const getAbsoluteIndex = (gIndex: number, rIndex: number) => {
   return count + rIndex
 }
 
+// Nombre total de résultats
 const totalResults = computed(() => searchStore.results.length)
 
+// Gestionnaire de saisie de recherche
 const handleInput = () => {
   searchStore.performSearch(searchQuery.value)
   selectedIndex.value = 0
 }
 
+// Gestionnaire des touches clavier pour la navigation
 const handleKeydown = (e: KeyboardEvent) => {
   if (e.key === 'ArrowDown') {
     e.preventDefault()
@@ -164,6 +167,7 @@ const handleKeydown = (e: KeyboardEvent) => {
   }
 }
 
+// Sélection d'un résultat et redirection
 const selectResult = (result: any) => {
   if (result.path) {
     router.push(result.path)
@@ -171,11 +175,13 @@ const selectResult = (result: any) => {
   }
 }
 
+// Redirection vers la page de recherche complète
 const viewAllResults = () => {
   router.push({ path: '/system/search', query: { q: searchQuery.value } })
   searchStore.closeSearch()
 }
 
+// Récupération de l'icône correspondante au type de résultat
 const getIcon = (type: string) => {
   switch (type) {
     case 'navigation': return IconLayoutDashboard
@@ -185,6 +191,7 @@ const getIcon = (type: string) => {
   }
 }
 
+// Réinitialisation lors de l'ouverture
 watch(() => searchStore.isOpen, (val) => {
   if (val) {
     searchQuery.value = ''

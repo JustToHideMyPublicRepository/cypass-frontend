@@ -7,7 +7,3 @@
     <UiBaseButton to="/modules" variant="primary">Retour au catalogue</UiBaseButton>
   </div>
 </template>
-
-<script setup lang="ts">
-// Aucune logique requise
-</script>
