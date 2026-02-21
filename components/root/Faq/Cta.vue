@@ -1,5 +1,6 @@
 <template>
   <section class="py-12 md:py-20 text-center">
+    <!-- Section d'appel à l'action pour le support -->
     <div class="max-w-2xl mx-auto animate-fade-up">
       <div
         class="p-6 md:p-8 rounded-2xl md:rounded-3xl bg-gradient-to-br from-slate-900 to-slate-800 text-white shadow-2xl relative overflow-hidden">

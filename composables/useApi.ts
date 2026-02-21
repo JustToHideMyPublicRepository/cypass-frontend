@@ -1,27 +1,27 @@
 import type { UseFetchOptions } from 'nuxt/app'
 
 /**
- * useApi composable
+ * Composable useApi
  * 
- * This composable is a wrapper around useFetch that targets our internal /api routes.
- * These internal routes act as a proxy to the backend and handle HttpOnly cookies.
+ * Ce composable est une surcouche autour de useFetch qui cible les routes /api internes.
+ * Ces routes internes servent de proxy vers le backend et gèrent les cookies HttpOnly.
  */
 export const useApi = <T>(url: string, options: UseFetchOptions<T> = {}) => {
   return useFetch(url, {
     ...options,
-    // Base URL is omitted because we target our own /api routes
+    // L'URL de base est omise car nous ciblons nos propres routes /api
     headers: {
       ...options.headers,
     },
 
     onResponse({ response }) {
-      // Global response interceptor if needed
+      // Intercepteur de réponse global
     },
 
     onResponseError({ response }) {
-      // Global error handler
+      // Gestionnaire d'erreurs global
       if (response.status === 401) {
-        // Handle unauthorized (redirect to login or clear store)
+        // Gérer le cas non autorisé (redirection vers login ou nettoyage du store)
         // const auth = useAuthStore()
         // auth.user = null
       }

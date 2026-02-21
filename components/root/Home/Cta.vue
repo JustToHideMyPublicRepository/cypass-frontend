@@ -1,5 +1,6 @@
 <template>
   <section class="py-20 md:py-32 relative overflow-hidden">
+    <!-- Section d'appel à l'action finale (Home) -->
     <div class="absolute inset-0 bg-bgClr"></div>
     <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-3xl">
     </div>

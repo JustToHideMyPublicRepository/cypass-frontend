@@ -1,5 +1,6 @@
 <template>
   <aside class="space-y-6">
+    <!-- Barre latérale de filtrage par catégorie -->
     <UiBaseCard title="Filtrer par catégorie">
       <div class="space-y-2">
         <button @click="$emit('update:activeFilter', 'all')"

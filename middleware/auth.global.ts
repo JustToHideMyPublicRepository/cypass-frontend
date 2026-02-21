@@ -3,7 +3,7 @@ import { useAuthStore } from '~/stores/auth'
 export default defineNuxtRouteMiddleware((to, from) => {
     const auth = useAuthStore()
 
-    // Log pour le debug (sera visible dans la console du navigateur)
+    // Log pour le debug
     // console.log('Auth middleware running for path:', to.path, 'User:', !!auth.user)
 
     // Si l'utilisateur n'est pas connecté et essaie d'accéder au dashboard

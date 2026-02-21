@@ -21,6 +21,7 @@ import { IconLoader2 as IconLoader2Raw } from '@tabler/icons-vue'
 
 const IconLoader2 = markRaw(IconLoader2Raw)
 
+// Définition des propriétés du bouton
 const props = withDefaults(defineProps<{
   variant?: 'primary' | 'secondary' | 'danger' | 'ghost'
   block?: boolean
@@ -37,6 +38,7 @@ const props = withDefaults(defineProps<{
   type: 'button'
 })
 
+// Classes CSS basées sur les props
 const buttonClasses = computed(() => [
   'btn',
   props.variant === 'primary' ? 'btn-primary' : '',

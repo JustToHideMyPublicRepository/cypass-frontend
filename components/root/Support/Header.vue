@@ -5,7 +5,7 @@
       Comment pouvons-nous <span class="text-primary">vous aider ?</span>
     </h1>
 
-    <!-- Search Bar -->
+    <!-- Barre de recherche -->
     <div class="max-w-2xl mx-auto relative group">
       <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
         <IconSearch class="w-5 h-5 text-hsa/50 group-focus-within:text-primary transition-colors" />

@@ -3,6 +3,9 @@ import { IconFileText, IconShieldLock, IconUser, IconCircleCheck, IconAlertTrian
 export type NotificationCategory = 'DOC' | 'SEC' | 'PRF' | 'OTHER'
 
 export const useNotificationStyles = () => {
+  /**
+   * Détermine la catégorie principale d'une notification
+   */
   const getCategory = (type: string): NotificationCategory => {
     if (type.startsWith('DOC_')) return 'DOC'
     if (type.startsWith('SEC_')) return 'SEC'
@@ -10,6 +13,9 @@ export const useNotificationStyles = () => {
     return 'OTHER'
   }
 
+  /**
+   * Récupère l'icône correspondante au type de notification
+   */
   const getTypeIcon = (type: string) => {
     switch (type) {
       case 'DOC_SUCCESS':
@@ -29,6 +35,9 @@ export const useNotificationStyles = () => {
     }
   }
 
+  /**
+   * Récupère les classes de style (couleurs) pour un type donné
+   */
   const getTypeStyles = (type: string) => {
     const category = getCategory(type)
     switch (category) {
@@ -45,6 +54,9 @@ export const useNotificationStyles = () => {
     }
   }
 
+  /**
+   * Retourne le libellé de la catégorie
+   */
   const getCategoryLabel = (category: NotificationCategory) => {
     switch (category) {
       case 'DOC': return 'Documents'
@@ -54,6 +66,9 @@ export const useNotificationStyles = () => {
     }
   }
 
+  /**
+   * Génère un message détaillé pour les notifications de sécurité
+   */
   const getSecurityMessage = (type: string) => {
     if (type === 'SEC_LOGIN') {
       return "Si vous ne reconnaissez pas cette activité de connexion, nous vous recommandons de changer votre mot de passe immédiatement dans l'onglet Sécurité et de déconnecter les autres sessions."
@@ -64,6 +79,9 @@ export const useNotificationStyles = () => {
     return "Une activité liée à la sécurité de votre compte a été détectée. Veuillez vérifier l'historique de vos connexions."
   }
 
+  /**
+   * Génère un message détaillé pour les notifications de documents
+   */
   const getDocumentMessage = (type: string) => {
     if (type === 'DOC_SUCCESS') {
       return "Votre document a été traité et vérifié avec succès. Vous pouvez maintenant consulter le certificat associé."
@@ -74,6 +92,9 @@ export const useNotificationStyles = () => {
     return "Nouvelle activité enregistrée dans votre coffre-fort numérique DocSentry."
   }
 
+  /**
+   * Génère un message détaillé pour les notifications de profil
+   */
   const getProfileMessage = (type: string) => {
     if (type === 'PRF_AVATAR') {
       return "Votre photo de profil a été mise à jour avec succès. Elle est désormais visible sur votre compte."

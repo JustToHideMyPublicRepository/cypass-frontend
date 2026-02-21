@@ -1,6 +1,7 @@
-import { onMounted, onUnmounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useShortcutsStore } from '~/stores/shortcuts'
+import { useAuthStore } from '~/stores/auth'
 
 interface ShortcutsOptions {
   global?: boolean
@@ -9,18 +10,16 @@ interface ShortcutsOptions {
   onAltModeChange?: (active: boolean) => void
 }
 
-import { useAuthStore } from '~/stores/auth'
-
 export const useShortcuts = (options: ShortcutsOptions = {}) => {
   const router = useRouter()
   const store = useShortcutsStore()
   const authStore = useAuthStore()
 
-  // Visual update logic for hints
+  // Logique de mise à jour visuelle des indices de raccourcis
   const updateVisualHints = () => {
     if (!import.meta.client) return
 
-    // Defer to next tick to ensure store updates are propagated if needed,
+    // Différer au prochain frame pour s'assurer que les mises à jour du store sont propagées
     requestAnimationFrame(() => {
       const hints = document.querySelectorAll('.alt-shortcut-hint')
       const buffer = store.buffer.map(k => k.toLowerCase())
@@ -29,16 +28,16 @@ export const useShortcuts = (options: ShortcutsOptions = {}) => {
         const hint = el as HTMLElement
         const seq = (hint.dataset.seq || '').split(',') // ["l", "m", "p"]
 
-        // Check if buffer matches the start of this sequence
+        // Vérifier si le tampon correspond au début de cette séquence
         const matches = buffer.every((k, i) => seq[i] === k)
 
         if (!matches) {
           hint.classList.add('dimmed')
-          // Reset active keys
+          // Réinitialiser les touches actives
           hint.querySelectorAll('.key').forEach(k => k.classList.remove('active'))
         } else {
           hint.classList.remove('dimmed')
-          // Highlight active keys based on progress (skipping modifiers like Shift)
+          // Mettre en surbrillance les touches actives selon la progression
           const keys = hint.querySelectorAll('.key:not(.is-mod)')
           keys.forEach((k, i) => {
             if (i < buffer.length) k.classList.add('active')
@@ -49,7 +48,7 @@ export const useShortcuts = (options: ShortcutsOptions = {}) => {
     })
   }
 
-  // Synchro body class and visual hints with store state
+  // Synchronisation de la classe du body et des indices visuels avec l'état du store
   watch(() => store.altMode, (active) => {
     if (import.meta.client) {
       if (active) {
@@ -76,7 +75,7 @@ export const useShortcuts = (options: ShortcutsOptions = {}) => {
 
     const currentBuffer = [...shiftBuffer.value]
 
-    // Check for matches
+    // Vérifier les correspondances
     const matches = Object.values(store.mergedShortcuts).filter(s => {
       if (!s.isGlobal || s.modifier !== 'Shift') return false
       return s.keys.slice(0, currentBuffer.length).every((k, i) => k.toLowerCase() === currentBuffer[i])
@@ -95,7 +94,7 @@ export const useShortcuts = (options: ShortcutsOptions = {}) => {
   const handleKeyDown = (event: KeyboardEvent) => {
     if (!store.enabled && event.key !== 'Alt') return
 
-    // Sticky Alt Mode Toggle
+    // Basculer le Mode Alt (Touche collante)
     if (event.key === 'Alt') {
       if (!event.repeat) {
         event.preventDefault()
@@ -105,29 +104,29 @@ export const useShortcuts = (options: ShortcutsOptions = {}) => {
       return
     }
 
-    // If Alt Mode is active, intercept keys
+    // Si le Mode Alt est actif, intercepter les touches
     if (store.altMode) {
-      event.preventDefault() // Block normal interaction while in mode
+      event.preventDefault() // Bloquer l'interaction normale dans ce mode
 
       const key = event.key.toLowerCase()
-      // Ignore separate modifier presses
+      // Ignorer les pressions de touches de modification isolées
       if (['shift', 'control', 'meta'].includes(key)) return
 
-      // Escape to cancel
+      // Échappe pour annuler
       if (key === 'escape') {
         store.disableAltMode()
         updateVisualHints()
         return
       }
 
-      // Add to buffer
+      // Ajouter au tampon
       store.addToBuffer(key)
       updateVisualHints()
 
-      // Check for matches
+      // Vérifier les correspondances
       const currentBuffer = store.buffer.map(k => k.toLowerCase())
 
-      // Find exact match
+      // Trouver une correspondance exacte
       const exactMatch = Object.values(store.mergedShortcuts).find(s => {
         if (!s.isGlobal) return false
         if (s.keys.length !== currentBuffer.length) return false
@@ -139,7 +138,7 @@ export const useShortcuts = (options: ShortcutsOptions = {}) => {
         store.disableAltMode()
         updateVisualHints()
       } else {
-        // Check if any valid sequence remains
+        // Vérifier si une séquence valide subsiste
         const potentialMatches = Object.values(store.mergedShortcuts).filter(s => {
           if (!s.isGlobal) return false
           return s.keys.length > currentBuffer.length &&
@@ -147,14 +146,13 @@ export const useShortcuts = (options: ShortcutsOptions = {}) => {
         })
 
         if (potentialMatches.length === 0 && !exactMatch) {
-          // Invalid path taken, maybe reset or feedback? 
-          // For now, let user see the dimmed state and decide to Escape or Alt to reset
+          // Aucun chemin valide, l'utilisateur verra l'état grisé
         }
       }
       return
     }
 
-    // Standard shortcuts logic
+    // Logique des raccourcis standards
     const activeElement = document.activeElement
     const isTyping = activeElement instanceof HTMLInputElement ||
       activeElement instanceof HTMLTextAreaElement ||
@@ -168,7 +166,7 @@ export const useShortcuts = (options: ShortcutsOptions = {}) => {
     if (!event.key) return
     const key = event.key.toLowerCase()
 
-    // Contextual Search Shortcut (Ctrl+Shift+K)
+    // Raccourci Recherche Contextuelle (Ctrl+Shift+K)
     if ((event.ctrlKey || event.metaKey) && event.shiftKey && key === 'k') {
       if (options.searchCallback) {
         event.preventDefault()
@@ -177,7 +175,7 @@ export const useShortcuts = (options: ShortcutsOptions = {}) => {
       return
     }
 
-    // Local Search Shortcut (Ctrl+K)
+    // Raccourci Recherche Locale (Ctrl+K)
     if ((event.ctrlKey || event.metaKey) && !event.shiftKey && key === 'k') {
       if (options.localSearchCallback) {
         event.preventDefault()
@@ -186,7 +184,7 @@ export const useShortcuts = (options: ShortcutsOptions = {}) => {
       return
     }
 
-    // Logout Shortcut (Ctrl + Shift + D by default)
+    // Raccourci Déconnexion (Ctrl + Shift + D par défaut)
     const logoutShortcut = store.mergedShortcuts.logout
     const lKeys = logoutShortcut.keys[0].toLowerCase()
     const lModifier = logoutShortcut.modifier
@@ -199,7 +197,7 @@ export const useShortcuts = (options: ShortcutsOptions = {}) => {
       return
     }
 
-    // Theme Toggle (Ctrl + Shift + L by default)
+    // Basculer le Thème (Ctrl + Shift + L par défaut)
     const toggleThemeShortcut = store.mergedShortcuts.toggle_theme
     const ttKeys = toggleThemeShortcut.keys[0].toLowerCase()
     const ttModifier = toggleThemeShortcut.modifier
@@ -211,7 +209,7 @@ export const useShortcuts = (options: ShortcutsOptions = {}) => {
       return
     }
 
-    // Help shortcut (Dynamic)
+    // Raccourci d'aide (Dynamique)
     const helpShortcut = store.mergedShortcuts.help
     const hKeys = helpShortcut.keys[0].toLowerCase()
     const hMod = helpShortcut.modifier
@@ -220,7 +218,7 @@ export const useShortcuts = (options: ShortcutsOptions = {}) => {
     if (!hMod && !event.ctrlKey && !event.metaKey && !event.altKey && !event.shiftKey && key === hKeys) isMatch = true
     else if (hMod === 'Shift' && event.shiftKey && !event.ctrlKey && !event.metaKey && !event.altKey && key === hKeys) isMatch = true
 
-    // Special case for '?' which often requires shift but event.key is '?'
+    // Cas spécial pour '?' qui nécessite souvent Shift mais event.key est '?'
     if (event.key === hKeys && !event.ctrlKey && !event.metaKey && !event.altKey) isMatch = true
 
     if (isMatch) {
@@ -229,13 +227,13 @@ export const useShortcuts = (options: ShortcutsOptions = {}) => {
       return
     }
 
-    // Legacy/Standard Shift Navigation (Shift + Key sequence)
+    // Navigation Shift Standard (Séquence Shift + Touche)
     if (event.shiftKey && !event.ctrlKey && !event.metaKey && !event.altKey) {
       if (['shift', 'control', 'meta', 'alt'].includes(key)) return
 
-      // Handle Arrow keys separately (scroll/history)
+      // Gérer les touches fléchées séparément (défilement/historique)
       if (['arrowup', 'arrowdown', 'arrowleft', 'arrowright'].includes(key)) {
-        // Fall through to arrow logic below
+        // Laisser passer pour la logique des flèches ci-dessous
       } else {
         event.preventDefault()
         handleShiftSequence(key)
@@ -243,7 +241,7 @@ export const useShortcuts = (options: ShortcutsOptions = {}) => {
       }
     }
 
-    // Global toggle (Dynamic)
+    // Toggle global (Dynamique)
     const toggleShortcut = store.mergedShortcuts.toggle_help_modal
     const tKeys = toggleShortcut.keys[0].toLowerCase()
     const tMod = toggleShortcut.modifier
@@ -253,7 +251,7 @@ export const useShortcuts = (options: ShortcutsOptions = {}) => {
       store.toggleHelp()
     }
 
-    // Shift + Arrow shortcuts (scroll and history)
+    // Raccourcis Shift + Flèches (défilement et historique)
     if (event.shiftKey && !event.ctrlKey && !event.metaKey && !event.altKey) {
       switch (event.key) {
         case 'ArrowDown':
@@ -276,7 +274,7 @@ export const useShortcuts = (options: ShortcutsOptions = {}) => {
     }
   }
 
-  // Handle outside clicks to close Alt mode
+  // Gestion des clics extérieurs pour fermer le mode Alt
   const handleClick = (e: MouseEvent) => {
     if (store.altMode) {
       store.disableAltMode()
@@ -289,7 +287,7 @@ export const useShortcuts = (options: ShortcutsOptions = {}) => {
     window.addEventListener('click', handleClick)
     window.addEventListener('blur', () => {
       document.body.classList.remove('alt-mode-active')
-      // Also disable sticky mode on blur
+      // Désactiver également le mode collant lors d'une perte de focus
       store.disableAltMode()
     })
   })
@@ -299,3 +297,4 @@ export const useShortcuts = (options: ShortcutsOptions = {}) => {
     window.removeEventListener('click', handleClick)
   })
 }
+

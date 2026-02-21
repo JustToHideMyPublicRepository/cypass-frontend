@@ -1,11 +1,11 @@
 <template>
   <main class="lg:col-span-3 space-y-6">
-    <!-- Loading State -->
+    <!-- État de chargement -->
     <div v-if="loading" class="space-y-4">
       <UiAppSkeleton v-for="i in 5" :key="i" height="80px" />
     </div>
 
-    <!-- Empty State -->
+    <!-- État vide -->
     <div v-else-if="results.length === 0" class="bg-WtB rounded-2xl p-12 text-center border border-ash">
       <div class="w-16 h-16 bg-ash/30 rounded-full flex items-center justify-center mx-auto mb-4">
         <IconSearch class="w-8 h-8 text-hsa" />
@@ -14,7 +14,7 @@
       <p class="text-hsa">Essayez avec d'autres mots-clés ou modifiez vos filtres.</p>
     </div>
 
-    <!-- Results List -->
+    <!-- Liste des résultats -->
     <div v-else class="space-y-4">
       <div v-for="result in results" :key="result.id"
         class="bg-WtB border border-ash rounded-2xl p-4 hover:shadow-lg transition-all cursor-pointer group"

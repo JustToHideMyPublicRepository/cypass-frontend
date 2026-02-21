@@ -1,5 +1,6 @@
 <template>
   <section class="py-16 md:py-24 bg-slate-900 text-white relative overflow-hidden">
+    <!-- Section des statistiques clés -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 text-center">
         <div v-for="(stat, index) in stats" :key="index" class="space-y-4 group">

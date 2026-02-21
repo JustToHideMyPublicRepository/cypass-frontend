@@ -1,6 +1,6 @@
 <template>
   <div class="glass-panel p-6 md:p-12 rounded-3xl md:rounded-[40px] border border-ashAct shadow-2xl relative group">
-    <!-- Mode Switcher -->
+    <!-- Sélecteur de mode -->
     <div v-if="!result && !loading" class="flex justify-center mb-6 md:mb-8">
       <div class="flex p-1 bg-ash/50 rounded-xl border border-ash gap-2 md:gap-4">
         <UiBaseButton @click="$emit('update:verifyMode', 'file')" variant="ghost"
@@ -16,11 +16,10 @@
       </div>
     </div>
 
-    <!-- Interactive Dropzone -->
+    <!-- Zone de dépôt interactive (Drag & Drop) -->
     <div v-if="!file && verifyMode === 'file' && !result"
       class="relative border-2 border-dashed border-primary/20 rounded-2xl md:rounded-3xl p-6 md:p-12 text-center hover:border-primary/50 transition-all cursor-pointer bg-WtB/50 hover:bg-primary/5 group overflow-hidden"
       @click="$emit('trigger-file')">
-
 
       <div class="pointer-events-none">
         <div
@@ -34,7 +33,7 @@
       <input type="file" ref="fileInput" class="hidden" accept=".pdf,application/pdf" @change="handleFileChange">
     </div>
 
-    <!-- Hash Input Zone -->
+    <!-- Zone de saisie d'empreinte (Hash) -->
     <div v-if="verifyMode === 'hash' && !result && !file" class="max-w-md mx-auto space-y-4 py-8">
       <div class="space-y-2 text-left">
         <label class="text-xs font-black text-hsa uppercase tracking-widest px-1">Code SHA-256 du document</label>
@@ -52,7 +51,7 @@
     </div>
 
     <div v-if="(file || result || (loading && verifyMode === 'hash'))" class="space-y-8">
-      <!-- Selected File Header (Only for file mode) -->
+      <!-- En-tête du fichier sélectionné (Uniquement pour le mode fichier) -->
       <div v-if="file && !result"
         class="flex items-center gap-4 p-4 bg-ash/20 rounded-2xl border border-ash animate-fade-in">
         <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center text-primary">
@@ -68,7 +67,7 @@
         </UiBaseButton>
       </div>
 
-      <!-- Loading State (Progress Steps) -->
+      <!-- État de chargement (Étapes de progression) -->
       <div v-if="loading && !result" class="py-12 animate-fade-in max-w-2xl mx-auto">
         <div class="mb-8 p-6 bg-primary/5 rounded-[32px] border border-primary/10 text-left overflow-hidden">
           <p class="text-xs font-black text-primary uppercase tracking-widest mb-6 flex items-center gap-2">
@@ -89,7 +88,7 @@
       </div>
     </div>
 
-    <!-- File Error Modal -->
+    <!-- Modale d'erreur de fichier -->
     <ModalGlobalFileError :show="showFileError" :title="fileErrorTitle" :message="fileErrorMessage"
       :file-name="errorFileName" :file-type="errorFileType" :file-size="errorFileSize"
       :accepted-formats="acceptedFormats" @close="showFileError = false" />
@@ -121,7 +120,7 @@ onUnmounted(() => {
   disable(onDroppedFile)
 })
 
-const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB for PDF files
+const MAX_FILE_SIZE = 3 * 1024 * 1024 // 3MB for PDF files
 
 const props = defineProps<{
   verifyMode: 'file' | 'hash'
@@ -137,7 +136,7 @@ const emit = defineEmits(['update:verifyMode', 'update:hashInput', 'trigger-file
 
 const fileInput = ref<HTMLInputElement | null>(null)
 
-// Error modal state
+// État de la modale d'erreur
 const showFileError = ref(false)
 const fileErrorTitle = ref('Format non supporté')
 const fileErrorMessage = ref('')
@@ -168,7 +167,7 @@ const validateFile = (file: File): boolean => {
   if (file.size > MAX_FILE_SIZE) {
     showError(
       'Fichier trop volumineux',
-      `Le fichier fait ${(file.size / 1024 / 1024).toFixed(2)} Mo. La taille maximale autorisée est de 10 Mo.`,
+      `Le fichier fait ${(file.size / 1024 / 1024).toFixed(2)} Mo. La taille maximale autorisée est de 3 Mo.`,
       file
     )
     return false
@@ -185,7 +184,7 @@ const handleFileChange = (e: Event) => {
     if (validateFile(file)) {
       emit('update:file', file)
     }
-    target.value = '' // Reset input
+    target.value = '' // Réinitialisation de l'input
   }
 }
 </script>

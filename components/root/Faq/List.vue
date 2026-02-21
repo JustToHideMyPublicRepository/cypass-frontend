@@ -1,5 +1,6 @@
 <template>
   <section class="pb-10 md:pb-12">
+    <!-- Liste accordéon des questions/réponses FAQ -->
     <div class="max-w-6xl mx-auto">
       <div class="max-w-3xl mx-auto space-y-8 md:space-y-12">
         <div v-for="(category, catIndex) in categories" :key="catIndex" class="animate-fade-up"
@@ -59,8 +60,12 @@ defineProps<{
   categories: any[]
 }>()
 
+// Index de l'élément FAQ actuellement ouvert (format: "catIndex-itemIndex")
 const activeIndex = ref<string | null>(null)
 
+/**
+ * Alterne l'ouverture d'un élément de la FAQ
+ */
 const toggle = (id: string) => {
   activeIndex.value = activeIndex.value === id ? null : id
 }
