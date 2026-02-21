@@ -8,6 +8,7 @@
       <UiAppToast :model-value="toastStore.show" @update:model-value="val => toastStore.show = val"
         :type="toastStore.type" :title="toastStore.title" :message="toastStore.message"
         :duration="toastStore.duration" />
+      <ModalGlobalSearch />
     </NuxtLayout>
   </div>
 </template>
@@ -15,15 +16,19 @@
 <script setup lang="ts">
 import { useToastStore } from '@/stores/toast'
 import { useShortcutsStore } from '@/stores/shortcuts'
+import { useSearchStore } from '@/stores/search'
 
 const toastStore = useToastStore()
 const shortcutsStore = useShortcutsStore()
+const searchStore = useSearchStore()
 
 onMounted(() => {
   shortcutsStore.init()
 })
 
-useShortcuts()
+useShortcuts({
+  searchCallback: () => searchStore.openSearch()
+})
 
 const heroImagePath = "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=1200";
 const baseUrl = "https://cypass.bj";

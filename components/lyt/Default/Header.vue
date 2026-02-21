@@ -6,10 +6,14 @@
     </button>
 
     <!-- Search -->
-    <div class="hidden md:flex flex-1 max-w-md ml-8 relative">
-      <IconSearch class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-hsa" />
-      <input type="text" placeholder="Rechercher une alerte, un document..." v-tooltip="searchTooltip"
-        class="w-full pl-10 pr-4 py-2 rounded-lg bg-ash focus:ring-2 focus:ring-primary text-sm text-BtW placeholder-slate-400" />
+    <div @click="searchStore.openSearch()" class="hidden md:flex flex-1 max-w-md ml-8 relative cursor-pointer group">
+      <IconSearch
+        class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-hsa group-hover:text-primary transition-colors" />
+      <input type="text" placeholder="Rechercher une alerte, un document..." v-tooltip="searchTooltip" readonly
+        class="w-full pl-10 pr-4 py-2 rounded-lg bg-ash focus:ring-2 focus:ring-primary text-sm text-BtW placeholder-slate-400 cursor-pointer transition-all" />
+      <div class="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1">
+        <span class="px-1.5 py-0.5 rounded border border-ashAct text-[10px] font-bold text-hsa uppercase">Ctrl K</span>
+      </div>
     </div>
 
     <!-- Right actions -->
@@ -90,10 +94,12 @@ import { useRoute } from 'nuxt/app'
 import { IconMenu2, IconSearch, IconChevronDown, IconUser, IconSettings, IconHelp, IconDevices, IconLogout, IconKeyboard, IconActivity } from '@tabler/icons-vue'
 import { useAuthStore } from '~/stores/auth'
 import { useProfilStore } from '~/stores/profil'
+import { useSearchStore } from '~/stores/search'
 import { getLinkTooltip } from '~/data/shortcuts'
 
 const authStore = useAuthStore()
 const profilStore = useProfilStore()
+const searchStore = useSearchStore()
 const route = useRoute()
 
 const isLinkActive = (path: string) => {
