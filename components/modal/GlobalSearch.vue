@@ -34,6 +34,15 @@
               <p class="text-hsa text-sm">Trouvez instantanément vos documents, alertes et paramètres.</p>
             </div>
 
+            <!-- Saisie trop courte -->
+            <div v-else-if="searchQuery.length === 1" class="p-8 text-center animate-fade-in">
+              <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <IconKeyboard class="w-6 h-6 text-primary" />
+              </div>
+              <p class="text-BtW font-medium">Continuez à saisir...</p>
+              <p class="text-hsa text-sm">Veuillez saisir au moins 2 caractères pour lancer la recherche.</p>
+            </div>
+
             <!-- Aucun résultat trouvé -->
             <div v-else-if="searchStore.results.length === 0 && !searchStore.isLoading" class="p-8 text-center">
               <p class="text-hsa">Aucun résultat trouvé pour "<span class="text-BtW font-medium">{{ searchQuery
@@ -115,7 +124,7 @@
 import { ref, computed, watch, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import { useSearchStore } from '~/stores/search'
-import { IconSearch, IconFileDescription, IconLayoutDashboard, IconSettings, IconCornerDownLeft, IconExternalLink } from '@tabler/icons-vue'
+import { IconSearch, IconFileDescription, IconLayoutDashboard, IconSettings, IconCornerDownLeft, IconExternalLink, IconKeyboard } from '@tabler/icons-vue'
 
 const searchStore = useSearchStore()
 const router = useRouter()

@@ -5,6 +5,15 @@
       <UiAppSkeleton v-for="i in 5" :key="i" height="80px" />
     </div>
 
+    <!-- Saisie trop courte -->
+    <div v-else-if="query.length === 1" class="bg-WtB rounded-2xl p-12 text-center border border-ash animate-fade-in">
+      <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+        <IconKeyboard class="w-8 h-8 text-primary" />
+      </div>
+      <h3 class="text-lg font-bold text-BtW">Continuez à saisir...</h3>
+      <p class="text-hsa">Veuillez saisir au moins 2 caractères pour lancer la recherche.</p>
+    </div>
+
     <!-- État vide -->
     <div v-else-if="results.length === 0" class="bg-WtB rounded-2xl p-12 text-center border border-ash">
       <div class="w-16 h-16 bg-ash/30 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -45,11 +54,12 @@
 </template>
 
 <script setup lang="ts">
-import { IconSearch, IconFileDescription, IconLayoutDashboard, IconSettings, IconChevronRight } from '@tabler/icons-vue'
+import { IconSearch, IconFileDescription, IconLayoutDashboard, IconSettings, IconChevronRight, IconKeyboard } from '@tabler/icons-vue'
 
 defineProps<{
   results: any[]
   loading: boolean
+  query: string
 }>()
 
 defineEmits(['navigate'])
