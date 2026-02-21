@@ -175,6 +175,22 @@ export const shortcutsData: Record<string, ShortcutEntry> = {
     group: 'Modules',
     modifier: 'Shift'
   },
+  module_secuscan: {
+    keys: ['m', '3'],
+    label: 'Module SecuScan',
+    path: '/modules/secuscan',
+    isGlobal: true,
+    group: 'Modules',
+    modifier: 'Shift'
+  },
+  module_leakmonitor: {
+    keys: ['m', '4'],
+    label: 'Module LeakMonitor',
+    path: '/modules/leakmonitor',
+    isGlobal: true,
+    group: 'Modules',
+    modifier: 'Shift'
+  },
 
   // DASHBOARD
   dashboard_home: {
