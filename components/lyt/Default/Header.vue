@@ -2,31 +2,12 @@
   <header
     class="h-16 bg-WtB border-b border-ash flex items-center justify-between px-4 sm:px-6 lg:px-8 transition-colors duration-300">
     <div class="flex items-center gap-2 md:hidden">
-      <button @click="$emit('toggle-menu')" class="text-hsa hover:text-BtW">
+      <button @click="$emit('toggle-menu')" class="p-2 -ml-2 text-hsa hover:text-BtW transition-colors">
         <IconMenu2 class="w-6 h-6" />
-      </button>
-      <button @click="searchStore.openSearch()"
-        class="p-1 rounded-lg text-hsa hover:bg-ash hover:text-primary transition-colors">
-        <IconSearch class="w-6 h-6" />
       </button>
     </div>
 
-    <!-- Search -->
-    <div @click="searchStore.openSearch()" class="hidden md:flex flex-1 max-w-md ml-8 relative cursor-pointer group">
-      <IconSearch
-        class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-hsa group-hover:text-primary transition-colors" />
-      <input type="text" placeholder="Rechercher une alerte, un document..." v-tooltip="searchTooltip" readonly
-        class="w-full pl-10 pr-4 py-2 rounded-lg bg-ash focus:ring-2 focus:ring-primary text-sm text-BtW placeholder-slate-400 cursor-pointer transition-all" />
-      <div class="absolute right-3 top-1/2 -translate-y-1/2 hidden md:flex items-center gap-1">
-        <kbd
-          class="px-1.5 py-0.5 rounded bg-ash text-[10px] font-bold text-hsa border border-ashAct uppercase">Ctrl</kbd>
-        <span class="text-[10px] text-hsa">+</span>
-        <kbd
-          class="px-1.5 py-0.5 rounded bg-ash text-[10px] font-bold text-hsa border border-ashAct uppercase">Shift</kbd>
-        <span class="text-[10px] text-hsa">+</span>
-        <kbd class="px-1.5 py-0.5 rounded bg-ash text-[10px] font-bold text-hsa border border-ashAct uppercase">K</kbd>
-      </div>
-    </div>
+    <UtilsGlobalSearchTrigger customClass="ml-2 md:ml-8" />
 
     <!-- Right actions -->
     <div class="flex items-center gap-4">
@@ -103,15 +84,12 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'nuxt/app'
-import { IconMenu2, IconSearch, IconChevronDown, IconUser, IconSettings, IconHelp, IconDevices, IconLogout, IconKeyboard, IconActivity } from '@tabler/icons-vue'
+import { IconChevronDown, IconUser, IconSettings, IconHelp, IconDevices, IconLogout, IconKeyboard, IconActivity, IconMenu2 } from '@tabler/icons-vue'
 import { useAuthStore } from '~/stores/auth'
 import { useProfilStore } from '~/stores/profil'
-import { useSearchStore } from '~/stores/search'
 import { getLinkTooltip } from '~/data/shortcuts'
-
 const authStore = useAuthStore()
 const profilStore = useProfilStore()
-const searchStore = useSearchStore()
 const route = useRoute()
 
 const isLinkActive = (path: string) => {
@@ -120,8 +98,6 @@ const isLinkActive = (path: string) => {
 
 const isDropdownOpen = ref(false)
 const dropdownRef = ref<HTMLElement | null>(null)
-
-const searchTooltip = '<span class="kbd-hint">CTRL</span> + <span class="kbd-hint">K</span>'
 
 const dropdownLinks = [
   { label: 'Mon Profil', path: '/dashboard/profile', icon: IconUser },

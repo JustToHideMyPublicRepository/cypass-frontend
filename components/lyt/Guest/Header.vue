@@ -19,14 +19,8 @@
             </span>
           </NuxtLink>
 
-          <!-- Search (Desktop) -->
-          <div @click="searchStore.openSearch()"
-            class="hidden lg:flex flex-1 max-w-sm mx-8 relative cursor-pointer group">
-            <IconSearch
-              class="absolute left-3 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-hsa group-hover:text-primary transition-colors" />
-            <input type="text" placeholder="Rechercher..." readonly
-              class="w-full pl-9 pr-4 py-2 rounded-xl bg-ash/50 border border-transparent group-hover:border-ash group-hover:bg-ash transition-all text-xs text-BtW placeholder-slate-400 cursor-pointer" />
-          </div>
+          <!-- Search -->
+          <UtilsGlobalSearchTrigger customClass="mx-8" />
 
           <!-- Desktop Nav -->
           <nav class="hidden md:flex items-center gap-6">
@@ -66,11 +60,6 @@
             </ClientOnly>
 
             <UiThemeToggle />
-
-            <button @click="searchStore.openSearch()"
-              class="p-2 rounded-lg text-hsa hover:bg-ash hover:text-primary transition-colors focus:outline-none">
-              <IconSearch class="w-6 h-6" />
-            </button>
 
             <button @click="isMobileMenuOpen = !isMobileMenuOpen"
               class="p-2 rounded-lg text-hsa hover:bg-ash transition-colors focus:outline-none">
@@ -130,9 +119,8 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
-import { IconMenu2, IconX, IconSearch } from '@tabler/icons-vue'
+import { IconMenu2, IconX } from '@tabler/icons-vue'
 import { useAuthStore } from '~/stores/auth'
-import { useSearchStore } from '~/stores/search'
 import { getLinkTooltip } from '~/data/shortcuts'
 import { useToastStore } from '~/stores/toast'
 
@@ -173,7 +161,6 @@ const getAuthLinks = (forMobile: boolean) => {
 
 const authStore = useAuthStore()
 const toastStore = useToastStore()
-const searchStore = useSearchStore()
 
 const handleLogout = () => {
   isMobileMenuOpen.value = false

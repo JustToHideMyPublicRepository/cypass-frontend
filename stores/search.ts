@@ -84,7 +84,7 @@ export const useSearchStore = defineStore('search', {
               description: entry.group || 'Navigation',
               path: entry.path,
               type: 'navigation',
-              category: 'Navigation & Raccourcis'
+              category: 'Page'
             })
           }
         })
@@ -100,7 +100,7 @@ export const useSearchStore = defineStore('search', {
                 description: `Document ${(doc.file_type || '').toUpperCase()}`,
                 path: `/dashboard/docsentry?id=${doc.id}`,
                 type: 'document',
-                category: 'Documents'
+                category: 'DocSentry'
               })
             }
           })

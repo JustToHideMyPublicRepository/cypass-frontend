@@ -1,24 +1,25 @@
 <template>
-  <div class="flex flex-col md:flex-row gap-4 mb-6 md:mb-8 animate-fade-up" style="animation-delay: 100ms">
+  <div class="flex flex-col gap-6 mb-6 md:mb-10 animate-fade-up" style="animation-delay: 100ms">
     <!-- Barre de Recherche -->
-    <div class="flex-1 relative group w-full">
+    <div class="relative group w-full">
       <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
         <IconSearch class="w-5 h-5 text-hsa/50 group-focus-within:text-primary transition-colors" />
       </div>
       <input ref="searchInput" :value="searchQuery"
         @input="$emit('update:searchQuery', ($event.target as HTMLInputElement).value)" type="text"
-        class="block w-full pl-12 pr-12 md:pr-16 py-3 md:py-3.5 bg-WtB border border-ash rounded-xl md:rounded-2xl shadow-sm focus:ring-2 focus:ring-primary focus:border-primary transition-all outline-none text-sm"
-        placeholder="Rechercher un raccourci...">
-      <div class="hidden md:flex items-center gap-1 absolute right-4 top-1/2 -translate-y-1/2 opacity-50">
+        class="block w-full pl-12 pr-12 md:pr-16 py-3.5 md:py-4 bg-WtB border border-ash rounded-2xl md:rounded-3xl shadow-sm focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none text-sm md:text-base font-medium placeholder-slate-400"
+        placeholder="Rechercher un raccourci clavier par nom, touche ou catégorie...">
+      <div class="hidden md:flex items-center gap-1.5 absolute right-5 top-1/2 -translate-y-1/2 opacity-40">
         <kbd
-          class="px-1.5 py-0.5 rounded bg-ash text-[10px] font-bold text-hsa border border-ashAct uppercase">Ctrl</kbd>
-        <span class="text-[10px] text-hsa">+</span>
-        <kbd class="px-1.5 py-0.5 rounded bg-ash text-[10px] font-bold text-hsa border border-ashAct uppercase">K</kbd>
+          class="px-2 py-0.5 rounded-lg bg-ash text-[10px] font-bold text-hsa border border-ashAct uppercase">Ctrl</kbd>
+        <span class="text-[10px] text-hsa font-bold">+</span>
+        <kbd class="px-2 py-0.5 rounded-lg bg-ash text-[10px] font-bold text-hsa border border-ashAct uppercase">K</kbd>
       </div>
     </div>
 
     <!-- Filtres et Tris -->
-    <div class="flex flex-col sm:flex-row gap-2 md:gap-4 overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
+    <div
+      class="flex flex-col sm:flex-row gap-2 md:gap-4 overflow-x-auto pb-2 md:pb-0 scrollbar-hide mx-auto justify-center">
       <!-- Options de Tri -->
       <div class="flex items-center gap-1 bg-WtB border border-ash rounded-xl md:rounded-2xl p-1 shadow-sm shrink-0">
         <UiBaseButton v-for="option in sortOptions" :key="option.value" @click="$emit('update:sortBy', option.value)"
@@ -42,27 +43,27 @@
 
       <!-- Actions Globales -->
       <div class="flex items-center gap-1 bg-WtB border border-ash rounded-xl md:rounded-2xl p-1 shadow-sm shrink-0">
-        <UiBaseButton @click="handleResetAll" variant="ghost"
-          class="!px-3 !py-1.5 md:!py-2 !text-[11px] md:!text-xs !font-bold !rounded-lg md:!rounded-xl hover:!bg-danger/10 hover:!text-danger transition-all !flex !items-center !gap-1.5 !h-auto"
-          title="Tout réinitialiser par défaut">
-          <IconRotate class="w-3.5 h-3.5" />
-          <span class="hidden lg:inline">Reset</span>
-        </UiBaseButton>
-
-        <div class="w-[1px] h-4 bg-ash mx-1"></div>
-
         <UiBaseButton @click="store.exportConfig" variant="ghost"
           class="!px-3 !py-1.5 md:!py-2 !text-[11px] md:!text-xs !font-bold !rounded-lg md:!rounded-xl hover:!bg-ash transition-all !flex !items-center !gap-1.5 !h-auto"
           title="Exporter ma configuration (JSON)">
-          <IconDownload class="w-3.5 h-3.5" />
+          <IconUpload class="w-3.5 h-3.5" />
           <span class="hidden lg:inline">Export</span>
         </UiBaseButton>
 
         <UiBaseButton @click="triggerImport" variant="ghost"
           class="!px-3 !py-1.5 md:!py-2 !text-[11px] md:!text-xs !font-bold !rounded-lg md:!rounded-xl hover:!bg-ash transition-all !flex !items-center !gap-1.5 !h-auto"
           title="Importer une configuration">
-          <IconUpload class="w-3.5 h-3.5" />
+          <IconDownload class="w-3.5 h-3.5" />
           <span class="hidden lg:inline">Import</span>
+        </UiBaseButton>
+
+        <div class="w-[1px] h-4 bg-ash mx-1"></div>
+
+        <UiBaseButton @click="handleResetAll" variant="ghost"
+          class="!px-3 !py-1.5 md:!py-2 !text-[11px] md:!text-xs !font-bold !rounded-lg md:!rounded-xl hover:!bg-danger/10 hover:!text-danger transition-all !flex !items-center !gap-1.5 !h-auto"
+          title="Tout réinitialiser par défaut">
+          <IconRotate class="w-3.5 h-3.5" />
+          <span class="hidden lg:inline">Reset</span>
         </UiBaseButton>
 
         <input type="file" ref="fileInput" @change="handleImport" accept=".json" class="hidden">

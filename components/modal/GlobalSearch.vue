@@ -37,7 +37,7 @@
             <!-- Aucun résultat trouvé -->
             <div v-else-if="searchStore.results.length === 0 && !searchStore.isLoading" class="p-8 text-center">
               <p class="text-hsa">Aucun résultat trouvé pour "<span class="text-BtW font-medium">{{ searchQuery
-              }}</span>"
+                  }}</span>"
               </p>
             </div>
 
@@ -91,19 +91,19 @@
 
           <!-- Pied de page / Informations sur les raccourcis -->
           <div
-            class="p-3 bg-ash/30 border-t border-ash/50 flex items-center justify-between text-[10px] font-medium text-hsa">
-            <div class="flex items-center gap-4">
-              <span class="flex items-center gap-1.5">
+            class="p-3 bg-ash/30 border-t border-ash/50 flex flex-col sm:flex-row items-center justify-between gap-3 text-[10px] font-medium text-hsa">
+            <div class="flex items-center gap-4 flex-wrap justify-center">
+              <span class="flex items-center gap-1.5 shrink-0">
                 <kbd class="px-1 py-0.5 rounded bg-WtB border border-ash text-[10px] font-bold">↑</kbd>
                 ou
                 <kbd class="px-1 py-0.5 rounded bg-WtB border border-ash text-[10px] font-bold">↓</kbd>
                 Naviguer
               </span>
-              <span class="flex items-center gap-1.5">
+              <span class="flex items-center gap-1.5 shrink-0">
                 <kbd class="px-1 py-0.5 rounded bg-WtB border border-ash text-[10px] font-bold">↵</kbd> Sélectionner
               </span>
             </div>
-            <div>Moteur de recherche CYPASS</div>
+            <div class="opacity-60">Moteur de recherche CYPASS</div>
           </div>
         </div>
       </div>
