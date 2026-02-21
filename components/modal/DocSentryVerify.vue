@@ -247,7 +247,6 @@ import { fr } from 'date-fns/locale'
 import { useDocumentsStore } from '~/stores/documents'
 import { verifySteps, type Step } from '~/utils/docsentry'
 import { useGlobalDropZone } from '~/composables/useDropZone'
-import ModalFileError from '~/components/modal/FileError.vue'
 
 const { enable, disable } = useGlobalDropZone()
 

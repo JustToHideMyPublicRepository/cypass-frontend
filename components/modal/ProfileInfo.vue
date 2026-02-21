@@ -1,7 +1,7 @@
 <template>
   <UiBaseModal :show="show" title="Informations personnelles" @close="$emit('close')">
     <form @submit.prevent="submit" class="space-y-8 py-2">
-      <!-- Encadré d'information premium -->
+      <!-- Information -->
       <div class="p-5 rounded-[1.5rem] bg-primary/5 border border-primary/10 flex gap-4 backdrop-blur-sm">
         <div class="shrink-0 p-2.5 bg-primary/10 rounded-xl h-fit text-primary shadow-inner">
           <IconUserCheck class="w-6 h-6" />

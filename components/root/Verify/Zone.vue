@@ -100,7 +100,6 @@
 import { ref, watch, onMounted, onUnmounted } from 'vue'
 import { IconRosetteDiscountCheck, IconHash, IconFileText, IconX } from '@tabler/icons-vue'
 import type { Step } from '~/utils/docsentry'
-import ModalFileError from '~/components/modal/FileError.vue'
 
 import { useGlobalDropZone } from '~/composables/useDropZone'
 

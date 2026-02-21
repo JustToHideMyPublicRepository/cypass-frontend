@@ -5,7 +5,6 @@
       <RootPartnersGrid :partners="partners" />
     </div>
 
-    <!-- Modal -->
     <ModalPartnerRequest :show="isModalOpen" @close="isModalOpen = false" />
   </div>
 </template>
