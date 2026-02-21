@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia'
 import { shortcutsData } from '@/data/shortcuts'
 import { useDocumentsStore } from './documents'
+import { useProfilStore } from './profil'
+import { useAuthStore } from './auth'
 
 interface SearchResult {
   id: string
@@ -47,45 +49,91 @@ export const useSearchStore = defineStore('search', {
       }
 
       this.isLoading = true
-      const searchResults: SearchResult[] = []
-
-      // 1. Search in Navigation/Shortcuts
-      const q = query.toLowerCase()
-      Object.entries(shortcutsData).forEach(([id, entry]) => {
-        if (
-          entry.label.toLowerCase().includes(q) ||
-          (entry.path && entry.path.toLowerCase().includes(q)) ||
-          (entry.group && entry.group.toLowerCase().includes(q))
-        ) {
-          searchResults.push({
-            id: `nav-${id}`,
-            title: entry.label,
-            description: entry.group || 'Navigation',
-            path: entry.path,
-            type: 'navigation',
-            category: entry.group
-          })
+      try {
+        const authStore = useAuthStore()
+        if (!authStore.user) {
+          this.isLoading = false
+          return
         }
-      })
 
-      // 2. Search in Documents (local for now, could be extended to API)
-      const docStore = useDocumentsStore()
-      docStore.documents.forEach(doc => {
-        if (doc.filename.toLowerCase().includes(q)) {
-          searchResults.push({
-            id: `doc-${doc.id}`,
-            title: doc.filename,
-            description: `Document ${doc.file_type.toUpperCase()}`,
-            path: `/dashboard/docsentry?id=${doc.id}`,
-            type: 'document',
-            category: 'Documents'
-          })
+        const docStore = useDocumentsStore()
+        const profStore = useProfilStore()
+
+        // Proactive fetching if stores are empty
+        const fetchPromises = []
+        if (docStore.documents.length === 0) fetchPromises.push(docStore.fetchDocuments(100))
+        if (profStore.logs.length === 0) fetchPromises.push(profStore.fetchLogs({ limit: 100 }))
+
+        if (fetchPromises.length > 0) {
+          await Promise.all(fetchPromises)
         }
-      })
 
-      // Limit results
-      this.results = searchResults.slice(0, 10)
-      this.isLoading = false
+        const searchResults: SearchResult[] = []
+        const q = query.toLowerCase()
+
+        // 1. Search in Navigation/Shortcuts
+        Object.entries(shortcutsData).forEach(([id, entry]) => {
+          const label = (entry.label || '').toLowerCase()
+          const path = (entry.path || '').toLowerCase()
+          const group = (entry.group || '').toLowerCase()
+
+          if (label.includes(q) || path.includes(q) || group.includes(q)) {
+            searchResults.push({
+              id: `nav-${id}`,
+              title: entry.label,
+              description: entry.group || 'Navigation',
+              path: entry.path,
+              type: 'navigation',
+              category: 'Navigation & Raccourcis'
+            })
+          }
+        })
+
+        // 2. Search in Documents
+        docStore.documents.forEach(doc => {
+          const filename = (doc.filename || '').toLowerCase()
+          if (filename.includes(q)) {
+            searchResults.push({
+              id: `doc-${doc.id}`,
+              title: doc.filename,
+              description: `Document ${(doc.file_type || '').toUpperCase()}`,
+              path: `/dashboard/docsentry?id=${doc.id}`,
+              type: 'document',
+              category: 'Documents'
+            })
+          }
+        })
+
+        // 3. Search in Logs
+        profStore.logs.forEach((log, index) => {
+          const action = (log.action || '').toLowerCase()
+          const label = (log.action_label || '').toLowerCase()
+          let detailsStr = ''
+          try {
+            detailsStr = typeof log.details === 'string' ? log.details : JSON.stringify(log.details || {})
+          } catch (e) {
+            detailsStr = ''
+          }
+          detailsStr = detailsStr.toLowerCase()
+
+          if (action.includes(q) || label.includes(q) || detailsStr.includes(q)) {
+            searchResults.push({
+              id: `log-${index}`,
+              title: log.action_label || log.action || 'Activité',
+              description: typeof log.details === 'string' ? log.details : (log.action_label || log.timestamp),
+              path: '/dashboard/logs',
+              type: 'action',
+              category: 'Journal d\'activité'
+            })
+          }
+        })
+
+        this.results = searchResults
+      } catch (e) {
+        console.error('Search error:', e)
+      } finally {
+        this.isLoading = false
+      }
     }
   }
 })

@@ -1,11 +1,10 @@
 <template>
   <div class="space-y-6">
-    <MeActivitiesHeader :user-email="profilStore.logUser?.email" :loading="loading" @refresh="refreshLogs"
-      @reset="resetFilters" />
+    <MeActivitiesHeader :user-email="logUser?.email" :loading="loading" @refresh="refreshLogs" @reset="resetFilters" />
 
-    <MeActivitiesStats :stats="profilStore.logStatistics" />
+    <MeActivitiesStats :stats="logStatistics" />
 
-    <MeActivitiesFilters v-model="filters" :active-filters="profilStore.logFilters" @change="applyFilters" />
+    <MeActivitiesFilters v-model="filters" :active-filters="logFilters" />
 
     <MeActivitiesList :logs="paginatedLogs" :grouped-logs="groupedLogs" :loading="loading" :current-page="currentPage"
       :total-pages="totalPages" @next-page="nextPage" @prev-page="prevPage" />
@@ -13,9 +12,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted, watch } from 'vue'
+import { storeToRefs } from 'pinia'
 import { useProfilStore } from '~/stores/profil'
 import { format } from 'date-fns'
+
+const profilStore = useProfilStore()
 
 definePageMeta({
   layout: 'default'
@@ -25,13 +27,14 @@ useHead({
   title: 'Historique d\'activité'
 })
 
-const profilStore = useProfilStore()
+const { logs, logStatistics, logUser, logFilters } = storeToRefs(profilStore)
 const loading = ref(false)
 
 const filters = ref({
   date: format(new Date(), 'yyyy-MM-dd'),
   type: 'all',
-  limit: 50
+  limit: 50,
+  search: ''
 })
 
 const currentPage = ref(1)
@@ -48,16 +51,35 @@ const fetchLogs = async () => {
   loading.value = false
 }
 
+const filteredLogs = computed(() => {
+  if (!logs.value) return []
+  if (!filters.value.search) return logs.value
+
+  const q = filters.value.search.toLowerCase()
+  return logs.value.filter(log => {
+    const action = (log.action || '').toLowerCase()
+    const label = (log.action_label || '').toLowerCase()
+    let details = ''
+    try {
+      details = typeof log.details === 'string' ? log.details : JSON.stringify(log.details || {})
+    } catch (e) {
+      details = ''
+    }
+    details = details.toLowerCase()
+
+    return action.includes(q) || label.includes(q) || details.includes(q)
+  })
+})
+
 const paginatedLogs = computed(() => {
-  if (!profilStore.logs) return []
   const start = (currentPage.value - 1) * itemsPerPage.value
   const end = start + itemsPerPage.value
-  return profilStore.logs.slice(start, end)
+  return filteredLogs.value.slice(start, end)
 })
 
 const totalPages = computed(() => {
-  if (!profilStore.logs) return 1
-  return Math.ceil(profilStore.logs.length / itemsPerPage.value)
+  if (filteredLogs.value.length === 0) return 1
+  return Math.ceil(filteredLogs.value.length / itemsPerPage.value)
 })
 
 const groupedLogs = computed(() => {
@@ -88,9 +110,14 @@ const groupedLogs = computed(() => {
   return sortedGroups
 })
 
-const applyFilters = () => {
+// Watchers for automatic filtering
+watch([() => filters.value.date, () => filters.value.type], () => {
   fetchLogs()
-}
+})
+
+watch(() => filters.value.search, () => {
+  currentPage.value = 1
+})
 
 const refreshLogs = () => {
   fetchLogs()
@@ -100,6 +127,7 @@ const resetFilters = () => {
   filters.value.date = format(new Date(), 'yyyy-MM-dd')
   filters.value.type = 'all'
   filters.value.limit = 50
+  filters.value.search = ''
   fetchLogs()
 }
 
@@ -110,6 +138,21 @@ const nextPage = () => {
 const prevPage = () => {
   if (currentPage.value > 1) currentPage.value--
 }
+
+import { useSearchStore } from '~/stores/search'
+import { useShortcuts } from '~/composables/useShortcuts'
+
+const searchStore = useSearchStore()
+const filterRef = ref<any>(null)
+
+useShortcuts({
+  searchCallback: () => searchStore.openSearch(),
+  localSearchCallback: () => {
+    // Focus logic for local search
+    const input = document.querySelector('input[placeholder="Filtrer..."]') as HTMLInputElement
+    if (input) input.focus()
+  }
+})
 
 onMounted(() => {
   fetchLogs()

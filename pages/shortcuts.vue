@@ -17,6 +17,7 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 import { useShortcutsStore } from '~/stores/shortcuts'
+import { useSearchStore } from '~/stores/search'
 import { useShortcuts } from '~/composables/useShortcuts'
 
 definePageMeta({
@@ -28,6 +29,7 @@ useHead({
 })
 
 const store = useShortcutsStore()
+const searchStore = useSearchStore()
 const searchComp = ref<any>(null)
 const searchQuery = ref('')
 const sortBy = ref<'name' | 'key'>(store.sortBy)
@@ -47,7 +49,8 @@ watch(groupSort, (newVal) => {
 })
 
 useShortcuts({
-  searchCallback: () => searchComp.value?.focus()
+  searchCallback: () => searchStore.openSearch(),
+  localSearchCallback: () => searchComp.value?.focus()
 })
 
 // Données de raccourcis de traitement

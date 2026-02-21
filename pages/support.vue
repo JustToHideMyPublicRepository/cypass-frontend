@@ -14,11 +14,15 @@
 import { ref } from 'vue'
 import { IconUserCircle, IconShieldLock, IconTerminal2 } from '@tabler/icons-vue'
 
+import { useSearchStore } from '~/stores/search'
+
+const searchStore = useSearchStore()
 const headerComp = ref<any>(null)
 const searchQuery = ref('')
 
 useShortcuts({
-  searchCallback: () => headerComp.value?.focus()
+  searchCallback: () => searchStore.openSearch(),
+  localSearchCallback: () => headerComp.value?.focus()
 })
 
 definePageMeta({

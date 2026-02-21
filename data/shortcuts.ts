@@ -242,18 +242,7 @@ export const shortcutsData: Record<string, ShortcutEntry> = {
     modifier: 'Shift'
   },
 
-  // SPECIFIC
-  search: {
-    keys: ['k'],
-    label: 'Rechercher',
-    isGlobal: false,
-    group: 'Actions',
-    modifier: 'Ctrl'
-  },
-
-
   // ACTIONS
-
   toggle_theme: {
     keys: ['l'],
     label: 'Changer le thème',
@@ -288,6 +277,20 @@ export const shortcutsData: Record<string, ShortcutEntry> = {
     isGlobal: false,
     group: 'Actions',
     modifier: 'Shift'
+  },
+  search_global: {
+    keys: ['k'],
+    label: 'Recherche globale',
+    isGlobal: true,
+    group: 'Actions',
+    modifier: 'Ctrl + Shift'
+  },
+  search_local: {
+    keys: ['k'],
+    label: 'Rechercher sur la page',
+    isGlobal: false,
+    group: 'Actions',
+    modifier: 'Ctrl'
   },
   logout: {
     keys: ['d'],

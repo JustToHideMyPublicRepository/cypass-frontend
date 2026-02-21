@@ -14,12 +14,16 @@
 import { ref, computed } from 'vue'
 import { faqCategories } from '@/data/faq'
 
+import { useSearchStore } from '~/stores/search'
+
+const searchStore = useSearchStore()
 const headerComp = ref<any>(null)
 const searchQuery = ref('')
 const selectedCategoryText = ref<string | null>(null)
 
 useShortcuts({
-  searchCallback: () => headerComp.value?.focus()
+  searchCallback: () => searchStore.openSearch(),
+  localSearchCallback: () => headerComp.value?.focus()
 })
 
 definePageMeta({

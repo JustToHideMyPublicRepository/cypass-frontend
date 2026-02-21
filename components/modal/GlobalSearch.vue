@@ -17,7 +17,8 @@
             class="w-full pl-12 pr-12 py-3 bg-transparent text-BtW text-lg placeholder-slate-500 outline-none"
             @input="handleInput" @keydown="handleKeydown" />
           <div class="absolute right-6 top-1/2 -translate-y-1/2 flex items-center gap-1">
-            <span class="px-1.5 py-0.5 rounded border border-ash text-[10px] font-bold text-hsa uppercase">Esc</span>
+            <kbd
+              class="px-1.5 py-0.5 rounded bg-ash text-[10px] font-bold text-hsa border border-ashAct uppercase">Esc</kbd>
           </div>
         </div>
 
@@ -39,36 +40,48 @@
           </div>
 
           <!-- Loading State -->
-          <div v-else-if="searchStore.isLoading" class="p-8 flex justify-center">
-            <IconLoader2 class="w-8 h-8 text-primary animate-spin" />
+          <div v-else-if="searchStore.isLoading" class="p-8">
+            <UiLogoLoader size="lg" />
           </div>
 
           <!-- Results List -->
-          <div v-else class="space-y-1">
+          <div v-else class="space-y-4">
             <div v-for="(group, gIndex) in groupedResults" :key="group.name">
               <div class="px-3 py-2 text-[10px] font-black text-slate-500 uppercase tracking-widest">{{ group.name }}
               </div>
-              <button v-for="(result, rIndex) in group.items" :key="result.id" @click="selectResult(result)"
-                class="w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 text-left"
-                :class="[
-                  selectedIndex === getAbsoluteIndex(gIndex, rIndex)
-                    ? 'bg-primary/10 ring-1 ring-primary/20'
-                    : 'hover:bg-ash'
-                ]" @mouseenter="selectedIndex = getAbsoluteIndex(gIndex, rIndex)">
-                <div class="w-10 h-10 rounded-lg flex items-center justify-center shrink-0" :class="[
-                  result.type === 'navigation' ? 'bg-blue-500/10 text-blue-500' :
-                    result.type === 'document' ? 'bg-orange-500/10 text-orange-500' :
-                      'bg-purple-500/10 text-purple-500'
-                ]">
-                  <component :is="getIcon(result.type)" class="w-5 h-5" />
-                </div>
-                <div class="flex-1 min-w-0">
-                  <div class="text-sm font-bold text-BtW truncate">{{ result.title }}</div>
-                  <div class="text-xs text-hsa truncate">{{ result.description }}</div>
-                </div>
-                <div v-if="selectedIndex === getAbsoluteIndex(gIndex, rIndex)" class="text-primary">
-                  <IconCornerDownLeft class="w-4 h-4" />
-                </div>
+              <div class="space-y-1">
+                <button v-for="(result, rIndex) in group.items.slice(0, 3)" :key="result.id"
+                  @click="selectResult(result)"
+                  class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 text-left"
+                  :class="[
+                    selectedIndex === getAbsoluteIndex(gIndex, rIndex)
+                      ? 'bg-primary/10 ring-1 ring-primary/20'
+                      : 'hover:bg-ash'
+                  ]" @mouseenter="selectedIndex = getAbsoluteIndex(gIndex, rIndex)">
+                  <div class="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" :class="[
+                    result.type === 'navigation' ? 'bg-blue-500/10 text-blue-500' :
+                      result.type === 'document' ? 'bg-orange-500/10 text-orange-500' :
+                        'bg-purple-500/10 text-purple-500'
+                  ]">
+                    <component :is="getIcon(result.type)" class="w-4.5 h-4.5" />
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="text-sm font-bold text-BtW truncate">{{ result.title }}</div>
+                    <div class="text-xs text-hsa truncate">{{ result.description }}</div>
+                  </div>
+                  <div v-if="selectedIndex === getAbsoluteIndex(gIndex, rIndex)" class="text-primary">
+                    <IconCornerDownLeft class="w-4 h-4" />
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            <!-- View All Link -->
+            <div class="p-2">
+              <button @click="viewAllResults"
+                class="w-full py-3 rounded-xl border-2 border-dashed border-ash hover:border-primary/30 hover:bg-primary/5 text-sm font-bold text-hsa hover:text-primary transition-all flex items-center justify-center gap-2">
+                <IconExternalLink class="w-4 h-4" />
+                Voir tous les résultats pour "{{ searchQuery }}"
               </button>
             </div>
           </div>
@@ -79,13 +92,16 @@
           class="p-3 bg-ash/30 border-t border-ash/50 flex items-center justify-between text-[10px] font-medium text-hsa">
           <div class="flex items-center gap-4">
             <span class="flex items-center gap-1.5">
-              <span class="px-1 py-0.5 rounded bg-WtB border border-ash">↑↓</span> Naviguer
+              <kbd class="px-1 py-0.5 rounded bg-WtB border border-ash text-[10px] font-bold">↑</kbd>
+              ou
+              <kbd class="px-1 py-0.5 rounded bg-WtB border border-ash text-[10px] font-bold">↓</kbd>
+              Naviguer
             </span>
             <span class="flex items-center gap-1.5">
-              <span class="px-1 py-0.5 rounded bg-WtB border border-ash">↵</span> Sélectionner
+              <kbd class="px-1 py-0.5 rounded bg-WtB border border-ash text-[10px] font-bold">↵</kbd> Sélectionner
             </span>
           </div>
-          <div>CYPASS Cloud Search</div>
+          <div>Moteur de recherche CYPASS</div>
         </div>
       </div>
     </div>
@@ -96,7 +112,7 @@
 import { ref, computed, watch, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import { useSearchStore } from '~/stores/search'
-import { IconSearch, IconLoader2, IconFileDescription, IconLayoutDashboard, IconSettings, IconCornerDownLeft } from '@tabler/icons-vue'
+import { IconSearch, IconFileDescription, IconLayoutDashboard, IconSettings, IconCornerDownLeft, IconExternalLink } from '@tabler/icons-vue'
 
 const searchStore = useSearchStore()
 const router = useRouter()
@@ -150,6 +166,11 @@ const selectResult = (result: any) => {
     router.push(result.path)
     searchStore.closeSearch()
   }
+}
+
+const viewAllResults = () => {
+  router.push({ path: '/search', query: { q: searchQuery.value } })
+  searchStore.closeSearch()
 }
 
 const getIcon = (type: string) => {

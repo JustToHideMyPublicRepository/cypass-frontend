@@ -3,14 +3,16 @@ import { useRouter } from 'vue-router'
 import { shortcutsData } from '@/data/shortcuts'
 import { useShortcutsStore } from '~/stores/shortcuts'
 
-interface ShortcutOptions {
+interface ShortcutsOptions {
   global?: boolean
   searchCallback?: () => void
+  localSearchCallback?: () => void
+  onAltModeChange?: (active: boolean) => void
 }
 
 import { useAuthStore } from '~/stores/auth'
 
-export const useShortcuts = (options: ShortcutOptions = {}) => {
+export const useShortcuts = (options: ShortcutsOptions = {}) => {
   const router = useRouter()
   const store = useShortcutsStore()
   const authStore = useAuthStore()
@@ -167,11 +169,20 @@ export const useShortcuts = (options: ShortcutOptions = {}) => {
     if (!event.key) return
     const key = event.key.toLowerCase()
 
-    // Contextual Search Shortcut (Ctrl+K or Cmd+K)
-    if ((event.ctrlKey || event.metaKey) && key === 'k') {
+    // Contextual Search Shortcut (Ctrl+Shift+K)
+    if ((event.ctrlKey || event.metaKey) && event.shiftKey && key === 'k') {
       if (options.searchCallback) {
         event.preventDefault()
         options.searchCallback()
+      }
+      return
+    }
+
+    // Local Search Shortcut (Ctrl+K)
+    if ((event.ctrlKey || event.metaKey) && !event.shiftKey && key === 'k') {
+      if (options.localSearchCallback) {
+        event.preventDefault()
+        options.localSearchCallback()
       }
       return
     }

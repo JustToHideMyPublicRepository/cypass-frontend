@@ -17,7 +17,7 @@
           placeholder="Rechercher une réponse (ex: mot de passe, API)...">
         <div class="hidden md:flex items-center gap-1 absolute right-4 top-1/2 -translate-y-1/2 px-2">
           <kbd
-            class="px-1.5 py-0.5 rounded bg-ash text-[10px] font-bold text-hsa border border-ashAct uppercase">CTRL</kbd>
+            class="px-1.5 py-0.5 rounded bg-ash text-[10px] font-bold text-hsa border border-ashAct uppercase">Ctrl</kbd>
           <span class="text-[10px] text-hsa">+</span>
           <kbd
             class="px-1.5 py-0.5 rounded bg-ash text-[10px] font-bold text-hsa border border-ashAct uppercase">K</kbd>
