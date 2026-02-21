@@ -2,7 +2,7 @@
   <div class="flex flex-col ">
     <LytGuestHeader />
 
-    <!-- Content -->
+    <!-- Contenu -->
     <main class="flex-grow pt-24">
       <slot />
     </main>

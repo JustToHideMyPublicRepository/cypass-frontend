@@ -1,23 +1,29 @@
 import { IconScanEye, IconCertificate, IconRadar2, IconEye } from '@tabler/icons-vue'
 
+// Interface pour les bénéfices/avantages d'un service
 export interface ServiceBenefit {
   title: string
   qty: string
   desc?: string
 }
 
+// Spécifications techniques d'un service
 export interface ServiceTechSpec {
   label: string
   value: string
 }
 
+// Fonctionnalité mise en avant avec une icône
 export interface ServiceFeatureIcon {
   title: string
   desc: string
   icon: any
 }
 
-export interface CypassService {
+/**
+ * Interface principale représentant un service CYPASS (Module)
+ */
+export interface CypassModule {
   id: string
   title: string
   subtitle?: string
@@ -30,17 +36,17 @@ export interface CypassService {
   cta?: string
   image?: string
 
-  // Data for Features.vue
+  // Données pour Features.vue
   features?: ServiceFeatureIcon[]
   list?: string[]
   specs?: string[]
 
-  // Data for [id].vue
+  // Données pour la page détail [id].vue
   benefits?: ServiceBenefit[]
   techSpecs?: ServiceTechSpec[]
 }
 
-export const modules: CypassService[] = [
+export const modules: CypassModule[] = [
   {
     id: 'docsentry',
     title: 'DocSentry',

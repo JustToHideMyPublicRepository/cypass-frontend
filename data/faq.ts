@@ -1,14 +1,19 @@
+// Types pour les éléments de la FAQ
 export interface FaqItem {
   question: string
   answer: string
   category?: string
 }
 
+// Interface pour regrouper les questions par catégorie
 export interface FaqCategory {
   title: string
   items: FaqItem[]
 }
 
+/**
+ * Données des catégories de la FAQ avec leurs questions respectives.
+ */
 export const faqCategories: FaqCategory[] = [
   {
     title: 'Général',
@@ -62,7 +67,9 @@ export const faqCategories: FaqCategory[] = [
   }
 ]
 
-// Helper for Home/Features which might need a flat list or specific items
+/**
+ * Liste des questions populaires affichées sur la page d'accueil.
+ */
 export const popularFaqItems: FaqItem[] = [
   ...faqCategories[0].items,
   ...faqCategories[1].items.slice(0, 2)
