@@ -1,5 +1,11 @@
 <template>
   <div class="space-y-6">
+    <UiBreadcrumbs :items="[
+      { label: 'Tableau de bord', path: '/dashboard' },
+      { label: 'VigiTech', path: '/dashboard/vigitech' },
+      { label: decodeHtmlEntities(incident?.title || 'Détail') }
+    ]" />
+
     <!-- Header -->
     <div class="flex items-center gap-4">
       <NuxtLink to="/dashboard/vigitech" class="p-2 rounded-xl hover:bg-ash/20 transition-colors text-hsa">
@@ -39,11 +45,13 @@
               </div>
             </div>
 
-            <h2 class="text-2xl md:text-3xl font-black text-BtW leading-tight">{{ incident.title }}</h2>
+            <h2 class="text-2xl md:text-3xl font-black text-BtW leading-tight">
+              {{ decodeHtmlEntities(incident.title) }}
+            </h2>
 
             <div class="flex flex-wrap items-center gap-6 text-sm font-bold text-hsa">
               <div v-if="incident.location" class="flex items-center gap-2">
-                <IconMapPin class="w-4 h-4 text-primary" /> {{ incident.location }}
+                <IconMapPin class="w-4 h-4 text-primary" /> {{ decodeHtmlEntities(incident.location) }}
               </div>
               <div class="flex items-center gap-2">
                 <IconCalendar class="w-4 h-4 text-primary" /> {{ formatDate(incident.created_at) }}
@@ -54,23 +62,45 @@
 
             <div class="space-y-4">
               <h3 class="text-xs font-black text-hsa uppercase tracking-[0.2em]">Description détaillée</h3>
-              <p class="text-BtW leading-relaxed whitespace-pre-wrap">{{ incident.description }}</p>
+              <p class="text-BtW leading-relaxed whitespace-pre-wrap">{{ decodeHtmlEntities(incident.description) }}</p>
             </div>
           </div>
         </UiBaseCard>
 
         <!-- Evidence -->
-        <UiBaseCard v-if="incident.evidence_file" title="Pièce Jointe / Preuve" class="!rounded-[2.5rem]">
-          <div class="p-4 md:p-6">
-            <div class="relative group rounded-2xl overflow-hidden border border-ash aspect-video bg-ash/5">
+        <UiBaseCard v-if="incident.evidence_file" class="!rounded-[2.5rem] overflow-hidden">
+          <div class="p-6 space-y-4">
+            <h3 class="text-xs font-black text-hsa uppercase tracking-[0.2em] px-2">Pièce Jointe / Preuve</h3>
+
+            <div v-if="isImage(incident.evidence_file)" @click="openViewer(getFullUrl(incident.evidence_file))"
+              class="group relative rounded-3xl overflow-hidden border border-ash bg-ash/5 cursor-zoom-in aspect-video transition-transform hover:scale-[1.01] active:scale-[0.99]">
               <img :src="getFullUrl(incident.evidence_file)" class="w-full h-full object-contain" alt="Evidence" />
               <div
-                class="absolute inset-0 bg-BtW/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
-                <a :href="getFullUrl(incident.evidence_file)" target="_blank"
-                  class="p-4 bg-white rounded-full text-primary shadow-xl scale-90 group-hover:scale-100 transition-transform">
-                  <IconExternalLink class="w-6 h-6" />
-                </a>
+                class="absolute inset-0 bg-BtW/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                <div
+                  class="p-4 bg-white/90 backdrop-blur rounded-2xl shadow-xl text-primary transform translate-y-4 group-hover:translate-y-0 transition-transform">
+                  <IconZoomIn class="w-6 h-6" />
+                </div>
               </div>
+            </div>
+
+            <div v-else-if="isPdf(incident.evidence_file)"
+              class="flex items-center justify-between p-6 rounded-[2rem] bg-ash/5 border border-ashAct">
+              <div class="flex items-center gap-4">
+                <div class="w-14 h-14 rounded-2xl bg-danger/10 flex items-center justify-center text-danger">
+                  <IconFileTypePdf class="w-8 h-8" />
+                </div>
+                <div>
+                  <p class="text-sm font-black text-BtW tracking-tight">Document PDF</p>
+                  <p class="text-[10px] font-bold text-hsa uppercase tracking-widest">Preuve de l'incident</p>
+                </div>
+              </div>
+              <a :href="getFullUrl(incident.evidence_file)" target="_blank">
+                <UiBaseButton variant="secondary" size="sm"
+                  class="!rounded-xl text-[10px] font-black uppercase tracking-widest">
+                  <IconExternalLink class="w-4 h-4 mr-2" /> Ouvrir
+                </UiBaseButton>
+              </a>
             </div>
           </div>
         </UiBaseCard>
@@ -131,17 +161,22 @@
         </UiBaseCard>
       </div>
     </div>
+
+    <!-- Image Viewer Modal -->
+    <ModalImageViewer :show="viewer.show" :imageUrl="viewer.url" @close="viewer.show = false" />
   </div>
 </template>
 
 <script setup lang="ts">
 import {
   IconArrowLeft, IconMapPin, IconCalendar, IconExternalLink,
-  IconCheck, IconX, IconLock, IconAlertCircle, IconAlertTriangle, IconUsers
+  IconCheck, IconX, IconLock, IconAlertCircle, IconAlertTriangle, IconUsers,
+  IconZoomIn, IconFileTypePdf
 } from '@tabler/icons-vue'
 import { useVigitechStore } from '~/stores/vigitech'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
+import { decodeHtmlEntities } from '~/utils/format'
 
 definePageMeta({
   layout: 'default'
@@ -169,8 +204,28 @@ const formatDate = (dateStr: string) => {
 
 const getFullUrl = (path: string) => {
   if (!path) return ''
-  // Handle path starting with uploads/
-  return `https://cypass-backend.alwaysdata.net/${path}`
+  return `/evidence/${path}`
+}
+
+const isImage = (path: string) => {
+  if (!path) return false
+  const ext = path.split('.').pop()?.toLowerCase()
+  return ['jpg', 'jpeg', 'png', 'webp', 'gif'].includes(ext || '')
+}
+
+const isPdf = (path: string) => {
+  if (!path) return false
+  return path.toLowerCase().endsWith('.pdf')
+}
+
+const viewer = ref({
+  show: false,
+  url: ''
+})
+
+const openViewer = (url: string) => {
+  viewer.value.url = url
+  viewer.value.show = true
 }
 
 const fetchData = () => {

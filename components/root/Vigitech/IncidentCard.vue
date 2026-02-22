@@ -27,12 +27,18 @@
             </span>
           </div>
 
-          <h3 class="text-base font-black text-BtW truncate leading-tight">{{ incident.title }}</h3>
-          <p class="text-xs text-hsa line-clamp-2 leading-relaxed">{{ incident.description }}</p>
+          <NuxtLink :to="detailUrl">
+            <h3 class="text-base font-black text-BtW truncate leading-tight hover:text-primary transition-colors">
+              {{ decodeHtmlEntities(incident.title) }}
+            </h3>
+          </NuxtLink>
+          <p class="text-xs text-hsa line-clamp-2 leading-relaxed">
+            {{ decodeHtmlEntities(incident.description) }}
+          </p>
 
           <div class="flex items-center gap-3 pt-2 text-[10px] font-bold text-hsa">
             <span v-if="incident.location" class="flex items-center gap-1">
-              <IconMapPin class="w-3 h-3" /> {{ incident.location }}
+              <IconMapPin class="w-3 h-3" /> {{ decodeHtmlEntities(incident.location) }}
             </span>
             <span class="flex items-center gap-1">
               <IconClock class="w-3 h-3" /> {{ formatTime(incident.created_at) }}
@@ -72,6 +78,7 @@
 <script setup lang="ts">
 import { IconMapPin, IconClock, IconEye, IconAlertCircle, IconLock } from '@tabler/icons-vue'
 import type { Incident } from '~/types/vigitech'
+import { decodeHtmlEntities } from '~/utils/format'
 
 const props = defineProps<{
   incident: Incident

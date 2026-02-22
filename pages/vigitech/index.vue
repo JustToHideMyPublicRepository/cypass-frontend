@@ -21,25 +21,33 @@
             <div class="space-y-4">
               <div class="space-y-1.5">
                 <label class="text-[9px] font-black text-hsa uppercase tracking-widest px-1">Type de menace</label>
-                <select v-model="filters.type" @change="fetchData"
-                  class="w-full h-10 px-4 rounded-xl bg-WtB border border-ash/50 font-bold text-xs outline-none focus:ring-2 focus:ring-primary transition-all appearance-none cursor-pointer">
-                  <option value="">Tous les types</option>
-                  <option value="phishing">Phishing</option>
-                  <option value="ransomware">Ransomware</option>
-                  <option value="fake_profile">Faux Profil</option>
-                  <option value="harassment">Harcèlement</option>
-                </select>
+                <div class="relative group">
+                  <select v-model="filters.type" @change="fetchData"
+                    class="w-full h-10 px-4 rounded-xl bg-WtB border border-ash/50 font-bold text-xs outline-none focus:ring-2 focus:ring-primary transition-all appearance-none cursor-pointer">
+                    <option value="">Tous les types</option>
+                    <option value="phishing">Phishing</option>
+                    <option value="ransomware">Ransomware</option>
+                    <option value="fake_profile">Faux Profil</option>
+                    <option value="harassment">Harcèlement</option>
+                  </select>
+                  <IconChevronDown
+                    class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-hsa pointer-events-none group-focus-within:text-primary transition-colors" />
+                </div>
               </div>
 
               <div class="space-y-1.5">
                 <label class="text-[9px] font-black text-hsa uppercase tracking-widest px-1">Gravité</label>
-                <select v-model="filters.level" @change="fetchData"
-                  class="w-full h-10 px-4 rounded-xl bg-WtB border border-ash/50 font-bold text-xs outline-none focus:ring-2 focus:ring-primary transition-all appearance-none cursor-pointer">
-                  <option value="">Toutes les gravités</option>
-                  <option value="low">Faible</option>
-                  <option value="medium">Moyenne</option>
-                  <option value="critical">Critique</option>
-                </select>
+                <div class="relative group">
+                  <select v-model="filters.level" @change="fetchData"
+                    class="w-full h-10 px-4 rounded-xl bg-WtB border border-ash/50 font-bold text-xs outline-none focus:ring-2 focus:ring-primary transition-all appearance-none cursor-pointer">
+                    <option value="">Toutes les gravités</option>
+                    <option value="low">Faible</option>
+                    <option value="medium">Moyenne</option>
+                    <option value="critical">Critique</option>
+                  </select>
+                  <IconChevronDown
+                    class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-hsa pointer-events-none group-focus-within:text-primary transition-colors" />
+                </div>
               </div>
             </div>
 
@@ -94,7 +102,8 @@
             </div>
 
             <!-- Pagination -->
-            <div class="flex items-center justify-between pt-6">
+            <div v-if="store.publicPagination.total > store.publicPagination.limit"
+              class="flex items-center justify-between pt-6">
               <UiBaseButton variant="ghost" size="sm" :disabled="store.publicPagination.offset === 0"
                 @click="changePage(-1)">
                 <IconChevronLeft class="w-4 h-4 mr-2" /> Précédent
@@ -103,7 +112,8 @@
                 Page {{ Math.floor(store.publicPagination.offset / store.publicPagination.limit) + 1 }}
               </div>
               <UiBaseButton variant="ghost" size="sm"
-                :disabled="store.publicIncidents.length < store.publicPagination.limit" @click="changePage(1)">
+                :disabled="store.publicPagination.offset + store.publicPagination.limit >= store.publicPagination.total"
+                @click="changePage(1)">
                 Suivant
                 <IconChevronRight class="w-4 h-4 ml-2" />
               </UiBaseButton>
@@ -176,6 +186,7 @@ import {
 } from '@tabler/icons-vue'
 import { useVigitechStore } from '~/stores/vigitech'
 import { useAuthStore } from '~/stores/auth'
+import { decodeHtmlEntities } from '~/utils/format'
 
 definePageMeta({
   layout: 'guest'
@@ -194,10 +205,15 @@ const stats = computed(() => {
   const phishing = incidents.filter(i => i.type === 'phishing').length
   const critical = incidents.filter(i => i.threat_level === 'critical').length
 
+  // Calculate trends (mock logic for demo if no history, but dynamic based on current data)
+  const total = store.publicPagination.total
+  const phishingTrend = total > 0 ? Math.round((phishing / total) * 100) : 0
+  const criticalTrend = total > 0 ? Math.round((critical / total) * 100) : 0
+
   return [
     {
       label: 'Menaces Actives',
-      value: store.publicPagination.total,
+      value: total,
       icon: IconActivity,
       iconColor: 'text-primary',
       bg: 'bg-primary/5',
@@ -209,7 +225,7 @@ const stats = computed(() => {
       icon: IconAlertCircle,
       iconColor: 'text-warning',
       bg: 'bg-warning/5',
-      trend: 12,
+      trend: phishingTrend,
       sub: 'Type le plus fréquent'
     },
     {
@@ -218,22 +234,40 @@ const stats = computed(() => {
       icon: IconLock,
       iconColor: 'text-danger',
       bg: 'bg-danger/5',
-      trend: -5,
+      trend: criticalTrend,
       sub: 'Urgence immédiate'
     }
   ]
 })
 
 const topThreatType = computed(() => {
+  if (!store.publicIncidents.length) return 'menaces diverses'
   const typeCounts: Record<string, number> = {}
   store.publicIncidents.forEach(i => {
     typeCounts[i.type] = (typeCounts[i.type] || 0) + 1
   })
   const sorted = Object.entries(typeCounts).sort((a, b) => b[1] - a[1])
-  return sorted[0]?.[0] || 'menaces diverses'
+  const top = sorted[0]?.[0]
+  switch (top) {
+    case 'phishing': return 'hameçonnage (phishing)'
+    case 'ransomware': return 'logiciels malveillants (ransomware)'
+    case 'fake_profile': return 'faux profils sociaux'
+    case 'harassment': return 'cyber-harcèlement'
+    default: return 'menaces numériques'
+  }
 })
 
-const topTarget = computed(() => 'réseaux sociaux au Bénin')
+const topTarget = computed(() => {
+  if (!store.publicIncidents.length) return 'réseaux sociaux au Bénin'
+  const locations = store.publicIncidents.map(i => i.location).filter(l => !!l)
+  const locationCounts: Record<string, number> = {}
+  locations.forEach(l => {
+    locationCounts[l] = (locationCounts[l] || 0) + 1
+  })
+  const sorted = Object.entries(locationCounts).sort((a, b) => b[1] - a[1])
+  const top = sorted[0]?.[0]
+  return top ? `secteur de ${decodeHtmlEntities(top)}` : 'réseaux sociaux au Bénin'
+})
 
 const fetchData = () => {
   const params: any = {

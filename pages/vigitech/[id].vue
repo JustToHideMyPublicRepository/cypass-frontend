@@ -1,10 +1,11 @@
 <template>
   <div class="relative min-h-[80vh] flex flex-col items-center justify-center px-4">
     <div class="max-w-5xl mx-auto px-6">
-      <NuxtLink to="/vigitech"
-        class="inline-flex items-center gap-2 text-hsa font-bold hover:text-primary transition-colors mb-12">
-        <IconArrowLeft class="w-5 h-5" /> Retour à la liste
-      </NuxtLink>
+      <UiBreadcrumbs :items="[
+        { label: 'Accueil', path: '/' },
+        { label: 'VigiTech', path: '/vigitech' },
+        { label: decodeHtmlEntities(incident?.title || 'Détail de l\'incident') }
+      ]" class="mb-8" />
 
       <div v-if="store.loading" class="py-32 flex justify-center">
         <UiBaseLoader />
@@ -32,18 +33,20 @@
               </div>
             </div>
 
-            <h1 class="text-3xl md:text-5xl font-black text-BtW leading-tight tracking-tighter">{{ incident.title }}
+            <h1 class="text-3xl md:text-5xl font-black text-BtW leading-tight tracking-tighter">
+              {{ decodeHtmlEntities(incident.title) }}
             </h1>
 
             <div class="flex flex-wrap items-center gap-8 text-sm md:text-base font-bold text-hsa">
               <div v-if="incident.location" class="flex items-center gap-2.5">
-                <IconMapPin class="w-5 h-5 text-primary" /> {{ incident.location }}
+                <IconMapPin class="w-5 h-5 text-primary" /> {{ decodeHtmlEntities(incident.location) }}
               </div>
               <div class="flex items-center gap-2.5">
                 <IconCalendar class="w-5 h-5 text-primary" /> {{ formatDate(incident.created_at) }}
               </div>
               <div class="flex items-center gap-2.5">
-                <IconUsers class="w-5 h-5 text-primary" /> {{ incident.reporter_organization || 'Pas d\'organisation' }}
+                <IconUsers class="w-5 h-5 text-primary" /> {{ (incident.is_anonymous || incident.is_anonymous === 1) ?
+                  'Utilisateur anonyme' : (incident.reporter_organization || 'Pas d\'organisation') }}
               </div>
             </div>
           </div>
@@ -52,17 +55,45 @@
 
           <div class="space-y-6">
             <h3 class="text-xs font-black text-hsa uppercase tracking-[0.3em]">Analyse de l'incident</h3>
-            <p class="text-lg md:text-xl text-BtW leading-relaxed font-bold whitespace-pre-wrap">{{ incident.description
-            }}</p>
+            <p class="text-lg md:text-xl text-BtW leading-relaxed font-bold whitespace-pre-wrap">
+              {{ decodeHtmlEntities(incident.description) }}
+            </p>
           </div>
 
           <!-- Evidence Preview if public and unblocked -->
           <div v-if="incident.evidence_file" class="pt-6 space-y-6">
-            <h3 class="text-xs font-black text-hsa uppercase tracking-[0.3em]">Preuve Visuelle</h3>
-            <div
-              class="rounded-3xl overflow-hidden border border-ash bg-ash/5 aspect-video md:aspect-auto max-h-[600px]">
+            <h3 class="text-xs font-black text-hsa uppercase tracking-[0.3em]">Preuve de l'incident</h3>
+
+            <div v-if="isImage(incident.evidence_file)" @click="openViewer(getFullUrl(incident.evidence_file))"
+              class="group relative rounded-3xl overflow-hidden border border-ash bg-ash/5 cursor-zoom-in aspect-video md:aspect-auto max-h-[600px] transition-transform hover:scale-[1.01] active:scale-[0.99]">
               <img :src="getFullUrl(incident.evidence_file)" class="w-full h-full object-contain mx-auto"
                 alt="Evidence" />
+              <div
+                class="absolute inset-0 bg-BtW/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                <div
+                  class="p-3 bg-white/90 backdrop-blur rounded-2xl shadow-xl text-primary transform translate-y-4 group-hover:translate-y-0 transition-transform">
+                  <IconZoomIn class="w-6 h-6" />
+                </div>
+              </div>
+            </div>
+
+            <div v-else-if="isPdf(incident.evidence_file)"
+              class="flex items-center justify-between p-6 rounded-[2rem] bg-ash/5 border border-ashAct">
+              <div class="flex items-center gap-4">
+                <div class="w-14 h-14 rounded-2xl bg-danger/10 flex items-center justify-center text-danger">
+                  <IconFileTypePdf class="w-8 h-8" />
+                </div>
+                <div>
+                  <p class="text-sm font-black text-BtW tracking-tight">Document PDF</p>
+                  <p class="text-[10px] font-bold text-hsa uppercase tracking-widest">Preuve de l'incident</p>
+                </div>
+              </div>
+              <a :href="getFullUrl(incident.evidence_file)" target="_blank">
+                <UiBaseButton variant="secondary" size="sm"
+                  class="!rounded-xl text-[10px] font-black uppercase tracking-widest">
+                  <IconExternalLink class="w-4 h-4 mr-2" /> Ouvrir
+                </UiBaseButton>
+              </a>
             </div>
           </div>
         </div>
@@ -93,17 +124,21 @@
         </NuxtLink>
       </div>
     </div>
+
+    <!-- Image Viewer Modal -->
+    <ModalImageViewer :show="viewer.show" :imageUrl="viewer.url" @close="viewer.show = false" />
   </div>
 </template>
 
 <script setup lang="ts">
 import {
   IconArrowLeft, IconMapPin, IconCalendar, IconUsers,
-  IconShieldCheck, IconAlertCircle
+  IconShieldCheck, IconAlertCircle, IconZoomIn, IconFileTypePdf, IconExternalLink
 } from '@tabler/icons-vue'
 import { useVigitechStore } from '~/stores/vigitech'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
+import { decodeHtmlEntities } from '~/utils/format'
 
 definePageMeta({
   layout: 'guest'
@@ -120,7 +155,29 @@ const formatDate = (dateStr: string) => {
 
 const getFullUrl = (path: string) => {
   if (!path) return ''
-  return `https://cypass-backend.alwaysdata.net/${path}`
+  // Use the proxy route
+  return `/evidence/${path}`
+}
+
+const isImage = (path: string) => {
+  if (!path) return false
+  const ext = path.split('.').pop()?.toLowerCase()
+  return ['jpg', 'jpeg', 'png', 'webp', 'gif'].includes(ext || '')
+}
+
+const isPdf = (path: string) => {
+  if (!path) return false
+  return path.toLowerCase().endsWith('.pdf')
+}
+
+const viewer = ref({
+  show: false,
+  url: ''
+})
+
+const openViewer = (url: string) => {
+  viewer.value.url = url
+  viewer.value.show = true
 }
 
 const fetchData = () => {
