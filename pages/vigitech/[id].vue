@@ -36,7 +36,7 @@
             </h1>
 
             <div class="flex flex-wrap items-center gap-8 text-sm md:text-base font-bold text-hsa">
-              <div class="flex items-center gap-2.5">
+              <div v-if="incident.location" class="flex items-center gap-2.5">
                 <IconMapPin class="w-5 h-5 text-primary" /> {{ incident.location }}
               </div>
               <div class="flex items-center gap-2.5">
@@ -131,6 +131,6 @@ const fetchData = () => {
 onMounted(fetchData)
 
 useHead({
-  title: computed(() => incident.value ? `Incident: ${incident.value.title}` : 'VigiTech')
+  title: computed(() => incident.value ? `Incident: ${incident.value.title}` : 'Détail de l\'incident')
 })
 </script>

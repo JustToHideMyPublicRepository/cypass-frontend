@@ -31,7 +31,7 @@
           <p class="text-xs text-hsa line-clamp-2 leading-relaxed">{{ incident.description }}</p>
 
           <div class="flex items-center gap-3 pt-2 text-[10px] font-bold text-hsa">
-            <span class="flex items-center gap-1">
+            <span v-if="incident.location" class="flex items-center gap-1">
               <IconMapPin class="w-3 h-3" /> {{ incident.location }}
             </span>
             <span class="flex items-center gap-1">
@@ -55,6 +55,7 @@
           class="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-ash/10 text-[10px] uppercase font-black tracking-widest text-hsa">
           Statut: <span :class="statusClass">{{ incident.status }}</span>
         </div>
+
         <div v-if="incident.pending_reports_count"
           class="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-danger/10 text-[10px] uppercase font-black tracking-widest text-danger">
           <IconAlertCircle class="w-3 h-3" /> {{ incident.pending_reports_count }} Signalements

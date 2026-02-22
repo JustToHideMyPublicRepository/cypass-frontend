@@ -22,7 +22,7 @@ export default defineEventHandler(async (event) => {
 
     for (const item of formData) {
       if (item.name === 'evidence' && item.filename) {
-        const blob = new Blob([item.data], { type: item.type })
+        const blob = new Blob([new Uint8Array(item.data)], { type: item.type })
         externalFormData.append('evidence', blob, item.filename)
       } else if (item.name) {
         externalFormData.append(item.name, item.data.toString())

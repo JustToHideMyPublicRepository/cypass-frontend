@@ -117,7 +117,7 @@
 <script setup lang="ts">
 import { ref, watch, computed, onUnmounted } from 'vue'
 import {
-  IconPhoto, IconLoader2, IconUpload, IconCamera, IconCheck, IconFileUpload, IconChevronRight, IconTrash
+  IconPhoto, IconLoader2, IconCamera, IconCheck, IconFileUpload, IconChevronRight, IconTrash
 } from '@tabler/icons-vue'
 import { useGlobalDropZone } from '~/composables/useDropZone'
 

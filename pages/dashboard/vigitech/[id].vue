@@ -42,7 +42,7 @@
             <h2 class="text-2xl md:text-3xl font-black text-BtW leading-tight">{{ incident.title }}</h2>
 
             <div class="flex flex-wrap items-center gap-6 text-sm font-bold text-hsa">
-              <div class="flex items-center gap-2">
+              <div v-if="incident.location" class="flex items-center gap-2">
                 <IconMapPin class="w-4 h-4 text-primary" /> {{ incident.location }}
               </div>
               <div class="flex items-center gap-2">

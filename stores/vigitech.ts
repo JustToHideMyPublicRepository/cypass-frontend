@@ -5,6 +5,11 @@ export const useVigitechStore = defineStore('vigitech', {
   state: () => ({
     userIncidents: [] as Incident[],
     publicIncidents: [] as Incident[],
+    publicPagination: {
+      total: 0,
+      limit: 10,
+      offset: 0
+    },
     currentIncident: null as Incident | null,
     loading: false,
     error: null as string | null
@@ -32,9 +37,17 @@ export const useVigitechStore = defineStore('vigitech', {
       this.loading = true
       this.error = null
       try {
-        const response: any = await $fetch('/api/vigitech/all', { params })
+        const query = {
+          ...params,
+          limit: params.limit || this.publicPagination.limit,
+          offset: params.offset || this.publicPagination.offset
+        }
+        const response: any = await $fetch('/api/vigitech/all', { params: query })
         if (response.success) {
           this.publicIncidents = response.data
+          this.publicPagination.total = response.total || (response.data.length < query.limit ? query.offset + response.data.length : 100)
+          this.publicPagination.limit = query.limit
+          this.publicPagination.offset = query.offset
         } else {
           this.error = response.message || 'Erreur lors de la récupération des incidents publics'
         }
