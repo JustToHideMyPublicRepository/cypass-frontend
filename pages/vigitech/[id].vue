@@ -43,7 +43,7 @@
                 <IconCalendar class="w-5 h-5 text-primary" /> {{ formatDate(incident.created_at) }}
               </div>
               <div class="flex items-center gap-2.5">
-                <IconUsers class="w-5 h-5 text-primary" /> {{ incident.reporter_organization || 'Individu' }}
+                <IconUsers class="w-5 h-5 text-primary" /> {{ incident.reporter_organization || 'Pas d\'organisation' }}
               </div>
             </div>
           </div>
