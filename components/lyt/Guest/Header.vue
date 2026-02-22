@@ -134,8 +134,8 @@ const isLinkActive = (path: string) => {
 // Navigation Constants
 const NavHeader = [
   { label: 'Vérifier', path: '/verify' },
+  { label: 'VigiTech', path: '/vigitech' },
   { label: 'Support', path: '/support' },
-  { label: 'À propos', path: '/about' },
   { label: 'Contact', path: '/contact' },
 ]
 
