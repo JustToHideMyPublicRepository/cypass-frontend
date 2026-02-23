@@ -17,14 +17,33 @@ export default defineNuxtPlugin((nuxtApp) => {
   const updateTooltip = (el: any, binding: any) => {
     if (!binding.value) return
 
+    // Disable on mobile/tablet (touch devices usually don't hover anyway)
+    const isMobile = import.meta.client && (window.innerWidth < 1024 || 'ontouchstart' in window)
+    if (isMobile) return
+
     const store = useShortcutsStore()
 
     // Resolve content: if it's a shortcut ID or path, get the dynamic tooltip
     let content = binding.value
-    const isShortcut = store.mergedShortcuts[content] || Object.values(store.mergedShortcuts).find(s => s.path === content)
+    if (!content) {
+      el._tooltipContent = ''
+      return
+    }
 
-    if (isShortcut) {
-      content = getLinkTooltip(content, store.mergedShortcuts)
+    const isShortcut = store.mergedShortcuts[content] || Object.values(store.mergedShortcuts).find(s => s.path === content)
+    const resolvedTooltip = getLinkTooltip(content, store.mergedShortcuts)
+
+    if (resolvedTooltip) {
+      content = resolvedTooltip
+    } else if (isShortcut || (typeof content === 'string' && content.startsWith('/'))) {
+      // If it's a shortcut ID but no tooltip HTML, or it's a raw path, don't show tooltip
+      el._tooltipContent = ''
+      return
+    }
+
+    if (typeof content !== 'string' || content.toLowerCase().includes('undefined')) {
+      el._tooltipContent = ''
+      return
     }
 
     // Capture the calculated content for reference
@@ -104,6 +123,7 @@ export default defineNuxtPlugin((nuxtApp) => {
       updateTooltip(el, binding)
 
       const handleMouseEnter = () => {
+        if (!el._tooltipContent) return
         const tooltip = document.getElementById('global-shortcut-tooltip')
         if (!tooltip) return
         tooltip.innerHTML = el._tooltipContent

@@ -17,10 +17,12 @@
           <div class="flex flex-wrap items-center gap-2">
             <span
               class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest border border-ash/50 bg-ash/10 text-hsa">
-              {{ incident.type }}
+              {{ mapIncidentType(incident.type) }}
             </span>
             <UiStatusBadge
-              :status="incident.threat_level === 'critical' ? 'High' : incident.threat_level === 'medium' ? 'Medium' : 'Low'" />
+              :status="incident.threat_level === 'critical' ? 'High' : incident.threat_level === 'medium' ? 'Medium' : 'Low'">
+              {{ mapThreatLevel(incident.threat_level) }}
+            </UiStatusBadge>
             <span v-if="incident.is_anonymous"
               class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest bg-BtW text-WtB">
               Anonyme
@@ -48,8 +50,13 @@
       </div>
 
       <div class="flex flex-col gap-2 shrink-0">
-        <NuxtLink :to="detailUrl" class="p-2 rounded-xl hover:bg-ash/20 transition-colors text-hsa hover:text-primary">
-          <IconEye class="w-5 h-5" />
+        <button @click.stop="shareIncident"
+          class="p-2 rounded-xl hover:bg-ash/20 transition-colors text-hsa hover:text-primary" title="Partager">
+          <IconShare class="w-5 h-5" />
+        </button>
+        <NuxtLink :to="detailUrl" class="p-2 rounded-xl hover:bg-ash/20 transition-colors text-hsa hover:text-primary"
+          title="Voir les détails">
+          <IconChevronRight class="w-5 h-5" />
         </NuxtLink>
       </div>
     </div>
@@ -59,7 +66,7 @@
       <div class="flex items-center gap-4">
         <div
           class="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-ash/10 text-[10px] uppercase font-black tracking-widest text-hsa">
-          Statut: <span :class="statusClass">{{ incident.status }}</span>
+          Statut: <span :class="statusClass">{{ mapIncidentStatus(incident.status) }}</span>
         </div>
 
         <div v-if="incident.pending_reports_count"
@@ -76,15 +83,41 @@
 </template>
 
 <script setup lang="ts">
-import { IconMapPin, IconClock, IconEye, IconAlertCircle, IconLock } from '@tabler/icons-vue'
+import { IconMapPin, IconClock, IconAlertCircle, IconLock, IconShare, IconChevronRight } from '@tabler/icons-vue'
 import type { Incident } from '~/types/vigitech'
 import { decodeHtmlEntities } from '~/utils/format'
+import { mapIncidentType, mapThreatLevel, mapIncidentStatus } from '~/utils/vigitech'
+import { useToastStore } from '~/stores/toast'
 
 const props = defineProps<{
   incident: Incident
   showFooter?: boolean
   detailUrl: string
 }>()
+
+const toast = useToastStore()
+
+const shareIncident = async () => {
+  const fullUrl = `${window.location.origin}/vigitech/${props.incident.id}`
+  const shareData = {
+    title: `Cyber-Alerte CYPASS: ${props.incident.title}`,
+    text: `${props.incident.description.substring(0, 100)}...`,
+    url: fullUrl
+  }
+
+  try {
+    if (navigator.share) {
+      await navigator.share(shareData)
+    } else {
+      await navigator.clipboard.writeText(fullUrl)
+      toast.showToast('success', 'Lien copié', 'Le lien de l\'incident a été copié.')
+    }
+  } catch (err) {
+    if (err instanceof Error && err.name !== 'AbortError') {
+      console.warn('Share failed', err)
+    }
+  }
+}
 
 const statusClass = computed(() => {
   switch (props.incident.status) {

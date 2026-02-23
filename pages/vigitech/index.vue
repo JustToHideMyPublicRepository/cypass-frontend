@@ -1,10 +1,10 @@
 <template>
-  <div class="relative min-h-[80vh] flex flex-col items-center justify-center px-4">
+  <div class="relative min-h-[80vh] flex flex-col items-center justify-center px-4 pb-8">
     <div class="max-w-7xl mx-auto px-6">
       <!-- Header -->
       <div class="max-w-3xl mb-12 md:mb-20">
         <h1 class="text-4xl md:text-6xl font-black text-BtW tracking-tighter mb-6">
-          Vigi<span class="text-primary">Tech</span>
+          {{ getDynamicGreeting() }}, <span class="text-primary">CYPASS</span>
         </h1>
         <p class="text-lg md:text-xl text-hsa leading-relaxed">
           Veille communautaire sur la cybersécurité. Consultez les derniers incidents signalés et apprenez à vous
@@ -19,6 +19,20 @@
             <h3 class="text-[10px] font-black text-hsa uppercase tracking-[0.2em]">Filtrer les incidents</h3>
 
             <div class="space-y-4">
+              <!-- Recherche -->
+              <div class="space-y-1.5">
+                <label class="text-[9px] font-black text-hsa uppercase tracking-widest px-1">Recherche</label>
+                <div class="relative group">
+                  <span
+                    class="absolute left-3 top-1/2 -translate-y-1/2 text-hsa group-focus-within:text-primary transition-colors">
+                    <IconSearch class="w-4 h-4" />
+                  </span>
+                  <input v-model="filters.search" @input="fetchData" type="text" placeholder="Mot-clé..."
+                    class="w-full h-10 pl-9 pr-4 rounded-xl bg-WtB border border-ash/50 font-bold text-xs outline-none focus:ring-2 focus:ring-primary transition-all placeholder-hsa/50" />
+                </div>
+              </div>
+
+              <!-- Type -->
               <div class="space-y-1.5">
                 <label class="text-[9px] font-black text-hsa uppercase tracking-widest px-1">Type de menace</label>
                 <div class="relative group">
@@ -35,6 +49,7 @@
                 </div>
               </div>
 
+              <!-- Gravité -->
               <div class="space-y-1.5">
                 <label class="text-[9px] font-black text-hsa uppercase tracking-widest px-1">Gravité</label>
                 <div class="relative group">
@@ -49,12 +64,28 @@
                     class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-hsa pointer-events-none group-focus-within:text-primary transition-colors" />
                 </div>
               </div>
+
+              <!-- Date range -->
+              <div class="space-y-4 pt-2 border-t border-ash">
+                <div class="space-y-1.5">
+                  <label class="text-[9px] font-black text-hsa uppercase tracking-widest px-1">Depuis le</label>
+                  <input v-model="filters.date_start" @change="fetchData" type="datetime-local"
+                    class="w-full h-10 px-3 rounded-xl bg-WtB border border-ash/50 text-xs font-bold outline-none focus:ring-2 focus:ring-primary transition-all" />
+                </div>
+                <div class="space-y-1.5">
+                  <label class="text-[9px] font-black text-hsa uppercase tracking-widest px-1">Jusqu'au</label>
+                  <input v-model="filters.date_end" @change="fetchData" type="datetime-local"
+                    class="w-full h-10 px-3 rounded-xl bg-WtB border border-ash/50 text-xs font-bold outline-none focus:ring-2 focus:ring-primary transition-all" />
+                </div>
+              </div>
             </div>
 
-            <UiBaseButton variant="ghost" block size="sm" class="!text-[9px] !font-black !uppercase"
-              @click="resetFilters">
-              Réinitialiser
-            </UiBaseButton>
+            <div class="flex gap-2">
+              <UiBaseButton variant="ghost" block size="sm" class="!text-[9px] !font-black !uppercase"
+                @click="resetFilters" :disabled="!hasActiveFilters">
+                Réinitialiser
+              </UiBaseButton>
+            </div>
           </div>
 
           <!-- Info Block Based on Auth -->
@@ -62,7 +93,8 @@
             <div class="bg-primary/20 p-6 rounded-[1.8rem] space-y-4">
               <IconAlertTriangle class="w-8 h-8 text-WtB" />
               <template v-if="authStore.user">
-                <h3 class="text-lg text-WtB font-black leading-tight">Bonjour {{ authStore.user.first_name }}</h3>
+                <h3 class="text-lg text-WtB font-black leading-tight">{{ getDynamicGreeting() }} {{
+                  authStore.user.first_name }}</h3>
                 <p class="text-[11px] text-ashAct font-bold leading-relaxed">
                   Consultez et suivez vos propres signalements directement dans votre espace personnel.
                 </p>
@@ -91,8 +123,8 @@
 
         <!-- Column 2: Feed & Pagination -->
         <div class="lg:col-span-6 space-y-6 order-1 lg:order-2">
-          <div v-if="store.loading && !store.publicIncidents.length" class="space-y-6">
-            <div v-for="i in 3" :key="i" class="h-32 bg-ash/5 rounded-[2rem] animate-pulse border border-ash/30"></div>
+          <div v-if="store.loading && !store.publicIncidents.length" class="space-y-4">
+            <UiAppSkeleton v-for="i in 5" :key="i" height="120px" radius="1.5rem" />
           </div>
 
           <template v-else-if="store.publicIncidents.length">
@@ -162,12 +194,12 @@
             </div>
 
             <!-- Small AI Report -->
-            <div class="glass-panel p-6 rounded-[2rem] border border-ashAct space-y-4 bg-ash/5">
+            <div class="glass-panel p-6 rounded-[2rem] border border-ashAct space-y-4 bg-hsa">
               <div class="flex items-center gap-2">
                 <IconSparkles class="w-4 h-4 text-primary" />
-                <span class="text-[10px] font-black uppercase tracking-widest text-BtW">Analyse VigiGPT</span>
+                <span class="text-[10px] font-black uppercase tracking-widest text-WtB">Analyse VIGIAI</span>
               </div>
-              <p class="text-[11px] font-medium text-hsa leading-relaxed italic">
+              <p class="text-[11px] font-medium text-ash leading-relaxed italic">
                 "Cette semaine, nous observons une recrudescence des campagnes de <strong>{{ topThreatType }}</strong>.
                 La vigilance est de mise sur les <strong>{{ topTarget }}</strong>."
               </p>
@@ -181,12 +213,13 @@
 
 <script setup lang="ts">
 import {
-  IconShieldCheck, IconAlertTriangle, IconChevronLeft, IconChevronRight,
-  IconAlertCircle, IconActivity, IconLock, IconTrendingUp, IconTrendingDown, IconSparkles
+  IconChevronDown, IconShieldCheck, IconAlertTriangle, IconChevronLeft, IconChevronRight,
+  IconAlertCircle, IconActivity, IconLock, IconTrendingUp, IconTrendingDown, IconSparkles, IconSearch
 } from '@tabler/icons-vue'
 import { useVigitechStore } from '~/stores/vigitech'
 import { useAuthStore } from '~/stores/auth'
 import { decodeHtmlEntities } from '~/utils/format'
+import { getDynamicGreeting } from '~/utils/greeting'
 
 definePageMeta({
   layout: 'guest'
@@ -196,8 +229,11 @@ const store = useVigitechStore()
 const authStore = useAuthStore()
 
 const filters = ref({
+  search: '',
   type: '',
-  level: ''
+  level: '',
+  date_start: '',
+  date_end: ''
 })
 
 const stats = computed(() => {
@@ -260,13 +296,14 @@ const topThreatType = computed(() => {
 const topTarget = computed(() => {
   if (!store.publicIncidents.length) return 'réseaux sociaux au Bénin'
   const locations = store.publicIncidents.map(i => i.location).filter(l => !!l)
+  if (!locations.length) return 'réseaux sociaux au Bénin'
   const locationCounts: Record<string, number> = {}
   locations.forEach(l => {
     locationCounts[l] = (locationCounts[l] || 0) + 1
   })
   const sorted = Object.entries(locationCounts).sort((a, b) => b[1] - a[1])
-  const top = sorted[0]?.[0]
-  return top ? `secteur de ${decodeHtmlEntities(top)}` : 'réseaux sociaux au Bénin'
+  const topVal = sorted[0]?.[0]
+  return topVal ? `secteur de ${decodeHtmlEntities(topVal)}` : 'réseaux sociaux au Bénin'
 })
 
 const fetchData = () => {
@@ -276,6 +313,9 @@ const fetchData = () => {
   }
   if (filters.value.type) params.type = filters.value.type
   if (filters.value.level) params.level = filters.value.level
+  if (filters.value.search) params.search = filters.value.search
+  if (filters.value.date_start) params.date_start = filters.value.date_start
+  if (filters.value.date_end) params.date_end = filters.value.date_end
   store.fetchPublicIncidents(params)
 }
 
@@ -288,8 +328,13 @@ const changePage = (delta: number) => {
   }
 }
 
+const hasActiveFilters = computed(() => {
+  return filters.value.search !== '' || filters.value.type !== '' ||
+    filters.value.level !== '' || filters.value.date_start !== '' || filters.value.date_end !== ''
+})
+
 const resetFilters = () => {
-  filters.value = { type: '', level: '' }
+  filters.value = { search: '', type: '', level: '', date_start: '', date_end: '' }
   store.publicPagination.offset = 0
   fetchData()
 }

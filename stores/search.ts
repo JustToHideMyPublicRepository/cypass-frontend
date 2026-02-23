@@ -1,8 +1,7 @@
 import { defineStore } from 'pinia'
 import { shortcutsData } from '@/data/shortcuts'
-import { useDocumentsStore } from './documents'
-import { useProfilStore } from './profil'
 import { useAuthStore } from './auth'
+import { useVigitechStore } from './vigitech'
 
 interface SearchResult {
   id: string
@@ -10,8 +9,9 @@ interface SearchResult {
   description?: string
   path?: string
   icon?: string
-  type: 'navigation' | 'document' | 'action'
+  type: 'shortcuts' | 'navigation' | 'docsentry' | 'vigitech' | 'incident' | 'log'
   category?: string
+  isShortcut?: boolean
 }
 
 export const useSearchStore = defineStore('search', {
@@ -54,16 +54,23 @@ export const useSearchStore = defineStore('search', {
         const docStore = useDocumentsStore()
         const profStore = useProfilStore()
         const isAuthenticated = !!authStore.user
+        const vigitechStore = useVigitechStore()
 
-        // Proactive fetching (ONLY if authenticated)
+        // Proactive fetching (ONLY if authenticated or for public data if empty)
+        const fetchPromises = []
         if (isAuthenticated) {
-          const fetchPromises = []
           if (docStore.documents.length === 0) fetchPromises.push(docStore.fetchDocuments(100))
           if (profStore.logs.length === 0) fetchPromises.push(profStore.fetchLogs({ limit: 100 }))
+          if (vigitechStore.userIncidents.length === 0) fetchPromises.push(vigitechStore.fetchUserIncidents())
+        }
 
-          if (fetchPromises.length > 0) {
-            await Promise.all(fetchPromises)
-          }
+        // Always try to have public incidents for search
+        if (vigitechStore.publicIncidents.length === 0) {
+          fetchPromises.push(vigitechStore.fetchPublicIncidents())
+        }
+
+        if (fetchPromises.length > 0) {
+          await Promise.all(fetchPromises)
         }
 
         const searchResults: SearchResult[] = []
@@ -78,13 +85,17 @@ export const useSearchStore = defineStore('search', {
           // Filter out navigation items that require auth if user is not logged in 
           // (though most are probably public or intended to be found)
           if (label.includes(q) || path.includes(q) || group.includes(q)) {
+            const hasPath = !!entry.path
+            const isShortcut = !hasPath && !!entry.keys
+
             searchResults.push({
               id: `nav-${id}`,
               title: entry.label,
               description: entry.group || 'Navigation',
               path: entry.path,
-              type: 'navigation',
-              category: 'Page'
+              type: hasPath ? 'navigation' : 'shortcuts',
+              category: hasPath ? 'Navigation' : 'Raccourcis',
+              isShortcut
             })
           }
         })
@@ -99,14 +110,50 @@ export const useSearchStore = defineStore('search', {
                 title: doc.filename,
                 description: `Document ${(doc.file_type || '').toUpperCase()}`,
                 path: `/dashboard/docsentry/${doc.id}`,
-                type: 'document',
+                type: 'docsentry',
                 category: 'DocSentry'
               })
             }
           })
         }
 
-        // 3. Search in Logs (ONLY IF AUTHENTICATED)
+        // 3. Search in VigiTech (DASHBOARD - If AUTH)
+        if (isAuthenticated) {
+          vigitechStore.userIncidents.forEach(inc => {
+            const title = (inc.title || '').toLowerCase()
+            const desc = (inc.description || '').toLowerCase()
+            if (title.includes(q) || desc.includes(q)) {
+              if (!searchResults.find(r => r.id === `vigi-pub-${inc.id}`)) {
+                searchResults.push({
+                  id: `vigi-dash-${inc.id}`,
+                  title: inc.title,
+                  description: `Incident #${inc.id.toString().slice(-6)} - ${inc.created_at}`,
+                  path: `/dashboard/vigitech/${inc.id}`,
+                  type: 'vigitech',
+                  category: 'Vigitech'
+                })
+              }
+            }
+          })
+        }
+
+        // 4. Search in VigiTech (PUBLIC)
+        vigitechStore.publicIncidents.forEach(inc => {
+          const title = (inc.title || '').toLowerCase()
+          const desc = (inc.description || '').toLowerCase()
+          if (title.includes(q) || desc.includes(q)) {
+            searchResults.push({
+              id: `vigi-pub-${inc.id}`,
+              title: inc.title,
+              description: `Alerte VigiTech - ${inc.location || 'Sans localisation'}`,
+              path: `/vigitech/${inc.id}`,
+              type: 'incident',
+              category: 'Incident'
+            })
+          }
+        })
+
+        // 5. Search in Logs (ONLY IF AUTHENTICATED)
         if (isAuthenticated) {
           profStore.logs.forEach((log, index) => {
             const action = (log.action || '').toLowerCase()
@@ -125,7 +172,7 @@ export const useSearchStore = defineStore('search', {
                 title: log.action_label || log.action || 'Activité',
                 description: typeof log.details === 'string' ? log.details : (log.action_label || log.timestamp),
                 path: '/dashboard/logs',
-                type: 'action',
+                type: 'log',
                 category: 'Journal d\'activité'
               })
             }

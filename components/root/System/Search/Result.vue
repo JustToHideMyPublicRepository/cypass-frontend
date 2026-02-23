@@ -26,15 +26,13 @@
     <!-- Liste des résultats -->
     <div v-else class="space-y-4">
       <div v-for="result in results" :key="result.id"
-        class="bg-WtB border border-ash rounded-2xl p-4 hover:shadow-lg transition-all cursor-pointer group"
-        @click="$emit('navigate', result)">
+        class="bg-WtB border border-ash rounded-2xl p-4 transition-all group" :class="[
+          result.isShortcut ? 'cursor-help opacity-80' : 'hover:shadow-lg cursor-pointer'
+        ]" @click="!result.isShortcut && $emit('navigate', result)">
         <div class="flex items-center gap-4">
-          <div class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0" :class="[
-            result.type === 'navigation' ? 'bg-blue-500/10 text-blue-500' :
-              result.type === 'document' ? 'bg-orange-500/10 text-orange-500' :
-                'bg-purple-500/10 text-purple-500'
-          ]">
-            <component :is="getIcon(result.type)" class="w-6 h-6" />
+          <div class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0"
+            :class="getSearchIconStyle(result.type)">
+            <component :is="getSearchIcon(result.type)" class="w-6 h-6" />
           </div>
           <div class="flex-1 min-w-0">
             <div class="flex items-center gap-2 mb-0.5">
@@ -42,11 +40,14 @@
               <span class="text-hsa text-[10px]">•</span>
               <span class="text-[10px] text-hsa">{{ result.type.toUpperCase() }}</span>
             </div>
-            <h4 class="text-base font-bold text-BtW truncate group-hover:text-primary transition-colors">{{
-              result.title }}</h4>
+            <h4 class="text-base font-bold text-BtW truncate transition-colors"
+              :class="{ 'group-hover:text-primary': !result.isShortcut }">{{
+                result.title }}</h4>
             <p class="text-sm text-hsa truncate line-clamp-1">{{ result.description }}</p>
           </div>
-          <IconChevronRight class="w-5 h-5 text-hsa group-hover:translate-x-1 transition-transform" />
+          <IconChevronRight v-if="!result.isShortcut"
+            class="w-5 h-5 text-hsa group-hover:translate-x-1 transition-transform" />
+          <IconKeyboard v-else class="w-5 h-5 text-hsa/40" />
         </div>
       </div>
     </div>
@@ -54,7 +55,8 @@
 </template>
 
 <script setup lang="ts">
-import { IconSearch, IconFileDescription, IconLayoutDashboard, IconSettings, IconChevronRight, IconKeyboard } from '@tabler/icons-vue'
+import { IconSearch, IconChevronRight, IconKeyboard } from '@tabler/icons-vue'
+import { getSearchIcon, getSearchIconStyle } from '~/utils/search'
 
 defineProps<{
   results: any[]
@@ -64,12 +66,5 @@ defineProps<{
 
 defineEmits(['navigate', 'modify', 'reset'])
 
-const getIcon = (type: string) => {
-  switch (type) {
-    case 'navigation': return IconLayoutDashboard
-    case 'document': return IconFileDescription
-    case 'action': return IconSettings
-    default: return IconSearch
-  }
-}
+
 </script>

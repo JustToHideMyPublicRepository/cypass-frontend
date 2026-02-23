@@ -4,11 +4,11 @@
       <div class="flex items-center gap-2 mb-1">
         <div class="w-2 h-2 rounded-full bg-success animate-pulse"></div>
         <span class="text-[10px] font-bold text-success uppercase tracking-widest">Connecté en tant que {{ role
-          }}</span>
+        }}</span>
       </div>
       <h1 class="text-3xl md:text-4xl font-black text-BtW tracking-tight">
-        Bienvenue, <span class="bg-gradient-to-r from-primary to-indigo-500 bg-clip-text text-transparent">{{ userName
-          }}</span>
+        {{ getDynamicGreeting() }}, <span
+          class="bg-gradient-to-r from-primary to-indigo-500 bg-clip-text text-transparent">{{ userName }}</span>
       </h1>
       <p class="text-hsa text-sm font-medium">CYPASS veille sur l'intégrité de vos actifs numériques.</p>
     </div>
@@ -29,6 +29,7 @@
 import { computed } from 'vue'
 import { IconShieldCheck } from '@tabler/icons-vue'
 import { useAuthStore } from '~/stores/auth'
+import { getDynamicGreeting } from '~/utils/greeting'
 
 const props = defineProps<{
   currentTime: string

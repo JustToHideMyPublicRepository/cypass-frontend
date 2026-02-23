@@ -1,125 +1,208 @@
 <template>
-  <div class="relative min-h-[80vh] flex flex-col items-center justify-center px-4">
-    <div class="max-w-5xl mx-auto px-6">
+  <div class="relative min-h-[85vh] py-12 px-4">
+    <div class="max-w-6xl mx-auto space-y-8">
       <UiBreadcrumbs :items="[
         { label: 'Accueil', path: '/' },
         { label: 'VigiTech', path: '/vigitech' },
         { label: decodeHtmlEntities(incident?.title || 'Détail de l\'incident') }
-      ]" class="mb-8" />
+      ]" />
 
-      <div v-if="store.loading" class="py-32 flex justify-center">
-        <UiBaseLoader />
-      </div>
-
-      <div v-else-if="store.error" class="py-32 text-center space-y-4">
-        <IconAlertCircle class="w-12 h-12 text-danger mx-auto" />
-        <p class="text-BtW font-bold">{{ store.error }}</p>
-        <UiBaseButton variant="ghost" @click="fetchData">Réessayer</UiBaseButton>
-      </div>
-
-      <div v-else-if="incident" class="space-y-8 animate-fade-in text-left">
-        <!-- Main Panel -->
-        <div class="glass-panel p-8 md:p-12 rounded-[3.5rem] border border-ashAct space-y-10 shadow-2xl">
-          <div class="space-y-6">
-            <div class="flex flex-wrap items-center gap-3">
-              <UiStatusBadge
-                :status="incident.threat_level === 'critical' ? 'High' : incident.threat_level === 'medium' ? 'Medium' : 'Low'" />
-              <div class="px-3 py-1 rounded-full bg-ash/10 text-[10px] uppercase font-black tracking-widest text-hsa">
-                {{ incident.type }}
+      <!-- Skeleton Loading -->
+      <div v-if="store.loading" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div class="lg:col-span-8 space-y-8">
+          <div class="glass-panel p-8 md:p-12 rounded-[3.5rem] border border-ashAct space-y-8 shadow-xl bg-ash/5">
+            <div class="space-y-6">
+              <div class="flex items-center gap-3">
+                <UiAppSkeleton width="80px" height="24px" radius="99px" />
+                <UiAppSkeleton width="120px" height="24px" radius="99px" />
               </div>
-              <div v-if="incident.is_anonymous"
-                class="px-3 py-1 rounded-full bg-BtW text-WtB text-[10px] uppercase font-black tracking-widest">
-                Anonyme
+              <UiAppSkeleton width="80%" height="48px" radius="1rem" />
+              <div class="flex gap-6">
+                <UiAppSkeleton width="150px" height="20px" />
+                <UiAppSkeleton width="150px" height="20px" />
               </div>
             </div>
-
-            <h1 class="text-3xl md:text-5xl font-black text-BtW leading-tight tracking-tighter">
-              {{ decodeHtmlEntities(incident.title) }}
-            </h1>
-
-            <div class="flex flex-wrap items-center gap-8 text-sm md:text-base font-bold text-hsa">
-              <div v-if="incident.location" class="flex items-center gap-2.5">
-                <IconMapPin class="w-5 h-5 text-primary" /> {{ decodeHtmlEntities(incident.location) }}
-              </div>
-              <div class="flex items-center gap-2.5">
-                <IconCalendar class="w-5 h-5 text-primary" /> {{ formatDate(incident.created_at) }}
-              </div>
-              <div class="flex items-center gap-2.5">
-                <IconUsers class="w-5 h-5 text-primary" /> {{ (incident.is_anonymous || incident.is_anonymous === 1) ?
-                  'Utilisateur anonyme' : (incident.reporter_organization || 'Pas d\'organisation') }}
-              </div>
-            </div>
-          </div>
-
-          <div class="h-px bg-ashAct/50"></div>
-
-          <div class="space-y-6">
-            <h3 class="text-xs font-black text-hsa uppercase tracking-[0.3em]">Analyse de l'incident</h3>
-            <p class="text-lg md:text-xl text-BtW leading-relaxed font-bold whitespace-pre-wrap">
-              {{ decodeHtmlEntities(incident.description) }}
-            </p>
-          </div>
-
-          <!-- Evidence Preview if public and unblocked -->
-          <div v-if="incident.evidence_file" class="pt-6 space-y-6">
-            <h3 class="text-xs font-black text-hsa uppercase tracking-[0.3em]">Preuve de l'incident</h3>
-
-            <div v-if="isImage(incident.evidence_file)" @click="openViewer(getFullUrl(incident.evidence_file))"
-              class="group relative rounded-3xl overflow-hidden border border-ash bg-ash/5 cursor-zoom-in aspect-video md:aspect-auto max-h-[600px] transition-transform hover:scale-[1.01] active:scale-[0.99]">
-              <img :src="getFullUrl(incident.evidence_file)" class="w-full h-full object-contain mx-auto"
-                alt="Evidence" />
-              <div
-                class="absolute inset-0 bg-BtW/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                <div
-                  class="p-3 bg-white/90 backdrop-blur rounded-2xl shadow-xl text-primary transform translate-y-4 group-hover:translate-y-0 transition-transform">
-                  <IconZoomIn class="w-6 h-6" />
-                </div>
-              </div>
-            </div>
-
-            <div v-else-if="isPdf(incident.evidence_file)"
-              class="flex items-center justify-between p-6 rounded-[2rem] bg-ash/5 border border-ashAct">
-              <div class="flex items-center gap-4">
-                <div class="w-14 h-14 rounded-2xl bg-danger/10 flex items-center justify-center text-danger">
-                  <IconFileTypePdf class="w-8 h-8" />
-                </div>
-                <div>
-                  <p class="text-sm font-black text-BtW tracking-tight">Document PDF</p>
-                  <p class="text-[10px] font-bold text-hsa uppercase tracking-widest">Preuve de l'incident</p>
-                </div>
-              </div>
-              <a :href="getFullUrl(incident.evidence_file)" target="_blank">
-                <UiBaseButton variant="secondary" size="sm"
-                  class="!rounded-xl text-[10px] font-black uppercase tracking-widest">
-                  <IconExternalLink class="w-4 h-4 mr-2" /> Ouvrir
-                </UiBaseButton>
-              </a>
+            <div class="h-px bg-ashAct/50"></div>
+            <div class="space-y-4">
+              <UiAppSkeleton width="100px" height="12px" />
+              <UiAppSkeleton :count="4" height="16px" />
             </div>
           </div>
         </div>
-
-        <!-- Protection Advice -->
-        <UiBaseCard class="bg-primary/5 border-primary/20 !rounded-[3rem] p-10 space-y-6">
-          <h3 class="text-xl font-black text-primary flex items-center gap-3">
-            <IconShieldCheck class="w-7 h-7" /> Comment se protéger ?
-          </h3>
-          <p class="text-BtW font-bold leading-relaxed">
-            Pour ce type de menace ({{ incident.type }}), nous recommandons une vigilance accrue sur vos communications
-            numériques et l'activation systématique de l'authentification à deux facteurs.
-          </p>
-          <div class="pt-4">
-            <NuxtLink to="/verify">
-              <UiBaseButton variant="primary">Authentifier un document suspect</UiBaseButton>
-            </NuxtLink>
-          </div>
-        </UiBaseCard>
+        <div class="lg:col-span-4 space-y-6">
+          <UiAppSkeleton height="200px" radius="2.5rem" />
+          <UiAppSkeleton height="150px" radius="2.5rem" />
+        </div>
       </div>
 
-      <div v-else class="text-center py-32">
-        <IconAlertCircle class="w-16 h-16 text-danger mx-auto mb-6 opacity-20" />
-        <h3 class="text-2xl font-black text-BtW">Incident introuvable</h3>
-        <p class="text-hsa font-bold mt-2">Ce signalement n'existe pas ou a été retiré pour des raisons de sécurité.</p>
-        <NuxtLink to="/vigitech" class="mt-8 inline-block">
+      <div v-else-if="store.error" class="py-24 text-center space-y-8 animate-fade-in max-w-lg mx-auto">
+        <div class="relative inline-block">
+          <div class="absolute inset-0 bg-danger/20 blur-3xl rounded-full"></div>
+          <IconAlertCircle class="w-20 h-20 text-danger relative z-10 mx-auto" />
+        </div>
+        <div class="space-y-4">
+          <h2 class="text-3xl font-black text-BtW tracking-tighter">Oups ! Une erreur est survenue</h2>
+          <p class="text-hsa font-medium leading-relaxed">
+            {{ store.error.includes('404') ? 'Cet incident n\'existe plus ou n\'est pas accessible publiquement.' :
+              'Nous rencontrons des difficultés techniques pour récupérer les détails de cet incident.' }}
+          </p>
+        </div>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+          <UiBaseButton variant="primary" @click="fetchData" class="w-full sm:w-auto">
+            Réessayer
+          </UiBaseButton>
+          <NuxtLink to="/vigitech" class="w-full sm:w-auto">
+            <UiBaseButton variant="ghost" class="w-full">
+              Retourner à la liste
+            </UiBaseButton>
+          </NuxtLink>
+        </div>
+      </div>
+
+      <div v-else-if="incident" class="animate-fade-in">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <!-- Left Column: Main Content -->
+          <div class="lg:col-span-8 space-y-8">
+            <div class="glass-panel p-8 md:p-12 rounded-[3.5rem] border border-ashAct space-y-8 shadow-xl">
+              <div class="space-y-6">
+                <div class="flex flex-wrap items-center gap-3">
+                  <UiStatusBadge
+                    :status="incident.threat_level === 'critical' ? 'High' : incident.threat_level === 'medium' ? 'Medium' : 'Low'">
+                    {{ mapThreatLevel(incident.threat_level) }}
+                  </UiStatusBadge>
+                  <div
+                    class="px-3 py-1 rounded-full bg-ash/10 text-[10px] uppercase font-black tracking-widest text-hsa">
+                    {{ mapIncidentType(incident.type) }}
+                  </div>
+                  <div v-if="incident.is_anonymous"
+                    class="px-3 py-1 rounded-full bg-BtW text-WtB text-[10px] uppercase font-black tracking-widest">
+                    Anonyme
+                  </div>
+                </div>
+
+                <h1 class="text-3xl md:text-5xl font-black text-BtW leading-tight tracking-tighter">
+                  {{ decodeHtmlEntities(incident.title) }}
+                </h1>
+
+                <div class="flex flex-wrap items-center gap-8 text-sm md:text-base text-hsa">
+                  <div v-if="incident.location" class="flex items-center gap-2.5">
+                    <IconMapPin class="w-5 h-5 text-primary" /> {{ decodeHtmlEntities(incident.location) }}
+                  </div>
+                  <div class="flex items-center gap-2.5">
+                    <IconCalendar class="w-5 h-5 text-primary" /> {{ formatDate(incident.created_at) }}
+                  </div>
+                  <div class="flex items-center gap-2.5">
+                    <IconUsers class="w-5 h-5 text-primary" />
+                    {{ (incident.is_anonymous || incident.is_anonymous === 1) ? 'Utilisateur anonyme' :
+                      (incident.reporter_organization || 'Pas d\'organisation') }}
+                  </div>
+                </div>
+              </div>
+
+              <div class="h-px bg-ashAct/50"></div>
+
+              <div class="space-y-6">
+                <h3 class="text-xs font-black text-hsa uppercase tracking-[0.3em]">Analyse de l'incident</h3>
+                <p class="text-lg md:text-xl text-BtW leading-relaxed whitespace-pre-wrap">
+                  {{ decodeHtmlEntities(incident.description) }}
+                </p>
+              </div>
+
+              <!-- Evidence Section with Toggle -->
+              <div v-if="incident.evidence_file" class="pt-8 space-y-6">
+                <button @click="showEvidence = !showEvidence"
+                  class="flex items-center gap-2 text-xs font-black text-hsa uppercase tracking-[0.3em] hover:text-primary transition-colors">
+                  <component :is="showEvidence ? IconChevronUp : IconChevronDown" class="w-4 h-4" />
+                  Preuve de l'incident
+                </button>
+
+                <div v-if="showEvidence" class="animate-fade-in space-y-6">
+                  <div v-if="isImage(incident.evidence_file)" @click="openViewer(getFullUrl(incident.evidence_file))"
+                    class="group relative rounded-3xl overflow-hidden border border-ash bg-ash/5 cursor-zoom-in aspect-video md:aspect-auto max-h-[600px] transition-transform hover:scale-[1.01] active:scale-[0.99]">
+                    <img :src="getFullUrl(incident.evidence_file)" class="w-full h-full object-contain mx-auto"
+                      alt="Evidence" />
+                    <div
+                      class="absolute inset-0 bg-BtW/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <div
+                        class="p-3 bg-white/90 backdrop-blur rounded-2xl shadow-xl text-primary transform translate-y-4 group-hover:translate-y-0 transition-transform">
+                        <IconZoomIn class="w-6 h-6" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- PDF Viewer Frame -->
+                  <div v-else-if="isPdf(incident.evidence_file)" class="space-y-4">
+                    <div
+                      class="w-full h-[600px] rounded-[2rem] overflow-hidden border border-ash shadow-inner bg-ash/5">
+                      <iframe :src="getFullUrl(incident.evidence_file)" class="w-full h-full border-none"></iframe>
+                    </div>
+                    <div class="flex items-center justify-between p-6 rounded-2xl bg-ash/5 border border-ashAct">
+                      <div class="flex items-center gap-4">
+                        <IconFileTypePdf class="w-8 h-8 text-danger" />
+                        <p class="text-sm font-black text-BtW tracking-tight">Vue PDF intégrée</p>
+                      </div>
+                      <a :href="getFullUrl(incident.evidence_file)" target="_blank">
+                        <UiBaseButton variant="secondary" size="sm"
+                          class="!rounded-xl text-[10px] font-black uppercase tracking-widest">
+                          <IconExternalLink class="w-4 h-4 mr-2" /> Plein écran
+                        </UiBaseButton>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Actions & Advice -->
+          <div class="lg:col-span-4 space-y-6">
+            <!-- Action Card -->
+            <UiBaseCard class="!rounded-[2.5rem] p-8 space-y-6">
+              <h3 class="text-xs font-black text-hsa uppercase tracking-[0.3em] pb-4">Actions</h3>
+              <div class="grid grid-cols-1 gap-4">
+                <button @click="shareIncident"
+                  class="w-full flex items-center justify-between p-4 rounded-2xl bg-ash/5 hover:bg-ash/10 border border-ashAct transition-all group">
+                  <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                      <IconShare class="w-5 h-5" />
+                    </div>
+                    <span class="text-sm font-black text-BtW">Partager l'alerte</span>
+                  </div>
+                  <IconArrowUpRight class="w-4 h-4 text-hsa group-hover:text-primary transition-colors" />
+                </button>
+                <button @click="downloadEvidence"
+                  class="w-full flex items-center justify-between p-4 rounded-2xl bg-ash/5 hover:bg-ash/10 border border-ashAct transition-all group">
+                  <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-success/10 flex items-center justify-center text-success">
+                      <IconDownload class="w-5 h-5" />
+                    </div>
+                    <span class="text-sm font-black text-BtW">Télécharger la preuve</span>
+                  </div>
+                  <IconArrowUpRight class="w-4 h-4 text-hsa group-hover:text-success transition-colors" />
+                </button>
+              </div>
+            </UiBaseCard>
+
+            <!-- Personalized Advice Card -->
+            <UiBaseCard class="bg-primary/5 border-primary/20 !rounded-[2.5rem] p-8 space-y-6">
+              <h3 class="text-lg font-black text-primary flex items-center gap-3">
+                <IconShieldCheck class="w-6 h-6" /> Conseils de sécurité
+              </h3>
+              <p class="text-sm text-BtW leading-relaxed">
+                {{ getAdvice(incident.type, incident.threat_level) }}
+              </p>
+            </UiBaseCard>
+          </div>
+        </div>
+      </div>
+
+      <div v-else-if="!store.loading && !incident" class="text-center py-32 space-y-6 animate-fade-in max-w-lg mx-auto">
+        <IconAlertCircle class="w-16 h-16 text-danger mx-auto opacity-20" />
+        <div class="space-y-2">
+          <h3 class="text-2xl font-black text-BtW">Incident introuvable</h3>
+          <p class="text-hsa font-bold">Ce signalement n'existe pas ou a été retiré pour des raisons de sécurité.</p>
+        </div>
+        <NuxtLink to="/vigitech" class="block">
           <UiBaseButton variant="ghost">Retourner à la liste</UiBaseButton>
         </NuxtLink>
       </div>
@@ -132,13 +215,15 @@
 
 <script setup lang="ts">
 import {
-  IconArrowLeft, IconMapPin, IconCalendar, IconUsers,
-  IconShieldCheck, IconAlertCircle, IconZoomIn, IconFileTypePdf, IconExternalLink
+  IconMapPin, IconCalendar, IconUsers, IconArrowUpRight, IconDownload, IconShare, IconShieldCheck, IconAlertCircle, IconZoomIn, IconFileTypePdf, IconExternalLink, IconChevronDown, IconChevronUp
 } from '@tabler/icons-vue'
 import { useVigitechStore } from '~/stores/vigitech'
+import { useToastStore } from '~/stores/toast'
+import { useVigitechAdvice } from '~/composables/useVigitechAdvice'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { decodeHtmlEntities } from '~/utils/format'
+import { mapIncidentType, mapThreatLevel } from '~/utils/vigitech'
 
 definePageMeta({
   layout: 'guest'
@@ -146,7 +231,10 @@ definePageMeta({
 
 const route = useRoute()
 const store = useVigitechStore()
+const toast = useToastStore()
+const { getAdvice } = useVigitechAdvice()
 const incident = computed(() => store.currentIncident)
+const showEvidence = ref(false)
 
 const formatDate = (dateStr: string) => {
   if (!dateStr) return '-'
@@ -155,7 +243,6 @@ const formatDate = (dateStr: string) => {
 
 const getFullUrl = (path: string) => {
   if (!path) return ''
-  // Use the proxy route
   return `/evidence/${path}`
 }
 
@@ -170,6 +257,29 @@ const isPdf = (path: string) => {
   return path.toLowerCase().endsWith('.pdf')
 }
 
+const shareIncident = async () => {
+  if (!incident.value) return
+  const fullUrl = window.location.href
+  const shareData = {
+    title: `Cyber-Alerte CYPASS: ${incident.value.title}`,
+    text: `${incident.value.description.substring(0, 100)}...`,
+    url: fullUrl
+  }
+
+  try {
+    if (navigator.share) {
+      await navigator.share(shareData)
+    } else {
+      await navigator.clipboard.writeText(fullUrl)
+      toast.showToast('success', 'Lien copié', 'Le lien de l\'incident a été copié.')
+    }
+  } catch (err) {
+    if (err instanceof Error && err.name !== 'AbortError') {
+      console.warn('Share failed', err)
+    }
+  }
+}
+
 const viewer = ref({
   show: false,
   url: ''
@@ -180,6 +290,16 @@ const openViewer = (url: string) => {
   viewer.value.show = true
 }
 
+const downloadEvidence = () => {
+  if (!incident.value?.evidence_file) return
+  const link = document.createElement('a')
+  link.href = getFullUrl(incident.value.evidence_file)
+  link.download = incident.value.evidence_file
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+}
+
 const fetchData = () => {
   const id = route.params.id as string
   store.fetchPublicIncidentById(id)
@@ -188,6 +308,6 @@ const fetchData = () => {
 onMounted(fetchData)
 
 useHead({
-  title: computed(() => incident.value ? `Incident: ${incident.value.title}` : 'Détail de l\'incident')
+  title: computed(() => incident.value ? `${incident.value.title} - Incident` : 'Détail de l\'incident')
 })
 </script>

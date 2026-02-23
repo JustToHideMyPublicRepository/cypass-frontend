@@ -65,22 +65,24 @@
                     class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 text-left"
                     :class="[
                       selectedIndex === getAbsoluteIndex(gIndex, rIndex)
-                        ? 'bg-primary/10 ring-1 ring-primary/20'
-                        : 'hover:bg-ash'
+                        ? (result.isShortcut ? 'bg-ash/50 ring-1 ring-ashAct' : 'bg-primary/10 ring-1 ring-primary/20')
+                        : 'hover:bg-ash',
+                      result.isShortcut ? 'cursor-help' : 'cursor-pointer'
                     ]" @mouseenter="selectedIndex = getAbsoluteIndex(gIndex, rIndex)">
-                    <div class="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" :class="[
-                      result.type === 'navigation' ? 'bg-blue-500/10 text-blue-500' :
-                        result.type === 'document' ? 'bg-orange-500/10 text-orange-500' :
-                          'bg-purple-500/10 text-purple-500'
-                    ]">
-                      <component :is="getIcon(result.type)" class="w-4.5 h-4.5" />
+                    <div class="w-9 h-9 rounded-lg flex items-center justify-center shrink-0"
+                      :class="getSearchIconStyle(result.type)">
+                      <component :is="getSearchIcon(result.type)" class="w-4.5 h-4.5" />
                     </div>
                     <div class="flex-1 min-w-0">
                       <div class="text-sm font-bold text-BtW truncate">{{ result.title }}</div>
                       <div class="text-xs text-hsa truncate">{{ result.description }}</div>
                     </div>
-                    <div v-if="selectedIndex === getAbsoluteIndex(gIndex, rIndex)" class="text-primary">
+                    <div v-if="selectedIndex === getAbsoluteIndex(gIndex, rIndex) && !result.isShortcut"
+                      class="text-primary">
                       <IconCornerDownLeft class="w-4 h-4" />
+                    </div>
+                    <div v-else-if="result.isShortcut" class="text-hsa/40">
+                      <IconKeyboard class="w-4 h-4" />
                     </div>
                   </button>
                 </div>
@@ -123,7 +125,8 @@
 import { ref, computed, watch, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import { useSearchStore } from '~/stores/search'
-import { IconSearch, IconFileDescription, IconLayoutDashboard, IconSettings, IconCornerDownLeft, IconExternalLink, IconKeyboard } from '@tabler/icons-vue'
+import { getSearchIcon, getSearchIconStyle } from '~/utils/search'
+import { IconSearch, IconCornerDownLeft, IconExternalLink, IconKeyboard } from '@tabler/icons-vue'
 
 const searchStore = useSearchStore()
 const router = useRouter()
@@ -178,6 +181,7 @@ const handleKeydown = (e: KeyboardEvent) => {
 
 // Sélection d'un résultat et redirection
 const selectResult = (result: any) => {
+  if (result.isShortcut) return
   if (result.path) {
     router.push(result.path)
     searchStore.closeSearch()
@@ -190,15 +194,7 @@ const viewAllResults = () => {
   searchStore.closeSearch()
 }
 
-// Récupération de l'icône correspondante au type de résultat
-const getIcon = (type: string) => {
-  switch (type) {
-    case 'navigation': return IconLayoutDashboard
-    case 'document': return IconFileDescription
-    case 'action': return IconSettings
-    default: return IconSearch
-  }
-}
+
 
 // Réinitialisation lors de l'ouverture
 watch(() => searchStore.isOpen, (val) => {

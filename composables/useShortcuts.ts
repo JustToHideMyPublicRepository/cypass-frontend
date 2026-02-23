@@ -30,6 +30,10 @@ export const useShortcuts = (options: ShortcutsOptions = {}) => {
    * Gestionnaire principal des événements clavier
    */
   const handleKeyDown = (event: KeyboardEvent) => {
+    // Disable shortcuts on mobile/small screens
+    const isMobile = import.meta.client && window.innerWidth < 1024
+    if (isMobile) return
+
     if (!store.enabled && event.key !== 'Alt') return
 
     // Gestion du Mode ALT

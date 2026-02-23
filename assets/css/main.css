@@ -139,7 +139,7 @@
   }
 
   .kbd-tip {
-    @apply inline-flex items-center justify-center px-1 py-0.5 bg-ash text-hsa border border-ash rounded text-[8px] font-bold shadow-[0_2px_0_0_rgb(var(--color-hsa))] font-code leading-none uppercase transition-all duration-200
+    @apply inline-flex items-center justify-center px-1 py-0.5 bg-ashAct text-hsa border border-ash rounded text-[8px] font-bold shadow-[0_2px_0_0_rgb(var(--color-hsa))] font-code leading-none uppercase transition-all duration-200
   }
 }
 
