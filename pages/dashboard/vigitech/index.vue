@@ -6,10 +6,17 @@
         <p class="text-hsa font-bold">Vos signalements et veille cybernétique</p>
       </div>
 
-      <UiBaseButton @click="showCreateModal = true" class="!px-4 !py-2.5 !text-xs !uppercase !tracking-wider gap-2">
-        <IconAlertCircle class="w-4 h-4" />
-        Signaler un Incident
-      </UiBaseButton>
+      <div class="flex items-center gap-3">
+        <UiBaseButton @click="showCreateModal = true" class="!px-4 !py-2.5 !text-xs !uppercase !tracking-wider gap-2">
+          <IconAlertCircle class="w-4 h-4" />
+          Signaler un Incident
+        </UiBaseButton>
+        <UiBaseButton variant="secondary" to="/dashboard/vigitech/comments"
+          class="!px-4 !py-2.5 !text-xs !uppercase !tracking-wider gap-2">
+          <IconMessage class="w-4 h-4" />
+          Mes commentaires
+        </UiBaseButton>
+      </div>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
@@ -22,7 +29,7 @@
 
         <template v-else-if="filteredIncidents.length">
           <RootVigitechIncidentCard v-for="incident in filteredIncidents" :key="incident.id" :incident="incident"
-            showFooter :detailUrl="`/dashboard/vigitech/${incident.id}`" />
+            showFooter :detailUrl="`/dashboard/vigitech/${incident.id}`" @edit="openEditModal" />
         </template>
 
         <div v-else class="text-center py-20 px-6 glass-panel rounded-[2rem] border-2 border-dashed border-ash">
@@ -115,6 +122,7 @@
             Réinitialiser
           </UiBaseButton>
         </div>
+
         <UiBaseCard title="Sources Surveillées" class="!rounded-[2rem]">
           <ul class="space-y-3 text-[11px] font-bold uppercase tracking-wider">
             <li class="flex justify-between items-center text-hsa">
@@ -157,15 +165,16 @@
       </div>
     </div>
 
-    <!-- Create Incident Modal -->
-    <ModalVigitechCreateIncident :show="showCreateModal" @close="showCreateModal = false"
+    <!-- Create / Edit Incident Modal -->
+    <ModalVigitechCreateIncident :show="showCreateModal" :incident="editIncident" @close="closeModal"
       @success="onIncidentCreated" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { IconBroadcast, IconAlertCircle, IconShieldCheck, IconChevronDown, IconSearch } from '@tabler/icons-vue'
+import { IconBroadcast, IconAlertCircle, IconShieldCheck, IconChevronDown, IconSearch, IconMessage } from '@tabler/icons-vue'
 import { useVigitechStore } from '~/stores/vigitech'
+import type { Incident } from '~/types/vigitech'
 
 definePageMeta({
   layout: 'default'
@@ -173,6 +182,17 @@ definePageMeta({
 
 const store = useVigitechStore()
 const showCreateModal = ref(false)
+const editIncident = ref<Incident | null>(null)
+
+const openEditModal = (incident: Incident) => {
+  editIncident.value = incident
+  showCreateModal.value = true
+}
+
+const closeModal = () => {
+  showCreateModal.value = false
+  editIncident.value = null
+}
 
 const filters = ref({
   search: '',

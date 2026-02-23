@@ -35,3 +35,26 @@ export const mapIncidentStatus = (status: string) => {
   }
   return statuses[status] || status
 }
+
+/**
+ * Mappe les raisons de signalement VigiTech en français
+ */
+export const mapReportReason = (reason: string) => {
+  const reasons: Record<string, string> = {
+    fake_incident: 'Faux incident',
+    inappropriate: 'Contenu inapproprié',
+    spam: 'Spam',
+    other: 'Autre'
+  }
+  return reasons[reason] || reason
+}
+
+/**
+ * Liste des raisons de signalement disponibles
+ */
+export const reportReasons = [
+  { value: 'fake_incident', label: 'Faux incident' },
+  { value: 'inappropriate', label: 'Contenu inapproprié' },
+  { value: 'spam', label: 'Spam' },
+  { value: 'other', label: 'Autre' }
+]

@@ -159,6 +159,49 @@ export const useVigitechStore = defineStore('vigitech', {
       } finally {
         this.loading = false
       }
+    },
+
+    async reportIncident(incidentId: string, reason: string, details: string) {
+      try {
+        const response: any = await $fetch('/api/vigitech/report', {
+          method: 'POST',
+          body: { incident_id: incidentId, reason, details }
+        })
+        return { success: response.success, message: response.message }
+      } catch (err: any) {
+        return { success: false, message: err.data?.message || err.message || 'Erreur lors du signalement.' }
+      }
+    },
+
+    async updateIncident(incidentId: string, data: Record<string, string>) {
+      try {
+        const response: any = await $fetch('/api/vigitech/update', {
+          method: 'POST',
+          body: { incident_id: incidentId, ...data }
+        })
+        if (response.success) {
+          // Refresh the current incident data
+          await this.fetchUserIncidentById(incidentId)
+        }
+        return { success: response.success, message: response.message }
+      } catch (err: any) {
+        return { success: false, message: err.data?.message || err.message || 'Erreur lors de la mise à jour.' }
+      }
+    },
+
+    async updateComment(commentId: string, content: string, incidentId?: string) {
+      try {
+        const response: any = await $fetch('/api/vigitech/comments', {
+          method: 'PUT',
+          body: { comment_id: commentId, content }
+        })
+        if (response.success && incidentId) {
+          await this.fetchComments(incidentId)
+        }
+        return { success: response.success, message: response.message }
+      } catch (err: any) {
+        return { success: false, message: err.data?.message || err.message || 'Erreur lors de la mise à jour du commentaire.' }
+      }
     }
   }
 })

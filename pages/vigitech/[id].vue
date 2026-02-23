@@ -224,9 +224,32 @@
                           · {{ comment.organization_name }}
                         </span>
                       </div>
-                      <span class="text-[10px] text-hsa font-bold">{{ formatDate(comment.created_at) }}</span>
+                      <div class="flex items-center gap-2">
+                        <span class="text-[10px] text-hsa font-bold">{{ formatDate(comment.created_at) }}</span>
+                        <!-- Edit button: own comment + within 24h -->
+                        <button v-if="canEditComment(comment)" @click="startEditComment(comment)"
+                          class="p-1 rounded-lg hover:bg-primary/10 text-hsa hover:text-primary transition-colors"
+                          title="Modifier le commentaire">
+                          <IconEdit class="w-3.5 h-3.5" />
+                        </button>
+                      </div>
                     </div>
-                    <p class="text-sm text-BtW leading-relaxed pl-9">{{ comment.content }}</p>
+                    <!-- Inline edit mode -->
+                    <div v-if="editingCommentId === comment.id" class="pl-9 space-y-2">
+                      <textarea v-model="editCommentContent" rows="2"
+                        class="w-full p-3 rounded-xl bg-WtB border border-ash/50 text-sm font-medium outline-none focus:ring-2 focus:ring-primary transition-all resize-none" />
+                      <div class="flex gap-2 justify-end">
+                        <UiBaseButton variant="ghost" size="sm" @click="cancelEditComment"
+                          class="!rounded-lg !text-[10px]">
+                          Annuler
+                        </UiBaseButton>
+                        <UiBaseButton variant="primary" size="sm" @click="saveEditComment(comment)"
+                          :disabled="!editCommentContent.trim() || savingComment" class="!rounded-lg !text-[10px]">
+                          {{ savingComment ? 'Enregistrement...' : 'Enregistrer' }}
+                        </UiBaseButton>
+                      </div>
+                    </div>
+                    <p v-else class="text-sm text-BtW leading-relaxed pl-9">{{ comment.content }}</p>
                   </div>
                 </div>
 
@@ -264,6 +287,22 @@
                   </div>
                   <IconArrowUpRight class="w-4 h-4 text-hsa group-hover:text-success transition-colors" />
                 </button>
+                <!-- Signaler -->
+                <button @click="showReportModal = true" :disabled="isOwnIncident"
+                  class="w-full flex items-center justify-between p-4 rounded-2xl border transition-all group" :class="isOwnIncident
+                    ? 'bg-ash/5 border-ash/20 opacity-50 cursor-not-allowed'
+                    : 'bg-danger/5 hover:bg-danger/10 border-danger/20'"
+                  :title="isOwnIncident ? 'Vous ne pouvez pas signaler vos propres incidents' : 'Signaler cet incident'">
+                  <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl flex items-center justify-center"
+                      :class="isOwnIncident ? 'bg-ash/10 text-hsa' : 'bg-danger/10 text-danger'">
+                      <IconFlag class="w-5 h-5" />
+                    </div>
+                    <span class="text-sm font-black" :class="isOwnIncident ? 'text-hsa' : 'text-BtW'">Signaler</span>
+                  </div>
+                  <IconArrowUpRight v-if="!isOwnIncident"
+                    class="w-4 h-4 text-hsa group-hover:text-danger transition-colors" />
+                </button>
               </div>
             </UiBaseCard>
 
@@ -294,12 +333,16 @@
 
     <!-- Image Viewer Modal -->
     <ModalImageViewer :show="viewer.show" :imageUrl="viewer.url" @close="viewer.show = false" />
+
+    <!-- Report Modal -->
+    <ModalVigitechReportIncident v-if="incident" :show="showReportModal" :incidentId="incident.id"
+      @close="showReportModal = false" @success="fetchData" />
   </div>
 </template>
 
 <script setup lang="ts">
 import {
-  IconMapPin, IconCalendar, IconUser, IconArrowUpRight, IconDownload, IconShare, IconShieldCheck, IconAlertCircle, IconZoomIn, IconFileTypePdf, IconExternalLink, IconChevronDown, IconChevronUp, IconEye, IconMessage, IconSend
+  IconMapPin, IconCalendar, IconUser, IconArrowUpRight, IconDownload, IconShare, IconShieldCheck, IconAlertCircle, IconZoomIn, IconFileTypePdf, IconExternalLink, IconChevronDown, IconChevronUp, IconEye, IconMessage, IconSend, IconFlag, IconEdit
 } from '@tabler/icons-vue'
 import { useVigitechStore } from '~/stores/vigitech'
 import { useAuthStore } from '~/stores/auth'
@@ -324,6 +367,46 @@ const showEvidence = ref(false)
 const showComments = ref(true)
 const newComment = ref('')
 const submittingComment = ref(false)
+const showReportModal = ref(false)
+const editingCommentId = ref<string | null>(null)
+const editCommentContent = ref('')
+const savingComment = ref(false)
+
+const isOwnIncident = computed(() => {
+  return !!(authStore.user && incident.value?.user_id === authStore.user.id)
+})
+
+const canEditComment = (comment: any) => {
+  if (!authStore.user || comment.user_id !== authStore.user.id) return false
+  const createdAt = new Date(comment.created_at).getTime()
+  const now = Date.now()
+  const hoursDiff = (now - createdAt) / (1000 * 60 * 60)
+  return hoursDiff <= 24
+}
+
+const startEditComment = (comment: any) => {
+  editingCommentId.value = comment.id
+  editCommentContent.value = comment.content
+}
+
+const cancelEditComment = () => {
+  editingCommentId.value = null
+  editCommentContent.value = ''
+}
+
+const saveEditComment = async (comment: any) => {
+  if (!editCommentContent.value.trim() || !incident.value) return
+  savingComment.value = true
+  const result = await store.updateComment(comment.id, editCommentContent.value.trim(), incident.value.id)
+  if (result.success) {
+    toast.showToast('success', 'Commentaire modifié', result.message || 'Votre commentaire a été mis à jour.')
+    editingCommentId.value = null
+    editCommentContent.value = ''
+  } else {
+    toast.showToast('error', 'Erreur', result.message || 'Impossible de modifier le commentaire.')
+  }
+  savingComment.value = false
+}
 
 const formatDate = (dateStr: string) => {
   if (!dateStr) return '-'

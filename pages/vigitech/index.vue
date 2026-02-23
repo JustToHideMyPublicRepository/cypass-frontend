@@ -129,7 +129,7 @@
           <template v-else-if="filteredIncidents.length">
             <div class="space-y-4">
               <RootVigitechIncidentCard v-for="incident in filteredIncidents" :key="incident.id" :incident="incident"
-                :detailUrl="`/vigitech/${incident.id}`" />
+                :detailUrl="`/vigitech/${incident.id}`" @report="openReportModal" />
             </div>
 
             <!-- Pagination -->
@@ -213,6 +213,10 @@
         </div>
       </div>
     </div>
+
+    <!-- Report Modal -->
+    <ModalVigitechReportIncident :show="showReportModal" :incidentId="reportTargetId" @close="showReportModal = false"
+      @success="fetchData" />
   </div>
 </template>
 
@@ -361,6 +365,13 @@ const resetFilters = () => {
   filters.value = { search: '', type: '', level: '', date_start: '', date_end: '' }
   store.publicPagination.offset = 0
   fetchData()
+}
+
+const showReportModal = ref(false)
+const reportTargetId = ref('')
+const openReportModal = (incidentId: string) => {
+  reportTargetId.value = incidentId
+  showReportModal.value = true
 }
 
 onMounted(fetchData)

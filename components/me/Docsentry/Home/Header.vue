@@ -13,15 +13,14 @@
     </div>
 
     <div class="flex items-center gap-3">
+      <UiBaseButton @click="$emit('upload')" class="!px-4 !py-2.5 !text-xs !uppercase !tracking-wider gap-2">
+        <IconPlus class="w-4 h-4" />
+        Nouveau
+      </UiBaseButton>
       <UiBaseButton variant="secondary" @click="$emit('verify')"
         class="!px-4 !py-2.5 !text-xs !uppercase !tracking-wider gap-2">
         <IconShieldCheck class="w-4 h-4" />
         Vérifier
-      </UiBaseButton>
-
-      <UiBaseButton @click="$emit('upload')" class="!px-4 !py-2.5 !text-xs !uppercase !tracking-wider gap-2">
-        <IconPlus class="w-4 h-4" />
-        Nouveau
       </UiBaseButton>
     </div>
   </div>

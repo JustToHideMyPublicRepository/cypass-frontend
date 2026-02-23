@@ -1,5 +1,6 @@
 <template>
-  <UiBaseModal :show="show" title="Signaler un Incident" maxWidth="2xl" @close="closeModal">
+  <UiBaseModal :show="show" :title="isEditMode ? 'Modifier l\'incident' : 'Signaler un Incident'" maxWidth="2xl"
+    @close="closeModal">
     <div class="space-y-6 py-2">
       <!-- Information Box -->
       <div class="p-5 rounded-[1.5rem] bg-danger/5 border border-danger/10 flex gap-4 backdrop-blur-sm">
@@ -139,7 +140,7 @@
         <UiBaseButton variant="ghost" class="flex-1 !rounded-2xl font-bold" @click="closeModal">Annuler</UiBaseButton>
         <UiBaseButton variant="primary" class="flex-1 !rounded-2xl font-black tracking-widest shadow-xl"
           :loading="store.loading" @click="submit">
-          Publier l'alerte
+          {{ isEditMode ? 'Enregistrer' : 'Publier l\'alerte' }}
         </UiBaseButton>
       </div>
     </div>
@@ -159,11 +160,14 @@ import {
 } from '@tabler/icons-vue'
 import { useVigitechStore } from '~/stores/vigitech'
 import { useGlobalDropZone } from '~/composables/useDropZone'
-import type { CreateIncidentRequest } from '~/types/vigitech'
+import type { CreateIncidentRequest, Incident } from '~/types/vigitech'
 
 const props = defineProps<{
   show: boolean
+  incident?: Incident | null
 }>()
+
+const isEditMode = computed(() => !!props.incident)
 
 const emit = defineEmits(['close', 'success'])
 const store = useVigitechStore()
@@ -245,15 +249,30 @@ const closeModal = () => {
 
 const submit = async () => {
   if (!form.value.title || !form.value.description) {
-    // We could use a toast here later, but standard alert for now
     return
   }
 
-  const result = await store.createIncident(form.value)
-  if (result) {
-    emit('success')
-    emit('close')
-    resetForm()
+  if (isEditMode.value && props.incident) {
+    const result = await store.updateIncident(props.incident.id, {
+      title: form.value.title,
+      description: form.value.description,
+      type: form.value.type,
+      threat_level: form.value.threat_level,
+      is_anonymous: form.value.is_anonymous ? 'true' : 'false',
+      location: form.value.location
+    })
+    if (result.success) {
+      emit('success')
+      emit('close')
+      resetForm()
+    }
+  } else {
+    const result = await store.createIncident(form.value)
+    if (result) {
+      emit('success')
+      emit('close')
+      resetForm()
+    }
   }
 }
 
@@ -275,9 +294,20 @@ const resetForm = () => {
 watch(() => props.show, (isVisible) => {
   if (isVisible) {
     enable(onDroppedFile)
+    // Pre-fill form in edit mode
+    if (props.incident) {
+      form.value = {
+        title: props.incident.title,
+        description: props.incident.description,
+        type: props.incident.type,
+        threat_level: props.incident.threat_level,
+        is_anonymous: !!props.incident.is_anonymous,
+        location: props.incident.location || '',
+        evidence: null
+      }
+    }
   } else {
     disable(onDroppedFile)
-    // Only reset if it's not a success (success resets anyway)
   }
 })
 

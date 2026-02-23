@@ -37,6 +37,7 @@
       <div class="lg:col-span-2 space-y-6">
         <UiBaseCard class="!rounded-[2.5rem] overflow-hidden">
           <div class="p-6 md:p-8 space-y-6">
+            <!-- Détails -->
             <div class="flex flex-wrap items-center gap-3">
               <UiStatusBadge
                 :status="incident.threat_level === 'critical' ? 'High' : incident.threat_level === 'medium' ? 'Medium' : 'Low'">
@@ -75,7 +76,8 @@
                   Utilisateur anonyme
                 </template>
                 <template v-else>
-                  {{ [incident.author_first_name, incident.author_last_name].filter(Boolean).join(' ') || 'Utilisateur'
+                  {{ [incident.author_first_name, incident.author_last_name].filter(Boolean).join(' ') ||
+                    'Utilisateur'
                   }}
                   <span v-if="incident.reporter_organization" class="text-hsa/60">
                     · {{ incident.reporter_organization }}
@@ -88,7 +90,8 @@
 
             <div class="space-y-4">
               <h3 class="text-xs font-black text-hsa uppercase tracking-[0.2em]">Description détaillée</h3>
-              <p class="text-BtW leading-relaxed whitespace-pre-wrap">{{ decodeHtmlEntities(incident.description) }}</p>
+              <p class="text-BtW leading-relaxed whitespace-pre-wrap">{{ decodeHtmlEntities(incident.description) }}
+              </p>
             </div>
           </div>
         </UiBaseCard>
@@ -135,52 +138,52 @@
           </div>
         </div>
 
-          <!-- Comments Section (read-only) -->
-          <UiBaseCard class="!rounded-[2.5rem] overflow-hidden">
-            <div class="p-6 md:p-8 space-y-5">
-              <button @click="showComments = !showComments"
-                class="w-full flex items-center justify-between hover:text-primary transition-colors">
-                <h3 class="text-xs font-black text-hsa uppercase tracking-[0.2em] flex items-center gap-2">
-                  <IconMessage class="w-4 h-4 text-primary" /> Commentaires
-                  <span v-if="store.comments.length"
-                    class="ml-1 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-black">
-                    {{ store.comments.length }}
-                  </span>
-                </h3>
-                <component :is="showComments ? IconChevronUp : IconChevronDown" class="w-4 h-4 text-hsa" />
-              </button>
+        <!-- Comments Section (read-only) -->
+        <UiBaseCard class="!rounded-[2.5rem] overflow-hidden">
+          <div class="p-6 md:p-8 space-y-5">
+            <button @click="showComments = !showComments"
+              class="w-full flex items-center justify-between hover:text-primary transition-colors">
+              <h3 class="text-xs font-black text-hsa uppercase tracking-[0.2em] flex items-center gap-2">
+                <IconMessage class="w-4 h-4 text-primary" /> Commentaires
+                <span v-if="store.comments.length"
+                  class="ml-1 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-black">
+                  {{ store.comments.length }}
+                </span>
+              </h3>
+              <component :is="showComments ? IconChevronUp : IconChevronDown" class="w-4 h-4 text-hsa" />
+            </button>
 
-              <template v-if="showComments">
-                <div v-if="store.loadingComments" class="space-y-3">
-                  <UiAppSkeleton v-for="i in 3" :key="i" height="70px" radius="1rem" />
-                </div>
+            <template v-if="showComments">
+              <div v-if="store.loadingComments" class="space-y-3">
+                <UiAppSkeleton v-for="i in 3" :key="i" height="70px" radius="1rem" />
+              </div>
 
-                <div v-else-if="store.comments.length" class="space-y-3">
-                  <div v-for="comment in store.comments" :key="comment.id"
-                    class="p-4 rounded-xl bg-ash/5 border border-ash/30 space-y-1.5">
-                    <div class="flex items-center justify-between">
-                      <div class="flex items-center gap-2">
-                        <div
-                          class="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-primary text-[9px] font-black uppercase">
-                          {{ (comment.first_name || 'U').charAt(0) }}
-                        </div>
-                        <span class="text-[11px] font-black text-BtW">
-                          {{ [comment.first_name, comment.last_name].filter(Boolean).join(' ') || 'Utilisateur' }}
-                        </span>
+              <div v-else-if="store.comments.length" class="space-y-3">
+                <div v-for="comment in store.comments" :key="comment.id"
+                  class="p-4 rounded-xl bg-ash/5 border border-ash/30 space-y-1.5">
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                      <div
+                        class="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-primary text-[9px] font-black uppercase">
+                        {{ (comment.first_name || 'U').charAt(0) }}
                       </div>
-                      <span class="text-[10px] text-hsa font-bold">{{ formatDate(comment.created_at) }}</span>
+                      <span class="text-[11px] font-black text-BtW">
+                        {{ [comment.first_name, comment.last_name].filter(Boolean).join(' ') || 'Utilisateur' }}
+                      </span>
                     </div>
-                    <p class="text-xs text-BtW leading-relaxed pl-8">{{ comment.content }}</p>
+                    <span class="text-[10px] text-hsa font-bold">{{ formatDate(comment.created_at) }}</span>
                   </div>
+                  <p class="text-xs text-BtW leading-relaxed pl-8">{{ comment.content }}</p>
                 </div>
+              </div>
 
-                <div v-else class="text-center py-6">
-                  <IconMessage class="w-6 h-6 text-hsa/20 mx-auto mb-2" />
-                  <p class="text-[11px] text-hsa font-bold">Aucun commentaire.</p>
-                </div>
-              </template>
-            </div>
-          </UiBaseCard>
+              <div v-else class="text-center py-6">
+                <IconMessage class="w-6 h-6 text-hsa/20 mx-auto mb-2" />
+                <p class="text-[11px] text-hsa font-bold">Aucun commentaire.</p>
+              </div>
+            </template>
+          </div>
+        </UiBaseCard>
       </div>
 
       <!-- Right Sidebar -->
@@ -190,10 +193,14 @@
           <div class="p-6 space-y-4">
             <h3 class="text-[10px] font-black uppercase tracking-[0.2em] opacity-60">Actions</h3>
             <div class="grid grid-cols-1 gap-3">
-              <UiBaseButton @click="shareIncident" variant="primary" class="w-full justify-start !px-4">
+              <UiBaseButton v-if="!incident.is_blocked" @click="showEditModal = true" variant="primary"
+                class="w-full justify-start !px-4">
+                <IconEdit class="w-4 h-4 mr-2" /> Modifier
+              </UiBaseButton>
+              <UiBaseButton @click="shareIncident" variant="secondary" class="w-full justify-start !px-4">
                 <IconShare class="w-4 h-4 mr-2" /> Partager l'alerte
               </UiBaseButton>
-              <UiBaseButton v-if="incident.evidence_file" @click="downloadEvidence" variant="secondary"
+              <UiBaseButton v-if="incident.evidence_file" @click="downloadEvidence" variant="ghost"
                 class="w-full justify-start !px-4">
                 <IconDownload class="w-4 h-4 mr-2" /> Télécharger preuve
               </UiBaseButton>
@@ -208,7 +215,7 @@
             <div class="p-4 rounded-2xl border border-transparent transition-colors"
               :class="getSidebarItemStyle('status').bg">
               <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-white shadow-sm shrink-0">
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-WtB shadow-sm shrink-0">
                   <IconCheck v-if="incident.status === 'validated'" class="w-6 h-6 text-success" />
                   <IconX v-else-if="incident.status === 'rejected'" class="w-6 h-6 text-danger" />
                   <IconLock v-else class="w-6 h-6 text-orange-500" />
@@ -221,7 +228,7 @@
               </div>
 
               <div v-if="incident.is_blocked"
-                class="mt-4 p-4 bg-white/50 backdrop-blur-sm border border-danger/20 rounded-xl space-y-2">
+                class="mt-4 p-4 bg-WtB/50 backdrop-blur-sm border border-danger/20 rounded-xl space-y-2">
                 <p class="text-[10px] font-black text-danger uppercase tracking-widest">Admin Info</p>
                 <p class="text-[11px] font-bold text-BtW leading-relaxed">
                   <IconLock class="w-3.5 h-3.5 inline mr-1" /> Masqué au public
@@ -237,7 +244,7 @@
             <div class="p-4 rounded-2xl border border-transparent transition-colors"
               :class="getSidebarItemStyle('reports').bg">
               <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-white shadow-sm shrink-0">
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-WtB shadow-sm shrink-0">
                   <IconAlertTriangle class="w-6 h-6 text-warning" />
                 </div>
                 <div>
@@ -254,7 +261,7 @@
             <div class="p-4 rounded-2xl border border-transparent transition-colors"
               :class="getSidebarItemStyle('org').bg">
               <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-white shadow-sm shrink-0">
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-WtB shadow-sm shrink-0">
                   <IconBuilding class="w-6 h-6 text-primary" />
                 </div>
                 <div>
@@ -272,12 +279,16 @@
 
     <!-- Image Viewer Modal -->
     <ModalImageViewer :show="viewer.show" :imageUrl="viewer.url" @close="viewer.show = false" />
+
+    <!-- Edit Incident Modal -->
+    <ModalVigitechCreateIncident v-if="incident" :show="showEditModal" :incident="incident"
+      @close="showEditModal = false" @success="onEditSuccess" />
   </div>
 </template>
 
 <script setup lang="ts">
 import {
-  IconMapPin, IconCalendar, IconExternalLink, IconCheck, IconX, IconLock, IconAlertCircle, IconAlertTriangle, IconZoomIn, IconFileTypePdf, IconShare, IconDownload, IconBuilding, IconChevronDown, IconChevronUp, IconEye, IconUser, IconMessage
+  IconMapPin, IconCalendar, IconExternalLink, IconCheck, IconX, IconLock, IconAlertCircle, IconAlertTriangle, IconZoomIn, IconFileTypePdf, IconShare, IconDownload, IconBuilding, IconChevronDown, IconChevronUp, IconEye, IconUser, IconMessage, IconEdit
 } from '@tabler/icons-vue'
 import { useVigitechStore } from '~/stores/vigitech'
 import { useToastStore } from '~/stores/toast'
@@ -298,6 +309,12 @@ const config = useRuntimeConfig()
 const incident = computed(() => store.currentIncident)
 const showEvidence = ref(false)
 const showComments = ref(true)
+const showEditModal = ref(false)
+
+const onEditSuccess = () => {
+  showEditModal.value = false
+  fetchData()
+}
 
 const statusBg = computed(() => {
   if (!incident.value) return 'bg-ash/5'
@@ -386,6 +403,13 @@ const fetchData = () => {
 }
 
 onMounted(fetchData)
+
+// Auto-open edit modal if ?edit=true
+watch(incident, (val) => {
+  if (val && route.query.edit === 'true' && !showEditModal.value) {
+    showEditModal.value = true
+  }
+}, { immediate: true })
 
 useHead({
   title: computed(() => incident.value

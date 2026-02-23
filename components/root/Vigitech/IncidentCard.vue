@@ -56,6 +56,20 @@
       </div>
 
       <div class="flex flex-col gap-2 shrink-0">
+        <!-- Signaler -->
+        <button v-if="!showFooter" @click.stop="handleReport" :disabled="isOwnIncident"
+          class="p-2 rounded-xl transition-colors" :class="isOwnIncident
+            ? 'text-hsa/30 cursor-not-allowed'
+            : 'hover:bg-danger/10 text-hsa hover:text-danger'"
+          :title="isOwnIncident ? 'Vous ne pouvez pas signaler votre incident' : 'Signaler'">
+          <IconFlag class="w-5 h-5" />
+        </button>
+        <!-- Modifier (dashboard only, own incidents) -->
+        <button v-if="showFooter" @click.stop="$emit('edit', incident)"
+          class="p-2 rounded-xl hover:bg-primary/10 transition-colors text-hsa hover:text-primary"
+          title="Modifier mon signalement">
+          <IconEdit class="w-5 h-5" />
+        </button>
         <button @click.stop="shareIncident"
           class="p-2 rounded-xl hover:bg-ash/20 transition-colors text-hsa hover:text-primary" title="Partager">
           <IconShare class="w-5 h-5" />
@@ -89,11 +103,12 @@
 </template>
 
 <script setup lang="ts">
-import { IconMapPin, IconClock, IconAlertCircle, IconLock, IconShare, IconChevronRight, IconEye, IconMessage } from '@tabler/icons-vue'
+import { IconMapPin, IconClock, IconAlertCircle, IconLock, IconShare, IconChevronRight, IconEye, IconFlag, IconEdit, IconMessage } from '@tabler/icons-vue'
 import type { Incident } from '~/types/vigitech'
 import { decodeHtmlEntities } from '~/utils/format'
 import { mapIncidentType, mapThreatLevel, mapIncidentStatus } from '~/utils/vigitech'
 import { useToastStore } from '~/stores/toast'
+import { useAuthStore } from '~/stores/auth'
 
 const props = defineProps<{
   incident: Incident
@@ -101,7 +116,18 @@ const props = defineProps<{
   detailUrl: string
 }>()
 
+const emit = defineEmits(['report', 'edit'])
 const toast = useToastStore()
+const authStore = useAuthStore()
+
+const isOwnIncident = computed(() => {
+  return !!(authStore.user && props.incident.user_id === authStore.user.id)
+})
+
+const handleReport = () => {
+  if (isOwnIncident.value) return
+  emit('report', props.incident.id)
+}
 
 const shareIncident = async () => {
   const fullUrl = `${window.location.origin}/vigitech/${props.incident.id}`
