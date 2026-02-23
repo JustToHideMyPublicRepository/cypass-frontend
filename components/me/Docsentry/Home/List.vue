@@ -171,7 +171,7 @@ const toggleHash = (id: string) => {
 
 const downloadCertificate = async (id: string, filename: string) => {
   try {
-    const response = await $fetch('/api/documents/download', {
+    const response = await $fetch('/api/docsentry/download', {
       query: { id, type: 'certificate' },
       responseType: 'blob'
     })

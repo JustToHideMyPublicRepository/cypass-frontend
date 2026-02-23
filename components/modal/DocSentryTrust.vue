@@ -1,5 +1,5 @@
 <template>
-  <UiBaseModal :show="show" title="Certificat de Confiance" maxWidth="2xl" @close="$emit('close')">
+  <UiBaseModal :show="show" title="Certificat de confiance" maxWidth="2xl" @close="$emit('close')">
     <div v-if="store.publicKeyInfo" class="flex flex-col md:flex-row gap-6 items-start py-2">
       <!-- Icône de certification premium -->
       <div
@@ -11,7 +11,7 @@
         <!-- Titre et statut -->
         <div>
           <h3 class="text-lg font-black text-BtW flex items-center gap-2">
-            Certificat de Confiance National
+            Certificat de confiance DocSentry
             <span class="badge badge-success !text-[10px]">Actif</span>
           </h3>
           <p class="text-xs text-hsa">{{ store.publicKeyInfo.usage }}</p>
@@ -69,7 +69,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { IconCertificate, IconCopy, IconCheck, IconCalendar, IconArrowUpRight } from '@tabler/icons-vue'
-import { useDocumentsStore } from '~/stores/documents'
+import { useDocsentryStore } from '~/stores/docsentry'
 import { useToastStore } from '~/stores/toast'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
@@ -81,7 +81,7 @@ defineProps<{
 
 defineEmits(['close'])
 
-const store = useDocumentsStore()
+const store = useDocsentryStore()
 const copied = ref(false)
 
 const toast = useToastStore()

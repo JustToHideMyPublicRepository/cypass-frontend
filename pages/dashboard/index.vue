@@ -39,7 +39,7 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
 import { format, startOfWeek, endOfWeek, subWeeks, isWithinInterval } from 'date-fns'
-import { useDocumentsStore } from '~/stores/documents'
+import { useDocsentryStore } from '~/stores/docsentry'
 import { useNotificationsStore } from '~/stores/notifications'
 import { useProfilStore } from '~/stores/profil'
 import { useAuthStore } from '~/stores/auth'
@@ -49,7 +49,7 @@ definePageMeta({
   layout: 'default'
 })
 
-const documentsStore = useDocumentsStore()
+const documentsStore = useDocsentryStore()
 const notificationsStore = useNotificationsStore()
 const profilStore = useProfilStore()
 const authStore = useAuthStore()
@@ -113,7 +113,7 @@ const calculateDocTrend = async () => {
     const previousWeekStart = startOfWeek(subWeeks(now, 1), { weekStartsOn: 1 })
     const previousWeekEnd = endOfWeek(subWeeks(now, 1), { weekStartsOn: 1 })
 
-    const response = await $fetch<any>('/api/documents/list', {
+    const response = await $fetch<any>('/api/docsentry/list', {
       query: { limit: 100, offset: 0 }
     })
 

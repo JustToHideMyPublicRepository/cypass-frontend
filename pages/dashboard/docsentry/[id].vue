@@ -62,7 +62,7 @@
 import { computed, onMounted, reactive } from 'vue'
 import { useRoute } from 'nuxt/app'
 import { IconAlertCircle } from '@tabler/icons-vue'
-import { useDocumentsStore } from '~/stores/documents'
+import { useDocsentryStore } from '~/stores/docsentry'
 import { useToastStore } from '~/stores/toast'
 
 definePageMeta({
@@ -70,7 +70,7 @@ definePageMeta({
 })
 
 const route = useRoute()
-const store = useDocumentsStore()
+const store = useDocsentryStore()
 const docId = route.params.id as string
 
 const doc = computed(() => store.currentDocument)
@@ -101,7 +101,7 @@ const redirectToVerify = () => {
 const downloadCertificate = async () => {
   if (!doc.value) return
   try {
-    const response = await $fetch('/api/documents/download', {
+    const response = await $fetch('/api/docsentry/download', {
       query: { id: doc.value.id, type: 'certificate' },
       responseType: 'blob'
     })

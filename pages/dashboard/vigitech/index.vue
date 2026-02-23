@@ -5,9 +5,10 @@
         <h1 class="text-2xl md:text-3xl font-black text-BtW tracking-tight">VigiTech</h1>
         <p class="text-hsa font-bold">Vos signalements et veille cybernétique</p>
       </div>
-      <UiBaseButton variant="primary" size="lg" @click="showCreateModal = true"
-        class="!rounded-2xl shadow-xl shadow-primary/20">
-        <IconAlertCircle class="w-5 h-5 mr-2" /> Signaler un Incident
+
+      <UiBaseButton @click="showCreateModal = true" class="!px-4 !py-2.5 !text-xs !uppercase !tracking-wider gap-2">
+        <IconAlertCircle class="w-4 h-4" />
+        Signaler un Incident
       </UiBaseButton>
     </div>
 

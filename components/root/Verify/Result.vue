@@ -118,7 +118,7 @@ const downloadCertificate = async () => {
   }
 
   try {
-    const response = await $fetch('/api/documents/download', {
+    const response = await $fetch('/api/docsentry/download', {
       query: { id, type: 'certificate' },
       responseType: 'blob'
     })

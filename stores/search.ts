@@ -51,7 +51,7 @@ export const useSearchStore = defineStore('search', {
       this.isLoading = true
       try {
         const authStore = useAuthStore()
-        const docStore = useDocumentsStore()
+        const docStore = useDocsentryStore()
         const profStore = useProfilStore()
         const isAuthenticated = !!authStore.user
         const vigitechStore = useVigitechStore()
@@ -94,7 +94,7 @@ export const useSearchStore = defineStore('search', {
               description: entry.group || 'Navigation',
               path: entry.path,
               type: hasPath ? 'navigation' : 'shortcuts',
-              category: hasPath ? 'Navigation' : 'Raccourcis',
+              category: hasPath ? 'Page' : 'Raccourcis',
               isShortcut
             })
           }
@@ -111,7 +111,7 @@ export const useSearchStore = defineStore('search', {
                 description: `Document ${(doc.file_type || '').toUpperCase()}`,
                 path: `/dashboard/docsentry/${doc.id}`,
                 type: 'docsentry',
-                category: 'DocSentry'
+                category: 'Gestion document'
               })
             }
           })
@@ -130,7 +130,7 @@ export const useSearchStore = defineStore('search', {
                   description: `Incident #${inc.id.toString().slice(-6)} - ${inc.created_at}`,
                   path: `/dashboard/vigitech/${inc.id}`,
                   type: 'vigitech',
-                  category: 'Vigitech'
+                  category: 'Gestion incident'
                 })
               }
             }
@@ -148,7 +148,7 @@ export const useSearchStore = defineStore('search', {
               description: `Alerte VigiTech - ${inc.location || 'Sans localisation'}`,
               path: `/vigitech/${inc.id}`,
               type: 'incident',
-              category: 'Incident'
+              category: 'Alerte'
             })
           }
         })

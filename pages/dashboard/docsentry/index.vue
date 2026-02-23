@@ -41,14 +41,14 @@
 
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted, watch } from 'vue'
-import { useDocumentsStore } from '~/stores/documents'
+import { useDocsentryStore } from '~/stores/docsentry'
 import { useToastStore } from '~/stores/toast'
 
 definePageMeta({
   layout: 'default'
 })
 
-const store = useDocumentsStore()
+const store = useDocsentryStore()
 const toast = useToastStore()
 
 const filters = ref({

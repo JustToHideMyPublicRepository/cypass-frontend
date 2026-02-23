@@ -22,7 +22,7 @@ import { useRoute } from 'nuxt/app'
 import { IconServer, IconLock, IconCertificate } from '@tabler/icons-vue'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
-import { useDocumentsStore } from '~/stores/documents'
+import { useDocsentryStore } from '~/stores/docsentry'
 import { verifySteps, type Step } from '~/utils/docsentry'
 
 definePageMeta({
@@ -34,7 +34,7 @@ useHead({
 })
 
 const route = useRoute()
-const store = useDocumentsStore()
+const store = useDocsentryStore()
 const verifyMode = ref<'file' | 'hash' | 'qr'>('file')
 const pdfSubMode = ref<'original' | 'certificate'>('original')
 const hashInput = ref('')
