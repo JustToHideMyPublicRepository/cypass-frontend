@@ -30,10 +30,6 @@
           <div v-if="editingId === comment.id" class="space-y-3">
             <textarea v-model="editContent" rows="3"
               class="w-full p-4 rounded-xl bg-WtB border border-ash/50 text-sm font-medium outline-none focus:ring-2 focus:ring-primary transition-all resize-none" />
-            <button v-if="canEdit(comment)" @click="startEdit(comment)"
-              class="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-primary/10 text-hsa hover:text-primary transition-colors text-[10px] font-black uppercase tracking-widest">
-              <IconEdit class="w-3 h-3" /> Modifier
-            </button>
             <div class="flex gap-2 justify-end">
               <UiBaseButton variant="ghost" size="sm" @click="cancelEdit" class="!rounded-lg !text-[10px]">
                 Annuler
@@ -44,7 +40,14 @@
               </UiBaseButton>
             </div>
           </div>
-          <p v-else class="text-BtW text-sm leading-relaxed font-medium">{{ comment.content }}</p>
+          <div v-else class="flex items-start justify-between gap-4">
+            <p class="text-BtW text-sm leading-relaxed font-medium">{{ comment.content }}</p>
+            <button v-if="canEdit(comment)" @click="startEdit(comment)"
+              class="shrink-0 flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-primary/10 text-hsa hover:text-primary transition-colors text-[10px] font-black uppercase tracking-widest"
+              title="Modifier">
+              <IconEdit class="w-3 h-3" /> Modifier
+            </button>
+          </div>
 
           <!-- Footer: incident link + date + modifier -->
           <div class="flex items-center justify-between pt-3 border-t border-ash/30">
@@ -54,11 +57,10 @@
               {{ getIncidentTitle(comment.incident_id) }}
             </NuxtLink>
             <div class="flex items-center gap-3 shrink-0">
+              <div class="w-6 h-6 rounded-full overflow-hidden border border-ash/20 bg-ash/10">
+                <img :src="getCommentAvatar(comment)" class="w-full h-full object-cover" />
+              </div>
               <span class="text-[10px] text-hsa font-bold">{{ formatDate(comment.created_at) }}</span>
-              <button v-if="canEdit(comment)" @click="startEdit(comment)"
-                class="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-primary/10 text-hsa hover:text-primary transition-colors text-[10px] font-black uppercase tracking-widest">
-                <IconEdit class="w-3 h-3" /> Modifier
-              </button>
             </div>
           </div>
         </div>
@@ -110,8 +112,14 @@ const formatDate = (dateStr: string) => {
   return format(new Date(dateStr), 'PPP p', { locale: fr })
 }
 
+const getCommentAvatar = (cm: Comment) => {
+  return getUserAvatarUrl(cm.avatar_url, cm.first_name, cm.last_name)
+}
+
 const getIncidentTitle = (incidentId: string) => {
-  return incidentTitles.value[incidentId] || `Incident #${incidentId.substring(0, 8)}...`
+  const title = incidentTitles.value[incidentId]
+  if (!title) return `Incident #${incidentId.substring(0, 8)}...`
+  return title.length > 30 ? title.substring(0, 30) + '...' : title
 }
 
 const canEdit = (comment: Comment) => {

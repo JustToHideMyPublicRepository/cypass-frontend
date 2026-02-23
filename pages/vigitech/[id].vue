@@ -97,167 +97,174 @@
                   </div>
                   <!-- Author info -->
                   <div class="flex items-center gap-2.5">
-                    <IconUser class="w-5 h-5 text-primary" />
-                    <template v-if="incident.is_anonymous || incident.is_anonymous === 1">
-                      Utilisateur anonyme
-                    </template>
-                    <template v-else>
-                      {{ [incident.author_first_name, incident.author_last_name].filter(Boolean).join(' ') ||
-                        'Utilisateur' }}
-                      <span v-if="incident.reporter_organization" class="text-hsa/60">
-                        · {{ incident.reporter_organization }}
-                      </span>
-                    </template>
-                  </div>
-                </div>
-              </div>
-
-              <div class="h-px bg-ashAct/50"></div>
-
-              <div class="space-y-6">
-                <h3 class="text-xs font-black text-hsa uppercase tracking-[0.3em]">Analyse de l'incident</h3>
-                <p class="text-lg md:text-xl text-BtW leading-relaxed whitespace-pre-wrap">
-                  {{ decodeHtmlEntities(incident.description) }}
-                </p>
-              </div>
-
-              <!-- Evidence Section with Toggle -->
-              <div v-if="incident.evidence_file" class="pt-8 space-y-6">
-                <button @click="showEvidence = !showEvidence"
-                  class="flex items-center gap-2 text-xs font-black text-hsa uppercase tracking-[0.3em] hover:text-primary transition-colors">
-                  <component :is="showEvidence ? IconChevronUp : IconChevronDown" class="w-4 h-4" />
-                  Preuve de l'incident
-                </button>
-
-                <div v-if="showEvidence" class="animate-fade-in space-y-6">
-                  <div v-if="isImage(incident.evidence_file)" @click="openViewer(getFullUrl(incident.evidence_file))"
-                    class="group relative rounded-3xl overflow-hidden border border-ash bg-ash/5 cursor-zoom-in aspect-video md:aspect-auto max-h-[600px] transition-transform hover:scale-[1.01] active:scale-[0.99]">
-                    <img :src="getFullUrl(incident.evidence_file)" class="w-full h-full object-contain mx-auto"
-                      alt="Evidence" />
-                    <div
-                      class="absolute inset-0 bg-BtW/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                      <div
-                        class="p-3 bg-white/90 backdrop-blur rounded-2xl shadow-xl text-primary transform translate-y-4 group-hover:translate-y-0 transition-transform">
-                        <IconZoomIn class="w-6 h-6" />
+                    <div class="w-10 h-10 rounded-full overflow-hidden border border-ash/20 bg-ash/10 shrink-0">
+                      <img
+                        :src="getUserAvatarUrl((incident as any).user_avatar || null, incident.author_first_name || null, incident.author_last_name || null)"
+                        class="w-full h-full object-cover" />
+                    </div>
+                    <div class="min-w-0">
+                      <div class="flex items-center gap-2">
+                        <template v-if="incident.is_anonymous || incident.is_anonymous === 1">
+                          Anonyme
+                        </template>
+                        <template v-else>
+                          <NuxtLink :to="`/user/${incident.user_id}`"
+                            class="hover:text-primary hover:underline transition-colors">
+                            {{ [incident.author_first_name, incident.author_last_name].filter(Boolean).join(' ') ||
+                              'Utilisateur' }}
+                          </NuxtLink>
+                        </template>
                       </div>
                     </div>
                   </div>
-
-                  <!-- PDF Viewer Frame -->
-                  <div v-else-if="isPdf(incident.evidence_file)" class="space-y-4">
-                    <div
-                      class="w-full h-[600px] rounded-[2rem] overflow-hidden border border-ash shadow-inner bg-ash/5">
-                      <iframe :src="getFullUrl(incident.evidence_file)" class="w-full h-full border-none"></iframe>
-                    </div>
-                    <div class="flex items-center justify-between p-6 rounded-2xl bg-ash/5 border border-ashAct">
-                      <div class="flex items-center gap-4">
-                        <IconFileTypePdf class="w-8 h-8 text-danger" />
-                        <p class="text-sm font-black text-BtW tracking-tight">Vue PDF intégrée</p>
-                      </div>
-                      <a :href="getFullUrl(incident.evidence_file)" target="_blank">
-                        <UiBaseButton variant="secondary" size="sm"
-                          class="!rounded-xl text-[10px] font-black uppercase tracking-widest">
-                          <IconExternalLink class="w-4 h-4 mr-2" /> Plein écran
-                        </UiBaseButton>
-                      </a>
-                    </div>
-                  </div>
                 </div>
-              </div>
-            </div>
 
-            <!-- Comments Section -->
-            <div class="glass-panel p-8 md:p-10 rounded-[3rem] border border-ashAct space-y-6 shadow-lg">
-              <button @click="showComments = !showComments"
-                class="w-full flex items-center justify-between hover:text-primary transition-colors">
-                <h3 class="text-xs font-black text-hsa uppercase tracking-[0.3em] flex items-center gap-2">
-                  <IconMessage class="w-4 h-4 text-primary" /> Commentaires
-                  <span v-if="store.comments.length"
-                    class="ml-1 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-black">
-                    {{ store.comments.length }}
-                  </span>
-                </h3>
-                <component :is="showComments ? IconChevronUp : IconChevronDown" class="w-4 h-4 text-hsa" />
-              </button>
+                <div class="h-px bg-ashAct/50"></div>
 
-              <template v-if="showComments">
-                <!-- Add Comment Form (authenticated only) -->
-                <div v-if="authStore.user" class="space-y-3">
-                  <textarea v-model="newComment" rows="3" placeholder="Ajouter un commentaire..."
-                    class="w-full p-4 rounded-2xl bg-WtB border border-ash/50 text-sm font-medium outline-none focus:ring-2 focus:ring-primary transition-all placeholder-hsa/50 resize-none" />
-                  <div class="flex justify-end">
-                    <UiBaseButton variant="primary" size="sm" @click="handleAddComment"
-                      :disabled="!newComment.trim() || submittingComment"
-                      class="!rounded-xl text-[10px] font-black uppercase tracking-widest">
-                      <IconSend class="w-3.5 h-3.5 mr-1.5" />
-                      {{ submittingComment ? 'Envoi...' : 'Commenter' }}
-                    </UiBaseButton>
-                  </div>
-                </div>
-                <div v-else class="p-4 rounded-2xl bg-ash/5 border border-ash/30 text-center">
-                  <p class="text-xs text-hsa font-bold">
-                    <NuxtLink to="/auth/login" class="text-primary hover:underline">Connectez-vous</NuxtLink>
-                    pour laisser un commentaire.
+                <div class="space-y-6">
+                  <h3 class="text-xs font-black text-hsa uppercase tracking-[0.3em]">Analyse de l'incident</h3>
+                  <p class="text-lg md:text-xl text-BtW leading-relaxed whitespace-pre-wrap">
+                    {{ decodeHtmlEntities(incident.description) }}
                   </p>
                 </div>
 
-                <div class="h-px bg-ashAct/40"></div>
+                <!-- Evidence Section with Toggle -->
+                <div v-if="incident.evidence_file" class="pt-8 space-y-6">
+                  <button @click="showEvidence = !showEvidence"
+                    class="flex items-center gap-2 text-xs font-black text-hsa uppercase tracking-[0.3em] hover:text-primary transition-colors">
+                    <component :is="showEvidence ? IconChevronUp : IconChevronDown" class="w-4 h-4" />
+                    Preuve de l'incident
+                  </button>
 
-                <!-- Comments List -->
-                <div v-if="store.loadingComments" class="space-y-4">
-                  <UiAppSkeleton v-for="i in 3" :key="i" height="80px" radius="1.5rem" />
-                </div>
-
-                <div v-else-if="store.comments.length" class="space-y-4">
-                  <div v-for="comment in store.comments" :key="comment.id"
-                    class="p-5 rounded-2xl bg-ash/5 border border-ash/30 space-y-2 hover:border-ash/50 transition-colors">
-                    <div class="flex items-center justify-between">
-                      <div class="flex items-center gap-2">
+                  <div v-if="showEvidence" class="animate-fade-in space-y-6">
+                    <div v-if="isImage(incident.evidence_file)" @click="openViewer(getFullUrl(incident.evidence_file))"
+                      class="group relative rounded-3xl overflow-hidden border border-ash bg-ash/5 cursor-zoom-in aspect-video md:aspect-auto max-h-[600px] transition-transform hover:scale-[1.01] active:scale-[0.99]">
+                      <img :src="getFullUrl(incident.evidence_file)" class="w-full h-full object-contain mx-auto"
+                        alt="Evidence" />
+                      <div
+                        class="absolute inset-0 bg-BtW/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                         <div
-                          class="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center text-primary text-[10px] font-black uppercase">
-                          {{ (comment.first_name || 'U').charAt(0) }}
+                          class="p-3 bg-white/90 backdrop-blur rounded-2xl shadow-xl text-primary transform translate-y-4 group-hover:translate-y-0 transition-transform">
+                          <IconZoomIn class="w-6 h-6" />
                         </div>
-                        <span class="text-xs font-black text-BtW">
-                          {{ [comment.first_name, comment.last_name].filter(Boolean).join(' ') || 'Utilisateur' }}
-                        </span>
-                        <span v-if="comment.organization_name" class="text-[10px] text-hsa font-bold">
-                          · {{ comment.organization_name }}
-                        </span>
-                      </div>
-                      <div class="flex items-center gap-2">
-                        <span class="text-[10px] text-hsa font-bold">{{ formatDate(comment.created_at) }}</span>
-                        <!-- Edit button: own comment + within 24h -->
-                        <button v-if="canEditComment(comment)" @click="startEditComment(comment)"
-                          class="p-1 rounded-lg hover:bg-primary/10 text-hsa hover:text-primary transition-colors"
-                          title="Modifier le commentaire">
-                          <IconEdit class="w-3.5 h-3.5" />
-                        </button>
                       </div>
                     </div>
-                    <!-- Inline edit mode -->
-                    <div v-if="editingCommentId === comment.id" class="pl-9 space-y-2">
-                      <textarea v-model="editCommentContent" rows="2"
-                        class="w-full p-3 rounded-xl bg-WtB border border-ash/50 text-sm font-medium outline-none focus:ring-2 focus:ring-primary transition-all resize-none" />
-                      <div class="flex gap-2 justify-end">
-                        <UiBaseButton variant="ghost" size="sm" @click="cancelEditComment"
-                          class="!rounded-lg !text-[10px]">
-                          Annuler
-                        </UiBaseButton>
-                        <UiBaseButton variant="primary" size="sm" @click="saveEditComment(comment)"
-                          :disabled="!editCommentContent.trim() || savingComment" class="!rounded-lg !text-[10px]">
-                          {{ savingComment ? 'Enregistrement...' : 'Enregistrer' }}
-                        </UiBaseButton>
+
+                    <!-- PDF Viewer Frame -->
+                    <div v-else-if="isPdf(incident.evidence_file)" class="space-y-4">
+                      <div
+                        class="w-full h-[600px] rounded-[2rem] overflow-hidden border border-ash shadow-inner bg-ash/5">
+                        <iframe :src="getFullUrl(incident.evidence_file)" class="w-full h-full border-none"></iframe>
+                      </div>
+                      <div class="flex items-center justify-between p-6 rounded-2xl bg-ash/5 border border-ashAct">
+                        <div class="flex items-center gap-4">
+                          <IconFileTypePdf class="w-8 h-8 text-danger" />
+                          <p class="text-sm font-black text-BtW tracking-tight">Vue PDF intégrée</p>
+                        </div>
+                        <a :href="getFullUrl(incident.evidence_file)" target="_blank">
+                          <UiBaseButton variant="secondary" size="sm"
+                            class="!rounded-xl text-[10px] font-black uppercase tracking-widest">
+                            <IconExternalLink class="w-4 h-4 mr-2" /> Plein écran
+                          </UiBaseButton>
+                        </a>
                       </div>
                     </div>
-                    <p v-else class="text-sm text-BtW leading-relaxed pl-9">{{ comment.content }}</p>
                   </div>
                 </div>
+              </div>
 
-                <div v-else class="text-center py-8">
-                  <IconMessage class="w-8 h-8 text-hsa/20 mx-auto mb-2" />
-                  <p class="text-xs text-hsa font-bold">Aucun commentaire pour le moment.</p>
-                </div>
-              </template>
+              <!-- Comments Section -->
+              <div class="glass-panel p-8 md:p-10 rounded-[3rem] border border-ashAct space-y-6 shadow-lg">
+                <button @click="showComments = !showComments"
+                  class="w-full flex items-center justify-between hover:text-primary transition-colors">
+                  <h3 class="text-xs font-black text-hsa uppercase tracking-[0.3em] flex items-center gap-2">
+                    <IconMessage class="w-4 h-4 text-primary" /> Commentaires
+                    <span v-if="store.comments.length"
+                      class="ml-1 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-black">
+                      {{ store.comments.length }}
+                    </span>
+                  </h3>
+                  <component :is="showComments ? IconChevronUp : IconChevronDown" class="w-4 h-4 text-hsa" />
+                </button>
+
+                <template v-if="showComments">
+                  <!-- Add Comment Form (authenticated only) -->
+                  <div v-if="authStore.user" class="space-y-3">
+                    <textarea v-model="newComment" rows="3" placeholder="Ajouter un commentaire..."
+                      class="w-full p-4 rounded-2xl bg-WtB border border-ash/50 text-sm font-medium outline-none focus:ring-2 focus:ring-primary transition-all placeholder-hsa/50 resize-none" />
+                    <div class="flex justify-end">
+                      <UiBaseButton variant="primary" size="sm" @click="handleAddComment"
+                        :disabled="!newComment.trim() || submittingComment"
+                        class="!rounded-xl text-[10px] font-black uppercase tracking-widest">
+                        <IconSend class="w-3.5 h-3.5 mr-1.5" />
+                        {{ submittingComment ? 'Envoi...' : 'Commenter' }}
+                      </UiBaseButton>
+                    </div>
+                  </div>
+                  <div v-else class="p-4 rounded-2xl bg-ash/5 border border-ash/30 text-center">
+                    <p class="text-xs text-hsa font-bold">
+                      <NuxtLink to="/auth/login" class="text-primary hover:underline">Connectez-vous</NuxtLink>
+                      pour laisser un commentaire.
+                    </p>
+                  </div>
+
+                  <div class="h-px bg-ashAct/40"></div>
+
+                  <!-- Comments List -->
+                  <div v-if="store.loadingComments" class="space-y-4">
+                    <UiAppSkeleton v-for="i in 3" :key="i" height="80px" radius="1.5rem" />
+                  </div>
+
+                  <div v-else-if="store.comments.length" class="space-y-4">
+                    <div v-for="comment in store.comments" :key="comment.id"
+                      class="p-5 rounded-2xl bg-ash/5 border border-ash/30 space-y-2 hover:border-ash/50 transition-colors">
+                      <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                          <div class="w-7 h-7 rounded-full overflow-hidden border border-ash/20 bg-ash/10">
+                            <img
+                              :src="getUserAvatarUrl((comment as any).avatar_url || null, comment.first_name || null, comment.last_name || null)"
+                              class="w-full h-full object-cover" />
+                          </div>
+                          <NuxtLink :to="`/user/${comment.user_id}`"
+                            class="text-xs font-black text-BtW hover:text-primary hover:underline transition-colors">
+                            {{ [comment.first_name, comment.last_name].filter(Boolean).join(' ') || 'Utilisateur' }}
+                          </NuxtLink>
+                        </div>
+                        <div class="flex items-center gap-2">
+                          <span class="text-[10px] text-hsa font-bold">{{ formatDate(comment.created_at) }}</span>
+                          <!-- Edit button: own comment + within 24h -->
+                          <button v-if="canEditComment(comment)" @click="startEditComment(comment)"
+                            class="p-1 rounded-lg hover:bg-primary/10 text-hsa hover:text-primary transition-colors"
+                            title="Modifier le commentaire">
+                            <IconEdit class="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                      <!-- Inline edit mode -->
+                      <div v-if="editingCommentId === comment.id" class="pl-9 space-y-2">
+                        <textarea v-model="editCommentContent" rows="2"
+                          class="w-full p-3 rounded-xl bg-WtB border border-ash/50 text-sm font-medium outline-none focus:ring-2 focus:ring-primary transition-all resize-none" />
+                        <div class="flex gap-2 justify-end">
+                          <UiBaseButton variant="ghost" size="sm" @click="cancelEditComment"
+                            class="!rounded-lg !text-[10px]">
+                            Annuler
+                          </UiBaseButton>
+                          <UiBaseButton variant="primary" size="sm" @click="saveEditComment(comment)"
+                            :disabled="!editCommentContent.trim() || savingComment" class="!rounded-lg !text-[10px]">
+                            {{ savingComment ? 'Enregistrement...' : 'Enregistrer' }}
+                          </UiBaseButton>
+                        </div>
+                      </div>
+                      <p v-else class="text-sm text-BtW leading-relaxed pl-9">{{ comment.content }}</p>
+                    </div>
+                  </div>
+
+                  <div v-else class="text-center py-8">
+                    <IconMessage class="w-8 h-8 text-hsa/20 mx-auto mb-2" />
+                    <p class="text-xs text-hsa font-bold">Aucun commentaire pour le moment.</p>
+                  </div>
+                </template>
+              </div>
             </div>
           </div>
 
@@ -352,12 +359,14 @@ import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { decodeHtmlEntities } from '~/utils/format'
 import { mapIncidentType, mapThreatLevel } from '~/utils/vigitech'
+import { getUserAvatarUrl } from '~/utils/user'
 
 definePageMeta({
   layout: 'guest'
 })
 
 const route = useRoute()
+const config = useRuntimeConfig()
 const store = useVigitechStore()
 const authStore = useAuthStore()
 const toast = useToastStore()
@@ -412,6 +421,7 @@ const formatDate = (dateStr: string) => {
   if (!dateStr) return '-'
   return format(new Date(dateStr), 'PPP p', { locale: fr })
 }
+
 
 const getFullUrl = (path: string) => {
   if (!path) return ''

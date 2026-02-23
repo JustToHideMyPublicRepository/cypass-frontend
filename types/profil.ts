@@ -14,6 +14,7 @@ export interface UserProfile {
 export interface Statistics {
   total_documents: number
   total_incidents: number
+  total_views: number
 }
 
 export interface LogEntry {

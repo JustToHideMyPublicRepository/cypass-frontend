@@ -16,16 +16,12 @@ export const useAuthStore = defineStore('auth', {
       return `${state.user.first_name} ${state.user.last_name}`.trim() || 'Vous'
     },
     avatarUrl: (state) => {
-      const avatar = state.user?.avatar_url
-      if (!avatar || avatar.trim() === '') {
-        const seed = state.user ? `${state.user.first_name} ${state.user.last_name}`.trim() : 'Utilisateur'
-        return `https://api.dicebear.com/9.x/initials/svg?seed=${seed}`
-      }
-
-      if (avatar.startsWith('http')) return avatar
-      const cleanPath = avatar.replace(/^\/+/, '').replace(/^uploads\//i, '')
-
-      return `/uploads/${cleanPath}`
+      const user = state.user
+      return getUserAvatarUrl(
+        user?.avatar_url,
+        user?.first_name,
+        user?.last_name
+      )
     }
   },
 

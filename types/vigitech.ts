@@ -25,6 +25,7 @@ export interface Incident {
   author_first_name?: string | null
   author_last_name?: string | null
   author_is_reported?: boolean | number
+  user_avatar?: string | null
 }
 
 export interface Comment {
@@ -37,6 +38,7 @@ export interface Comment {
   first_name?: string | null
   last_name?: string | null
   organization_name?: string | null
+  avatar_url?: string | null
 }
 
 export interface CreateIncidentRequest {

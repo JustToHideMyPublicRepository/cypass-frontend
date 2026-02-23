@@ -4,7 +4,7 @@
 
     <!-- Loading State -->
     <div v-if="profilStore.loading && !profilStore.profile" class="flex items-center justify-center py-12">
-      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      <UiLogoLoader size="xl" />
     </div>
 
     <div v-else class="grid grid-cols-1 lg:grid-cols-3 gap-6">

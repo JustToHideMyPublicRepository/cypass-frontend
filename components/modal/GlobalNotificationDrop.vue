@@ -42,7 +42,6 @@
 
             <div v-if="store.loading && !store.notifications.length" class="py-10">
               <UiLogoLoader size="sm" />
-              <p class="text-xs text-hsa text-BtW">Synchronisation...</p>
             </div>
 
             <div v-else-if="!store.notifications.length" class="p-12 text-center">

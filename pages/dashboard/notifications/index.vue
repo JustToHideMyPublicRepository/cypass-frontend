@@ -102,7 +102,6 @@
     <UiBaseCard class="p-0 overflow-hidden sm:rounded-2xl border-x-0 sm:border-x">
       <div v-if="store.loading && !store.notifications.length" class="py-10">
         <UiLogoLoader size="xl" />
-        <p class="text-sm text-hsa">Chargement de vos notifications...</p>
       </div>
 
       <div v-else-if="!filteredNotifications.length" class="p-12 md:p-20 text-center">

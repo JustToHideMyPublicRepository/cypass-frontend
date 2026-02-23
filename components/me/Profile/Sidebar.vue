@@ -52,7 +52,7 @@
           <p class="text-xs font-black text-BtW">{{ formatDate(user?.created_at) }}</p>
         </div>
         <div class="text-center">
-          <p class="text-[10px] font-bold text-hsa uppercase tracking-widest mb-1 opacity-60">Status</p>
+          <p class="text-[10px] font-bold text-hsa uppercase tracking-widest mb-1 opacity-60">Status de compte</p>
           <div class="flex justify-center">
             <span :class="statusColorClass" class="text-[10px] font-black uppercase tracking-tighter">
               {{ statusLabel.label }}
