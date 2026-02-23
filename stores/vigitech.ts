@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { Incident, CreateIncidentRequest } from '../types/vigitech'
+import type { Incident, Comment, CreateIncidentRequest } from '../types/vigitech'
 
 export const useVigitechStore = defineStore('vigitech', {
   state: () => ({
@@ -11,6 +11,8 @@ export const useVigitechStore = defineStore('vigitech', {
       offset: 0
     },
     currentIncident: null as Incident | null,
+    comments: [] as Comment[],
+    loadingComments: false,
     loading: false,
     error: null as string | null
   }),
@@ -89,6 +91,38 @@ export const useVigitechStore = defineStore('vigitech', {
         this.error = err.message
       } finally {
         this.loading = false
+      }
+    },
+
+    async fetchComments(incidentId: string) {
+      this.loadingComments = true
+      try {
+        const response: any = await $fetch('/api/vigitech/comments', {
+          params: { incident_id: incidentId }
+        })
+        if (response.success) {
+          this.comments = response.data || []
+        }
+      } catch (err: any) {
+        console.warn('Erreur chargement commentaires:', err.message)
+      } finally {
+        this.loadingComments = false
+      }
+    },
+
+    async addComment(incidentId: string, content: string) {
+      try {
+        const response: any = await $fetch('/api/vigitech/comments', {
+          method: 'POST',
+          body: { incident_id: incidentId, content }
+        })
+        if (response.success) {
+          await this.fetchComments(incidentId)
+          return { success: true, message: response.message }
+        }
+        return { success: false, message: response.message || 'Impossible de publier le commentaire.' }
+      } catch (err: any) {
+        return { success: false, message: err.data?.message || err.message || 'Impossible de publier le commentaire.' }
       }
     },
 

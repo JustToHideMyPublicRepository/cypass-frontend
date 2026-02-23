@@ -18,8 +18,25 @@ export interface Incident {
   is_reported?: boolean | number
   created_at: string
   updated_at?: string | null
-  reporter_organization?: string
+  reporter_organization?: string | null
   pending_reports_count?: number
+  views_count?: number
+  comments_count?: number
+  author_first_name?: string | null
+  author_last_name?: string | null
+  author_is_reported?: boolean | number
+}
+
+export interface Comment {
+  id: string
+  incident_id: string
+  user_id: string
+  content: string
+  created_at: string
+  updated_at?: string | null
+  first_name?: string | null
+  last_name?: string | null
+  organization_name?: string | null
 }
 
 export interface CreateIncidentRequest {

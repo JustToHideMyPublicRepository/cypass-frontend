@@ -50,6 +50,11 @@
                 class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-BtW text-WtB text-[10px] uppercase font-black tracking-widest">
                 Anonyme
               </div>
+              <div v-if="incident.views_count != null"
+                class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-ash/10 text-[10px] uppercase font-black tracking-widest text-hsa">
+                <IconEye class="w-3.5 h-3.5" /> {{ incident.views_count }} vue{{ incident.views_count !== 1 ? 's' : ''
+                }}
+              </div>
             </div>
 
             <h2 class="text-2xl md:text-3xl font-black text-BtW leading-tight">
@@ -62,6 +67,20 @@
               </div>
               <div class="flex items-center gap-2">
                 <IconCalendar class="w-4 h-4 text-primary" /> {{ formatDate(incident.created_at) }}
+              </div>
+              <!-- Author info -->
+              <div class="flex items-center gap-2">
+                <IconUser class="w-4 h-4 text-primary" />
+                <template v-if="incident.is_anonymous || incident.is_anonymous === 1">
+                  Utilisateur anonyme
+                </template>
+                <template v-else>
+                  {{ [incident.author_first_name, incident.author_last_name].filter(Boolean).join(' ') || 'Utilisateur'
+                  }}
+                  <span v-if="incident.reporter_organization" class="text-hsa/60">
+                    · {{ incident.reporter_organization }}
+                  </span>
+                </template>
               </div>
             </div>
 
@@ -115,6 +134,53 @@
             </div>
           </div>
         </div>
+
+          <!-- Comments Section (read-only) -->
+          <UiBaseCard class="!rounded-[2.5rem] overflow-hidden">
+            <div class="p-6 md:p-8 space-y-5">
+              <button @click="showComments = !showComments"
+                class="w-full flex items-center justify-between hover:text-primary transition-colors">
+                <h3 class="text-xs font-black text-hsa uppercase tracking-[0.2em] flex items-center gap-2">
+                  <IconMessage class="w-4 h-4 text-primary" /> Commentaires
+                  <span v-if="store.comments.length"
+                    class="ml-1 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-black">
+                    {{ store.comments.length }}
+                  </span>
+                </h3>
+                <component :is="showComments ? IconChevronUp : IconChevronDown" class="w-4 h-4 text-hsa" />
+              </button>
+
+              <template v-if="showComments">
+                <div v-if="store.loadingComments" class="space-y-3">
+                  <UiAppSkeleton v-for="i in 3" :key="i" height="70px" radius="1rem" />
+                </div>
+
+                <div v-else-if="store.comments.length" class="space-y-3">
+                  <div v-for="comment in store.comments" :key="comment.id"
+                    class="p-4 rounded-xl bg-ash/5 border border-ash/30 space-y-1.5">
+                    <div class="flex items-center justify-between">
+                      <div class="flex items-center gap-2">
+                        <div
+                          class="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-primary text-[9px] font-black uppercase">
+                          {{ (comment.first_name || 'U').charAt(0) }}
+                        </div>
+                        <span class="text-[11px] font-black text-BtW">
+                          {{ [comment.first_name, comment.last_name].filter(Boolean).join(' ') || 'Utilisateur' }}
+                        </span>
+                      </div>
+                      <span class="text-[10px] text-hsa font-bold">{{ formatDate(comment.created_at) }}</span>
+                    </div>
+                    <p class="text-xs text-BtW leading-relaxed pl-8">{{ comment.content }}</p>
+                  </div>
+                </div>
+
+                <div v-else class="text-center py-6">
+                  <IconMessage class="w-6 h-6 text-hsa/20 mx-auto mb-2" />
+                  <p class="text-[11px] text-hsa font-bold">Aucun commentaire.</p>
+                </div>
+              </template>
+            </div>
+          </UiBaseCard>
       </div>
 
       <!-- Right Sidebar -->
@@ -211,7 +277,7 @@
 
 <script setup lang="ts">
 import {
-  IconMapPin, IconCalendar, IconExternalLink, IconCheck, IconX, IconLock, IconAlertCircle, IconAlertTriangle, IconZoomIn, IconFileTypePdf, IconShare, IconDownload, IconBuilding, IconChevronDown, IconChevronUp
+  IconMapPin, IconCalendar, IconExternalLink, IconCheck, IconX, IconLock, IconAlertCircle, IconAlertTriangle, IconZoomIn, IconFileTypePdf, IconShare, IconDownload, IconBuilding, IconChevronDown, IconChevronUp, IconEye, IconUser, IconMessage
 } from '@tabler/icons-vue'
 import { useVigitechStore } from '~/stores/vigitech'
 import { useToastStore } from '~/stores/toast'
@@ -231,6 +297,7 @@ const config = useRuntimeConfig()
 
 const incident = computed(() => store.currentIncident)
 const showEvidence = ref(false)
+const showComments = ref(true)
 
 const statusBg = computed(() => {
   if (!incident.value) return 'bg-ash/5'
@@ -315,13 +382,14 @@ const openViewer = (url: string) => {
 const fetchData = () => {
   const id = route.params.id as string
   store.fetchUserIncidentById(id)
+  store.fetchComments(id)
 }
 
 onMounted(fetchData)
 
 useHead({
   title: computed(() => incident.value
-    ? `${incident.value.title} - DocSentry`
-    : 'Detail de l\'incident - DocSentry')
+    ? `${incident.value.title} - VigiTech`
+    : 'Detail de l\'incident - VigiTech')
 })
 </script>

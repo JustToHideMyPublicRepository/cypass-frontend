@@ -78,6 +78,10 @@
                     class="px-3 py-1 rounded-full bg-BtW text-WtB text-[10px] uppercase font-black tracking-widest">
                     Anonyme
                   </div>
+                  <div v-if="incident.views_count != null"
+                    class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-ash/10 text-[10px] uppercase font-black tracking-widest text-hsa">
+                    <IconEye class="w-3.5 h-3.5" /> {{ incident.views_count }}
+                  </div>
                 </div>
 
                 <h1 class="text-3xl md:text-5xl font-black text-BtW leading-tight tracking-tighter">
@@ -91,10 +95,19 @@
                   <div class="flex items-center gap-2.5">
                     <IconCalendar class="w-5 h-5 text-primary" /> {{ formatDate(incident.created_at) }}
                   </div>
+                  <!-- Author info -->
                   <div class="flex items-center gap-2.5">
-                    <IconUsers class="w-5 h-5 text-primary" />
-                    {{ (incident.is_anonymous || incident.is_anonymous === 1) ? 'Utilisateur anonyme' :
-                      (incident.reporter_organization || 'Pas d\'organisation') }}
+                    <IconUser class="w-5 h-5 text-primary" />
+                    <template v-if="incident.is_anonymous || incident.is_anonymous === 1">
+                      Utilisateur anonyme
+                    </template>
+                    <template v-else>
+                      {{ [incident.author_first_name, incident.author_last_name].filter(Boolean).join(' ') ||
+                        'Utilisateur' }}
+                      <span v-if="incident.reporter_organization" class="text-hsa/60">
+                        · {{ incident.reporter_organization }}
+                      </span>
+                    </template>
                   </div>
                 </div>
               </div>
@@ -151,6 +164,77 @@
                   </div>
                 </div>
               </div>
+            </div>
+
+            <!-- Comments Section -->
+            <div class="glass-panel p-8 md:p-10 rounded-[3rem] border border-ashAct space-y-6 shadow-lg">
+              <button @click="showComments = !showComments"
+                class="w-full flex items-center justify-between hover:text-primary transition-colors">
+                <h3 class="text-xs font-black text-hsa uppercase tracking-[0.3em] flex items-center gap-2">
+                  <IconMessage class="w-4 h-4 text-primary" /> Commentaires
+                  <span v-if="store.comments.length"
+                    class="ml-1 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-black">
+                    {{ store.comments.length }}
+                  </span>
+                </h3>
+                <component :is="showComments ? IconChevronUp : IconChevronDown" class="w-4 h-4 text-hsa" />
+              </button>
+
+              <template v-if="showComments">
+                <!-- Add Comment Form (authenticated only) -->
+                <div v-if="authStore.user" class="space-y-3">
+                  <textarea v-model="newComment" rows="3" placeholder="Ajouter un commentaire..."
+                    class="w-full p-4 rounded-2xl bg-WtB border border-ash/50 text-sm font-medium outline-none focus:ring-2 focus:ring-primary transition-all placeholder-hsa/50 resize-none" />
+                  <div class="flex justify-end">
+                    <UiBaseButton variant="primary" size="sm" @click="handleAddComment"
+                      :disabled="!newComment.trim() || submittingComment"
+                      class="!rounded-xl text-[10px] font-black uppercase tracking-widest">
+                      <IconSend class="w-3.5 h-3.5 mr-1.5" />
+                      {{ submittingComment ? 'Envoi...' : 'Commenter' }}
+                    </UiBaseButton>
+                  </div>
+                </div>
+                <div v-else class="p-4 rounded-2xl bg-ash/5 border border-ash/30 text-center">
+                  <p class="text-xs text-hsa font-bold">
+                    <NuxtLink to="/auth/login" class="text-primary hover:underline">Connectez-vous</NuxtLink>
+                    pour laisser un commentaire.
+                  </p>
+                </div>
+
+                <div class="h-px bg-ashAct/40"></div>
+
+                <!-- Comments List -->
+                <div v-if="store.loadingComments" class="space-y-4">
+                  <UiAppSkeleton v-for="i in 3" :key="i" height="80px" radius="1.5rem" />
+                </div>
+
+                <div v-else-if="store.comments.length" class="space-y-4">
+                  <div v-for="comment in store.comments" :key="comment.id"
+                    class="p-5 rounded-2xl bg-ash/5 border border-ash/30 space-y-2 hover:border-ash/50 transition-colors">
+                    <div class="flex items-center justify-between">
+                      <div class="flex items-center gap-2">
+                        <div
+                          class="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center text-primary text-[10px] font-black uppercase">
+                          {{ (comment.first_name || 'U').charAt(0) }}
+                        </div>
+                        <span class="text-xs font-black text-BtW">
+                          {{ [comment.first_name, comment.last_name].filter(Boolean).join(' ') || 'Utilisateur' }}
+                        </span>
+                        <span v-if="comment.organization_name" class="text-[10px] text-hsa font-bold">
+                          · {{ comment.organization_name }}
+                        </span>
+                      </div>
+                      <span class="text-[10px] text-hsa font-bold">{{ formatDate(comment.created_at) }}</span>
+                    </div>
+                    <p class="text-sm text-BtW leading-relaxed pl-9">{{ comment.content }}</p>
+                  </div>
+                </div>
+
+                <div v-else class="text-center py-8">
+                  <IconMessage class="w-8 h-8 text-hsa/20 mx-auto mb-2" />
+                  <p class="text-xs text-hsa font-bold">Aucun commentaire pour le moment.</p>
+                </div>
+              </template>
             </div>
           </div>
 
@@ -215,9 +299,10 @@
 
 <script setup lang="ts">
 import {
-  IconMapPin, IconCalendar, IconUsers, IconArrowUpRight, IconDownload, IconShare, IconShieldCheck, IconAlertCircle, IconZoomIn, IconFileTypePdf, IconExternalLink, IconChevronDown, IconChevronUp
+  IconMapPin, IconCalendar, IconUser, IconArrowUpRight, IconDownload, IconShare, IconShieldCheck, IconAlertCircle, IconZoomIn, IconFileTypePdf, IconExternalLink, IconChevronDown, IconChevronUp, IconEye, IconMessage, IconSend
 } from '@tabler/icons-vue'
 import { useVigitechStore } from '~/stores/vigitech'
+import { useAuthStore } from '~/stores/auth'
 import { useToastStore } from '~/stores/toast'
 import { useVigitechAdvice } from '~/composables/useVigitechAdvice'
 import { format } from 'date-fns'
@@ -231,10 +316,14 @@ definePageMeta({
 
 const route = useRoute()
 const store = useVigitechStore()
+const authStore = useAuthStore()
 const toast = useToastStore()
 const { getAdvice } = useVigitechAdvice()
 const incident = computed(() => store.currentIncident)
 const showEvidence = ref(false)
+const showComments = ref(true)
+const newComment = ref('')
+const submittingComment = ref(false)
 
 const formatDate = (dateStr: string) => {
   if (!dateStr) return '-'
@@ -300,9 +389,23 @@ const downloadEvidence = () => {
   document.body.removeChild(link)
 }
 
+const handleAddComment = async () => {
+  if (!newComment.value.trim() || !incident.value) return
+  submittingComment.value = true
+  const result = await store.addComment(incident.value.id, newComment.value.trim())
+  if (result.success) {
+    newComment.value = ''
+    toast.showToast('success', 'Commentaire ajouté', result.message || 'Votre commentaire a été publié.')
+  } else {
+    toast.showToast('error', 'Erreur', result.message || 'Impossible de publier le commentaire.')
+  }
+  submittingComment.value = false
+}
+
 const fetchData = () => {
   const id = route.params.id as string
   store.fetchPublicIncidentById(id)
+  store.fetchComments(id)
 }
 
 onMounted(fetchData)

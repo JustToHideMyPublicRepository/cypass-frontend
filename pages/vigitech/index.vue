@@ -19,7 +19,6 @@
             <h3 class="text-[10px] font-black text-hsa uppercase tracking-[0.2em]">Filtrer les incidents</h3>
 
             <div class="space-y-4">
-              <!-- Recherche -->
               <div class="space-y-1.5">
                 <label class="text-[9px] font-black text-hsa uppercase tracking-widest px-1">Recherche</label>
                 <div class="relative group">
@@ -27,7 +26,7 @@
                     class="absolute left-3 top-1/2 -translate-y-1/2 text-hsa group-focus-within:text-primary transition-colors">
                     <IconSearch class="w-4 h-4" />
                   </span>
-                  <input v-model="filters.search" @input="fetchData" type="text" placeholder="Mot-clé..."
+                  <input v-model="filters.search" type="text" placeholder="Mot-clé..."
                     class="w-full h-10 pl-9 pr-4 rounded-xl bg-WtB border border-ash/50 font-bold text-xs outline-none focus:ring-2 focus:ring-primary transition-all placeholder-hsa/50" />
                 </div>
               </div>
@@ -69,12 +68,12 @@
               <div class="space-y-4 pt-2 border-t border-ash">
                 <div class="space-y-1.5">
                   <label class="text-[9px] font-black text-hsa uppercase tracking-widest px-1">Depuis le</label>
-                  <input v-model="filters.date_start" @change="fetchData" type="datetime-local"
+                  <input v-model="filters.date_start" type="datetime-local"
                     class="w-full h-10 px-3 rounded-xl bg-WtB border border-ash/50 text-xs font-bold outline-none focus:ring-2 focus:ring-primary transition-all" />
                 </div>
                 <div class="space-y-1.5">
                   <label class="text-[9px] font-black text-hsa uppercase tracking-widest px-1">Jusqu'au</label>
-                  <input v-model="filters.date_end" @change="fetchData" type="datetime-local"
+                  <input v-model="filters.date_end" type="datetime-local"
                     class="w-full h-10 px-3 rounded-xl bg-WtB border border-ash/50 text-xs font-bold outline-none focus:ring-2 focus:ring-primary transition-all" />
                 </div>
               </div>
@@ -127,10 +126,10 @@
             <UiAppSkeleton v-for="i in 5" :key="i" height="120px" radius="1.5rem" />
           </div>
 
-          <template v-else-if="store.publicIncidents.length">
+          <template v-else-if="filteredIncidents.length">
             <div class="space-y-4">
-              <RootVigitechIncidentCard v-for="incident in store.publicIncidents" :key="incident.id"
-                :incident="incident" :detailUrl="`/vigitech/${incident.id}`" />
+              <RootVigitechIncidentCard v-for="incident in filteredIncidents" :key="incident.id" :incident="incident"
+                :detailUrl="`/vigitech/${incident.id}`" />
             </div>
 
             <!-- Pagination -->
@@ -154,8 +153,14 @@
 
           <div v-else class="text-center py-20 glass-panel rounded-[2.5rem] border-2 border-dashed border-ash">
             <IconShieldCheck class="w-12 h-12 text-primary mx-auto mb-4 opacity-20" />
-            <h3 class="text-xl font-black text-BtW">Aucun incident</h3>
-            <p class="text-xs text-hsa font-bold mt-2">La plateforme est actuellement calme.</p>
+            <h3 class="text-xl font-black text-BtW">{{ hasActiveFilters ? 'Aucun résultat' : 'Aucun incident' }}</h3>
+            <p class="text-xs text-hsa font-bold mt-2">
+              {{ hasActiveFilters ? 'Essayez de modifier vos critères de recherche.'
+                : 'La plateforme est actuellement calme.'
+              }}</p>
+            <UiBaseButton v-if="hasActiveFilters" variant="ghost" size="sm" class="mt-4" @click="resetFilters">
+              Réinitialiser les filtres
+            </UiBaseButton>
           </div>
         </div>
 
@@ -306,6 +311,28 @@ const topTarget = computed(() => {
   return topVal ? `secteur de ${decodeHtmlEntities(topVal)}` : 'réseaux sociaux au Bénin'
 })
 
+const filteredIncidents = computed(() => {
+  let list = store.publicIncidents
+  const q = filters.value.search.toLowerCase()
+  if (q) {
+    list = list.filter(i => {
+      const title = (i.title || '').toLowerCase()
+      const desc = (i.description || '').toLowerCase()
+      const loc = (i.location || '').toLowerCase()
+      return title.includes(q) || desc.includes(q) || loc.includes(q)
+    })
+  }
+  if (filters.value.date_start) {
+    const start = new Date(filters.value.date_start).getTime()
+    list = list.filter(i => new Date(i.created_at).getTime() >= start)
+  }
+  if (filters.value.date_end) {
+    const end = new Date(filters.value.date_end).getTime()
+    list = list.filter(i => new Date(i.created_at).getTime() <= end)
+  }
+  return list
+})
+
 const fetchData = () => {
   const params: any = {
     limit: store.publicPagination.limit,
@@ -313,9 +340,6 @@ const fetchData = () => {
   }
   if (filters.value.type) params.type = filters.value.type
   if (filters.value.level) params.level = filters.value.level
-  if (filters.value.search) params.search = filters.value.search
-  if (filters.value.date_start) params.date_start = filters.value.date_start
-  if (filters.value.date_end) params.date_end = filters.value.date_end
   store.fetchPublicIncidents(params)
 }
 

@@ -45,6 +45,12 @@
             <span class="flex items-center gap-1">
               <IconClock class="w-3 h-3" /> {{ formatTime(incident.created_at) }}
             </span>
+            <span v-if="incident.views_count != null" class="flex items-center gap-1">
+              <IconEye class="w-3 h-3" /> {{ incident.views_count }}
+            </span>
+            <span v-if="incident.comments_count != null" class="flex items-center gap-1">
+              <IconMessage class="w-3 h-3" /> {{ incident.comments_count }}
+            </span>
           </div>
         </div>
       </div>
@@ -83,7 +89,7 @@
 </template>
 
 <script setup lang="ts">
-import { IconMapPin, IconClock, IconAlertCircle, IconLock, IconShare, IconChevronRight } from '@tabler/icons-vue'
+import { IconMapPin, IconClock, IconAlertCircle, IconLock, IconShare, IconChevronRight, IconEye, IconMessage } from '@tabler/icons-vue'
 import type { Incident } from '~/types/vigitech'
 import { decodeHtmlEntities } from '~/utils/format'
 import { mapIncidentType, mapThreatLevel, mapIncidentStatus } from '~/utils/vigitech'
