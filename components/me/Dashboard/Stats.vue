@@ -48,6 +48,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { IconFileCertificate, IconAlertTriangle, IconDevices, IconShieldLock, IconTrendingUp, IconTrendingDown, type Icon } from '@tabler/icons-vue'
+import type { SecurityScoreResult } from '~/utils/security'
 
 interface Trend {
   percentage: number
@@ -74,6 +75,7 @@ const props = defineProps<{
   vigitechCount: number
   vigitechTrend?: Trend
   activeSessions: number
+  securityScore?: SecurityScoreResult
 }>()
 
 const statsConfig = computed<StatCard[]>(() => [
@@ -99,11 +101,11 @@ const statsConfig = computed<StatCard[]>(() => [
   },
   {
     label: 'Score sécurité',
-    value: 'A+',
+    value: props.securityScore?.grade || '...',
     icon: IconShieldLock,
     bgClass: 'bg-gradient-to-br from-successAct to-success',
-    advice: 'Excellent',
-    displaySubLabel: 'Infrastructure saine et protégée'
+    advice: props.securityScore?.label || 'Analyse...',
+    displaySubLabel: props.securityScore?.score !== undefined ? `Protection évaluée à ${props.securityScore.score}%` : 'Évaluation en cours'
   },
   {
     label: 'Appareils actifs',

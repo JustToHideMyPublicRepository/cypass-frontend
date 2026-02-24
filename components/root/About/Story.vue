@@ -34,21 +34,21 @@
                 </div>
 
                 <div class="space-y-2 pl-4 border-l border-slate-800 ml-1">
-                  <div class="text-slate-500">2023-01-15 09:00:00 [INFO] Initializing Core Systems...</div>
+                  <div class="text-slate-500">2025-04-15 09:00:00 [INFO] Inscription au Programme CyberIncub...</div>
                   <div class="flex items-center gap-2">
                     <span class="text-blue-400 text-[8px] md:text-xs">➜</span>
-                    <span>Chargement du Module : <span class="text-yellow-300">DocSentry v1.0</span></span>
+                    <span>Lancement : <span class="text-yellow-300">Phase d'Accélération</span></span>
                     <span class="text-green-500">[OK]</span>
                   </div>
                   <div class="flex items-center gap-2">
                     <span class="text-blue-400 text-[8px] md:text-xs">➜</span>
-                    <span>Établissement du Nœud Sécurisé </span>
+                    <span>Établissement du SOC Communautaire </span>
                     <div class="w-12 md:w-16 h-1 bg-slate-800 rounded overflow-hidden">
                       <div class="h-full bg-green-500 w-full animate-pulse"></div>
                     </div>
                   </div>
-                  <div class="text-slate-500">2024-06-20 14:30:12 [INFO] Déploiement sur le Cloud Gouvernemental
-                    terminé.</div>
+                  <div class="text-slate-500">2025-11-20 14:30:12 [INFO] Déploiement des modules de confiance terminé.
+                  </div>
 
                   <br />
                   <div class="flex">
@@ -57,9 +57,9 @@
                   </div>
 
                   <div class="text-purple-300">
-                    > 2024: 50+ Entités Publiques Connectées<br />
-                    > 2025: Intégration du Secteur Privé [EN ATTENTE]<br />
-                    > 2026: Détection de menaces par IA [PROGRAMMÉ]
+                    > 2025: Sélection & Incubation Cyber [OK]<br />
+                    > 2026: Lancement MVP & Expansion [EN COURS]<br />
+                    > 2027: Consolidation Nationale [PROGRAMMÉ]
                   </div>
 
                   <div class="animate-pulse">_</div>
@@ -79,24 +79,24 @@
 <script setup lang="ts">
 const timeline = [
   {
-    year: '2023',
-    title: 'La Genèse',
-    desc: 'Lancement de l\'initiative CYPASS suite aux nouvelles directives de l\'ASIN pour la sécurisation des services publics.'
+    year: 'Avril 2025',
+    title: 'L\'Éveil',
+    desc: 'Candidature au programme CyberIncub, marquant la première étape vers la révolution de la confiance numérique.'
   },
   {
-    year: '2024',
-    title: 'Premiers Pilotes',
-    desc: 'Déploiement réussi de DocSentry auprès de deux ministères clés. Validation du modèle de certification.'
+    year: 'Octobre 2025',
+    title: 'La Sélection',
+    desc: 'CYPASS est officiellement sélectionné parmi les dossiers les plus prometteurs pour intégrer l\'écosystème cyber.'
   },
   {
-    year: '2025',
-    title: 'Expansion Nationale',
-    desc: 'Ouverture de la plateforme au secteur privé et lancement du SOC communautaire VigiTech.'
+    year: 'Novembre 2025',
+    title: 'L\'Envol',
+    desc: 'Démarrage officiel du programme d\'incubation et accélération du développement des modules DocSentry et VigiTech.'
   },
   {
     year: '2026',
-    title: 'Vers l\'IA',
-    desc: 'Intégration prévue de modèles d\'IA souverains pour la détection prédictive des menaces.'
+    title: 'L\'Horizon',
+    desc: 'L\'aventure continue avec le déploiement du MVP et une expansion continue de notre solution de confiance numérique.'
   }
 ]
 </script>

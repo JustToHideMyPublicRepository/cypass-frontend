@@ -3,9 +3,9 @@
     <MeDashboardHeader :current-time="currentTime" />
 
     <!-- Stats Grid -->
-    <MeDashboardStats :documents-count="documentsStore.pagination?.total || 0" :documents-trend="docTrend"
+    <MeDashboardStats :documents-count="documentsStore.pagination.total" :documents-trend="docTrend"
       :vigitech-count="vigitechStore.userIncidents.length" :vigitech-trend="vigiTrend"
-      :active-sessions="activeSessionsCount" />
+      :active-sessions="activeSessionsCount" :security-score="securityScore" />
 
     <!-- Data Insights Row -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -53,15 +53,16 @@ import { useProfilStore } from '~/stores/profil'
 import { useAuthStore } from '~/stores/auth'
 import { useVigitechStore } from '~/stores/vigitech'
 import { useToastStore } from '~/stores/toast'
+import { calculateSecurityScore, type SecurityScoreResult } from '~/utils/security'
 
 definePageMeta({
   layout: 'default'
 })
 
+const authStore = useAuthStore()
+const profilStore = useProfilStore()
 const documentsStore = useDocsentryStore()
 const notificationsStore = useNotificationsStore()
-const profilStore = useProfilStore()
-const authStore = useAuthStore()
 const vigitechStore = useVigitechStore()
 const toast = useToastStore()
 
@@ -71,6 +72,7 @@ const activeSessions = ref<any[]>([])
 const loading = ref(true)
 const docTrend = ref({ percentage: 0, difference: 0 })
 const vigiTrend = ref({ percentage: 0, difference: 0 })
+const securityScore = ref<SecurityScoreResult>({ score: 100, grade: 'A+', label: 'Excellent', color: 'text-success' })
 
 const recentComments = computed(() => {
   // Since we don't have a direct /all-comments endpoint yet, 
@@ -191,6 +193,21 @@ const calculateDocTrend = async () => {
   }
 }
 
+const updateSecurityScore = () => {
+  const logs = profilStore.logs || []
+  const failedLogins = logs.filter(l => l.action.toLowerCase().includes('login') && l.status !== 'success').length
+  const otherFailures = logs.filter(l => !l.action.toLowerCase().includes('login') && l.status !== 'success').length
+
+  securityScore.value = calculateSecurityScore({
+    documentsCount: documentsStore.pagination.total,
+    criticalIncidents: vigitechStore.userIncidents.filter(i => i.threat_level === 'critical').length,
+    mediumIncidents: vigitechStore.userIncidents.filter(i => i.threat_level === 'medium').length,
+    failedLogins,
+    otherFailures,
+    activeSessions: activeSessionsCount.value
+  })
+}
+
 onMounted(async () => {
   const now = new Date()
   currentTime.value = `${format(now, 'dd/MM/yyyy')} à ${format(now, 'HH:mm')}`
@@ -212,6 +229,7 @@ onMounted(async () => {
     calculateDocTrend(),
     calculateVigiTrend()
   ])
+  updateSecurityScore()
   loading.value = false
 })
 
