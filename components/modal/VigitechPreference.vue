@@ -1,8 +1,6 @@
 <template>
-  <UiBaseModal :show="show" title="Préférences d'affichage" max-width="md" @close="$emit('close')">
+  <UiBaseModal :show="show" title="Configuration VigiTech" max-width="md" @close="$emit('close')">
     <div class="space-y-6 py-2 max-h-[400px] overflow-y-auto px-1 -mx-1 no-scrollbar animate-fade-in">
-      <p class="text-[10px] font-black text-hsa uppercase tracking-[0.2em] px-2 mb-4">Configuration VigiTech</p>
-
       <!-- Preview Files -->
       <div
         class="flex items-center justify-between gap-4 p-5 rounded-[2rem] bg-ash/20 border border-ashAct/30 transition-all hover:bg-ash/40 group/setting shadow-inner">
@@ -14,8 +12,7 @@
         <label class="relative inline-flex items-center cursor-pointer">
           <input type="checkbox" :checked="store.display.previewFile" @change="store.toggleSetting('previewFile')"
             class="sr-only peer">
-          <div
-            class="w-12 h-6 bg-ashAct/20 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary shadow-sm">
+          <div class="input-toggle-slider">
           </div>
         </label>
       </div>
@@ -31,8 +28,7 @@
         <label class="relative inline-flex items-center cursor-pointer">
           <input type="checkbox" :checked="store.display.showComments" @change="store.toggleSetting('showComments')"
             class="sr-only peer">
-          <div
-            class="w-12 h-6 bg-ashAct/20 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary shadow-sm">
+          <div class="input-toggle-slider">
           </div>
         </label>
       </div>

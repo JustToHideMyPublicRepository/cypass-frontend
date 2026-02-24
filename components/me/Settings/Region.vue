@@ -1,6 +1,7 @@
 <template>
   <UiBaseCard title="Langue et Région">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!-- Sélection de la langue d'affichage -->
       <div class="space-y-1">
         <label class="text-xs font-bold text-hsa uppercase">Langue</label>
         <div class="relative">
@@ -12,6 +13,7 @@
           </select>
         </div>
       </div>
+      <!-- Sélection du fuseau horaire pour les horodatages -->
       <div class="space-y-1">
         <label class="text-xs font-bold text-hsa uppercase">Fuseau Horaire</label>
         <div class="relative">

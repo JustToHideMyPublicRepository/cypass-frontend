@@ -1,5 +1,6 @@
 <template>
   <div class="space-y-6">
+    <!-- Affichage si des incidents existent -->
     <div v-if="incidents.length" class="overflow-x-auto no-scrollbar">
       <table class="w-full text-left border-separate border-spacing-y-4">
         <thead>
@@ -11,13 +12,16 @@
           </tr>
         </thead>
         <tbody>
+          <!-- Ligne d'incident individuelle -->
           <tr v-for="incident in paginatedItems" :key="incident.id"
             class="group bg-ash/5 hover:bg-ash/10 hover:scale-[1.01] transition-all duration-300">
+            <!-- Titre de l'incident -->
             <td class="py-5 px-6 rounded-l-2xl">
               <div class="text-sm font-black text-BtW group-hover:text-primary transition-colors line-clamp-1">
                 {{ decodeHtmlEntities(incident.title) }}
               </div>
             </td>
+            <!-- Classification : Type et Niveau de menace -->
             <td class="py-5 px-6">
               <div class="flex flex-col gap-1.5">
                 <span class="text-[10px] font-black text-BtW uppercase tracking-tighter">{{
@@ -29,11 +33,13 @@
                 </UiStatusBadge>
               </div>
             </td>
+            <!-- Date de signalement -->
             <td class="py-5 px-6">
               <div class="text-[10px] font-black text-hsa uppercase tracking-widest whitespace-nowrap">
                 {{ formatDateShort(incident.created_at) }}
               </div>
             </td>
+            <!-- Bouton d'action pour consulter les détails -->
             <td class="py-5 px-6 text-right rounded-r-2xl">
               <NuxtLink :to="`/vigitech/${incident.id}`">
                 <UiBaseButton variant="primary" size="sm"
@@ -47,6 +53,7 @@
       </table>
     </div>
 
+    <!-- État vide -->
     <div v-else class="flex flex-col items-center justify-center py-32 text-center">
       <div class="w-24 h-24 bg-ash/5 rounded-[3rem] flex items-center justify-center mb-8 border border-ash/10">
         <IconShield class="w-10 h-10 text-ash/30" />
@@ -80,10 +87,12 @@ import { fr } from 'date-fns/locale'
 import { decodeHtmlEntities } from '~/utils/format'
 import { mapIncidentType, mapThreatLevel } from '~/utils/vigitech'
 
+// Propriétés reçues
 const props = defineProps<{
   incidents: any[]
 }>()
 
+// Logique de pagination
 const page = ref(1)
 const pageSize = 5
 const totalPages = computed(() => Math.ceil(props.incidents.length / pageSize))
@@ -92,6 +101,9 @@ const paginatedItems = computed(() => {
   return props.incidents.slice(start, start + pageSize)
 })
 
+/**
+ * Formate la date de création de l'incident en français.
+ */
 const formatDateShort = (dateStr: string) => {
   if (!dateStr) return ''
   try {

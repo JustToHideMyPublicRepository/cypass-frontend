@@ -1,21 +1,29 @@
 <template>
   <div class="space-y-6">
+    <!-- Affichage si des commentaires existent -->
     <div v-if="comments.length" class="overflow-x-auto px-1">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Carte de commentaire individuelle -->
         <div v-for="comment in paginatedItems" :key="comment.id"
           class="group bg-ash p-6 rounded-[2.5rem] border border-primary/20 hover:border-primary/50 hover:bg-WtB hover:shadow-2xl transition-all duration-500">
+
+          <!-- En-tête du commentaire : Date et lien vers l'incident -->
           <div class="flex items-start justify-between mb-4">
             <div class="text-[9px] font-black text-hsa uppercase tracking-[0.2em] bg-ash/10 px-3 py-1 rounded-full">
               {{ formatDateShort(comment.created_at) }}
             </div>
-            <NuxtLink :to="`/vigitech/${comment.incident_id}`"
-              class="text-primary hover:scale-110 transition-transform">
+            <NuxtLink :to="`/vigitech/${comment.incident_id}`" class="text-primary hover:scale-110 transition-transform"
+              title="Ouvrir l'incident">
               <IconExternalLink class="w-4 h-4" />
             </NuxtLink>
           </div>
+
+          <!-- Corps du commentaire : Contenu textuel -->
           <p class="text-sm text-BtW leading-relaxed font-medium mb-6 line-clamp-3">
             "{{ comment.content }}"
           </p>
+
+          <!-- Pied de carte : Référence à l'incident lié -->
           <div class="pt-4 border-t border-ash/10 flex items-center justify-between">
             <div class="min-w-0 flex-1">
               <p class="text-[8px] font-black text-hsa uppercase tracking-widest mb-1">Sur l'Incident</p>
@@ -34,6 +42,7 @@
       </div>
     </div>
 
+    <!-- État vide -->
     <div v-else class="flex flex-col items-center justify-center py-32 text-center">
       <div class="w-24 h-24 bg-ash/5 rounded-[3rem] flex items-center justify-center mb-8 border border-ash/10">
         <IconMessage class="w-10 h-10 text-ash/30" />
@@ -65,10 +74,12 @@ import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { decodeHtmlEntities } from '~/utils/format'
 
+// Propriétés reçues
 const props = defineProps<{
   comments: any[]
 }>()
 
+// Logique de pagination
 const page = ref(1)
 const pageSize = 4
 const totalPages = computed(() => Math.ceil(props.comments.length / pageSize))
@@ -77,6 +88,9 @@ const paginatedItems = computed(() => {
   return props.comments.slice(start, start + pageSize)
 })
 
+/**
+ * Formate la date de création du commentaire en français.
+ */
 const formatDateShort = (dateStr: string) => {
   if (!dateStr) return ''
   try {

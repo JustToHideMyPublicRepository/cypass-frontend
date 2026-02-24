@@ -1,12 +1,12 @@
 <template>
   <UiBaseCard class="!rounded-[3rem] overflow-hidden !border-none shadow-2xl relative group">
-    <!-- Premium Ambient Background -->
+    <!-- Éléments de design premium : Fonds ambients et effets de flou (Blur) -->
     <div class="absolute inset-0 bg-gradient-to-br from-primary/10 via-WtB to-secondary/5 opacity-50"></div>
     <div class="absolute -top-24 -right-24 w-96 h-96 bg-primary/10 rounded-full blur-[100px] animate-pulse"></div>
     <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-secondary/10 rounded-full blur-[100px]"></div>
 
     <div class="relative p-8 md:p-16 flex flex-col md:flex-row items-center gap-10 md:gap-16">
-      <!-- Avatar Section with Interaction -->
+      <!-- Section Avatar -->
       <div class="relative shrink-0">
         <div @click="showImageViewer = true"
           class="relative z-10 w-36 h-36 md:w-48 md:h-48 rounded-[3rem] p-1.5 bg-gradient-to-tr from-primary to-secondary shadow-2xl cursor-pointer hover:scale-105 transition-all duration-500 overflow-hidden group/avatar">
@@ -14,18 +14,19 @@
             <img :src="userAvatarUrl"
               class="w-full h-full object-cover transition-transform duration-700 group-hover/avatar:scale-110"
               :alt="user.first_name" />
-            <!-- Hover Overlay -->
+            <!-- Calque de survol pour l'indication de zoom -->
             <div
               class="absolute inset-0 bg-black/20 opacity-0 group-hover/avatar:opacity-100 transition-opacity flex items-center justify-center">
               <IconZoomIn class="w-8 h-8 text-white" />
             </div>
           </div>
         </div>
-        <!-- Decorative ring -->
+        <!-- Anneau décoratif animé en arrière-plan de l'avatar -->
         <div class="absolute inset-0 -m-4 border border-primary/10 rounded-[4rem] animate-[spin_20s_linear_infinite]">
         </div>
       </div>
 
+      <!-- Informations textuelles : Nom, Statut, Organisation -->
       <div class="flex-1 text-center md:text-left space-y-6">
         <div class="space-y-2">
           <div class="flex flex-wrap items-center justify-center md:justify-start gap-4">
@@ -33,6 +34,7 @@
               {{ user.first_name }} <span class="text-primary">{{ user.last_name }}</span>
             </h1>
             <div class="flex items-center">
+              <!-- Indicateur de statut (Actif/Inactif) -->
               <UiStatusBadge v-if="user.status == true || user.status === 'active'" status="active">
                 Actif
               </UiStatusBadge>
@@ -41,6 +43,7 @@
               </UiStatusBadge>
             </div>
           </div>
+          <!-- Affichage de l'organisation si renseigné -->
           <p v-if="user.organization_name"
             class="flex items-center justify-center md:justify-start gap-2 text-primary font-black uppercase tracking-[0.3em] text-xs">
             <IconBuilding class="w-4 h-4" />
@@ -48,7 +51,9 @@
           </p>
         </div>
 
+        <!-- Statistiques et dates clés -->
         <div class="flex flex-wrap items-center justify-center md:justify-start gap-8">
+          <!-- Date d'inscription -->
           <div class="group/stat">
             <p
               class="text-[10px] font-black text-hsa uppercase tracking-widest mb-1 group-hover/stat:text-primary transition-colors">
@@ -58,7 +63,9 @@
               {{ formattedDate }}
             </div>
           </div>
+          <!-- Séparateur visuel -->
           <div class="w-px h-10 bg-ash/20 hidden md:block"></div>
+          <!-- Compteurs d'activité publique -->
           <div class="group/stat">
             <p
               class="text-[10px] font-black text-hsa uppercase tracking-widest mb-1 group-hover/stat:text-primary transition-colors">
@@ -78,7 +85,7 @@
       </div>
     </div>
 
-    <!-- Modal Image Viewer -->
+    <!-- Visionneuse d'image plein écran -->
     <ModalImageViewer v-if="userAvatarUrl" :show="showImageViewer" :image-url="userAvatarUrl"
       @close="showImageViewer = false" />
   </UiBaseCard>
@@ -89,6 +96,7 @@ import { IconZoomIn, IconBuilding, IconCalendar, IconShield, IconMessage } from 
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 
+// Définition des propriétés attendues
 const props = defineProps<{
   user: any
   userAvatarUrl: string
@@ -96,8 +104,12 @@ const props = defineProps<{
   commentsCount: number
 }>()
 
+// État pour afficher la modale visionneuse d'image
 const showImageViewer = ref(false)
 
+/**
+ * Formate la date d'inscription au format "Mois Année".
+ */
 const formattedDate = computed(() => {
   if (!props.user?.created_at) return ''
   try {

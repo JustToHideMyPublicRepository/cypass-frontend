@@ -1,6 +1,7 @@
 <template>
+  <!-- Page de profil public de l'utilisateur -->
   <div class="relative min-h-[80vh] max-w-5xl flex flex-col items-center px-4 pb-8 pt-12 mx-auto">
-    <!-- Back Button -->
+    <!-- Bouton Retour -->
     <div class="w-full max-w-7xl mb-8">
       <button @click="router.back()"
         class="group flex items-center gap-2 text-hsa hover:text-primary transition-all font-black uppercase tracking-widest text-[10px]">
@@ -9,19 +10,19 @@
       </button>
     </div>
 
-    <!-- Loading State -->
+    <!-- État de chargement -->
     <RootUserLoading v-if="loading" />
 
-    <!-- Error State -->
+    <!-- État d'erreur -->
     <RootUserError v-else-if="error" :message="error" @retry="fetchPublicProfile" />
 
-    <!-- Profile Content -->
+    <!-- Contenu du Profil -->
     <div v-else-if="user" class="w-full max-w-7xl space-y-8 animate-fade-in">
-      <!-- Profile Header -->
+      <!-- En-tête du profil -->
       <RootUserHero :user="user" :user-avatar-url="userAvatarUrl" :public-incidents-count="publicIncidents.length"
         :comments-count="comments.length" />
 
-      <!-- Activity Section -->
+      <!-- Section Activité -->
       <RootUserActivity :public-incidents="publicIncidents" :comments="comments" />
     </div>
   </div>
@@ -31,14 +32,17 @@
 import { IconArrowLeft } from '@tabler/icons-vue'
 import { getUserAvatarUrl } from '~/utils/user'
 
+// Configuration de la page
 definePageMeta({
   layout: 'guest'
 })
 
+// Accès aux utilitaires de route, de navigation et de store
 const route = useRoute()
 const router = useRouter()
 const store = useVigitechStore()
 
+// États réactifs de la page
 const loading = ref(true)
 const error = ref<string | null>(null)
 const user = ref<any>(null)
@@ -53,6 +57,9 @@ const userAvatarUrl = computed(() => {
   )
 })
 
+/**
+ * Récupère les données du profil public via l'API.
+ */
 const fetchPublicProfile = async () => {
   loading.value = true
   error.value = null
@@ -75,8 +82,12 @@ const fetchPublicProfile = async () => {
   }
 }
 
+// Initialisation au montage du composant
 onMounted(fetchPublicProfile)
 
+/**
+ * Mise à jour dynamique du titre de la page (Balise <title>)
+ */
 useHead({
   title: computed(() => user.value
     ? `Profil de ${user.value.first_name} ${user.value.last_name}`
