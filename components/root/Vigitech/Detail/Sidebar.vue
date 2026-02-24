@@ -4,8 +4,9 @@
     <UiBaseCard class="!rounded-[2.5rem] p-8 space-y-6">
       <h3 class="text-xs font-black text-hsa uppercase tracking-[0.3em] pb-4">Actions</h3>
       <div class="grid grid-cols-1 gap-4">
+        <!-- Partager -->
         <button @click="shareIncident"
-          class="w-full flex items-center justify-between p-4 rounded-2xl bg-ash/5 hover:bg-ash/10 border border-ashAct transition-all group">
+          class="w-full flex items-center justify-between p-4 rounded-2xl bg-ash/10 hover:bg-ash/60 border border-ash transition-all group">
           <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
               <IconShare class="w-5 h-5" />
@@ -14,8 +15,10 @@
           </div>
           <IconArrowUpRight class="w-4 h-4 text-hsa group-hover:text-primary transition-colors" />
         </button>
+
+        <!-- Télécharger la preuve -->
         <button @click="downloadEvidence"
-          class="w-full flex items-center justify-between p-4 rounded-2xl bg-ash/5 hover:bg-ash/10 border border-ashAct transition-all group">
+          class="w-full flex items-center justify-between p-4 rounded-2xl bg-ash/10 hover:bg-ash/60 border border-ash transition-all group">
           <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-xl bg-success/10 flex items-center justify-center text-success">
               <IconDownload class="w-5 h-5" />
@@ -24,6 +27,7 @@
           </div>
           <IconArrowUpRight class="w-4 h-4 text-hsa group-hover:text-success transition-colors" />
         </button>
+
         <!-- Signaler -->
         <button @click="showReportModal = true" :disabled="isOwnIncident"
           class="w-full flex items-center justify-between p-4 rounded-2xl border transition-all group" :class="isOwnIncident
@@ -39,6 +43,18 @@
           </div>
           <IconArrowUpRight v-if="!isOwnIncident" class="w-4 h-4 text-hsa group-hover:text-danger transition-colors" />
         </button>
+
+        <!-- Préférences d'affichage -->
+        <button @click="showSettingsModal = true"
+          class="w-full flex items-center justify-between p-4 rounded-2xl bg-ash/10 hover:bg-ash/60 border border-ash transition-all group">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center text-secondary">
+              <IconSettings class="w-5 h-5" />
+            </div>
+            <span class="text-sm font-black text-BtW">Préférences d'affichage</span>
+          </div>
+          <IconArrowUpRight class="w-4 h-4 text-hsa group-hover:text-secondary transition-colors" />
+        </button>
       </div>
     </UiBaseCard>
 
@@ -52,14 +68,16 @@
       </p>
     </UiBaseCard>
 
-    <!-- Report Modal -->
+    <!-- Modals -->
     <ModalVigitechReportIncident v-if="incident" :show="showReportModal" :incidentId="incident.id"
       @close="showReportModal = false" @success="$emit('fetch')" />
+
+    <ModalVigitechPreference :show="showSettingsModal" @close="showSettingsModal = false" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { IconShare, IconArrowUpRight, IconDownload, IconFlag, IconShieldCheck } from '@tabler/icons-vue'
+import { IconShare, IconArrowUpRight, IconDownload, IconFlag, IconShieldCheck, IconSettings } from '@tabler/icons-vue'
 import { useVigitechAdvice } from '~/composables/useVigitechAdvice'
 import { useAuthStore } from '~/stores/auth'
 import { useToastStore } from '~/stores/toast'
@@ -74,6 +92,7 @@ const authStore = useAuthStore()
 const toast = useToastStore()
 const { getAdvice } = useVigitechAdvice()
 const showReportModal = ref(false)
+const showSettingsModal = ref(false)
 
 const isOwnIncident = computed(() => {
   return !!(authStore.user && props.incident?.user_id === authStore.user.id)

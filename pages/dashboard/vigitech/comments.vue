@@ -1,90 +1,26 @@
 <template>
   <div class="space-y-6">
-    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
-      <div class="flex items-center gap-4">
-        <NuxtLink to="/dashboard/vigitech" class="p-2 rounded-xl hover:bg-ash/20 transition-colors text-hsa">
-          <IconArrowLeft class="w-6 h-6" />
-        </NuxtLink>
-        <div>
-          <h1 class="text-2xl md:text-3xl font-black text-BtW tracking-tight">Mes commentaires</h1>
-          <p class="text-hsa font-bold">Historique de vos commentaires sur les incidents VigiTech</p>
-        </div>
-      </div>
+    <MeVigitechCommentsHeader :count="userComments.length" />
 
-      <div v-if="userComments.length"
-        class="px-4 py-2 rounded-xl bg-primary/10 text-primary text-xs font-black uppercase tracking-widest">
-        {{ userComments.length }} commentaire{{ userComments.length > 1 ? 's' : '' }}
-      </div>
-    </div>
-
-    <!-- Loading -->
     <div v-if="loading" class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <UiAppSkeleton v-for="i in 6" :key="i" height="160px" radius="2rem" />
     </div>
 
-    <!-- Comments List -->
-    <div v-else-if="userComments.length" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <UiBaseCard v-for="comment in userComments" :key="comment.id" class="!rounded-[2rem] overflow-hidden">
-        <div class="p-6 space-y-4">
-          <!-- Comment content (prominent) -->
-          <div v-if="editingId === comment.id" class="space-y-3">
-            <textarea v-model="editContent" rows="3"
-              class="w-full p-4 rounded-xl bg-WtB border border-ash/50 text-sm font-medium outline-none focus:ring-2 focus:ring-primary transition-all resize-none" />
-            <div class="flex gap-2 justify-end">
-              <UiBaseButton variant="ghost" size="sm" @click="cancelEdit" class="!rounded-lg !text-[10px]">
-                Annuler
-              </UiBaseButton>
-              <UiBaseButton variant="primary" size="sm" @click="saveEdit(comment)"
-                :disabled="!editContent.trim() || saving" class="!rounded-lg !text-[10px]">
-                {{ saving ? 'Enregistrement...' : 'Enregistrer' }}
-              </UiBaseButton>
-            </div>
-          </div>
-          <div v-else class="flex items-start justify-between gap-4">
-            <p class="text-BtW text-sm leading-relaxed font-medium">{{ comment.content }}</p>
-            <button v-if="canEdit(comment)" @click="startEdit(comment)"
-              class="shrink-0 flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-primary/10 text-hsa hover:text-primary transition-colors text-[10px] font-black uppercase tracking-widest"
-              title="Modifier">
-              <IconEdit class="w-3 h-3" /> Modifier
-            </button>
-          </div>
-
-          <!-- Footer: incident link + date + modifier -->
-          <div class="flex items-center justify-between pt-3 border-t border-ash/30">
-            <NuxtLink :to="`/vigitech/${comment.incident_id}`"
-              class="flex items-center gap-1.5 text-[10px] text-primary hover:underline font-black truncate transition-colors max-w-[60%]">
-              <IconExternalLink class="w-3 h-3 shrink-0" />
-              {{ getIncidentTitle(comment.incident_id) }}
-            </NuxtLink>
-            <div class="flex items-center gap-3 shrink-0">
-              <div class="w-6 h-6 rounded-full overflow-hidden border border-ash/20 bg-ash/10">
-                <img :src="getCommentAvatar(comment)" class="w-full h-full object-cover" />
-              </div>
-              <span class="text-[10px] text-hsa font-bold">{{ formatDate(comment.created_at) }}</span>
-            </div>
-          </div>
-        </div>
-      </UiBaseCard>
-    </div>
-
-    <!-- Empty state -->
-    <div v-else class="text-center py-20 px-6 glass-panel rounded-[2rem] border-2 border-dashed border-ash">
-      <div class="w-16 h-16 bg-ash/10 rounded-2xl flex items-center justify-center text-hsa mx-auto mb-4">
-        <IconMessage class="w-8 h-8 opacity-20" />
+    <template v-else-if="userComments.length">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <MeVigitechCommentsItem v-for="comment in userComments" :key="comment.id" :comment="comment"
+          :incidentTitle="getIncidentTitle(comment.incident_id)" :avatarUrl="getCommentAvatar(comment)"
+          :formattedDate="formatDate(comment.created_at)" :canEdit="canEdit(comment)"
+          :isEditing="editingId === comment.id" :saving="savingId === comment.id" :editContent="editContent"
+          @edit="startEdit(comment)" @cancel="cancelEdit" @save="saveEdit" />
       </div>
-      <h3 class="text-lg font-black text-BtW">Aucun commentaire</h3>
-      <p class="text-hsa text-sm mt-2 max-w-sm mx-auto">
-        Vous n'avez pas encore commenté d'incident. Rendez-vous sur la veille communautaire pour participer.
-      </p>
-      <NuxtLink to="/vigitech" class="inline-block mt-4">
-        <UiBaseButton variant="primary" size="sm">Voir les incidents</UiBaseButton>
-      </NuxtLink>
-    </div>
+    </template>
+
+    <MeVigitechCommentsEmpty v-else />
   </div>
 </template>
 
 <script setup lang="ts">
-import { IconMessage, IconExternalLink, IconEdit, IconArrowLeft } from '@tabler/icons-vue'
 import { useVigitechStore } from '~/stores/vigitech'
 import { useAuthStore } from '~/stores/auth'
 import { useToastStore } from '~/stores/toast'
@@ -107,6 +43,7 @@ const incidentTitles = ref<Record<string, string>>({})
 const editingId = ref<string | null>(null)
 const editContent = ref('')
 const saving = ref(false)
+const savingId = ref<string | null>(null)
 
 const formatDate = (dateStr: string) => {
   if (!dateStr) return '-'
@@ -140,16 +77,23 @@ const cancelEdit = () => {
   editContent.value = ''
 }
 
-const saveEdit = async (comment: Comment) => {
-  if (!editContent.value.trim()) return
+const saveEdit = async (val?: any) => {
+  const contentToSave = typeof val === 'string' ? val : editContent.value
+  if (!contentToSave.trim() || !editingId.value) return
+
   saving.value = true
-  const result = await store.updateComment(comment.id, editContent.value.trim(), comment.incident_id)
+  savingId.value = editingId.value
+
+  // Find the incident_id for the current editing comment
+  const comment = userComments.value.find(c => c.id === editingId.value)
+  if (!comment) return
+
+  const result = await store.updateComment(editingId.value, contentToSave.trim(), comment.incident_id)
   if (result.success) {
     toast.showToast('success', 'Commentaire modifié', result.message || 'Votre commentaire a été mis à jour.')
-    // Update local state
-    const idx = userComments.value.findIndex(c => c.id === comment.id)
+    const idx = userComments.value.findIndex(c => c.id === editingId.value)
     if (idx !== -1) {
-      userComments.value[idx] = { ...userComments.value[idx], content: editContent.value.trim() }
+      userComments.value[idx] = { ...userComments.value[idx], content: contentToSave.trim() }
     }
     editingId.value = null
     editContent.value = ''
@@ -157,12 +101,12 @@ const saveEdit = async (comment: Comment) => {
     toast.showToast('error', 'Erreur', result.message || 'Impossible de modifier le commentaire.')
   }
   saving.value = false
+  savingId.value = null
 }
 
 onMounted(async () => {
   loading.value = true
   try {
-    // Fetch all public incidents to get comment data
     await store.fetchPublicIncidents({ limit: 100, offset: 0 })
 
     // Collect all comments from user's incidents
@@ -181,11 +125,9 @@ onMounted(async () => {
           allComments.push(...myComments)
         }
       } catch {
-        // Skip failed comment fetches
       }
     }
 
-    // Also fetch user's own incidents
     if (store.userIncidents.length === 0) {
       await store.fetchUserIncidents()
     }
@@ -204,7 +146,6 @@ onMounted(async () => {
           allComments.push(...myComments)
         }
       } catch {
-        // Skip failed comment fetches
       }
     }
 

@@ -1,123 +1,13 @@
 <template>
   <div class="relative min-h-[80vh] flex flex-col items-center justify-center px-4 pb-8">
     <div class="max-w-7xl mx-auto px-6">
-      <!-- Header -->
-      <div class="max-w-3xl mb-12 md:mb-20">
-        <h1 class="text-4xl md:text-6xl font-black text-BtW tracking-tighter mb-6">
-          {{ getDynamicGreeting() }}, <span class="text-primary">CYPASS</span>
-        </h1>
-        <p class="text-lg md:text-xl text-hsa leading-relaxed">
-          Veille communautaire sur la cybersécurité. Consultez les derniers incidents signalés et apprenez à vous
-          protéger contre les menaces émergentes au Bénin.
-        </p>
-      </div>
+      <RootVigitechHomeHeader :greeting="getDynamicGreeting()" />
 
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         <!-- Column 1: Filters & Info -->
         <div class="lg:col-span-3 space-y-6 order-2 lg:order-1">
-          <div class="glass-panel p-6 rounded-[2rem] border border-ashAct space-y-6 shadow-sm">
-            <h3 class="text-[10px] font-black text-hsa uppercase tracking-[0.2em]">Filtrer les incidents</h3>
-
-            <div class="space-y-4">
-              <div class="space-y-1.5">
-                <label class="text-[9px] font-black text-hsa uppercase tracking-widest px-1">Recherche</label>
-                <div class="relative group">
-                  <span
-                    class="absolute left-3 top-1/2 -translate-y-1/2 text-hsa group-focus-within:text-primary transition-colors">
-                    <IconSearch class="w-4 h-4" />
-                  </span>
-                  <input v-model="filters.search" type="text" placeholder="Mot-clé..."
-                    class="w-full h-10 pl-9 pr-4 rounded-xl bg-WtB border border-ash/50 font-bold text-xs outline-none focus:ring-2 focus:ring-primary transition-all placeholder-hsa/50" />
-                </div>
-              </div>
-
-              <!-- Type -->
-              <div class="space-y-1.5">
-                <label class="text-[9px] font-black text-hsa uppercase tracking-widest px-1">Type de menace</label>
-                <div class="relative group">
-                  <select v-model="filters.type" @change="fetchData"
-                    class="w-full h-10 px-4 rounded-xl bg-WtB border border-ash/50 font-bold text-xs outline-none focus:ring-2 focus:ring-primary transition-all appearance-none cursor-pointer">
-                    <option value="">Tous les types</option>
-                    <option value="phishing">Phishing</option>
-                    <option value="ransomware">Ransomware</option>
-                    <option value="fake_profile">Faux Profil</option>
-                    <option value="harassment">Harcèlement</option>
-                  </select>
-                  <IconChevronDown
-                    class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-hsa pointer-events-none group-focus-within:text-primary transition-colors" />
-                </div>
-              </div>
-
-              <!-- Gravité -->
-              <div class="space-y-1.5">
-                <label class="text-[9px] font-black text-hsa uppercase tracking-widest px-1">Gravité</label>
-                <div class="relative group">
-                  <select v-model="filters.level" @change="fetchData"
-                    class="w-full h-10 px-4 rounded-xl bg-WtB border border-ash/50 font-bold text-xs outline-none focus:ring-2 focus:ring-primary transition-all appearance-none cursor-pointer">
-                    <option value="">Toutes les gravités</option>
-                    <option value="low">Faible</option>
-                    <option value="medium">Moyenne</option>
-                    <option value="critical">Critique</option>
-                  </select>
-                  <IconChevronDown
-                    class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-hsa pointer-events-none group-focus-within:text-primary transition-colors" />
-                </div>
-              </div>
-
-              <!-- Date range -->
-              <div class="space-y-4 pt-2 border-t border-ash">
-                <div class="space-y-1.5">
-                  <label class="text-[9px] font-black text-hsa uppercase tracking-widest px-1">Depuis le</label>
-                  <input v-model="filters.date_start" type="datetime-local"
-                    class="w-full h-10 px-3 rounded-xl bg-WtB border border-ash/50 text-xs font-bold outline-none focus:ring-2 focus:ring-primary transition-all" />
-                </div>
-                <div class="space-y-1.5">
-                  <label class="text-[9px] font-black text-hsa uppercase tracking-widest px-1">Jusqu'au</label>
-                  <input v-model="filters.date_end" type="datetime-local"
-                    class="w-full h-10 px-3 rounded-xl bg-WtB border border-ash/50 text-xs font-bold outline-none focus:ring-2 focus:ring-primary transition-all" />
-                </div>
-              </div>
-            </div>
-
-            <div class="flex gap-2">
-              <UiBaseButton variant="ghost" block size="sm" class="!text-[9px] !font-black !uppercase"
-                @click="resetFilters" :disabled="!hasActiveFilters">
-                Réinitialiser
-              </UiBaseButton>
-            </div>
-          </div>
-
-          <!-- Info Block Based on Auth -->
-          <UiBaseCard class="bg-primary text-white border-none !rounded-[2rem] p-1 shadow-xl shadow-primary/20">
-            <div class="bg-primary/20 p-6 rounded-[1.8rem] space-y-4">
-              <IconAlertTriangle class="w-8 h-8 text-WtB" />
-              <template v-if="authStore.user">
-                <h3 class="text-lg text-WtB font-black leading-tight">{{ getDynamicGreeting() }} {{
-                  authStore.user.first_name }}</h3>
-                <p class="text-[11px] text-ashAct font-bold leading-relaxed">
-                  Consultez et suivez vos propres signalements directement dans votre espace personnel.
-                </p>
-                <NuxtLink to="/dashboard/vigitech">
-                  <UiBaseButton variant="secondary" block size="sm"
-                    class="mt-2 !bg-ash !text-primary !border-none font-black">
-                    Dashboard
-                  </UiBaseButton>
-                </NuxtLink>
-              </template>
-              <template v-else>
-                <h3 class="text-lg text-WtB font-black leading-tight">Victime d'une attaque ?</h3>
-                <p class="text-[11px] text-ashAct font-bold leading-relaxed">
-                  Connectez-vous pour signaler officiellement l'incident et recevoir notre assistance.
-                </p>
-                <NuxtLink to="/auth/login">
-                  <UiBaseButton variant="secondary" block size="sm"
-                    class="mt-2 !bg-ash !text-primary !border-none font-black">
-                    Se connecter
-                  </UiBaseButton>
-                </NuxtLink>
-              </template>
-            </div>
-          </UiBaseCard>
+          <RootVigitechHomeFilters v-model="filters" :hasActiveFilters="hasActiveFilters" @reset="resetFilters" />
+          <RootVigitechHomeInfoBlock :user="authStore.user" :greeting="getDynamicGreeting()" />
         </div>
 
         <!-- Column 2: Feed & Pagination -->
@@ -127,89 +17,16 @@
           </div>
 
           <template v-else-if="filteredIncidents.length">
-            <div class="space-y-4">
-              <RootVigitechIncidentCard v-for="incident in filteredIncidents" :key="incident.id" :incident="incident"
-                :detailUrl="`/vigitech/${incident.id}`" @report="openReportModal" />
-            </div>
-
-            <!-- Pagination -->
-            <div v-if="store.publicPagination.total > store.publicPagination.limit"
-              class="flex items-center justify-between pt-6">
-              <UiBaseButton variant="ghost" size="sm" :disabled="store.publicPagination.offset === 0"
-                @click="changePage(-1)">
-                <IconChevronLeft class="w-4 h-4 mr-2" /> Précédent
-              </UiBaseButton>
-              <div class="text-[10px] font-black text-hsa uppercase tracking-widest">
-                Page {{ Math.floor(store.publicPagination.offset / store.publicPagination.limit) + 1 }}
-              </div>
-              <UiBaseButton variant="ghost" size="sm"
-                :disabled="store.publicPagination.offset + store.publicPagination.limit >= store.publicPagination.total"
-                @click="changePage(1)">
-                Suivant
-                <IconChevronRight class="w-4 h-4 ml-2" />
-              </UiBaseButton>
-            </div>
+            <RootVigitechHomeFeed :incidents="filteredIncidents" :pagination="store.publicPagination"
+              @report="openReportModal" @change-page="changePage" />
           </template>
 
-          <div v-else class="text-center py-20 glass-panel rounded-[2.5rem] border-2 border-dashed border-ash">
-            <IconShieldCheck class="w-12 h-12 text-primary mx-auto mb-4 opacity-20" />
-            <h3 class="text-xl font-black text-BtW">{{ hasActiveFilters ? 'Aucun résultat' : 'Aucun incident' }}</h3>
-            <p class="text-xs text-hsa font-bold mt-2">
-              {{ hasActiveFilters ? 'Essayez de modifier vos critères de recherche.'
-                : 'La plateforme est actuellement calme.'
-              }}</p>
-            <UiBaseButton v-if="hasActiveFilters" variant="ghost" size="sm" class="mt-4" @click="resetFilters">
-              Réinitialiser les filtres
-            </UiBaseButton>
-          </div>
+          <RootVigitechHomeEmpty v-else :hasActiveFilters="hasActiveFilters" @reset="resetFilters" />
         </div>
 
         <!-- Column 3: Weekly Stats -->
         <div class="lg:col-span-3 space-y-6 order-3">
-          <div class="space-y-4">
-            <h3 class="text-[10px] font-black text-hsa uppercase tracking-[0.2em] px-2">Rapport Hebdomadaire</h3>
-
-            <!-- Stat Cards -->
-            <div v-for="stat in stats" :key="stat.label"
-              class="p-5 rounded-[1.8rem] border border-ashAct shadow-sm overflow-hidden relative group"
-              :class="stat.bg">
-              <div class="relative z-10">
-                <div class="flex justify-between items-start mb-2">
-                  <p
-                    class="text-[9px] font-black uppercase tracking-widest text-hsa opacity-80 group-hover:text-BtW transition-colors">
-                    {{ stat.label }}</p>
-                  <component :is="stat.icon" class="w-4 h-4" :class="stat.iconColor" />
-                </div>
-                <div class="flex items-end gap-3">
-                  <h4 class="text-2xl font-black text-BtW transition-transform group-hover:scale-105 duration-500">{{
-                    stat.value
-                  }}</h4>
-                  <div v-if="stat.trend"
-                    class="flex items-center gap-1 mb-1 px-1.5 py-0.5 rounded-full bg-ash/50 text-[8px] font-black">
-                    <component :is="stat.trend >= 0 ? IconTrendingUp : IconTrendingDown" class="w-2.5 h-2.5"
-                      :class="stat.trend >= 0 ? 'text-success' : 'text-danger'" />
-                    <span :class="stat.trend >= 0 ? 'text-success' : 'text-danger'">{{ Math.abs(stat.trend) }}%</span>
-                  </div>
-                </div>
-                <p class="text-[10px] font-bold text-hsa mt-1">{{ stat.sub }}</p>
-              </div>
-              <div
-                class="absolute -right-4 -bottom-4 w-16 h-16 bg-white/5 rounded-full blur-xl group-hover:bg-primary/5 transition-all duration-700">
-              </div>
-            </div>
-
-            <!-- Small AI Report -->
-            <div class="glass-panel p-6 rounded-[2rem] border border-ashAct space-y-4 bg-hsa">
-              <div class="flex items-center gap-2">
-                <IconSparkles class="w-4 h-4 text-primary" />
-                <span class="text-[10px] font-black uppercase tracking-widest text-WtB">Analyse VIGIAI</span>
-              </div>
-              <p class="text-[11px] font-medium text-ash leading-relaxed italic">
-                "Cette semaine, nous observons une recrudescence des campagnes de <strong>{{ topThreatType }}</strong>.
-                La vigilance est de mise sur les <strong>{{ topTarget }}</strong>."
-              </p>
-            </div>
-          </div>
+          <RootVigitechHomeStats :stats="stats" :topThreatType="topThreatType" :topTarget="topTarget" />
         </div>
       </div>
     </div>
@@ -221,10 +38,7 @@
 </template>
 
 <script setup lang="ts">
-import {
-  IconChevronDown, IconShieldCheck, IconAlertTriangle, IconChevronLeft, IconChevronRight,
-  IconAlertCircle, IconActivity, IconLock, IconTrendingUp, IconTrendingDown, IconSparkles, IconSearch
-} from '@tabler/icons-vue'
+import { IconActivity, IconLock, IconAlertCircle } from '@tabler/icons-vue'
 import { useVigitechStore } from '~/stores/vigitech'
 import { useAuthStore } from '~/stores/auth'
 import { decodeHtmlEntities } from '~/utils/format'

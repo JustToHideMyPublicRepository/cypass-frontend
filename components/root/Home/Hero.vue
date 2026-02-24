@@ -36,11 +36,11 @@
           </p>
 
           <!-- Boutons -->
-          <div class="space-y-4 pt-4">
+          <div class="space-y-4 pt-4 max-w-fit mx-auto lg:mx-0">
             <!-- Bouton Principal -->
             <div class="flex justify-center lg:justify-start">
               <UiBaseButton :to="authStore.user ? '/dashboard' : '/auth/login'"
-                class="w-full sm:w-auto text-base md:text-lg px-8 md:px-12 py-3 md:py-4 shadow-BtW/40">
+                class="w-full lg:w-[calc(100%+16px)] text-base md:text-lg px-8 md:px-12 py-3 md:py-4 shadow-BtW/40 !rounded-2xl">
                 {{ authStore.user ? 'Tableau de bord' : 'Accéder au portail' }}
                 <IconArrowRight class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
               </UiBaseButton>
@@ -48,12 +48,14 @@
 
             <!-- Boutons Secondaires -->
             <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-              <UiBaseButton :to="authStore.user ? '/dashboard/vigitech' : '/vigitech'" variant="secondary"
-                class="w-full sm:w-auto text-sm md:text-base px-6 md:px-8 py-2.5 md:py-3 !bg-primary/5 !text-primary !border-primary/20 hover:!bg-primary hover:!text-WtB transition-all">
+              <UiBaseButton :to="authStore.user ? '/dashboard/vigitech' : '/vigitech'" variant="accent"
+                class="w-full sm:w-auto text-sm md:text-base px-6 md:px-8 py-2.5 md:py-3 flex items-center justify-center gap-2">
+                <IconShield class="w-4 h-4" />
                 {{ authStore.user ? 'Gestion des incidents' : 'Veille communautaire' }}
               </UiBaseButton>
               <UiBaseButton :to="authStore.user ? '/dashboard/docsentry' : '/verify'" variant="secondary"
-                class="w-full sm:w-auto text-sm md:text-base px-6 md:px-8 py-2.5 md:py-3 font-bold">
+                class="w-full sm:w-auto text-sm md:text-base px-6 md:px-8 py-2.5 md:py-3 font-bold flex items-center justify-center gap-2">
+                <IconFileCheck class="w-4 h-4" />
                 {{ authStore.user ? 'Gestion des documents' : 'Vérifier un document' }}
               </UiBaseButton>
             </div>
@@ -175,7 +177,7 @@
 </template>
 
 <script setup lang="ts">
-import { IconShieldCheck, IconServer, IconArrowRight, IconShieldLock, IconAlertTriangle, IconCheck, IconFileAnalytics, IconUser } from '@tabler/icons-vue'
+import { IconShieldCheck, IconServer, IconArrowRight, IconShieldLock, IconAlertTriangle, IconCheck, IconFileAnalytics, IconUser, IconFileCheck, IconShield } from '@tabler/icons-vue'
 import { useAuthStore } from '~/stores/auth'
 
 const authStore = useAuthStore()

@@ -1,5 +1,5 @@
 <template>
-  <div class="p-6 md:p-8 space-y-6">
+  <div v-if="incident" class="p-6 md:p-8 space-y-6">
     <!-- Détails -->
     <div class="flex flex-wrap items-center gap-3">
       <UiStatusBadge

@@ -1,5 +1,5 @@
 <template>
-  <div class="space-y-6">
+  <div v-if="incident" class="space-y-6">
     <div class="flex flex-wrap items-center gap-3">
       <UiStatusBadge
         :status="incident.threat_level === 'critical' ? 'High' : incident.threat_level === 'medium' ? 'Medium' : 'Low'">

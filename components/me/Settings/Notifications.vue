@@ -1,16 +1,17 @@
 <template>
-  <UiBaseCard title="Notifications">
+  <UiBaseCard title="Notifications" class="!rounded-[2rem]">
     <div class="space-y-6">
-      <div v-for="(setting, index) in settings" :key="index"
-        class="flex items-center justify-between pb-4 border-b border-ash last:border-0 last:pb-0">
-        <div>
-          <h3 class="font-medium text-BtW">{{ setting.title }}</h3>
-          <p class="text-xs text-hsa mt-0.5">{{ setting.desc }}</p>
+      <div v-for="(setting, index) in settingsList" :key="index"
+        class="flex items-center justify-between gap-4 p-5 rounded-[2rem] bg-ash/20 border border-ashAct/30 transition-all hover:bg-ash/40 group/setting shadow-inner">
+        <div class="flex-1">
+          <h4 class="font-black text-BtW text-sm uppercase tracking-tight">{{ setting.title }}</h4>
+          <p class="text-[11px] text-hsa leading-tight mt-1 font-medium opacity-70">{{ setting.desc }}</p>
         </div>
+
+        <!-- Toggle Switch Premium -->
         <label class="relative inline-flex items-center cursor-pointer">
           <input type="checkbox" v-model="setting.enabled" class="sr-only peer">
-          <div
-            class="w-11 h-6 bg-ash peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary">
+          <div class="input-toggle-slider">
           </div>
         </label>
       </div>
@@ -19,11 +20,23 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
-  settings: {
-    title: string
-    desc: string
-    enabled: boolean
-  }[]
-}>()
+import { reactive } from 'vue'
+
+const settingsList = reactive([
+  {
+    title: 'Alertes de sécurité critiques',
+    desc: 'Recevoir une alerte immédiate en cas de faille détectée.',
+    enabled: true
+  },
+  {
+    title: 'Mises à jour de DocSentry',
+    desc: 'Notifications lors de la validation d\'un document.',
+    enabled: true
+  },
+  {
+    title: 'Newsletter VigiTech',
+    desc: 'Résumé hebdomadaire des menaces cybernétiques.',
+    enabled: false
+  },
+])
 </script>

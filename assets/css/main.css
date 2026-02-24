@@ -57,6 +57,7 @@
   /* Barre de défilement */
   ::-webkit-scrollbar {
     width: 8px;
+    height: 8px;
   }
 
   ::-webkit-scrollbar-track {
@@ -83,6 +84,10 @@
     @apply bg-WtB text-BtW hover:scale-[1.01] relative border border-BtW hover:bg-BtW hover:text-WtB;
   }
 
+  .btn-accent {
+    @apply bg-primary/5 text-primary hover:scale-[1.01] relative border border-primary/20 hover:bg-primary hover:text-WtB transition-all;
+  }
+
   .btn-ghost {
     @apply text-BtW hover:text-primary bg-transparent hover:bg-WtBAct;
   }
@@ -94,6 +99,27 @@
   /* Champs de saisie */
   .input {
     @apply w-full px-4 py-3 rounded-xl bg-ash border border-WtBAct placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300;
+  }
+
+  .input-toggle-slider {
+    @apply w-12 h-6 bg-ashAct/20 rounded-full transition-all shadow-sm relative;
+  }
+
+  .input-toggle-slider::after {
+    content: '';
+    @apply absolute top-[2px] left-[2px] bg-white border-gray-300 border rounded-full h-5 w-5 transition-all;
+  }
+
+  .peer:focus~.input-toggle-slider {
+    @apply ring-4 ring-primary/20 outline-none;
+  }
+
+  .peer:checked~.input-toggle-slider {
+    @apply bg-primary;
+  }
+
+  .peer:checked~.input-toggle-slider::after {
+    @apply translate-x-full border-white;
   }
 
   /* Cartes */

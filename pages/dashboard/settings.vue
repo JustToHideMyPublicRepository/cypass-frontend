@@ -6,10 +6,13 @@
     <MeSettingsAppearance />
 
     <!-- Notifications -->
-    <MeSettingsNotifications :settings="notificationSettings" />
+    <MeSettingsNotifications />
 
     <!-- Shortcuts Settings -->
     <MeSettingsShortcuts />
+
+    <!-- Vigitech Settings -->
+    <MeSettingsVigitech />
 
     <!-- Language & Region -->
     <MeSettingsRegion />
@@ -20,8 +23,6 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue'
-
 definePageMeta({
   layout: 'default'
 })
@@ -29,22 +30,4 @@ definePageMeta({
 useHead({
   title: 'Paramètres'
 })
-
-const notificationSettings = reactive([
-  {
-    title: 'Alertes de sécurité critiques',
-    desc: 'Recevoir une alerte immédiate en cas de faille détectée.',
-    enabled: true
-  },
-  {
-    title: 'Mises à jour de DocSentry',
-    desc: 'Notifications lors de la validation d\'un document.',
-    enabled: true
-  },
-  {
-    title: 'Newsletter VigiTech',
-    desc: 'Résumé hebdomadaire des menaces cybernétiques.',
-    enabled: false
-  },
-])
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div class="space-y-6">
-    <div v-if="incidents.length" class="overflow-x-auto">
+    <div v-if="incidents.length" class="overflow-x-auto scrollbar-hide">
       <table class="w-full text-left border-separate border-spacing-y-4">
         <thead>
           <tr class="text-[10px] font-black uppercase tracking-[0.25em] text-hsa/60 px-4">

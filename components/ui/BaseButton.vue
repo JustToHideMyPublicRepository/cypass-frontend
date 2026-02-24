@@ -23,7 +23,7 @@ const IconLoader2 = markRaw(IconLoader2Raw)
 
 // Définition des propriétés du bouton
 const props = withDefaults(defineProps<{
-  variant?: 'primary' | 'secondary' | 'danger' | 'ghost'
+  variant?: 'primary' | 'secondary' | 'accent' | 'danger' | 'ghost'
   block?: boolean
   disabled?: boolean
   loading?: boolean
@@ -43,6 +43,7 @@ const buttonClasses = computed(() => [
   'btn',
   props.variant === 'primary' ? 'btn-primary' : '',
   props.variant === 'secondary' ? 'btn-secondary' : '',
+  props.variant === 'accent' ? 'btn-accent' : '',
   props.variant === 'danger' ? 'btn-danger' : '',
   props.variant === 'ghost' ? 'btn-ghost' : '',
   props.block ? 'w-full' : '',

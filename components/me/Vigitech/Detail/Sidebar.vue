@@ -16,6 +16,9 @@
             class="w-full justify-start !px-4">
             <IconDownload class="w-4 h-4 mr-2" /> Télécharger preuve
           </UiBaseButton>
+          <UiBaseButton @click="showSettingsModal = true" variant="accent" class="w-full justify-start !px-4">
+            <IconSettings class="w-4 h-4 mr-2" /> Préférences d'affichage
+          </UiBaseButton>
         </div>
       </div>
     </UiBaseCard>
@@ -84,14 +87,16 @@
       </div>
     </UiBaseCard>
 
-    <!-- Edit Incident Modal -->
+    <!-- Modals -->
     <ModalVigitechCreateIncident v-if="incident" :show="showEditModal" :incident="incident"
       @close="showEditModal = false" @success="$emit('success')" />
+
+    <ModalVigitechPreference :show="showSettingsModal" @close="showSettingsModal = false" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { IconEdit, IconShare, IconDownload, IconCheck, IconX, IconLock, IconAlertTriangle, IconBuilding } from '@tabler/icons-vue'
+import { IconEdit, IconShare, IconDownload, IconCheck, IconX, IconLock, IconAlertTriangle, IconBuilding, IconSettings } from '@tabler/icons-vue'
 import { useToastStore } from '~/stores/toast'
 import { mapIncidentStatus } from '~/utils/vigitech'
 
@@ -104,6 +109,7 @@ const emit = defineEmits(['success'])
 const toast = useToastStore()
 const config = useRuntimeConfig()
 const showEditModal = ref(false)
+const showSettingsModal = ref(false)
 
 const statusStyle = computed(() => {
   if (!props.incident) return { bg: 'bg-ash/5' }

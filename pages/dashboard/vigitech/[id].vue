@@ -1,18 +1,7 @@
 <template>
   <div class="space-y-6">
-    <UiBreadcrumbs :items="[
-      { label: 'Tableau de bord', path: '/dashboard' },
-      { label: 'VigiTech', path: '/dashboard/vigitech' },
-      { label: decodeHtmlEntities(incident?.title || 'Détail') }
-    ]" />
-
     <!-- Header -->
-    <div class="flex items-center gap-4">
-      <div>
-        <h1 class="text-2xl font-black text-BtW">Détails du Signalement</h1>
-        <p class="text-xs font-bold text-hsa uppercase tracking-widest">Référence: {{ route.params.id }}</p>
-      </div>
-    </div>
+    <MeVigitechDetailHero :incident="incident" />
 
     <!-- Loading States -->
     <MeVigitechDetailLoading v-if="store.loading && !incident" />
@@ -32,10 +21,10 @@
         </UiBaseCard>
 
         <!-- Comments Section -->
-        <MeVigitechDetailComments :comments="store.comments" :loading="store.loadingComments" />
+        <MeVigitechDetailComments v-if="settingsStore.display.showComments" :comments="store.comments"
+          :loading="store.loadingComments" />
       </div>
 
-      <!-- Right Sidebar -->
       <div class="space-y-6">
         <MeVigitechDetailSidebar :incident="incident" @success="fetchData" />
       </div>
@@ -44,9 +33,9 @@
 </template>
 
 <script setup lang="ts">
-import { IconAlertCircle } from '@tabler/icons-vue'
 import { useVigitechStore } from '~/stores/vigitech'
-import { decodeHtmlEntities } from '~/utils/format'
+import { useVigiPrefStore } from '~/stores/vigiPref'
+import { IconAlertCircle } from '@tabler/icons-vue'
 
 definePageMeta({
   layout: 'default'
@@ -54,15 +43,20 @@ definePageMeta({
 
 const route = useRoute()
 const store = useVigitechStore()
+const settingsStore = useVigiPrefStore()
+
 const incident = computed(() => store.currentIncident)
 
-const fetchData = () => {
+const fetchData = async () => {
   const id = route.params.id as string
-  store.fetchUserIncidentById(id)
-  store.fetchComments(id)
+  await store.fetchUserIncidentById(id)
+  await store.fetchComments(id)
 }
 
-onMounted(fetchData)
+onMounted(async () => {
+  settingsStore.loadFromLocalStorage()
+  await fetchData()
+})
 
 useHead({
   title: computed(() => incident.value

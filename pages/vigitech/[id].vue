@@ -22,12 +22,12 @@
             <div class="glass-panel p-8 md:p-12 rounded-[3.5rem] border border-ashAct space-y-8 shadow-xl">
               <RootVigitechDetailHeader :incident="incident" />
               <RootVigitechDetailContent :incident="incident" />
-              <RootVigitechDetailComments :incident-id="incident.id" :comments="store.comments"
-                :loading="store.loadingComments" />
+              <RootVigitechDetailComments v-if="vigiPrefStore.display.showComments" :incident-id="incident.id"
+                :comments="store.comments" :loading="store.loadingComments" />
             </div>
           </div>
 
-          <!-- Right Column: Actions & Advice -->
+          <!-- Right Sidebar -->
           <div class="lg:col-span-4 space-y-6">
             <RootVigitechDetailSidebar :incident="incident" @fetch="fetchData" />
           </div>
@@ -39,7 +39,7 @@
 
 <script setup lang="ts">
 import { useVigitechStore } from '~/stores/vigitech'
-import { decodeHtmlEntities } from '~/utils/format'
+import { useVigiPrefStore } from '~/stores/vigiPref'
 
 definePageMeta({
   layout: 'guest'
@@ -47,6 +47,8 @@ definePageMeta({
 
 const route = useRoute()
 const store = useVigitechStore()
+const vigiPrefStore = useVigiPrefStore()
+
 const incident = computed(() => store.currentIncident)
 
 const fetchData = () => {
@@ -55,9 +57,14 @@ const fetchData = () => {
   store.fetchComments(id)
 }
 
-onMounted(fetchData)
+onMounted(() => {
+  vigiPrefStore.loadFromLocalStorage()
+  fetchData()
+})
 
 useHead({
-  title: computed(() => incident.value ? `${incident.value.title} - Incident` : 'Détail de l\'incident')
+  title: computed(() => incident.value
+    ? `${incident.value.title} - VigiTech`
+    : 'Incident - VigiTech')
 })
 </script>
