@@ -81,7 +81,7 @@ export const navigationShortcuts: Record<string, ShortcutEntry> = {
     group: 'Navigation',
     modifier: 'Shift'
   },
-  vigitech: {
+  incidents: {
     keys: ['g'],
     label: 'Voir incidents',
     path: '/vigitech',
