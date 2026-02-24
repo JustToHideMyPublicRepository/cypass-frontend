@@ -150,13 +150,4 @@ const isLinkActive = (path: string) => {
 .nav-link:hover .icon:not(.active) {
   @apply scale-110;
 }
-
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
-}
-
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
 </style>

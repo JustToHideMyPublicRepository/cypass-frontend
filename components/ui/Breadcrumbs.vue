@@ -1,5 +1,5 @@
 <template>
-  <nav class="flex mb-6 overflow-x-auto scrollbar-hide py-1" aria-label="Fil d'Ariane">
+  <nav class="flex mb-6 overflow-x-auto no-scrollbar py-1" aria-label="Fil d'Ariane">
     <ol class="inline-flex items-center space-x-2 md:space-x-4 whitespace-nowrap">
       <!-- Lien vers l'accueil -->
       <li class="inline-flex items-center">

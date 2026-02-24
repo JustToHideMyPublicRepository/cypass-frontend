@@ -13,7 +13,7 @@
       <LytDefaultHeader :user="user" @toggle-menu="isOpen = !isOpen" @logout="handleLogout" />
 
       <!-- Contenu de la page -->
-      <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 scrollbar-hide">
+      <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 no-scrollbar">
         <div class="max-w-7xl mx-auto">
           <slot />
         </div>

@@ -33,7 +33,7 @@
           </div>
 
           <!-- Liste des notifications -->
-          <div class="overflow-y-auto flex-1 scrollbar-hide">
+          <div class="overflow-y-auto flex-1 no-scrollbar">
             <!-- État : Chargement -->
             <div v-if="store.loading && !store.notifications.length" class="p-8 text-center">
               <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-2"></div>

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-1 overflow-y-auto w-full custom-scrollbar">
+  <div class="flex-1 overflow-y-auto w-full no-scrollbar">
     <div class="flex flex-col justify-center min-h-full px-4 sm:px-10 lg:px-12 xl:px-16 py-8 md:py-12 max-w-lg mx-auto">
 
       <!-- Logo et Lien vers l'Accueil -->

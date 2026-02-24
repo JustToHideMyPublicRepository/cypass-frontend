@@ -1,6 +1,6 @@
 <template>
   <UiBaseModal :show="show" title="Préférences d'affichage" max-width="md" @close="$emit('close')">
-    <div class="space-y-6 py-2 max-h-[400px] overflow-y-auto px-1 -mx-1 scrollbar-hide animate-fade-in">
+    <div class="space-y-6 py-2 max-h-[400px] overflow-y-auto px-1 -mx-1 no-scrollbar animate-fade-in">
       <p class="text-[10px] font-black text-hsa uppercase tracking-[0.2em] px-2 mb-4">Configuration VigiTech</p>
 
       <!-- Preview Files -->

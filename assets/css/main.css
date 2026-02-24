@@ -56,8 +56,8 @@
 
   /* Barre de défilement */
   ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 4px;
+    height: 4px;
   }
 
   ::-webkit-scrollbar-track {
@@ -219,14 +219,12 @@
   }
 
   /* Cacher la barre de défilement pour Chrome, Safari et Opera */
-  .no-scrollbar::-webkit-scrollbar,
-  .scrollbar-hide::-webkit-scrollbar {
+  .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
 
   /* Cacher la barre de défilement pour IE, Edge et Firefox */
-  .no-scrollbar,
-  .scrollbar-hide {
+  .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }

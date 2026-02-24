@@ -18,7 +18,7 @@
 
     <!-- Filtres et Tris -->
     <div
-      class="flex flex-col sm:flex-row gap-2 md:gap-4 overflow-x-auto pb-2 md:pb-0 scrollbar-hide mx-auto justify-center">
+      class="flex flex-col sm:flex-row gap-2 md:gap-4 overflow-x-auto pb-2 md:pb-0 no-scrollbar mx-auto justify-center">
       <!-- Options de Tri -->
       <div class="flex items-center gap-1 bg-WtB border border-ash rounded-xl md:rounded-2xl p-1 shadow-sm shrink-0">
         <UiBaseButton v-for="option in sortOptions" :key="option.value" @click="$emit('update:sortBy', option.value)"
