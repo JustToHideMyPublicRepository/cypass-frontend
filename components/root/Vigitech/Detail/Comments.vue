@@ -96,6 +96,7 @@ import { fr } from 'date-fns/locale'
 import { useAuthStore } from '~/stores/auth'
 import { useVigitechStore } from '~/stores/vigitech'
 import { useToastStore } from '~/stores/toast'
+import { useVigiPrefStore } from '~/stores/vigiPref'
 import { getUserAvatarUrl } from '~/utils/user'
 
 const props = defineProps<{
@@ -107,8 +108,13 @@ const props = defineProps<{
 const authStore = useAuthStore()
 const store = useVigitechStore()
 const toast = useToastStore()
+const prefStore = useVigiPrefStore()
+const showComments = ref(prefStore.display.showComments)
 
-const showComments = ref(true)
+// React to preference changes
+watch(() => prefStore.display.showComments, (val) => {
+  showComments.value = val
+})
 const newComment = ref('')
 const submittingComment = ref(false)
 const editingCommentId = ref<string | null>(null)

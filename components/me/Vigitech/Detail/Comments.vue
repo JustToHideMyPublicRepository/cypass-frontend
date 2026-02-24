@@ -51,13 +51,20 @@ import { IconMessage, IconChevronUp, IconChevronDown } from '@tabler/icons-vue'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { getUserAvatarUrl } from '~/utils/user'
+import { useVigiPrefStore } from '~/stores/vigiPref'
 
 const props = defineProps<{
   comments: any[]
   loading: boolean
 }>()
 
-const showComments = ref(true)
+const prefStore = useVigiPrefStore()
+const showComments = ref(prefStore.display.showComments)
+
+// React to preference changes
+watch(() => prefStore.display.showComments, (val) => {
+  showComments.value = val
+})
 
 const getAvatar = (comment: any) => {
   return getUserAvatarUrl((comment as any).avatar_url || null, comment.first_name || null, comment.last_name || null)

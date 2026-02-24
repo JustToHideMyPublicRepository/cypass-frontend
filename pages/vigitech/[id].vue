@@ -22,8 +22,8 @@
             <div class="glass-panel p-8 md:p-12 rounded-[3.5rem] border border-ashAct space-y-8 shadow-xl">
               <RootVigitechDetailHeader :incident="incident" />
               <RootVigitechDetailContent :incident="incident" />
-              <RootVigitechDetailComments v-if="vigiPrefStore.display.showComments" :incident-id="incident.id"
-                :comments="store.comments" :loading="store.loadingComments" />
+              <RootVigitechDetailComments :incident-id="incident.id" :comments="store.comments"
+                :loading="store.loadingComments" />
             </div>
           </div>
 

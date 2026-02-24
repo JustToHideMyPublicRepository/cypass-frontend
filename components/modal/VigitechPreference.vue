@@ -1,52 +1,33 @@
 <template>
   <UiBaseModal :show="show" title="Configuration VigiTech" max-width="md" @close="$emit('close')">
     <div class="space-y-6 py-2 max-h-[400px] overflow-y-auto px-1 -mx-1 no-scrollbar animate-fade-in">
-      <!-- Preview Files -->
-      <div
+      <!-- Settings List -->
+      <div v-for="setting in settingsList" :key="setting.id"
         class="flex items-center justify-between gap-4 p-5 rounded-[2rem] bg-ash/20 border border-ashAct/30 transition-all hover:bg-ash/40 group/setting shadow-inner">
         <div class="flex-1">
-          <h4 class="font-black text-BtW text-sm uppercase tracking-tight">Prévisualisation auto</h4>
-          <p class="text-[11px] text-hsa leading-tight mt-1 font-medium opacity-70">Ouvrir automatiquement les fichiers
-            joints</p>
+          <h4 class="font-black text-BtW text-sm uppercase tracking-tight">{{ setting.title }}</h4>
+          <p class="text-[11px] text-hsa leading-tight mt-1 font-medium opacity-70">{{ setting.desc }}</p>
         </div>
         <label class="relative inline-flex items-center cursor-pointer">
-          <input type="checkbox" :checked="store.display.previewFile" @change="store.toggleSetting('previewFile')"
+          <input type="checkbox" :checked="store.display[setting.id]" @change="store.toggleSetting(setting.id)"
             class="sr-only peer">
-          <div class="input-toggle-slider">
+          <div class="input-toggle-inline">
           </div>
         </label>
-      </div>
-
-      <!-- Show Comments -->
-      <div
-        class="flex items-center justify-between gap-4 p-5 rounded-[2rem] bg-ash/20 border border-ashAct/30 transition-all hover:bg-ash/40 group/setting shadow-inner">
-        <div class="flex-1">
-          <h4 class="font-black text-BtW text-sm uppercase tracking-tight">Commentaires</h4>
-          <p class="text-[11px] text-hsa leading-tight mt-1 font-medium opacity-70">Afficher la section commentaires par
-            défaut</p>
-        </div>
-        <label class="relative inline-flex items-center cursor-pointer">
-          <input type="checkbox" :checked="store.display.showComments" @change="store.toggleSetting('showComments')"
-            class="sr-only peer">
-          <div class="input-toggle-slider">
-          </div>
-        </label>
-      </div>
-
-      <!-- Reset -->
-      <div class="pt-4 flex justify-center">
-        <button @click="store.resetToDefault"
-          class="flex items-center gap-2 px-4 py-2 rounded-xl hover:bg-danger/10 text-danger transition-all text-[10px] font-black uppercase tracking-widest border border-transparent hover:border-danger/20">
-          <IconRotateClockwise2 class="w-4 h-4" />
-          Réinitialiser par défaut
-        </button>
       </div>
     </div>
 
     <template #footer>
-      <div class="flex justify-end pt-4">
-        <UiBaseButton variant="primary" size="sm" @click="$emit('close')" class="!px-8 !rounded-xl">
-          Terminer
+      <div class="flex justify-between items-center w-full pt-2">
+        <UiBaseButton variant="ghost" size="sm"
+          class="!rounded-2xl !text-[11px] font-black uppercase tracking-widest text-hsa hover:text-primary transition-colors !p-3"
+          @click="store.resetToDefault()">
+          <IconRotate class="w-4 h-4 mr-2" />
+          Défaut
+        </UiBaseButton>
+        <UiBaseButton variant="secondary" size="sm"
+          class="!rounded-2xl font-black uppercase tracking-widest px-8 shadow-lg" @click="$emit('close')">
+          Fermer
         </UiBaseButton>
       </div>
     </template>
@@ -54,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import { IconRotateClockwise2 } from '@tabler/icons-vue'
+import { IconRotate } from '@tabler/icons-vue'
 import { useVigiPrefStore } from '~/stores/vigiPref'
 
 defineProps<{
@@ -64,4 +45,17 @@ defineProps<{
 defineEmits(['close'])
 
 const store = useVigiPrefStore()
+
+const settingsList = [
+  {
+    id: 'previewFile' as const,
+    title: 'Prévisualisation auto',
+    desc: 'Ouvrir automatiquement les fichiers joints dans les détails d\'incidents.'
+  },
+  {
+    id: 'showComments' as const,
+    title: 'Commentaires',
+    desc: 'Afficher la section commentaires par défaut sur les signalements.'
+  }
+]
 </script>

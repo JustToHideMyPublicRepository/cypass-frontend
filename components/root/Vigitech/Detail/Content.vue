@@ -59,12 +59,19 @@
 <script setup lang="ts">
 import { IconChevronUp, IconChevronDown, IconZoomIn, IconFileTypePdf, IconExternalLink } from '@tabler/icons-vue'
 import { decodeHtmlEntities } from '~/utils/format'
+import { useVigiPrefStore } from '~/stores/vigiPref'
 
 const props = defineProps<{
   incident: any
 }>()
 
-const showEvidence = ref(false)
+const prefStore = useVigiPrefStore()
+const showEvidence = ref(prefStore.display.previewFile)
+
+// React to preference changes
+watch(() => prefStore.display.previewFile, (val) => {
+  showEvidence.value = val
+})
 const viewer = ref({
   show: false,
   url: ''

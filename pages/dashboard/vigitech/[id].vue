@@ -21,8 +21,7 @@
         </UiBaseCard>
 
         <!-- Comments Section -->
-        <MeVigitechDetailComments v-if="settingsStore.display.showComments" :comments="store.comments"
-          :loading="store.loadingComments" />
+        <MeVigitechDetailComments :comments="store.comments" :loading="store.loadingComments" />
       </div>
 
       <div class="space-y-6">

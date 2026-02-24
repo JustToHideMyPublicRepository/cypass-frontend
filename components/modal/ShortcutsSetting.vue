@@ -13,8 +13,7 @@
         <label class="relative inline-flex items-center cursor-pointer">
           <input type="checkbox" :checked="store[setting.id]" @change="store.toggleSetting(setting.id)"
             class="sr-only peer">
-          <div
-            class="w-12 h-6 bg-ashAct/20 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[3px] after:left-[3px] after:bg-white after:rounded-full after:h-4.5 after:w-5 after:transition-all peer-checked:bg-primary shadow-inner">
+          <div class="input-toggle-inline">
           </div>
         </label>
       </div>
