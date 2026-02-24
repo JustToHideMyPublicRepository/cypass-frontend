@@ -97,8 +97,12 @@
                   </div>
                   <!-- Author info -->
                   <div class="flex items-center gap-2.5">
-                    <div class="w-10 h-10 rounded-full overflow-hidden border border-ash/20 bg-ash/10 shrink-0">
-                      <img
+                    <div
+                      class="w-10 h-10 rounded-full overflow-hidden border border-ash/20 bg-ash/10 shrink-0 flex items-center justify-center">
+                      <template v-if="incident.is_anonymous || incident.is_anonymous === 1">
+                        <IconUserOff class="w-6 h-6 text-hsa/50" />
+                      </template>
+                      <img v-else
                         :src="getUserAvatarUrl((incident as any).user_avatar || null, incident.author_first_name || null, incident.author_last_name || null)"
                         class="w-full h-full object-cover" />
                     </div>
@@ -349,7 +353,7 @@
 
 <script setup lang="ts">
 import {
-  IconMapPin, IconCalendar, IconUser, IconArrowUpRight, IconDownload, IconShare, IconShieldCheck, IconAlertCircle, IconZoomIn, IconFileTypePdf, IconExternalLink, IconChevronDown, IconChevronUp, IconEye, IconMessage, IconSend, IconFlag, IconEdit
+  IconMapPin, IconCalendar, IconUser, IconArrowUpRight, IconDownload, IconShare, IconShieldCheck, IconAlertCircle, IconZoomIn, IconFileTypePdf, IconExternalLink, IconChevronDown, IconChevronUp, IconEye, IconMessage, IconSend, IconFlag, IconEdit, IconUserOff
 } from '@tabler/icons-vue'
 import { useVigitechStore } from '~/stores/vigitech'
 import { useAuthStore } from '~/stores/auth'
@@ -431,7 +435,7 @@ const getFullUrl = (path: string) => {
 const isImage = (path: string) => {
   if (!path) return false
   const ext = path.split('.').pop()?.toLowerCase()
-  return ['jpg', 'jpeg', 'png', 'webp', 'gif'].includes(ext || '')
+  return ['jpg', 'jpeg', 'png', 'webp', 'gif', 'jfif', 'pjpeg', 'pjp', 'avif', 'apng'].includes(ext || '')
 }
 
 const isPdf = (path: string) => {

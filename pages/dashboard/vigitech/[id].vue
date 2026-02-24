@@ -362,7 +362,7 @@ const getFullUrl = (path: string) => {
 const isImage = (path: string) => {
   if (!path) return false
   const ext = path.split('.').pop()?.toLowerCase()
-  return ['jpg', 'jpeg', 'png', 'webp', 'gif'].includes(ext || '')
+  return ['jpg', 'jpeg', 'png', 'webp', 'gif', 'jfif', 'pjpeg', 'pjp', 'avif', 'apng'].includes(ext || '')
 }
 
 const isPdf = (path: string) => {

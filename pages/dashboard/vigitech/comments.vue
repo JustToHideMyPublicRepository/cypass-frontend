@@ -91,6 +91,7 @@ import { useToastStore } from '~/stores/toast'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import type { Comment } from '~/types/vigitech'
+import { getUserAvatarUrl } from '~/utils/user'
 
 definePageMeta({
   layout: 'default'
@@ -216,6 +217,6 @@ onMounted(async () => {
 })
 
 useHead({
-  title: 'Mes commentaires - VigiTech'
+  title: 'Mes commentaires'
 })
 </script>

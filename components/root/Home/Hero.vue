@@ -35,11 +35,15 @@
             en temps réel.
           </p>
 
-          <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-4">
+          <div class="flex flex-col sm:flex-row flex-wrap gap-4 justify-center lg:justify-start pt-4">
             <UiBaseButton :to="authStore.user ? '/dashboard' : '/auth/login'"
               class="w-full sm:w-auto text-base md:text-lg px-6 md:px-8 py-3 md:py-4 shadow-BtW/40">
               {{ authStore.user ? 'Tableau de bord' : 'Accéder au Portail' }}
               <IconArrowRight class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+            </UiBaseButton>
+            <UiBaseButton :to="authStore.user ? '/dashboard/vigitech' : '/vigitech'" variant="secondary"
+              class="w-full sm:w-auto text-base md:text-lg px-6 md:px-8 py-3 md:py-4 !bg-primary/5 !text-primary !border-primary/20 hover:!bg-primary hover:!text-WtB transition-all">
+              Veille Communautaire
             </UiBaseButton>
             <UiBaseButton to="/verify" variant="secondary"
               class="w-full sm:w-auto text-base md:text-lg px-6 md:px-8 py-3 md:py-4">
