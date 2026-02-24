@@ -14,17 +14,8 @@
       </div>
     </div>
 
-    <!-- Skeleton Loading -->
-    <div v-if="store.loading" class="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-fade-in">
-      <div class="lg:col-span-2 space-y-6">
-        <UiAppSkeleton height="400px" radius="2.5rem" />
-        <UiAppSkeleton height="200px" radius="2.5rem" />
-      </div>
-      <div class="space-y-6">
-        <UiAppSkeleton height="150px" radius="2rem" />
-        <UiAppSkeleton height="300px" radius="2rem" />
-      </div>
-    </div>
+    <!-- Loading States -->
+    <MeVigitechDetailLoading v-if="store.loading && !incident" />
 
     <div v-else-if="store.error" class="glass-panel p-12 rounded-[2rem] text-center">
       <IconAlertCircle class="w-12 h-12 text-danger mx-auto mb-4" />

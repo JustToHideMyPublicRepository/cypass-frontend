@@ -63,9 +63,15 @@
             <p
               class="text-[10px] font-black text-hsa uppercase tracking-widest mb-1 group-hover/stat:text-primary transition-colors">
               Activité publique</p>
-            <div class="flex items-center gap-2 text-BtW font-bold text-lg">
-              <IconShield class="w-5 h-5 text-primary/40" />
-              {{ publicIncidentsCount }} Incident{{ publicIncidentsCount > 1 ? 's' : '' }}
+            <div class="flex flex-col gap-1.5">
+              <div class="flex items-center gap-2 text-BtW font-bold text-lg">
+                <IconShield class="w-5 h-5 text-primary/80" />
+                {{ publicIncidentsCount }} Incident{{ publicIncidentsCount > 1 ? 's' : '' }}
+              </div>
+              <div class="flex items-center gap-2 text-hsa font-bold text-xs pl-0.5">
+                <IconMessage class="w-3.5 h-3.5 text-primary/60" />
+                {{ commentsCount }} Commentaire{{ commentsCount > 1 ? 's' : '' }}
+              </div>
             </div>
           </div>
         </div>
@@ -79,7 +85,7 @@
 </template>
 
 <script setup lang="ts">
-import { IconZoomIn, IconBuilding, IconCalendar, IconShield } from '@tabler/icons-vue'
+import { IconZoomIn, IconBuilding, IconCalendar, IconShield, IconMessage } from '@tabler/icons-vue'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 
@@ -87,6 +93,7 @@ const props = defineProps<{
   user: any
   userAvatarUrl: string
   publicIncidentsCount: number
+  commentsCount: number
 }>()
 
 const showImageViewer = ref(false)

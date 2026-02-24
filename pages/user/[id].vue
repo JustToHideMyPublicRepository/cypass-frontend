@@ -10,30 +10,16 @@
     </div>
 
     <!-- Loading State -->
-    <div v-if="loading" class="w-full max-w-7xl space-y-8 animate-fade-in">
-      <UiAppSkeleton height="300px" radius="3rem" />
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <UiAppSkeleton height="400px" radius="2.5rem" />
-        <UiAppSkeleton height="400px" radius="2.5rem" />
-      </div>
-    </div>
+    <RootUserLoading v-if="loading" />
 
     <!-- Error State -->
-    <div v-else-if="error" class="glass-panel p-12 rounded-[3rem] text-center max-w-2xl mx-auto">
-      <div class="w-20 h-20 bg-danger/10 rounded-[2rem] flex items-center justify-center text-danger mx-auto mb-6">
-        <IconAlertCircle class="w-10 h-10" />
-      </div>
-      <h2 class="text-2xl font-black text-BtW mb-2">Oups !</h2>
-      <p class="text-hsa font-bold mb-8">{{ error }}</p>
-      <NuxtLink to="/vigitech">
-        <UiBaseButton variant="primary" class="!rounded-2xl px-8">Retour à VigiTech</UiBaseButton>
-      </NuxtLink>
-    </div>
+    <RootUserError v-else-if="error" :message="error" @retry="fetchPublicProfile" />
 
     <!-- Profile Content -->
     <div v-else-if="user" class="w-full max-w-7xl space-y-8 animate-fade-in">
       <!-- Profile Header -->
-      <RootUserHero :user="user" :user-avatar-url="userAvatarUrl" :public-incidents-count="publicIncidents.length" />
+      <RootUserHero :user="user" :user-avatar-url="userAvatarUrl" :public-incidents-count="publicIncidents.length"
+        :comments-count="comments.length" />
 
       <!-- Activity Section -->
       <RootUserActivity :public-incidents="publicIncidents" :comments="comments" />
@@ -42,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import { IconAlertCircle, IconArrowLeft } from '@tabler/icons-vue'
+import { IconArrowLeft } from '@tabler/icons-vue'
 import { getUserAvatarUrl } from '~/utils/user'
 
 definePageMeta({
