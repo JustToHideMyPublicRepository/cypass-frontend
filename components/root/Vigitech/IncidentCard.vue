@@ -61,7 +61,7 @@
 
       <div class="flex flex-col gap-2 shrink-0">
         <!-- Signaler -->
-        <button v-if="!showFooter" @click.stop="handleReport" :disabled="isOwnIncident"
+        <button v-if="!showFooter && authStore.user" @click.stop="handleReport" :disabled="isOwnIncident"
           class="p-2 rounded-xl transition-colors" :class="isOwnIncident
             ? 'text-hsa/30 cursor-not-allowed'
             : 'hover:bg-danger/10 text-hsa hover:text-danger'"

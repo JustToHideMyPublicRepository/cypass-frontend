@@ -4,7 +4,7 @@
 
     <!-- Stats Grid -->
     <MeDashboardStats :documents-count="documentsStore.pagination?.total || 0" :documents-trend="docTrend"
-      :unread-count="notificationsStore.unreadCount" :unread-trend="unreadTrend"
+      :vigitech-count="vigitechStore.userIncidents.length" :vigitech-trend="vigiTrend"
       :active-sessions="activeSessionsCount" />
 
     <!-- Data Insights Row -->
@@ -13,12 +13,16 @@
         :loading="notificationsStore.loading" :format-time="formatTime" />
       <MeDashboardRecentDocs :documents="documentsStore.documents.slice(0, 4)" :loading="documentsStore.loading"
         :format-time="formatTime" :get-doc-status="getDocStatus" />
+      <MeDashboardVigitechRecent :incidents="vigitechStore.userIncidents.slice(0, 4)" :loading="vigitechStore.loading"
+        :format-time="formatTime" />
+      <MeDashboardVigitechCommentsRecent :comments="recentComments" :loading="vigitechStore.loadingComments" />
       <MeDashboardActivityFeed :logs="profilStore.logs.slice(0, 4)" :loading="loading" :format-time="formatTime" />
     </div>
 
     <!-- Quick Actions & Trust Center Row -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      <MeDashboardQuickActions @upload="modals.upload = true" @verify="modals.verify = true" />
+      <MeDashboardQuickActions @upload="modals.upload = true" @verify="modals.verify = true"
+        @create="modals.createIncident = true" />
       <div class="lg:col-span-2">
         <MeDashboardTrustCenter />
       </div>
@@ -33,6 +37,9 @@
     <ModalDocSentryVerify :show="modals.verify" :loading="documentsStore.loading" :error="documentsStore.error"
       :result="documentsStore.verificationResult" @verify="handleVerify"
       @reset="documentsStore.verificationResult = null" @close="closeModals" />
+
+    <ModalVigitechCreateIncident :show="modals.createIncident" @close="closeModals"
+      @success="vigitechStore.fetchUserIncidents()" />
   </div>
 </template>
 
@@ -43,6 +50,7 @@ import { useDocsentryStore } from '~/stores/docsentry'
 import { useNotificationsStore } from '~/stores/notifications'
 import { useProfilStore } from '~/stores/profil'
 import { useAuthStore } from '~/stores/auth'
+import { useVigitechStore } from '~/stores/vigitech'
 import { useToastStore } from '~/stores/toast'
 
 definePageMeta({
@@ -53,17 +61,25 @@ const documentsStore = useDocsentryStore()
 const notificationsStore = useNotificationsStore()
 const profilStore = useProfilStore()
 const authStore = useAuthStore()
+const vigitechStore = useVigitechStore()
 const toast = useToastStore()
 
 const currentTime = ref('')
 const activeSessionsCount = ref(0)
 const loading = ref(true)
 const docTrend = ref({ percentage: 0, difference: 0 })
-const unreadTrend = ref({ percentage: 0, difference: 0 })
+const vigiTrend = ref({ percentage: 0, difference: 0 })
+
+const recentComments = computed(() => {
+  // Since we don't have a direct /all-comments endpoint yet, 
+  // we use what's in the store or fetch on mount for recent user incidents
+  return vigitechStore.comments.slice(0, 4)
+})
 
 const modals = reactive({
   upload: false,
-  verify: false
+  verify: false,
+  createIncident: false
 })
 
 // Helper to determine doc status string for badge
@@ -98,9 +114,43 @@ const handleVerify = async (file: File) => {
 const closeModals = () => {
   modals.upload = false
   modals.verify = false
+  modals.createIncident = false
   documentsStore.error = null
   documentsStore.uploadResult = null
   documentsStore.verificationResult = null
+}
+
+const calculateVigiTrend = async () => {
+  try {
+    const now = new Date()
+    const currentWeekStart = startOfWeek(now, { weekStartsOn: 1 })
+    const previousWeekStart = startOfWeek(subWeeks(now, 1), { weekStartsOn: 1 })
+    const previousWeekEnd = endOfWeek(subWeeks(now, 1), { weekStartsOn: 1 })
+
+    const response = await $fetch<any>('/api/vigitech/all', {
+      query: { limit: 100, offset: 0 }
+    })
+
+    const incidents = response?.data || []
+
+    const currentWeekCount = incidents.filter((i: any) => {
+      const date = new Date(i.created_at)
+      return isWithinInterval(date, { start: currentWeekStart, end: now })
+    }).length
+
+    const previousWeekCount = incidents.filter((i: any) => {
+      const date = new Date(i.created_at)
+      return isWithinInterval(date, { start: previousWeekStart, end: previousWeekEnd })
+    }).length
+
+    const diff = currentWeekCount - previousWeekCount
+    vigiTrend.value = {
+      percentage: previousWeekCount === 0 ? (currentWeekCount > 0 ? 100 : 0) : Math.round((diff / previousWeekCount) * 100),
+      difference: diff
+    }
+  } catch (err) {
+    console.error('Failed to calculate vigitech trend', err)
+  }
 }
 
 const calculateDocTrend = async () => {
@@ -139,39 +189,6 @@ const calculateDocTrend = async () => {
   }
 }
 
-const calculateUnreadTrend = async () => {
-  try {
-    const now = new Date()
-    const currentWeekStart = startOfWeek(now, { weekStartsOn: 1 })
-    const previousWeekStart = startOfWeek(subWeeks(now, 1), { weekStartsOn: 1 })
-    const previousWeekEnd = endOfWeek(subWeeks(now, 1), { weekStartsOn: 1 })
-
-    const response = await $fetch<any>('/api/notifications/list', {
-      query: { limit: 100, offset: 0 }
-    })
-
-    const notifications = response?.data?.notifications || []
-
-    const currentUnread = notifications.filter((n: any) => {
-      const date = new Date(n.created_at)
-      return !n.is_read && isWithinInterval(date, { start: currentWeekStart, end: now })
-    }).length
-
-    const previousUnread = notifications.filter((n: any) => {
-      const date = new Date(n.created_at)
-      return !n.is_read && isWithinInterval(date, { start: previousWeekStart, end: previousWeekEnd })
-    }).length
-
-    const diff = currentUnread - previousUnread
-    unreadTrend.value = {
-      percentage: previousUnread === 0 ? (currentUnread > 0 ? 100 : 0) : Math.round((diff / previousUnread) * 100),
-      difference: diff
-    }
-  } catch (err) {
-    console.error('Failed to calculate unread trend', err)
-  }
-}
-
 onMounted(async () => {
   const now = new Date()
   currentTime.value = `${format(now, 'dd/MM/yyyy')} à ${format(now, 'HH:mm')}`
@@ -181,11 +198,16 @@ onMounted(async () => {
     documentsStore.fetchDocuments(5, 0),
     notificationsStore.fetchNotifications(5, 0),
     profilStore.fetchLogs({ limit: 5 }),
+    vigitechStore.fetchUserIncidents().then(async () => {
+      // Fetch comments for top users incidents
+      const latest = vigitechStore.userIncidents.slice(0, 3)
+      await Promise.all(latest.map(inc => vigitechStore.fetchComments(inc.id)))
+    }),
     authStore.fetchSessions().then(sessions => {
       activeSessionsCount.value = sessions?.length || 0
     }),
     calculateDocTrend(),
-    calculateUnreadTrend()
+    calculateVigiTrend()
   ])
   loading.value = false
 })

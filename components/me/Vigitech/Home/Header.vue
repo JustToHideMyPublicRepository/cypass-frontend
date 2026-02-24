@@ -1,8 +1,15 @@
 <template>
-  <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
-    <div>
-      <h1 class="text-2xl md:text-3xl font-black text-BtW tracking-tight">{{ title }}</h1>
-      <p class="text-hsa font-bold">{{ subtitle }}</p>
+  <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 w-full">
+    <div class="space-y-1">
+      <div class="flex items-center gap-2 mb-1">
+        <div class="w-1.5 h-1.5 rounded-full bg-danger animate-pulse"></div>
+        <span class="text-[10px] font-bold text-danger uppercase tracking-widest">Veille Active</span>
+      </div>
+      <h1 class="text-3xl md:text-4xl font-black text-BtW tracking-tight">
+        VigiTech <span class="text-hsa font-medium">/</span>
+        <span class="bg-gradient-to-r from-danger to-indigo-500 bg-clip-text text-transparent">Incidents</span>
+      </h1>
+      <p class="text-hsa text-sm font-medium">Surveillez et signalez les incidents de sécurité en temps réel.</p>
     </div>
 
     <div class="flex items-center gap-3">
@@ -21,11 +28,6 @@
 
 <script setup lang="ts">
 import { IconAlertCircle, IconMessage } from '@tabler/icons-vue'
-
-defineProps<{
-  title: string
-  subtitle: string
-}>()
 
 defineEmits(['create'])
 </script>

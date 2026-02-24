@@ -29,7 +29,7 @@
         </button>
 
         <!-- Signaler -->
-        <button @click="showReportModal = true" :disabled="isOwnIncident"
+        <button v-if="authStore.user" @click="showReportModal = true" :disabled="isOwnIncident"
           class="w-full flex items-center justify-between p-4 rounded-2xl border transition-all group" :class="isOwnIncident
             ? 'bg-ash/5 border-ash/20 opacity-50 cursor-not-allowed'
             : 'bg-danger/5 hover:bg-danger/10 border-danger/20'"

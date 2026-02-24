@@ -107,15 +107,31 @@ const saveEdit = async (val?: any) => {
 onMounted(async () => {
   loading.value = true
   try {
-    await store.fetchPublicIncidents({ limit: 100, offset: 0 })
-
-    // Collect all comments from user's incidents
-    const allComments: Comment[] = []
     const userId = authStore.user?.id
+    if (!userId) return
 
-    // Fetch comments for each incident the user might have commented on
-    for (const incident of store.publicIncidents) {
-      incidentTitles.value[incident.id] = incident.title
+    // 1. Fetch user's own incidents first
+    await store.fetchUserIncidents()
+
+    // 2. Fetch public incidents to have a broader title reference
+    await store.fetchPublicIncidents({ limit: 50, offset: 0 })
+
+    // Build title map
+    store.publicIncidents.forEach(inc => incidentTitles.value[inc.id] = inc.title)
+    store.userIncidents.forEach(inc => incidentTitles.value[inc.id] = inc.title)
+
+    // 3. Collect comments. 
+    // Optimization: We check user's incidents and common public ones.
+    // In a real app, we'd have /api/vigitech/user/comments
+    const allComments: Comment[] = []
+
+    // Check user's incidents (highest probability of comments)
+    const incidentsToCheck = [...store.userIncidents]
+    // Add public incidents to check (limit to avoid too many requests)
+    const extraIncidents = store.publicIncidents.filter(pi => !incidentsToCheck.some(ui => ui.id === pi.id))
+    incidentsToCheck.push(...extraIncidents.slice(0, 20))
+
+    await Promise.all(incidentsToCheck.map(async (incident) => {
       try {
         const response: any = await $fetch('/api/vigitech/comments', {
           params: { incident_id: incident.id }
@@ -124,30 +140,10 @@ onMounted(async () => {
           const myComments = response.data.filter((c: Comment) => c.user_id === userId)
           allComments.push(...myComments)
         }
-      } catch {
+      } catch (err) {
+        console.warn(`Could not fetch comments for incident ${incident.id}`, err)
       }
-    }
-
-    if (store.userIncidents.length === 0) {
-      await store.fetchUserIncidents()
-    }
-    for (const incident of store.userIncidents) {
-      if (!incidentTitles.value[incident.id]) {
-        incidentTitles.value[incident.id] = incident.title
-      }
-      try {
-        const response: any = await $fetch('/api/vigitech/comments', {
-          params: { incident_id: incident.id }
-        })
-        if (response.success && response.data) {
-          const myComments = response.data.filter(
-            (c: Comment) => c.user_id === userId && !allComments.some(existing => existing.id === c.id)
-          )
-          allComments.push(...myComments)
-        }
-      } catch {
-      }
-    }
+    }))
 
     // Sort by most recent first
     allComments.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())

@@ -64,5 +64,13 @@ export const dashboardShortcuts: Record<string, ShortcutEntry> = {
     isGlobal: true,
     group: 'Dashboard',
     modifier: 'Shift'
-  }
+  },
+  vigitech_comment: {
+    keys: ['d', 'c'],
+    label: 'Commentaires Vigitech',
+    path: '/dashboard/vigitech/comments',
+    isGlobal: true,
+    group: 'Dashboard',
+    modifier: 'Shift'
+  },
 }

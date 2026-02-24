@@ -71,8 +71,8 @@ interface StatCard {
 const props = defineProps<{
   documentsCount: number
   documentsTrend?: Trend
-  unreadCount: number
-  unreadTrend?: Trend
+  vigitechCount: number
+  vigitechTrend?: Trend
   activeSessions: number
 }>()
 
@@ -88,14 +88,14 @@ const statsConfig = computed<StatCard[]>(() => [
       : 'Documents sécurisés'
   },
   {
-    label: 'Alertes non lues',
-    value: props.unreadCount,
+    label: 'Signalements Vigitech',
+    value: props.vigitechCount,
     icon: IconAlertTriangle,
-    bgClass: 'bg-gradient-to-br from-dangerAct to-danger',
-    trend: props.unreadTrend,
-    displaySubLabel: props.unreadTrend
-      ? `${props.unreadTrend.percentage >= 0 ? '+' : ''}${props.unreadTrend.percentage}% par rapport à la semaine dernière`
-      : 'Action requise immédiate'
+    bgClass: 'bg-gradient-to-br from-indigo-500 to-indigo-600',
+    trend: props.vigitechTrend,
+    displaySubLabel: props.vigitechTrend
+      ? `${props.vigitechTrend.percentage >= 0 ? '+' : ''}${props.vigitechTrend.percentage}% par rapport à la semaine dernière`
+      : props.vigitechCount > 0 ? `${props.vigitechCount} incidents répertoriés` : 'Aucun incident actif'
   },
   {
     label: 'Score sécurité',
@@ -109,7 +109,7 @@ const statsConfig = computed<StatCard[]>(() => [
     label: 'Appareils actifs',
     value: props.activeSessions,
     icon: IconDevices,
-    bgClass: 'bg-gradient-to-br from-indigo-500 to-primary',
+    bgClass: 'bg-gradient-to-br from-ashAct to-hsa',
     iconBgClass: 'bg-white/10',
     advice: props.activeSessions > 1 ? 'Vérifier' : 'Sécurisé',
     displaySubLabel: props.activeSessions > 1

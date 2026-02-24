@@ -17,7 +17,7 @@
         @click="navigateTo(`/dashboard/notifications/${alert.id}`)">
         <div :class="[
           'w-2 h-2 rounded-full mt-2 flex-shrink-0 transition-transform group-hover:scale-125',
-          alert.is_read ? 'bg-hsa' : alert.priority === 'high' ? 'bg-danger' : 'bg-primary'
+          alert.priority === 'high' ? 'bg-danger' : 'bg-primary'
         ]"></div>
         <div class="min-w-0 flex-1">
           <h4 class="text-sm font-bold text-BtW truncate">{{ alert.title }}</h4>
