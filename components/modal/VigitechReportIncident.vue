@@ -70,11 +70,15 @@ const store = useVigitechStore()
 const toast = useToastStore()
 const loading = ref(false)
 
+// Payload de signalement
 const form = reactive({
   reason: '',
   details: ''
 })
 
+/**
+ * Envoie le signalement
+ */
 const handleSubmit = async () => {
   if (!form.reason) return
   loading.value = true

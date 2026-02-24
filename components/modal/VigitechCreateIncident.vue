@@ -2,7 +2,7 @@
   <UiBaseModal :show="show" :title="isEditMode ? 'Modifier l\'incident' : 'Signaler un Incident'" maxWidth="2xl"
     @close="closeModal">
     <div class="space-y-6 py-2">
-      <!-- Information Box -->
+      <!-- Information -->
       <div class="p-5 rounded-[1.5rem] bg-danger/5 border border-danger/10 flex gap-4 backdrop-blur-sm">
         <div class="shrink-0 p-2.5 bg-danger/10 rounded-xl h-fit text-danger shadow-inner">
           <IconAlertTriangle class="w-6 h-6" />
@@ -90,7 +90,7 @@
             class="w-full p-4 rounded-xl bg-ash/30 border border-ash focus:ring-2 focus:ring-primary outline-none transition-all font-bold text-sm resize-none"></textarea>
         </div>
 
-        <!-- Premium Drop Zone -->
+        <!-- Drop Zone -->
         <div class="md:col-span-2 space-y-2 text-left">
           <label class="text-xs font-black text-hsa uppercase tracking-widest px-1">Preuve / Capture d'écran</label>
           <div class="relative group">
@@ -101,7 +101,7 @@
                 isOver ? 'border-primary ring-4 ring-primary/10 bg-primary/5 scale-[0.99]' : ''
               ]">
 
-              <!-- Drop Icon / Preview -->
+              <!-- Aperçue -->
               <div v-if="!form.evidence"
                 class="w-16 h-16 bg-ash/10 rounded-2xl flex items-center justify-center text-hsa group-hover:text-primary transition-colors">
                 <IconCloudUpload class="w-8 h-8" />
@@ -146,7 +146,7 @@
     </div>
   </UiBaseModal>
 
-  <!-- Error Modal -->
+  <!-- Modal d'erreur -->
   <ModalGlobalFileError :show="showFileError" :title="fileErrorTitle" :message="fileErrorMessage"
     :file-name="errorFileName" :file-type="errorFileType" :file-size="errorFileSize"
     :accepted-formats="'JPG, PNG, PDF (Max 3 Mo)'" @close="showFileError = false" />
@@ -173,6 +173,7 @@ const emit = defineEmits(['close', 'success'])
 const store = useVigitechStore()
 const { enable, disable } = useGlobalDropZone()
 
+// État initial du formulaire
 const form = ref<CreateIncidentRequest>({
   title: '',
   description: '',
@@ -187,12 +188,18 @@ const fileInput = ref<HTMLInputElement | null>(null)
 const previewUrl = ref<string>('')
 const isOver = ref(false)
 
-// File handling
+// Gestion des fichiers et validation
 const isImage = computed(() => form.value.evidence?.type.startsWith('image/'))
-const MAX_FILE_SIZE = 3 * 1024 * 1024 // 3MB
+const MAX_FILE_SIZE = 3 * 1024 * 1024 // Limite de 3 Mo
 
+/**
+ * Déclenche l'explorateur de fichiers natif
+ */
 const triggerFileUpload = () => fileInput.value?.click()
 
+/**
+ * Traite le changement de fichier via l'input
+ */
 const handleFileChange = (e: Event) => {
   const target = e.target as HTMLInputElement
   if (target.files?.length) {
@@ -200,13 +207,16 @@ const handleFileChange = (e: Event) => {
   }
 }
 
+/**
+ * Callback pour la DropZone globale
+ */
 const onDroppedFile = (file: File) => {
   if (props.show && !store.loading) {
     processFile(file)
   }
 }
 
-// Error state
+// Gestion des erreurs d'upload
 const showFileError = ref(false)
 const fileErrorTitle = ref('')
 const fileErrorMessage = ref('')
@@ -214,6 +224,9 @@ const errorFileName = ref('')
 const errorFileType = ref('')
 const errorFileSize = ref('')
 
+/**
+ * Affiche la modale d'erreur pour un fichier invalide
+ */
 const showError = (title: string, message: string, file: File) => {
   fileErrorTitle.value = title
   fileErrorMessage.value = message
@@ -223,6 +236,9 @@ const showError = (title: string, message: string, file: File) => {
   showFileError.value = true
 }
 
+/**
+ * Valide le type et la taille du fichier avant de l'accepter
+ */
 const processFile = (file: File) => {
   const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf']
   if (!allowedTypes.includes(file.type)) {
@@ -247,12 +263,16 @@ const closeModal = () => {
   emit('close')
 }
 
+/**
+ * Soumet le formulaire (création ou mise à jour) vers le store Vigitech
+ */
 const submit = async () => {
   if (!form.value.title || !form.value.description) {
     return
   }
 
   if (isEditMode.value && props.incident) {
+    // Mode édition
     const result = await store.updateIncident(props.incident.id, {
       title: form.value.title,
       description: form.value.description,
@@ -267,6 +287,7 @@ const submit = async () => {
       resetForm()
     }
   } else {
+    // Mode création
     const result = await store.createIncident(form.value)
     if (result) {
       emit('success')
@@ -276,6 +297,9 @@ const submit = async () => {
   }
 }
 
+/**
+ * Réinitialise les champs du formulaire et les URLs de prévisualisation
+ */
 const resetForm = () => {
   form.value = {
     title: '',
@@ -290,11 +314,11 @@ const resetForm = () => {
   previewUrl.value = ''
 }
 
-// Global DropZone hook integration
+// Intégration du hook DropZone globale
 watch(() => props.show, (isVisible) => {
   if (isVisible) {
     enable(onDroppedFile)
-    // Pre-fill form in edit mode
+    // Pré-remplissage en mode édition
     if (props.incident) {
       form.value = {
         title: props.incident.title,
@@ -311,7 +335,7 @@ watch(() => props.show, (isVisible) => {
   }
 })
 
-// Drag over state simulation if possible, or just the drop
+// Nettoyage lors de la destruction
 onUnmounted(() => {
   disable(onDroppedFile)
   if (previewUrl.value) URL.revokeObjectURL(previewUrl.value)

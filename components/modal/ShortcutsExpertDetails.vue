@@ -1,7 +1,7 @@
 <template>
   <UiBaseModal :show="show" @close="$emit('close')" title="Documentation expert" max-width="2xl">
     <div class="space-y-6">
-      <!-- Section Overview -->
+      <!-- Section Aperçu -->
       <div class="p-4 rounded-2xl bg-primary/5 border border-primary/10">
         <h3 class="text-BtW font-bold flex items-center gap-2 mb-2">
           <IconBolt class="w-5 h-5 text-primary" />
@@ -14,7 +14,7 @@
         </p>
       </div>
 
-      <!-- Section Personalization -->
+      <!-- Section Personalisation -->
       <div class="grid md:grid-cols-2 gap-4">
         <div class="p-4 rounded-2xl bg-WtB border border-ash">
           <h4 class="text-BtW font-bold text-sm mb-2 flex items-center gap-2">
@@ -69,10 +69,10 @@
         </div>
       </div>
 
-      <!-- Footer Info -->
+      <!-- Info -->
       <div class="flex items-center gap-2 text-[10px] font-bold text-hsa/60 justify-center pt-2">
         <IconInfoCircle class="w-3.5 h-3.5" />
-        <span>CYPASS Engine v2.0 - Keyboard Shortcut Matrix</span>
+        <span>CYPASS Moteur raccourcie v2.0</span>
       </div>
     </div>
   </UiBaseModal>

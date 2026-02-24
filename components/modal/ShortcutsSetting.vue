@@ -9,11 +9,11 @@
           <p class="text-[11px] text-hsa leading-tight mt-1 font-medium opacity-70">{{ setting.desc }}</p>
         </div>
 
-        <!-- Toggle Switch Premium -->
+        <!-- Toggle -->
         <label class="relative inline-flex items-center cursor-pointer">
           <input type="checkbox" :checked="store[setting.id]" @change="store.toggleSetting(setting.id)"
             class="sr-only peer">
-          <div class="input-toggle-inline">
+          <div class="input-toggle-slider">
           </div>
         </label>
       </div>
