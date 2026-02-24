@@ -1,6 +1,6 @@
 <template>
   <div class="space-y-6">
-    <MeDocsentryDetailsHeader :filename="doc?.filename" />
+    <MeDocsentryDetailHeader :filename="doc?.filename" />
 
     <!-- Skeleton Loading -->
     <div v-if="store.loading" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -45,14 +45,14 @@
     <div v-else-if="doc" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <!-- Main Info -->
       <div class="lg:col-span-2 space-y-6">
-        <MeDocsentryDetailsInfo :doc="doc" :is-verified="isVerified" :copied-fields="copiedFields" @copy="copyField" />
+        <MeDocsentryDetailInfo :doc="doc" :is-verified="isVerified" :copied-fields="copiedFields" @copy="copyField" />
 
         <!-- Cryptographic Proof -->
-        <MeDocsentryDetailsProof :doc="doc" :copied-fields="copiedFields" @copy="copyField" />
+        <MeDocsentryDetailProof :doc="doc" :copied-fields="copiedFields" @copy="copyField" />
       </div>
 
       <!-- Actions & Sidebar -->
-      <MeDocsentryDetailsSidebar :has-certificate="!!doc.availability?.certificate" @verify="redirectToVerify"
+      <MeDocsentryDetailSidebar :has-certificate="!!doc.availability?.certificate" @verify="redirectToVerify"
         @download="downloadCertificate" @share="shareDocument" />
     </div>
   </div>

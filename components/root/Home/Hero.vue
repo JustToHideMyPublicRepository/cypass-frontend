@@ -35,15 +35,16 @@
             en temps réel.
           </p>
 
+          <!-- Boutons -->
           <div class="flex flex-col sm:flex-row flex-wrap gap-4 justify-center lg:justify-start pt-4">
             <UiBaseButton :to="authStore.user ? '/dashboard' : '/auth/login'"
               class="w-full sm:w-auto text-base md:text-lg px-6 md:px-8 py-3 md:py-4 shadow-BtW/40">
-              {{ authStore.user ? 'Tableau de bord' : 'Accéder au Portail' }}
+              {{ authStore.user ? 'Tableau de bord' : 'Accéder au portail' }}
               <IconArrowRight class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
             </UiBaseButton>
             <UiBaseButton :to="authStore.user ? '/dashboard/vigitech' : '/vigitech'" variant="secondary"
               class="w-full sm:w-auto text-base md:text-lg px-6 md:px-8 py-3 md:py-4 !bg-primary/5 !text-primary !border-primary/20 hover:!bg-primary hover:!text-WtB transition-all">
-              Veille Communautaire
+              Veille communautaire
             </UiBaseButton>
             <UiBaseButton to="/verify" variant="secondary"
               class="w-full sm:w-auto text-base md:text-lg px-6 md:px-8 py-3 md:py-4">
@@ -56,7 +57,7 @@
             <div
               class="flex items-center gap-2 bg-WtB/50 px-3 md:px-4 py-2 rounded-lg backdrop-blur-sm border border-ash/50">
               <IconShieldCheck class="w-5 h-5 text-primary" />
-              <span>Données Chiffrées</span>
+              <span>Données chiffrées</span>
             </div>
             <div
               class="flex items-center gap-2 bg-WtB/50 px-3 md:px-4 py-2 rounded-lg backdrop-blur-sm border border-ash/50">
@@ -66,7 +67,7 @@
           </div>
         </div>
 
-        <!-- Composition de Carte de Verre 3D -->
+        <!-- Composition de carte de verre -->
         <div class="relative hidden lg:block perspective-1000 animate-fade-left">
 
           <!-- Éléments d'arrière-plan flottants -->
