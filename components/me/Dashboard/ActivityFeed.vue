@@ -12,10 +12,11 @@
         Aucune activité enregistrée
       </div>
       <div v-for="log in logs" :key="log.id"
-        class="flex gap-3 text-sm p-2 rounded-xl hover:bg-ash/50 transition-all cursor-pointer group">
-        <div
-          class="h-8 w-8 rounded-lg bg-ash flex items-center justify-center shrink-0 transition-transform group-hover:scale-110">
-          <IconHistory class="w-4 h-4 text-hsa" />
+        class="flex gap-3 text-sm p-2 rounded-xl hover:bg-ash/50 transition-all group">
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="p-2 bg-ash rounded-lg group-hover:bg-primary/10 transition-colors">
+            <IconHistory class="w-4 h-4 text-hsa group-hover:text-primary" />
+          </div>
         </div>
         <div class="min-w-0 flex-1">
           <h4 class="text-xs font-bold text-BtW truncate">{{ log.action }}</h4>

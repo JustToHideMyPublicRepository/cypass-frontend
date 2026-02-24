@@ -13,9 +13,10 @@
         :loading="notificationsStore.loading" :format-time="formatTime" />
       <MeDashboardRecentDocs :documents="documentsStore.documents.slice(0, 4)" :loading="documentsStore.loading"
         :format-time="formatTime" :get-doc-status="getDocStatus" />
-      <MeDashboardVigitechRecent :incidents="vigitechStore.userIncidents.slice(0, 4)" :loading="vigitechStore.loading"
+      <MeDashboardRecentIncidents :incidents="vigitechStore.userIncidents.slice(0, 4)" :loading="vigitechStore.loading"
         :format-time="formatTime" />
-      <MeDashboardVigitechCommentsRecent :comments="recentComments" :loading="vigitechStore.loadingComments" />
+      <MeDashboardRecentComments :comments="recentComments.slice(0, 4)" :loading="vigitechStore.loadingComments" />
+      <MeDashboardRecentSessions :sessions="activeSessions.slice(0, 4)" :loading="loading" />
       <MeDashboardActivityFeed :logs="profilStore.logs.slice(0, 4)" :loading="loading" :format-time="formatTime" />
     </div>
 
@@ -66,6 +67,7 @@ const toast = useToastStore()
 
 const currentTime = ref('')
 const activeSessionsCount = ref(0)
+const activeSessions = ref<any[]>([])
 const loading = ref(true)
 const docTrend = ref({ percentage: 0, difference: 0 })
 const vigiTrend = ref({ percentage: 0, difference: 0 })
@@ -73,7 +75,7 @@ const vigiTrend = ref({ percentage: 0, difference: 0 })
 const recentComments = computed(() => {
   // Since we don't have a direct /all-comments endpoint yet, 
   // we use what's in the store or fetch on mount for recent user incidents
-  return vigitechStore.comments.slice(0, 4)
+  return vigitechStore.comments
 })
 
 const modals = reactive({
@@ -200,10 +202,11 @@ onMounted(async () => {
     profilStore.fetchLogs({ limit: 5 }),
     vigitechStore.fetchUserIncidents().then(async () => {
       // Fetch comments for top users incidents
-      const latest = vigitechStore.userIncidents.slice(0, 3)
+      const latest = vigitechStore.userIncidents
       await Promise.all(latest.map(inc => vigitechStore.fetchComments(inc.id)))
     }),
     authStore.fetchSessions().then(sessions => {
+      activeSessions.value = sessions || []
       activeSessionsCount.value = sessions?.length || 0
     }),
     calculateDocTrend(),

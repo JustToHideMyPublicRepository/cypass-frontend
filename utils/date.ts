@@ -20,3 +20,31 @@ export const formatDateInput = (date: string | Date): string => {
   const d = new Date(date)
   return d.toISOString().split('T')[0]
 }
+
+export const formatRelativeTime = (date: string | Date): string => {
+  if (!date) return ''
+  const d = new Date(date)
+  const now = new Date()
+  const diffInSeconds = Math.floor((now.getTime() - d.getTime()) / 1000)
+
+  if (diffInSeconds < 60) return "À l'instant"
+
+  const diffInMinutes = Math.floor(diffInSeconds / 60)
+  if (diffInMinutes < 60) return `il y a ${diffInMinutes} min`
+
+  const diffInHours = Math.floor(diffInMinutes / 60)
+  if (diffInHours < 24) return `il y a ${diffInHours} h`
+
+  const diffInDays = Math.floor(diffInHours / 24)
+  if (diffInDays === 1) return "hier"
+  if (diffInDays < 7) return `il y a ${diffInDays} j`
+
+  const diffInWeeks = Math.floor(diffInDays / 7)
+  if (diffInWeeks < 4) return `il y a ${diffInWeeks} sem`
+
+  const diffInMonths = Math.floor(diffInDays / 30)
+  if (diffInMonths < 12) return `il y a ${diffInMonths} mois`
+
+  const diffInYears = Math.floor(diffInDays / 365)
+  return `il y a ${diffInYears} an${diffInYears > 1 ? 's' : ''}`
+}

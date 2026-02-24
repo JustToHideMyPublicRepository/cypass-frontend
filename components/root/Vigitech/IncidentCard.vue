@@ -47,7 +47,7 @@
               <IconMapPin class="w-3 h-3" /> {{ decodeHtmlEntities(incident.location) }}
             </span>
             <span class="flex items-center gap-1">
-              <IconClock class="w-3 h-3" /> {{ formatTime(incident.created_at) }}
+              <IconClock class="w-3 h-3" /> {{ formatRelativeTime(incident.created_at) }}
             </span>
             <span v-if="incident.views_count != null" class="flex items-center gap-1">
               <IconEye class="w-3 h-3" /> {{ incident.views_count }}
@@ -110,6 +110,7 @@
 import { IconMapPin, IconClock, IconAlertCircle, IconLock, IconShare, IconChevronRight, IconEye, IconFlag, IconEdit, IconMessage } from '@tabler/icons-vue'
 import type { Incident } from '~/types/vigitech'
 import { decodeHtmlEntities } from '~/utils/format'
+import { formatRelativeTime } from '~/utils/date'
 import { mapIncidentType, mapThreatLevel, mapIncidentStatus } from '~/utils/vigitech'
 import { useToastStore } from '~/stores/toast'
 import { useAuthStore } from '~/stores/auth'
