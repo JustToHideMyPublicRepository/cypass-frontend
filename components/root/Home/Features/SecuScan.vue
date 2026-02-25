@@ -8,7 +8,7 @@
         <span class="text-primary">~</span>
         <span>nmap -sV -p- target.gov.bj</span>
       </div>
-      <div class="pl-4 text-hsa opacity-70">Lancement de Nmap 7.92 à 2024-01-16 14:00 CET</div>
+      <div class="pl-4 text-hsa opacity-70">Lancement de Nmap 7.92 à {{ scanDate }} CET</div>
       <div class="pl-4">Rapport de scan Nmap pour target.gov.bj (10.0.0.1)</div>
       <div class="pl-4">L'hôte est actif (latence de 0.002s).</div>
       <div class="pl-4 text-hsa opacity-70">Non affiché : 65532 ports tcp fermés (reset)</div>
@@ -30,3 +30,13 @@
     </div>
   </UiAppFrame>
 </template>
+
+<script setup lang="ts">
+import { getRandomPastDate } from '~/utils/date'
+import { format } from 'date-fns'
+
+const scanDate = computed(() => {
+  const date = getRandomPastDate(5, 21)
+  return format(date, 'yyyy-MM-dd HH:mm')
+})
+</script>

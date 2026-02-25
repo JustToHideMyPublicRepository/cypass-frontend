@@ -36,7 +36,7 @@
             <p class="pl-8 text-orange-300">"signatory": "user_123"</p>
             <p class="pl-4 text-orange-300">}'</p>
             <p class="mt-4 text-green-500"># Réponse : 200 OK</p>
-            <p class="text-slate-400">{ "status": "signed", "timestamp": "2024-01-15T10:00:00Z" }</p>
+            <p class="text-slate-400">{ "status": "signed", "timestamp": "{{ apiTimestamp }}" }</p>
           </UiAppFrame>
         </div>
       </div>
@@ -46,10 +46,15 @@
 
 <script setup lang="ts">
 import { useToastStore } from '~/stores/toast'
+import { getRandomPastDate } from '~/utils/date'
 
 // Configuration de la page
 definePageMeta({
   layout: 'guest'
+})
+
+const apiTimestamp = computed(() => {
+  return getRandomPastDate(5, 21).toISOString()
 })
 
 const toastStore = useToastStore()

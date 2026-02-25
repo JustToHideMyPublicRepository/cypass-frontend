@@ -48,3 +48,18 @@ export const formatRelativeTime = (date: string | Date): string => {
   const diffInYears = Math.floor(diffInDays / 365)
   return `il y a ${diffInYears} an${diffInYears > 1 ? 's' : ''}`
 }
+
+/**
+ * Génère une date aléatoire dans le passé entre minDays et maxDays.
+ */
+export const getRandomPastDate = (minDays = 5, maxDays = 21): Date => {
+  const days = Math.floor(Math.random() * (maxDays - minDays + 1)) + minDays
+  const date = new Date()
+  date.setDate(date.getDate() - days)
+
+  // Optionnel: On peut aussi mettre une heure aléatoire
+  date.setHours(Math.floor(Math.random() * 24))
+  date.setMinutes(Math.floor(Math.random() * 60))
+
+  return date
+}

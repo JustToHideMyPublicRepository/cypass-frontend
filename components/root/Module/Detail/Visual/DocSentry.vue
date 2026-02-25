@@ -19,7 +19,7 @@
         </div>
 
         <h3 class="font-serif text-base md:text-2xl font-bold mb-1 md:mb-2 truncate">Contrat_Cadre_v2.pdf</h3>
-        <p class="text-[9px] md:text-xs text-slate-500 mb-6 md:mb-8">Signé numériquement le 16 Jan 2024</p>
+        <p class="text-[9px] md:text-xs text-slate-500 mb-6 md:mb-8">Signé numériquement le {{ signedDate }}</p>
 
         <div class="text-left space-y-2 md:space-y-3 text-[10px] md:text-xs border-t border-ash pt-4 md:pt-6">
           <div class="flex justify-between">
@@ -46,4 +46,12 @@
 
 <script setup lang="ts">
 import { IconCertificate } from '@tabler/icons-vue'
+import { getRandomPastDate } from '~/utils/date'
+import { format } from 'date-fns'
+import { fr } from 'date-fns/locale'
+
+const signedDate = computed(() => {
+  const date = getRandomPastDate(5, 21)
+  return format(date, 'd MMM yyyy', { locale: fr })
+})
 </script>

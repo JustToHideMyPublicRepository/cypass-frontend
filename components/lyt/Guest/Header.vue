@@ -106,7 +106,7 @@
         </div>
 
         <div class="mt-8 pt-8 border-t border-ash w-full text-center">
-          <p class="text-sm text-hsa mb-4">CYPASS &copy; 2024</p>
+          <p class="text-sm text-hsa mb-4">CYPASS &copy; {{ new Date().getFullYear() }}</p>
         </div>
       </div>
     </Transition>
