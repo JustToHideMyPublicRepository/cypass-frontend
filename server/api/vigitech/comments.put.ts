@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
 
   try {
     const response = await $fetch(`${baseApi}/vigitech/update_comment.php`, {
-      method: 'POST',
+      method: 'PUT',
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/x-www-form-urlencoded'

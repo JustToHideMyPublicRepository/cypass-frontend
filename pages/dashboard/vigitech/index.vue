@@ -13,7 +13,8 @@
 
         <template v-else-if="filteredIncidents.length">
           <RootVigitechIncidentCard v-for="incident in filteredIncidents" :key="incident.id" :incident="incident"
-            showFooter :detailUrl="`/dashboard/vigitech/${incident.id}`" @edit="openEditModal" />
+            showFooter :detailUrl="`/dashboard/vigitech/${incident.id}`" @edit="openEditModal"
+            @delete="confirmDelete" />
         </template>
 
         <MeVigitechHomeEmpty v-else :hasActiveFilters="hasActiveFilters" @reset="resetFilters" />
@@ -29,11 +30,17 @@
     <!-- Create / Edit Incident Modal -->
     <ModalVigitechCreateIncident :show="showCreateModal" :incident="editIncident" @close="closeModal"
       @success="onIncidentCreated" />
+
+    <UiConfirmModal :show="showDeleteConfirm" title="Supprimer l'incident"
+      message="Êtes-vous sûr de vouloir supprimer cet incident ? Cette action est irréversible."
+      confirm-text="Supprimer" :loading="deleting" variant="danger" @close="showDeleteConfirm = false"
+      @confirm="handleDelete" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { useVigitechStore } from '~/stores/vigitech'
+import { useToastStore } from '~/stores/toast'
 import type { Incident } from '~/types/vigitech'
 
 definePageMeta({
@@ -52,6 +59,30 @@ const openEditModal = (incident: Incident) => {
 const closeModal = () => {
   showCreateModal.value = false
   editIncident.value = null
+}
+
+const toast = useToastStore()
+const showDeleteConfirm = ref(false)
+const deleting = ref(false)
+const incidentToDelete = ref<Incident | null>(null)
+
+const confirmDelete = (incident: Incident) => {
+  incidentToDelete.value = incident
+  showDeleteConfirm.value = true
+}
+
+const handleDelete = async () => {
+  if (!incidentToDelete.value) return
+  deleting.value = true
+  const result = await store.deleteIncident(incidentToDelete.value.id)
+  if (result.success) {
+    toast.showToast('success', 'Incident supprimé', result.message || 'L\'incident a été supprimé.')
+  } else {
+    toast.showToast('error', 'Erreur', result.message || 'Impossible de supprimer l\'incident.')
+  }
+  deleting.value = false
+  showDeleteConfirm.value = false
+  incidentToDelete.value = null
 }
 
 const filters = ref({

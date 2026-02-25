@@ -25,6 +25,11 @@
             title="Modifier">
             <IconEdit class="w-3.5 h-3.5" />
           </button>
+          <button @click="$emit('delete', comment.id)"
+            class="shrink-0 p-1.5 rounded-lg hover:bg-danger/10 text-hsa hover:text-danger transition-all active:scale-95"
+            title="Supprimer">
+            <IconTrash class="w-3.5 h-3.5" />
+          </button>
         </div>
       </div>
 
@@ -47,7 +52,7 @@
 </template>
 
 <script setup lang="ts">
-import { IconEdit, IconExternalLink } from '@tabler/icons-vue'
+import { IconEdit, IconExternalLink, IconTrash } from '@tabler/icons-vue'
 import { formatRelativeTime } from '~/utils/date'
 
 const props = defineProps<{
@@ -61,7 +66,7 @@ const props = defineProps<{
   editContent: string
 }>()
 
-const emit = defineEmits(['edit', 'cancel', 'save'])
+const emit = defineEmits(['edit', 'cancel', 'save', 'delete'])
 
 const editContentLocal = ref(props.editContent)
 

@@ -13,12 +13,17 @@
           :incidentTitle="comment.incident_title || getIncidentTitle(comment.incident_id)"
           :avatarUrl="getCommentAvatar(comment)" :formattedDate="formatDate(comment.created_at)"
           :canEdit="canEdit(comment)" :isEditing="editingId === comment.id" :saving="savingId === comment.id"
-          :editContent="editContent" @edit="startEdit(comment)" @cancel="cancelEdit" @save="saveEdit" />
+          :editContent="editContent" @edit="startEdit(comment)" @cancel="cancelEdit" @save="saveEdit"
+          @delete="confirmDelete" />
       </div>
     </template>
 
     <!-- Empty State -->
     <MeVigitechCommentsEmpty v-else />
+
+    <UiConfirmModal :show="showDeleteConfirm" title="Supprimer le commentaire"
+      message="Êtes-vous sûr de vouloir supprimer ce commentaire ?" confirm-text="Supprimer" :loading="deleting"
+      variant="danger" @close="showDeleteConfirm = false" @confirm="handleDelete" />
   </div>
 </template>
 
@@ -97,6 +102,29 @@ const saveEdit = async (val?: any) => {
     toast.showToast('error', 'Erreur', result.message || 'Impossible de modifier le commentaire.')
   }
   savingId.value = null
+}
+
+const showDeleteConfirm = ref(false)
+const deleting = ref(false)
+const idToDelete = ref<string | null>(null)
+
+const confirmDelete = (id: string) => {
+  idToDelete.value = id
+  showDeleteConfirm.value = true
+}
+
+const handleDelete = async () => {
+  if (!idToDelete.value) return
+  deleting.value = true
+  const result = await store.deleteComment(idToDelete.value)
+  if (result.success) {
+    toast.showToast('success', 'Commentaire supprimé', result.message || 'Le commentaire a été supprimé.')
+  } else {
+    toast.showToast('error', 'Erreur', result.message || 'Impossible de supprimer le commentaire.')
+  }
+  deleting.value = false
+  showDeleteConfirm.value = false
+  idToDelete.value = null
 }
 
 onMounted(async () => {

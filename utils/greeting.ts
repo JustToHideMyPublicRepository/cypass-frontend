@@ -7,25 +7,49 @@ const greetings = {
     'Bonjour',
     'Bonne matinée',
     'Bon début de journée',
-    'Excellent matin'
+    'Excellent matin',
+    'Bon pied, bon œil !',
+    'Heureux de vous voir ce matin',
+    'Que votre matinée soit productive',
+    'Un agréable réveil à vous',
+    'Salut, prêt pour la journée ?',
+    'Matin lumineux à vous',
   ],
   afternoon: [
     'Bon après-midi',
-    'Bonne après-midi',
     'Ravi de vous revoir',
-    'Passez une belle après-midi'
+    'Excellente continuation',
+    'Que votre après-midi soit agréable',
+    'Bel après-midi à vous',
+    'Bon courage pour la suite de la journée',
+    'Profitez bien de votre après-midi',
+    'Une après-midi pleine de réussite',
+    'Bon milieu de journée',
+    'Bonne progression dans vos activités',
   ],
   evening: [
     'Bonsoir',
     'Bonne soirée',
     'Excellente soirée',
-    'Finissez bien votre journée'
+    'Finissez bien votre journée',
+    'Très belle soirée à vous',
+    'Profitez de votre soirée',
+    'Belle fin de journée',
+    'Détendez-vous bien ce soir',
+    'Une soirée remplie de sérénité',
+    'Clôturez la journée en beauté',
   ],
   night: [
     'Bonne nuit',
     'Bonne fin de soirée',
     'Douce nuit',
-    'Il se fait tard'
+    'Il se fait tard',
+    'Reposez-vous bien',
+    'Faites de beaux rêves',
+    'Nuit paisible à vous',
+    'À demain, reposez-vous bien',
+    'Que la nuit vous ressource',
+    'Il est temps de déconnecter',
   ]
 }
 

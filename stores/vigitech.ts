@@ -235,6 +235,42 @@ export const useVigitechStore = defineStore('vigitech', {
       } catch (err: any) {
         return { success: false, message: err.data?.message || err.message || 'Erreur lors de la mise à jour du commentaire.' }
       }
+    },
+
+    async deleteIncident(incidentId: string) {
+      try {
+        const response: any = await $fetch('/api/vigitech/incident', {
+          method: 'DELETE',
+          query: { incident_id: incidentId }
+        })
+        if (response.success) {
+          this.userIncidents = this.userIncidents.filter(i => i.id !== incidentId)
+          if (this.currentIncident?.id === incidentId) this.currentIncident = null
+        }
+        return { success: response.success, message: response.message }
+      } catch (err: any) {
+        return { success: false, message: err.data?.message || err.message || 'Erreur lors de la suppression.' }
+      }
+    },
+
+    async deleteComment(commentId: string, incidentId?: string) {
+      try {
+        const response: any = await $fetch('/api/vigitech/comments', {
+          method: 'DELETE',
+          query: { comment_id: commentId }
+        })
+        if (response.success) {
+          if (incidentId) {
+            await this.fetchComments(incidentId)
+          }
+          // Also remove from user comments list if present
+          this.userComments = this.userComments.filter(c => c.id !== commentId)
+          this.userCommentsTotal = Math.max(0, this.userCommentsTotal - 1)
+        }
+        return { success: response.success, message: response.message }
+      } catch (err: any) {
+        return { success: false, message: err.data?.message || err.message || 'Erreur lors de la suppression du commentaire.' }
+      }
     }
   }
 })

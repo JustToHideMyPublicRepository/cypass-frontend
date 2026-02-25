@@ -55,11 +55,15 @@
             </div>
             <div class="flex items-center gap-2">
               <span class="text-[10px] text-hsa font-bold">{{ formatDate(comment.created_at) }}</span>
-              <!-- Edit button: own comment + within 24h -->
               <button v-if="canEditComment(comment)" @click="startEditComment(comment)"
                 class="p-1 rounded-lg hover:bg-primary/10 text-hsa hover:text-primary transition-colors"
                 title="Modifier le commentaire">
                 <IconEdit class="w-3.5 h-3.5" />
+              </button>
+              <button v-if="canEditComment(comment)" @click="confirmDeleteComment(comment.id)"
+                class="p-1 rounded-lg hover:bg-danger/10 text-hsa hover:text-danger transition-colors"
+                title="Supprimer le commentaire">
+                <IconTrash class="w-3.5 h-3.5" />
               </button>
             </div>
           </div>
@@ -86,11 +90,15 @@
         <p class="text-xs text-hsa font-bold">Aucun commentaire pour le moment.</p>
       </div>
     </template>
+
+    <UiConfirmModal :show="showDeleteConfirm" title="Supprimer le commentaire"
+      message="Êtes-vous sûr de vouloir supprimer ce commentaire ?" confirm-text="Supprimer" :loading="deletingComment"
+      variant="danger" @close="showDeleteConfirm = false" @confirm="handleDeleteComment" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { IconMessage, IconChevronUp, IconChevronDown, IconSend, IconEdit } from '@tabler/icons-vue'
+import { IconMessage, IconChevronUp, IconChevronDown, IconSend, IconEdit, IconTrash } from '@tabler/icons-vue'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { useAuthStore } from '~/stores/auth'
@@ -121,6 +129,29 @@ const submittingComment = ref(false)
 const editingCommentId = ref<string | null>(null)
 const editCommentContent = ref('')
 const savingComment = ref(false)
+
+const showDeleteConfirm = ref(false)
+const commentIdToDelete = ref<string | null>(null)
+const deletingComment = ref(false)
+
+const confirmDeleteComment = (id: string) => {
+  commentIdToDelete.value = id
+  showDeleteConfirm.value = true
+}
+
+const handleDeleteComment = async () => {
+  if (!commentIdToDelete.value) return
+  deletingComment.value = true
+  const result = await store.deleteComment(commentIdToDelete.value, props.incidentId)
+  if (result.success) {
+    toast.showToast('success', 'Commentaire supprimé', result.message || 'Le commentaire a été supprimé.')
+  } else {
+    toast.showToast('error', 'Erreur', result.message || 'Impossible de supprimer le commentaire.')
+  }
+  deletingComment.value = false
+  showDeleteConfirm.value = false
+  commentIdToDelete.value = null
+}
 
 const getAvatar = (comment: any) => {
   return getUserAvatarUrl((comment as any).avatar_url || null, comment.first_name || null, comment.last_name || null)

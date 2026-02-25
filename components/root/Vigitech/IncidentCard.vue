@@ -74,14 +74,16 @@
           title="Modifier mon signalement">
           <IconEdit class="w-5 h-5" />
         </button>
+        <!-- Supprimer (dashboard only, own incidents) -->
+        <button v-if="showFooter && isOwnIncident" @click.stop="$emit('delete', incident)"
+          class="p-2 rounded-xl hover:bg-danger/10 transition-colors text-hsa hover:text-danger"
+          title="Supprimer mon signalement">
+          <IconTrash class="w-5 h-5" />
+        </button>
         <button @click.stop="shareIncident"
           class="p-2 rounded-xl hover:bg-ash/20 transition-colors text-hsa hover:text-primary" title="Partager">
           <IconShare class="w-5 h-5" />
         </button>
-        <NuxtLink :to="detailUrl" class="p-2 rounded-xl hover:bg-ash/20 transition-colors text-hsa hover:text-primary"
-          title="Voir les détails">
-          <IconChevronRight class="w-5 h-5" />
-        </NuxtLink>
       </div>
     </div>
 
@@ -107,7 +109,7 @@
 </template>
 
 <script setup lang="ts">
-import { IconMapPin, IconClock, IconAlertCircle, IconLock, IconShare, IconChevronRight, IconEye, IconFlag, IconEdit, IconMessage } from '@tabler/icons-vue'
+import { IconMapPin, IconClock, IconAlertCircle, IconLock, IconShare, IconChevronRight, IconEye, IconFlag, IconEdit, IconMessage, IconTrash } from '@tabler/icons-vue'
 import type { Incident } from '~/types/vigitech'
 import { decodeHtmlEntities } from '~/utils/format'
 import { formatRelativeTime } from '~/utils/date'
@@ -121,7 +123,7 @@ const props = defineProps<{
   detailUrl: string
 }>()
 
-const emit = defineEmits(['report', 'edit'])
+const emit = defineEmits(['report', 'edit', 'delete'])
 const toast = useToastStore()
 const authStore = useAuthStore()
 

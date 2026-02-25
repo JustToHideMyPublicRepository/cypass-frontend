@@ -4,41 +4,59 @@
     <div v-if="comments.length" class="overflow-x-auto px-1">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- Carte de commentaire individuelle -->
-        <div v-for="comment in paginatedItems" :key="comment.id"
-          class="group bg-ash p-6 rounded-[2.5rem] border border-primary/20 hover:border-primary/50 hover:bg-WtB hover:shadow-2xl transition-all duration-500">
+        <NuxtLink v-for="comment in paginatedItems" :key="comment.id" :to="`/vigitech/${comment.incident_id}`"
+          class="group relative flex flex-col bg-WtB/60 backdrop-blur-xl p-6 md:p-7 rounded-[3rem] border border-ash hover:border-primary/40 hover:bg-WtB hover:shadow-[0_20px_50px_rgba(var(--primary-rgb),0.1)] transition-all duration-500 overflow-hidden">
 
-          <!-- En-tête du commentaire : Date et lien vers l'incident -->
-          <div class="flex items-start justify-between mb-4">
-            <div class="text-[9px] font-black text-hsa uppercase tracking-[0.2em] bg-ash/10 px-3 py-1 rounded-full">
+          <!-- Effet de brillance au survol -->
+          <div
+            class="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+          </div>
+
+          <!-- En-tête du commentaire : Date -->
+          <div class="relative flex items-center justify-between mb-5">
+            <div
+              class="text-[9px] font-black text-hsa uppercase tracking-[0.2em] bg-ash/10 px-4 py-1.5 rounded-full group-hover:bg-primary/10 group-hover:text-primary transition-all duration-500">
               {{ formatDateShort(comment.created_at) }}
             </div>
-            <NuxtLink :to="`/vigitech/${comment.incident_id}`" class="text-primary hover:scale-110 transition-transform"
-              title="Ouvrir l'incident">
+            <div
+              class="p-2.5 rounded-2xl bg-ash/5 border border-ash/20 group-hover:bg-primary group-hover:text-WtB transition-all duration-500 shadow-sm">
               <IconExternalLink class="w-4 h-4" />
-            </NuxtLink>
+            </div>
           </div>
 
           <!-- Corps du commentaire : Contenu textuel -->
-          <p class="text-sm text-BtW leading-relaxed font-medium mb-6 line-clamp-3">
-            "{{ comment.content }}"
-          </p>
+          <div class="relative flex-1">
+            <p
+              class="text-[13px] text-BtW leading-relaxed font-bold mb-7 line-clamp-3 italic opacity-85 group-hover:opacity-100 transition-opacity">
+              "{{ comment.content }}"
+            </p>
+          </div>
 
           <!-- Pied de carte : Référence à l'incident lié -->
-          <div class="pt-4 border-t border-ash/10 flex items-center justify-between">
-            <div class="min-w-0 flex-1">
-              <p class="text-[8px] font-black text-hsa uppercase tracking-widest mb-1">Sur l'Incident</p>
-              <p class="text-[11px] font-black text-BtW truncate pr-4">
-                {{ decodeHtmlEntities(comment.incident_title) }}
-              </p>
+          <div class="relative pt-6 border-t border-ash/20 flex items-center gap-4">
+            <!-- Icone de l'auteur de l'incident -->
+            <div class="relative">
+              <div
+                class="w-10 h-10 rounded-2xl overflow-hidden border-2 border-WtB shadow-lg bg-ash/20 shrink-0 transform group-hover:rotate-6 transition-transform duration-500">
+                <img :src="getAvatarForActivity(comment)" class="w-full h-full object-cover" />
+              </div>
+              <div
+                class="absolute -bottom-1 -right-1 w-4 h-4 bg-primary rounded-full flex items-center justify-center border-2 border-WtB shadow-sm">
+                <IconMessage class="w-2.5 h-2.5 text-WtB" />
+              </div>
             </div>
-            <NuxtLink :to="`/vigitech/${comment.incident_id}`">
-              <UiBaseButton variant="ghost" size="sm"
-                class="!px-3 !py-1.5 !rounded-xl !text-[9px] !bg-primary/5 hover:!bg-primary !text-primary hover:!text-WtB transition-all">
-                Voir
-              </UiBaseButton>
-            </NuxtLink>
+
+            <div class="min-w-0 flex-1">
+              <p
+                class="text-[9px] font-black text-hsa uppercase tracking-[0.2em] mb-1 group-hover:text-primary transition-colors">
+                Sur l'Incident</p>
+              <h4
+                class="text-xs font-black text-BtW truncate leading-tight group-hover:translate-x-1 transition-transform">
+                {{ decodeHtmlEntities(comment.incident_title) }}
+              </h4>
+            </div>
           </div>
-        </div>
+        </NuxtLink>
       </div>
     </div>
 
@@ -74,10 +92,15 @@ import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { decodeHtmlEntities } from '~/utils/format'
 
+import { getUserAvatarUrl } from '~/utils/user'
+import { useAuthStore } from '~/stores/auth'
+
 // Propriétés reçues
 const props = defineProps<{
   comments: any[]
 }>()
+
+const authStore = useAuthStore()
 
 // Logique de pagination
 const page = ref(1)
@@ -87,6 +110,17 @@ const paginatedItems = computed(() => {
   const start = (page.value - 1) * pageSize
   return props.comments.slice(start, start + pageSize)
 })
+
+/**
+ * Récupère l'avatar en utilisant la même méthode que dans les commentaires de Vigitech.
+ */
+const getAvatarForActivity = (comment: any) => {
+  return getUserAvatarUrl(
+    comment.avatar_url || comment.incident_author_avatar || comment.author_avatar || null,
+    comment.first_name || comment.incident_author_first_name || null,
+    comment.last_name || comment.incident_author_last_name || null
+  )
+}
 
 /**
  * Formate la date de création du commentaire en français.

@@ -9,6 +9,10 @@
             class="w-full justify-start !px-4">
             <IconEdit class="w-4 h-4 mr-2" /> Modifier
           </UiBaseButton>
+          <UiBaseButton v-if="canEdit" @click="showDeleteConfirm = true" variant="ghost"
+            class="w-full justify-start !px-4 !text-danger hover:!bg-danger/10">
+            <IconTrash class="w-4 h-4 mr-2" /> Supprimer
+          </UiBaseButton>
           <UiBaseButton @click="shareIncident" variant="secondary" class="w-full justify-start !px-4">
             <IconShare class="w-4 h-4 mr-2" /> Partager l'alerte
           </UiBaseButton>
@@ -92,11 +96,17 @@
       @close="showEditModal = false" @success="$emit('success')" />
 
     <ModalVigitechPreference :show="showSettingsModal" @close="showSettingsModal = false" />
+
+    <UiConfirmModal :show="showDeleteConfirm" title="Supprimer l'incident"
+      message="Êtes-vous sûr de vouloir supprimer cet incident ? Cette action est irréversible."
+      confirm-text="Supprimer" :loading="deleting" variant="danger" @close="showDeleteConfirm = false"
+      @confirm="handleDelete" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { IconEdit, IconShare, IconDownload, IconCheck, IconX, IconLock, IconAlertTriangle, IconBuilding, IconSettings } from '@tabler/icons-vue'
+import { IconEdit, IconShare, IconDownload, IconCheck, IconX, IconLock, IconAlertTriangle, IconBuilding, IconSettings, IconTrash } from '@tabler/icons-vue'
+import { useVigitechStore } from '~/stores/vigitech'
 import { useToastStore } from '~/stores/toast'
 import { mapIncidentStatus } from '~/utils/vigitech'
 
@@ -110,6 +120,22 @@ const toast = useToastStore()
 const config = useRuntimeConfig()
 const showEditModal = ref(false)
 const showSettingsModal = ref(false)
+const showDeleteConfirm = ref(false)
+const deleting = ref(false)
+
+const handleDelete = async () => {
+  if (!props.incident?.id) return
+  deleting.value = true
+  const result = await useVigitechStore().deleteIncident(props.incident.id)
+  if (result.success) {
+    toast.showToast('success', 'Incident supprimé', result.message || 'L\'incident a été supprimé avec succès.')
+    navigateTo('/dashboard/vigitech')
+  } else {
+    toast.showToast('error', 'Erreur', result.message || 'Impossible de supprimer l\'incident.')
+  }
+  deleting.value = false
+  showDeleteConfirm.value = false
+}
 
 const statusStyle = computed(() => {
   if (!props.incident) return { bg: 'bg-ash/5' }
