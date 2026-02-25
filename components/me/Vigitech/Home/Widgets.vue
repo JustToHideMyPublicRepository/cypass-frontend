@@ -1,6 +1,6 @@
 <template>
   <div class="space-y-6">
-    <UiBaseCard title="Répartition Menaces" class="!rounded-[2rem]">
+    <UiBaseCard title="Répartition" class="!rounded-[2rem]">
       <ul class="space-y-3 text-[11px] font-bold uppercase tracking-wider">
         <li v-for="(count, type) in typeBreakdown" :key="type" class="flex justify-between items-center text-hsa">
           <span>{{ mapTypeLabel(type) }}</span>
@@ -62,6 +62,16 @@ const mapTypeLabel = (type: string) => {
 
 const identificationRate = computed(() => {
   if (store.userIncidents.length === 0) return 0
-  return Math.min(95, Math.max(70, Math.round(75 + (store.userIncidents.length % 20))))
+
+  const weights: Record<string, number> = { critical: 1.0, medium: 0.7, low: 0.4 }
+  let weightedSum = 0
+
+  store.userIncidents.forEach(inc => {
+    weightedSum += weights[inc.threat_level] || 0.5
+  })
+
+  const averageWeight = weightedSum / store.userIncidents.length
+  // Base 70% + up to 28% based on severity average
+  return Math.min(98, Math.max(70, Math.round(70 + (averageWeight * 28))))
 })
 </script>

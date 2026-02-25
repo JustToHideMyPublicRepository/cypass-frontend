@@ -20,7 +20,8 @@ export const useProfilStore = defineStore('profil', {
       this.loading = true
       this.error = null
       try {
-        const response = await $fetch<{ success: boolean; user: UserProfile; statistics: Statistics }>('/api/profile')
+        const headers = import.meta.server ? useRequestHeaders(['cookie']) as any : {}
+        const response = await $fetch<{ success: boolean; user: UserProfile; statistics: Statistics }>('/api/profile', { headers })
         if (response.success) {
           this.profile = response.user
           this.statistics = response.statistics

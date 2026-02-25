@@ -5,6 +5,7 @@ export const useAuthStore = defineStore('auth', {
   state: () => ({
     user: null,
     loading: false,
+    initialized: false,
     error: null,
     message: null,
     isLogoutModalOpen: false
@@ -219,13 +220,19 @@ export const useAuthStore = defineStore('auth', {
     },
 
     async initAuth() {
+      if (this.initialized) return
+
       try {
-        const response = await $fetch<{ success: boolean; data: { user: User } }>('/api/auth/me')
+        const headers = import.meta.server ? useRequestHeaders(['cookie']) as any : {}
+
+        const response = await $fetch<{ success: boolean; data: { user: User } }>('/api/auth/me', { headers })
         if (response.success) {
           this.user = response.data.user
         }
       } catch (err) {
         this.user = null
+      } finally {
+        this.initialized = true
       }
     },
 

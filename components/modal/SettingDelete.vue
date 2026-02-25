@@ -1,5 +1,5 @@
 <template>
-  <UiBaseModal :show="show" title="Suppression du compte" @close="closeModal">
+  <UiBaseModal :show="show" title="Suppression du compte" maxWidth="2xl" @close="closeModal">
     <div class="space-y-8 py-2">
 
       <!-- Étape 1 : Conditions et Impact -->
@@ -41,7 +41,7 @@ const showPassword = ref(false)
 const loading = ref(false)
 const error = ref<string | null>(null)
 
-const verificationStats = reactive({
+const verificationStats = ref({
   documents: null as number | null,
   incidents: null as number | null
 })
@@ -94,8 +94,8 @@ const resetState = () => {
   step.value = 1
   password.value = ''
   showPassword.value = false
-  verificationStats.documents = null
-  verificationStats.incidents = null
+  verificationStats.value.documents = null
+  verificationStats.value.incidents = null
   error.value = null
   loading.value = false
 }
@@ -121,8 +121,8 @@ const nextStep = () => {
  */
 const isValidStats = computed(() => {
   if (!profilStore.statistics) return false
-  return verificationStats.documents === profilStore.statistics.total_documents &&
-    verificationStats.incidents === profilStore.statistics.total_incidents
+  return verificationStats.value.documents === profilStore.statistics.total_documents &&
+    verificationStats.value.incidents === profilStore.statistics.total_incidents
 })
 
 /**

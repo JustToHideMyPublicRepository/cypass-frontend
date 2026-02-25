@@ -12,6 +12,7 @@ export interface User {
 export interface AuthState {
   user: User | null
   loading: boolean
+  initialized: boolean
   error: string | null
   message: string | null
   isLogoutModalOpen: boolean

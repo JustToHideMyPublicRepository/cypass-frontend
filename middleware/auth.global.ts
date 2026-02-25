@@ -1,10 +1,12 @@
 import { useAuthStore } from '~/stores/auth'
 
-export default defineNuxtRouteMiddleware((to, from) => {
+export default defineNuxtRouteMiddleware(async (to, from) => {
     const auth = useAuthStore()
 
-    // Log pour le debug
-    // console.log('Auth middleware running for path:', to.path, 'User:', !!auth.user)
+    // Si l'auth n'est pas encore initialisée
+    if (!auth.initialized) {
+        await auth.initAuth()
+    }
 
     // Si l'utilisateur n'est pas connecté et essaie d'accéder au dashboard
     if (!auth.user && to.path.startsWith('/dashboard')) {
