@@ -26,7 +26,7 @@
           <div class="pt-12 border-t border-ash/50 flex flex-col sm:flex-row justify-between items-center gap-6">
             <div class="space-y-1 text-center sm:text-left">
               <p class="text-sm font-bold text-BtW">Cet article vous a-t-il aidé ?</p>
-              <p class="text-xs text-hsa">Dernière mise à jour : Février 2026</p>
+              <p class="text-xs text-hsa">Dernière mise à jour : {{ formatLastUpdate(article.lastUpdate) }}</p>
             </div>
             <div class="flex gap-4">
               <UiBaseButton variant="ghost" size="sm"
@@ -80,6 +80,14 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { supportData } from '~/data/support'
 import { IconThumbUp, IconThumbDown } from '@tabler/icons-vue'
+
+const formatLastUpdate = (date: string) => {
+  if (!date) return ''
+  return new Date(date).toLocaleDateString('fr-FR', {
+    month: 'long',
+    year: 'numeric'
+  }).replace(/^\w/, (c) => c.toUpperCase())
+}
 
 const route = useRoute()
 const categoryId = computed(() => route.params.category as string)
