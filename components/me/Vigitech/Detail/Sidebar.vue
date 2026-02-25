@@ -9,7 +9,7 @@
             class="w-full justify-start !px-4">
             <IconEdit class="w-4 h-4 mr-2" /> Modifier
           </UiBaseButton>
-          <UiBaseButton v-if="canEdit" @click="showDeleteConfirm = true" variant="ghost"
+          <UiBaseButton @click="showDeleteConfirm = true" variant="ghost"
             class="w-full justify-start !px-4 !text-danger hover:!bg-danger/10">
             <IconTrash class="w-4 h-4 mr-2" /> Supprimer
           </UiBaseButton>

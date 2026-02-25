@@ -31,7 +31,7 @@
       <RootUserActivityIncidents v-if="activeTab === 'incidents'" :incidents="publicIncidents" />
 
       <!-- Vue des Commentaires -->
-      <RootUserActivityComments v-if="activeTab === 'comments'" :comments="comments" />
+      <RootUserActivityComments v-if="activeTab === 'comments'" :comments="comments" :user-avatar-url="userAvatarUrl" />
     </div>
   </UiBaseCard>
 </template>
@@ -43,6 +43,7 @@ import { IconAlertTriangle, IconMessage } from '@tabler/icons-vue'
 const props = defineProps<{
   publicIncidents: any[]
   comments: any[]
+  userAvatarUrl: string
 }>()
 
 // État local pour l'onglet actif

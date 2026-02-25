@@ -38,7 +38,7 @@
             <div class="relative">
               <div
                 class="w-10 h-10 rounded-2xl overflow-hidden border-2 border-WtB shadow-lg bg-ash/20 shrink-0 transform group-hover:rotate-6 transition-transform duration-500">
-                <img :src="getAvatarForActivity(comment)" class="w-full h-full object-cover" />
+                <img :src="userAvatarUrl" class="w-full h-full object-cover" />
               </div>
               <div
                 class="absolute -bottom-1 -right-1 w-4 h-4 bg-primary rounded-full flex items-center justify-center border-2 border-WtB shadow-sm">
@@ -98,6 +98,7 @@ import { useAuthStore } from '~/stores/auth'
 // Propriétés reçues
 const props = defineProps<{
   comments: any[]
+  userAvatarUrl: string
 }>()
 
 const authStore = useAuthStore()
@@ -111,16 +112,6 @@ const paginatedItems = computed(() => {
   return props.comments.slice(start, start + pageSize)
 })
 
-/**
- * Récupère l'avatar en utilisant la même méthode que dans les commentaires de Vigitech.
- */
-const getAvatarForActivity = (comment: any) => {
-  return getUserAvatarUrl(
-    comment.avatar_url || comment.incident_author_avatar || comment.author_avatar || null,
-    comment.first_name || comment.incident_author_first_name || null,
-    comment.last_name || comment.incident_author_last_name || null
-  )
-}
 
 /**
  * Formate la date de création du commentaire en français.
