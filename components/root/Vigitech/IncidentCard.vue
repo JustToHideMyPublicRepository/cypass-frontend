@@ -68,8 +68,8 @@
           :title="isOwnIncident ? 'Vous ne pouvez pas signaler votre incident' : 'Signaler'">
           <IconFlag class="w-5 h-5" />
         </button>
-        <!-- Modifier (dashboard only, own incidents) -->
-        <button v-if="showFooter" @click.stop="$emit('edit', incident)"
+        <!-- Modifier (dashboard only, own incidents, within 24h) -->
+        <button v-if="showFooter && canEditIncident" @click.stop="$emit('edit', incident)"
           class="p-2 rounded-xl hover:bg-primary/10 transition-colors text-hsa hover:text-primary"
           title="Modifier mon signalement">
           <IconEdit class="w-5 h-5" />
@@ -129,9 +129,17 @@ const isOwnIncident = computed(() => {
   return !!(authStore.user && props.incident.user_id === authStore.user.id)
 })
 
+const canEditIncident = computed(() => {
+  if (!props.incident?.created_at) return false
+  const createdAt = new Date(props.incident.created_at).getTime()
+  const hoursDiff = (Date.now() - createdAt) / (1000 * 60 * 60)
+  return hoursDiff <= 24
+})
+
 const handleReport = () => {
   if (isOwnIncident.value) return
   emit('report', props.incident.id)
+  toast.showToast('info', 'Signalement', 'Ouverture du formulaire de signalement...')
 }
 
 const shareIncident = async () => {

@@ -11,17 +11,26 @@ export default defineEventHandler(async (event) => {
 
   const body = await readBody(event)
 
+  // Flatten any non-string values for URLSearchParams compatibility
+  const flatBody: Record<string, string> = {}
+  for (const key in body) {
+    const val = body[key]
+    if (val === null || val === undefined || val === '') continue
+    flatBody[key] = String(val)
+  }
+
   try {
     const response = await $fetch(`${baseApi}/vigitech/update_incident.php`, {
-      method: 'POST',
+      method: 'PUT',
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/x-www-form-urlencoded'
       },
-      body: new URLSearchParams(body).toString()
+      body: new URLSearchParams(flatBody).toString()
     })
     return response
   } catch (err: any) {
-    return { success: false, message: err.data?.message || err.message || 'Erreur lors de la mise à jour' }
+    const message = err.data?.message || err.message || 'Erreur lors de la mise à jour'
+    throw createError({ statusCode: err.statusCode || 500, message })
   }
 })

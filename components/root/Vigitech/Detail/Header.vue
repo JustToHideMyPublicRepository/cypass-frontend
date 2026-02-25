@@ -74,7 +74,7 @@ const formattedDate = computed(() => {
 
 const userAvatarUrl = computed(() => {
   return getUserAvatarUrl(
-    (props.incident as any).user_avatar || null,
+    (props.incident as any).user_avatar || (props.incident as any).avatar_url || null,
     props.incident.author_first_name || null,
     props.incident.author_last_name || null
   )

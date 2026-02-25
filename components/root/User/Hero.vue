@@ -33,7 +33,7 @@
             <h1 class="text-4xl md:text-5xl font-black text-BtW tracking-tighter leading-tight">
               {{ user.first_name }} <span class="text-primary">{{ user.last_name }}</span>
             </h1>
-            <div class="flex items-center">
+            <div class="flex items-center gap-2">
               <!-- Indicateur de statut (Actif/Inactif) -->
               <UiStatusBadge v-if="user.status == true || user.status === 'active'" status="active">
                 Actif
@@ -41,6 +41,16 @@
               <UiStatusBadge v-else status="Error">
                 Inactif
               </UiStatusBadge>
+              <UiStatusBadge v-if="user.is_reported" status="Error">
+                En observation
+              </UiStatusBadge>
+
+              <!-- Action de signalement (uniquement pour les autres users connectés) -->
+              <UiBaseButton variant="danger" size="sm" v-if="!isOwnProfile && isLoggedIn" @click="emit('report')"
+                class="flex items-center gap-2 px-4 py-1.5 rounded-2xl bg-danger/10 text-danger hover:bg-danger/20 uppercase tracking-widest text-[10px] shadow-sm hover:shadow-md active:scale-95 group">
+                <IconFlag class="w-4 h-4 group-hover:rotate-12 transition-transform" />
+                Signaler ce compte
+              </UiBaseButton>
             </div>
           </div>
           <!-- Affichage de l'organisation si renseigné -->
@@ -52,7 +62,7 @@
         </div>
 
         <!-- Statistiques et dates clés -->
-        <div class="flex flex-wrap items-center justify-center md:justify-start gap-8">
+        <div class="flex flex-wrap items-start justify-center md:justify-start gap-8">
           <!-- Date d'inscription -->
           <div class="group/stat">
             <p
@@ -64,7 +74,7 @@
             </div>
           </div>
           <!-- Séparateur visuel -->
-          <div class="w-px h-10 bg-ash/20 hidden md:block"></div>
+          <div class="w-px h-10 bg-ash hidden md:block"></div>
           <!-- Compteurs d'activité publique -->
           <div class="group/stat">
             <p
@@ -92,7 +102,7 @@
 </template>
 
 <script setup lang="ts">
-import { IconZoomIn, IconBuilding, IconCalendar, IconShield, IconMessage } from '@tabler/icons-vue'
+import { IconZoomIn, IconBuilding, IconCalendar, IconShield, IconMessage, IconFlag } from '@tabler/icons-vue'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 
@@ -102,7 +112,11 @@ const props = defineProps<{
   userAvatarUrl: string
   publicIncidentsCount: number
   commentsCount: number
+  isOwnProfile?: boolean
+  isLoggedIn?: boolean
 }>()
+
+const emit = defineEmits(['report'])
 
 // État pour afficher la modale visionneuse d'image
 const showImageViewer = ref(false)

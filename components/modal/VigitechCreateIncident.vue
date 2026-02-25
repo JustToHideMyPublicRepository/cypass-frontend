@@ -139,7 +139,7 @@
       <div class="pt-4 flex gap-4">
         <UiBaseButton variant="ghost" class="flex-1 !rounded-2xl font-bold" @click="closeModal">Annuler</UiBaseButton>
         <UiBaseButton variant="primary" class="flex-1 !rounded-2xl font-black tracking-widest shadow-xl"
-          :loading="store.loading" @click="submit">
+          :loading="submitting || store.loading" @click="submit">
           {{ isEditMode ? 'Enregistrer' : 'Publier l\'alerte' }}
         </UiBaseButton>
       </div>
@@ -159,6 +159,7 @@ import {
   IconMapPin, IconFileTypePdf, IconRefresh
 } from '@tabler/icons-vue'
 import { useVigitechStore } from '~/stores/vigitech'
+import { useToastStore } from '~/stores/toast'
 import { useGlobalDropZone } from '~/composables/useDropZone'
 import type { CreateIncidentRequest, Incident } from '~/types/vigitech'
 
@@ -171,6 +172,7 @@ const isEditMode = computed(() => !!props.incident)
 
 const emit = defineEmits(['close', 'success'])
 const store = useVigitechStore()
+const toast = useToastStore()
 const { enable, disable } = useGlobalDropZone()
 
 // État initial du formulaire
@@ -266,25 +268,36 @@ const closeModal = () => {
 /**
  * Soumet le formulaire (création ou mise à jour) vers le store Vigitech
  */
+const submitting = ref(false)
 const submit = async () => {
   if (!form.value.title || !form.value.description) {
+    toast.showToast('error', 'Champs requis', 'Veuillez remplir le titre et la description.')
     return
   }
 
+  submitting.value = true
+
   if (isEditMode.value && props.incident) {
     // Mode édition
-    const result = await store.updateIncident(props.incident.id, {
-      title: form.value.title,
-      description: form.value.description,
-      type: form.value.type,
-      threat_level: form.value.threat_level,
-      is_anonymous: form.value.is_anonymous ? 'true' : 'false',
-      location: form.value.location
-    })
-    if (result.success) {
-      emit('success')
-      emit('close')
-      resetForm()
+    try {
+      const result = await store.updateIncident(props.incident.id, {
+        title: form.value.title,
+        description: form.value.description,
+        type: form.value.type,
+        threat_level: form.value.threat_level,
+        is_anonymous: form.value.is_anonymous,
+        location: form.value.location
+      })
+      if (result.success) {
+        toast.showToast('success', 'Incident modifié', result.message || 'L\'incident a été mis à jour avec succès.')
+        emit('success')
+        emit('close')
+        resetForm()
+      } else {
+        toast.showToast('error', 'Erreur', result.message || 'Impossible de mettre à jour l\'incident.')
+      }
+    } catch (err: any) {
+      toast.showToast('error', 'Erreur', err.data?.message || err.message || 'Une erreur inattendue est survenue.')
     }
   } else {
     // Mode création
@@ -295,6 +308,7 @@ const submit = async () => {
       resetForm()
     }
   }
+  submitting.value = false
 }
 
 /**
@@ -326,6 +340,7 @@ watch(() => props.show, (isVisible) => {
         type: props.incident.type,
         threat_level: props.incident.threat_level,
         is_anonymous: !!props.incident.is_anonymous,
+        // is_anonymous: String(props.incident.is_anonymous) === 'true' || String(props.incident.is_anonymous) === '1',
         location: props.incident.location || '',
         evidence: null
       }

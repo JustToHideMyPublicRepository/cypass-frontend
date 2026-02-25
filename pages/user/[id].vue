@@ -20,17 +20,26 @@
     <div v-else-if="user" class="w-full max-w-7xl space-y-8 animate-fade-in">
       <!-- En-tête du profil -->
       <RootUserHero :user="user" :user-avatar-url="userAvatarUrl" :public-incidents-count="publicIncidents.length"
-        :comments-count="comments.length" />
+        :comments-count="comments.length"
+        :is-own-profile="!!(authStore.user && String(authStore.user.id) === String(route.params.id))"
+        :is-logged-in="!!authStore.user" @report="modals.report = true" />
 
       <!-- Section Activité -->
       <RootUserActivity :public-incidents="publicIncidents" :comments="comments" />
     </div>
+
+    <!-- Modal de signalement -->
+    <ModalVigitechReportUser v-if="user" :show="modals.report" title="Signaler un compte"
+      subtitle="Aidez-nous à modérer la plateforme" :target-id="String(route.params.id)" type="user"
+      @close="modals.report = false" @success="handleReportSuccess" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { IconArrowLeft } from '@tabler/icons-vue'
 import { getUserAvatarUrl } from '~/utils/user'
+import { useAuthStore } from '~/stores/auth'
+import { useToastStore } from '~/stores/toast'
 
 // Configuration de la page
 definePageMeta({
@@ -40,7 +49,8 @@ definePageMeta({
 // Accès aux utilitaires de route, de navigation et de store
 const route = useRoute()
 const router = useRouter()
-const store = useVigitechStore()
+const authStore = useAuthStore()
+const toast = useToastStore()
 
 // États réactifs de la page
 const loading = ref(true)
@@ -48,6 +58,9 @@ const error = ref<string | null>(null)
 const user = ref<any>(null)
 const publicIncidents = ref<any[]>([])
 const comments = ref<any[]>([])
+const modals = reactive({
+  report: false
+})
 
 const userAvatarUrl = computed(() => {
   return getUserAvatarUrl(
@@ -80,6 +93,16 @@ const fetchPublicProfile = async () => {
   } finally {
     loading.value = false
   }
+}
+
+/**
+ * Gère le succès du signalement.
+ */
+const handleReportSuccess = () => {
+  modals.report = false
+  toast.showToast('success', 'Signalement envoyé', 'Le compte a été signalé avec succès et sera examiné.')
+  // Optionnel: rafraîchir le profil pour voir le badge "Compte suspecté"
+  fetchPublicProfile()
 }
 
 // Initialisation au montage du composant

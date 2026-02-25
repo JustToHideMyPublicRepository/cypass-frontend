@@ -12,6 +12,8 @@ export const useVigitechStore = defineStore('vigitech', {
     },
     currentIncident: null as Incident | null,
     comments: [] as Comment[],
+    userComments: [] as any[],
+    userCommentsTotal: 0,
     loadingComments: false,
     loading: false,
     error: null as string | null
@@ -110,6 +112,21 @@ export const useVigitechStore = defineStore('vigitech', {
       }
     },
 
+    async fetchUserComments() {
+      this.loadingComments = true
+      try {
+        const response: any = await $fetch('/api/vigitech/user/comments')
+        if (response.success && response.data) {
+          this.userComments = response.data.comments || []
+          this.userCommentsTotal = response.data.total || 0
+        }
+      } catch (err: any) {
+        console.warn('Erreur chargement commentaires utilisateur:', err.message)
+      } finally {
+        this.loadingComments = false
+      }
+    },
+
     async addComment(incidentId: string, content: string) {
       try {
         const response: any = await $fetch('/api/vigitech/comments', {
@@ -173,15 +190,31 @@ export const useVigitechStore = defineStore('vigitech', {
       }
     },
 
-    async updateIncident(incidentId: string, data: Record<string, string>) {
+    async updateIncident(incidentId: string, data: Record<string, string | boolean>) {
       try {
+        const body: Record<string, string> = {}
+        for (const key in data) {
+          if (typeof data[key] === 'boolean') {
+            body[key] = data[key] ? 'true' : 'false'
+          } else {
+            body[key] = data[key] as string
+          }
+        }
+
         const response: any = await $fetch('/api/vigitech/update', {
-          method: 'POST',
-          body: { incident_id: incidentId, ...data }
+          method: 'PUT',
+          body: { incident_id: incidentId, ...body }
         })
         if (response.success) {
           // Refresh the current incident data
           await this.fetchUserIncidentById(incidentId)
+          // Also update the item in the userIncidents list for real-time refresh on dashboard
+          if (this.currentIncident) {
+            const idx = this.userIncidents.findIndex(i => i.id === incidentId)
+            if (idx !== -1) {
+              this.userIncidents[idx] = { ...this.userIncidents[idx], ...this.currentIncident }
+            }
+          }
         }
         return { success: response.success, message: response.message }
       } catch (err: any) {

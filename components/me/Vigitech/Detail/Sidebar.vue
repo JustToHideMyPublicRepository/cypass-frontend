@@ -5,7 +5,7 @@
       <div class="p-6 space-y-4">
         <h3 class="text-[10px] font-black uppercase tracking-[0.2em] opacity-60">Actions</h3>
         <div class="grid grid-cols-1 gap-3">
-          <UiBaseButton v-if="!incident.is_blocked" @click="showEditModal = true" variant="primary"
+          <UiBaseButton v-if="!incident.is_blocked && canEdit" @click="showEditModal = true" variant="primary"
             class="w-full justify-start !px-4">
             <IconEdit class="w-4 h-4 mr-2" /> Modifier
           </UiBaseButton>
@@ -118,6 +118,14 @@ const statusStyle = computed(() => {
     case 'rejected': return { bg: 'bg-danger/5 border-danger/20' }
     default: return { bg: 'bg-orange-500/5 border-orange-500/20' }
   }
+})
+
+const canEdit = computed(() => {
+  if (!props.incident?.created_at) return false
+  const createdAt = new Date(props.incident.created_at).getTime()
+  const now = Date.now()
+  const hoursDiff = (now - createdAt) / (1000 * 60 * 60)
+  return hoursDiff <= 24
 })
 
 const getFullUrl = (path: string) => {

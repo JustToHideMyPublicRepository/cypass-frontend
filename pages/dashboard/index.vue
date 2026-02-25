@@ -75,9 +75,7 @@ const vigiTrend = ref({ percentage: 0, difference: 0 })
 const securityScore = ref<SecurityScoreResult>({ score: 100, grade: 'A+', label: 'Excellent', color: 'text-success' })
 
 const recentComments = computed(() => {
-  // Since we don't have a direct /all-comments endpoint yet, 
-  // we use what's in the store or fetch on mount for recent user incidents
-  return vigitechStore.comments
+  return vigitechStore.userComments
 })
 
 const modals = reactive({
@@ -217,11 +215,8 @@ onMounted(async () => {
     documentsStore.fetchDocuments(5, 0),
     notificationsStore.fetchNotifications(5, 0),
     profilStore.fetchLogs({ limit: 5 }),
-    vigitechStore.fetchUserIncidents().then(async () => {
-      // Fetch comments for top users incidents
-      const latest = vigitechStore.userIncidents
-      await Promise.all(latest.map(inc => vigitechStore.fetchComments(inc.id)))
-    }),
+    vigitechStore.fetchUserIncidents(),
+    vigitechStore.fetchUserComments(),
     authStore.fetchSessions().then(sessions => {
       activeSessions.value = sessions || []
       activeSessionsCount.value = sessions?.length || 0

@@ -23,7 +23,7 @@
               <RootVigitechDetailHeader :incident="incident" />
               <RootVigitechDetailContent :incident="incident" />
               <RootVigitechDetailComments :incident-id="incident.id" :comments="store.comments"
-                :loading="store.loadingComments" />
+                :loading="store.loadingComments" :comments-count="incident.comments_count" />
             </div>
           </div>
 

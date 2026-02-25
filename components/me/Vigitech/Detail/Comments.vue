@@ -5,9 +5,9 @@
         class="w-full flex items-center justify-between hover:text-primary transition-all duration-300">
         <h3 class="text-xs font-black text-hsa uppercase tracking-[0.2em] flex items-center gap-2">
           <IconMessage class="w-4 h-4 text-primary" /> Commentaires
-          <span v-if="comments.length"
+          <span v-if="commentsCount || comments.length"
             class="ml-1 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-black">
-            {{ comments.length }}
+            {{ commentsCount ?? comments.length }}
           </span>
         </h3>
         <component :is="showComments ? IconChevronUp : IconChevronDown" class="w-4 h-4 text-hsa transition-transform" />
@@ -18,7 +18,7 @@
           <UiAppSkeleton v-for="i in 3" :key="i" height="70px" radius="1rem" />
         </div>
 
-        <div v-else-if="comments.length" class="space-y-3">
+        <div v-else-if="commentsCount || comments.length" class="space-y-3">
           <div v-for="comment in comments" :key="comment.id"
             class="p-4 rounded-xl bg-ash/5 border border-ash/30 space-y-1.5 hover:border-ash/50 transition-colors">
             <div class="flex items-center justify-between">
@@ -56,6 +56,7 @@ import { useVigiPrefStore } from '~/stores/vigiPref'
 const props = defineProps<{
   comments: any[]
   loading: boolean
+  commentsCount?: number
 }>()
 
 const prefStore = useVigiPrefStore()

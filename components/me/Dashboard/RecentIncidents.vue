@@ -1,5 +1,5 @@
 <template>
-  <UiBaseCard title="Activités Vigitech" subtitle="Derniers incidents signalés">
+  <UiBaseCard title="Derniers incidents" subtitle="Derniers incidents signalés">
     <template #header>
       <UiBaseButton variant="secondary" size="sm" class="!px-2 !py-1 !text-[10px]"
         @click="navigateTo('/dashboard/vigitech')">Veille</UiBaseButton>

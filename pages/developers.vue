@@ -16,7 +16,7 @@
           </p>
 
           <div class="flex flex-col sm:flex-row gap-3 pt-2">
-            <UiBaseButton to="/support#developers" class="w-full sm:w-auto px-6 py-3">Lire la Documentation
+            <UiBaseButton to="/support/tech" class="w-full sm:w-auto px-6 py-3">Lire la Documentation
             </UiBaseButton>
             <UiBaseButton variant="secondary" @click="handleApiKey" class="w-full sm:w-auto px-6 py-3">Obtenir une Clé
               API</UiBaseButton>

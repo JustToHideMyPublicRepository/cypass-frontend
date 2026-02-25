@@ -8,35 +8,46 @@
       <div v-if="loading && !comments.length" class="py-10">
         <UiLogoLoader size="sm" />
       </div>
-      <div v-else-if="!comments.length" class="py-10 text-center text-hsa text-xs">
+      <div v-else-if="!comments.length" class="py-10 text-center text-hsa">
         Aucun commentaire récent
       </div>
       <div v-for="comment in comments" :key="comment.id"
-        class="flex gap-3 text-sm p-2 rounded-xl hover:bg-ash/50 transition-all cursor-pointer group"
-        @click="navigateTo(`/dashboard/vigitech/${comment.incident_id}`)">
-        <div class="shrink-0">
-          <img v-if="comment.avatar_url"
-            :src="getUserAvatarUrl(comment.avatar_url, comment.first_name, comment.last_name)"
-            class="w-8 h-8 rounded-full border border-ash group-hover:border-primary transition-colors" />
-          <div v-else
-            class="w-8 h-8 rounded-full bg-ash flex items-center justify-center text-[10px] font-bold text-hsa">
-            {{ comment.first_name?.[0] }}{{ comment.last_name?.[0] }}
+        class="flex items-center justify-between p-3 rounded-xl hover:bg-ash/50 transition-all cursor-pointer group"
+        @click="navigateTo(`/dashboard/vigitech/comments`)">
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="p-2 bg-ash rounded-lg group-hover:bg-primary/10 transition-colors">
+            <IconMessage class="w-4 h-4 text-hsa group-hover:text-primary" />
+          </div>
+          <div class="min-w-0">
+            <h4 class="text-sm font-bold text-BtW truncate"> {{ comment.incident_title }} </h4>
+            <p class="text-[10px] text-hsa mt-0.5"> "{{ comment.content }}" </p>
           </div>
         </div>
-        <div class="min-w-0 flex-1">
-          <h4 class="text-xs font-bold text-BtW truncate">{{ comment.first_name }} {{ comment.last_name }}</h4>
-          <p class="text-[10px] text-hsa line-clamp-1 italic">{{ comment.content }}</p>
-        </div>
+        <span class="shrink-0 px-2.5 py-1 rounded-lg text-[10px] font-black"
+          :class="getBadgeLabelColor(comment.created_at)">
+          {{ formatRelativeTime(comment.created_at) }}
+        </span>
       </div>
     </div>
   </UiBaseCard>
 </template>
 
 <script setup lang="ts">
-import { getUserAvatarUrl } from '~/utils/user'
+import { IconMessage } from '@tabler/icons-vue'
+import { formatRelativeTime } from '~/utils/date'
 
 defineProps<{
   comments: any[]
   loading: boolean
 }>()
+
+const getBadgeLabelColor = (dateStr: string) => {
+  const diff = Date.now() - new Date(dateStr).getTime()
+  const hours = diff / (1000 * 60 * 60)
+
+  if (hours < 1) return 'bg-success/10 text-success'
+  if (hours < 24) return 'bg-primary/10 text-primary'
+  if (hours < 72) return 'bg-warning/10 text-warning'
+  return 'bg-ash/20 text-hsa'
+}
 </script>

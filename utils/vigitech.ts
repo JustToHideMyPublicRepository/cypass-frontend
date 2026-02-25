@@ -50,10 +50,35 @@ export const mapReportReason = (reason: string) => {
 }
 
 /**
- * Liste des raisons de signalement disponibles
+ * Mappe les raisons de signalement d'utilisateur
+ */
+export const mapUserReportReason = (reason: string) => {
+  const reasons: Record<string, string> = {
+    fake_profile: 'Usurpation d\'identité',
+    harassment: 'Harcèlement',
+    inappropriate: 'Contenu inapproprié',
+    spam: 'Spam',
+    other: 'Autre'
+  }
+  return reasons[reason] || reason
+}
+
+/**
+ * Liste des raisons de signalement d'incident disponibles
  */
 export const reportReasons = [
   { value: 'fake_incident', label: 'Faux incident' },
+  { value: 'inappropriate', label: 'Contenu inapproprié' },
+  { value: 'spam', label: 'Spam' },
+  { value: 'other', label: 'Autre' }
+]
+
+/**
+ * Liste des raisons de signalement d'utilisateur disponibles
+ */
+export const userReportReasons = [
+  { value: 'fake_profile', label: 'Usurpation d\'identité' },
+  { value: 'harassment', label: 'Harcèlement' },
   { value: 'inappropriate', label: 'Contenu inapproprié' },
   { value: 'spam', label: 'Spam' },
   { value: 'other', label: 'Autre' }
