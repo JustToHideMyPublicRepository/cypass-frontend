@@ -1,11 +1,11 @@
 import {
   IconKeyboard, IconLayoutDashboard, IconFileDescription,
-  IconAlertTriangle, IconShieldCheck, IconActivity, IconSearch
+  IconAlertTriangle, IconShieldCheck, IconActivity, IconSearch,
+  IconQuestionMark, IconLifebuoy
 } from '@tabler/icons-vue'
 
 /**
  * Retourne l'icône correspondant au type de résultat de recherche.
- * Types : shortcuts | navigation | docsentry | vigitech | incident | log
  */
 export const getSearchIcon = (type: string) => {
   switch (type) {
@@ -15,6 +15,8 @@ export const getSearchIcon = (type: string) => {
     case 'vigitech': return IconShieldCheck
     case 'incident': return IconAlertTriangle
     case 'log': return IconActivity
+    case 'faq': return IconQuestionMark
+    case 'support': return IconLifebuoy
     default: return IconSearch
   }
 }
@@ -30,6 +32,8 @@ export const getSearchIconStyle = (type: string) => {
     case 'vigitech': return 'bg-emerald-500/10 text-emerald-500'
     case 'incident': return 'bg-red-500/10 text-red-500'
     case 'log': return 'bg-purple-500/10 text-purple-500'
+    case 'faq': return 'bg-yellow-500/10 text-yellow-500'
+    case 'support': return 'bg-rose-500/10 text-rose-500'
     default: return 'bg-ash/10 text-hsa'
   }
 }

@@ -30,6 +30,15 @@ definePageMeta({
   layout: 'guest'
 })
 
+const route = useRoute()
+
+onMounted(() => {
+  const cat = route.query.cat as string
+  const q = route.query.q as string
+  if (cat) selectedCategoryText.value = cat
+  if (q) searchQuery.value = q
+})
+
 // Filter FAQ based on search and selection
 const filteredCategories = computed(() => {
   let categories = faqCategories

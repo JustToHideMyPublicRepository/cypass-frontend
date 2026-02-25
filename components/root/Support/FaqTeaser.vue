@@ -1,8 +1,8 @@
 <template>
-  <div
-    class="glass-panel p-6 md:p-12 rounded-2xl md:rounded-3xl animate-fade-up flex flex-col md:flex-row items-center justify-between gap-6 md:gap-8 border border-ash/50 text-center md:text-left">
+  <div class="p-6 md:p-12 rounded-2xl md:rounded-3xl animate-fade-up flex flex-col md:flex-row items-center justify-between
+  gap-6 md:gap-8 text-center md:text-left border-y border-ashAct py-8 md:py-12 ">
     <div class="space-y-3 md:space-y-4">
-      <h3 class="text-xl md:text-2xl font-bold text-BtW">Questions Fréquentes</h3>
+      <h3 class="text-xl md:text-2xl font-bold text-BtW">Questions fréquentes</h3>
       <p class="text-hsa text-sm md:text-base max-w-lg">
         Consultez notre base de connaissances pour trouver des réponses rapides aux questions les plus courantes.
       </p>

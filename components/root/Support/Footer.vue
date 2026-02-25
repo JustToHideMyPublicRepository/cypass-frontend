@@ -1,5 +1,5 @@
 <template>
-  <div class="text-center space-y-4 md:space-y-6 pt-8 md:pt-12 border-t border-ash">
+  <div class="text-center space-y-4 md:space-y-6">
     <p class="text-hsa text-sm md:text-base">Besoin d'une assistance personnalisée ?</p>
     <div class="flex flex-col sm:flex-row justify-center gap-3 md:gap-4">
       <UiBaseButton href="mailto:support@cypass.bj" variant="secondary" class="border border-ash justify-center">

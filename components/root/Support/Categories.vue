@@ -1,6 +1,6 @@
 <template>
   <div class="grid md:grid-cols-3 gap-6 md:gap-8">
-    <div v-for="(category, index) in categories" :key="index"
+    <div v-for="(category, index) in categories" :key="index" @click="$emit('select', category)"
       class="glass-panel p-6 md:p-8 rounded-2xl md:rounded-3xl hover:scale-[1.01] transition-transform duration-300 cursor-pointer group animate-fade-up border border-ash/50"
       :style="{ animationDelay: `${index * 100}ms` }">
       <div

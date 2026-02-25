@@ -1,9 +1,14 @@
 <template>
   <div class="text-center space-y-6 md:space-y-8 animate-fade-up">
-    <span class="badge badge-primary">Centre d'Aide</span>
-    <h1 class="text-3xl md:text-5xl font-black tracking-tight leading-tight">
-      Comment pouvons-nous <span class="text-primary">vous aider ?</span>
-    </h1>
+    <div class="text-center space-y-3 md:space-y-4">
+      <span class="badge badge-primary">Centre d'aide</span>
+      <h1 class="text-3xl md:text-5xl font-black tracking-tight leading-tight">Comment pouvons-nous
+        <span class="text-primary">vous aider ?</span>
+      </h1>
+      <p class="text-hsa text-sm md:text-base max-w-2xl mx-auto">
+        Accédez à nos ressources pour trouver des réponses à vos questions et pour intégrer CYPASS dans votre quotidien.
+      </p>
+    </div>
 
     <!-- Barre de recherche -->
     <div class="max-w-2xl mx-auto relative group">

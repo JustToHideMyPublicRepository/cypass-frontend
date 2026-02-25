@@ -1,7 +1,9 @@
 import { defineStore } from 'pinia'
-import { shortcutsData } from '@/data/shortcuts'
 import { useAuthStore } from './auth'
 import { useVigitechStore } from './vigitech'
+import { shortcutsData } from '@/data/shortcuts'
+import { faqCategories } from '@/data/faq'
+import { supportData } from '@/data/support'
 
 interface SearchResult {
   id: string
@@ -9,7 +11,7 @@ interface SearchResult {
   description?: string
   path?: string
   icon?: string
-  type: 'shortcuts' | 'navigation' | 'docsentry' | 'vigitech' | 'incident' | 'log'
+  type: 'shortcuts' | 'navigation' | 'docsentry' | 'vigitech' | 'incident' | 'log' | 'faq' | 'support'
   category?: string
   isShortcut?: boolean
 }
@@ -178,6 +180,42 @@ export const useSearchStore = defineStore('search', {
             }
           })
         }
+
+        // 6. Search in FAQ
+        faqCategories.forEach(cat => {
+          cat.items.forEach(item => {
+            const question = item.question.toLowerCase()
+            const answer = item.answer.toLowerCase()
+            if (question.includes(q) || answer.includes(q)) {
+              searchResults.push({
+                id: `faq-${item.question}`,
+                title: item.question,
+                description: item.answer.substring(0, 100) + '...',
+                path: `/faq?cat=${encodeURIComponent(cat.title)}&q=${encodeURIComponent(item.question)}`,
+                type: 'faq',
+                category: 'Questions fréquentes'
+              })
+            }
+          })
+        })
+
+        // 7. Search in Support
+        supportData.forEach(cat => {
+          cat.articles.forEach(article => {
+            const title = article.title.toLowerCase()
+            const content = article.content.toLowerCase()
+            if (title.includes(q) || content.includes(q)) {
+              searchResults.push({
+                id: `support-${article.id}`,
+                title: article.title,
+                description: article.content.substring(0, 100) + '...',
+                path: `/support/${cat.id}/${article.id}`,
+                type: 'support',
+                category: 'Centre d\'aide'
+              })
+            }
+          })
+        })
 
         this.results = searchResults
       } catch (e) {
