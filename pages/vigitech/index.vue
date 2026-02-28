@@ -140,6 +140,12 @@ const filteredIncidents = computed(() => {
       return title.includes(q) || desc.includes(q) || loc.includes(q)
     })
   }
+  if (filters.value.type) {
+    list = list.filter(i => i.type === filters.value.type)
+  }
+  if (filters.value.level) {
+    list = list.filter(i => i.threat_level === filters.value.level)
+  }
   if (filters.value.date_start) {
     const start = new Date(filters.value.date_start).getTime()
     list = list.filter(i => new Date(i.created_at).getTime() >= start)

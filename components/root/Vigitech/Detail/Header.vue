@@ -36,12 +36,18 @@
           <template v-if="incident.is_anonymous || incident.is_anonymous === 1">
             <IconUserOff class="w-6 h-6 text-hsa/50" />
           </template>
+          <template v-else-if="![incident.author_first_name, incident.author_last_name].filter(Boolean).length">
+            <IconUserCancel class="w-6 h-6 text-hsa/50" />
+          </template>
           <img v-else :src="userAvatarUrl" class="w-full h-full object-cover" />
         </div>
         <div class="min-w-0">
           <div class="flex items-center gap-2">
             <template v-if="incident.is_anonymous || incident.is_anonymous === 1">
               Anonyme
+            </template>
+            <template v-else-if="![incident.author_first_name, incident.author_last_name].filter(Boolean).length">
+              <span class="text-hsa line-through decoration-hsa/50">Profil supprimé</span>
             </template>
             <template v-else>
               <NuxtLink :to="`/user/${incident.user_id}`" class="hover:text-primary hover:underline transition-colors">
@@ -56,7 +62,7 @@
 </template>
 
 <script setup lang="ts">
-import { IconEye, IconMapPin, IconCalendar, IconUserOff } from '@tabler/icons-vue'
+import { IconEye, IconMapPin, IconCalendar, IconUserOff, IconUserCancel } from '@tabler/icons-vue'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { decodeHtmlEntities } from '~/utils/format'

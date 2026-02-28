@@ -3,8 +3,8 @@
     incident.threat_level === 'critical' ? 'border-l-danger bg-danger/5' :
       incident.threat_level === 'medium' ? 'border-l-warning bg-warning/5' : 'border-l-success bg-success/5'
   ]">
-    <div class="flex items-start justify-between gap-4">
-      <div class="flex gap-4">
+    <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+      <div class="flex gap-3 sm:gap-4 flex-1 min-w-0">
         <!-- Date Block -->
         <div class="text-hsa shrink-0">
           <div class="text-center w-12 pt-1">
@@ -15,22 +15,23 @@
 
         <div class="space-y-2 flex-1 min-w-0">
           <div class="flex flex-wrap items-center gap-2">
-            <span
-              class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest border border-ash/50 bg-ash/10 text-hsa">
+            <span class="custum-badge">
               {{ mapIncidentType(incident.type) }}
             </span>
             <UiStatusBadge
               :status="incident.threat_level === 'critical' ? 'High' : incident.threat_level === 'medium' ? 'Medium' : 'Low'">
               {{ mapThreatLevel(incident.threat_level) }}
             </UiStatusBadge>
-            <span v-if="incident.is_anonymous"
-              class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest bg-BtW text-WtB">
+            <span v-if="incident.is_anonymous" class="custum-badge bg-BtW text-WtB">
               Anonyme
             </span>
+            <span v-else-if="![incident.author_first_name, incident.author_last_name].filter(Boolean).length"
+              class="custum-badge bg-hsa/10 text-hsa line-through decoration-hsa/50">
+              Profil supprimé
+            </span>
             <NuxtLink v-else :to="`/user/${incident.user_id}`"
-              class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest bg-primary/10 text-primary hover:bg-primary/20 transition-colors">
-              {{ [incident.author_first_name, incident.author_last_name].filter(Boolean).join(' ') || 'Profil supprimé'
-              }}
+              class="custum-badge bg-primary/10 text-primary hover:bg-primary/20 transition-colors">
+              {{ [incident.author_first_name, incident.author_last_name].filter(Boolean).join(' ') }}
             </NuxtLink>
           </div>
 
@@ -43,9 +44,9 @@
             {{ decodeHtmlEntities(incident.description) }}
           </p>
 
-          <div class="flex items-center gap-3 pt-2 text-[10px] font-bold text-hsa">
-            <span v-if="incident.location" class="flex items-center gap-1">
-              <IconMapPin class="w-3 h-3" /> {{ decodeHtmlEntities(incident.location) }}
+          <div class="flex flex-wrap items-center gap-x-3 gap-y-2 pt-2 text-[10px] font-bold text-hsa leading-tight">
+            <span v-if="incident.location" class="flex items-center gap-1 shrink-0 max-w-[150px]">
+              <IconMapPin class="w-3 h-3" /> <span class="truncate">{{ decodeHtmlEntities(incident.location) }}</span>
             </span>
             <span class="flex items-center gap-1">
               <IconClock class="w-3 h-3" /> {{ formatRelativeTime(incident.created_at) }}
@@ -56,15 +57,15 @@
             <span v-if="incident.comments_count != null" class="flex items-center gap-1">
               <IconMessage class="w-3 h-3" /> {{ incident.comments_count }}
             </span>
-            <span v-if="incident.evidence_file"
-              class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest bg-success/10 text-success flex items-center gap-1">
+            <span v-if="incident.evidence_file" class="custum-badge bg-success/10 text-success flex items-center gap-1">
               <IconPaperclip class="w-3 h-3" /> Preuve
             </span>
           </div>
         </div>
       </div>
 
-      <div class="flex flex-col gap-2 shrink-0">
+      <div
+        class="flex flex-row sm:flex-col gap-2 shrink-0 justify-end mt-4 sm:mt-0 pt-3 sm:pt-0 border-t sm:border-t-0 border-ash/20">
         <!-- Signaler -->
         <button v-if="!showFooter && authStore.user" @click.stop="handleReport" :disabled="isOwnIncident"
           class="p-2 rounded-xl transition-colors" :class="isOwnIncident
@@ -192,3 +193,9 @@ const formatTime = (dateStr: string) => {
   return new Date(dateStr).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
 }
 </script>
+
+<style scoped>
+.custum-badge {
+  @apply px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest;
+}
+</style>

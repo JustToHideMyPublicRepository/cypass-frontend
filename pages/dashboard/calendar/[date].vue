@@ -118,6 +118,6 @@ useHead({
 })
 
 onMounted(() => {
-  fetchAllEvents()
+  fetchAllEvents(dateParam)
 })
 </script>

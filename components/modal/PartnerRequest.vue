@@ -109,6 +109,9 @@ onMounted(() => {
   if (authStore.user) {
     form.contact_name = authStore.fullName
     form.email = authStore.user.email
+    if (authStore.user.organization) {
+      form.organization_name = authStore.user.organization
+    }
   }
 })
 

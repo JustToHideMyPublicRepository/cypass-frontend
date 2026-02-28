@@ -29,7 +29,7 @@ export const useCalendarEvents = () => {
   const sessions = ref<any[]>([])
 
   // Fetch all necessary data
-  const fetchAllEvents = async () => {
+  const fetchAllEvents = async (date?: string) => {
     loading.value = true
     try {
       // Parallelize fetching
@@ -37,7 +37,7 @@ export const useCalendarEvents = () => {
         docsentryStore.fetchDocuments(100, 0),
         vigitechStore.fetchUserIncidents(),
         vigitechStore.fetchUserComments(),
-        profilStore.fetchLogs({ limit: 500, type: 'all' }),
+        profilStore.fetchLogs({ limit: 500, type: 'all', date: date }),
       ])
       // Sessions don't have a state, we fetch and store locally
       sessions.value = await authStore.fetchSessions()
