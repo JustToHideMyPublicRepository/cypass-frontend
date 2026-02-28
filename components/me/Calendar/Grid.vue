@@ -10,8 +10,9 @@
     <!-- Calendar Grid -->
     <div class="grid grid-cols-7 grid-rows-5 bg-ash/5 gap-px">
       <div v-for="(dayObj, index) in calendarDays" :key="index" @click="goToDay(dayObj)"
-        class="min-h-[120px] bg-WtB p-2 transition-colors duration-200 cursor-pointer hover:bg-ash/10" :class="{
-          'opacity-50 bg-hsa/20': !dayObj.isCurrentMonth,
+        class="min-h-[120px] bg-WtB p-2 transition-colors duration-200 cursor-pointer group" :class="{
+          'opacity-50 bg-hsa/10 hover:bg-hsa/20': !dayObj.isCurrentMonth,
+          'hover:bg-primary/10': dayObj.isCurrentMonth,
           'ring-2 ring-primary ring-inset z-10': isToday(dayObj.date)
         }">
         <div class="flex items-center justify-between mb-2">
@@ -55,7 +56,6 @@ import {
   isSameMonth,
   isSameDay
 } from 'date-fns'
-import { fr } from 'date-fns/locale'
 import { useRouter } from 'vue-router'
 import type { CalendarEvent } from '~/composables/useCalendarEvents'
 
@@ -94,6 +94,12 @@ const isToday = (date: Date) => {
 const goToDay = (dayObj: any) => {
   if (dayObj.events.length > 0) {
     router.push(`/dashboard/calendar/${dayObj.dateKey}`)
+  }
+}
+
+const goToEvent = (event: CalendarEvent) => {
+  if (event.url) {
+    router.push(event.url)
   }
 }
 </script>

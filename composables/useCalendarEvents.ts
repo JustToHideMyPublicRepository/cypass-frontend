@@ -4,6 +4,7 @@ import { useVigitechStore } from '~/stores/vigitech'
 import { useProfilStore } from '~/stores/profil'
 import { useAuthStore } from '~/stores/auth'
 import { format } from 'date-fns'
+import { getCalendarFilterConfig } from '~/utils/calendar'
 
 export type EventType = 'docsentry' | 'vigitech' | 'comment' | 'log' | 'session'
 
@@ -60,8 +61,8 @@ export const useCalendarEvents = () => {
           description: `Document ${doc.file_type.toUpperCase()}`,
           date: doc.created_at,
           type: 'docsentry',
-          color: 'text-primary',
-          bgColor: 'bg-primary/10',
+          color: getCalendarFilterConfig('docsentry')?.classes.text || 'text-primary',
+          bgColor: getCalendarFilterConfig('docsentry')?.classes.bgLight || 'bg-primary/10',
           url: '/dashboard/docsentry'
         })
       })
@@ -76,8 +77,8 @@ export const useCalendarEvents = () => {
           description: `Incident de niveau ${inc.threat_level}`,
           date: inc.created_at,
           type: 'vigitech',
-          color: 'text-rose-500',
-          bgColor: 'bg-rose-500/10',
+          color: getCalendarFilterConfig('vigitech')?.classes.text || 'text-danger',
+          bgColor: getCalendarFilterConfig('vigitech')?.classes.bgLight || 'bg-danger/10',
           url: `/dashboard/vigitech/${inc.id}`
         })
       })
@@ -92,8 +93,8 @@ export const useCalendarEvents = () => {
           description: comment.content.substring(0, 50) + (comment.content.length > 50 ? '...' : ''),
           date: comment.created_at,
           type: 'comment',
-          color: 'text-amber-500',
-          bgColor: 'bg-amber-500/10',
+          color: getCalendarFilterConfig('comment')?.classes.text || 'text-warning',
+          bgColor: getCalendarFilterConfig('comment')?.classes.bgLight || 'bg-warning/10',
           url: `/dashboard/vigitech/comments`
         })
       })
@@ -113,8 +114,8 @@ export const useCalendarEvents = () => {
           description: `Action enregistrée depuis ${log.ip_address}`,
           date: ts,
           type: 'log',
-          color: 'text-slate-500',
-          bgColor: 'bg-slate-500/10',
+          color: getCalendarFilterConfig('log')?.classes.text || 'text-hsa',
+          bgColor: getCalendarFilterConfig('log')?.classes.bgLight || 'bg-hsa/10',
           url: '/dashboard/logs'
         })
       })
@@ -130,8 +131,8 @@ export const useCalendarEvents = () => {
           description: `${sess.browser || 'Navigateur inconnu'} sur ${sess.os || 'OS inconnu'}`,
           date: dateStr,
           type: 'session',
-          color: 'text-emerald-500',
-          bgColor: 'bg-emerald-500/10',
+          color: getCalendarFilterConfig('session')?.classes.text || 'text-success',
+          bgColor: getCalendarFilterConfig('session')?.classes.bgLight || 'bg-success/10',
           url: '/dashboard/sessions'
         })
       })

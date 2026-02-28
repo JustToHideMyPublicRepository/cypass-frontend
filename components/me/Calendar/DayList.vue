@@ -1,6 +1,6 @@
 <template>
   <div class="space-y-4">
-    <UiBaseCard v-for="event in events" :key="event.id"
+    <UiBaseCard v-for="event in paginatedEvents" :key="event.id"
       class="hover:shadow-md transition-shadow duration-300 relative overflow-hidden group">
       <!-- Color Bar on the left -->
       <div class="absolute left-0 top-0 bottom-0 w-1.5 transition-opacity" :class="event.bgColor.replace('/10', '')">
@@ -57,17 +57,62 @@
       <h3 class="text-lg font-bold text-BtW mb-2">Aucun événement</h3>
       <p class="text-hsa">Il n'y a aucun événement enregistré pour cette date selon vos filtres actuels.</p>
     </div>
+
+    <!-- Pagination -->
+    <div v-if="totalPages > 1" class="flex items-center justify-center gap-2 mt-6">
+      <button @click="currentPage--" :disabled="currentPage === 1"
+        class="w-10 h-10 flex items-center justify-center rounded-xl bg-WtB border border-ash text-BtW hover:bg-ash/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+        <span class="sr-only">Précédent</span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" stroke-width="2"
+          stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+          <path d="M15 6l-6 6l6 6" />
+        </svg>
+      </button>
+
+      <span class="text-sm font-medium text-BtW px-4">
+        Page {{ currentPage }} sur {{ totalPages }}
+      </span>
+
+      <button @click="currentPage++" :disabled="currentPage === totalPages"
+        class="w-10 h-10 flex items-center justify-center rounded-xl bg-WtB border border-ash text-BtW hover:bg-ash/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+        <span class="sr-only">Suivant</span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" stroke-width="2"
+          stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+          <path d="M9 6l6 6l-6 6" />
+        </svg>
+      </button>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref, computed, watch } from 'vue'
 import { format } from 'date-fns'
 import { IconClock, IconArrowRight, IconCalendarOff, IconFileText, IconAlertTriangle, IconMessage, IconActivity, IconDeviceDesktop } from '@tabler/icons-vue'
 import type { CalendarEvent } from '~/composables/useCalendarEvents'
 
-defineProps<{
+const props = defineProps<{
   events: CalendarEvent[]
 }>()
+
+const currentPage = ref(1)
+const itemsPerPage = 5
+
+const paginatedEvents = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage
+  return props.events.slice(start, start + itemsPerPage)
+})
+
+const totalPages = computed(() => {
+  return Math.max(1, Math.ceil(props.events.length / itemsPerPage))
+})
+
+// Reset page when events change
+watch(() => props.events, () => {
+  currentPage.value = 1
+}, { deep: true })
 
 const formatTime = (dateStr: string) => {
   try {

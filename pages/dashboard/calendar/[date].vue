@@ -10,7 +10,7 @@
         <h1 class="text-2xl font-bold text-BtW capitalize">
           {{ formattedDate }}
         </h1>
-        <p class="text-hsa">Détails des événements pour cette journée.</p>
+        <p class="text-hsa font-medium">{{ dailyInsightText }}</p>
       </div>
     </div>
 
@@ -45,100 +45,37 @@
             <div>
               <h3 class="text-sm font-bold text-hsa uppercase tracking-wider mb-4">Filtrer les résultats</h3>
               <div class="space-y-3">
-                <!-- Docsentry -->
-                <label class="flex items-center gap-3 cursor-pointer group">
-                  <div class="relative flex items-center justify-center">
-                    <input type="checkbox" :checked="filterTypes.includes('docsentry')"
-                      @change="toggleFilter('docsentry')" class="peer sr-only">
-                    <div
-                      class="w-5 h-5 border-2 border-ash rounded transition-colors peer-checked:bg-primary peer-checked:border-primary group-hover:border-primary/50">
+                <label v-for="filter in visibleFilters" :key="filter.id"
+                  class="flex items-center justify-between cursor-pointer group">
+                  <div class="flex items-center gap-3">
+                    <div class="relative flex items-center justify-center">
+                      <input type="checkbox" :checked="filterTypes.includes(filter.id as any)"
+                        @change="toggleFilter(filter.id as any)" class="peer sr-only">
+                      <div class="w-5 h-5 border-2 border-ash rounded transition-colors"
+                        :class="[filter.classes.peerCheckedBg, filter.classes.peerCheckedBorder, filter.classes.groupHoverBorder]">
+                      </div>
+                      <IconCheck
+                        class="w-3.5 h-3.5 text-white absolute opacity-0 peer-checked:opacity-100 transition-opacity" />
                     </div>
-                    <IconCheck
-                      class="w-3.5 h-3.5 text-white absolute opacity-0 peer-checked:opacity-100 transition-opacity" />
+                    <div class="flex items-center gap-2">
+                      <div class="p-1.5 rounded" :class="[filter.classes.bgLight, filter.classes.text]">
+                        <component :is="filter.icon" class="w-4 h-4" />
+                      </div>
+                      <span class="text-sm font-medium text-BtW">{{ filter.label }}</span>
+                    </div>
                   </div>
-                  <div class="flex items-center gap-2">
-                    <div class="p-1.5 rounded bg-primary/10 text-primary">
-                      <IconFileText class="w-4 h-4" />
-                    </div>
-                    <span class="text-sm font-medium text-BtW">Docsentry</span>
+
+                  <!-- Count Badge -->
+                  <div class="px-2 py-0.5 rounded-full text-xs font-bold"
+                    :class="[filter.classes.bgLight, filter.classes.text]">
+                    {{ currentDayCounts[filter.id] }}
                   </div>
                 </label>
 
-                <!-- Vigitech -->
-                <label class="flex items-center gap-3 cursor-pointer group">
-                  <div class="relative flex items-center justify-center">
-                    <input type="checkbox" :checked="filterTypes.includes('vigitech')"
-                      @change="toggleFilter('vigitech')" class="peer sr-only">
-                    <div
-                      class="w-5 h-5 border-2 border-ash rounded transition-colors peer-checked:bg-rose-500 peer-checked:border-rose-500 group-hover:border-rose-500/50">
-                    </div>
-                    <IconCheck
-                      class="w-3.5 h-3.5 text-white absolute opacity-0 peer-checked:opacity-100 transition-opacity" />
-                  </div>
-                  <div class="flex items-center gap-2">
-                    <div class="p-1.5 rounded bg-rose-500/10 text-rose-500">
-                      <IconAlertTriangle class="w-4 h-4" />
-                    </div>
-                    <span class="text-sm font-medium text-BtW">Vigitech</span>
-                  </div>
-                </label>
-
-                <!-- Comments -->
-                <label class="flex items-center gap-3 cursor-pointer group">
-                  <div class="relative flex items-center justify-center">
-                    <input type="checkbox" :checked="filterTypes.includes('comment')" @change="toggleFilter('comment')"
-                      class="peer sr-only">
-                    <div
-                      class="w-5 h-5 border-2 border-ash rounded transition-colors peer-checked:bg-amber-500 peer-checked:border-amber-500 group-hover:border-amber-500/50">
-                    </div>
-                    <IconCheck
-                      class="w-3.5 h-3.5 text-white absolute opacity-0 peer-checked:opacity-100 transition-opacity" />
-                  </div>
-                  <div class="flex items-center gap-2">
-                    <div class="p-1.5 rounded bg-amber-500/10 text-amber-500">
-                      <IconMessage class="w-4 h-4" />
-                    </div>
-                    <span class="text-sm font-medium text-BtW">Commentaires</span>
-                  </div>
-                </label>
-
-                <!-- Logs -->
-                <label class="flex items-center gap-3 cursor-pointer group">
-                  <div class="relative flex items-center justify-center">
-                    <input type="checkbox" :checked="filterTypes.includes('log')" @change="toggleFilter('log')"
-                      class="peer sr-only">
-                    <div
-                      class="w-5 h-5 border-2 border-ash rounded transition-colors peer-checked:bg-slate-500 peer-checked:border-slate-500 group-hover:border-slate-500/50">
-                    </div>
-                    <IconCheck
-                      class="w-3.5 h-3.5 text-white absolute opacity-0 peer-checked:opacity-100 transition-opacity" />
-                  </div>
-                  <div class="flex items-center gap-2">
-                    <div class="p-1.5 rounded bg-slate-500/10 text-slate-500">
-                      <IconActivity class="w-4 h-4" />
-                    </div>
-                    <span class="text-sm font-medium text-BtW">Traces d'activité</span>
-                  </div>
-                </label>
-
-                <!-- Sessions -->
-                <label class="flex items-center gap-3 cursor-pointer group">
-                  <div class="relative flex items-center justify-center">
-                    <input type="checkbox" :checked="filterTypes.includes('session')" @change="toggleFilter('session')"
-                      class="peer sr-only">
-                    <div
-                      class="w-5 h-5 border-2 border-ash rounded transition-colors peer-checked:bg-emerald-500 peer-checked:border-emerald-500 group-hover:border-emerald-500/50">
-                    </div>
-                    <IconCheck
-                      class="w-3.5 h-3.5 text-white absolute opacity-0 peer-checked:opacity-100 transition-opacity" />
-                  </div>
-                  <div class="flex items-center gap-2">
-                    <div class="p-1.5 rounded bg-emerald-500/10 text-emerald-500">
-                      <IconDeviceDesktop class="w-4 h-4" />
-                    </div>
-                    <span class="text-sm font-medium text-BtW">Sessions Auth</span>
-                  </div>
-                </label>
+                <div v-if="visibleFilters.length === 0"
+                  class="text-sm text-hsa text-center italic p-3 bg-ash/10 rounded-xl border border-ash/50">
+                  Aucun événement disponible pour alimenter les filtres.
+                </div>
               </div>
             </div>
           </div>
@@ -158,8 +95,9 @@ import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { format, parseISO, isValid } from 'date-fns'
 import { fr } from 'date-fns/locale'
-import { IconArrowLeft, IconCheck, IconFileText, IconAlertTriangle, IconMessage, IconActivity, IconDeviceDesktop } from '@tabler/icons-vue'
+import { IconArrowLeft, IconCheck } from '@tabler/icons-vue'
 import { useCalendarEvents } from '~/composables/useCalendarEvents'
+import { CALENDAR_FILTERS as AVAILABLE_FILTERS } from '~/utils/calendar'
 
 definePageMeta({
   layout: 'default'
@@ -171,6 +109,7 @@ const dateParam = route.params.date as string
 const {
   loading,
   filteredEventsByDate,
+  eventsByDate,
   filterTypes,
   fetchAllEvents,
   toggleFilter
@@ -189,6 +128,51 @@ const currentDate = computed(() => {
 
 const formattedDate = computed(() => {
   return format(currentDate.value, 'EEEE d MMMM yyyy', { locale: fr })
+})
+
+// Counts and Insights
+const currentDayCounts = computed(() => {
+  const counts: Record<string, number> = {
+    docsentry: 0,
+    vigitech: 0,
+    comment: 0,
+    log: 0,
+    session: 0
+  }
+
+  const allDayEvents = eventsByDate.value[dateParam] || []
+  allDayEvents.forEach(event => {
+    if (counts[event.type] !== undefined) {
+      counts[event.type]++
+    }
+  })
+
+  return counts
+})
+
+const visibleFilters = computed(() => {
+  return AVAILABLE_FILTERS.filter(f => currentDayCounts.value[f.id] > 0)
+})
+
+const dailyInsightText = computed(() => {
+  const allEvents = eventsByDate.value[dateParam] || []
+  const count = allEvents.length
+
+  if (count === 0) return "Tout est calme aujourd'hui. Profitez de ce moment de répit!"
+
+  const counts = currentDayCounts.value
+
+  if (counts.docsentry > counts.vigitech && counts.docsentry > counts.log) {
+    return "Vous êtes à fond dans l'intégrité aujourd'hui ! Beaucoup de documents certifiés."
+  }
+  if (counts.vigitech > 0) {
+    return "Merci pour la veille active ! Des incidents ont été signalés."
+  }
+  if (count > 20) {
+    return "Vous avez beaucoup d'activités aujourd'hui. Une journée bien remplie !"
+  }
+
+  return "Une journée standard avec plusieurs événements enregistrés."
 })
 
 const currentDayEvents = computed(() => {

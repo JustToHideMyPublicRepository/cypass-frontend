@@ -1,11 +1,6 @@
 <template>
   <div class="space-y-6">
-    <div class="flex items-center justify-between">
-      <div>
-        <h1 class="text-2xl font-bold text-BtW">Calendrier d'activités</h1>
-        <p class="text-hsa">Vue unifiée de toutes vos actions et événements.</p>
-      </div>
-    </div>
+    <MeCalendarHeader />
 
     <!-- Loading State -->
     <div v-if="loading" class="grid grid-cols-1 lg:grid-cols-4 gap-6">
@@ -16,8 +11,8 @@
     <div v-else class="grid grid-cols-1 lg:grid-cols-4 gap-6">
       <!-- Sidebar -->
       <div class="lg:col-span-1">
-        <MeCalendarSidebar :current-date="currentDate" :filter-types="filterTypes" @prev-month="prevMonth"
-          @next-month="nextMonth" @toggle-filter="toggleFilter" />
+        <MeCalendarSidebar :current-date="currentDate" :filter-types="filterTypes" :events-by-date="eventsByDate"
+          @prev-month="prevMonth" @next-month="nextMonth" @update-date="updateDate" @toggle-filter="toggleFilter" />
       </div>
 
       <!-- Calendar Grid -->
@@ -43,6 +38,7 @@ useHead({
 
 const {
   loading,
+  eventsByDate,
   filteredEventsByDate,
   filterTypes,
   fetchAllEvents,
@@ -57,6 +53,10 @@ const prevMonth = () => {
 
 const nextMonth = () => {
   currentDate.value = addMonths(currentDate.value, 1)
+}
+
+const updateDate = (newDate: Date) => {
+  currentDate.value = newDate
 }
 
 onMounted(() => {
