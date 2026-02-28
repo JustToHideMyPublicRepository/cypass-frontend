@@ -29,7 +29,8 @@
             </span>
             <NuxtLink v-else :to="`/user/${incident.user_id}`"
               class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest bg-primary/10 text-primary hover:bg-primary/20 transition-colors">
-              {{ [incident.author_first_name, incident.author_last_name].filter(Boolean).join(' ') || 'Profil supprimé' }}
+              {{ [incident.author_first_name, incident.author_last_name].filter(Boolean).join(' ') || 'Profil supprimé'
+              }}
             </NuxtLink>
           </div>
 
@@ -54,6 +55,10 @@
             </span>
             <span v-if="incident.comments_count != null" class="flex items-center gap-1">
               <IconMessage class="w-3 h-3" /> {{ incident.comments_count }}
+            </span>
+            <span v-if="incident.evidence_file"
+              class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest bg-success/10 text-success flex items-center gap-1">
+              <IconPaperclip class="w-3 h-3" /> Preuve
             </span>
           </div>
         </div>
@@ -109,7 +114,7 @@
 </template>
 
 <script setup lang="ts">
-import { IconMapPin, IconClock, IconAlertCircle, IconLock, IconShare, IconChevronRight, IconEye, IconFlag, IconEdit, IconMessage, IconTrash } from '@tabler/icons-vue'
+import { IconMapPin, IconClock, IconAlertCircle, IconLock, IconShare, IconChevronRight, IconEye, IconFlag, IconEdit, IconMessage, IconTrash, IconPaperclip } from '@tabler/icons-vue'
 import type { Incident } from '~/types/vigitech'
 import { decodeHtmlEntities } from '~/utils/format'
 import { formatRelativeTime } from '~/utils/date'

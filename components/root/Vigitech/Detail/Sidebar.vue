@@ -17,7 +17,7 @@
         </button>
 
         <!-- Télécharger la preuve -->
-        <button @click="downloadEvidence"
+        <button v-if="incident.evidence_file" @click="downloadEvidence"
           class="w-full flex items-center justify-between p-4 rounded-2xl bg-ash/10 hover:bg-ash/60 border border-ash transition-all group">
           <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-xl bg-success/10 flex items-center justify-center text-success">
