@@ -1,7 +1,18 @@
 <template>
-  <UiBaseCard title="Configuration VigiTech" class="!rounded-[2rem]">
-    <div class="space-y-6">
-      <!-- Options de préférences VigiTech -->
+  <UiBaseCard class="!rounded-[2rem]">
+    <!-- Custom Header for Collapse/Expand -->
+    <template #header>
+      <div class="flex-1 flex items-center justify-between cursor-pointer group"
+        @click="settingsPref.toggleSection('vigitech')">
+        <h3 class="text-xl font-black text-BtW tracking-tight uppercase">Configuration VigiTech</h3>
+        <button class="p-2 rounded-full hover:bg-ash transition-colors text-hsa group-hover:text-primary">
+          <IconChevronDown class="w-5 h-5 transition-transform duration-300"
+            :class="{ '-rotate-180': settingsPref.display.vigitech }" />
+        </button>
+      </div>
+    </template>
+
+    <div v-show="settingsPref.display.vigitech" class="space-y-6 animate-fade-in">
       <div v-for="setting in settingsList" :key="setting.id"
         class="flex items-center justify-between gap-4 p-5 rounded-[2rem] bg-ash/20 border border-ashAct/30 transition-all hover:bg-ash/40 group/setting shadow-inner">
         <div class="flex-1">
@@ -33,11 +44,13 @@
 </template>
 
 <script setup lang="ts">
-import { IconRotate } from '@tabler/icons-vue'
+import { IconRotate, IconChevronDown } from '@tabler/icons-vue'
 import { useVigiPrefStore } from '~/stores/vigiPref'
+import { useSettingsPrefStore } from '~/stores/settingsPref'
 
 // Accès au store des préférences VigiTech
 const store = useVigiPrefStore()
+const settingsPref = useSettingsPrefStore()
 
 /**
  * Définition des options disponibles pour VigiTech.

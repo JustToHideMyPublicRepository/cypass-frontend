@@ -23,6 +23,15 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted } from 'vue'
+import { useSettingsPrefStore } from '~/stores/settingsPref'
+
+const settingsPref = useSettingsPrefStore()
+
+onMounted(() => {
+  settingsPref.loadFromLocalStorage()
+})
+
 definePageMeta({
   layout: 'default'
 })

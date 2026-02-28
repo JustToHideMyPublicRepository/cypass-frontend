@@ -21,7 +21,8 @@ export const useSearchStore = defineStore('search', {
     isOpen: false,
     query: '',
     results: [] as SearchResult[],
-    isLoading: false
+    isLoading: false,
+    recentSearches: [] as SearchResult[]
   }),
 
   actions: {
@@ -41,6 +42,50 @@ export const useSearchStore = defineStore('search', {
 
     closeSearch() {
       this.isOpen = false
+    },
+
+    loadRecentSearches() {
+      if (process.client) {
+        const saved = localStorage.getItem('cps_global_search')
+        if (saved) {
+          try {
+            this.recentSearches = JSON.parse(saved)
+          } catch (e) {
+            console.error('Failed to parse recent searches', e)
+          }
+        }
+      }
+    },
+
+    saveRecentSearches() {
+      if (process.client) {
+        localStorage.setItem('cps_global_search', JSON.stringify(this.recentSearches))
+      }
+    },
+
+    addRecentSearch(result: SearchResult) {
+      // Éviter les doublons basés sur l'ID
+      this.recentSearches = this.recentSearches.filter(r => r.id !== result.id)
+
+      // Ajouter au début
+      this.recentSearches.unshift(result)
+
+      // Limiter à 5 recherches récentes
+      if (this.recentSearches.length > 5) {
+        this.recentSearches = this.recentSearches.slice(0, 5)
+      }
+
+      this.saveRecentSearches()
+    },
+
+    removeRecentSearch(id: string) {
+      this.recentSearches = this.recentSearches.filter(r => r.id !== id)
+      this.saveRecentSearches()
+    },
+
+    clearRecentSearches() {
+      this.recentSearches = []
+      this.saveRecentSearches()
     },
 
     async performSearch(query: string) {

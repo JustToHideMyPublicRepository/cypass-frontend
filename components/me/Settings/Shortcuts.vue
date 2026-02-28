@@ -1,7 +1,18 @@
 <template>
-  <UiBaseCard title="Raccourcis clavier" class="!rounded-[2rem]">
-    <div class="space-y-6">
-      <!-- Boucle sur les options de raccourcis configurables -->
+  <UiBaseCard class="!rounded-[2rem]">
+    <!-- Custom Header for Collapse/Expand -->
+    <template #header>
+      <div class="flex-1 flex items-center justify-between cursor-pointer group"
+        @click="settingsPref.toggleSection('shortcuts')">
+        <h3 class="text-xl font-black text-BtW tracking-tight uppercase">Raccourcis clavier</h3>
+        <button class="p-2 rounded-full hover:bg-ash transition-colors text-hsa group-hover:text-primary">
+          <IconChevronDown class="w-5 h-5 transition-transform duration-300"
+            :class="{ '-rotate-180': settingsPref.display.shortcuts }" />
+        </button>
+      </div>
+    </template>
+
+    <div v-show="settingsPref.display.shortcuts" class="space-y-6 animate-fade-in">
       <div v-for="setting in settingsList" :key="setting.id"
         class="flex items-center justify-between gap-4 p-5 rounded-[2rem] bg-ash/20 border border-ashAct/30 transition-all hover:bg-ash/40 group/setting shadow-inner">
         <div class="flex-1">
@@ -34,10 +45,12 @@
 
 <script setup lang="ts">
 import { useShortcutsStore } from '~/stores/shortcuts'
-import { IconRotate } from '@tabler/icons-vue'
+import { useSettingsPrefStore } from '~/stores/settingsPref'
+import { IconRotate, IconChevronDown } from '@tabler/icons-vue'
 
 // Accès au store global des raccourcis
 const shortcutsStore = useShortcutsStore()
+const settingsPref = useSettingsPrefStore()
 
 // Définition des options disponibles pour les raccourcis.
 const settingsList = [
