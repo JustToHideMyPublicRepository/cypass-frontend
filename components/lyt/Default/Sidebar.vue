@@ -88,7 +88,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRoute } from 'nuxt/app'
-import { IconLayoutDashboard as IconDashboard, IconLogout, IconChevronLeft } from '@tabler/icons-vue'
+import { IconLayoutDashboard as IconDashboard, IconCalendar, IconLogout, IconChevronLeft } from '@tabler/icons-vue'
 import { modules } from '@/data/modules'
 import { getLinkTooltip } from '~/data/shortcuts'
 
@@ -101,7 +101,8 @@ defineEmits(['logout', 'toggle-collapse', 'close'])
 
 
 const mainLinks = [
-  { label: 'Vue d\'ensemble', path: '/dashboard', icon: IconDashboard }
+  { label: 'Vue d\'ensemble', path: '/dashboard', icon: IconDashboard },
+  { label: 'Calendrier', path: '/dashboard/calendar', icon: IconCalendar }
 ]
 
 const activeModules = computed(() => modules.filter(s => s.status === 'available'))
