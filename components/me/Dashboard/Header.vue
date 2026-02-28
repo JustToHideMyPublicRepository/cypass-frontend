@@ -36,6 +36,6 @@ const props = defineProps<{
 }>()
 
 const authStore = useAuthStore()
-const userName = computed(() => authStore.user?.first_name || 'Utilisateur')
-const role = computed(() => authStore.user?.role?.toUpperCase() || 'MEMBRE')
+const userName = computed(() => authStore.user?.first_name || 'Vous')
+const role = computed(() => authStore.user?.role?.toUpperCase() || 'Utilisateur')
 </script>

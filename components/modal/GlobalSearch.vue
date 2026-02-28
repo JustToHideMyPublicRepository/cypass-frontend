@@ -45,7 +45,7 @@
             <!-- Aucun résultat trouvé -->
             <div v-else-if="searchStore.results.length === 0 && !searchStore.isLoading" class="p-8 text-center">
               <p class="text-hsa">Aucun résultat trouvé pour "<span class="text-BtW font-medium">{{ searchQuery
-              }}</span>"
+                  }}</span>"
               </p>
             </div>
 
@@ -82,7 +82,7 @@
                       <IconCornerDownLeft class="w-4 h-4" />
                     </div>
                     <div v-else-if="result.isShortcut" class="text-hsa/40">
-                      <IconKeyboard class="w-4 h-4" />
+                      <IconSquareF1 class="w-4 h-4" />
                     </div>
                   </button>
                 </div>
@@ -126,7 +126,7 @@ import { ref, computed, watch, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import { useSearchStore } from '~/stores/search'
 import { getSearchIcon, getSearchIconStyle } from '~/utils/search'
-import { IconSearch, IconCornerDownLeft, IconExternalLink, IconKeyboard } from '@tabler/icons-vue'
+import { IconSearch, IconCornerDownLeft, IconExternalLink, IconKeyboard, IconSquareF1 } from '@tabler/icons-vue'
 
 const searchStore = useSearchStore()
 const router = useRouter()

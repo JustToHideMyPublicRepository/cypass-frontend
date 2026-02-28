@@ -50,7 +50,7 @@
               </div>
               <NuxtLink :to="`/user/${comment.user_id}`"
                 class="text-xs font-black text-BtW hover:text-primary hover:underline transition-colors">
-                {{ [comment.first_name, comment.last_name].filter(Boolean).join(' ') || 'Utilisateur' }}
+                {{ [comment.first_name, comment.last_name].filter(Boolean).join(' ') || 'Profil supprimé' }}
               </NuxtLink>
             </div>
             <div class="flex items-center gap-2">

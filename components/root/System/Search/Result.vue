@@ -47,7 +47,7 @@
           </div>
           <IconChevronRight v-if="!result.isShortcut"
             class="w-5 h-5 text-hsa group-hover:translate-x-1 transition-transform" />
-          <IconKeyboard v-else class="w-5 h-5 text-hsa/40" />
+          <IconSquareF1 v-else class="w-5 h-5 text-hsa/40" />
         </div>
       </div>
     </div>
@@ -55,7 +55,7 @@
 </template>
 
 <script setup lang="ts">
-import { IconSearch, IconChevronRight, IconKeyboard } from '@tabler/icons-vue'
+import { IconSearch, IconChevronRight, IconKeyboard, IconSquareF1 } from '@tabler/icons-vue'
 import { getSearchIcon, getSearchIconStyle } from '~/utils/search'
 
 defineProps<{

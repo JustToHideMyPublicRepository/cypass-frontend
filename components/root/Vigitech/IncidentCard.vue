@@ -29,7 +29,7 @@
             </span>
             <NuxtLink v-else :to="`/user/${incident.user_id}`"
               class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest bg-primary/10 text-primary hover:bg-primary/20 transition-colors">
-              {{ [incident.author_first_name, incident.author_last_name].filter(Boolean).join(' ') || 'Utilisateur' }}
+              {{ [incident.author_first_name, incident.author_last_name].filter(Boolean).join(' ') || 'Profil supprimé' }}
             </NuxtLink>
           </div>
 

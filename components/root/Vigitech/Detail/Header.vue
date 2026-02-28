@@ -81,6 +81,6 @@ const userAvatarUrl = computed(() => {
 })
 
 const authorName = computed(() => {
-  return [props.incident.author_first_name, props.incident.author_last_name].filter(Boolean).join(' ') || 'Utilisateur'
+  return [props.incident.author_first_name, props.incident.author_last_name].filter(Boolean).join(' ') || 'Profil supprimé'
 })
 </script>

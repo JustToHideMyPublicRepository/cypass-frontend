@@ -1,5 +1,5 @@
 <template>
-  <UiBaseCard title="Journal d'activité">
+  <UiBaseCard title="Journal d'aujourd'hui">
     <template #header>
       <UiBaseButton variant="secondary" size="sm" class="!px-2 !py-1 !text-[10px]"
         @click="navigateTo('/dashboard/logs')">Logs</UiBaseButton>
@@ -9,7 +9,7 @@
         <UiLogoLoader size="sm" />
       </div>
       <div v-else-if="!logs.length" class="py-10 text-center text-hsa">
-        Aucune activité enregistrée
+        Aucune activité enregistrée aujourd'hui
       </div>
       <div v-for="log in logs" :key="log.id"
         class="flex gap-3 text-sm p-2 rounded-xl hover:bg-ash/50 transition-all group">

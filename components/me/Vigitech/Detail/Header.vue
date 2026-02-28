@@ -42,7 +42,7 @@
         </div>
         <div class="min-w-0">
           <template v-if="incident.is_anonymous || incident.is_anonymous === 1">
-            Utilisateur anonyme
+            Anonyme
           </template>
           <template v-else>
             <NuxtLink to="/dashboard/profile" class="hover:text-primary hover:underline transition-colors">
@@ -82,6 +82,6 @@ const userAvatarUrl = computed(() => {
 })
 
 const authorName = computed(() => {
-  return [props.incident.author_first_name, props.incident.author_last_name].filter(Boolean).join(' ') || 'Utilisateur'
+  return [props.incident.author_first_name, props.incident.author_last_name].filter(Boolean).join(' ') || 'Vous'
 })
 </script>
