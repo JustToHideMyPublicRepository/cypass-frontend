@@ -3,7 +3,7 @@ import { useDocsentryStore } from '~/stores/docsentry'
 import { useVigitechStore } from '~/stores/vigitech'
 import { useProfilStore } from '~/stores/profil'
 import { useAuthStore } from '~/stores/auth'
-import { format } from 'date-fns'
+import { format, startOfMonth, endOfMonth } from 'date-fns'
 import { getCalendarFilterConfig } from '~/utils/calendar'
 
 export type EventType = 'docsentry' | 'vigitech' | 'comment' | 'log' | 'session'
@@ -32,13 +32,49 @@ export const useCalendarEvents = () => {
   const fetchAllEvents = async (date?: string) => {
     loading.value = true
     try {
+      const logParams: any = { limit: 1000, type: 'all' }
+
+      if (date) {
+        logParams.date = date
+        if (date.length === 7) { // YYYY-MM
+          const [year, month] = date.split('-')
+          logParams.month = month
+          logParams.year = year
+          const d = new Date(date + '-01')
+          const s = format(startOfMonth(d), 'yyyy-MM-dd')
+          const e = format(endOfMonth(d), 'yyyy-MM-dd')
+          // Add all possible range parameter names
+          logParams.date_start = s
+          logParams.date_end = e
+          logParams.startDate = s
+          logParams.endDate = e
+          logParams.from_date = s
+          logParams.to_date = e
+        }
+      }
+
       // Parallelize fetching
-      await Promise.all([
+      const requests: any[] = [
         docsentryStore.fetchDocuments(100, 0),
         vigitechStore.fetchUserIncidents(),
         vigitechStore.fetchUserComments(),
-        profilStore.fetchLogs({ limit: 500, type: 'all', date: date }),
-      ])
+      ]
+
+      if (date && date.length === 10) {
+        // Daily view: just fetch that day
+        requests.push(profilStore.fetchLogs({ limit: 1000, type: 'all', date: date }))
+      } else {
+        // Month view: Fetch the last 7 days individually and merge (since backend is day-only)
+        const daysToFetch: string[] = []
+        const today = new Date()
+        for (let i = 0; i < 7; i++) {
+          const d = new Date(today.getTime() - i * 86400000)
+          daysToFetch.push(format(d, 'yyyy-MM-dd'))
+        }
+        requests.push(profilStore.fetchLogsRange(daysToFetch, 300))
+      }
+
+      await Promise.all(requests)
       // Sessions don't have a state, we fetch and store locally
       sessions.value = await authStore.fetchSessions()
     } catch (error) {

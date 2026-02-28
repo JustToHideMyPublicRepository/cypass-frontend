@@ -14,9 +14,9 @@ export default defineEventHandler(async (event) => {
         'accept': 'application/json'
       },
       query: {
-        limit: query.limit || 50,
-        type: query.type || 'all',
-        date: query.date || undefined
+        limit: 50,
+        type: 'all',
+        ...query
       }
     })
 

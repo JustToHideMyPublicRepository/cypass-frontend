@@ -24,8 +24,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { addMonths, subMonths } from 'date-fns'
+import { ref, watch, onMounted } from 'vue'
+import { addMonths, subMonths, format } from 'date-fns'
 import { useCalendarEvents } from '~/composables/useCalendarEvents'
 
 definePageMeta({
@@ -59,7 +59,13 @@ const updateDate = (newDate: Date) => {
   currentDate.value = newDate
 }
 
+watch(currentDate, () => {
+  // Try to fetch for the whole month if backend allows, otherwise it will use the default day
+  const monthStr = format(currentDate.value, 'yyyy-MM')
+  fetchAllEvents(monthStr)
+}, { immediate: false })
+
 onMounted(() => {
-  fetchAllEvents()
+  fetchAllEvents(format(new Date(), 'yyyy-MM'))
 })
 </script>

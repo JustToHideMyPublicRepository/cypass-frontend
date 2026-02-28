@@ -114,7 +114,7 @@ const currentDayEvents = computed(() => {
 })
 
 useHead({
-  title: `Calendrier - ${formattedDate.value}`
+  title: `${formattedDate.value} - Calendrier`
 })
 
 onMounted(() => {

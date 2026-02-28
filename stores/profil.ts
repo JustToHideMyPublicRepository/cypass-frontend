@@ -119,6 +119,32 @@ export const useProfilStore = defineStore('profil', {
       }
     },
 
+    async fetchLogsRange(dates: string[], limit: number = 500) {
+      this.loading = true
+      this.error = null
+      try {
+        const fetchPromises = dates.map(date =>
+          $fetch<any>('/api/profile/logs', { params: { limit, date, type: 'all' } })
+        )
+        const results = await Promise.all(fetchPromises)
+        let allLogs: LogEntry[] = []
+        results.forEach(res => {
+          if (res.success && res.data?.logs) {
+            allLogs = [...allLogs, ...res.data.logs]
+          }
+        })
+        // Unique by ID to avoid duplicates if any
+        this.logs = allLogs.filter((log, index, self) =>
+          index === self.findIndex((t) => t.id === log.id)
+        )
+        return true
+      } catch (err: any) {
+        this.error = err.data?.message || 'Erreur lors de la récupération de la plage de logs'
+        return false
+      } finally {
+        this.loading = false
+      }
+    },
     async uploadAvatar(file: File) {
       this.loading = true
       this.error = null
