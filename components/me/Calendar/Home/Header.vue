@@ -7,7 +7,7 @@
       </div>
       <h1 class="text-3xl md:text-4xl font-black text-BtW tracking-tight">
         Vue unifiée <span class="text-hsa font-medium">/</span>
-        <span class="bg-gradient-to-r from-indigo-500 to-primary bg-clip-text text-transparent">Calendrier</span>
+        <span class="bg-gradient-to-r from-indigo-500 to-primary bg-clip-text text-transparent">Événements</span>
       </h1>
       <p class="text-hsa text-sm font-medium">Retrouvez toutes vos actions et événements de sécurité au même endroit.
       </p>

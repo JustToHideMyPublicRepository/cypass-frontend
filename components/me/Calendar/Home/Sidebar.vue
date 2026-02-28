@@ -19,7 +19,7 @@
             </select>
             <span class="text-hsa font-medium">/</span>
             <input type="number" v-model="selectedYear" list="year-options"
-              class="bg-transparent text-BtW font-bold text-center appearance-none cursor-pointer focus:outline-none w-16" />
+              class="bg-transparent text-BtW font-bold text-center appearance-none cursor-pointer focus:outline-none w-20" />
             <datalist id="year-options">
               <option v-for="y in years" :key="y" :value="y"></option>
             </datalist>

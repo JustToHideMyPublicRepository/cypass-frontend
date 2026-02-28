@@ -1,6 +1,6 @@
 <template>
   <div class="space-y-6">
-    <MeCalendarHeader />
+    <MeCalendarHomeHeader />
 
     <!-- Loading State -->
     <div v-if="loading" class="grid grid-cols-1 lg:grid-cols-4 gap-6">
@@ -11,13 +11,13 @@
     <div v-else class="grid grid-cols-1 lg:grid-cols-4 gap-6">
       <!-- Sidebar -->
       <div class="lg:col-span-1">
-        <MeCalendarSidebar :current-date="currentDate" :filter-types="filterTypes" :events-by-date="eventsByDate"
+        <MeCalendarHomeSidebar :current-date="currentDate" :filter-types="filterTypes" :events-by-date="eventsByDate"
           @prev-month="prevMonth" @next-month="nextMonth" @update-date="updateDate" @toggle-filter="toggleFilter" />
       </div>
 
       <!-- Calendar Grid -->
       <div class="lg:col-span-3">
-        <MeCalendarGrid :current-date="currentDate" :events-by-date="filteredEventsByDate" />
+        <MeCalendarHomeGrid :current-date="currentDate" :events-by-date="filteredEventsByDate" />
       </div>
     </div>
   </div>

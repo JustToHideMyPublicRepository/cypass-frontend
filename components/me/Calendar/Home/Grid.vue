@@ -38,7 +38,6 @@
             +{{ dayObj.events.length - 2 }} autres
           </div>
         </div>
-
       </div>
     </div>
   </UiBaseCard>
