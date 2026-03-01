@@ -8,7 +8,8 @@ export const useAuthStore = defineStore('auth', {
     initialized: false,
     error: null,
     message: null,
-    isLogoutModalOpen: false
+    isLogoutModalOpen: false,
+    mfaSession: null
   } as AuthState),
 
   getters: {
@@ -31,19 +32,95 @@ export const useAuthStore = defineStore('auth', {
       this.loading = true
       this.error = null
       try {
-        const response = await $fetch<{ success: boolean; message: string; data: { user: User; token: string } }>('/api/auth/login', {
+        const response = await $fetch<{
+          success: boolean;
+          message: string;
+          data: {
+            user?: User;
+            token?: string;
+            require_mfa?: boolean;
+            email?: string;
+          }
+        }>('/api/auth/login', {
           method: 'POST',
           body: credentials
+        })
+
+        if (response.success) {
+          if (response.data.require_mfa) {
+            this.mfaSession = {
+              email: response.data.email || credentials.email,
+              loginTime: Date.now()
+            }
+            this.message = response.message
+            return { requireMfa: true }
+          }
+
+          this.user = response.data.user!
+          this.message = response.message
+          return { success: true }
+        }
+        this.error = response.message
+        return { success: false }
+      } catch (err: any) {
+        this.error = err.data?.message || 'Une erreur est survenue lors de la connexion'
+        return { success: false }
+      } finally {
+        this.loading = false
+      }
+    },
+
+    async verifyMfa(code: string) {
+      if (!this.mfaSession) return false
+      this.loading = true
+      this.error = null
+      try {
+        const response = await $fetch<{
+          success: boolean;
+          message: string;
+          data: { user: User; token: string }
+        }>('/api/auth/verify-mfa', {
+          method: 'POST',
+          body: {
+            email: this.mfaSession.email,
+            code
+          }
         })
         if (response.success) {
           this.user = response.data.user
           this.message = response.message
+          this.mfaSession = null
           return true
         }
         this.error = response.message
         return false
       } catch (err: any) {
-        this.error = err.data?.message || 'Une erreur est survenue lors de la connexion'
+        this.error = err.data?.message || 'Code invalide ou expiré'
+        return false
+      } finally {
+        this.loading = false
+      }
+    },
+
+    async resendMfa() {
+      if (!this.mfaSession) return false
+      this.loading = true
+      this.error = null
+      try {
+        const response = await $fetch<{ success: boolean; message: string }>('/api/auth/resend-mfa', {
+          method: 'POST',
+          body: { email: this.mfaSession.email }
+        })
+        if (response.success) {
+          this.message = response.message
+          // Refresh login time to reset 10m countdown if needed, 
+          // though strictly the 10m is from initial connection according to prompt
+          return true
+        }
+        this.error = response.message
+        return false
+      } catch (err: any) {
+        this.error = err.data?.message || 'Erreur lors du renvoi du code'
         return false
       } finally {
         this.loading = false

@@ -104,12 +104,15 @@ const toastStore = useToastStore()
 const handleLogin = async () => {
   loading.value = true
 
-  const success = await authStore.login({
+  const result = await authStore.login({
     email: email.value,
     password: password.value
   })
 
-  if (success) {
+  if (result.requireMfa) {
+    toastStore.showToast('success', 'Vérification requise', authStore.message || 'Un code a été envoyé.')
+    setTimeout(() => navigateTo('/auth/mfa'), 1000)
+  } else if (result.success) {
     toastStore.showToast('success', 'Bienvenue', authStore.message || 'Connexion réussie !')
     setTimeout(() => navigateTo('/dashboard'), 1000)
   } else {

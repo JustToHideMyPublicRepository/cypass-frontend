@@ -11,6 +11,7 @@ export interface User {
 
 export interface AuthState {
   user: User | null
+  mfaSession: { email: string; loginTime: number } | null
   loading: boolean
   initialized: boolean
   error: string | null
