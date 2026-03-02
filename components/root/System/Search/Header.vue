@@ -6,6 +6,20 @@
     </div>
 
     <div class="flex items-center gap-3">
+      <!-- Filtre de tri -->
+      <div class="flex items-center gap-2 mr-2">
+        <label for="sort" class="text-[10px] font-black text-hsa uppercase tracking-widest hidden sm:block">Trier
+          par</label>
+        <select :value="sortValue" @change="$emit('update:sortValue', ($event.target as HTMLSelectElement).value)"
+          class="px-3 py-1.5 rounded-lg bg-WtB border border-ash focus:ring-2 focus:ring-primary outline-none text-BtW text-xs cursor-pointer font-bold">
+          <option value="default">Catégorie</option>
+          <option value="alpha-asc">Nom (A-Z)</option>
+          <option value="alpha-desc">Nom (Z-A)</option>
+          <option value="count-desc">Plus d'éléments</option>
+          <option value="count-asc">Moins d'éléments</option>
+        </select>
+      </div>
+
       <UiBaseButton v-if="resultsCount === 0" variant="primary" @click="$emit('modify')"
         class="gap-2 shadow-lg shadow-primary/20">
         <IconSearch class="w-4 h-4" />
@@ -25,7 +39,8 @@ import { IconSearch, IconRotate } from '@tabler/icons-vue'
 defineProps<{
   query: string
   resultsCount: number
+  sortValue: string
 }>()
 
-defineEmits(['modify', 'reset'])
+defineEmits(['modify', 'reset', 'update:sortValue'])
 </script>

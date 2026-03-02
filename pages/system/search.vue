@@ -1,7 +1,7 @@
 <template>
   <div class="max-w-6xl mx-auto px-4 py-8">
-    <RootSystemSearchHeader :query="query" :resultsCount="totalCount" @modify="searchStore.openSearch()"
-      @reset="performSearch" />
+    <RootSystemSearchHeader :query="query" :resultsCount="totalCount" v-model:sortValue="currentSort"
+      @modify="searchStore.openSearch()" @reset="performSearch" />
 
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
       <!-- Sidebar Filters (1/4) -->
@@ -18,7 +18,7 @@
 
       <!-- Recherches récentes (1/4)-->
       <div class="lg:col-span-1">
-        <RootSystemSearchRecentSearches @navigate="navigateToResult" />
+        <RootSystemSearchRecents @navigate="navigateToResult" />
       </div>
     </div>
   </div>
@@ -38,6 +38,7 @@ const router = useRouter()
 const searchStore = useSearchStore()
 const loading = ref(true)
 const activeFilter = ref('all')
+const currentSort = ref('default')
 
 const query = computed(() => route.query.q as string || '')
 
@@ -49,8 +50,33 @@ const performSearch = async () => {
 }
 
 const filteredResults = computed(() => {
-  if (activeFilter.value === 'all') return searchStore.results
-  return searchStore.results.filter(r => r.category === activeFilter.value)
+  let results = [...searchStore.results]
+
+  // Filter by category
+  if (activeFilter.value !== 'all') {
+    results = results.filter(r => r.category === activeFilter.value)
+  }
+
+  // Apply sorting
+  switch (currentSort.value) {
+    case 'alpha-asc':
+      results.sort((a, b) => a.title.localeCompare(b.title))
+      break
+    case 'alpha-desc':
+      results.sort((a, b) => b.title.localeCompare(a.title))
+      break
+    case 'count-desc':
+      results.sort((a, b) => (categoryCounts.value[b.category || 'Autres'] || 0) - (categoryCounts.value[a.category || 'Autres'] || 0))
+      break
+    case 'count-asc':
+      results.sort((a, b) => (categoryCounts.value[a.category || 'Autres'] || 0) - (categoryCounts.value[b.category || 'Autres'] || 0))
+      break
+    default:
+      // Keep relevance order from store
+      break
+  }
+
+  return results
 })
 
 const categoryCounts = computed(() => {
