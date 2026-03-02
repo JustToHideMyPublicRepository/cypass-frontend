@@ -1,76 +1,86 @@
 <template>
-  <div class="w-full max-w-md">
-    <div class="mb-8 text-center">
+  <div class="w-full max-w-md mx-auto">
+    <!-- En-tête -->
+    <div class="mb-8 text-center text-BtW">
       <div class="inline-flex p-3 rounded-2xl bg-primary/10 text-primary mb-4">
         <IconShieldCheck class="w-8 h-8" />
       </div>
-      <h2 class="text-3xl font-black text-BtW tracking-tight mb-2 uppercase">Vérification</h2>
-      <p class="text-hsa font-medium">Un code de sécurité a été envoyé à <br /><span class="text-BtW font-bold">{{
-        authStore.mfaSession?.email }}</span></p>
+      <h2 class="text-3xl font-black tracking-tight mb-2 uppercase">Vérification</h2>
+      <p class="text-hsa font-medium leading-relaxed">
+        Un code de sécurité a été envoyé à <br />
+        <span class="font-bold text-BtW">{{ maskedEmail }}</span>
+      </p>
     </div>
 
-    <div class="bg-WtB shadow-2xl rounded-3xl p-6 md:p-8 border border-ash/50">
-      <div class="space-y-6">
-        <!-- Segmented Code Input -->
-        <div>
-          <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-6 text-center">Code de
-            sécurité</label>
+    <!-- Conteneur de saisie -->
+    <div class="bg-WtB shadow-2xl rounded-3xl p-4 sm:p-8 border border-ash/50 overflow-hidden text-BtW">
+      <div class="space-y-8">
+        <!-- Groupe de saisie segmenté -->
+        <div class="flex flex-col items-center">
+          <label class="block text-[10px] font-black text-hsa uppercase tracking-[0.2em] mb-6 text-center">
+            Code de sécurité
+          </label>
 
-          <div class="flex flex-col gap-4">
-            <div class="flex justify-center items-center gap-2 md:gap-3">
-              <!-- Group 1 -->
-              <div class="flex gap-1 md:gap-2">
+          <!-- Cases à remplir -->
+          <div class="flex items-center justify-center gap-4 sm:gap-6">
+            <div class="flex items-center gap-0.5 sm:gap-2">
+              <!-- Groupe 1 (3 chiffres) -->
+              <div class="flex gap-0.5 sm:gap-1">
                 <input v-for="i in 3" :key="i - 1" :id="'code-' + (i - 1)" v-model="digits[i - 1]" type="text"
-                  maxlength="1" @input="handleDigitInput(i - 1, $event)"
+                  maxlength="1" placeholder="•" @input="handleDigitInput(i - 1, $event)"
                   @keydown.delete="handleBackspace(i - 1, $event)" @paste="handlePaste" :disabled="loading"
-                  class="code-input" />
+                  class="code-input" :class="{ 'is-filled': digits[i - 1] }" />
               </div>
 
-              <div class="w-2 h-0.5 bg-ashAct rounded-full"></div>
+              <!-- Séparateur 1 -->
+              <span class="font-bold text-lg px-0.5 select-none opacity-50 text-BtW">-</span>
 
-              <!-- Group 2 -->
-              <div class="flex gap-1 md:gap-2">
+              <!-- Groupe 2 (3 chiffres) -->
+              <div class="flex gap-0.5 sm:gap-1">
                 <input v-for="i in 3" :key="i + 2" :id="'code-' + (i + 2)" v-model="digits[i + 2]" type="text"
-                  maxlength="1" @input="handleDigitInput(i + 2, $event)"
+                  maxlength="1" placeholder="•" @input="handleDigitInput(i + 2, $event)"
                   @keydown.delete="handleBackspace(i + 2, $event)" @paste="handlePaste" :disabled="loading"
-                  class="code-input" />
+                  class="code-input" :class="{ 'is-filled': digits[i + 2] }" />
               </div>
 
-              <div class="w-2 h-0.5 bg-ashAct rounded-full"></div>
+              <!-- Séparateur 2 -->
+              <span class="font-bold text-lg px-0.5 select-none opacity-50 text-BtW">-</span>
 
-              <!-- Group 3 -->
-              <div class="flex gap-1 md:gap-2">
+              <!-- Groupe 3 (3 chiffres) -->
+              <div class="flex gap-0.5 sm:gap-1">
                 <input v-for="i in 3" :key="i + 5" :id="'code-' + (i + 5)" v-model="digits[i + 5]" type="text"
-                  maxlength="1" @input="handleDigitInput(i + 5, $event)"
+                  maxlength="1" placeholder="•" @input="handleDigitInput(i + 5, $event)"
                   @keydown.delete="handleBackspace(i + 5, $event)" @paste="handlePaste" :disabled="loading"
-                  class="code-input" />
+                  class="code-input" :class="{ 'is-filled': digits[i + 5] }" />
               </div>
             </div>
 
-            <!-- Loading Indicator -->
-            <div v-if="loading" class="flex justify-center text-primary mt-2">
-              <IconLoader2 class="w-6 h-6 animate-spin" />
+            <!-- Indicateur de chargement -->
+            <div v-if="loading" class="flex-shrink-0">
+              <UiLogoLoader size="sm" />
             </div>
           </div>
         </div>
 
-        <!-- Countdown and Resend -->
-        <div class="text-center">
-          <p v-if="timeLeft > 0" class="text-sm text-hsa font-medium">
-            Renvoyer le code dans <span class="text-primary font-bold">{{ formattedTime }}</span>
+        <!-- Compte à rebours et Action de renvoi -->
+        <div class="text-center space-y-3">
+          <p v-if="timeLeft > 0" class="text-xs text-hsa font-bold uppercase tracking-wider text-BtW">
+            Renvoyer le code dans <span class="text-primary font-black">{{ formattedTime }}</span>
           </p>
-          <UiBaseButton v-else @click="handleResend" variant="ghost" size="sm" :loading="resendLoading"
-            class="!text-xs font-black uppercase tracking-widest !text-primary hover:!bg-primary/5">
-            Renvoyer le code
-          </UiBaseButton>
+          <div v-else class="flex justify-center text-BtW">
+            <UiBaseButton @click="handleResend" variant="ghost" size="sm" :loading="resendLoading"
+              class="!text-[10px] font-black uppercase tracking-[0.2em] !text-primary hover:!bg-primary/5 px-6 py-2 rounded-xl">
+              Renvoyer le code
+            </UiBaseButton>
+          </div>
         </div>
       </div>
 
-      <!-- Back to login link -->
+      <!-- Lien vers la page de login -->
       <div class="mt-8 pt-6 border-t border-ash/50 text-center">
         <button @click="goBack"
-          class="text-sm text-hsa hover:text-primary transition-colors font-bold inline-flex items-center gap-2">
-          <IconArrowLeft class="w-4 h-4" />
+          class="text-[10px] text-hsa hover:text-primary transition-all font-black uppercase tracking-[0.2em] inline-flex items-center gap-2 group">
+          <IconArrowLeft class="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" />
           Retour à la connexion
         </button>
       </div>
@@ -97,11 +107,28 @@ const timeLeft = ref(600)
 
 let timer: any = null
 
+/* --- État Calculé --- */
+
+// Masquage de l'email pour la confidentialité
+const maskedEmail = computed(() => {
+  const email = authStore.mfaSession?.email || ''
+  if (!email.includes('@')) return email
+
+  const [local, domain] = email.split('@')
+  if (local.length <= 2) {
+    return `${local[0]}***@${domain}`
+  }
+  return `${local[0]}***${local[local.length - 1]}@${domain}`
+})
+
+// Formattage du temps MM:SS
 const formattedTime = computed(() => {
   const mins = Math.floor(timeLeft.value / 60)
   const secs = timeLeft.value % 60
   return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
 })
+
+/* --- Logique Métier --- */
 
 const startTimer = () => {
   if (timer) clearInterval(timer)
@@ -121,12 +148,23 @@ const focusInput = (index: number) => {
   }
 }
 
+/* --- Gestionnaires d'Événements --- */
+
 const handleDigitInput = (index: number, e: Event) => {
   const input = e.target as HTMLInputElement
   const char = input.value.toUpperCase().slice(-1)
-  digits.value[index] = char
-  input.value = char // Ensure only 1 char is displayed
 
+  // N'accepte que l'alphanumérique
+  if (char && !/^[A-Z0-9]$/.test(char)) {
+    input.value = ''
+    digits.value[index] = ''
+    return
+  }
+
+  digits.value[index] = char
+  input.value = char
+
+  // Avance automatique
   if (char && index < 8) {
     focusInput(index + 1)
   }
@@ -135,6 +173,7 @@ const handleDigitInput = (index: number, e: Event) => {
 }
 
 const handleBackspace = (index: number, e: KeyboardEvent) => {
+  // Recule si la case actuelle est vide
   if (!digits.value[index] && index > 0) {
     focusInput(index - 1)
   }
@@ -167,7 +206,7 @@ const verifyCode = async (code: string) => {
   const success = await authStore.verifyMfa(code)
 
   if (success) {
-    toastStore.showToast('success', 'Vérifié', authStore.message || 'Accès autorisé.')
+    toastStore.showToast('success', 'Vérifié', authStore.message || 'Authentification réussie.')
     setTimeout(() => navigateTo('/dashboard'), 1000)
   } else {
     toastStore.showToast('error', 'Erreur', authStore.error || 'Code incorrect ou expiré.')
@@ -180,11 +219,11 @@ const handleResend = async () => {
   const success = await authStore.resendMfa()
 
   if (success) {
-    toastStore.showToast('success', 'Code renvoyé', authStore.message || 'Consultez vos emails.')
+    toastStore.showToast('success', 'Renvoyé', authStore.message || 'Nouveau code envoyé par email.')
     timeLeft.value = 600
     startTimer()
   } else {
-    toastStore.showToast('error', 'Erreur', authStore.error || 'Échec du renvoi.')
+    toastStore.showToast('error', 'Échec', authStore.error || 'Erreur lors du renvoi.')
   }
   resendLoading.value = false
 }
@@ -193,6 +232,8 @@ const goBack = () => {
   authStore.mfaSession = null
   navigateTo('/auth/login')
 }
+
+/* --- Cycle de Vie --- */
 
 onMounted(() => {
   if (!authStore.mfaSession) {
@@ -204,8 +245,6 @@ onMounted(() => {
   timeLeft.value = Math.max(0, 600 - elapsed)
 
   startTimer()
-
-  // Auto-focus first input
   setTimeout(() => focusInput(0), 100)
 })
 
@@ -214,12 +253,23 @@ onUnmounted(() => {
 })
 
 useHead({
-  title: 'Vérification MFA'
+  title: 'MFA - Vérification'
 })
 </script>
 
 <style scoped>
 .code-input {
-  @apply w-10 h-14 md:w-12 md:h-16 text-center text-xl md:text-2xl font-black rounded-xl border border-ashAct focus:ring-4 focus:ring-primary/10 focus:border-primary bg-ash/30 transition-all outline-none text-BtW uppercase
+  /* Dimensions ultra-compactes pour mobile, s'adaptant aux écrans étroits */
+  @apply w-7 h-10 text-center rounded-lg sm:rounded-xl border border-ashAct focus:ring-4 focus:ring-primary/10 focus:border-primary bg-ash/30 transition-all outline-none text-BtW uppercase placeholder:text-ashAct/30;
+}
+
+.code-input.is-filled {
+  @apply border-primary/50 bg-primary/5 shadow-sm;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 </style>
