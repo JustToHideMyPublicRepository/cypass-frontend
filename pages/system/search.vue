@@ -4,19 +4,28 @@
       @reset="performSearch" />
 
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-      <!-- Sidebar Filters -->
-      <RootSystemSearchSidebar v-model:activeFilter="activeFilter" :totalCount="totalCount"
-        :categoryCounts="categoryCounts" />
+      <!-- Sidebar Filters (1/4) -->
+      <div class="lg:col-span-1">
+        <RootSystemSearchSidebar v-model:activeFilter="activeFilter" :totalCount="totalCount"
+          :categoryCounts="categoryCounts" />
+      </div>
 
-      <!-- Results Main -->
-      <RootSystemSearchResult :results="filteredResults" :loading="loading" :query="query" @navigate="navigateToResult"
-        @modify="searchStore.openSearch()" @reset="performSearch" />
+      <!-- Results Main (2/4) -->
+      <div class="lg:col-span-2">
+        <RootSystemSearchResult :results="filteredResults" :loading="loading" :query="query"
+          @navigate="navigateToResult" @modify="searchStore.openSearch()" @reset="performSearch" />
+      </div>
+
+      <!-- Recherches récentes (1/4)-->
+      <div class="lg:col-span-1">
+        <RootSystemSearchRecentSearches @navigate="navigateToResult" />
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useSearchStore } from '~/stores/search'
 
@@ -56,8 +65,15 @@ const categoryCounts = computed(() => {
 const totalCount = computed(() => searchStore.results.length)
 
 const navigateToResult = (result: any) => {
+  // Enregistrer comme recherche récente
+  searchStore.addRecentSearch(result)
   if (result.path) router.push(result.path)
 }
+
+// Charger les recherches récentes
+onMounted(() => {
+  searchStore.loadRecentSearches()
+})
 
 // Watchers
 watch(query, () => {

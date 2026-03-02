@@ -92,6 +92,15 @@
                 </button>
               </div>
             </div>
+
+            <!-- Restaurer les paramètres par défaut -->
+            <div class="pt-4 flex justify-end">
+              <UiBaseButton @click="resetScheduleDefaults" variant="ghost"
+                class="!inline-flex !items-center !gap-2 !px-3 !py-1.5 !text-[11px] !font-bold !uppercase tracking-wider">
+                <IconRotate class="w-4 h-4" />
+                Restaurer Defaults
+              </UiBaseButton>
+            </div>
           </div>
         </Transition>
       </div>
@@ -101,12 +110,14 @@
 
 <script setup lang="ts">
 import { onMounted, onUnmounted } from 'vue'
-import { IconSun, IconMoon, IconDeviceDesktop, IconSolarPanel2, IconChevronDown } from '@tabler/icons-vue'
+import { IconSun, IconMoon, IconDeviceDesktop, IconSolarPanel2, IconChevronDown, IconRotate } from '@tabler/icons-vue'
 import { useAutoTheme } from '~/composables/useAutoTheme'
 import { useSettingsPrefStore } from '~/stores/settingsPref'
+import { useToastStore } from '~/stores/toast'
 
 const { isAutoTimeEnabled, autoThemeSchedule, updateSchedule } = useAutoTheme()
 const settingsPref = useSettingsPrefStore()
+const toast = useToastStore()
 
 const days = [
   { id: 1, label: 'Lun' },
@@ -122,13 +133,26 @@ const toggleDay = (dayId: number) => {
   const currentDays = [...autoThemeSchedule.value.activeDays]
   const index = currentDays.indexOf(dayId)
   if (index > -1) {
-    if (currentDays.length > 1) { // Au moins un jour doit être actif
+    if (currentDays.length > 1) {
       currentDays.splice(index, 1)
+    } else {
+      // Au moins un jour doit rester actif
+      toast.showToast('warning', 'Action impossible', 'Au moins un jour doit rester actif pour la planification automatique.')
+      return
     }
   } else {
     currentDays.push(dayId)
   }
   updateSchedule({ activeDays: currentDays })
+}
+
+// Restaurer les paramètres de planification par défaut
+const resetScheduleDefaults = () => {
+  updateSchedule({
+    dayStart: '08:00',
+    dayEnd: '18:00',
+    activeDays: [1, 2, 3, 4, 5]
+  })
 }
 
 // Écouter si l'utilisateur modifie le thème manuellement via ThemeToggle.vue

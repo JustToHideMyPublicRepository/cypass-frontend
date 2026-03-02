@@ -1,5 +1,5 @@
 <template>
-  <main class="lg:col-span-3 space-y-6">
+  <main class="space-y-6">
     <!-- État de chargement -->
     <div v-if="loading" class="space-y-4">
       <UiAppSkeleton v-for="i in 5" :key="i" height="80px" />
