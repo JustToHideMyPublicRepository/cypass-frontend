@@ -5,7 +5,7 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- Carte de commentaire individuelle -->
         <NuxtLink v-for="comment in paginatedItems" :key="comment.id" :to="`/vigitech/${comment.incident_id}`"
-          class="group relative flex flex-col bg-WtB/60 backdrop-blur-xl p-6 md:p-7 rounded-[3rem] border border-ash hover:border-primary/40 hover:bg-WtB hover:shadow-[0_20px_50px_rgba(var(--primary-rgb),0.1)] transition-all duration-500 overflow-hidden">
+          class="group relative flex flex-col bg-ash/80 backdrop-blur-xl p-6 md:p-7 rounded-[3rem] border border-ash hover:border-primary/40 hover:bg-WtB hover:shadow-[0_20px_50px_rgba(var(--primary-rgb),0.1)] transition-all duration-500 overflow-hidden">
 
           <!-- Effet de brillance au survol -->
           <div

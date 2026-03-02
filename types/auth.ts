@@ -6,6 +6,7 @@ export interface User {
   organization: string | null
   avatar_url: string | null
   role: string
+  mfa_enabled: boolean
   created_at: string
 }
 

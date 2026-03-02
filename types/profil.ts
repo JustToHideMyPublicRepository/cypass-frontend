@@ -8,6 +8,7 @@ export interface UserProfile {
   role: string
   status: 'pending' | 'active' | 'pending_delete' | 'deleted' | 'suspended'
   email_verified: boolean
+  mfa_enabled: boolean
   created_at: string
 }
 

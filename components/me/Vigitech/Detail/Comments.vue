@@ -31,9 +31,36 @@
                   {{ [comment.first_name, comment.last_name].filter(Boolean).join(' ') || 'Utilisateur' }}
                 </NuxtLink>
               </div>
-              <span class="text-[10px] text-hsa font-bold">{{ formatDate(comment.created_at) }}</span>
+              <div class="flex items-center gap-2">
+                <span class="text-[10px] text-hsa font-bold">{{ formatDate(comment.created_at) }}</span>
+                <button v-if="canEditComment(comment)" @click="startEditComment(comment)"
+                  class="p-1 rounded-lg hover:bg-primary/10 text-hsa hover:text-primary transition-colors"
+                  title="Modifier">
+                  <IconEdit class="w-3.5 h-3.5" />
+                </button>
+                <button v-if="isOwner(comment)" @click="confirmDeleteComment(comment.id)"
+                  class="p-1 rounded-lg hover:bg-danger/10 text-hsa hover:text-danger transition-colors"
+                  title="Supprimer">
+                  <IconTrash class="w-3.5 h-3.5" />
+                </button>
+              </div>
             </div>
-            <p class="text-xs text-BtW leading-relaxed pl-8">{{ comment.content }}</p>
+
+            <!-- Inline Edit -->
+            <div v-if="editingCommentId === comment.id" class="pl-8 space-y-2">
+              <textarea v-model="editCommentContent" rows="2"
+                class="w-full p-3 rounded-xl bg-WtB border border-ash/50 text-xs font-medium outline-none focus:ring-2 focus:ring-primary transition-all resize-none" />
+              <div class="flex gap-2 justify-end">
+                <UiBaseButton variant="ghost" size="sm" @click="cancelEditComment" class="!rounded-lg !text-[9px]">
+                  Annuler
+                </UiBaseButton>
+                <UiBaseButton variant="primary" size="sm" @click="saveEditComment(comment)"
+                  :disabled="!editCommentContent.trim() || savingComment" class="!rounded-lg !text-[9px]">
+                  {{ savingComment ? 'Enregistrement...' : 'Enregistrer' }}
+                </UiBaseButton>
+              </div>
+            </div>
+            <p v-else class="text-xs text-BtW leading-relaxed pl-8">{{ comment.content }}</p>
           </div>
         </div>
 
@@ -42,30 +69,106 @@
           <p class="text-[11px] text-hsa font-bold">Aucun commentaire.</p>
         </div>
       </template>
+
+      <!-- Delete Confirmation -->
+      <UiConfirmModal :show="showDeleteConfirm" title="Supprimer le commentaire"
+        message="Êtes-vous sûr de vouloir supprimer ce commentaire ?" confirm-text="Supprimer"
+        :loading="deletingComment" variant="danger" @cancel="showDeleteConfirm = false"
+        @confirm="handleDeleteComment" />
     </div>
   </UiBaseCard>
 </template>
 
 <script setup lang="ts">
-import { IconMessage, IconChevronUp, IconChevronDown } from '@tabler/icons-vue'
+import { IconMessage, IconChevronUp, IconChevronDown, IconEdit, IconTrash } from '@tabler/icons-vue'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { getUserAvatarUrl } from '~/utils/user'
 import { useVigiPrefStore } from '~/stores/vigiPref'
+import { useAuthStore } from '~/stores/auth'
+import { useVigitechStore } from '~/stores/vigitech'
+import { useToastStore } from '~/stores/toast'
 
 const props = defineProps<{
+  incidentId: string
   comments: any[]
   loading: boolean
   commentsCount?: number
 }>()
 
 const prefStore = useVigiPrefStore()
+const authStore = useAuthStore()
+const store = useVigitechStore()
+const toast = useToastStore()
+
 const showComments = ref(prefStore.display.showComments)
 
 // React to preference changes
 watch(() => prefStore.display.showComments, (val) => {
   showComments.value = val
 })
+
+const editingCommentId = ref<string | null>(null)
+const editCommentContent = ref('')
+const savingComment = ref(false)
+const showDeleteConfirm = ref(false)
+const commentIdToDelete = ref<string | null>(null)
+const deletingComment = ref(false)
+
+const isOwner = (comment: any) => {
+  return authStore.user && comment.user_id === authStore.user.id
+}
+
+const canEditComment = (comment: any) => {
+  if (!isOwner(comment)) return false
+  const createdAt = new Date(comment.created_at).getTime()
+  const now = Date.now()
+  const hoursDiff = (now - createdAt) / (1000 * 60 * 60)
+  return hoursDiff <= 24
+}
+
+const startEditComment = (comment: any) => {
+  editingCommentId.value = comment.id
+  editCommentContent.value = comment.content
+}
+
+const cancelEditComment = () => {
+  editingCommentId.value = null
+  editCommentContent.value = ''
+}
+
+const saveEditComment = async (comment: any) => {
+  if (!editCommentContent.value.trim()) return
+  savingComment.value = true
+  const result = await store.updateComment(comment.id, editCommentContent.value.trim(), props.incidentId)
+  if (result.success) {
+    toast.showToast('success', 'Commentaire modifié', result.message || 'Votre commentaire a été mis à jour.')
+    editingCommentId.value = null
+    editCommentContent.value = ''
+  } else {
+    toast.showToast('error', 'Erreur', result.message || 'Impossible de modifier le commentaire.')
+  }
+  savingComment.value = false
+}
+
+const confirmDeleteComment = (id: string) => {
+  commentIdToDelete.value = id
+  showDeleteConfirm.value = true
+}
+
+const handleDeleteComment = async () => {
+  if (!commentIdToDelete.value) return
+  deletingComment.value = true
+  const result = await store.deleteComment(commentIdToDelete.value, props.incidentId)
+  if (result.success) {
+    toast.showToast('success', 'Commentaire supprimé', result.message || 'Le commentaire a été supprimé.')
+  } else {
+    toast.showToast('error', 'Erreur', result.message || 'Impossible de supprimer le commentaire.')
+  }
+  deletingComment.value = false
+  showDeleteConfirm.value = false
+  commentIdToDelete.value = null
+}
 
 const getAvatar = (comment: any) => {
   return getUserAvatarUrl((comment as any).avatar_url || null, comment.first_name || null, comment.last_name || null)

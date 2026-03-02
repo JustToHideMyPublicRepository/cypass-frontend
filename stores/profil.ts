@@ -258,6 +258,34 @@ export const useProfilStore = defineStore('profil', {
       if (authStore.user) {
         authStore.user.avatar_url = url
       }
+    },
+    async toggleMfa(enabled: boolean) {
+      this.loading = true
+      this.error = null
+      try {
+        const response = await $fetch<{ success: boolean; data: { mfa_enabled: boolean }; message: string }>('/api/profile/mfa', {
+          method: 'PATCH',
+          body: { mfa_enabled: enabled }
+        })
+
+        if (response.success) {
+          this.message = response.message
+          if (this.profile) {
+            this.profile.mfa_enabled = response.data.mfa_enabled
+          }
+          const authStore = useAuthStore()
+          if (authStore.user) {
+            authStore.user.mfa_enabled = response.data.mfa_enabled
+          }
+          return true
+        }
+        return false
+      } catch (err: any) {
+        this.error = err.data?.message || 'Erreur lors du changement du MFA'
+        return false
+      } finally {
+        this.loading = false
+      }
     }
   }
 })

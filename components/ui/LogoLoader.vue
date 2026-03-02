@@ -42,7 +42,7 @@
 
 <script setup lang="ts">
 const props = withDefaults(defineProps<{
-  size?: 'sm' | 'md' | 'lg' | 'xl'
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
   containerClass?: string
 }>(), {
   size: 'md',
@@ -50,6 +50,7 @@ const props = withDefaults(defineProps<{
 })
 
 const sizeClasses = {
+  xs: 'w-4 h-4',
   sm: 'w-8 h-8',
   md: 'w-12 h-12',
   lg: 'w-14 h-14 md:w-16 md:h-16',

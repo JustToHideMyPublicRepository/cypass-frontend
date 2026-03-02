@@ -103,7 +103,7 @@
 
   /* Interrupteur Classic (Slider) - Bouton visible avec bordure */
   .input-toggle-slider {
-    @apply w-12 h-6 bg-ashAct/20 rounded-full transition-all shadow-sm relative border border-transparent;
+    @apply w-12 h-6 bg-ashAct/20 rounded-full transition-all shadow-sm relative border border-ash/70;
   }
 
   .input-toggle-slider::after {
