@@ -60,7 +60,7 @@
                 title="Modifier le commentaire">
                 <IconEdit class="w-3.5 h-3.5" />
               </button>
-              <button v-if="canEditComment(comment)" @click="confirmDeleteComment(comment.id)"
+              <button @click="confirmDeleteComment(comment.id)"
                 class="p-1 rounded-lg hover:bg-danger/10 text-hsa hover:text-danger transition-colors"
                 title="Supprimer le commentaire">
                 <IconTrash class="w-3.5 h-3.5" />
@@ -93,7 +93,7 @@
 
     <UiConfirmModal :show="showDeleteConfirm" title="Supprimer le commentaire"
       message="Êtes-vous sûr de vouloir supprimer ce commentaire ?" confirm-text="Supprimer" :loading="deletingComment"
-      variant="danger" @close="showDeleteConfirm = false" @confirm="handleDeleteComment" />
+      variant="danger" @cancel="showDeleteConfirm = false" @confirm="handleDeleteComment" />
   </div>
 </template>
 

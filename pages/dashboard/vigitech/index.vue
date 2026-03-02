@@ -33,7 +33,7 @@
 
     <UiConfirmModal :show="showDeleteConfirm" title="Supprimer l'incident"
       message="Êtes-vous sûr de vouloir supprimer cet incident ? Cette action est irréversible."
-      confirm-text="Supprimer" :loading="deleting" variant="danger" @close="showDeleteConfirm = false"
+      confirm-text="Supprimer" :loading="deleting" variant="danger" @cancel="showDeleteConfirm = false"
       @confirm="handleDelete" />
   </div>
 </template>

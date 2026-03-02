@@ -23,7 +23,7 @@
 
     <UiConfirmModal :show="showDeleteConfirm" title="Supprimer le commentaire"
       message="Êtes-vous sûr de vouloir supprimer ce commentaire ?" confirm-text="Supprimer" :loading="deleting"
-      variant="danger" @close="showDeleteConfirm = false" @confirm="handleDelete" />
+      variant="danger" @cancel="showDeleteConfirm = false" @confirm="handleDelete" />
   </div>
 </template>
 
