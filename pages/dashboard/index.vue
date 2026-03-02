@@ -20,13 +20,13 @@
       <MeDashboardActivityFeed :logs="profilStore.logs.slice(0, 4)" :loading="loading" :format-time="formatTime" />
     </div>
 
-    <!-- Quick Actions & Trust Center Row -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Quick Actions, Access Links & Trust Center Row -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <MeDashboardQuickActions @upload="modals.upload = true" @verify="modals.verify = true"
         @create="modals.createIncident = true" />
-      <div class="lg:col-span-2">
-        <MeDashboardTrustCenter />
-      </div>
+      <MeDashboardAccessLinks />
+
+      <MeDashboardTrustCenter class="md:col-span-2 lg:col-span-2" />
     </div>
 
     <!-- Modals -->
