@@ -64,14 +64,14 @@ export const useCalendarEvents = () => {
         // Daily view: just fetch that day
         requests.push(profilStore.fetchLogs({ limit: 1000, type: 'all', date: date }))
       } else {
-        // Month view: Fetch the last 7 days individually and merge (since backend is day-only)
+        // Month view: Fetch the last 30 days individually and merge (since backend is day-only)
         const daysToFetch: string[] = []
         const today = new Date()
-        for (let i = 0; i < 7; i++) {
+        for (let i = 0; i < 30; i++) {
           const d = new Date(today.getTime() - i * 86400000)
           daysToFetch.push(format(d, 'yyyy-MM-dd'))
         }
-        requests.push(profilStore.fetchLogsRange(daysToFetch, 300))
+        requests.push(profilStore.fetchLogsRange(daysToFetch, 1000))
       }
 
       await Promise.all(requests)
@@ -152,7 +152,7 @@ export const useCalendarEvents = () => {
           type: 'log',
           color: getCalendarFilterConfig('log')?.classes.text || 'text-hsa',
           bgColor: getCalendarFilterConfig('log')?.classes.bgLight || 'bg-hsa/10',
-          url: '/dashboard/logs'
+          url: `/dashboard/logs?date=${format(new Date(ts), 'yyyy-MM-dd')}`
         })
       })
     }

@@ -13,11 +13,13 @@
 
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useProfilStore } from '~/stores/profil'
-import { format } from 'date-fns'
+import { format, isValid, parseISO } from 'date-fns'
 
 const profilStore = useProfilStore()
+const route = useRoute()
 
 definePageMeta({
   layout: 'default'
@@ -31,7 +33,7 @@ const { logs, logStatistics, logUser, logFilters } = storeToRefs(profilStore)
 const loading = ref(false)
 
 const filters = ref({
-  date: format(new Date(), 'yyyy-MM-dd'),
+  date: (route.query.date as string) || format(new Date(), 'yyyy-MM-dd'),
   type: 'all',
   limit: 50,
   search: ''

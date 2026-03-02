@@ -9,7 +9,7 @@
       @update:modelValue="$emit('update:pdfSubMode', $event as any)" />
 
     <!-- Zone de dépôt interactive (Drag & Drop) -->
-    <div v-if="!activeFile && (verifyMode === 'file' || verifyMode === 'qr') && !result"
+    <div v-if="!activeFile && (verifyMode === 'file' || verifyMode === 'qr') && !result && !isCameraMode"
       class="relative border-2 border-dashed border-primary/20 rounded-2xl md:rounded-3xl p-6 md:p-12 text-center hover:border-primary/50 transition-all cursor-pointer bg-WtB/50 hover:bg-primary/5 group overflow-hidden"
       @click="$emit('trigger-file')">
 
@@ -27,11 +27,26 @@
         <p class="text-xs md:text-sm text-hsa">
           {{ verifyMode === 'file'
             ? 'Glissez-déposez le fichier PDF ici ou cliquez pour parcourir'
-            : 'Glissez - déposez l\'image (PNG, JPG) ici ou cliquez pour parcourir' }}</p>
+            : 'Glissez-déposez l\'image (PNG, JPG) ici ou cliquez pour parcourir' }}
+        </p>
+
+        <div v-if="verifyMode === 'qr'" class="mt-8 flex justify-center pointer-events-auto">
+          <UiBaseButton variant="accent" size="sm" @click.stop="isCameraMode = true">
+            <template #icon>
+              <IconCamera class="w-4 h-4" />
+            </template>
+            Utiliser la caméra
+          </UiBaseButton>
+        </div>
       </div>
 
       <input type="file" ref="fileInput" class="hidden"
         :accept="verifyMode === 'file' ? '.pdf,application/pdf' : '.png,.jpg,.jpeg,image/*'" @change="handleFileChange">
+    </div>
+
+    <!-- Zone de caméra -->
+    <div v-if="isCameraMode && verifyMode === 'qr' && !result && !activeFile" class="py-4">
+      <RootVerifyCameraScanner @capture="handleCameraCapture" @cancel="isCameraMode = false" />
     </div>
 
     <!-- Zone de saisie d'empreinte (Hash) -->
@@ -75,7 +90,7 @@
 
 <script setup lang="ts">
 import { ref, watch, onMounted, onUnmounted, computed } from 'vue'
-import { IconRosetteDiscountCheck, IconHash, IconFileText, IconX, IconQrcode, IconChevronDown } from '@tabler/icons-vue'
+import { IconRosetteDiscountCheck, IconHash, IconFileText, IconX, IconQrcode, IconChevronDown, IconCamera } from '@tabler/icons-vue'
 import type { Step } from '~/utils/docsentry'
 
 import { useGlobalDropZone } from '~/composables/useDropZone'
@@ -134,6 +149,19 @@ const errorFileName = ref('')
 const errorFileType = ref('')
 const errorFileSize = ref('')
 const acceptedFormats = ref('PDF, PNG, JPG (Max 3 Mo)')
+
+const isCameraMode = ref(false)
+
+const handleCameraCapture = (file: File) => {
+  if (validateFile(file)) {
+    emit('update:qrFile', file)
+    isCameraMode.value = false
+  }
+}
+
+watch(() => props.verifyMode, () => {
+  isCameraMode.value = false
+})
 
 const showError = (title: string, message: string, file: File) => {
   fileErrorTitle.value = title
