@@ -2,7 +2,7 @@
   <UiBaseCard title="Sessions Actives" subtitle="Appareils connectés">
     <template #header>
       <UiBaseButton variant="secondary" size="sm" class="!px-2 !py-1 !text-[10px]"
-        @click="navigateTo('/dashboard/security/sessions')">Gérer</UiBaseButton>
+        @click="navigateTo('/dashboard/sessions')">Gérer</UiBaseButton>
     </template>
     <div class="space-y-1">
       <div v-if="loading && !sessions.length" class="py-10">
