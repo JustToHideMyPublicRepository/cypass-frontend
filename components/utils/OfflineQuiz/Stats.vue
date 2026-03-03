@@ -13,8 +13,7 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
-  score: number
-  highScore: number
-}>()
+import { inject } from 'vue'
+
+const { score, highScore, gameState, timer } = inject<any>('quiz-state')
 </script>

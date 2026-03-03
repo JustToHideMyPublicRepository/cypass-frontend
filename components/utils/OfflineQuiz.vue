@@ -9,18 +9,19 @@
     <div class="w-full max-w-2xl relative z-10 flex flex-col gap-8">
       <UtilsOfflineQuizHeader />
 
-      <UtilsOfflineQuizStats :score="score" :high-score="highScore" />
+      <UtilsOfflineQuizStats />
 
       <Transition name="fade-slide" mode="out-in">
-        <div v-if="!gameState.isFinished && sessionQuestions.length > 0" :key="currentQuestionIndex">
-          <UtilsOfflineQuizCard :question="currentQuestion" :current-index="currentQuestionIndex"
-            :total-questions="sessionQuestions.length" :shuffled-options="gameState.shuffledOptions"
-            :selected-index="gameState.selectedIndex" :show-feedback="gameState.showFeedback"
-            :is-last-question="isLastQuestion" @select="handleAnswer" @next="nextQuestion" />
+        <div v-if="gameState.status === 'idle'" :key="'start'">
+          <UtilsOfflineQuizStart />
+        </div>
+
+        <div v-else-if="gameState.status === 'playing' && sessionQuestions.length > 0" :key="currentQuestionIndex">
+          <UtilsOfflineQuizCard />
         </div>
 
         <div v-else :key="'results'">
-          <UtilsOfflineQuizResults :score="score" :total-questions="sessionQuestions.length" @reset="resetQuiz" />
+          <UtilsOfflineQuizResults />
         </div>
       </Transition>
 
@@ -37,127 +38,23 @@
 
 
 <script setup lang="ts">
-import { ref, reactive, computed, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted, provide, onUnmounted } from 'vue'
+import { offlineQuestions, type Question } from '~/utils/offlineQuizQuestions'
 
-interface Question {
-  text: string
-  options: string[]
-  correctIndex: number
-  explanation: string
-}
+const score = ref(0)
+const highScore = ref(0)
+const currentQuestionIndex = ref(0)
+const sessionQuestions = ref<Question[]>([])
+const timer = ref(0)
+let timerInterval: any = null
 
-const allQuestions: Question[] = [
-  {
-    text: "Quelle est la méthode la plus sûre pour protéger vos comptes en ligne ?",
-    options: [
-      "Utiliser le même mot de passe partout",
-      "Activer l'authentification à deux facteurs (2FA)",
-      "Changer de mot de passe tous les ans",
-      "Ne jamais se déconnecter"
-    ],
-    correctIndex: 1,
-    explanation: "La 2FA ajoute une couche de sécurité cruciale : même si un pirate trouve votre mot de passe, il ne pourra pas accéder à votre compte sans le second code."
-  },
-  {
-    text: "Vous recevez un email alarmant d'une banque vous demandant de cliquer sur un lien pour 'vérifier votre identité'. De quoi s'agit-il ?",
-    options: [
-      "Une procédure de sécurité standard",
-      "Une mise à jour système",
-      "Une tentative de phishing (hameçonnage)",
-      "Un cadeau d'anniversaire"
-    ],
-    correctIndex: 2,
-    explanation: "Les banques ne demandent jamais d'identifiants par email. Vérifiez toujours l'adresse de l'expéditeur et ne cliquez jamais sur des liens suspects."
-  },
-  {
-    text: "Qu'est-ce qu'un Ransomware (rançongiciel) ?",
-    options: [
-      "Un logiciel qui accélère votre PC",
-      "Un virus qui crypte vos fichiers et demande de l'argent",
-      "Un programme de nettoyage de disque",
-      "Un type de carte réseau"
-    ],
-    correctIndex: 1,
-    explanation: "Le ransomware prend vos données en otage. La meilleure protection est d'avoir des sauvegardes régulières hors ligne."
-  },
-  {
-    text: "Pourquoi est-il risqué d'utiliser un Wi-Fi public gratuit sans VPN ?",
-    options: [
-      "La connexion est trop lente",
-      "Vos données peuvent être interceptées par d'autres utilisateurs",
-      "Cela décharge la batterie plus vite",
-      "Le Wi-Fi public est payant en réalité"
-    ],
-    correctIndex: 1,
-    explanation: "Sur un réseau ouvert, les pirates peuvent 'écouter' votre trafic. Un VPN encrypte vos données, les rendant illisibles pour les tiers."
-  },
-  {
-    text: "Quelle caractéristique définit un mot de passe robuste ?",
-    options: [
-      "Le nom de votre animal de compagnie",
-      "Au moins 12 caractères mixant lettres, chiffres et symboles",
-      "Votre date de naissance",
-      "Le mot 'Azerty123'"
-    ],
-    correctIndex: 1,
-    explanation: "La complexité et la longueur augmentent exponentiellement le temps nécessaire à un ordinateur pour deviner votre mot de passe par 'force brute'."
-  },
-  {
-    text: "Que signifie l'acronyme RGPD ?",
-    options: [
-      "Règlement Général sur la Protection des Données",
-      "Réseau Global de Protection Digitale",
-      "Registre des Grands Protocoles de Défense",
-      "Règlement de Gestion des Particuliers et des Données"
-    ],
-    correctIndex: 0,
-    explanation: "Le RGPD est le cadre juridique européen qui protège la vie privée et les données personnelles des citoyens."
-  },
-  {
-    text: "Quelle est la première action à faire en cas de vol de votre téléphone ?",
-    options: [
-      "Appeler la police",
-      "Acheter un nouveau téléphone",
-      "Bloquer votre carte SIM et vos comptes à distance",
-      "Envoyer un SMS au voleur"
-    ],
-    correctIndex: 2,
-    explanation: "La priorité est de sécuriser l'accès à vos données bancaires, emails et réseaux sociaux en bloquant les accès distants."
-  },
-  {
-    text: "Quel est le but principal d'un pare-feu (firewall) ?",
-    options: [
-      "Éteindre les incendies de serveurs",
-      "Améliorer la vitesse de téléchargement",
-      "Filtrer le trafic entrant et sortant pour bloquer les menaces",
-      "Nettoyer les virus sur le disque dur"
-    ],
-    correctIndex: 2,
-    explanation: "Un pare-feu surveille et contrôle le trafic réseau entrant et sortant selon des règles de sécurité établies."
-  },
-  {
-    text: "Que signifie 'le HTTPS' (petit cadenas) dans la barre d'adresse ?",
-    options: [
-      "Le site est hébergé en France",
-      "La connexion entre vous et le site est cryptée",
-      "Le site appartient obligatoirement au gouvernement",
-      "Le site est protégé contre tous les virus"
-    ],
-    correctIndex: 1,
-    explanation: "HTTPS garantit que les informations échangées ne peuvent pas être interceptées 'en clair' par un pirate sur le réseau."
-  },
-  {
-    text: "Qu'est-ce qu'une attaque 'Zero-Day' ?",
-    options: [
-      "Une attaque qui dure 24 heures",
-      "Une attaque pendant les jours fériés",
-      "Une attaque exploitant une faille inconnue du fabricant",
-      "Une attaque sans aucune conséquence"
-    ],
-    correctIndex: 2,
-    explanation: "Une faille Zero-Day est une vulnérabilité que le développeur n'a pas encore découverte, et donc pour laquelle aucun correctif n'existe encore."
-  }
-]
+const gameState = reactive({
+  status: 'idle' as 'idle' | 'playing' | 'finished',
+  mode: 'normal' as 'normal' | 'time-attack',
+  selectedIndex: null as number | null,
+  showFeedback: false,
+  shuffledOptions: [] as { text: string; originalIndex: number }[]
+})
 
 // Utilities
 const shuffleArray = <T>(array: T[]): T[] => {
@@ -169,33 +66,42 @@ const shuffleArray = <T>(array: T[]): T[] => {
   return newArr
 }
 
-const score = ref(0)
-const highScore = ref(0)
-const currentQuestionIndex = ref(0)
-const sessionQuestions = ref<Question[]>([])
-
-const gameState = reactive({
-  selectedIndex: null as number | null,
-  showFeedback: false,
-  isFinished: false,
-  shuffledOptions: [] as { text: string; originalIndex: number }[]
-})
-
 const currentQuestion = computed(() => sessionQuestions.value[currentQuestionIndex.value])
 const isLastQuestion = computed(() => currentQuestionIndex.value === sessionQuestions.value.length - 1)
 
-const initializeGame = () => {
-  // Select 5 random questions
-  sessionQuestions.value = shuffleArray(allQuestions).slice(0, 5)
-  currentQuestionIndex.value = 0
-  score.value = 0
-  prepareQuestion()
+const stopTimer = () => {
+  if (timerInterval) {
+    clearInterval(timerInterval)
+    timerInterval = null
+  }
+}
+
+const endGame = () => {
+  stopTimer()
+  gameState.status = 'finished'
+  if (score.value > highScore.value) {
+    highScore.value = score.value
+    if (process.client) {
+      localStorage.setItem('cps_quiz_high_score', String(score.value))
+    }
+  }
+}
+
+const startTimer = () => {
+  timer.value = 60 // 60 seconds for the whole quiz
+  clearInterval(timerInterval)
+  timerInterval = setInterval(() => {
+    if (timer.value > 0) {
+      timer.value--
+    } else {
+      endGame()
+    }
+  }, 1000)
 }
 
 const prepareQuestion = () => {
   if (!currentQuestion.value) return
 
-  // Shuffle options and keep track of original index to verify answer
   const optionsWithIndex = currentQuestion.value.options.map((opt, idx) => ({
     text: opt,
     originalIndex: idx
@@ -206,13 +112,19 @@ const prepareQuestion = () => {
   gameState.showFeedback = false
 }
 
-onMounted(() => {
-  if (process.client) {
-    const stored = localStorage.getItem('cps_quiz_high_score')
-    if (stored) highScore.value = parseInt(stored)
+const initializeGame = (mode: 'normal' | 'time-attack' = 'normal') => {
+  gameState.mode = mode
+  gameState.status = 'playing'
+  sessionQuestions.value = shuffleArray(offlineQuestions).slice(0, 5)
+  currentQuestionIndex.value = 0
+  score.value = 0
+
+  if (mode === 'time-attack') {
+    startTimer()
   }
-  initializeGame()
-})
+
+  prepareQuestion()
+}
 
 const handleAnswer = (shuffledIdx: number) => {
   if (gameState.showFeedback) return
@@ -228,13 +140,7 @@ const handleAnswer = (shuffledIdx: number) => {
 
 const nextQuestion = () => {
   if (isLastQuestion.value) {
-    gameState.isFinished = true
-    if (score.value > highScore.value) {
-      highScore.value = score.value
-      if (process.client) {
-        localStorage.setItem('cps_quiz_high_score', String(score.value))
-      }
-    }
+    endGame()
   } else {
     currentQuestionIndex.value++
     prepareQuestion()
@@ -242,9 +148,36 @@ const nextQuestion = () => {
 }
 
 const resetQuiz = () => {
-  gameState.isFinished = false
-  initializeGame()
+  gameState.status = 'idle'
+  stopTimer()
 }
+
+// Provide context to sub-components
+provide('quiz-state', {
+  score,
+  highScore,
+  currentQuestionIndex,
+  sessionQuestions,
+  gameState,
+  currentQuestion,
+  isLastQuestion,
+  timer,
+  handleAnswer,
+  nextQuestion,
+  resetQuiz,
+  initializeGame
+})
+
+onMounted(() => {
+  if (process.client) {
+    const stored = localStorage.getItem('cps_quiz_high_score')
+    if (stored) highScore.value = parseInt(stored)
+  }
+})
+
+onUnmounted(() => {
+  stopTimer()
+})
 </script>
 
 <style scoped>

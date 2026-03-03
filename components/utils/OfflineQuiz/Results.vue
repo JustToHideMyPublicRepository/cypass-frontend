@@ -20,23 +20,19 @@
       </div>
       <div class="p-4 rounded-2xl bg-ash/30 border border-ashAct">
         <span class="block text-[10px] uppercase font-bold text-textClr/50 mb-1">Questions</span>
-        <span class="text-3xl font-black text-secondary">{{ score / 10 }}/{{ totalQuestions }}</span>
+        <span class="text-3xl font-black text-secondary">{{ score / 10 }}/{{ sessionQuestions.length }}</span>
       </div>
     </div>
 
-    <button @click="$emit('reset')" class="btn btn-secondary w-full">
+    <button @click="resetQuiz" class="btn btn-secondary w-full">
       Rejouer pour s'améliorer
     </button>
   </div>
 </template>
 
 <script setup lang="ts">
+import { inject } from 'vue'
 import { IconTrophy } from '@tabler/icons-vue'
 
-defineProps<{
-  score: number,
-  totalQuestions: number
-}>()
-
-defineEmits(['reset'])
+const { score, sessionQuestions, resetQuiz } = inject<any>('quiz-state')
 </script>
