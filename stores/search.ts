@@ -119,6 +119,10 @@ export const useSearchStore = defineStore('search', {
 
     clearRecentSearches() {
       this.recentSearches = []
+      this.saveRecentSearches()
+    },
+
+    clearRecentQueries() {
       this.recentQueries = []
       this.saveRecentSearches()
     },

@@ -7,19 +7,7 @@
           <div>
             <div class="flex items-center gap-1.5 mb-1">
               <p :class="[stat.labelClass || '', 'font-medium opacity-90']">{{ stat.label }}</p>
-              <div v-if="stat.tooltip" class="relative group/tooltip">
-                <IconInfoCircle class="w-3.5 h-3.5 cursor-help opacity-40 hover:opacity-100 transition-opacity" />
-                <div
-                  class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 bg-slate-900/90 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl opacity-0 invisible group-hover/tooltip:opacity-100 group-hover/tooltip:visible transition-all duration-300 z-[100] text-[10px] leading-relaxed scale-95 group-hover/tooltip:scale-100 origin-bottom">
-                  <div
-                    class="font-bold border-b border-white/10 pb-1.5 mb-1.5 text-white/90 uppercase tracking-tighter">
-                    Information</div>
-                  <div class="text-white/70" v-html="stat.tooltip"></div>
-                  <div
-                    class="absolute top-full left-1/2 -translate-x-1/2 border-8 border-transparent border-t-slate-900/90">
-                  </div>
-                </div>
-              </div>
+              <UiAppTooltip v-if="stat.tooltip" :content="stat.tooltip" icon-class="text-WtB/40 hover:text-WtB" />
             </div>
             <h3 class="text-3xl font-bold tracking-tight">{{ stat.value }}</h3>
           </div>

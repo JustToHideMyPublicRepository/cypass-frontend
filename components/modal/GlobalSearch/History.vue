@@ -4,7 +4,7 @@
     <div v-if="searchStore.recentQueries.length > 0" class="space-y-3">
       <div class="flex items-center justify-between px-2">
         <h3 class="text-xs font-black text-slate-500 uppercase tracking-widest">Thèmes de recherche</h3>
-        <button @click.stop="searchStore.clearRecentSearches()"
+        <button @click.stop="searchStore.clearRecentQueries()"
           class="text-xs font-medium text-hsa hover:text-red-400 transition-colors">
           Tout effacer
         </button>
