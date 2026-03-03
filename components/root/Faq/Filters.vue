@@ -10,8 +10,8 @@
         class="block w-full pl-10 pr-4 py-3 bg-ash border border-ash rounded-2xl shadow-sm focus:ring-2 focus:ring-primary focus:border-primary transition-all outline-none text-sm font-bold placeholder:font-normal"
         placeholder="Rechercher...">
       <div class="hidden lg:flex items-center gap-1 absolute right-3 top-1/2 -translate-y-1/2">
-        <kbd class="text-[9px] px-1.5 py-0.5 rounded-lg bg-ashAct border border-ash text-hsa font-black">Ctrl</kbd>
-        <kbd class="text-[9px] px-1.5 py-0.5 rounded-lg bg-ashAct border border-ash text-hsa font-black">K</kbd>
+        <kbd class="kbd-tip">Ctrl</kbd>
+        <kbd class="kbd-tip">K</kbd>
       </div>
     </div>
 
