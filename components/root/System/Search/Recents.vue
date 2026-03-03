@@ -16,7 +16,7 @@
         <div v-if="searchStore.recentQueries.length > 0" class="space-y-3">
           <div class="flex items-center justify-between">
             <span class="text-[10px] font-black text-hsa uppercase tracking-widest">Thèmes</span>
-            <button v-if="searchStore.recentSearches.length === 0" @click="searchStore.clearRecentSearches()"
+            <button @click="searchStore.clearRecentSearches()"
               class="text-[10px] font-medium text-hsa hover:text-red-400">
               Effacer
             </button>
