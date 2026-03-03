@@ -23,10 +23,12 @@ const toastStore = useToastStore()
 const shortcutsStore = useShortcutsStore()
 const searchStore = useSearchStore()
 
-const isOffline = ref(false)
+const isOffline = ref(process.client ? !navigator.onLine : false)
 
 const updateOnlineStatus = () => {
-  isOffline.value = !navigator.onLine
+  if (process.client) {
+    isOffline.value = !navigator.onLine
+  }
 }
 
 onMounted(() => {
