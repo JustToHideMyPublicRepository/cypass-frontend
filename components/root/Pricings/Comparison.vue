@@ -23,7 +23,10 @@
           <tbody class="divide-y divide-ash/5">
             <tr v-for="row in comparison" :key="row.feature" class="group hover:bg-ash/5 transition-colors">
               <td class="py-6 pr-4">
-                <p class="text-sm font-bold text-BtW">{{ row.feature }}</p>
+                <div class="flex items-center gap-2">
+                  <p class="text-sm font-bold text-BtW">{{ row.feature }}</p>
+                  <UiAppTooltip v-if="row.tooltip" :content="row.tooltip" />
+                </div>
               </td>
               <td class="py-6 px-4 text-center">
                 <IconCircleCheck v-if="row.basic" class="w-5 h-5 text-primary/40 mx-auto" />

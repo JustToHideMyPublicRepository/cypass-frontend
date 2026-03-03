@@ -35,20 +35,8 @@
         <div class="mt-6">
           <div class="flex items-center gap-1.5 mb-3">
             <h3 class="text-sm font-bold text-hsa uppercase tracking-wider">Recherche Rapide</h3>
-            <div class="relative group/tooltip">
-              <IconInfoCircle
-                class="w-3.5 h-3.5 text-hsa cursor-help opacity-60 hover:opacity-100 transition-opacity" />
-              <div
-                class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-56 p-3 bg-slate-900/90 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl opacity-0 invisible group-hover/tooltip:opacity-100 group-hover/tooltip:visible transition-all duration-300 z-[100] text-[10px] leading-relaxed scale-95 group-hover/tooltip:scale-100 origin-bottom">
-                <div class="font-bold border-b border-white/10 pb-1.5 mb-1.5 text-white/90 uppercase tracking-tighter">
-                  Information</div>
-                <div class="text-white/70">Sélectionnez ou saisissez directement une date pour y accéder instantanément.
-                </div>
-                <div
-                  class="absolute top-full left-1/2 -translate-x-1/2 border-8 border-transparent border-t-slate-900/90">
-                </div>
-              </div>
-            </div>
+            <UiAppTooltip content="Sélectionnez ou saisissez directement une date pour y accéder instantanément."
+              width-class="w-56" />
           </div>
           <div class="relative">
             <div class="absolute inset-y-0 left-3 flex items-center pointer-events-none">

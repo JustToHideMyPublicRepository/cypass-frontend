@@ -23,7 +23,7 @@ defineProps<{
   modelValue: string
 }>()
 
-defineEmits(['update:modelValue', 'keydown'])
+defineEmits(['update:modelValue', 'keydown', 'clear'])
 
 const inputRef = ref<HTMLInputElement | null>(null)
 
