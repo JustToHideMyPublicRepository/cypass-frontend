@@ -22,7 +22,8 @@ export const useSearchStore = defineStore('search', {
     query: '',
     results: [] as SearchResult[],
     isLoading: false,
-    recentSearches: [] as SearchResult[]
+    recentSearches: [] as SearchResult[],
+    recentQueries: [] as string[]
   }),
 
   actions: {
@@ -46,12 +47,22 @@ export const useSearchStore = defineStore('search', {
 
     loadRecentSearches() {
       if (process.client) {
-        const saved = localStorage.getItem('cps_global_search')
-        if (saved) {
+        // Résultats cliqués
+        const savedResults = localStorage.getItem('cps_global_search')
+        if (savedResults) {
           try {
-            this.recentSearches = JSON.parse(saved)
+            this.recentSearches = JSON.parse(savedResults)
           } catch (e) {
             console.error('Failed to parse recent searches', e)
+          }
+        }
+        // Thèmes de recherche
+        const savedQueries = localStorage.getItem('cps_search_queries')
+        if (savedQueries) {
+          try {
+            this.recentQueries = JSON.parse(savedQueries)
+          } catch (e) {
+            console.error('Failed to parse recent queries', e)
           }
         }
       }
@@ -60,7 +71,30 @@ export const useSearchStore = defineStore('search', {
     saveRecentSearches() {
       if (process.client) {
         localStorage.setItem('cps_global_search', JSON.stringify(this.recentSearches))
+        localStorage.setItem('cps_search_queries', JSON.stringify(this.recentQueries))
       }
+    },
+
+    addRecentQuery(query: string) {
+      if (!query || query.length < 2) return
+
+      // Éviter les doublons
+      this.recentQueries = this.recentQueries.filter(q => q.toLowerCase() !== query.toLowerCase())
+
+      // Ajouter au début
+      this.recentQueries.unshift(query)
+
+      // Limiter à 5
+      if (this.recentQueries.length > 5) {
+        this.recentQueries = this.recentQueries.slice(0, 5)
+      }
+
+      this.saveRecentSearches()
+    },
+
+    removeRecentQuery(query: string) {
+      this.recentQueries = this.recentQueries.filter(q => q !== query)
+      this.saveRecentSearches()
     },
 
     addRecentSearch(result: SearchResult) {
@@ -85,6 +119,7 @@ export const useSearchStore = defineStore('search', {
 
     clearRecentSearches() {
       this.recentSearches = []
+      this.recentQueries = []
       this.saveRecentSearches()
     },
 

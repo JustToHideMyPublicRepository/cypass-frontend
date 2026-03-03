@@ -19,7 +19,7 @@
 
       <!-- Recherches récentes (1/4)-->
       <div class="lg:col-span-1">
-        <RootSystemSearchRecents @navigate="navigateToResult" />
+        <RootSystemSearchRecents @navigate="navigateToResult" @query-click="handleQueryClick" />
       </div>
     </div>
   </div>
@@ -43,11 +43,16 @@ const currentSort = ref('default')
 
 const query = computed(() => route.query.q as string || '')
 
-const performSearch = async () => {
-  if (!query.value) return
+const performSearch = async (q?: string) => {
+  const finalQuery = q || query.value
+  if (!finalQuery) return
   loading.value = true
-  await searchStore.performSearch(query.value)
+  await searchStore.performSearch(finalQuery)
   loading.value = false
+}
+
+const handleQueryClick = (q: string) => {
+  router.push({ path: '/system/search', query: { q } })
 }
 
 const itemsPerPage = 5
