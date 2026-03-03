@@ -121,7 +121,7 @@
 
 			<div class="mt-12 text-center">
 				<p class="text-hsa mb-4">Vous ne trouvez pas votre réponse ?</p>
-				<NuxtLink to="/support" class="text-primary font-bold hover:underline">Contacter le support dédié
+				<NuxtLink to="/faq" class="text-primary font-bold hover:underline">Consulter toutes les FAQ
 					&rarr;</NuxtLink>
 			</div>
 		</div>
