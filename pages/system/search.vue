@@ -12,8 +12,9 @@
 
       <!-- Results Main (2/4) -->
       <div class="lg:col-span-2">
-        <RootSystemSearchResult :results="filteredResults" :loading="loading" :query="query"
-          @navigate="navigateToResult" @modify="searchStore.openSearch()" @reset="performSearch" />
+        <RootSystemSearchResult :results="paginatedResults" :loading="loading" :query="query"
+          :current-page="currentPage" :total-pages="totalPages" @navigate="navigateToResult"
+          @modify="searchStore.openSearch()" @reset="performSearch" @change-page="handlePageChange" />
       </div>
 
       <!-- Recherches récentes (1/4)-->
@@ -49,6 +50,9 @@ const performSearch = async () => {
   loading.value = false
 }
 
+const itemsPerPage = 5
+const currentPage = ref(1)
+
 const filteredResults = computed(() => {
   let results = [...searchStore.results]
 
@@ -79,6 +83,22 @@ const filteredResults = computed(() => {
   return results
 })
 
+const paginatedResults = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage
+  const end = start + itemsPerPage
+  return filteredResults.value.slice(start, end)
+})
+
+const totalPages = computed(() => Math.ceil(filteredResults.value.length / itemsPerPage))
+
+const handlePageChange = (delta: number) => {
+  const next = currentPage.value + delta
+  if (next >= 1 && next <= totalPages.value) {
+    currentPage.value = next
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+}
+
 const categoryCounts = computed(() => {
   const counts: Record<string, number> = {}
   searchStore.results.forEach(r => {
@@ -102,8 +122,9 @@ onMounted(() => {
 })
 
 // Watchers
-watch(query, () => {
-  performSearch()
+watch([query, activeFilter, currentSort], () => {
+  if (query.value) performSearch()
+  currentPage.value = 1
 }, { immediate: true })
 
 useHead({

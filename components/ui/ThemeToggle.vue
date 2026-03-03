@@ -19,8 +19,8 @@
     <!-- Modal de confirmation pour désactiver l'auto-thème -->
     <UiConfirmModal :show="showConfirm" title="Désactiver l'automatisme ?"
       message="Vous allez changer le thème manuellement, ce qui désactivera la planification automatique. Voulez-vous continuer ?"
-      confirm-text="Oui, changer" cancel-text="Garder l'auto" variant="primary" :icon="IconAlertTriangle"
-      @confirm="confirmOverride" @cancel="showConfirm = false" />
+      confirm-text="Changer" cancel-text="Garder" variant="primary" :icon="IconAlertTriangle" @confirm="confirmOverride"
+      @cancel="showConfirm = false" />
   </div>
 </template>
 

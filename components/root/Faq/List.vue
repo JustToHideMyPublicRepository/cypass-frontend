@@ -1,8 +1,8 @@
 <template>
   <section class="pb-10 md:pb-12">
     <!-- Liste accordéon des questions/réponses FAQ -->
-    <div class="max-w-6xl mx-auto">
-      <div class="max-w-3xl mx-auto space-y-8 md:space-y-12">
+    <div>
+      <div class="space-y-8 md:space-y-12">
         <div v-for="(category, catIndex) in categories" :key="catIndex" class="animate-fade-up"
           :style="{ animationDelay: `${200 + catIndex * 100}ms` }">
           <h2 class="flex items-center gap-3 text-xl md:text-2xl font-bold mb-6 md:mb-8">

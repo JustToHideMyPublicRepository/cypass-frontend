@@ -140,10 +140,9 @@
           </div>
         </div>
 
-        <div v-else class="py-20 text-center space-y-4">
-          <div
-            class="w-20 h-20 bg-ash/5 rounded-[2.5rem] flex items-center justify-center mx-auto border border-ash/10">
-            <IconMessage class="w-10 h-10 text-ash/20" />
+        <div v-else class="py-12 text-center space-y-4">
+          <div class="w-20 h-20 bg-hsa rounded-[2.5rem] flex items-center justify-center mx-auto border border-ash">
+            <IconMessage class="w-10 h-10 text-ash" />
           </div>
           <div>
             <h4 class="text-lg font-black text-BtW">Silence radio...</h4>

@@ -1,10 +1,21 @@
 <template>
   <div class="relative">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <RootFaqHeader ref="headerComp" v-model:searchQuery="searchQuery" />
-      <RootFaqCategories :categories="faqCategories" v-model:selectedCategory="selectedCategoryText" />
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <RootFaqHeader />
 
-      <RootFaqList :categories="filteredCategories" />
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 mt-12">
+        <!-- Sidebar: Filtres -->
+        <div class="lg:col-span-1">
+          <RootFaqFilters ref="categoriesComp" :categories="faqCategories"
+            v-model:selectedCategory="selectedCategoryText" v-model:searchQuery="searchQuery" class="sticky top-24" />
+        </div>
+
+        <!-- Main: FAQ List -->
+        <div class="lg:col-span-3">
+          <RootFaqList :categories="filteredCategories" />
+        </div>
+      </div>
+
       <RootFaqCta />
     </div>
   </div>
@@ -13,17 +24,15 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { faqCategories } from '@/data/faq'
+import { useShortcuts } from '~/composables/useShortcuts'
 
-import { useSearchStore } from '~/stores/search'
-
-const searchStore = useSearchStore()
-const headerComp = ref<any>(null)
+const categoriesComp = ref<any>(null)
 const searchQuery = ref('')
 const selectedCategoryText = ref<string | null>(null)
 
+// Focus keyboard shortcut (Ctrl+K)
 useShortcuts({
-  searchCallback: () => searchStore.openSearch(),
-  localSearchCallback: () => headerComp.value?.focus()
+  localSearchCallback: () => categoriesComp.value?.focus()
 })
 
 definePageMeta({

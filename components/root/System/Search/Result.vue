@@ -50,21 +50,25 @@
           <IconSquareF1 v-else class="w-5 h-5 text-hsa/40" />
         </div>
       </div>
+
+      <!-- Pagination Controls -->
+      <UiAppPagination :current-page="currentPage" :total-pages="totalPages"
+        @change-page="(delta) => $emit('change-page', delta)" />
     </div>
   </main>
 </template>
 
 <script setup lang="ts">
-import { IconSearch, IconChevronRight, IconKeyboard, IconSquareF1 } from '@tabler/icons-vue'
+import { IconSearch, IconChevronRight, IconKeyboard, IconSquareF1, IconChevronLeft } from '@tabler/icons-vue'
 import { getSearchIcon, getSearchIconStyle } from '~/utils/search'
 
 defineProps<{
   results: any[]
   loading: boolean
   query: string
+  currentPage: number
+  totalPages: number
 }>()
 
-defineEmits(['navigate', 'modify', 'reset'])
-
-
+defineEmits(['navigate', 'modify', 'reset', 'change-page'])
 </script>

@@ -32,11 +32,11 @@
 
     <!-- Statistiques de Confiance -->
     <div
-      class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 py-6 md:py-8 border-y border-ash/50 backdrop-blur-sm animate-fade-up"
+      class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 py-6 md:py-8 border-y border-hsa/50 backdrop-blur-sm animate-fade-up"
       style="animation-delay: 100ms;">
       <div v-for="stat in stats" :key="stat.label" class="text-center">
         <div class="text-2xl md:text-3xl font-bold mb-1">{{ stat.value }}</div>
-        <div class="text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-slate-500">{{ stat.label }}</div>
+        <div class="text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-hsa/70">{{ stat.label }}</div>
       </div>
     </div>
   </div>

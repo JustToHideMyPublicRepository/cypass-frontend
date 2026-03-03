@@ -19,7 +19,7 @@
               {{ formatDateShort(comment.created_at) }}
             </div>
             <div
-              class="p-2.5 rounded-2xl bg-ash/5 border border-ash/20 group-hover:bg-primary group-hover:text-WtB transition-all duration-500 shadow-sm">
+              class="p-2.5 rounded-2xl bg-hsa/20 border border-ash/20 group-hover:bg-primary group-hover:text-WtB transition-all duration-500 shadow-sm">
               <IconExternalLink class="w-4 h-4" />
             </div>
           </div>
@@ -62,8 +62,8 @@
 
     <!-- État vide -->
     <div v-else class="flex flex-col items-center justify-center py-32 text-center">
-      <div class="w-24 h-24 bg-ash/5 rounded-[3rem] flex items-center justify-center mb-8 border border-ash/10">
-        <IconMessage class="w-10 h-10 text-ash/30" />
+      <div class="w-24 h-24 bg-hsa rounded-[3rem] flex items-center justify-center mb-8 border border-ash/10">
+        <IconMessage class="w-10 h-10 text-ash" />
       </div>
       <h3 class="text-xl font-black text-BtW">Aucun commentaire</h3>
       <p class="text-sm font-bold text-hsa mt-2">Cet utilisateur n'a pas encore participé aux discussions.</p>

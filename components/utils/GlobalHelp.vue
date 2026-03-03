@@ -91,7 +91,7 @@ const helpLinks = [
     icon: IconStatusChange
   },
   {
-    label: 'Raccourcis Clavier',
+    label: 'Raccourcis clavier',
     desc: 'Naviguez plus vite',
     path: '/system/shortcuts',
     icon: IconKeyboard

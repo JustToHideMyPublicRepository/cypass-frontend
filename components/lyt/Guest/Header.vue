@@ -135,6 +135,7 @@ const isLinkActive = (path: string) => {
 const NavHeader = [
   { label: 'Vérifier', path: '/verify' },
   { label: 'VigiTech', path: '/vigitech' },
+  // { label: 'Tarifs', path: '/pricings' },
   { label: 'Support', path: '/support' },
   { label: 'Contact', path: '/contact' },
 ]
@@ -143,7 +144,7 @@ const NavHeader = [
 const getAuthLinks = (forMobile: boolean) => {
   const links = [
     { label: 'Tableau de bord', path: '/dashboard', type: 'link', mobile: true },
-    { label: 'Mon Profil', path: '/dashboard/profile', type: 'link' },
+    { label: 'Mon profil', path: '/dashboard/profile', type: 'link' },
     { label: "Journal d'activité", path: '/dashboard/logs', type: 'link' },
     { label: 'Sessions actives', path: '/dashboard/sessions', type: 'link' },
     {
