@@ -6,29 +6,13 @@
     </div>
 
     <!-- Pagination Controls -->
-    <div v-if="totalPages > 1" class="flex items-center justify-between pt-6 mt-6 border-t border-ash">
-      <p class="text-[10px] font-black uppercase tracking-widest text-hsa opacity-60">
-        Page {{ currentPage }} sur {{ totalPages }}
-      </p>
-      <div class="flex items-center gap-2">
-        <UiBaseButton @click="$emit('change-page', -1)" :disabled="pagination.offset === 0" variant="secondary"
-          class="flex items-center gap-1 !px-3 !py-1.5 !text-xs !font-medium">
-          <IconChevronLeft class="w-3 h-3" /> Précédent
-        </UiBaseButton>
-        <UiBaseButton @click="$emit('change-page', 1)"
-          :disabled="pagination.offset + pagination.limit >= pagination.total" variant="secondary"
-          class="flex items-center gap-1 !px-3 !py-1.5 !text-xs !font-medium">
-          Suivant
-          <IconChevronRight class="w-3 h-3" />
-        </UiBaseButton>
-      </div>
-    </div>
+    <UiAppPagination :current-page="currentPage" :total-pages="totalPages"
+      @change-page="(delta) => $emit('change-page', delta)" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { IconChevronLeft, IconChevronRight } from '@tabler/icons-vue'
 
 const props = defineProps<{
   incidents: any[]

@@ -10,6 +10,11 @@ export const useVigitechStore = defineStore('vigitech', {
       limit: 10,
       offset: 0
     },
+    globalStats: {
+      total: 0,
+      phishing: 0,
+      critical: 0
+    },
     currentIncident: null as Incident | null,
     comments: [] as Comment[],
     userComments: [] as any[],
@@ -49,7 +54,18 @@ export const useVigitechStore = defineStore('vigitech', {
         const response: any = await $fetch('/api/vigitech/all', { params: query })
         if (response.success) {
           this.publicIncidents = response.data
-          this.publicPagination.total = response.total || (response.data.length < query.limit ? query.offset + response.data.length : 100)
+          // Accurate total calculation if not provided by backend
+          if (response.total) {
+            this.publicPagination.total = response.total
+          } else {
+            // If data received is less than limit, we know the exact total
+            if (response.data.length < query.limit) {
+              this.publicPagination.total = query.offset + response.data.length
+            } else if (this.publicPagination.total < query.offset + response.data.length) {
+              // Otherwise, only update if it's higher than what we have
+              this.publicPagination.total = query.offset + response.data.length
+            }
+          }
           this.publicPagination.limit = query.limit
           this.publicPagination.offset = query.offset
         } else {
@@ -59,6 +75,29 @@ export const useVigitechStore = defineStore('vigitech', {
         this.error = err.message
       } finally {
         this.loading = false
+      }
+    },
+
+    async fetchGlobalStats() {
+      try {
+        // Fetch a large number of incidents to calculate global stats
+        // In a real app, this should be a dedicated /stats endpoint
+        const response: any = await $fetch('/api/vigitech/all', {
+          params: { limit: 1000, offset: 0 }
+        })
+        if (response.success && response.data) {
+          const all = response.data
+          const total = response.total || all.length
+          this.globalStats = {
+            total,
+            phishing: all.filter((i: any) => i.type === 'phishing').length,
+            critical: all.filter((i: any) => i.threat_level === 'critical').length
+          }
+          // Sync pagination total
+          this.publicPagination.total = total
+        }
+      } catch (err: any) {
+        console.warn('Erreur chargement stats globales:', err.message)
       }
     },
 

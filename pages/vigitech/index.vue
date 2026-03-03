@@ -60,12 +60,12 @@ const filters = ref({
 })
 
 const stats = computed(() => {
-  const incidents = store.publicIncidents
-  const phishing = incidents.filter(i => i.type === 'phishing').length
-  const critical = incidents.filter(i => i.threat_level === 'critical').length
+  const gStats = store.globalStats
+  const phishing = gStats.phishing
+  const critical = gStats.critical
+  const total = gStats.total
 
-  // Calculate trends (mock logic for demo if no history, but dynamic based on current data)
-  const total = store.publicPagination.total
+  // Calculate trends (relative to total)
   const phishingTrend = total > 0 ? Math.round((phishing / total) * 100) : 0
   const criticalTrend = total > 0 ? Math.round((critical / total) * 100) : 0
 
@@ -167,6 +167,11 @@ const fetchData = () => {
   store.fetchPublicIncidents(params)
 }
 
+const fetchAllData = () => {
+  fetchData()
+  store.fetchGlobalStats()
+}
+
 const changePage = (delta: number) => {
   const newOffset = store.publicPagination.offset + (delta * store.publicPagination.limit)
   if (newOffset >= 0) {
@@ -194,7 +199,7 @@ const openReportModal = (incidentId: string) => {
   showReportModal.value = true
 }
 
-onMounted(fetchData)
+onMounted(fetchAllData)
 
 useHead({
   title: 'Veille cyber communautaire'
