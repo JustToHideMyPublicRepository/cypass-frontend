@@ -1,6 +1,5 @@
 <template>
-  <div
-    class="fixed inset-0 z-[9999] bg-bgClr flex flex-col items-center justify-center p-4 sm:p-6 overflow-y-auto mt-16">
+  <div class="fixed inset-0 z-[9999] bg-bgClr flex flex-col items-center justify-center p-4 sm:p-6 overflow-y-auto">
     <!-- Background Decoration -->
     <div class="absolute inset-0 overflow-hidden pointer-events-none opacity-20">
       <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/20 blur-[120px] rounded-full"></div>

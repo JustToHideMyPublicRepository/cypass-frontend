@@ -9,8 +9,8 @@
         :type="toastStore.type" :title="toastStore.title" :message="toastStore.message"
         :duration="toastStore.duration" />
       <ModalGlobalSearch />
-      <UtilsOfflineQuiz v-if="isOffline" />
     </NuxtLayout>
+    <UtilsOfflineQuiz v-if="isOffline" />
   </div>
 </template>
 
