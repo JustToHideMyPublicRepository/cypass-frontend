@@ -9,6 +9,8 @@
         :type="toastStore.type" :title="toastStore.title" :message="toastStore.message"
         :duration="toastStore.duration" />
       <ModalGlobalSearch />
+      <ModalGlobalAiAnalysis />
+      <ModalGlobalAiAnalysisSettings />
     </NuxtLayout>
     <UtilsOfflineQuiz v-if="isOffline" />
   </div>
@@ -18,10 +20,12 @@
 import { useToastStore } from '@/stores/toast'
 import { useShortcutsStore } from '@/stores/shortcuts'
 import { useSearchStore } from '@/stores/search'
+import { useAiAnalysisStore } from '@/stores/aiAnalysis'
 
 const toastStore = useToastStore()
 const shortcutsStore = useShortcutsStore()
 const searchStore = useSearchStore()
+const aiAnalysisStore = useAiAnalysisStore()
 
 const isOffline = ref(process.client ? !navigator.onLine : false)
 
@@ -33,6 +37,7 @@ const updateOnlineStatus = () => {
 
 onMounted(() => {
   shortcutsStore.init()
+  aiAnalysisStore.init()
   updateOnlineStatus()
   window.addEventListener('online', updateOnlineStatus)
   window.addEventListener('offline', updateOnlineStatus)

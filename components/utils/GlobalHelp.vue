@@ -40,6 +40,34 @@
                 <div class="text-[10px] text-hsa">{{ link.desc }}</div>
               </div>
             </NuxtLink>
+
+            <!-- Bouton IA -->
+            <div class="relative group/ia-wrap mt-2">
+              <button @click="handleAiClick"
+                class="w-full flex items-center gap-3 p-3 rounded-2xl transition-all group/ia border border-dashed"
+                :class="aiAnalysisStore.preferredAi ? 'border-primary/40 bg-primary/5 hover:bg-primary/10' : 'border-primary/20 hover:bg-primary/10'">
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center transition-all shadow-sm"
+                  :class="aiAnalysisStore.preferredAi ? 'bg-primary text-ash' : 'bg-primary/10 text-primary group-hover/ia:bg-primary group-hover/ia:text-ash'">
+                  <IconSparkles class="w-4 h-4" />
+                </div>
+                <div class="text-left flex-grow">
+                  <div class="text-sm font-black text-BtW group-hover/ia:text-primary transition-colors">
+                    Analyse IA <span v-if="aiAnalysisStore.preferredAi" class="text-[10px] opacity-60 font-medium">({{
+                      aiAnalysisStore.preferredAi }})</span>
+                  </div>
+                  <div class="text-[10px] text-hsa italic">{{ aiAnalysisStore.preferredAi ? 'Lancer l\'analyse directe'
+                    :
+                    'Analyser cette page avec l\'IA' }}</div>
+                </div>
+              </button>
+
+              <!-- Reset Preference -->
+              <button v-if="aiAnalysisStore.preferredAi" @click.stop="aiAnalysisStore.setPreferredAi(null)"
+                class="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 rounded-lg bg-ash/50 text-hsa hover:text-danger hover:bg-danger/10 transition-all opacity-0 group-hover/ia-wrap:opacity-100 shadow-sm"
+                title="Réinitialiser la préférence IA">
+                <IconRotate class="w-3.5 h-3.5" />
+              </button>
+            </div>
           </div>
 
           <!-- Section Raccourcis -->
@@ -55,10 +83,31 @@
 
 <script setup lang="ts">
 import { watch, onMounted, onUnmounted } from 'vue'
-import { IconHelp, IconX, IconLifebuoy, IconStatusChange, IconKeyboard, IconBrandWhatsapp } from '@tabler/icons-vue'
+import {
+  IconHelp, IconX, IconLifebuoy, IconStatusChange,
+  IconKeyboard, IconBrandWhatsapp, IconSparkles, IconRotate
+} from '@tabler/icons-vue'
 import { useShortcutsStore } from '~/stores/shortcuts'
+import { useAiAnalysisStore } from '~/stores/aiAnalysis'
+import { useRoute } from 'vue-router'
 
 const store = useShortcutsStore()
+const aiAnalysisStore = useAiAnalysisStore()
+const route = useRoute()
+
+const handleAiClick = () => {
+  if (aiAnalysisStore.preferredAi) {
+    const prompt = aiAnalysisStore.getGeneratedPrompt(
+      document.title || 'Page CYPASS',
+      window.location.href,
+      route.name?.toString() || 'Inconnue'
+    )
+    aiAnalysisStore.triggerAiAnalysis(aiAnalysisStore.preferredAi, prompt)
+  } else {
+    aiAnalysisStore.openModal()
+  }
+  store.isHelpOpen = false
+}
 
 // Horodatage de l'ouverture pour éviter les fermetures immédiates
 let lastOpenedAt = 0
