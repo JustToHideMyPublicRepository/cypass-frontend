@@ -8,57 +8,72 @@
         </p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-        <!-- Rôle (Full Width) -->
-        <div class="space-y-2 md:col-span-2">
-          <label class="text-[10px] font-black uppercase tracking-wider text-hsa flex items-center gap-2">
-            <IconUserBolt class="w-3 h-3 text-primary" /> Rôle de l'IA
-          </label>
-          <textarea v-model="aiStore.customRole" rows="2"
-            class="w-full bg-ash/30 border-2 border-ash rounded-2xl p-4 text-xs font-medium text-BtW outline-none focus:border-primary/50 transition-all resize-none"></textarea>
-        </div>
-
-        <!-- Colonne Gauche: Objectif & Travail -->
-        <div class="space-y-5">
-          <div class="space-y-2">
-            <label class="text-[10px] font-black uppercase tracking-wider text-hsa flex items-center gap-2">
-              <IconTarget class="w-3 h-3 text-primary" /> Objectif de l'analyse
-            </label>
-            <textarea v-model="aiStore.customObjective" rows="3"
-              class="w-full bg-ash/30 border-2 border-ash rounded-2xl p-4 text-xs font-medium text-BtW outline-none focus:border-primary/50 transition-all resize-none"></textarea>
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-6 overflow-y-auto no-scrollbar pr-1">
+        <!-- Section: Identité de l'IA -->
+        <div class="md:col-span-12 space-y-3">
+          <div class="flex items-center gap-2 px-1">
+            <IconUserBolt class="w-4 h-4 text-primary" />
+            <span class="text-[10px] font-black uppercase tracking-[0.2em] text-hsa">Identité & Expertise</span>
           </div>
-
-          <div class="space-y-2">
-            <label class="text-[10px] font-black uppercase tracking-wider text-hsa flex items-center gap-2">
-              <IconListCheck class="w-3 h-3 text-primary" /> Travail attendu
-            </label>
-            <textarea v-model="aiStore.customWork" rows="6"
-              class="w-full bg-ash/30 border-2 border-ash rounded-2xl p-4 text-xs font-medium text-BtW outline-none focus:border-primary/50 transition-all resize-none"></textarea>
+          <div class="group/field relative">
+            <textarea v-model="aiStore.customRole" rows="2"
+              class="w-full bg-ash/20 border-2 border-ash rounded-2xl p-4 text-xs font-semibold text-BtW outline-none focus:border-primary/40 focus:bg-WtB transition-all resize-none shadow-sm"
+              placeholder="Ex: Expert en cybersécurité..."></textarea>
+            <div
+              class="absolute bottom-3 right-3 text-[9px] text-hsa/40 font-mono opacity-0 group-focus-within/field:opacity-100 transition-opacity">
+              rôle_ia</div>
           </div>
         </div>
 
-        <!-- Colonne Droite: Constraints & Format -->
-        <div class="space-y-5">
-          <div class="space-y-2">
-            <label class="text-[10px] font-black uppercase tracking-wider text-hsa flex items-center gap-2">
-              <IconAlertCircle class="w-3 h-3 text-primary" /> Contraintes
-            </label>
-            <textarea v-model="aiStore.customConstraints" rows="3"
-              class="w-full bg-ash/30 border-2 border-ash rounded-2xl p-4 text-xs font-medium text-BtW outline-none focus:border-primary/50 transition-all resize-none"></textarea>
+        <!-- Section: Objectifs -->
+        <div class="md:col-span-12 grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+          <!-- Objectif Principal -->
+          <div class="space-y-3">
+            <div class="flex items-center gap-2 px-1">
+              <IconTarget class="w-4 h-4 text-primary" />
+              <span class="text-[10px] font-black uppercase tracking-[0.2em] text-hsa">Objectif Principal</span>
+            </div>
+            <textarea v-model="aiStore.customObjective" rows="4"
+              class="w-full bg-ash/20 border-2 border-ash rounded-2xl p-4 text-xs font-semibold text-BtW outline-none focus:border-primary/40 focus:bg-WtB transition-all resize-none shadow-sm"></textarea>
           </div>
 
-          <div class="space-y-2">
-            <label class="text-[10px] font-black uppercase tracking-wider text-hsa flex items-center gap-2">
-              <IconLayoutList class="w-3 h-3 text-primary" /> Format de réponse
-            </label>
-            <textarea v-model="aiStore.customFormat" rows="6"
-              class="w-full bg-ash/30 border-2 border-ash rounded-2xl p-4 text-xs font-medium text-BtW outline-none focus:border-primary/50 transition-all resize-none"></textarea>
+          <!-- Contraintes -->
+          <div class="space-y-3">
+            <div class="flex items-center gap-2 px-1">
+              <IconAlertCircle class="w-4 h-4 text-danger/70" />
+              <span class="text-[10px] font-black uppercase tracking-[0.2em] text-hsa">Limites & Contraintes</span>
+            </div>
+            <textarea v-model="aiStore.customConstraints" rows="4"
+              class="w-full bg-ash/20 border-2 border-ash rounded-2xl p-4 text-xs font-semibold text-BtW outline-none focus:border-danger/30 focus:bg-WtB transition-all resize-none shadow-sm"></textarea>
+          </div>
+        </div>
+
+        <!-- Section: Structure du résultat -->
+        <div class="md:col-span-12 grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+          <!-- Méthodologie -->
+          <div class="space-y-3">
+            <div class="flex items-center gap-2 px-1">
+              <IconListCheck class="w-4 h-4 text-primary" />
+              <span class="text-[10px] font-black uppercase tracking-[0.2em] text-hsa">Méthodologie (Work)</span>
+            </div>
+            <textarea v-model="aiStore.customWork" rows="7"
+              class="w-full bg-ash/20 border-2 border-ash rounded-2xl p-4 text-xs font-semibold text-BtW outline-none focus:border-primary/40 focus:bg-WtB transition-all resize-none shadow-sm"></textarea>
+          </div>
+
+          <!-- Format de sortie -->
+          <div class="space-y-3">
+            <div class="flex items-center gap-2 px-1">
+              <IconLayoutList class="w-4 h-4 text-primary" />
+              <span class="text-[10px] font-black uppercase tracking-[0.2em] text-hsa">Format de Sortie</span>
+            </div>
+            <textarea v-model="aiStore.customFormat" rows="7"
+              class="w-full bg-ash/20 border-2 border-ash rounded-2xl p-4 text-xs font-semibold text-BtW outline-none focus:border-primary/40 focus:bg-WtB transition-all resize-none shadow-sm"></textarea>
           </div>
         </div>
       </div>
 
-      <div class="pt-4 flex justify-end gap-3 border-t border-ash">
-        <UiBaseButton variant="ghost" @click="resetPrompt" class="!text-danger hover:!bg-danger/5">
+      <div class="pt-4 flex justify-end gap-3">
+        <UiBaseButton variant="ghost" @click="showResetConfirm = true" class="!text-danger hover:!bg-danger/5">
           <IconRotate class="w-4 h-4 mr-2" /> Réinitialiser
         </UiBaseButton>
         <UiBaseButton @click="aiStore.isSettingsOpen = false">
@@ -66,23 +81,29 @@
         </UiBaseButton>
       </div>
     </div>
+
+    <!-- Confirm Reset Modal -->
+    <UiConfirmModal :show="showResetConfirm" title="Réinitialiser le prompt ?"
+      message="Cette action restaurera les instructions par défaut. Vos personnalisations actuelles seront perdues."
+      confirmText="Réinitialiser" variant="danger" @confirm="handleReset" @cancel="showResetConfirm = false" />
   </UiBaseModal>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import { IconTarget, IconListCheck, IconAlertCircle, IconRotate, IconUserBolt, IconLayoutList } from '@tabler/icons-vue'
 import { useAiAnalysisStore } from '~/stores/aiAnalysis'
 
 const aiStore = useAiAnalysisStore()
+const showResetConfirm = ref(false)
 
-const resetPrompt = () => {
-  if (confirm('Voulez-vous vraiment réinitialiser le prompt aux valeurs par défaut ?')) {
-    aiStore.customRole = `Tu es un analyste documentaire senior spécialisé en synthèse stratégique et vulgarisation claire. Tu as l’habitude d’analyser des contenus web complexes et de les rendre compréhensibles pour un décideur pressé.`
-    aiStore.customObjective = `Lire intégralement la page, comprendre son message et produire :
+const handleReset = () => {
+  aiStore.customRole = `Tu es un analyste documentaire senior spécialisé en synthèse stratégique et vulgarisation claire. Tu as l’habitude d’analyser des contenus web complexes et de les rendre compréhensibles pour un décideur pressé.`
+  aiStore.customObjective = `Lire intégralement la page, comprendre son message et produire :
 - un résumé clair et structuré
 - une explication pédagogique du rôle de cette page
 - une identification des informations clés`
-    aiStore.customWork = `1. Résumer le contenu en 10 à 15 lignes maximum.
+  aiStore.customWork = `1. Résumer le contenu en 10 à 15 lignes maximum.
 2. Expliquer :
    - À qui s’adresse cette page
    - Quel problème elle cherche à résoudre
@@ -90,13 +111,13 @@ const resetPrompt = () => {
 3. Identifier les sections principales et leur rôle.
 4. Reformuler le contenu en langage simple si nécessaire.
 5. Conclure par une synthèse en 5 points essentiels.`
-    aiStore.customConstraints = `- Ne pas analyser le design.
+  aiStore.customConstraints = `- Ne pas analyser le design.
 - Ne pas proposer d’améliorations.
 - Se concentrer uniquement sur la compréhension et l’explication du contenu.`
-    aiStore.customFormat = `- Résumé global
+  aiStore.customFormat = `- Résumé global
 - Détail des sections
 - Explication pédagogique
 - Synthèse finale`
-  }
+  showResetConfirm.value = false
 }
 </script>

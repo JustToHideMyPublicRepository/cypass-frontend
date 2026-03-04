@@ -9,43 +9,46 @@
         </p>
       </div>
 
-      <!-- Scrollable AI List (Reduced Height) -->
-      <div class="max-h-48 overflow-y-auto pr-2 space-y-3 no-scrollbar pb-4 border-b border-ash/50 shrink-0">
+      <!-- Scrollable AI List (Optimized Grid) -->
+      <div
+        class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4 shrink-0 overflow-y-auto max-h-40 md:max-h-none no-scrollbar">
         <div v-for="ai in aiOptions" :key="ai.name" class="relative group/ai-container">
           <button @click="analyzeWith(ai)"
-            class="w-full flex items-center gap-4 p-4 rounded-3xl border-2 transition-all group/ai" :class="[
+            class="w-full flex flex-col items-center gap-2 p-3 rounded-2xl border-2 transition-all group/ai h-full"
+            :class="[
               aiStore.lastUsedAi === ai.name
                 ? 'border-primary bg-primary/5'
-                : 'border-ash hover:border-primary/50 hover:bg-ash/30'
+                : 'border-ash hover:border-primary/30 hover:bg-ash/20'
             ]">
             <div
-              class="w-12 h-12 rounded-2xl flex items-center justify-center transition-all shadow-sm overflow-hidden p-2"
-              :class="aiStore.lastUsedAi === ai.name ? 'bg-primary' : 'bg-ash group-hover/ai:bg-primary/20'">
+              class="w-10 h-10 rounded-xl flex items-center justify-center transition-all shadow-sm overflow-hidden p-1.5"
+              :class="aiStore.lastUsedAi === ai.name ? 'bg-primary' : 'bg-ash/50 group-hover/ai:bg-primary/10'">
               <img :src="ai.logo" :alt="ai.name" class="w-full h-full object-contain"
                 :class="{ 'grayscale group-hover/ai:grayscale-0': aiStore.lastUsedAi !== ai.name }">
             </div>
-            <div class="flex-grow text-left">
-              <div class="flex items-center gap-2">
-                <span class="text-sm font-black text-BtW group-hover/ai:text-primary transition-colors">{{ ai.name
-                }}</span>
+
+            <div class="text-center">
+              <div class="flex flex-col items-center gap-0.5">
+                <div class="flex items-center gap-1">
+                  <span
+                    class="text-[11px] font-black text-BtW group-hover/ai:text-primary transition-colors leading-tight">{{
+                      ai.name }}</span>
+                  <UiAppTooltip :content="ai.desc" :title="ai.name" widthClass="w-48" />
+                </div>
                 <span v-if="aiStore.lastUsedAi === ai.name"
-                  class="text-[9px] font-black uppercase tracking-tighter text-primary bg-primary/10 px-1.5 py-0.5 rounded">Dernier
+                  class="text-[7px] font-black uppercase tracking-tighter text-primary bg-primary/10 px-1 py-0.2 rounded">Dernier
                   utilisé</span>
               </div>
-              <div class="text-[10px] text-hsa font-medium">{{ ai.desc }}</div>
             </div>
-
-            <IconExternalLink
-              class="w-4 h-4 text-hsa opacity-0 group-hover/ai:opacity-100 transition-all translate-x-2 group-hover/ai:translate-x-0" />
           </button>
 
-          <!-- Toggle pour préférence -->
+          <!-- Toggle pour préférence (Overlay on top right) -->
           <button @click.stop="togglePreference(ai.name)"
-            class="absolute right-12 top-1/2 -translate-y-1/2 p-2 rounded-xl transition-all"
+            class="absolute right-1.5 top-1.5 p-1.5 rounded-lg transition-all z-10"
             :title="aiStore.preferredAi === ai.name ? 'Retirer des favoris' : 'Définir par défaut'"
-            :class="aiStore.preferredAi === ai.name ? 'text-warning' : 'text-hsa/20 hover:text-warning/50'">
-            <IconStar v-if="aiStore.preferredAi === ai.name" class="w-5 h-5 fill-current" />
-            <IconStar v-else class="w-5 h-5" />
+            :class="aiStore.preferredAi === ai.name ? 'text-warning bg-warning/10' : 'text-hsa/20 hover:text-warning/50 hover:bg-ash/50'">
+            <IconStar v-if="aiStore.preferredAi === ai.name" class="w-3.5 h-3.5 fill-current" />
+            <IconStar v-else class="w-3.5 h-3.5" />
           </button>
         </div>
       </div>
