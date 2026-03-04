@@ -94,6 +94,10 @@ const toc = [
 
 // Métadonnées SEO
 useHead({
-  title: 'Mentions Légales'
+  title: 'Mentions Légales',
+  meta: [
+    { name: 'description', content: 'Informations réglementaires relatives à l\'éditeur du service CYPASS.' },
+    { name: 'robots', content: 'index, follow' }
+  ]
 })
 </script>

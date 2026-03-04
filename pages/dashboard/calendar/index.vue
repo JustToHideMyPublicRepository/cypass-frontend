@@ -33,7 +33,11 @@ definePageMeta({
 })
 
 useHead({
-  title: 'Calendrier'
+  title: 'Calendrier',
+  meta: [
+    { name: 'description', content: 'Consultez vos activités et événements de sécurité sur votre calendrier CYPASS.' },
+    { name: 'robots', content: 'noindex, nofollow' }
+  ]
 })
 
 const {

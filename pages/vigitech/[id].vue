@@ -65,6 +65,10 @@ onMounted(() => {
 useHead({
   title: computed(() => incident.value
     ? `${incident.value.title} - VigiTech`
-    : 'Incident - VigiTech')
+    : 'Incident - VigiTech'),
+  meta: [
+    { name: 'description', content: 'Détails de l\'incident de sécurité signalé sur la plateforme communautaire VigiTech.' },
+    { name: 'robots', content: 'index, follow' }
+  ]
 })
 </script>

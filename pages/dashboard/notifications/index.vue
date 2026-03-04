@@ -332,6 +332,10 @@ onUnmounted(() => {
 })
 
 useHead({
-  title: 'Toutes les Notifications'
+  title: 'Toutes les Notifications',
+  meta: [
+    { name: 'description', content: 'Consultez vos alertes de sécurité, mises à jour et notifications importantes.' },
+    { name: 'robots', content: 'noindex, nofollow' }
+  ]
 })
 </script>

@@ -152,6 +152,10 @@ onMounted(() => {
 })
 
 useHead({
-  title: 'Gestion de documents'
+  title: 'Gestion de documents',
+  meta: [
+    { name: 'description', content: 'Gérez et vérifiez l\'intégrité de vos documents numériques sur DocSentry.' },
+    { name: 'robots', content: 'noindex, nofollow' }
+  ]
 })
 </script>

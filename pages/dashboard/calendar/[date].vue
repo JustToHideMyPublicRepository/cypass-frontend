@@ -114,7 +114,11 @@ const currentDayEvents = computed(() => {
 })
 
 useHead({
-  title: `${formattedDate.value} - Calendrier`
+  title: `${formattedDate.value} - Calendrier`,
+  meta: [
+    { name: 'description', content: `Détails des activités du ${formattedDate.value} sur CYPASS.` },
+    { name: 'robots', content: 'noindex, nofollow' }
+  ]
 })
 
 onMounted(() => {

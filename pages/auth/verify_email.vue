@@ -128,6 +128,10 @@ const handleResendSubmit = async (email: string) => {
 
 // Métadonnées SEO
 useHead({
-  title: 'Vérification de l\'email'
+  title: 'Vérification de l\'email',
+  meta: [
+    { name: 'description', content: 'Vérification de votre compte utilisateur sur CYPASS.' },
+    { name: 'robots', content: 'noindex, nofollow' }
+  ]
 })
 </script>

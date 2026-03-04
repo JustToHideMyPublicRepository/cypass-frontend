@@ -154,6 +154,10 @@ const handleReset = async () => {
 
 // Métadonnées SEO
 useHead({
-  title: 'Réinitialisation du mot de passe'
+  title: 'Réinitialisation du mot de passe',
+  meta: [
+    { name: 'description', content: 'Définissez votre nouveau mot de passe sécurisé sur CYPASS.' },
+    { name: 'robots', content: 'noindex, nofollow' }
+  ]
 })
 </script>

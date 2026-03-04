@@ -65,6 +65,10 @@ const components = [
 ]
 
 useHead({
-  title: 'Statut de services'
+  title: 'Statut de services',
+  meta: [
+    { name: 'description', content: 'Vérifiez en temps réel l\'état de fonctionnement des services CYPASS.' },
+    { name: 'robots', content: 'noindex, nofollow' }
+  ]
 })
 </script>

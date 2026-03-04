@@ -1,2 +1,57 @@
+# CYPASS robots.txt
+
 User-Agent: *
-Disallow:
+
+# SECURITY & PRIVATE
+Disallow: /auth/
+Disallow: /dashboard/
+Disallow: /system/search
+Disallow: /user/
+Disallow: /coming-soon
+Disallow: /status
+
+# NUXT & ARCHITECTURE
+Disallow: /_nuxt/
+Disallow: /_payload.json
+Disallow: /api/
+
+# PREVENT DUPLICATE CONTENT
+Disallow: /*?*
+Disallow: /*&*
+
+# CRAWL MANAGEMENT
+Crawl-delay: 5
+
+# ALLOW AI BOTS FOR SEARCH & RESPONSES
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Anthropic-ai
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: Diffbot
+Allow: /
+
+# SITEMAP
+Sitemap: https://cypass.netlify.app/sitemap.xml

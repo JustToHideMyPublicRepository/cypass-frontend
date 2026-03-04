@@ -92,6 +92,10 @@ const serviceDescription = computed(() => currentService.value?.description || "
 const serviceIcon = computed(() => currentService.value?.icon || IconRocket)
 
 useHead({
-  title: computed(() => currentService.value?.title || 'Bientôt disponible')
+  title: computed(() => currentService.value?.title || 'Bientôt disponible'),
+  meta: [
+    { name: 'description', content: 'Ce service CYPASS est en cours de développement et sera bientôt disponible.' },
+    { name: 'robots', content: 'noindex, nofollow' }
+  ]
 })
 </script>

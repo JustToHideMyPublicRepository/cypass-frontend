@@ -15,6 +15,10 @@ definePageMeta({
 })
 
 useHead({
-  title: 'À Propos'
+  title: 'À Propos',
+  meta: [
+    { name: 'description', content: 'En savoir plus sur la mission et les valeurs de CYPASS pour la confiance numérique.' },
+    { name: 'robots', content: 'index, follow' }
+  ]
 })
 </script>

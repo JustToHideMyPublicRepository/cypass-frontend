@@ -18,6 +18,10 @@ definePageMeta({
 })
 
 useHead({
-  title: 'Souveraineté numérique & sécurité'
+  title: 'Souveraineté numérique & sécurité',
+  meta: [
+    { name: 'description', content: 'CYPASS : La plateforme nationale souveraine pour la certification, la signature électronique et la confiance numérique au Bénin.' },
+    { name: 'robots', content: 'index, follow' }
+  ]
 })
 </script>

@@ -138,6 +138,10 @@ const toc = [
 
 // Métadonnées SEO
 useHead({
-  title: 'Politique de Confidentialité'
+  title: 'Politique de Confidentialité',
+  meta: [
+    { name: 'description', content: 'Découvrez comment nous protégeons vos données personnelles sur CYPASS.' },
+    { name: 'robots', content: 'index, follow' }
+  ]
 })
 </script>

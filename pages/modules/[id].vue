@@ -45,6 +45,10 @@ definePageMeta({
 })
 
 useHead({
-  title: computed(() => service.value?.title || 'Détails du Service')
+  title: computed(() => service.value?.title || 'Détails du Service'),
+  meta: [
+    { name: 'description', content: computed(() => service.value?.description || 'Informations détaillées sur ce service de sécurité CYPASS.') },
+    { name: 'robots', content: 'index, follow' }
+  ]
 })
 </script>

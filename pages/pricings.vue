@@ -16,6 +16,10 @@ definePageMeta({
 })
 
 useHead({
-  title: 'Packs et tarifs de certification'
+  title: 'Packs et tarifs de certification',
+  meta: [
+    { name: 'description', content: 'Consultez nos différentes offres et tarifs pour la certification numérique et les services de confiance CYPASS.' },
+    { name: 'robots', content: 'index, follow' }
+  ]
 })
 </script>

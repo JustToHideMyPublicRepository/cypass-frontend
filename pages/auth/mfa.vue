@@ -253,7 +253,11 @@ onUnmounted(() => {
 })
 
 useHead({
-  title: 'MFA - Vérification'
+  title: 'MFA Vérification',
+  meta: [
+    { name: 'description', content: 'Étape de vérification de sécurité par code MFA sur CYPASS.' },
+    { name: 'robots', content: 'noindex, nofollow' }
+  ]
 })
 </script>
 

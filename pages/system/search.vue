@@ -133,6 +133,10 @@ watch([query, activeFilter, currentSort], () => {
 }, { immediate: true })
 
 useHead({
-  title: computed(() => `Résultats pour "${query.value}"`)
+  title: computed(() => `Résultats pour "${query.value}"`),
+  meta: [
+    { name: 'description', content: 'Résultats de votre recherche sur l\'infrastructure CYPASS.' },
+    { name: 'robots', content: 'noindex, nofollow' }
+  ]
 })
 </script>

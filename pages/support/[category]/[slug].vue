@@ -116,6 +116,10 @@ definePageMeta({
 })
 
 useHead({
-  title: computed(() => article.value ? `${article.value.title} - Centre d'aide` : 'Article - Support')
+  title: computed(() => article.value ? `${article.value.title} - Centre d'aide` : 'Article - Support'),
+  meta: [
+    { name: 'description', content: computed(() => article.value?.content.substring(0, 150) + '...' || 'Article d\'aide détaillé pour vous accompagner sur CYPASS.') },
+    { name: 'robots', content: 'index, follow' }
+  ]
 })
 </script>

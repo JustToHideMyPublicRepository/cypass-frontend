@@ -114,6 +114,10 @@ onMounted(fetchPublicProfile)
 useHead({
   title: computed(() => user.value
     ? `Profil de ${user.value.first_name} ${user.value.last_name}`
-    : 'Profil public')
+    : 'Profil public'),
+  meta: [
+    { name: 'description', content: 'Consultez les activités publiques et signalements d\'un membre de la communauté CYPASS.' },
+    { name: 'robots', content: 'noindex, nofollow' }
+  ]
 })
 </script>

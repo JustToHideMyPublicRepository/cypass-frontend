@@ -33,7 +33,11 @@ definePageMeta({
 })
 
 useHead({
-  title: 'Mon profil'
+  title: 'Mon profil',
+  meta: [
+    { name: 'description', content: 'Gérez vos informations personnelles et vos paramètres de sécurité.' },
+    { name: 'robots', content: 'noindex, nofollow' }
+  ]
 })
 
 const authStore = useAuthStore()

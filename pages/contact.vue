@@ -31,7 +31,11 @@ definePageMeta({
 })
 
 useHead({
-  title: 'Contact'
+  title: 'Contact',
+  meta: [
+    { name: 'description', content: 'Contactez l\'équipe CYPASS pour toute question ou assistance technique.' },
+    { name: 'robots', content: 'index, follow' }
+  ]
 })
 
 const toast = useToastStore()

@@ -69,6 +69,10 @@ const handleApiKey = () => {
 
 // Métadonnées SEO
 useHead({
-  title: 'Développeurs'
+  title: 'Développeurs',
+  meta: [
+    { name: 'description', content: 'Ressources et API pour les développeurs souhaitant intégrer les services de confiance CYPASS.' },
+    { name: 'robots', content: 'index, follow' }
+  ]
 })
 </script>

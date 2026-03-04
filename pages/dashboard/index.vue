@@ -238,6 +238,10 @@ const formatTime = (ts: string) => {
 }
 
 useHead({
-  title: 'Tableau de bord'
+  title: 'Tableau de bord',
+  meta: [
+    { name: 'description', content: 'Vue d\'ensemble de votre activité et alertes de sécurité sur CYPASS.' },
+    { name: 'robots', content: 'noindex, nofollow' }
+  ]
 })
 </script>

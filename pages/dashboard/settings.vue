@@ -37,6 +37,10 @@ definePageMeta({
 })
 
 useHead({
-  title: 'Paramètres'
+  title: 'Paramètres',
+  meta: [
+    { name: 'description', content: 'Personnalisez votre expérience et configurez vos préférences CYPASS.' },
+    { name: 'robots', content: 'noindex, nofollow' }
+  ]
 })
 </script>

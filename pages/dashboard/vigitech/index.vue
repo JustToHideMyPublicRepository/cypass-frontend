@@ -139,6 +139,10 @@ onMounted(() => {
 })
 
 useHead({
-  title: 'Gestion des incidents'
+  title: 'Gestion des incidents',
+  meta: [
+    { name: 'description', content: 'Suivez et gérez vos signalements d\'incidents et votre veille cybernétique.' },
+    { name: 'robots', content: 'noindex, nofollow' }
+  ]
 })
 </script>

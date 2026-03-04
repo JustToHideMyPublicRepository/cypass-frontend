@@ -64,6 +64,10 @@ definePageMeta({
 })
 
 useHead({
-  title: computed(() => category.value ? `${category.value.title} - Support` : 'Catégorie - Support')
+  title: computed(() => category.value ? `${category.value.title} - Support` : 'Catégorie - Support'),
+  meta: [
+    { name: 'description', content: computed(() => category.value?.desc || 'Consultez les articles d\'aide pour cette catégorie sur CYPASS.') },
+    { name: 'robots', content: 'index, follow' }
+  ]
 })
 </script>

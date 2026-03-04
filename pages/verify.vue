@@ -30,7 +30,11 @@ definePageMeta({
 })
 
 useHead({
-  title: 'Vérifier un document'
+  title: 'Vérifier un document',
+  meta: [
+    { name: 'description', content: 'Vérifiez instantanément l\'authenticité et l\'intégrité de vos documents signés numériquement par CYPASS.' },
+    { name: 'robots', content: 'index, follow' }
+  ]
 })
 
 const route = useRoute()

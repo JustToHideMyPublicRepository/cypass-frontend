@@ -146,6 +146,10 @@ onMounted(() => {
 })
 
 useHead({
-  title: doc.value ? `${doc.value.filename} - DocSentry` : 'Détails du document - DocSentry'
+  title: doc.value ? `${doc.value.filename} - DocSentry` : 'Détails du document - DocSentry',
+  meta: [
+    { name: 'description', content: 'Informations détaillées et preuves cryptographiques du document sur CYPASS.' },
+    { name: 'robots', content: 'noindex, nofollow' }
+  ]
 })
 </script>

@@ -42,6 +42,10 @@ const onSelectCategory = (category: any) => {
 }
 
 useHead({
-  title: 'Centre d\'aide'
+  title: 'Centre d\'aide',
+  meta: [
+    { name: 'description', content: 'Trouvez des réponses à vos questions et apprenez à utiliser les services CYPASS.' },
+    { name: 'robots', content: 'index, follow' }
+  ]
 })
 </script>

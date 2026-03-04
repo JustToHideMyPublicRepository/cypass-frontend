@@ -18,7 +18,11 @@ definePageMeta({
 })
 
 useHead({
-  title: 'Partenaires'
+  title: 'Partenaires',
+  meta: [
+    { name: 'description', content: 'Découvrez les partenaires institutionnels et technologiques qui font confiance à l\'écosystème CYPASS.' },
+    { name: 'robots', content: 'index, follow' }
+  ]
 })
 
 const isModalOpen = ref(false)

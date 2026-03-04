@@ -192,6 +192,10 @@ onMounted(() => {
 })
 
 useHead({
-  title: notif.value ? notif.value.title : 'Notification'
+  title: notif.value ? notif.value.title : 'Notification',
+  meta: [
+    { name: 'description', content: 'Détails et actions recommandées pour cette notification de sécurité.' },
+    { name: 'robots', content: 'noindex, nofollow' }
+  ]
 })
 </script>

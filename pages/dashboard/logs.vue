@@ -25,10 +25,6 @@ definePageMeta({
   layout: 'default'
 })
 
-useHead({
-  title: 'Historique d\'activité'
-})
-
 const { logs, logStatistics, logUser, logFilters } = storeToRefs(profilStore)
 const loading = ref(false)
 
@@ -158,5 +154,13 @@ useShortcuts({
 
 onMounted(() => {
   fetchLogs()
+})
+
+useHead({
+  title: 'Historique d\'activité',
+  meta: [
+    { name: 'description', content: 'Consultez l\'historique détaillé des actions effectuées sur votre compte.' },
+    { name: 'robots', content: 'noindex, nofollow' }
+  ]
 })
 </script>

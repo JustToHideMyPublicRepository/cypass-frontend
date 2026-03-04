@@ -202,6 +202,10 @@ const openReportModal = (incidentId: string) => {
 onMounted(fetchAllData)
 
 useHead({
-  title: 'Veille cyber communautaire'
+  title: 'Veille cyber communautaire',
+  meta: [
+    { name: 'description', content: 'Participez à la veille cyber communautaire et restez informé des dernières menaces au Bénin.' },
+    { name: 'robots', content: 'index, follow' }
+  ]
 })
 </script>

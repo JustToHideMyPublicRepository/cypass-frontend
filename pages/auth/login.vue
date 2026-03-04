@@ -138,6 +138,10 @@ const handleForgot = async (forgotEmail: string) => {
 
 // Métadonnées SEO
 useHead({
-  title: 'Connexion'
+  title: 'Connexion',
+  meta: [
+    { name: 'description', content: 'Connectez-vous à votre espace sécurisé CYPASS.' },
+    { name: 'robots', content: 'noindex, nofollow' }
+  ]
 })
 </script>

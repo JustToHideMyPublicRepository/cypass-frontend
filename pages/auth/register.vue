@@ -157,6 +157,10 @@ const handleRegister = async () => {
 
 // Métadonnées SEO
 useHead({
-  title: 'Inscription'
+  title: 'Inscription',
+  meta: [
+    { name: 'description', content: 'Inscrivez-vous sur CYPASS, la plateforme de souveraineté numérique.' },
+    { name: 'robots', content: 'noindex, nofollow' }
+  ]
 })
 </script>

@@ -95,6 +95,10 @@ const handleConfirmRevoke = async () => {
 }
 
 useHead({
-  title: 'Sessions actives'
+  title: 'Sessions actives',
+  meta: [
+    { name: 'description', content: 'Contrôlez les appareils et sessions actuellement connectés à votre compte.' },
+    { name: 'robots', content: 'noindex, nofollow' }
+  ]
 })
 </script>

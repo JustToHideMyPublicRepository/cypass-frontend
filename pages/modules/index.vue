@@ -16,7 +16,11 @@ definePageMeta({
 })
 
 useHead({
-  title: 'Modules'
+  title: 'Modules',
+  meta: [
+    { name: 'description', content: 'Découvrez les différents services et modules de sécurité proposés par CYPASS.' },
+    { name: 'robots', content: 'index, follow' }
+  ]
 })
 </script>
 

@@ -72,6 +72,10 @@ const filteredCategories = computed(() => {
 })
 
 useHead({
-  title: 'Questions fréquentes'
+  title: 'Questions fréquentes',
+  meta: [
+    { name: 'description', content: 'Trouvez les réponses à vos questions les plus courantes sur les services et l\'utilisation de CYPASS.' },
+    { name: 'robots', content: 'index, follow' }
+  ]
 })
 </script>

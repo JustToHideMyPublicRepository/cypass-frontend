@@ -137,6 +137,10 @@ onMounted(async () => {
 })
 
 useHead({
-  title: 'Mes commentaires'
+  title: 'Mes commentaires',
+  meta: [
+    { name: 'description', content: 'Historique de vos participations et commentaires sur la veille VigiTech.' },
+    { name: 'robots', content: 'noindex, nofollow' }
+  ]
 })
 </script>
