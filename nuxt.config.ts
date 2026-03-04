@@ -99,6 +99,14 @@ export default defineNuxtConfig({
   },
 
   sitemap: {
+    exclude: [
+      '/auth/**',
+      '/dashboard/**',
+      '/user/**',
+      '/system/search',
+      '/coming-soon',
+      '/status'
+    ],
     xslColumns: [
       { label: 'URL', width: '50%' },
       { label: 'Last Modified', select: 'sitemap:lastmod', width: '25%' },

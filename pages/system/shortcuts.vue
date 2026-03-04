@@ -24,10 +24,6 @@ definePageMeta({
   layout: 'guest'
 })
 
-useHead({
-  title: 'Raccourcis Clavier'
-})
-
 const store = useShortcutsStore()
 const searchStore = useSearchStore()
 const searchComp = ref<any>(null)
@@ -111,5 +107,14 @@ const filteredShortcuts = computed(() => {
 
     return { ...cat, items }
   }).filter(cat => cat.items.length > 0)
+})
+
+
+useHead({
+  title: 'Raccourcis Clavier',
+  meta: [
+    { name: 'description', content: 'Liste des raccourcis clavier pour naviguer et utiliser efficacement la plateforme CYPASS.' },
+    { name: 'robots', content: 'index, follow' }
+  ]
 })
 </script>
