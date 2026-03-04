@@ -3,7 +3,7 @@
     <h1 class="text-4xl md:text-6xl font-black text-BtW tracking-tight">
       Une protection <span class="text-gradient-primary">sans compromis</span>
     </h1>
-    <p class="text-base md:text-xl text-hsa max-w-2xl mx-auto font-bold opacity-80 leading-relaxed">
+    <p class="text-base md:text-xl text-hsa max-w-2xl mx-auto opacity-80 leading-relaxed">
       Sécurisez votre identité numérique et vos documents avec des solutions adaptées à vos besoins, de l'usage
       personnel aux infrastructures critiques.
     </p>

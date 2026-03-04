@@ -88,10 +88,11 @@ const footerGroups = [
     ]
   },
   {
-    title: 'Centre d\aide',
+    title: 'Support',
     links: [
-      { label: 'Centre d\'aide', path: '/support' },
       { label: 'FAQ', path: '/faq' },
+      { label: 'Centre d\'aide', path: '/support' },
+      { label: 'Contact', path: '/contact' },
       { label: 'État du système', path: '/status' },
     ]
   },
@@ -101,6 +102,7 @@ const footerGroups = [
       { label: 'Mentions Légales', path: '/legal/mentions' },
       { label: 'Confidentialité', path: '/legal/privacy' },
       { label: 'CGU', path: '/legal/terms' },
+      { label: 'Raccourcis', path: '/system/shortcuts' },
     ]
   }
 ]

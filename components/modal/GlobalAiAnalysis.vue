@@ -112,11 +112,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import {
-  IconStar, IconExternalLink, IconCopy, IconCheck,
-  IconPencil, IconLink, IconTag, IconSettings as IconSettingsSmall
-} from '@tabler/icons-vue'
+import { ref, computed, watch } from 'vue'
+import { IconStar, IconCopy, IconCheck, IconPencil, IconLink, IconTag, IconSettings as IconSettingsSmall } from '@tabler/icons-vue'
 import { useAiAnalysisStore } from '~/stores/aiAnalysis'
 import { useToastStore } from '~/stores/toast'
 import { useRoute } from 'vue-router'
@@ -148,9 +145,29 @@ const aiOptions = [
   }
 ]
 
-const pageTitle = computed(() => document.title || 'Page CYPASS')
-const pageUrl = computed(() => window.location.href)
-const routeName = computed(() => route.name?.toString() || 'Inconnue')
+const pageTitle = ref('')
+const pageUrl = ref('')
+const routeName = ref('')
+
+const refreshContext = () => {
+  pageTitle.value = document.title || 'Page CYPASS'
+  pageUrl.value = window.location.href
+  routeName.value = route.name?.toString() || 'Inconnue'
+}
+
+// Refresh when modal opens
+watch(() => aiStore.isModalOpen, (newVal) => {
+  if (newVal) {
+    refreshContext()
+  }
+}, { immediate: true })
+
+// Also refresh on route changes if modal is open
+watch(() => route.fullPath, () => {
+  if (aiStore.isModalOpen) {
+    refreshContext()
+  }
+})
 
 const generatedPrompt = computed(() => {
   return aiStore.getGeneratedPrompt(
@@ -161,6 +178,7 @@ const generatedPrompt = computed(() => {
 })
 
 const analyzeWith = (ai: any) => {
+  refreshContext() // Final check before sending
   aiStore.triggerAiAnalysis(ai.name, generatedPrompt.value)
 }
 
