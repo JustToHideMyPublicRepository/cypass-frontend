@@ -11,7 +11,7 @@
 
       <!-- Scrollable AI List (Optimized Grid) -->
       <div
-        class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4 shrink-0 overflow-y-auto max-h-40 md:max-h-none no-scrollbar">
+        class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4 shrink-0 md:overflow-visible overflow-y-auto max-h-40 md:max-h-none no-scrollbar">
         <div v-for="ai in aiOptions" :key="ai.name" class="relative group/ai-container">
           <button @click="analyzeWith(ai)"
             class="w-full flex flex-col items-center gap-2 p-3 rounded-2xl border-2 transition-all group/ai h-full"
