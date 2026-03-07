@@ -89,9 +89,9 @@ export const useAiAnalysisStore = defineStore('aiAnalysis', {
 Contexte :
 Je te fournis l’URL suivante :
 ${url}
-titre : ${title} (Route: ${routeName})
+titre : ${title}
 
-Il s’agit d’une page de la plateforme CYPASS.
+Il s’agit de la page ${routeName} de la plateforme CYPASS.
 Je veux comprendre rapidement son contenu et son utilité sans devoir tout lire en détail.
 
 Objectif :
