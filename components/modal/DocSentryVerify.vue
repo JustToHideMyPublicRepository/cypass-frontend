@@ -8,7 +8,7 @@
       <RootVerifySubModeSelector v-if="!result && !loading && verifyMode === 'file'" v-model="pdfSubMode" />
 
       <!-- Zone de dépôt pour fichier / QR -->
-      <div v-if="!activeFile && (verifyMode === 'file' || verifyMode === 'qr') && !result"
+      <div v-if="!activeFile && (verifyMode === 'file' || verifyMode === 'qr') && !result && !isCameraMode"
         class="border-4 border-dashed border-primary/10 rounded-[2.5rem] p-12 text-center hover:border-primary/40 transition-all cursor-pointer group bg-ash/20 hover:bg-primary/5 overflow-hidden relative"
         @click="triggerFileSelect">
         <input type="file" ref="fileInput" class="hidden"
@@ -29,11 +29,25 @@
           <p class="text-[10px] text-hsa mt-2 tracking-[0.3em] font-black opacity-60">
             {{ verifyMode === 'file' ? 'Glissez le fichier PDF ici' : 'Glissez l\'image du QR ici' }}
           </p>
+
+          <div v-if="verifyMode === 'qr' && !isCameraMode" class="mt-8 flex justify-center pointer-events-auto">
+            <UiBaseButton variant="accent" size="sm" @click.stop="isCameraMode = true">
+              <template #icon>
+                <IconCamera class="w-4 h-4" />
+              </template>
+              Utiliser la caméra
+            </UiBaseButton>
+          </div>
         </div>
 
         <div
           class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
         </div>
+      </div>
+
+      <!-- Zone de caméra -->
+      <div v-if="isCameraMode && verifyMode === 'qr' && !result && !activeFile" class="py-4">
+        <RootVerifyCameraScanner @capture="handleCameraCapture" @cancel="isCameraMode = false" />
       </div>
 
       <!-- Zone de saisie pour Hash -->
@@ -217,7 +231,7 @@
 import { ref, onUnmounted, watch, computed } from 'vue'
 import {
   IconSearch, IconFileText, IconShieldOff, IconX, IconHash,
-  IconCopy, IconCheck, IconRosetteDiscountCheck, IconQrcode, IconChevronDown
+  IconCopy, IconCheck, IconRosetteDiscountCheck, IconQrcode, IconChevronDown, IconCamera
 } from '@tabler/icons-vue'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
@@ -256,6 +270,7 @@ const fileErrorMessage = ref('')
 const errorFileName = ref('')
 const errorFileType = ref('')
 const errorFileSize = ref('')
+const isCameraMode = ref(false)
 
 /**
  * Affiche la modale d'erreur personnalisée
@@ -305,6 +320,13 @@ const validateFile = (selectedFile: File): boolean => {
   return true
 }
 
+const handleCameraCapture = (file: File) => {
+  if (validateFile(file)) {
+    qrFile.value = file
+    isCameraMode.value = false
+  }
+}
+
 /**
  * Réinitialise les étapes de progression visuelle
  */
@@ -343,6 +365,7 @@ const resetCurrentFile = () => {
 
 watch(verifyMode, () => {
   // Clear only transient states when mode changes
+  isCameraMode.value = false
   hashInput.value = ''
   error.value = null
   result.value = null
