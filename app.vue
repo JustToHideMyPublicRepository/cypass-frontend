@@ -12,7 +12,10 @@
       <ModalGlobalAiAnalysis />
       <ModalGlobalAiAnalysisSettings />
     </NuxtLayout>
-    <UtilsOfflineQuiz v-if="isOffline" />
+
+    <UtilsOfflineQuiz v-if="isOffline" :connection-restored="connectionRestored" />
+
+    <UtilsNoScript />
   </div>
 </template>
 
@@ -27,11 +30,18 @@ const shortcutsStore = useShortcutsStore()
 const searchStore = useSearchStore()
 const aiAnalysisStore = useAiAnalysisStore()
 
-const isOffline = ref(process.client ? !navigator.onLine : false)
+const isOffline = ref(false)
+const connectionRestored = ref(false)
 
 const updateOnlineStatus = () => {
   if (process.client) {
-    isOffline.value = !navigator.onLine
+    if (!navigator.onLine) {
+      isOffline.value = true
+      connectionRestored.value = false
+    } else if (isOffline.value) {
+      // Don't close immediately, just notify the quiz
+      connectionRestored.value = true
+    }
   }
 }
 

@@ -57,6 +57,14 @@ export const navigationShortcuts: Record<string, ShortcutEntry> = {
     group: 'Navigation',
     modifier: 'Shift'
   },
+  pricing: {
+    keys: ['r'],
+    label: 'Tarification',
+    path: '/pricings',
+    isGlobal: true,
+    group: 'Navigation',
+    modifier: 'Shift'
+  },
   status: {
     keys: ['t'],
     label: 'État des services',

@@ -40,6 +40,10 @@ export default {
         code: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', '"Liberation Mono"', '"Courier New"', 'monospace']
       },
       keyframes: {
+        'fade-in': {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
         'fade-up': {
           '0%': { opacity: '0', transform: 'translateY(20px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
@@ -56,12 +60,20 @@ export default {
           '0%': { opacity: '0', transform: 'translateX(-20px)' },
           '100%': { opacity: '1', transform: 'translateX(0)' },
         },
+        'bounce-subtle': {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-4px)' },
+        },
+
       },
       animation: {
+        'fade-in': 'fade-in 0.5s ease-out forwards',
         'fade-up': 'fade-up 0.8s ease-out forwards',
         'fade-down': 'fade-down 0.8s ease-out forwards',
         'fade-left': 'fade-left 0.8s ease-out forwards',
         'fade-right': 'fade-right 0.8s ease-out forwards',
+        'bounce-subtle': 'bounce-subtle 2s ease-in-out infinite',
+
         'pulse-slow': 'pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'pulse-slower': 'pulse 10s cubic-bezier(0.4, 0, 0.6, 1) infinite',
       },

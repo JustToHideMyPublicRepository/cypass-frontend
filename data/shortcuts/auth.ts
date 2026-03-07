@@ -9,6 +9,14 @@ export const authShortcuts: Record<string, ShortcutEntry> = {
     group: 'Authentification',
     modifier: 'Shift'
   },
+  mfa: {
+    keys: ['a', 'f'],
+    label: 'MFA',
+    path: '/auth/mfa',
+    isGlobal: true,
+    group: 'Authentification',
+    modifier: 'Shift'
+  },
   register: {
     keys: ['a', 'r'],
     label: 'Inscription',

@@ -25,13 +25,7 @@
         </div>
       </Transition>
 
-      <!-- Connection Status indicator at bottom -->
-      <div class="text-center mt-4">
-        <div class="inline-flex items-center gap-2 text-textClr/40 text-xs font-medium">
-          <div class="w-2 h-2 rounded-full bg-warning border border-warning/50 animate-pulse"></div>
-          En attente de rétablissement du réseau...
-        </div>
-      </div>
+      <UtilsOfflineQuizStatus :connection-restored="!!connectionRestored" />
     </div>
   </div>
 </template>
@@ -40,6 +34,10 @@
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted, provide, onUnmounted } from 'vue'
 import { offlineQuestions, type Question } from '~/utils/offlineQuizQuestions'
+
+const props = defineProps<{
+  connectionRestored?: boolean
+}>()
 
 const score = ref(0)
 const highScore = ref(0)

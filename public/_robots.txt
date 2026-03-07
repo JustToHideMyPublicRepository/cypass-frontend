@@ -10,17 +10,10 @@ Disallow: /user/
 Disallow: /coming-soon
 Disallow: /status
 
-# NUXT & ARCHITECTURE
-Disallow: /_nuxt/
+# NUXT, ARCHITECTURE et PREVENT DUPLICATE CONTENT
 Disallow: /_payload.json
-Disallow: /api/
-
-# PREVENT DUPLICATE CONTENT
 Disallow: /*?*
 Disallow: /*&*
-
-# CRAWL MANAGEMENT
-Crawl-delay: 5
 
 # ALLOW AI BOTS FOR SEARCH & RESPONSES
 User-agent: GPTBot
