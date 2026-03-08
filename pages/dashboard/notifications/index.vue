@@ -1,102 +1,17 @@
 <template>
   <div class="max-w-4xl mx-auto space-y-4 md:space-y-6">
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-4 sm:px-0">
-      <h1 class="text-2xl md:text-3xl font-black text-BtW">Notifications</h1>
-      <div class="flex gap-2">
-        <UiBaseButton v-if="store.unreadCount > 0" @click="handleMarkAllAsRead" variant="ghost"
-          class="flex-1 sm:flex-none !px-4 !py-2 !rounded-xl !bg-primary/10 !text-primary hover:!bg-primary/20 transition-all !font-bold !text-[10px] md:!text-xs uppercase tracking-widest border border-primary/20 !h-auto">
-          Tout marquer comme lu
-        </UiBaseButton>
-      </div>
-    </div>
+    <!-- Header -->
+    <MeNotificationsHeader :unread-count="store.unreadCount" @mark-all-read="handleMarkAllAsRead" />
 
-    <!-- Stats Cards / Categories -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 px-4 sm:px-0">
-      <UiBaseCard class="bg-primary/5 border-primary/20 p-4">
-        <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
-            <IconBell class="w-4 h-4" />
-          </div>
-          <div>
-            <p class="text-[8px] font-black uppercase tracking-widest text-hsa">Total</p>
-            <p class="text-lg font-black text-BtW">{{ store.notifications.length }}</p>
-          </div>
-        </div>
-      </UiBaseCard>
+    <!-- Stats -->
+    <MeNotificationsStats :total="store.notifications.length" :counts="categoryCounts"
+      :active-category="filterState.category"
+      @filter-category="cat => filterState.category = filterState.category === cat ? '' : cat" />
 
-      <UiBaseCard class="bg-green-500/5 border-green-500/20 p-4 cursor-pointer hover:bg-green-500/10 transition-all"
-        @click="filterState.category = filterState.category === 'DOC' ? '' : 'DOC'">
-        <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-xl bg-green-500/10 text-green-500 flex items-center justify-center">
-            <IconFileText class="w-4 h-4" />
-          </div>
-          <div>
-            <p class="text-[8px] font-black uppercase tracking-widest text-hsa">Documents</p>
-            <p class="text-lg font-black text-BtW">{{ categoryCounts.DOC }}</p>
-          </div>
-        </div>
-      </UiBaseCard>
-
-      <UiBaseCard class="bg-amber-500/5 border-amber-500/20 p-4 cursor-pointer hover:bg-amber-500/10 transition-all"
-        @click="filterState.category = filterState.category === 'SEC' ? '' : 'SEC'">
-        <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-xl bg-amber-500/10 text-amber-600 flex items-center justify-center">
-            <IconShieldLock class="w-4 h-4" />
-          </div>
-          <div>
-            <p class="text-[8px] font-black uppercase tracking-widest text-hsa">Sécurité</p>
-            <p class="text-lg font-black text-BtW">{{ categoryCounts.SEC }}</p>
-          </div>
-        </div>
-      </UiBaseCard>
-
-      <UiBaseCard class="bg-blue-500/5 border-blue-500/20 p-4 cursor-pointer hover:bg-blue-500/10 transition-all"
-        @click="filterState.category = filterState.category === 'PRF' ? '' : 'PRF'">
-        <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-xl bg-blue-500/10 text-blue-500 flex items-center justify-center">
-            <IconUser class="w-4 h-4" />
-          </div>
-          <div>
-            <p class="text-[8px] font-black uppercase tracking-widest text-hsa">Profil</p>
-            <p class="text-lg font-black text-BtW">{{ categoryCounts.PRF }}</p>
-          </div>
-        </div>
-      </UiBaseCard>
-    </div>
-
-    <!-- Filters Bar -->
-    <div class="px-4 sm:px-0 flex flex-wrap gap-2 items-center">
-      <div class="flex items-center gap-2 bg-ash/30 p-1 rounded-xl border border-ash">
-        <UiBaseButton v-for="status in ['all', 'unread', 'read']" :key="status" @click="filterState.status = status"
-          variant="ghost"
-          class="!px-3 !py-1.5 !rounded-lg !text-[10px] !font-black uppercase tracking-tighter transition-all !h-auto"
-          :class="filterState.status === status ? '!bg-WtB !text-primary shadow-sm' : 'text-hsa hover:!text-BtW'">
-          {{ status === 'all' ? 'Toutes' : status === 'unread' ? 'Non lues' : 'Lues' }}
-        </UiBaseButton>
-      </div>
-
-      <select v-model="filterState.priority"
-        class="bg-ash/30 border border-ash rounded-xl px-3 py-1.5 text-[10px] font-black uppercase tracking-tighter text-hsa outline-none hover:border-primary/30 transition-all cursor-pointer">
-        <option value="all">Priorité (Toutes)</option>
-        <option value="standard">Standard</option>
-        <option value="medium">Moyenne</option>
-        <option value="high">Haute</option>
-      </select>
-
-      <UiBaseButton @click="toggleSort" variant="ghost"
-        class="!bg-ash/30 border border-ash !rounded-xl !px-3 !py-1.5 !text-[10px] !font-black uppercase tracking-tighter text-hsa !flex !items-center !gap-1.5 hover:!border-primary/30 transition-all !h-auto">
-        <IconArrowsSort class="w-3 h-3" />
-        {{ filterState.order === 'desc' ? 'Plus récents' : 'Plus anciens' }}
-      </UiBaseButton>
-
-      <div class="flex-1"></div>
-
-      <UiBaseButton v-if="hasActiveFilters" @click="resetFilters" variant="ghost"
-        class="!text-[9px] !font-black uppercase text-hsa hover:!text-danger !flex !items-center !gap-1 transition-colors !p-0 !bg-transparent hover:!bg-transparent !h-auto">
-        <IconX class="w-3 h-3" />
-        Réinitialiser
-      </UiBaseButton>
-    </div>
+    <!-- Filters -->
+    <MeNotificationsFilters v-model="filterState" :has-active-filters="hasActiveFilters"
+      @update:status="val => filterState.status = val" @update:priority="val => filterState.priority = val"
+      @toggle-sort="toggleSort" @reset="resetFilters" />
 
     <!-- List -->
     <UiBaseCard class="p-0 overflow-hidden sm:rounded-2xl border-x-0 sm:border-x">
@@ -104,60 +19,14 @@
         <UiLogoLoader size="xl" />
       </div>
 
-      <div v-else-if="!filteredNotifications.length" class="p-12 md:p-20 text-center">
-        <IconBellOff class="w-12 md:w-16 h-12 md:h-16 mx-auto mb-4 opacity-10" />
-        <h3 class="text-lg md:text-xl font-bold text-BtW">Aucune notification</h3>
-        <p class="text-xs md:text-sm text-hsa mt-2">Aucune notification ne correspond à vos filtres.</p>
-      </div>
+      <MeNotificationsEmpty v-else-if="!filteredNotifications.length" />
 
       <div v-else class="divide-y divide-ash">
-        <div v-for="notif in filteredNotifications" :key="notif.id"
-          :class="['p-4 md:p-6 flex gap-3 md:gap-4 transition-colors relative group cursor-pointer', !notif.is_read ? 'bg-primary/5 hover:bg-primary/10' : 'hover:bg-ash/20']"
-          @click="goToDetail(notif.id)">
-
-          <div v-if="!notif.is_read" class="absolute left-0 top-0 bottom-0 w-1 bg-primary"></div>
-
-          <div :class="[
-            'w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl flex items-center justify-center shrink-0 transition-transform group-hover:scale-105',
-            !notif.is_read ? getTypeStyles(notif.type) : 'bg-ash/50 text-hsa'
-          ]">
-            <component :is="notif.is_read ? IconCheck : getTypeIcon(notif.type)" class="w-5 h-5 md:w-6 md:h-6" />
-          </div>
-
-          <div class="flex-1 min-w-0">
-            <div class="flex justify-between items-start mb-1 gap-4">
-              <div class="flex flex-col gap-1">
-                <div class="flex items-center gap-2">
-                  <span
-                    :class="['text-[8px] font-black px-1.5 py-0.5 rounded-md uppercase tracking-thighter', getCategoryBadgeClass(notif.type)]">
-                    {{ getCategoryLabel(getCategory(notif.type)) }}
-                  </span>
-                  <span v-if="notif.priority === 'high'" class="text-[8px] font-black text-red-500 animate-pulse">
-                    PRIORITÉ HAUTE
-                  </span>
-                </div>
-                <h3 class="font-bold text-BtW truncate text-sm md:text-base">{{ notif.title }}</h3>
-              </div>
-              <span class="text-[10px] md:text-xs text-hsa whitespace-nowrap">{{ formatDate(notif.created_at) }}</span>
-            </div>
-            <p class="text-xs md:text-sm text-hsa line-clamp-2 leading-relaxed">{{ notif.message }}</p>
-
-            <div class="flex items-center gap-4 mt-4">
-              <UiBaseButton v-if="!notif.is_read" @click.stop="handleMarkAsRead(notif.id)" variant="ghost"
-                class="!text-[10px] !font-black uppercase tracking-widest !text-primary hover:!underline !p-0 !min-h-0 !h-auto !bg-transparent hover:!bg-transparent">
-                Marquer comme lu
-              </UiBaseButton>
-              <UiBaseButton @click.stop="handleDelete(notif.id)" variant="ghost"
-                class="!text-[10px] !font-black uppercase tracking-widest text-danger transition-opacity !p-0 !min-h-0 !h-auto !bg-transparent hover:!bg-transparent"
-                :class="isMobile ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'">
-                Supprimer
-              </UiBaseButton>
-            </div>
-          </div>
-        </div>
+        <MeNotificationsCard v-for="notif in filteredNotifications" :key="notif.id" :notification="notif"
+          :is-mobile="isMobile" @click="goToDetail" @mark-read="handleMarkAsRead" @delete="handleDelete" />
       </div>
 
-      <!-- Pagination (Only if no local filtering, or if has_more) -->
+      <!-- Pagination -->
       <div v-if="store.pagination.has_more && !hasActiveFilters" class="p-6 border-t border-ash text-center">
         <UiBaseButton variant="secondary" @click="loadMore" :loading="store.loading" block class="sm:w-auto">
           Charger plus
@@ -175,18 +44,13 @@
 
 <script setup lang="ts">
 import { onMounted, reactive, ref, onUnmounted, computed } from 'vue'
-import {
-  IconBell, IconBellOff, IconCheck, IconTrash, IconFileText, IconShieldLock, IconUser, IconArrowsSort, IconX
-} from '@tabler/icons-vue'
+import { IconTrash } from '@tabler/icons-vue'
 import { useNotificationsStore } from '~/stores/notifications'
 import { useToastStore } from '~/stores/toast'
-import { useNotificationStyles } from '~/composables/useNotificationStyles'
-import { format } from 'date-fns'
-import { fr } from 'date-fns/locale'
 
 const store = useNotificationsStore()
 const toastStore = useToastStore()
-const { getTypeIcon, getTypeStyles, getCategory, getCategoryLabel } = useNotificationStyles()
+const { getCategory } = useNotificationStyles()
 
 const filterState = reactive({
   status: 'all', // all, unread, read
@@ -246,24 +110,6 @@ const resetFilters = () => {
 
 const toggleSort = () => {
   filterState.order = filterState.order === 'desc' ? 'asc' : 'desc'
-}
-
-const getCategoryBadgeClass = (type: string) => {
-  const cat = getCategory(type)
-  switch (cat) {
-    case 'DOC': return 'bg-green-500/10 text-green-600'
-    case 'SEC': return 'bg-amber-500/10 text-amber-600'
-    case 'PRF': return 'bg-blue-500/10 text-blue-600'
-    default: return 'bg-ash text-hsa'
-  }
-}
-
-const formatDate = (date: string) => {
-  try {
-    return format(new Date(date), 'dd MMMM yyyy à HH:mm', { locale: fr })
-  } catch (e) {
-    return date
-  }
 }
 
 const handleMarkAllAsRead = async () => {

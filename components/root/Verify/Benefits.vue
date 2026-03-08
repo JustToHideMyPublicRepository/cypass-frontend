@@ -23,11 +23,11 @@ const benefits = [
   {
     icon: IconServer,
     title: 'Infrastructures d\'État',
-    desc: 'Vérification effectuée sur les serveurs souverains du Bénin.'
+    desc: 'Vérification effectuée sur nos serveurs sécurisés.'
   },
   {
     icon: IconCertificate,
-    title: 'Preuve Légale',
+    title: 'Preuve légale',
     desc: 'Validité juridique conforme aux normes de signature électronique.'
   }
 ]
