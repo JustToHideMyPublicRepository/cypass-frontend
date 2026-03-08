@@ -72,6 +72,37 @@ export const useReportStore = defineStore('report', {
       } catch (err) {
         return null
       }
+    },
+
+    async updateIncidentReport(reportId: string, reason: string, details: string) {
+      try {
+        const response: any = await $fetch('/api/profile/report_incident_update', {
+          method: 'PUT',
+          body: { report_id: reportId, reason, details }
+        })
+        if (response.success) {
+          // Update local state if needed (e.g., refresh list)
+          await this.fetchSentReports()
+        }
+        return response
+      } catch (err: any) {
+        return { success: false, message: err.data?.message || err.message || 'Erreur lors de la mise à jour' }
+      }
+    },
+
+    async deleteIncidentReport(reportId: string) {
+      try {
+        const response: any = await $fetch('/api/profile/report_incident_delete', {
+          method: 'DELETE',
+          body: { report_id: reportId }
+        })
+        if (response.success) {
+          this.sentReports = this.sentReports.filter(r => r.id !== reportId)
+        }
+        return response
+      } catch (err: any) {
+        return { success: false, message: err.data?.message || err.message || 'Erreur lors de la suppression' }
+      }
     }
   }
 })

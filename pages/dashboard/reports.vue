@@ -19,25 +19,34 @@
       <!-- Liste -->
       <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <MeReportsCard v-for="report in currentReports" :key="report.id" :report="report" :mode="activeTab"
-          @view-details="handleViewDetails" />
+          @view-details="handleViewDetails" @edit="handleEditReport" @delete="handleDeleteReport" />
       </div>
     </div>
 
     <!-- Modale de Détails -->
     <ModalReportDetail :show="showDetail" :report="selectedReport" @close="showDetail = false" />
+
+    <!-- Modale de Modification (Incident) -->
+    <ModalVigitechReportIncident :show="showEditModal" :incident-id="selectedEditReport?.incident_id || ''"
+      :report="selectedEditReport" @close="showEditModal = false" @success="fetchData" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { useReportStore } from '~/stores/report'
+import { useToastStore } from '~/stores/toast'
 
 const store = useReportStore()
+const toast = useToastStore()
 const router = useRouter()
 const route = useRoute()
 
 const activeTab = ref<'sent' | 'received'>('sent')
 const showDetail = ref(false)
 const selectedReport = ref<any>(null)
+
+const showEditModal = ref(false)
+const selectedEditReport = ref<any>(null)
 
 const tabs: { id: 'sent' | 'received'; label: string }[] = [
   { id: 'sent', label: 'Envoyés' },
@@ -54,6 +63,22 @@ const handleViewDetails = async (report: any) => {
   const details = await store.fetchReportDetails(report.id)
   if (details) {
     selectedReport.value = { ...report, ...details }
+  }
+}
+
+const handleEditReport = (report: any) => {
+  selectedEditReport.value = report
+  showEditModal.value = true
+}
+
+const handleDeleteReport = async (report: any) => {
+  if (!confirm('Êtes-vous sûr de vouloir supprimer ce signalement ? Cette action est irréversible.')) return
+
+  const result = await store.deleteIncidentReport(report.id)
+  if (result.success) {
+    toast.showToast('success', 'Supprimé', 'Le signalement a été supprimé.')
+  } else {
+    toast.showToast('error', 'Erreur', result.message || 'Impossible de supprimer le signalement.')
   }
 }
 
