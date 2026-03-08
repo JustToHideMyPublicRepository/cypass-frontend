@@ -139,10 +139,6 @@ import { useNotificationStyles } from '~/composables/useNotificationStyles'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 
-definePageMeta({
-  layout: 'default'
-})
-
 const route = useRoute()
 const store = useNotificationsStore()
 const toastStore = useToastStore()

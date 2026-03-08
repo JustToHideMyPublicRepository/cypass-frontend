@@ -22,10 +22,6 @@ import { getLogActionInfo } from '~/utils/logs'
 const profilStore = useProfilStore()
 const route = useRoute()
 
-definePageMeta({
-  layout: 'default'
-})
-
 const { logs, logStatistics, logUser, logFilters } = storeToRefs(profilStore)
 const loading = ref(false)
 

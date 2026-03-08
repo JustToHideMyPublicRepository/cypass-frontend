@@ -28,10 +28,6 @@ import { ref, watch, onMounted } from 'vue'
 import { addMonths, subMonths, format } from 'date-fns'
 import { useCalendarEvents } from '~/composables/useCalendarEvents'
 
-definePageMeta({
-  layout: 'default'
-})
-
 useHead({
   title: 'Calendrier',
   meta: [

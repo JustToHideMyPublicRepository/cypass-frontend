@@ -32,10 +32,6 @@ import { ref, reactive, computed, onMounted } from 'vue'
 import { useAuthStore } from '~/stores/auth'
 import { useToastStore } from '~/stores/toast'
 
-definePageMeta({
-  layout: 'default'
-})
-
 const authStore = useAuthStore()
 const toastStore = useToastStore()
 const sessions = ref<any[]>([])

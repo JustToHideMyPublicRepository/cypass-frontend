@@ -32,10 +32,6 @@ onMounted(() => {
   settingsPref.loadFromLocalStorage()
 })
 
-definePageMeta({
-  layout: 'default'
-})
-
 useHead({
   title: 'Paramètres',
   meta: [

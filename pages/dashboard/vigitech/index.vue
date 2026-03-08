@@ -43,10 +43,6 @@ import { useVigitechStore } from '~/stores/vigitech'
 import { useToastStore } from '~/stores/toast'
 import type { Incident } from '~/types/vigitech'
 
-definePageMeta({
-  layout: 'default'
-})
-
 const store = useVigitechStore()
 const showCreateModal = ref(false)
 const editIncident = ref<Incident | null>(null)

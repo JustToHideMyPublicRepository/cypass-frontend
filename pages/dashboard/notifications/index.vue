@@ -176,19 +176,13 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref, onUnmounted, computed } from 'vue'
 import {
-  IconBell, IconBellOff, IconCircleCheck, IconCheck,
-  IconAlertTriangle, IconInfoCircle, IconShieldCheck, IconTrash,
-  IconFileText, IconShieldLock, IconUser, IconArrowsSort, IconX
+  IconBell, IconBellOff, IconCheck, IconTrash, IconFileText, IconShieldLock, IconUser, IconArrowsSort, IconX
 } from '@tabler/icons-vue'
 import { useNotificationsStore } from '~/stores/notifications'
 import { useToastStore } from '~/stores/toast'
 import { useNotificationStyles } from '~/composables/useNotificationStyles'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
-
-definePageMeta({
-  layout: 'default'
-})
 
 const store = useNotificationsStore()
 const toastStore = useToastStore()

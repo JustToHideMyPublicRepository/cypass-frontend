@@ -33,10 +33,6 @@ import { fr } from 'date-fns/locale'
 import { useCalendarEvents } from '~/composables/useCalendarEvents'
 import { CALENDAR_FILTERS as AVAILABLE_FILTERS } from '~/utils/calendar'
 
-definePageMeta({
-  layout: 'default'
-})
-
 const route = useRoute()
 const dateParam = route.params.date as string
 

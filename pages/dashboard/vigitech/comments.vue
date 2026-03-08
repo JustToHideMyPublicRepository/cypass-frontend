@@ -36,10 +36,6 @@ import { fr } from 'date-fns/locale'
 import type { Comment } from '~/types/vigitech'
 import { getUserAvatarUrl } from '~/utils/user'
 
-definePageMeta({
-  layout: 'default'
-})
-
 const store = useVigitechStore()
 const authStore = useAuthStore()
 const toast = useToastStore()

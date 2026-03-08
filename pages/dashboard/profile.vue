@@ -28,10 +28,6 @@ import { reactive, computed, onMounted, watch } from 'vue'
 import { useAuthStore } from '~/stores/auth'
 import { useProfilStore } from '~/stores/profil'
 
-definePageMeta({
-  layout: 'default'
-})
-
 useHead({
   title: 'Mon profil',
   meta: [

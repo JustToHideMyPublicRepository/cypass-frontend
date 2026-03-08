@@ -37,10 +37,6 @@ import { useVigitechStore } from '~/stores/vigitech'
 import { useVigiPrefStore } from '~/stores/vigiPref'
 import { IconAlertCircle } from '@tabler/icons-vue'
 
-definePageMeta({
-  layout: 'default'
-})
-
 const route = useRoute()
 const store = useVigitechStore()
 const settingsStore = useVigiPrefStore()

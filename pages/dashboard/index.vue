@@ -55,10 +55,6 @@ import { useVigitechStore } from '~/stores/vigitech'
 import { useToastStore } from '~/stores/toast'
 import { calculateSecurityScore, type SecurityScoreResult } from '~/utils/security'
 
-definePageMeta({
-  layout: 'default'
-})
-
 const authStore = useAuthStore()
 const profilStore = useProfilStore()
 const documentsStore = useDocsentryStore()

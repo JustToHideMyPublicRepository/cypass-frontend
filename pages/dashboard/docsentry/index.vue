@@ -44,10 +44,6 @@ import { ref, reactive, computed, onMounted, watch } from 'vue'
 import { useDocsentryStore } from '~/stores/docsentry'
 import { useToastStore } from '~/stores/toast'
 
-definePageMeta({
-  layout: 'default'
-})
-
 const store = useDocsentryStore()
 const toast = useToastStore()
 

@@ -65,10 +65,6 @@ import { IconAlertCircle } from '@tabler/icons-vue'
 import { useDocsentryStore } from '~/stores/docsentry'
 import { useToastStore } from '~/stores/toast'
 
-definePageMeta({
-  layout: 'default'
-})
-
 const route = useRoute()
 const store = useDocsentryStore()
 const docId = route.params.id as string
