@@ -84,7 +84,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'nuxt/app'
-import { IconChevronDown, IconUser, IconSettings, IconHelp, IconDevices, IconLogout, IconKeyboard, IconActivity, IconMenu2 } from '@tabler/icons-vue'
+import { IconChevronDown, IconUser, IconSettings, IconHelp, IconDevices, IconLogout, IconKeyboard, IconActivity, IconMenu2, IconFlag } from '@tabler/icons-vue'
 import { useAuthStore } from '~/stores/auth'
 import { useProfilStore } from '~/stores/profil'
 import { getLinkTooltip } from '~/data/shortcuts'
@@ -103,6 +103,7 @@ const dropdownLinks = [
   { label: 'Mon profil', path: '/dashboard/profile', icon: IconUser },
   { label: 'Sessions', path: '/dashboard/sessions', icon: IconDevices },
   { label: 'Journal d\'activité', path: '/dashboard/logs', icon: IconActivity },
+  { label: 'Centre d\'alertes', path: '/dashboard/reports', icon: IconFlag },
   { label: 'Paramètres', path: '/dashboard/settings', icon: IconSettings },
   { label: 'Raccourcis clavier', path: '/system/shortcuts', icon: IconKeyboard },
   { label: 'Aide & support', path: '/support', icon: IconHelp }

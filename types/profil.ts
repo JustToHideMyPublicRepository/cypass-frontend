@@ -9,7 +9,23 @@ export interface UserProfile {
   status: 'pending' | 'active' | 'pending_delete' | 'deleted' | 'suspended'
   email_verified: boolean
   mfa_enabled: boolean
+  is_reported?: boolean
   created_at: string
+}
+
+export interface ReportEntry {
+  id: string
+  reporter_id: string
+  reported_user_id: string
+  reason: string
+  details: string
+  status: 'pending' | 'resolved' | 'dismissed' | string
+  created_at: string
+  updated_at: string
+  reported_name?: string
+  reported_organization?: string
+  reporter_name?: string
+  reporter_organization?: string
 }
 
 export interface Statistics {

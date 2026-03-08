@@ -42,7 +42,12 @@
               <UiStatusBadge v-else status="Error">
                 Inactif
               </UiStatusBadge>
-              <UiStatusBadge v-if="user.is_reported" status="Error">
+              <NuxtLink v-if="user.is_reported && isOwnProfile" to="/dashboard/reports?tab=received">
+                <UiStatusBadge status="Error" class="cursor-pointer hover:scale-105 transition-transform">
+                  En observation
+                </UiStatusBadge>
+              </NuxtLink>
+              <UiStatusBadge v-else-if="user.is_reported" status="Error">
                 En observation
               </UiStatusBadge>
 

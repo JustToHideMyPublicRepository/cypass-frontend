@@ -49,6 +49,14 @@ export const dashboardShortcuts: Record<string, ShortcutEntry> = {
     group: 'Dashboard',
     modifier: 'Shift'
   },
+  reports: {
+    keys: ['d', 'r'],
+    label: 'Centre d\'alertes',
+    path: '/dashboard/reports',
+    isGlobal: true,
+    group: 'Dashboard',
+    modifier: 'Shift'
+  },
   sessions: {
     keys: ['d', 's'],
     label: 'Sessions actives',
