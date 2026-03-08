@@ -1,5 +1,7 @@
 <template>
-  <div class="glass-panel p-6 md:p-12 rounded-3xl md:rounded-[40px] border border-ashAct shadow-2xl relative group">
+  <div :class="[
+    !isModal ? 'glass-panel p-6 md:p-12 rounded-3xl md:rounded-[40px] border border-ashAct shadow-2xl relative group' : 'space-y-6'
+  ]">
     <!-- Sélecteur de mode -->
     <RootVerifyModeSelector v-if="!result && !loading" :modelValue="verifyMode"
       @update:modelValue="$emit('update:verifyMode', $event as any)" />
@@ -11,7 +13,7 @@
     <!-- Zone de dépôt interactive (Drag & Drop) -->
     <div v-if="!activeFile && (verifyMode === 'file' || verifyMode === 'qr') && !result && !isCameraMode"
       class="relative border-2 border-dashed border-primary/20 rounded-2xl md:rounded-3xl p-6 md:p-12 text-center hover:border-primary/50 transition-all cursor-pointer bg-WtB/50 hover:bg-primary/5 group overflow-hidden"
-      @click="$emit('trigger-file')">
+      @click="triggerFileSelect">
 
       <div class="pointer-events-none">
         <div
@@ -61,7 +63,8 @@
             placeholder="Entrez l'empreinte numérique...">
         </div>
       </div>
-      <UiBaseButton block size="lg" :disabled="!hashInput || hashInput.length < 10" @click="$emit('verify-hash')">
+      <UiBaseButton v-if="!isModal" block size="lg" :disabled="!hashInput || hashInput.length < 10"
+        @click="$emit('verify-hash')">
         Vérifier l'empreinte
       </UiBaseButton>
     </div>
@@ -76,7 +79,7 @@
 
       <RootVerifyResult v-if="result" :result="result" :error="error" @reset="$emit('reset')" />
 
-      <div v-if="!loading && !result && activeFile" class="flex justify-center pt-4">
+      <div v-if="!loading && !result && activeFile && !isModal" class="flex justify-center pt-4">
         <UiBaseButton size="lg" class="px-12" @click="$emit('verify-file')">Vérifier le document</UiBaseButton>
       </div>
     </div>
@@ -119,7 +122,7 @@ onUnmounted(() => {
 
 const MAX_FILE_SIZE = 3 * 1024 * 1024 // 3MB for PDF files
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   verifyMode: 'file' | 'hash' | 'qr'
   pdfSubMode: 'original' | 'certificate'
   hashInput: string
@@ -129,7 +132,10 @@ const props = defineProps<{
   result: any
   error: string | null
   activeSteps: Step[]
-}>()
+  isModal?: boolean
+}>(), {
+  isModal: false
+})
 
 const activeFile = computed(() => {
   if (props.verifyMode === 'file') return props.pdfFile
@@ -137,9 +143,10 @@ const activeFile = computed(() => {
   return null
 })
 
-const emit = defineEmits(['update:verifyMode', 'update:pdfSubMode', 'update:hashInput', 'trigger-file', 'verify-hash', 'verify-file', 'reset', 'update:pdfFile', 'update:qrFile'])
+const emit = defineEmits(['update:verifyMode', 'update:pdfSubMode', 'update:hashInput', 'verify-hash', 'verify-file', 'reset', 'update:pdfFile', 'update:qrFile'])
 
 const fileInput = ref<HTMLInputElement | null>(null)
+const triggerFileSelect = () => fileInput.value?.click()
 
 // État de la modale d'erreur
 const showFileError = ref(false)

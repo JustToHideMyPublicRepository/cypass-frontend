@@ -22,7 +22,7 @@ const benefits = [
   },
   {
     icon: IconServer,
-    title: 'Infrastructures d\'État',
+    title: 'Infrastructures de confiance',
     desc: 'Vérification effectuée sur nos serveurs sécurisés.'
   },
   {
