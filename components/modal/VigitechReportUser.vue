@@ -1,5 +1,5 @@
 <template>
-  <UiBaseModal :show="show" maxWidth="lg" :title="title" @close="$emit('close')">
+  <UiBaseModal :show="show" maxWidth="lg" title="Signaler cet utilisateur" @close="$emit('close')">
     <div class="space-y-6 py-2 animate-fade-in">
       <!-- Contexte -->
       <div
@@ -8,9 +8,8 @@
           <IconFlag class="w-7 h-7" />
         </div>
         <p class="text-sm text-hsa font-medium leading-relaxed">
-          {{ subtitle }}
-          <br>
-          <span class="text-[10px] opacity-70">Ce signalement sera examiné par un administrateur.</span>
+          Ce signalement sera examiné par un <strong class="text-BtW">administrateur</strong>.
+          Aidez-nous à modérer la plateforme en signalant les comportements inappropriés.
         </p>
       </div>
 
@@ -22,7 +21,7 @@
             <select v-model="form.reason" required
               class="w-full h-12 px-4 rounded-xl bg-WtB border border-ash/50 font-bold text-sm outline-none focus:ring-2 focus:ring-primary transition-all appearance-none cursor-pointer">
               <option value="" disabled>Sélectionnez un motif</option>
-              <option v-for="r in currentReasons" :key="r.value" :value="r.value">{{ r.label }}</option>
+              <option v-for="r in userReportReasons" :key="r.value" :value="r.value">{{ r.label }}</option>
             </select>
             <IconChevronDown
               class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-hsa pointer-events-none group-focus-within:text-primary transition-colors" />
@@ -32,9 +31,8 @@
         <!-- Détails -->
         <div class="space-y-2">
           <label class="text-[10px] font-black text-hsa uppercase tracking-[0.2em] ml-1">Détails</label>
-          <textarea v-model="form.details"
-            class="textarea input h-28 pt-4 w-full p-4 rounded-xl bg-WtB border border-ash/50 font-medium text-sm outline-none focus:ring-2 focus:ring-primary transition-all resize-none"
-            rows="4" :placeholder="placeholder" required></textarea>
+          <textarea v-model="form.details" class="textarea input h-28 pt-4 w-full p-4" rows="4"
+            placeholder="Décrivez pourquoi vous signalez cet utilisateur..." required></textarea>
         </div>
 
         <!-- Actions -->
@@ -44,7 +42,7 @@
             Annuler
           </UiBaseButton>
           <UiBaseButton type="submit"
-            class="flex-1 !rounded-2xl font-black tracking-widest shadow-xl px-10 shadow-danger/10 !bg-danger hover:!bg-danger/90"
+            class="flex-1 !rounded-2xl font-black tracking-widest shadow-xl px-10 !bg-danger hover:!bg-danger/90"
             :loading="loading" :disabled="!form.reason">
             Signaler
           </UiBaseButton>
@@ -63,26 +61,13 @@ import { reportReasons, userReportReasons } from '~/utils/vigitech'
 
 const props = defineProps<{
   show: boolean
-  title: string
-  subtitle: string
   targetId: string
-  type: 'incident' | 'user'
 }>()
 
 const emit = defineEmits(['close', 'success'])
 const store = useVigitechStore()
 const toast = useToastStore()
 const loading = ref(false)
-
-const currentReasons = computed(() => {
-  return props.type === 'user' ? userReportReasons : reportReasons
-})
-
-const placeholder = computed(() => {
-  return props.type === 'user'
-    ? 'Décrivez pourquoi vous signalez cet utilisateur...'
-    : 'Décrivez pourquoi vous signalez cet incident...'
-})
 
 // Payload de signalement
 const form = reactive({
@@ -101,18 +86,12 @@ const handleSubmit = async () => {
   let message = ''
 
   try {
-    if (props.type === 'user') {
-      const response: any = await $fetch('/api/profile/report', {
-        method: 'POST',
-        body: { reported_user_id: props.targetId, reason: form.reason, details: form.details }
-      })
-      success = response.success
-      message = response.message
-    } else {
-      const result = await store.reportIncident(props.targetId, form.reason, form.details)
-      success = result.success
-      message = result.message
-    }
+    const response: any = await $fetch('/api/profile/report', {
+      method: 'POST',
+      body: { reported_user_id: props.targetId, reason: form.reason, details: form.details }
+    })
+    success = response.success
+    message = response.message
 
     if (success) {
       toast.showToast('success', 'Signalement envoyé', message || 'Votre signalement a été transmis.')

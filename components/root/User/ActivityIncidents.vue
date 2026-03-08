@@ -92,8 +92,8 @@
 
     <!-- État vide -->
     <div v-else class="flex flex-col items-center justify-center py-32 text-center">
-      <div class="w-24 h-24 bg-ash/5 rounded-[3rem] flex items-center justify-center mb-8 border border-ash/10">
-        <IconShield class="w-10 h-10 text-ash/30" />
+      <div class="w-24 h-24 bg-hsa rounded-[3rem] flex items-center justify-center mb-8 border border-ash/10">
+        <IconShield class="w-10 h-10 text-ash" />
       </div>
       <h3 class="text-xl font-black text-BtW">Aucun signalement public</h3>
       <p class="text-sm font-bold text-hsa mt-2">Cet utilisateur n'a pas encore partagé d'incidents avec la communauté.

@@ -29,8 +29,7 @@
     </div>
 
     <!-- Modal de signalement -->
-    <ModalVigitechReportUser v-if="user" :show="modals.report" title="Signaler un compte"
-      subtitle="Aidez-nous à modérer la plateforme" :target-id="String(route.params.id)" type="user"
+    <ModalVigitechReportUser v-if="user" :show="modals.report" :target-id="String(route.params.id)"
       @close="modals.report = false" @success="handleReportSuccess" />
   </div>
 </template>
@@ -60,6 +59,13 @@ const publicIncidents = ref<any[]>([])
 const comments = ref<any[]>([])
 const modals = reactive({
   report: false
+})
+
+// Notification lors de l'ouverture de la modale de signalement
+watch(() => modals.report, (isVisible) => {
+  if (isVisible) {
+    toast.showToast('info', 'Signalement', 'Votre signalement sera examiné en toute confidentialité par notre équipe.')
+  }
 })
 
 const userAvatarUrl = computed(() => {
