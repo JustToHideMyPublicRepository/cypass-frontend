@@ -65,4 +65,7 @@ export interface ProfilState {
   loading: boolean
   error: string | null
   message: string | null
+  sentReportsList: ReportEntry[]
+  receivedReportsList: ReportEntry[]
+  isLogoutModalOpen: boolean
 }

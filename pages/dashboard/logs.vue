@@ -37,7 +37,7 @@ const itemsPerPage = computed(() => filters.value.limit)
 
 const fetchLogs = async () => {
   loading.value = true
-  await profilStore.fetchLogs({
+  await profilStore.getUserLogs({
     limit: 500,
     type: filters.value.type,
     date: filters.value.date || undefined

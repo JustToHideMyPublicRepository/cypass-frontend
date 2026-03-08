@@ -94,7 +94,7 @@ const handleMfaToggle = async (event: Event) => {
 }
 
 const handleEmailUpdate = async (data: any) => {
-  const success = await profilStore.updateEmail(data.newEmail, data.password)
+  const success = await profilStore.changeEmail(data.newEmail, data.password)
   if (success) {
     toastStore.showToast('success', 'Email modifié', profilStore.message || 'Vérifiez votre nouvelle adresse.')
     showEmailModal.value = false
@@ -104,7 +104,7 @@ const handleEmailUpdate = async (data: any) => {
 }
 
 const handlePasswordUpdate = async (data: any) => {
-  const success = await profilStore.updatePassword(data.current, data.new, data.confirm)
+  const success = await profilStore.changePassword(data.current, data.new, data.confirm)
   if (success) {
     toastStore.showToast('success', 'Mot de passe mis à jour', profilStore.message || 'Votre mot de passe a été changé.')
     showPasswordModal.value = false

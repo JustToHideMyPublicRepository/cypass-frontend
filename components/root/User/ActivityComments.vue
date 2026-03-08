@@ -91,7 +91,6 @@ import { IconMessage, IconExternalLink, IconChevronLeft, IconChevronRight } from
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { decodeHtmlEntities } from '~/utils/format'
-
 import { getUserAvatarUrl } from '~/utils/user'
 import { useAuthStore } from '~/stores/auth'
 

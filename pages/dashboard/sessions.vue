@@ -22,7 +22,7 @@
 
     <!-- Confirm Modal -->
     <UiConfirmModal :show="confirmModal.show" :title="confirmModal.title" :message="confirmModal.message"
-      :loading="authStore.loading" variant="danger" confirmText="Déconnecter" @confirm="handleConfirmRevoke"
+      :loading="profilStore.loading" variant="danger" confirmText="Déconnecter" @confirm="handleConfirmRevoke"
       @cancel="confirmModal.show = false" />
   </div>
 </template>
@@ -30,9 +30,11 @@
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted } from 'vue'
 import { useAuthStore } from '~/stores/auth'
+import { useProfilStore } from '~/stores/profil'
 import { useToastStore } from '~/stores/toast'
 
 const authStore = useAuthStore()
+const profilStore = useProfilStore()
 const toastStore = useToastStore()
 const sessions = ref<any[]>([])
 const loading = ref(true)
@@ -52,7 +54,7 @@ const confirmModal = reactive({
 
 const loadSessions = async () => {
   loading.value = true
-  sessions.value = await authStore.fetchSessions()
+  sessions.value = await profilStore.sessionsGet()
   loading.value = false
 }
 
@@ -79,13 +81,13 @@ const revokeAll = () => {
 const handleConfirmRevoke = async () => {
   if (confirmModal.isAll) revokingAll.value = true
 
-  const success = await authStore.revokeSession(confirmModal.targetId, confirmModal.isAll)
+  const success = await profilStore.sessionsDelete(confirmModal.targetId, confirmModal.isAll)
   if (success) {
-    toastStore.showToast('success', 'Succès', authStore.message || 'Action réussie.')
+    toastStore.showToast('success', 'Succès', profilStore.message || 'Action réussie.')
     confirmModal.show = false
     await loadSessions()
   } else {
-    toastStore.showToast('error', 'Erreur', authStore.error || 'Une erreur est survenue.')
+    toastStore.showToast('error', 'Erreur', profilStore.error || 'Une erreur est survenue.')
   }
   revokingAll.value = false
 }

@@ -53,11 +53,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive } from 'vue'
 import { IconFlag, IconChevronDown } from '@tabler/icons-vue'
 import { useVigitechStore } from '~/stores/vigitech'
+import { useProfilStore } from '~/stores/profil'
 import { useToastStore } from '~/stores/toast'
-import { reportReasons, userReportReasons } from '~/utils/vigitech'
+import { userReportReasons } from '~/utils/vigitech'
 
 const props = defineProps<{
   show: boolean
@@ -66,6 +67,7 @@ const props = defineProps<{
 
 const emit = defineEmits(['close', 'success'])
 const store = useVigitechStore()
+const profilStore = useProfilStore()
 const toast = useToastStore()
 const loading = ref(false)
 
@@ -82,25 +84,17 @@ const handleSubmit = async () => {
   if (!form.reason) return
   loading.value = true
 
-  let success = false
-  let message = ''
-
   try {
-    const response: any = await $fetch('/api/profile/report', {
-      method: 'POST',
-      body: { reported_user_id: props.targetId, reason: form.reason, details: form.details }
-    })
-    success = response.success
-    message = response.message
+    const success = await profilStore.reportUser(props.targetId, form.reason, form.details)
 
     if (success) {
-      toast.showToast('success', 'Signalement envoyé', message || 'Votre signalement a été transmis.')
+      toast.showToast('success', 'Signalement envoyé', profilStore.message || 'Votre signalement a été transmis.')
       form.reason = ''
       form.details = ''
       emit('success')
       emit('close')
     } else {
-      toast.showToast('error', 'Erreur', message || 'Impossible d\'envoyer le signalement.')
+      toast.showToast('error', 'Erreur', profilStore.error || 'Impossible d\'envoyer le signalement.')
     }
   } catch (err: any) {
     toast.showToast('error', 'Erreur', err.data?.message || err.message || 'Une erreur est survenue.')

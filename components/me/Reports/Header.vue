@@ -9,7 +9,7 @@
 
     <div class="flex items-center gap-3">
       <div class="relative group">
-        <select :value="store.reportType" @change="handleTypeChange"
+        <select :value="reportStore.reportType" @change="handleTypeChange"
           class="appearance-none bg-ash/10 hover:bg-ash/20 border border-ashAct text-BtW text-xs font-black uppercase tracking-widest py-2 px-8 rounded-xl cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all">
           <option value="user">Utilisateurs</option>
           <option value="incident">Incidents</option>
@@ -31,7 +31,7 @@
 import { IconRefresh, IconChevronDown } from '@tabler/icons-vue'
 import { useReportStore } from '~/stores/report'
 
-const store = useReportStore()
+const reportStore = useReportStore()
 
 defineProps<{
   loading?: boolean
@@ -41,7 +41,7 @@ const emit = defineEmits(['refresh', 'change'])
 
 const handleTypeChange = (event: Event) => {
   const value = (event.target as HTMLSelectElement).value as 'user' | 'incident'
-  store.setReportType(value)
+  reportStore.setReportType(value)
   emit('change', value)
   emit('refresh')
 }

@@ -23,8 +23,9 @@
         <div class="space-y-1">
           <p class="text-xs font-black text-BtW flex items-center gap-2">
             <template v-if="mode === 'sent'">
-              <span class="text-hsa font-medium">{{ store.reportType === 'user' ? 'Signalé :' : 'Incident :' }}</span>
-              <NuxtLink v-if="store.reportType === 'user'" :to="`/user/${report.reported_user_id}`"
+              <span class="text-hsa font-medium">{{ reportStore.reportType === 'user' ? 'Signalé :' : 'Incident :'
+              }}</span>
+              <NuxtLink v-if="reportStore.reportType === 'user'" :to="`/user/${report.reported_user_id}`"
                 class="text-primary hover:underline transition-colors font-black">
                 {{ report.reported_name || 'Utilisateur inconnu' }}
               </NuxtLink>
@@ -55,7 +56,8 @@
         </div>
 
         <div class="flex items-center justify-between pt-1 gap-2">
-          <div v-if="isWithin24h && store.reportType === 'incident' && mode === 'sent'" class="flex items-center gap-2">
+          <div v-if="isWithin24h && reportStore.reportType === 'incident' && mode === 'sent'"
+            class="flex items-center gap-2">
             <button @click="$emit('edit', report)"
               class="p-2 rounded-xl bg-primary/5 text-primary hover:bg-primary/10 transition-colors" title="Modifier">
               <IconPencil class="w-3.5 h-3.5" />
@@ -87,7 +89,8 @@ import { decodeHtmlEntities } from '~/utils/format'
 import { userReportReasons } from '~/utils/vigitech'
 import { useReportStore } from '~/stores/report'
 
-const store = useReportStore()
+const reportStore = useReportStore()
+const profilStore = useProfilStore()
 
 const props = defineProps<{
   report: ReportEntry
@@ -96,6 +99,10 @@ const props = defineProps<{
 
 const emit = defineEmits(['view-details', 'edit', 'delete'])
 
+const currentStore = computed(() => {
+  return reportStore.reportType === 'user' ? profilStore : reportStore
+})
+
 const isWithin24h = computed(() => {
   if (!props.report.created_at) return false
   const diff = differenceInHours(new Date(), new Date(props.report.created_at))
@@ -103,8 +110,8 @@ const isWithin24h = computed(() => {
 })
 
 const canViewDetails = computed(() => {
-  if (store.reportType === 'user') return props.mode === 'sent'
-  if (store.reportType === 'incident') return props.mode === 'received'
+  if (reportStore.reportType === 'user') return props.mode === 'sent'
+  if (reportStore.reportType === 'incident') return props.mode === 'received'
   return false
 })
 

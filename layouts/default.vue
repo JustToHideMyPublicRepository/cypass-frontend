@@ -23,7 +23,7 @@
       <LytDefaultFooter class="shrink-0" />
     </div>
     <!-- Modale de déconnexion -->
-    <ModalGlobalLogout :show="authStore.isLogoutModalOpen" @close="authStore.closeLogoutModal()"
+    <ModalGlobalLogout :show="profilStore.isLogoutModalOpen" @close="profilStore.closeLogoutModal()"
       @confirm="confirmLogout" />
   </div>
 </template>
@@ -47,7 +47,7 @@ onMounted(async () => {
   }
 
   if (authStore.user && !profilStore.profile) {
-    await profilStore.fetchProfile()
+    await profilStore.getProfile()
   }
 })
 
@@ -58,12 +58,12 @@ watch(isCollapsed, (newVal) => {
 const user = computed(() => authStore.user)
 
 const handleLogout = () => {
-  authStore.openLogoutModal()
+  profilStore.openLogoutModal()
 }
 
 const confirmLogout = () => {
-  authStore.closeLogoutModal()
-  authStore.logout()
-  toastStore.showToast('success', 'Déconnexion', authStore.message || 'À bientôt.')
+  profilStore.closeLogoutModal()
+  profilStore.logout()
+  toastStore.showToast('success', 'Déconnexion', profilStore.message || 'À bientôt.')
 }
 </script>

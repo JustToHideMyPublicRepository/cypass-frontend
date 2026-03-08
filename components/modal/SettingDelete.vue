@@ -83,7 +83,7 @@ onUnmounted(() => window.removeEventListener('keydown', handleKeydown))
 watch(() => props.show, (newVal) => {
   if (newVal) {
     resetState()
-    profilStore.fetchProfile()
+    profilStore.getProfile()
   }
 })
 

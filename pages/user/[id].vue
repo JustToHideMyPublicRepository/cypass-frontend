@@ -39,6 +39,8 @@ import { IconArrowLeft } from '@tabler/icons-vue'
 import { getUserAvatarUrl } from '~/utils/user'
 import { useAuthStore } from '~/stores/auth'
 import { useToastStore } from '~/stores/toast'
+import { usePublicStore } from '~/stores/public'
+import { storeToRefs } from 'pinia'
 
 // Configuration de la page
 definePageMeta({
@@ -51,12 +53,10 @@ const router = useRouter()
 const authStore = useAuthStore()
 const toast = useToastStore()
 
-// États réactifs de la page
-const loading = ref(true)
-const error = ref<string | null>(null)
-const user = ref<any>(null)
-const publicIncidents = ref<any[]>([])
-const comments = ref<any[]>([])
+// States managed by public store
+const publicStore = usePublicStore()
+const { user, publicIncidents, comments, loading, error } = storeToRefs(publicStore)
+
 const modals = reactive({
   report: false
 })
@@ -79,27 +79,7 @@ const userAvatarUrl = computed(() => {
 /**
  * Récupère les données du profil public via l'API.
  */
-const fetchPublicProfile = async () => {
-  loading.value = true
-  error.value = null
-  try {
-    const response: any = await $fetch('/api/profile/public', {
-      params: { id: route.params.id }
-    })
-
-    if (response.success && response.data) {
-      user.value = response.data.user
-      publicIncidents.value = response.data.activity?.public_incidents || []
-      comments.value = response.data.activity?.comments || []
-    } else {
-      error.value = response.message || 'Impossible de charger le profil'
-    }
-  } catch (err: any) {
-    error.value = err.data?.message || 'Une erreur est survenue lors du chargement du profil'
-  } finally {
-    loading.value = false
-  }
-}
+const fetchPublicProfile = () => publicStore.getPublicProfile(String(route.params.id))
 
 /**
  * Gère le succès du signalement.

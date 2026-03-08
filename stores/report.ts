@@ -4,8 +4,8 @@ import type { ReportEntry } from '../types/profil'
 export const useReportStore = defineStore('report', {
   state: () => ({
     reportType: 'user' as 'user' | 'incident',
-    sentReports: [] as ReportEntry[],
-    receivedReports: [] as ReportEntry[],
+    sentReportsList: [] as ReportEntry[],
+    receivedReportsList: [] as ReportEntry[],
     loading: false,
     error: null as string | null
   }),
@@ -13,21 +13,17 @@ export const useReportStore = defineStore('report', {
   actions: {
     setReportType(type: 'user' | 'incident') {
       this.reportType = type
-      this.sentReports = []
-      this.receivedReports = []
+      this.sentReportsList = []
+      this.receivedReportsList = []
     },
 
-    async fetchSentReports() {
+    async sentReports() {
       this.loading = true
       this.error = null
       try {
-        const endpoint = this.reportType === 'user'
-          ? '/api/profile/reports_sent'
-          : '/api/profile/reports_incident_sent'
-
-        const response: any = await $fetch(endpoint)
+        const response: any = await $fetch('/api/profile/reports_incident_sent')
         if (response.success) {
-          this.sentReports = response.data
+          this.sentReportsList = response.data
         } else {
           this.error = response.message || 'Impossible de charger les signalements'
         }
@@ -38,17 +34,13 @@ export const useReportStore = defineStore('report', {
       }
     },
 
-    async fetchReceivedReports() {
+    async receivedReports() {
       this.loading = true
       this.error = null
       try {
-        const endpoint = this.reportType === 'user'
-          ? '/api/profile/reports_received'
-          : '/api/profile/reports_incident_received'
-
-        const response: any = await $fetch(endpoint)
+        const response: any = await $fetch('/api/profile/reports_incident_received')
         if (response.success) {
-          this.receivedReports = response.data
+          this.receivedReportsList = response.data
         } else {
           this.error = response.message || 'Impossible de charger les signalements'
         }
@@ -61,11 +53,7 @@ export const useReportStore = defineStore('report', {
 
     async fetchReportDetails(id: string) {
       try {
-        const endpoint = this.reportType === 'user'
-          ? `/api/profile/report_details`
-          : `/api/profile/report_incident_details`
-
-        const response: any = await $fetch(endpoint, {
+        const response: any = await $fetch('/api/profile/report_incident_details', {
           params: { id }
         })
         return response.success ? response.data : null
@@ -82,7 +70,7 @@ export const useReportStore = defineStore('report', {
         })
         if (response.success) {
           // Update local state if needed (e.g., refresh list)
-          await this.fetchSentReports()
+          await this.sentReports()
         }
         return response
       } catch (err: any) {
@@ -97,7 +85,7 @@ export const useReportStore = defineStore('report', {
           body: { report_id: reportId }
         })
         if (response.success) {
-          this.sentReports = this.sentReports.filter(r => r.id !== reportId)
+          this.sentReportsList = this.sentReportsList.filter(r => r.id !== reportId)
         }
         return response
       } catch (err: any) {

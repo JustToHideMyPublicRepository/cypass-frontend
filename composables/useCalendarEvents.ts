@@ -63,7 +63,7 @@ export const useCalendarEvents = () => {
 
       if (date && date.length === 10) {
         // Daily view: just fetch that day
-        requests.push(profilStore.fetchLogs({ limit: 1000, type: 'all', date: date }))
+        requests.push(profilStore.getUserLogs({ limit: 1000, type: 'all', date: date }))
       } else {
         // Month view: Fetch the last 30 days individually and merge (since backend is day-only)
         const daysToFetch: string[] = []
@@ -72,12 +72,12 @@ export const useCalendarEvents = () => {
           const d = new Date(today.getTime() - i * 86400000)
           daysToFetch.push(format(d, 'yyyy-MM-dd'))
         }
-        requests.push(profilStore.fetchLogsRange(daysToFetch, 1000))
+        requests.push(profilStore.getUserLogsRange(daysToFetch, 1000))
       }
 
       await Promise.all(requests)
       // Sessions don't have a state, we fetch and store locally
-      sessions.value = await authStore.fetchSessions()
+      sessions.value = await profilStore.sessionsGet()
     } catch (error) {
       console.error('Error fetching calendar events:', error)
     } finally {

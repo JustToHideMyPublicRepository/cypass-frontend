@@ -2,6 +2,7 @@ import { onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useShortcutsStore } from '~/stores/shortcuts'
 import { useAuthStore } from '~/stores/auth'
+import { useProfilStore } from '~/stores/profil'
 import { useShortcutModeAlt } from './useShortcutModeAlt'
 import { useShortcutModeShift } from './useShortcutModeShift'
 
@@ -14,14 +15,12 @@ interface ShortcutsOptions {
 
 /**
  * Composable useShortcuts
- * 
- * Point d'entrée principal pour la gestion des raccourcis clavier.
- * Orchestre le mode Alt, les séquences et les raccourcis simples.
  */
 export const useShortcuts = (options: ShortcutsOptions = {}) => {
   const router = useRouter()
   const store = useShortcutsStore()
   const authStore = useAuthStore()
+  const profilStore = useProfilStore()
 
   const { updateVisualHints } = useShortcutModeAlt()
   const { handleShiftSequence } = useShortcutModeShift()
@@ -127,7 +126,7 @@ export const useShortcuts = (options: ShortcutsOptions = {}) => {
     if (ctrl && event.shiftKey) {
       if (key === 'd' && authStore.user) {
         event.preventDefault()
-        authStore.openLogoutModal()
+        profilStore.openLogoutModal()
         return
       }
       if (key === 'l') {

@@ -17,5 +17,4 @@ export interface AuthState {
   initialized: boolean
   error: string | null
   message: string | null
-  isLogoutModalOpen: boolean
 }

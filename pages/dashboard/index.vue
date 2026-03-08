@@ -210,10 +210,10 @@ onMounted(async () => {
   await Promise.all([
     documentsStore.fetchDocuments(5, 0),
     notificationsStore.fetchNotifications(5, 0),
-    profilStore.fetchLogs({ limit: 5 }),
+    profilStore.getUserLogs({ limit: 5 }),
     vigitechStore.fetchUserIncidents(),
     vigitechStore.fetchUserComments(),
-    authStore.fetchSessions().then(sessions => {
+    profilStore.sessionsGet().then((sessions: any[]) => {
       activeSessions.value = sessions || []
       activeSessionsCount.value = sessions?.length || 0
     }),

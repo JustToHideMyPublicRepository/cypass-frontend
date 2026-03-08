@@ -100,13 +100,41 @@ const isDropdownOpen = ref(false)
 const dropdownRef = ref<HTMLElement | null>(null)
 
 const dropdownLinks = [
-  { label: 'Mon profil', path: '/dashboard/profile', icon: IconUser },
-  { label: 'Sessions', path: '/dashboard/sessions', icon: IconDevices },
-  { label: 'Journal d\'activité', path: '/dashboard/logs', icon: IconActivity },
-  { label: 'Centre d\'alertes', path: '/dashboard/reports', icon: IconFlag },
-  { label: 'Paramètres', path: '/dashboard/settings', icon: IconSettings },
-  { label: 'Raccourcis clavier', path: '/system/shortcuts', icon: IconKeyboard },
-  { label: 'Aide & support', path: '/support', icon: IconHelp }
+  {
+    label: 'Mon profil',
+    path: '/dashboard/profile',
+    icon: IconUser
+  },
+  {
+    label: 'Sessions',
+    path: '/dashboard/sessions',
+    icon: IconDevices
+  },
+  {
+    label: 'Journal d\'activité',
+    path: '/dashboard/logs',
+    icon: IconActivity
+  },
+  {
+    label: 'Centre d\'alertes',
+    path: '/dashboard/reports',
+    icon: IconFlag
+  },
+  {
+    label: 'Paramètres',
+    path: '/dashboard/settings',
+    icon: IconSettings
+  },
+  {
+    label: 'Raccourcis clavier',
+    path: '/system/shortcuts',
+    icon: IconKeyboard
+  },
+  {
+    label: 'Aide & support',
+    path: '/support',
+    icon: IconHelp
+  }
 ]
 
 defineEmits(['toggle-menu', 'logout'])

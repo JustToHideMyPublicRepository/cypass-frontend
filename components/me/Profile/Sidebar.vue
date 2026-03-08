@@ -92,7 +92,7 @@ const showAvatarModal = ref(false)
 const showImageViewer = ref(false)
 
 const handleAvatarDelete = async () => {
-  const success = await profilStore.deleteAvatar()
+  const success = await profilStore.uploadAvatarDelete()
   if (success) {
     toastStore.showToast('success', 'Photo supprimée', profilStore.message || 'Votre photo de profil a été retirée.')
     showAvatarModal.value = false
@@ -105,7 +105,7 @@ const handleAvatarDelete = async () => {
 }
 
 const handleAvatarUpload = async (file: File) => {
-  const success = await profilStore.uploadAvatar(file)
+  const success = await profilStore.uploadAvatarSet(file)
   if (success) {
     toastStore.showToast('success', 'Photo de profil', profilStore.message || 'Votre photo a été mise à jour avec succès.')
     showAvatarModal.value = false

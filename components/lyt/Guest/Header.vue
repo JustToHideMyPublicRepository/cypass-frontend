@@ -112,7 +112,7 @@
     </Transition>
 
     <!-- Logout Modal -->
-    <ModalGlobalLogout :show="authStore.isLogoutModalOpen" @close="authStore.closeLogoutModal()"
+    <ModalGlobalLogout :show="profilStore.isLogoutModalOpen" @close="profilStore.closeLogoutModal()"
       @confirm="confirmLogout" />
   </div>
 </template>
@@ -121,6 +121,7 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import { IconMenu2, IconX } from '@tabler/icons-vue'
 import { useAuthStore } from '~/stores/auth'
+import { useProfilStore } from '~/stores/profil'
 import { getLinkTooltip } from '~/data/shortcuts'
 import { useToastStore } from '~/stores/toast'
 
@@ -161,17 +162,18 @@ const getAuthLinks = (forMobile: boolean) => {
 }
 
 const authStore = useAuthStore()
+const profilStore = useProfilStore()
 const toastStore = useToastStore()
 
 const handleLogout = () => {
   isMobileMenuOpen.value = false
-  authStore.openLogoutModal()
+  profilStore.openLogoutModal()
 }
 
 const confirmLogout = () => {
-  authStore.closeLogoutModal()
-  authStore.logout(false)
-  toastStore.showToast('success', 'Déconnexion', authStore.message || 'Vous avez été déconnecté avec succès.')
+  profilStore.closeLogoutModal()
+  profilStore.logout(false)
+  toastStore.showToast('success', 'Déconnexion', profilStore.message || 'Vous avez été déconnecté avec succès.')
 }
 
 // -- State & Logic --

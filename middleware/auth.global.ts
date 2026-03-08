@@ -5,15 +5,15 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
     // Si l'auth n'est pas encore initialisée
     if (!auth.initialized) {
-        await auth.initAuth()
+        await auth.verifyToken()
     }
 
-    // Si l'utilisateur n'est pas connecté et essaie d'accéder au dashboard
+    // Si l'utilisateur n'est pas connecté
     if (!auth.user && to.path.startsWith('/dashboard')) {
         return navigateTo('/auth/login')
     }
 
-    // Si l'utilisateur est connecté et essaie d'accéder aux pages d'authentification
+    // Si l'utilisateur est connecté
     if (auth.user && to.path.startsWith('/auth')) {
         return navigateTo('/dashboard')
     }

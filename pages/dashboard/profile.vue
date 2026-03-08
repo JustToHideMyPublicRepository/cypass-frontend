@@ -60,7 +60,7 @@ const syncFormWithProfile = () => {
 watch(() => profilStore.profile, syncFormWithProfile, { deep: true })
 
 onMounted(async () => {
-  await profilStore.fetchProfile()
+  await profilStore.getProfile()
   syncFormWithProfile()
 })
 </script>

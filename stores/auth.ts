@@ -8,7 +8,6 @@ export const useAuthStore = defineStore('auth', {
     initialized: false,
     error: null,
     message: null,
-    isLogoutModalOpen: false,
     mfaSession: null
   } as AuthState),
 
@@ -28,6 +27,30 @@ export const useAuthStore = defineStore('auth', {
   },
 
   actions: {
+    // Mot de passe oublié
+    async forgotPassword(email: string) {
+      this.loading = true
+      this.error = null
+      try {
+        const response = await $fetch<{ success: boolean; message: string }>('/api/user/auth/forgot-password', {
+          method: 'POST',
+          body: { email }
+        })
+        if (response.success) {
+          this.message = response.message
+          return true
+        }
+        this.error = response.message
+        return false
+      } catch (err: any) {
+        this.error = err.data?.message || 'Une erreur est survenue lors de la demande'
+        return false
+      } finally {
+        this.loading = false
+      }
+    },
+
+    // Connexion
     async login(credentials: { email: string; password: string }) {
       this.loading = true
       this.error = null
@@ -41,7 +64,7 @@ export const useAuthStore = defineStore('auth', {
             require_mfa?: boolean;
             email?: string;
           }
-        }>('/api/auth/login', {
+        }>('/api/user/auth/login', {
           method: 'POST',
           body: credentials
         })
@@ -70,68 +93,12 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    async verifyMfa(code: string) {
-      if (!this.mfaSession) return false
-      this.loading = true
-      this.error = null
-      try {
-        const response = await $fetch<{
-          success: boolean;
-          message: string;
-          data: { user: User; token: string }
-        }>('/api/auth/verify-mfa', {
-          method: 'POST',
-          body: {
-            email: this.mfaSession.email,
-            code
-          }
-        })
-        if (response.success) {
-          this.user = response.data.user
-          this.message = response.message
-          this.mfaSession = null
-          return true
-        }
-        this.error = response.message
-        return false
-      } catch (err: any) {
-        this.error = err.data?.message || 'Code invalide ou expiré'
-        return false
-      } finally {
-        this.loading = false
-      }
-    },
-
-    async resendMfa() {
-      if (!this.mfaSession) return false
-      this.loading = true
-      this.error = null
-      try {
-        const response = await $fetch<{ success: boolean; message: string }>('/api/auth/resend-mfa', {
-          method: 'POST',
-          body: { email: this.mfaSession.email }
-        })
-        if (response.success) {
-          this.message = response.message
-          // Refresh login time to reset 10m countdown if needed, 
-          // though strictly the 10m is from initial connection according to prompt
-          return true
-        }
-        this.error = response.message
-        return false
-      } catch (err: any) {
-        this.error = err.data?.message || 'Erreur lors du renvoi du code'
-        return false
-      } finally {
-        this.loading = false
-      }
-    },
-
+    // Inscription
     async register(formData: any) {
       this.loading = true
       this.error = null
       try {
-        const response = await $fetch<{ success: boolean; message: string }>('/api/auth/register', {
+        const response = await $fetch<{ success: boolean; message: string }>('/api/user/auth/register', {
           method: 'POST',
           body: formData
         })
@@ -149,35 +116,15 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    async verifyEmail(token: string) {
+    // Renvoyer le code MFA
+    async resendMfa() {
+      if (!this.mfaSession) return false
       this.loading = true
       this.error = null
       try {
-        const response = await $fetch<{ success: boolean; message: string }>('/api/auth/verify-email', {
-          method: 'GET',
-          params: { token }
-        })
-        if (response.success) {
-          this.message = response.message
-          return true
-        }
-        this.error = response.message
-        return false
-      } catch (err: any) {
-        this.error = err.data?.message || 'Une erreur est survenue lors de la vérification'
-        return false
-      } finally {
-        this.loading = false
-      }
-    },
-
-    async forgotPassword(email: string) {
-      this.loading = true
-      this.error = null
-      try {
-        const response = await $fetch<{ success: boolean; message: string }>('/api/auth/forgot-password', {
+        const response = await $fetch<{ success: boolean; message: string }>('/api/user/auth/resend-mfa', {
           method: 'POST',
-          body: { email }
+          body: { email: this.mfaSession.email }
         })
         if (response.success) {
           this.message = response.message
@@ -186,18 +133,19 @@ export const useAuthStore = defineStore('auth', {
         this.error = response.message
         return false
       } catch (err: any) {
-        this.error = err.data?.message || 'Une erreur est survenue lors de la demande'
+        this.error = err.data?.message || 'Erreur lors du renvoi du code'
         return false
       } finally {
         this.loading = false
       }
     },
 
+    // Renvoyer le code de vérification
     async resendVerification(email: string) {
       this.loading = true
       this.error = null
       try {
-        const response = await $fetch<{ success: boolean; message: string }>('/api/auth/resend-verification', {
+        const response = await $fetch<{ success: boolean; message: string }>('/api/user/auth/resend-verification', {
           method: 'POST',
           body: { email }
         })
@@ -215,11 +163,12 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
+    // Réinitialiser le mot de passe
     async resetPassword(data: { token: string; password: string; confirm: string }) {
       this.loading = true
       this.error = null
       try {
-        const response = await $fetch<{ success: boolean; message: string }>('/api/auth/reset-password', {
+        const response = await $fetch<{ success: boolean; message: string }>('/api/user/auth/reset-password', {
           method: 'POST',
           body: {
             token: data.token,
@@ -241,68 +190,14 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    async fetchSessions() {
-      this.loading = true
-      this.error = null
-      try {
-        const response = await $fetch<{ success: boolean; message: string; data: { sessions: any[] } }>('/api/auth/sessions', {
-          method: 'GET'
-        })
-        if (response.success) {
-          return response.data.sessions
-        }
-        return []
-      } catch (err: any) {
-        this.error = err.data?.message || 'Impossible de récupérer les sessions'
-        return []
-      } finally {
-        this.loading = false
-      }
-    },
-
-    async revokeSession(tokenId: string, revokeAll: boolean = false) {
-      this.loading = true
-      this.error = null
-      try {
-        const response = await $fetch<{ success: boolean; message: string }>('/api/auth/sessions', {
-          method: 'DELETE',
-          body: {
-            token_id: tokenId,
-            revoke_all: revokeAll
-          }
-        })
-        if (response.success) {
-          this.message = response.message
-          return true
-        }
-        this.error = response.message
-        return false
-      } catch (err: any) {
-        this.error = err.data?.message || 'Impossible de révoquer la session'
-        return false
-      } finally {
-        this.loading = false
-      }
-    },
-
-    async logout(shouldRedirect: boolean = true) {
-      try {
-        await $fetch('/api/auth/logout', { method: 'POST' })
-      } finally {
-        this.user = null
-        if (shouldRedirect) {
-          navigateTo('/auth/login')
-        }
-      }
-    },
-
-    async initAuth() {
+    // Initialiser l'authentification
+    async verifyToken() {
       if (this.initialized) return
 
       try {
         const headers = import.meta.server ? useRequestHeaders(['cookie']) as any : {}
 
-        const response = await $fetch<{ success: boolean; data: { user: User } }>('/api/auth/me', { headers })
+        const response = await $fetch<{ success: boolean; data: { user: User } }>('/api/user/auth/verify_token', { headers })
         if (response.success) {
           this.user = response.data.user
         }
@@ -313,12 +208,60 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    openLogoutModal() {
-      this.isLogoutModalOpen = true
+    // Vérifier l'email
+    async verifyEmail(token: string) {
+      this.loading = true
+      this.error = null
+      try {
+        const response = await $fetch<{ success: boolean; message: string }>('/api/user/auth/verify-email', {
+          method: 'GET',
+          params: { token }
+        })
+        if (response.success) {
+          this.message = response.message
+          return true
+        }
+        this.error = response.message
+        return false
+      } catch (err: any) {
+        this.error = err.data?.message || 'Une erreur est survenue lors de la vérification'
+        return false
+      } finally {
+        this.loading = false
+      }
     },
 
-    closeLogoutModal() {
-      this.isLogoutModalOpen = false
-    }
+    // Vérifier le code MFA
+    async verifyMfa(code: string) {
+      if (!this.mfaSession) return false
+      this.loading = true
+      this.error = null
+      try {
+        const response = await $fetch<{
+          success: boolean;
+          message: string;
+          data: { user: User; token: string }
+        }>('/api/user/auth/verify-mfa', {
+          method: 'POST',
+          body: {
+            email: this.mfaSession.email,
+            code
+          }
+        })
+        if (response.success) {
+          this.user = response.data.user
+          this.message = response.message
+          this.mfaSession = null
+          return true
+        }
+        this.error = response.message
+        return false
+      } catch (err: any) {
+        this.error = err.data?.message || 'Code invalide ou expiré'
+        return false
+      } finally {
+        this.loading = false
+      }
+    },
   }
 })

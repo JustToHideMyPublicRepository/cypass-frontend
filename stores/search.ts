@@ -146,7 +146,7 @@ export const useSearchStore = defineStore('search', {
         const fetchPromises = []
         if (isAuthenticated) {
           if (docStore.documents.length === 0) fetchPromises.push(docStore.fetchDocuments(100))
-          if (profStore.logs.length === 0) fetchPromises.push(profStore.fetchLogs({ limit: 100 }))
+          if (profStore.logs.length === 0) fetchPromises.push(profStore.getUserLogs({ limit: 100 }))
           if (vigitechStore.userIncidents.length === 0) fetchPromises.push(vigitechStore.fetchUserIncidents())
         }
 
@@ -186,7 +186,7 @@ export const useSearchStore = defineStore('search', {
           }
         })
 
-        // 2. Search in Documents (ONLY IF AUTHENTICATED)
+        // 2. Search in Docsentry (ONLY IF AUTHENTICATED)
         if (isAuthenticated) {
           docStore.documents.forEach(doc => {
             const filename = (doc.filename || '').toLowerCase()

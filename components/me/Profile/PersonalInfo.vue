@@ -105,7 +105,7 @@ const toastStore = useToastStore()
 const showInfoModal = ref(false)
 
 const handleInfoUpdate = async (data: any) => {
-  const success = await profilStore.updatePersonalInfo({
+  const success = await profilStore.updateProfile({
     first_name: data.first_name,
     last_name: data.last_name,
     organization_name: data.organization_name
