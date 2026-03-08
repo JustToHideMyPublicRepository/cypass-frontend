@@ -23,19 +23,16 @@
         <div class="space-y-1">
           <p class="text-xs font-black text-BtW flex items-center gap-2">
             <template v-if="mode === 'sent'">
-              <span class="text-hsa font-medium">Signalé :</span>
-              <NuxtLink :to="`/user/${report.reported_user_id}`"
+              <span class="text-hsa font-medium">{{ store.reportType === 'user' ? 'Signalé :' : 'Incident :' }}</span>
+              <NuxtLink v-if="store.reportType === 'user'" :to="`/user/${report.reported_user_id}`"
                 class="hover:text-primary transition-colors hover:underline">
                 {{ report.reported_name || 'Utilisateur inconnu' }}
               </NuxtLink>
+              <span v-else class="text-primary">{{ report.incident_title || 'Incident inconnu' }}</span>
             </template>
             <template v-else>
               <span class="text-hsa font-medium">Signaleur :</span>
-              <span v-if="!report.reporter_id">Anonyme</span>
-              <NuxtLink v-else :to="`/user/${report.reporter_id}`"
-                class="hover:text-primary transition-colors hover:underline">
-                {{ report.reporter_name || 'Anonyme' }}
-              </NuxtLink>
+              <span>{{ report.reporter_name || 'Anonyme' }}</span>
             </template>
           </p>
           <p v-if="mode === 'sent' && report.reported_organization"
@@ -54,7 +51,7 @@
           </p>
         </div>
 
-        <div class="flex justify-end pt-1">
+        <div v-if="canViewDetails" class="flex justify-end pt-1">
           <button @click="$emit('view-details', report)"
             class="text-[10px] font-black text-primary uppercase tracking-widest hover:bg-primary/5 px-3 py-1.5 rounded-lg border border-primary/20 transition-all flex items-center gap-1.5 group/btn">
             Détails du signalement
@@ -72,6 +69,9 @@ import type { ReportEntry } from '~/types/profil'
 import { formatRelativeTime } from '~/utils/date'
 import { decodeHtmlEntities } from '~/utils/format'
 import { userReportReasons } from '~/utils/vigitech'
+import { useReportStore } from '~/stores/report'
+
+const store = useReportStore()
 
 const props = defineProps<{
   report: ReportEntry
@@ -79,6 +79,12 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits(['view-details'])
+
+const canViewDetails = computed(() => {
+  if (store.reportType === 'user') return props.mode === 'sent'
+  if (store.reportType === 'incident') return props.mode === 'received'
+  return false
+})
 
 const statusClasses = computed(() => {
   switch (props.report.status) {

@@ -26,6 +26,8 @@ export interface ReportEntry {
   reported_organization?: string
   reporter_name?: string
   reporter_organization?: string
+  incident_id?: string
+  incident_title?: string
 }
 
 export interface Statistics {

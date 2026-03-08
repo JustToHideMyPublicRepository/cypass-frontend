@@ -3,6 +3,7 @@ import type { ReportEntry } from '../types/profil'
 
 export const useReportStore = defineStore('report', {
   state: () => ({
+    reportType: 'user' as 'user' | 'incident',
     sentReports: [] as ReportEntry[],
     receivedReports: [] as ReportEntry[],
     loading: false,
@@ -10,15 +11,25 @@ export const useReportStore = defineStore('report', {
   }),
 
   actions: {
+    setReportType(type: 'user' | 'incident') {
+      this.reportType = type
+      this.sentReports = []
+      this.receivedReports = []
+    },
+
     async fetchSentReports() {
       this.loading = true
       this.error = null
       try {
-        const response: any = await $fetch('/api/profile/reports_sent')
+        const endpoint = this.reportType === 'user'
+          ? '/api/profile/reports_sent'
+          : '/api/profile/reports_incident_sent'
+
+        const response: any = await $fetch(endpoint)
         if (response.success) {
           this.sentReports = response.data
         } else {
-          this.error = response.message || 'Impossible de charger les signalements envoyés'
+          this.error = response.message || 'Impossible de charger les signalements'
         }
       } catch (err: any) {
         this.error = err.data?.message || err.message || 'Erreur réseau'
@@ -31,11 +42,15 @@ export const useReportStore = defineStore('report', {
       this.loading = true
       this.error = null
       try {
-        const response: any = await $fetch('/api/profile/reports_received')
+        const endpoint = this.reportType === 'user'
+          ? '/api/profile/reports_received'
+          : '/api/profile/reports_incident_received'
+
+        const response: any = await $fetch(endpoint)
         if (response.success) {
           this.receivedReports = response.data
         } else {
-          this.error = response.message || 'Impossible de charger les signalements reçus'
+          this.error = response.message || 'Impossible de charger les signalements'
         }
       } catch (err: any) {
         this.error = err.data?.message || err.message || 'Erreur réseau'
@@ -46,7 +61,11 @@ export const useReportStore = defineStore('report', {
 
     async fetchReportDetails(id: string) {
       try {
-        const response: any = await $fetch(`/api/profile/report_details`, {
+        const endpoint = this.reportType === 'user'
+          ? `/api/profile/report_details`
+          : `/api/profile/report_incident_details`
+
+        const response: any = await $fetch(endpoint, {
           params: { id }
         })
         return response.success ? response.data : null

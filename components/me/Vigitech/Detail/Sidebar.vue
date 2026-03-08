@@ -67,7 +67,8 @@
             <div>
               <p class="font-black text-BtW uppercase tracking-wider text-xs md:text-sm">{{
                 incident.pending_reports_count || 0 }}</p>
-              <p class="text-[10px] font-bold text-hsa uppercase tracking-widest mt-0.5">Signalements</p>
+              <p class="text-[10px] font-bold text-hsa uppercase tracking-widest mt-0.5">
+                Signalement{{ (incident.pending_reports_count || 0) > 1 ? 's' : '' }}</p>
             </div>
           </div>
         </div>

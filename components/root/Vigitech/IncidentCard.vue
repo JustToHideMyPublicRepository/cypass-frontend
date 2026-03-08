@@ -103,7 +103,8 @@
 
         <div v-if="incident.pending_reports_count"
           class="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-danger/10 text-[10px] uppercase font-black tracking-widest text-danger">
-          <IconAlertCircle class="w-3 h-3" /> {{ incident.pending_reports_count }} Signalements
+          <IconAlertCircle class="w-3 h-3" /> {{ incident.pending_reports_count }}
+          Signalement{{ incident.pending_reports_count > 1 ? 's' : '' }}
         </div>
       </div>
 

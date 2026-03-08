@@ -53,7 +53,7 @@ const handleViewDetails = async (report: any) => {
   showDetail.value = true
   const details = await store.fetchReportDetails(report.id)
   if (details) {
-    selectedReport.value = details
+    selectedReport.value = { ...report, ...details }
   }
 }
 

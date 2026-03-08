@@ -20,24 +20,34 @@
 
       <!-- Entities involved -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- Signalé -->
+        <!-- Signalé / Incident -->
         <div class="p-5 rounded-[2.5rem] bg-ash/5 border border-ash/20 space-y-4">
           <h3 class="text-[10px] font-black uppercase tracking-[0.2em] text-primary flex items-center gap-2">
-            <IconFlagCancel class="w-4 h-4" /> Utilisateur Signalé
+            <IconFlagCancel class="w-4 h-4" />
+            {{ store.reportType === 'user' ? 'Utilisateur Signalé' : 'Incident Signalé' }}
           </h3>
           <div class="flex items-center gap-4">
             <div
               class="w-12 h-12 rounded-2xl bg-ash/20 flex items-center justify-center border border-ashAct overflow-hidden">
-              <component :is="IconUserExclamation" class="w-6 h-6 text-hsa" />
+              <component :is="store.reportType === 'user' ? IconUserExclamation : IconAlertTriangle"
+                class="w-6 h-6 text-hsa" />
             </div>
             <div class="min-w-0">
-              <NuxtLink :to="`/user/${report.reported_user_id}`"
-                class="text-sm font-black text-BtW hover:text-primary transition-colors hover:underline block truncate">
-                {{ report.reported_name || 'Inconnu' }}
-              </NuxtLink>
-              <p v-if="report.reported_organization" class="text-[10px] font-bold text-hsa truncate">
-                {{ report.reported_organization }}
-              </p>
+              <template v-if="store.reportType === 'user'">
+                <NuxtLink :to="`/user/${report.reported_user_id}`"
+                  class="text-sm font-black text-BtW hover:text-primary transition-colors hover:underline block truncate">
+                  {{ report.reported_name || 'Inconnu' }}
+                </NuxtLink>
+                <p v-if="report.reported_organization" class="text-[10px] font-bold text-hsa truncate">
+                  {{ report.reported_organization }}
+                </p>
+              </template>
+              <template v-else>
+                <NuxtLink :to="`/vigitech/${report.incident_id}`"
+                  class="text-sm font-black text-BtW hover:text-primary transition-colors hover:underline block truncate">
+                  {{ report.incident_title || 'Incident inconnu' }}
+                </NuxtLink>
+              </template>
             </div>
           </div>
         </div>
@@ -53,18 +63,12 @@
               <component :is="IconUserCheck" class="w-6 h-6 text-hsa" />
             </div>
             <div class="min-w-0">
-              <template v-if="!report.reporter_id">
-                <p class="text-sm font-black text-BtW">Anonyme</p>
-              </template>
-              <template v-else>
-                <NuxtLink :to="`/user/${report.reporter_id}`"
-                  class="text-sm font-black text-BtW hover:text-secondary transition-colors hover:underline block truncate">
-                  {{ report.reporter_name || 'Utilisateur' }}
-                </NuxtLink>
-                <p v-if="report.reporter_organization" class="text-[10px] font-bold text-hsa truncate">
-                  {{ report.reporter_organization }}
-                </p>
-              </template>
+              <p class="text-sm font-black text-BtW">
+                {{ report.reporter_name || 'Anonyme' }}
+              </p>
+              <p v-if="report.reporter_organization" class="text-[10px] font-bold text-hsa truncate">
+                {{ report.reporter_organization }}
+              </p>
             </div>
           </div>
         </div>
@@ -117,12 +121,15 @@
 </template>
 
 <script setup lang="ts">
-import { IconFlag, IconFlagCancel, IconUserExclamation, IconFlagCheck, IconUserCheck, IconAlertCircle } from '@tabler/icons-vue'
+import { IconFlag, IconFlagCancel, IconUserExclamation, IconFlagCheck, IconUserCheck, IconAlertCircle, IconAlertTriangle } from '@tabler/icons-vue'
 import type { ReportEntry } from '~/types/profil'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { decodeHtmlEntities } from '~/utils/format'
 import { userReportReasons } from '~/utils/vigitech'
+import { useReportStore } from '~/stores/report'
+
+const store = useReportStore()
 
 const props = defineProps<{
   show: boolean
