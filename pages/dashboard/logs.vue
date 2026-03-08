@@ -17,6 +17,7 @@ import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useProfilStore } from '~/stores/profil'
 import { format, isValid, parseISO } from 'date-fns'
+import { getLogActionInfo } from '~/utils/logs'
 
 const profilStore = useProfilStore()
 const route = useRoute()
@@ -57,6 +58,8 @@ const filteredLogs = computed(() => {
   return logs.value.filter(log => {
     const action = (log.action || '').toLowerCase()
     const label = (log.action_label || '').toLowerCase()
+    const mappedLabel = getLogActionInfo(log.action).label.toLowerCase()
+
     let details = ''
     try {
       details = typeof log.details === 'string' ? log.details : JSON.stringify(log.details || {})
@@ -65,7 +68,7 @@ const filteredLogs = computed(() => {
     }
     details = details.toLowerCase()
 
-    return action.includes(q) || label.includes(q) || details.includes(q)
+    return action.includes(q) || label.includes(q) || mappedLabel.includes(q) || details.includes(q)
   })
 })
 

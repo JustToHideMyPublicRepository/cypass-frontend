@@ -25,14 +25,14 @@ export interface LogEntry {
   details: any
   ip_address: string
   user_agent: string
-  status: string
+  status: 'success' | 'failed' | 'error' | string
   timestamp: string
-  log_type: string
+  log_type: 'user_actions' | 'requests' | 'errors' | 'security' | string
 }
 
 export interface LogStatistics {
   total_logs: number
-  by_type: Record<string, number>
+  by_type: Record<'user_actions' | 'requests' | 'errors' | 'security' | string, number>
   by_action: Record<string, number>
   date_range: string
 }

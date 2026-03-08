@@ -22,7 +22,8 @@
               <option value="all">Toutes les actions</option>
               <option value="user_actions">Activités utilisateur</option>
               <option value="security">Sécurité</option>
-              <option value="system">Système</option>
+              <option value="requests">Requêtes API</option>
+              <option value="errors">Erreurs système</option>
             </select>
           </div>
 
@@ -47,7 +48,8 @@
 
       <div v-if="activeFilters" class="px-3 py-1.5 bg-primary/10 rounded-full border border-primary/20">
         <p class="text-[10px] font-black text-primary uppercase tracking-widest">
-          Affichage : {{ activeFilters.type === 'all' ? 'Toutes' : activeFilters.type }} |
+          Affichage : {{ activeFilters.type === 'all' ? 'Toutes' : (getLogTypeInfo(activeFilters.type)?.label ||
+            activeFilters.type) }} |
           {{ formatDate(activeFilters.date) }} |
           Lim : {{ activeFilters.limit }}
         </p>
@@ -60,6 +62,7 @@
 import { IconFilter, IconSearch } from '@tabler/icons-vue'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
+import { getLogTypeInfo } from '~/utils/logs'
 
 const props = defineProps<{
   modelValue: {

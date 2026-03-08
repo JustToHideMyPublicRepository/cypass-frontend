@@ -5,6 +5,7 @@ import { useProfilStore } from '~/stores/profil'
 import { useAuthStore } from '~/stores/auth'
 import { format, startOfMonth, endOfMonth } from 'date-fns'
 import { getCalendarFilterConfig } from '~/utils/calendar'
+import { getLogActionInfo } from '~/utils/logs'
 
 export type EventType = 'docsentry' | 'vigitech' | 'comment' | 'log' | 'session'
 
@@ -144,13 +145,16 @@ export const useCalendarEvents = () => {
         let ts = log.timestamp
         if (ts && !ts.includes('T')) ts = ts.replace(' ', 'T')
 
+        const logInfo = getLogActionInfo(log.action)
+        const label = (log.action_label && log.action_label !== log.action) ? log.action_label : logInfo.label
+
         events.push({
           id: `log-${log.id}`,
-          title: log.action_label || log.action,
+          title: label,
           description: `Action enregistrée depuis ${log.ip_address}`,
           date: ts,
           type: 'log',
-          color: getCalendarFilterConfig('log')?.classes.text || 'text-hsa',
+          color: getCalendarFilterConfig('log')?.classes.text || logInfo.color,
           bgColor: getCalendarFilterConfig('log')?.classes.bgLight || 'bg-hsa/10',
           url: `/dashboard/logs?date=${format(new Date(ts), 'yyyy-MM-dd')}`
         })

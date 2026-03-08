@@ -14,12 +14,18 @@
       <div v-for="log in logs" :key="log.id"
         class="flex gap-3 text-sm p-2 rounded-xl hover:bg-ash/50 transition-all group">
         <div class="flex items-center gap-3 min-w-0">
-          <div class="p-2 bg-ash rounded-lg group-hover:bg-primary/10 transition-colors">
-            <IconHistory class="w-4 h-4 text-hsa group-hover:text-primary" />
+          <div class="p-2 bg-ash rounded-lg group-hover:bg-primary/10 transition-colors"
+            :class="`${getLogActionInfo(log.action).color.replace('text-', 'bg-')}/5`">
+            <component :is="getLogActionInfo(log.action).icon" class="w-4 h-4 text-hsa group-hover:text-primary"
+              :class="getLogActionInfo(log.action).color" />
           </div>
         </div>
         <div class="min-w-0 flex-1">
-          <h4 class="text-xs font-bold text-BtW truncate">{{ log.action }}</h4>
+          <h4 class="text-xs font-bold text-BtW truncate">
+            {{ (log.action_label && log.action_label !== log.action) ? log.action_label :
+              getLogActionInfo(log.action).label
+            }}
+          </h4>
           <p class="text-[10px] text-hsa mt-0.5">{{ formatTime(log.timestamp) }}</p>
         </div>
       </div>
@@ -29,6 +35,7 @@
 
 <script setup lang="ts">
 import { IconHistory } from '@tabler/icons-vue'
+import { getLogActionInfo } from '~/utils/logs'
 
 defineProps<{
   logs: any[]

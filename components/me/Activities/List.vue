@@ -36,7 +36,8 @@
               <div class="flex-grow min-w-0">
                 <div class="flex items-center gap-2 mb-1">
                   <h3 class="font-bold text-BtW truncate">
-                    {{ log.action_label }}
+                    {{ (log.action_label && log.action_label !== log.action) ? log.action_label :
+                      getLogActionInfo(log.action).label }}
                   </h3>
                   <span v-if="log.status !== 'success'"
                     class="px-2 py-0.5 text-[8px] bg-danger text-white rounded-full font-black uppercase">
@@ -77,10 +78,11 @@
 
 <script setup lang="ts">
 import {
-  IconHistory, IconClock, IconPlus, IconDeviceDesktop, IconLogin, IconLogout, IconPhoto, IconLock, IconMail, IconUser, IconActivity
+  IconHistory, IconClock, IconPlus, IconDeviceDesktop
 } from '@tabler/icons-vue'
 import { format, isSameDay } from 'date-fns'
 import { fr } from 'date-fns/locale'
+import { getLogActionInfo } from '~/utils/logs'
 
 defineProps<{
   logs: any[]
@@ -94,24 +96,12 @@ defineEmits(['next-page', 'prev-page'])
 
 // Helpers
 const getActionIcon = (action: string) => {
-  if (!action) return IconActivity
-  const a = action.toUpperCase()
-  if (a.includes('LOGIN')) return IconLogin
-  if (a.includes('LOGOUT')) return IconLogout
-  if (a.includes('AVATAR')) return IconPhoto
-  if (a.includes('PASSWORD')) return IconLock
-  if (a.includes('EMAIL')) return IconMail
-  if (a.includes('PROFILE')) return IconUser
-  return IconActivity
+  return getLogActionInfo(action).icon
 }
 
 const getActionClass = (action: string) => {
-  if (!action) return 'bg-ash text-hsa'
-  const a = action.toUpperCase()
-  if (a.includes('FAILED')) return 'bg-danger/10 text-danger'
-  if (a.includes('LOGIN')) return 'bg-success/10 text-success'
-  if (a.includes('PASSWORD') || a.includes('EMAIL')) return 'bg-warning/10 text-warning'
-  return 'bg-ash text-hsa'
+  const info = getLogActionInfo(action)
+  return `${info.color.replace('text-', 'bg-')}/10 ${info.color}`
 }
 
 const formatTime = (ts: string) => {
