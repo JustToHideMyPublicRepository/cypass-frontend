@@ -25,27 +25,6 @@ export const useDocsentryStore = defineStore('docsentry', {
   }),
 
   actions: {
-    // Récupérer les détails du document
-    async fetchDocumentById(id: string) {
-      this.loading = true
-      this.error = null
-      try {
-        const response = await $fetch<{ success: boolean; data: DocumentDetail }>('/api/user/docsentry/get', {
-          query: { id }
-        })
-        if (response.success) {
-          this.currentDocument = response.data
-          return true
-        }
-        return false
-      } catch (err: any) {
-        this.error = err.data?.message || 'Impossible de récupérer les détails du document'
-        return false
-      } finally {
-        this.loading = false
-      }
-    },
-
     // Récupérer les documents
     async fetchDocuments(limit: number = 20, offset: number = 0, filters: any = {}) {
       this.loading = true
@@ -67,7 +46,7 @@ export const useDocsentryStore = defineStore('docsentry', {
               has_more: boolean
             }
           }
-        }>('/api/user/docsentry/list', {
+        }>('/api/user/docsentry/get-all', {
           query
         })
         if (response.success) {
@@ -81,6 +60,27 @@ export const useDocsentryStore = defineStore('docsentry', {
         }
       } catch (err) {
         console.error('Failed to fetch documents', err)
+      } finally {
+        this.loading = false
+      }
+    },
+
+    // Récupérer les détails du document
+    async fetchDocumentById(id: string) {
+      this.loading = true
+      this.error = null
+      try {
+        const response = await $fetch<{ success: boolean; data: DocumentDetail }>('/api/user/docsentry/get', {
+          query: { id }
+        })
+        if (response.success) {
+          this.currentDocument = response.data
+          return true
+        }
+        return false
+      } catch (err: any) {
+        this.error = err.data?.message || 'Impossible de récupérer les détails du document'
+        return false
       } finally {
         this.loading = false
       }
