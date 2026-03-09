@@ -96,19 +96,8 @@ const redirectToVerify = () => {
 
 const downloadCertificate = async () => {
   if (!doc.value) return
-  try {
-    const response = await $fetch('/api/docsentry/download', {
-      query: { id: doc.value.id, type: 'certificate' },
-      responseType: 'blob'
-    })
-    const url = window.URL.createObjectURL(response as Blob)
-    const link = document.createElement('a')
-    link.href = url
-    link.setAttribute('download', `Certificat_${doc.value.filename}`)
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-  } catch (err) {
+  const success = await store.downloadCertificate(doc.value.id, doc.value.filename)
+  if (!success) {
     toast.showToast('error', 'Erreur', 'Impossible de télécharger le certificat.')
   }
 }

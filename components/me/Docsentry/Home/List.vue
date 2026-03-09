@@ -133,13 +133,13 @@
 </template>
 
 <script setup lang="ts">
-import { IconFileText, IconDownload, IconFileOff, IconEye, IconCopy, IconCheck, IconChevronDown, IconChevronLeft, IconChevronRight } from '@tabler/icons-vue'
+import { IconFileText, IconDownload, IconFileOff, IconEye, IconCopy, IconCheck, IconChevronLeft, IconChevronRight } from '@tabler/icons-vue'
 import { ref } from 'vue'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
-
 import type { Document } from '~/types/documents'
 import { useToastStore } from '~/stores/toast'
+import { useDocsentryStore } from '~/stores/docsentry'
 
 const props = defineProps<{
   documents: Document[]
@@ -151,6 +151,7 @@ const props = defineProps<{
 const emit = defineEmits(['next-page', 'prev-page'])
 
 const toast = useToastStore()
+const docsentryStore = useDocsentryStore()
 const expandedHashes = ref(new Set<string>())
 const copiedHashes = ref(new Set<string>())
 
@@ -170,19 +171,8 @@ const toggleHash = (id: string) => {
 }
 
 const downloadCertificate = async (id: string, filename: string) => {
-  try {
-    const response = await $fetch('/api/docsentry/download', {
-      query: { id, type: 'certificate' },
-      responseType: 'blob'
-    })
-    const url = window.URL.createObjectURL(response as Blob)
-    const link = document.createElement('a')
-    link.href = url
-    link.setAttribute('download', `Certificat_${filename}`)
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-  } catch (err) {
+  const success = await docsentryStore.downloadCertificate(id, filename)
+  if (!success) {
     toast.showToast('error', 'Erreur', 'Impossible de télécharger le certificat.')
   }
 }

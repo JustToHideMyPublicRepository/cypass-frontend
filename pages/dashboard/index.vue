@@ -97,7 +97,7 @@ const handleUpload = async (file: File) => {
 }
 
 const handleVerify = async (file: File) => {
-  const success = await documentsStore.verifyDocument(file)
+  const success = await documentsStore.verifyDocumentFull(file, null)
   if (success) {
     if (documentsStore.verificationResult?.verified) {
       toast.showToast('success', 'Authentique', 'Le document est certifié valide par CYPASS.')
@@ -161,7 +161,7 @@ const calculateDocTrend = async () => {
     const previousWeekStart = startOfWeek(subWeeks(now, 1), { weekStartsOn: 1 })
     const previousWeekEnd = endOfWeek(subWeeks(now, 1), { weekStartsOn: 1 })
 
-    const response = await $fetch<any>('/api/docsentry/list', {
+    const response = await $fetch<any>('/api/user/docsentry/list', {
       query: { limit: 100, offset: 0 }
     })
 

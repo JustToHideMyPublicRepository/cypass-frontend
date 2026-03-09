@@ -25,6 +25,68 @@ export const useDocsentryStore = defineStore('docsentry', {
   }),
 
   actions: {
+    // Récupérer les détails du document
+    async fetchDocumentById(id: string) {
+      this.loading = true
+      this.error = null
+      try {
+        const response = await $fetch<{ success: boolean; data: DocumentDetail }>('/api/user/docsentry/get', {
+          query: { id }
+        })
+        if (response.success) {
+          this.currentDocument = response.data
+          return true
+        }
+        return false
+      } catch (err: any) {
+        this.error = err.data?.message || 'Impossible de récupérer les détails du document'
+        return false
+      } finally {
+        this.loading = false
+      }
+    },
+
+    // Récupérer les documents
+    async fetchDocuments(limit: number = 20, offset: number = 0, filters: any = {}) {
+      this.loading = true
+      try {
+        const query: any = { limit, offset }
+        if (filters.filename) query.filename = filters.filename
+        if (filters.file_type && filters.file_type !== 'all') query.file_type = filters.file_type
+        if (filters.date_start) query.date_start = filters.date_start
+        if (filters.date_end) query.date_end = filters.date_end
+
+        const response = await $fetch<{
+          success: boolean;
+          data: {
+            documents: Document[],
+            pagination: {
+              total: number,
+              limit: number,
+              offset: number,
+              has_more: boolean
+            }
+          }
+        }>('/api/user/docsentry/list', {
+          query
+        })
+        if (response.success) {
+          this.documents = response.data.documents
+          if (response.data.pagination) {
+            this.pagination = {
+              ...this.pagination,
+              ...response.data.pagination
+            }
+          }
+        }
+      } catch (err) {
+        console.error('Failed to fetch documents', err)
+      } finally {
+        this.loading = false
+      }
+    },
+
+    // Upload document
     async uploadDocument(file: File) {
       this.loading = true
       this.error = null
@@ -34,7 +96,7 @@ export const useDocsentryStore = defineStore('docsentry', {
         const formData = new FormData()
         formData.append('document', file)
 
-        const response = await $fetch<{ success: boolean; message: string; data: UploadResult }>('/api/docsentry/upload', {
+        const response = await $fetch<{ success: boolean; message: string; data: UploadResult }>('/api/user/docsentry/upload', {
           method: 'POST',
           body: formData
         })
@@ -55,108 +117,53 @@ export const useDocsentryStore = defineStore('docsentry', {
       }
     },
 
-    async verifyDocument(file: File) {
-      this.loading = true
-      this.error = null
-      this.verificationResult = null
 
+
+
+
+
+
+
+
+
+
+
+
+    // Télécharger certificat
+    async downloadCertificate(id: string, filename: string) {
       try {
-        const formData = new FormData()
-        formData.append('document', file)
-
-        const response = await $fetch<VerificationResult & { success: boolean; message?: string }>('/api/docsentry/upload', {
-          method: 'POST',
-          body: formData
+        const response = await $fetch('/api/public/docsentry/download', {
+          query: { id, type: 'certificate' },
+          responseType: 'blob'
         })
+        const url = window.URL.createObjectURL(response as Blob)
+        const link = document.createElement('a')
+        link.href = url
+        link.setAttribute('download', `Certificat_${filename}`)
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+        window.URL.revokeObjectURL(url)
+        return true
+      } catch (err) {
+        console.error('Failed to download certificate', err)
+        return false
+      }
+    },
 
+    // Récupérer la clé publique
+    async fetchPublicKey() {
+      try {
+        const response = await $fetch<PublicKeyInfo>('/api/public/docsentry/public-key')
         if (response.success) {
-          this.verificationResult = response
-          return true
+          this.publicKeyInfo = response
         }
-
-        if (response.message?.includes('déjà certifié')) {
-          return this.handleAlreadyCertified(file.name)
-        }
-
-        return false
-      } catch (err: any) {
-        const message = err.data?.message || ''
-        // Handle 409 Conflict or specific message
-        if (err.statusCode === 409 || message.includes('déjà certifié')) {
-          return this.handleAlreadyCertified(file.name)
-        }
-
-        this.error = err.data?.message || 'Erreur lors de la vérification'
-        return false
-      } finally {
-        this.loading = false
+      } catch (err) {
+        console.error('Failed to fetch public key', err)
       }
     },
 
-    async verifyDocumentByHash(hash: string) {
-      this.loading = true
-      this.error = null
-      this.verificationResult = null
-
-      try {
-        const response = await $fetch<VerificationResult & { success: boolean }>('/api/docsentry/verify', {
-          method: 'GET',
-          query: { h: hash }
-        })
-
-        if (response.success || response.verified !== undefined) {
-          this.verificationResult = response
-          return true
-        }
-
-        return false
-      } catch (err: any) {
-        const failureData = err.data?.data || err.data
-        if (failureData && (failureData.verified !== undefined || failureData.success !== undefined)) {
-          this.verificationResult = failureData
-          return true
-        }
-        this.error = err.data?.message || err.message || 'Hash invalide ou document inconnu'
-        return false
-      } finally {
-        this.loading = false
-      }
-    },
-
-    async verifyDocumentFull(originalFile: File | null, certificateFile: File | null) {
-      this.loading = true
-      this.error = null
-      this.verificationResult = null
-
-      try {
-        const formData = new FormData()
-        if (originalFile) formData.append('original_file', originalFile)
-        if (certificateFile) formData.append('certificate_file', certificateFile)
-
-        const response = await $fetch<VerificationResult & { success: boolean }>('/api/docsentry/verify', {
-          method: 'POST',
-          body: formData
-        })
-
-        if (response.success || response.verified !== undefined) {
-          this.verificationResult = response
-          return true
-        }
-
-        return false
-      } catch (err: any) {
-        const failureData = err.data?.data || err.data
-        if (failureData && (failureData.verified !== undefined || failureData.success !== undefined)) {
-          this.verificationResult = failureData
-          return true
-        }
-        this.error = err.data?.message || err.message || 'Erreur lors de la vérification du document'
-        return false
-      } finally {
-        this.loading = false
-      }
-    },
-
+    // Vérifier par code QR    
     async verifyDocumentByQR(file: File) {
       this.loading = true
       this.error = null
@@ -166,7 +173,7 @@ export const useDocsentryStore = defineStore('docsentry', {
         const formData = new FormData()
         formData.append('file', file)
 
-        const response = await $fetch<VerificationResult & { success: boolean }>('/api/docsentry/verify-qr', {
+        const response = await $fetch<VerificationResult & { success: boolean }>('/api/public/docsentry/verify-qr-image', {
           method: 'POST',
           body: formData
         })
@@ -190,94 +197,70 @@ export const useDocsentryStore = defineStore('docsentry', {
       }
     },
 
-    handleAlreadyCertified(filename: string) {
-      this.verificationResult = {
-        verified: true,
-        message: '✓ Document déjà certifié et authentique',
-        authenticity: 'VERIFIED',
-        verification_time: new Date().toISOString(),
-        document: {
-          signer: 'Émetteur CYPASS (Certifié)',
-          filename: filename,
-          file_type: 'pdf',
-        } as any,
-        signature_info: {
-          algorithm: 'Ed25519',
-          key_match: true,
-          signed_at: 'Précédemment'
-        } as any
-      }
-      return true
-    },
-
-    async fetchDocuments(limit: number = 20, offset: number = 0, filters: any = {}) {
-      this.loading = true
-      try {
-        const query: any = { limit, offset }
-        if (filters.filename) query.filename = filters.filename
-        if (filters.file_type && filters.file_type !== 'all') query.file_type = filters.file_type
-        if (filters.date_start) query.date_start = filters.date_start
-        if (filters.date_end) query.date_end = filters.date_end
-
-        const response = await $fetch<{
-          success: boolean;
-          data: {
-            documents: Document[],
-            pagination: {
-              total: number,
-              limit: number,
-              offset: number,
-              has_more: boolean
-            }
-          }
-        }>('/api/docsentry/list', {
-          query
-        })
-        if (response.success) {
-          this.documents = response.data.documents
-          if (response.data.pagination) {
-            this.pagination = {
-              ...this.pagination,
-              ...response.data.pagination
-            }
-          }
-        }
-      } catch (err) {
-        console.error('Failed to fetch documents', err)
-      } finally {
-        this.loading = false
-      }
-    },
-
-    async fetchDocumentById(id: string) {
+    // Vérifier par hash 
+    async verifyDocumentByHash(hash: string) {
       this.loading = true
       this.error = null
+      this.verificationResult = null
+
       try {
-        const response = await $fetch<{ success: boolean; data: DocumentDetail }>('/api/docsentry/get', {
-          query: { id }
+        const response = await $fetch<VerificationResult & { success: boolean }>('/api/public/docsentry/verify', {
+          method: 'GET',
+          query: { h: hash }
         })
-        if (response.success) {
-          this.currentDocument = response.data
+
+        if (response.success || response.verified !== undefined) {
+          this.verificationResult = response
           return true
         }
+
         return false
       } catch (err: any) {
-        this.error = err.data?.message || 'Impossible de récupérer les détails du document'
+        const failureData = err.data?.data || err.data
+        if (failureData && (failureData.verified !== undefined || failureData.success !== undefined)) {
+          this.verificationResult = failureData
+          return true
+        }
+        this.error = err.data?.message || err.message || 'Hash invalide ou document inconnu'
         return false
       } finally {
         this.loading = false
       }
     },
 
-    async fetchPublicKey() {
+    // Vérifier par document
+    async verifyDocumentFull(originalFile: File | null, certificateFile: File | null) {
+      this.loading = true
+      this.error = null
+      this.verificationResult = null
+
       try {
-        const response = await $fetch<PublicKeyInfo>('/api/docsentry/public-key')
-        if (response.success) {
-          this.publicKeyInfo = response
+        const formData = new FormData()
+        if (originalFile) formData.append('original_file', originalFile)
+        if (certificateFile) formData.append('certificate_file', certificateFile)
+
+        const response = await $fetch<VerificationResult & { success: boolean }>('/api/public/docsentry/verify', {
+          method: 'POST',
+          body: formData
+        })
+
+        if (response.success || response.verified !== undefined) {
+          this.verificationResult = response
+          return true
         }
-      } catch (err) {
-        console.error('Failed to fetch public key', err)
+
+        return false
+      } catch (err: any) {
+        const failureData = err.data?.data || err.data
+        if (failureData && (failureData.verified !== undefined || failureData.success !== undefined)) {
+          this.verificationResult = failureData
+          return true
+        }
+        this.error = err.data?.message || err.message || 'Erreur lors de la vérification du document'
+        return false
+      } finally {
+        this.loading = false
       }
-    }
+    },
   }
 })

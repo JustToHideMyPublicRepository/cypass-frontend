@@ -94,10 +94,11 @@
 </template>
 
 <script setup lang="ts">
-import { IconRosetteDiscountCheck, IconLock, IconShieldOff, IconDownload } from '@tabler/icons-vue'
+import { IconRosetteDiscountCheck, IconShieldOff, IconDownload } from '@tabler/icons-vue'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { useToastStore } from '~/stores/toast'
+import { useDocsentryStore } from '~/stores/docsentry'
 
 const props = defineProps<{
   result: any
@@ -107,6 +108,7 @@ const props = defineProps<{
 defineEmits(['reset'])
 
 const toast = useToastStore()
+const docsentryStore = useDocsentryStore()
 
 const downloadCertificate = async () => {
   const id = props.result.document?.id || props.result.id
@@ -117,20 +119,8 @@ const downloadCertificate = async () => {
     return
   }
 
-  try {
-    const response = await $fetch('/api/docsentry/download', {
-      query: { id, type: 'certificate' },
-      responseType: 'blob'
-    })
-    const url = window.URL.createObjectURL(response as Blob)
-    const link = document.createElement('a')
-    link.href = url
-    link.setAttribute('download', `Certificat_${filename}`)
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-    window.URL.revokeObjectURL(url)
-  } catch (err) {
+  const success = await docsentryStore.downloadCertificate(id, filename)
+  if (!success) {
     toast.showToast('error', 'Erreur', 'Impossible de télécharger le certificat.')
   }
 }

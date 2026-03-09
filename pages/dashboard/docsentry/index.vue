@@ -95,7 +95,7 @@ const handleUpload = async (file: File) => {
 }
 
 const handleVerify = async (file: File) => {
-  const success = await store.verifyDocument(file)
+  const success = await store.verifyDocumentFull(file, null)
   if (success) {
     if (store.verificationResult?.verified) {
       toast.showToast('success', 'Authentique', 'Le document est certifié valide par CYPASS.')
