@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const res = await fetch(`${baseApi}/profile/received_reports.php`, {
+    const res = await fetch(`${baseApi}/vigitech/list_sent_reports.php`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -20,6 +20,6 @@ export default defineEventHandler(async (event) => {
     const data = await res.json()
     return data
   } catch (err: any) {
-    return { success: false, message: 'Erreur lors de la récupération des signalements reçus' }
+    return { success: false, message: 'Erreur lors de la récupération des signalements envoyés' }
   }
 })

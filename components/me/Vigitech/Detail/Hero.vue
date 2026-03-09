@@ -8,7 +8,7 @@
 
     <!-- Header -->
     <div>
-      <h1 class="text-2xl font-black text-BtW">Détails du Signalement</h1>
+      <h1 class="text-2xl font-black text-BtW">Détails du signalement</h1>
       <p class="text-xs font-bold text-hsa uppercase tracking-widest">Référence: {{ route.params.id }}</p>
     </div>
   </div>

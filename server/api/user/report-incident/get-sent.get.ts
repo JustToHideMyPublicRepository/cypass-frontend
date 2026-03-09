@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const res = await fetch(`${baseApi}/profile/get_report.php?id=${id}`, {
+    const res = await fetch(`${baseApi}/vigitech/get_sent_report.php?id=${id}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -27,6 +27,6 @@ export default defineEventHandler(async (event) => {
     const data = await res.json()
     return data
   } catch (err: any) {
-    return { success: false, message: 'Erreur lors de la récupération du détail du signalement' }
+    return { success: false, message: 'Erreur lors de la récupération du signalement envoyé' }
   }
 })

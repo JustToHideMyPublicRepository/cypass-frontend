@@ -1,5 +1,5 @@
 <template>
-  <UiBaseModal :show="show" @close="$emit('close')" title="Détails du Signalement" maxWidth="2xl">
+  <UiBaseModal :show="show" @close="$emit('close')" title="Détails du signalement" maxWidth="2xl">
     <div v-if="report" class="space-y-6">
       <!-- Status & Date Header -->
       <div class="flex flex-wrap items-center justify-between gap-4 p-4 bg-ash/5 rounded-[2rem] border border-ash/30">
@@ -24,16 +24,16 @@
         <div class="p-5 rounded-[2.5rem] bg-ash/5 border border-ash/20 space-y-4">
           <h3 class="text-[10px] font-black uppercase tracking-[0.2em] text-primary flex items-center gap-2">
             <IconFlagCancel class="w-4 h-4" />
-            {{ reportStore.reportType === 'user' ? 'Utilisateur Signalé' : 'Incident Signalé' }}
+            {{ reportType === 'user' ? 'Utilisateur Signalé' : 'Incident Signalé' }}
           </h3>
           <div class="flex items-center gap-4">
             <div
               class="w-12 h-12 rounded-2xl bg-ash/20 flex items-center justify-center border border-ashAct overflow-hidden">
-              <component :is="reportStore.reportType === 'user' ? IconUserExclamation : IconAlertTriangle"
+              <component :is="reportType === 'user' ? IconUserExclamation : IconAlertTriangle"
                 class="w-6 h-6 text-hsa" />
             </div>
             <div class="min-w-0">
-              <template v-if="reportStore.reportType === 'user'">
+              <template v-if="reportType === 'user'">
                 <NuxtLink :to="`/user/${report.reported_user_id}`"
                   class="text-sm font-black text-BtW hover:text-primary transition-colors hover:underline block truncate">
                   {{ report.reported_name || 'Inconnu' }}
@@ -64,9 +64,9 @@
             </div>
             <div class="min-w-0">
               <p class="text-sm font-black text-BtW">
-                {{ report.reporter_name || 'Anonyme' }}
+                {{ mode === 'sent' ? (report.reporter_name || 'Vous') : 'Anonyme' }}
               </p>
-              <p v-if="report.reporter_organization" class="text-[10px] font-bold text-hsa truncate">
+              <p v-if="mode === 'sent' && report.reporter_organization" class="text-[10px] font-bold text-hsa truncate">
                 {{ report.reporter_organization }}
               </p>
             </div>
@@ -127,12 +127,11 @@ import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { decodeHtmlEntities } from '~/utils/format'
 import { userReportReasons } from '~/utils/vigitech'
-import { useReportStore } from '~/stores/back/user/report'
-
-const reportStore = useReportStore()
 
 const props = defineProps<{
   show: boolean
+  mode: 'sent' | 'received'
+  reportType: 'user' | 'incident'
   report: ReportEntry | null
 }>()
 

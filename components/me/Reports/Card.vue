@@ -23,9 +23,9 @@
         <div class="space-y-1">
           <p class="text-xs font-black text-BtW flex items-center gap-2">
             <template v-if="mode === 'sent'">
-              <span class="text-hsa font-medium">{{ reportStore.reportType === 'user' ? 'Signalé :' : 'Incident :'
+              <span class="text-hsa font-medium">{{ reportType === 'user' ? 'Signalé :' : 'Incident :'
               }}</span>
-              <NuxtLink v-if="reportStore.reportType === 'user'" :to="`/user/${report.reported_user_id}`"
+              <NuxtLink v-if="reportType === 'user'" :to="`/user/${report.reported_user_id}`"
                 class="text-primary hover:underline transition-colors font-black">
                 {{ report.reported_name || 'Utilisateur inconnu' }}
               </NuxtLink>
@@ -56,8 +56,7 @@
         </div>
 
         <div class="flex items-center justify-between pt-1 gap-2">
-          <div v-if="isWithin24h && reportStore.reportType === 'incident' && mode === 'sent'"
-            class="flex items-center gap-2">
+          <div v-if="isWithin24h && reportType === 'incident' && mode === 'sent'" class="flex items-center gap-2">
             <button @click="$emit('edit', report)"
               class="p-2 rounded-xl bg-primary/5 text-primary hover:bg-primary/10 transition-colors" title="Modifier">
               <IconPencil class="w-3.5 h-3.5" />
@@ -69,7 +68,7 @@
           </div>
           <div v-else></div>
 
-          <button v-if="canViewDetails" @click="$emit('view-details', report)"
+          <button @click="$emit('view-details', report)"
             class="text-[10px] font-black text-primary uppercase tracking-widest hover:bg-primary/5 px-3 py-1.5 rounded-lg border border-primary/20 transition-all flex items-center gap-1.5 group/btn">
             Détails du signalement
             <IconArrowRight class="w-3 h-3 group-hover/btn:translate-x-1 transition-transform" />
@@ -87,32 +86,21 @@ import { formatRelativeTime } from '~/utils/date'
 import { differenceInHours } from 'date-fns'
 import { decodeHtmlEntities } from '~/utils/format'
 import { userReportReasons } from '~/utils/vigitech'
-import { useReportStore } from '~/stores/back/user/report'
 
-const reportStore = useReportStore()
 const profilStore = useProfilStore()
 
 const props = defineProps<{
   report: ReportEntry
   mode: 'sent' | 'received'
+  reportType: 'user' | 'incident'
 }>()
 
 const emit = defineEmits(['view-details', 'edit', 'delete'])
-
-const currentStore = computed(() => {
-  return reportStore.reportType === 'user' ? profilStore : reportStore
-})
 
 const isWithin24h = computed(() => {
   if (!props.report.created_at) return false
   const diff = differenceInHours(new Date(), new Date(props.report.created_at))
   return diff < 24
-})
-
-const canViewDetails = computed(() => {
-  if (reportStore.reportType === 'user') return props.mode === 'sent'
-  if (reportStore.reportType === 'incident') return props.mode === 'received'
-  return false
 })
 
 const statusClasses = computed(() => {

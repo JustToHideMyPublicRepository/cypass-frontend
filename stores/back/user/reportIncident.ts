@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import type { ReportEntry } from '~/types/profil'
 
-export const useReportUserStore = defineStore('reportUser', {
+export const useReportIncidentStore = defineStore('reportIncident', {
   state: () => ({
     sentReportsList: [] as ReportEntry[],
     receivedReportsList: [] as ReportEntry[],
@@ -14,7 +14,7 @@ export const useReportUserStore = defineStore('reportUser', {
     // Récupérer les détails d'un signalement reçu
     async getReceivedReport(id: string) {
       try {
-        const response: any = await $fetch('/api/user/report-user/get-received', {
+        const response: any = await $fetch('/api/user/report-incident/get-received', {
           params: { id }
         })
         return response.success ? response.data : null
@@ -26,7 +26,7 @@ export const useReportUserStore = defineStore('reportUser', {
     // Récupérer les détails d'un signalement envoyé
     async getSentReport(id: string) {
       try {
-        const response: any = await $fetch('/api/user/report-user/get-sent', {
+        const response: any = await $fetch('/api/user/report-incident/get-sent', {
           params: { id }
         })
         return response.success ? response.data : null
@@ -40,7 +40,7 @@ export const useReportUserStore = defineStore('reportUser', {
       this.loading = true
       this.error = null
       try {
-        const response: any = await $fetch('/api/user/report-user/list-received')
+        const response: any = await $fetch('/api/user/report-incident/list-received')
         if (response.success) {
           this.receivedReportsList = response.data
           return true
@@ -60,7 +60,7 @@ export const useReportUserStore = defineStore('reportUser', {
       this.loading = true
       this.error = null
       try {
-        const response: any = await $fetch('/api/user/report-user/list-sent')
+        const response: any = await $fetch('/api/user/report-incident/list-sent')
         if (response.success) {
           this.sentReportsList = response.data
           return true
@@ -75,14 +75,14 @@ export const useReportUserStore = defineStore('reportUser', {
       }
     },
 
-    // Signaler un utilisateur
-    async reportUser(targetId: string, reason: string, details: string) {
+    // Signaler un incident
+    async reportIncident(incidentId: string, reason: string, details: string) {
       this.loading = true
       this.error = null
       try {
-        const response: any = await $fetch('/api/user/report-user/report-user', {
+        const response: any = await $fetch('/api/user/report-incident/report-incident', {
           method: 'POST',
-          body: { reported_user_id: targetId, reason, details }
+          body: { incident_id: incidentId, reason, details }
         })
         if (response.success) {
           this.message = response.message

@@ -55,7 +55,6 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
 import { IconFlag, IconChevronDown } from '@tabler/icons-vue'
-import { useVigitechStore } from '~/stores/back/user/vigitech'
 import { useReportUserStore } from '~/stores/back/user/reportUser'
 import { useToastStore } from '~/stores/front/toast'
 import { userReportReasons } from '~/utils/vigitech'

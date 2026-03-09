@@ -1,6 +1,6 @@
 <template>
   <div class="space-y-8">
-    <MeReportsHeader :loading="currentStore.loading" @refresh="fetchData" />
+    <MeReportsHeader v-model="reportType" :loading="currentStore.loading" @refresh="fetchData" />
     <MeReportsTabs v-model="activeTab" :tabs="tabs" />
 
     <!-- Contenu -->
@@ -19,12 +19,14 @@
       <!-- Liste -->
       <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <MeReportsCard v-for="report in currentReports" :key="report.id" :report="report" :mode="activeTab"
-          @view-details="handleViewDetails" @edit="handleEditReport" @delete="handleDeleteReport" />
+          :report-type="reportType" @view-details="handleViewDetails" @edit="handleEditReport"
+          @delete="handleDeleteReport" />
       </div>
     </div>
 
     <!-- Modale de Détails -->
-    <ModalReportDetail :show="showDetail" :report="selectedReport" @close="showDetail = false" />
+    <ModalReportDetail :show="showDetail" :mode="activeTab" :report-type="reportType" :report="selectedReport"
+      @close="showDetail = false" />
 
     <!-- Modale de Modification (Incident) -->
     <ModalVigitechReportIncident :show="showEditModal" :incident-id="selectedEditReport?.incident_id || ''"
@@ -33,19 +35,21 @@
 </template>
 
 <script setup lang="ts">
-import { useReportStore } from '~/stores/back/user/report'
 import { useReportUserStore } from '~/stores/back/user/reportUser'
+import { useReportIncidentStore } from '~/stores/back/user/reportIncident'
 import { useToastStore } from '~/stores/front/toast'
 
-const reportStore = useReportStore()
 const reportUserStore = useReportUserStore()
+const reportIncidentStore = useReportIncidentStore()
 const toast = useToastStore()
 const router = useRouter()
 const route = useRoute()
 
+const reportType = ref<'user' | 'incident'>('user')
+
 // Active store based on report type
 const currentStore = computed(() => {
-  return reportStore.reportType === 'user' ? reportUserStore : reportStore
+  return reportType.value === 'user' ? reportUserStore : reportIncidentStore
 })
 
 const activeTab = ref<'sent' | 'received'>('sent')
@@ -69,10 +73,14 @@ const handleViewDetails = async (report: any) => {
   showDetail.value = true
 
   let details = null
-  if (reportStore.reportType === 'user') {
-    details = await reportUserStore.getReport(report.id)
+  if (reportType.value === 'user') {
+    details = activeTab.value === 'sent'
+      ? await reportUserStore.getSentReport(report.id)
+      : await reportUserStore.getReceivedReport(report.id)
   } else {
-    details = await reportStore.fetchReportDetails(report.id)
+    details = activeTab.value === 'sent'
+      ? await reportIncidentStore.getSentReport(report.id)
+      : await reportIncidentStore.getReceivedReport(report.id)
   }
 
   if (details) {
@@ -88,15 +96,8 @@ const handleEditReport = (report: any) => {
 const handleDeleteReport = async (report: any) => {
   if (!confirm('Êtes-vous sûr de vouloir supprimer ce signalement ? Cette action est irréversible.')) return
 
-  // Only incident reports are currently removable via UI in the old store, 
-  // keeping the logic if it's incident type.
-  if (reportStore.reportType === 'incident') {
-    const result = await reportStore.deleteIncidentReport(report.id)
-    if (result.success) {
-      toast.showToast('success', 'Supprimé', 'Le signalement a été supprimé.')
-    } else {
-      toast.showToast('error', 'Erreur', result.message || 'Impossible de supprimer le signalement.')
-    }
+  if (reportType.value === 'incident') {
+    toast.showToast('info', 'Info', 'La suppression sera implémentée prochainement.')
   }
 }
 
@@ -109,7 +110,7 @@ const fetchData = async () => {
 }
 
 // Watch active tab or report type to fetch data
-watch([activeTab, () => reportStore.reportType], fetchData)
+watch([activeTab, reportType], fetchData)
 
 // Check for initial tab from query
 onMounted(() => {
