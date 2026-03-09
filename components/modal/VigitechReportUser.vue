@@ -56,7 +56,7 @@
 import { ref, reactive } from 'vue'
 import { IconFlag, IconChevronDown } from '@tabler/icons-vue'
 import { useVigitechStore } from '~/stores/back/user/vigitech'
-import { useProfilStore } from '~/stores/back/user/profil'
+import { useReportUserStore } from '~/stores/back/user/reportUser'
 import { useToastStore } from '~/stores/front/toast'
 import { userReportReasons } from '~/utils/vigitech'
 
@@ -67,7 +67,7 @@ const props = defineProps<{
 
 const emit = defineEmits(['close', 'success'])
 const store = useVigitechStore()
-const profilStore = useProfilStore()
+const reportUserStore = useReportUserStore()
 const toast = useToastStore()
 const loading = ref(false)
 
@@ -85,16 +85,16 @@ const handleSubmit = async () => {
   loading.value = true
 
   try {
-    const success = await profilStore.reportUser(props.targetId, form.reason, form.details)
+    const success = await reportUserStore.reportUser(props.targetId, form.reason, form.details)
 
     if (success) {
-      toast.showToast('success', 'Signalement envoyé', profilStore.message || 'Votre signalement a été transmis.')
+      toast.showToast('success', 'Signalement envoyé', reportUserStore.message || 'Votre signalement a été transmis.')
       form.reason = ''
       form.details = ''
       emit('success')
       emit('close')
     } else {
-      toast.showToast('error', 'Erreur', profilStore.error || 'Impossible d\'envoyer le signalement.')
+      toast.showToast('error', 'Erreur', reportUserStore.error || 'Impossible d\'envoyer le signalement.')
     }
   } catch (err: any) {
     toast.showToast('error', 'Erreur', err.data?.message || err.message || 'Une erreur est survenue.')

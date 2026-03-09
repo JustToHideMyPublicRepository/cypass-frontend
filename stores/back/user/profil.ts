@@ -13,8 +13,6 @@ export const useProfilStore = defineStore('profil', {
     loading: false,
     error: null,
     message: null,
-    sentReportsList: [],
-    receivedReportsList: [],
     isLogoutModalOpen: false
   } as ProfilState),
 
@@ -120,18 +118,6 @@ export const useProfilStore = defineStore('profil', {
       }
     },
 
-    // Récupérer les détails d'un signalement
-    async getReport(id: string) {
-      try {
-        const response: any = await $fetch('/api/user/profile/get-report', {
-          params: { id }
-        })
-        return response.success ? response.data : null
-      } catch (err) {
-        return null
-      }
-    },
-
     // Récupérer les logs
     async getUserLogs(params: { limit?: number; type?: string; date?: string } = {}) {
       this.loading = true
@@ -202,69 +188,6 @@ export const useProfilStore = defineStore('profil', {
         if (shouldRedirect) {
           navigateTo('/auth/login')
         }
-      }
-    },
-
-    // Récupérer les signalements reçus
-    async receivedReports() {
-      this.loading = true
-      this.error = null
-      try {
-        const response: any = await $fetch('/api/user/profile/received-report')
-        if (response.success) {
-          this.receivedReportsList = response.data
-          return true
-        }
-        this.error = response.message
-        return false
-      } catch (err: any) {
-        this.error = err.data?.message || 'Impossible de charger les signalements'
-        return false
-      } finally {
-        this.loading = false
-      }
-    },
-
-    // Signaler un utilisateur
-    async reportUser(targetId: string, reason: string, details: string) {
-      this.loading = true
-      this.error = null
-      try {
-        const response: any = await $fetch('/api/user/profile/report-user', {
-          method: 'POST',
-          body: { reported_user_id: targetId, reason, details }
-        })
-        if (response.success) {
-          this.message = response.message
-          return true
-        }
-        this.error = response.message
-        return false
-      } catch (err: any) {
-        this.error = err.data?.message || 'Erreur lors de l’envoi du signalement'
-        return false
-      } finally {
-        this.loading = false
-      }
-    },
-
-    // Récupérer les signalements envoyés
-    async sentReports() {
-      this.loading = true
-      this.error = null
-      try {
-        const response: any = await $fetch('/api/user/profile/sent-report')
-        if (response.success) {
-          this.sentReportsList = response.data
-          return true
-        }
-        this.error = response.message
-        return false
-      } catch (err: any) {
-        this.error = err.data?.message || 'Impossible de charger les signalements'
-        return false
-      } finally {
-        this.loading = false
       }
     },
 

@@ -26,6 +26,7 @@ export interface Incident {
   author_last_name?: string | null
   author_is_reported?: boolean | number
   user_avatar?: string | null
+  author_avatar_url?: string | null
 }
 
 export interface Comment {

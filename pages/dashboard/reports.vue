@@ -34,18 +34,18 @@
 
 <script setup lang="ts">
 import { useReportStore } from '~/stores/back/user/report'
-import { useProfilStore } from '~/stores/back/user/profil'
+import { useReportUserStore } from '~/stores/back/user/reportUser'
 import { useToastStore } from '~/stores/front/toast'
 
 const reportStore = useReportStore()
-const profilStore = useProfilStore()
+const reportUserStore = useReportUserStore()
 const toast = useToastStore()
 const router = useRouter()
 const route = useRoute()
 
 // Active store based on report type
 const currentStore = computed(() => {
-  return reportStore.reportType === 'user' ? profilStore : reportStore
+  return reportStore.reportType === 'user' ? reportUserStore : reportStore
 })
 
 const activeTab = ref<'sent' | 'received'>('sent')
@@ -70,7 +70,7 @@ const handleViewDetails = async (report: any) => {
 
   let details = null
   if (reportStore.reportType === 'user') {
-    details = await profilStore.getReport(report.id)
+    details = await reportUserStore.getReport(report.id)
   } else {
     details = await reportStore.fetchReportDetails(report.id)
   }

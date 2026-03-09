@@ -30,7 +30,14 @@
               Profil supprimé
             </span>
             <NuxtLink v-else :to="`/user/${incident.user_id}`"
-              class="custum-badge bg-primary/10 text-primary hover:bg-primary/20 transition-colors">
+              class="custum-badge bg-primary/10 text-primary hover:bg-primary/20 transition-colors !flex items-center gap-1.5 !pl-1.5 !py-0.5">
+              <img v-if="incident.author_avatar_url"
+                :src="getUserAvatarUrl(incident.author_avatar_url, incident.author_first_name, incident.author_last_name)"
+                class="w-4 h-4 rounded-full object-cover shrink-0" />
+              <div v-else
+                class="w-4 h-4 rounded-full bg-primary/20 flex items-center justify-center shrink-0 text-[8px]">
+                {{ incident.author_first_name?.[0] || '' }}{{ incident.author_last_name?.[0] || '' }}
+              </div>
               {{ [incident.author_first_name, incident.author_last_name].filter(Boolean).join(' ') }}
             </NuxtLink>
           </div>
@@ -121,6 +128,7 @@ import type { Incident } from '~/types/vigitech'
 import { decodeHtmlEntities } from '~/utils/format'
 import { formatRelativeTime } from '~/utils/date'
 import { mapIncidentType, mapThreatLevel, mapIncidentStatus } from '~/utils/vigitech'
+import { getUserAvatarUrl } from '~/utils/user'
 import { useToastStore } from '~/stores/front/toast'
 import { useAuthStore } from '~/stores/back/user/auth'
 

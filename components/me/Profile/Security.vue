@@ -44,8 +44,7 @@
           <div class="flex items-center gap-3">
             <UiLogoLoader v-if="loadingMfa" size="xs" />
             <label class="relative inline-flex items-center cursor-pointer">
-              <input type="checkbox" :checked="profilStore.profile?.mfa_enabled" class="sr-only peer"
-                :disabled="loadingMfa" @change="handleMfaToggle">
+              <input type="checkbox" v-model="mfaEnabled" class="sr-only peer" :disabled="loadingMfa">
               <div class="input-toggle-slider">
               </div>
             </label>
@@ -64,7 +63,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { IconMail, IconLock, IconChevronRight } from '@tabler/icons-vue'
 import { useProfilStore } from '~/stores/back/user/profil'
 import { useToastStore } from '~/stores/front/toast'
@@ -76,22 +75,20 @@ const showEmailModal = ref(false)
 const showPasswordModal = ref(false)
 const loadingMfa = ref(false)
 
-const handleMfaToggle = async (event: Event) => {
-  const target = event.target as HTMLInputElement
-  const enabled = target.checked
+const mfaEnabled = computed({
+  get: () => profilStore.profile?.mfa_enabled ?? false,
+  set: async (val) => {
+    loadingMfa.value = true
+    const success = await profilStore.toggleMfa(val)
 
-  loadingMfa.value = true
-  const success = await profilStore.toggleMfa(enabled)
-
-  if (success) {
-    toastStore.showToast('success', 'Sécurité mise à jour', `La double authentification est désormais ${enabled ? 'activée' : 'désactivée'}.`)
-  } else {
-    toastStore.showToast('error', 'Erreur', profilStore.error || 'Impossible de modifier le paramètre MFA.')
-    // Reset toggle if failed
-    target.checked = !enabled
+    if (success) {
+      toastStore.showToast('success', 'Sécurité mise à jour', `La double authentification est désormais ${val ? 'activée' : 'désactivée'}.`)
+    } else {
+      toastStore.showToast('error', 'Erreur', profilStore.error || 'Impossible de modifier le paramètre MFA.')
+    }
+    loadingMfa.value = false
   }
-  loadingMfa.value = false
-}
+})
 
 const handleEmailUpdate = async (data: any) => {
   const success = await profilStore.changeEmail(data.newEmail, data.password)

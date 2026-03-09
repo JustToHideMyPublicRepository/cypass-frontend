@@ -26,7 +26,7 @@ export const partners: Partner[] = [
   {
     name: 'ARCEP',
     role: 'Autorité de Régulation des Communications Électroniques',
-    logo: 'https://srtb.bj/storage/2021/01/ARCEP.jpg',
+    logo: 'https://arcep.bj/plaintes/img/logo_arcep.jpg',
     website: 'https://arcep.bj/',
     initials: 'ARCEP'
   },
