@@ -45,7 +45,7 @@ const handleDelete = () => {
 
 const confirmDelete = async () => {
   confirmLoading.value = true
-  const success = await store.deleteNotification(id)
+  const success = await store.notificationDelete(id)
   confirmLoading.value = false
   confirmShow.value = false
   if (success) {
@@ -55,7 +55,7 @@ const confirmDelete = async () => {
 }
 
 onMounted(() => {
-  store.fetchNotificationById(id)
+  store.notificationGet(id)
 })
 
 useHead({

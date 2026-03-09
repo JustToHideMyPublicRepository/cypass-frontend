@@ -7,11 +7,30 @@ export const useSupportStore = defineStore('support', {
   }),
 
   actions: {
+    // Contacte
+    async contactRequest(data: { full_name: string; email: string; subject: string; message: string }) {
+      this.loading = true
+      this.error = null
+      try {
+        const response = await $fetch<{ success: boolean; message: string; data: any }>('/api/public/support/contact', {
+          method: 'POST',
+          body: data
+        })
+        return response
+      } catch (err: any) {
+        this.error = err.data?.message || 'Une erreur est survenue lors de l\'envoi du message.'
+        return { success: false, message: this.error }
+      } finally {
+        this.loading = false
+      }
+    },
+
+    // Partenaires
     async partnershipRequest(data: { organization_name: string; contact_name: string; email: string; message: string }) {
       this.loading = true
       this.error = null
       try {
-        const response = await $fetch<{ success: boolean; message: string; data: any }>('/api/support/partnership', {
+        const response = await $fetch<{ success: boolean; message: string; data: any }>('/api/public/support/partnership', {
           method: 'POST',
           body: data
         })
@@ -23,22 +42,5 @@ export const useSupportStore = defineStore('support', {
         this.loading = false
       }
     },
-
-    async contactRequest(data: { full_name: string; email: string; subject: string; message: string }) {
-      this.loading = true
-      this.error = null
-      try {
-        const response = await $fetch<{ success: boolean; message: string; data: any }>('/api/support/contact', {
-          method: 'POST',
-          body: data
-        })
-        return response
-      } catch (err: any) {
-        this.error = err.data?.message || 'Une erreur est survenue lors de l\'envoi du message.'
-        return { success: false, message: this.error }
-      } finally {
-        this.loading = false
-      }
-    }
   }
 })

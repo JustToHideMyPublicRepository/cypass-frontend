@@ -16,10 +16,50 @@ export const useNotificationsStore = defineStore('notifications', {
   }),
 
   actions: {
-    async fetchNotifications(limit: number = 20, offset: number = 0, append: boolean = false) {
+    // Supression de notifications    
+    async notificationDelete(id: string) {
+      try {
+        const response = await $fetch<{ success: boolean }>('/api/user/notifications/delete', {
+          method: 'DELETE',
+          query: { id }
+        })
+        if (response.success) {
+          this.notifications = this.notifications.filter(n => n.id !== id)
+          return true
+        }
+        return false
+      } catch (err) {
+        console.error('Failed to delete notification')
+        return false
+      }
+    },
+
+    // Détail d'une notification
+    async notificationGet(id: string) {
       this.loading = true
       try {
-        const response = await $fetch<{ success: boolean; data: NotificationResponse }>('/api/notifications/list', {
+        const response = await $fetch<{ success: boolean; data: { notification: Notification } }>('/api/user/notifications/get', {
+          query: { id }
+        })
+        if (response.success) {
+          this.currentNotification = response.data.notification
+          // If fetched specifically, mark as read if not already
+          if (!this.currentNotification.is_read) {
+            this.notificationAsRead(id)
+          }
+        }
+      } catch (err: any) {
+        this.error = 'Erreur lors de la récupération de la notification'
+      } finally {
+        this.loading = false
+      }
+    },
+
+    // Liste des notifications
+    async notificationsList(limit: number = 20, offset: number = 0, append: boolean = false) {
+      this.loading = true
+      try {
+        const response = await $fetch<{ success: boolean; data: NotificationResponse }>('/api/user/notifications/list', {
           query: { limit, offset }
         })
         if (response.success) {
@@ -41,29 +81,10 @@ export const useNotificationsStore = defineStore('notifications', {
       }
     },
 
-    async fetchNotificationById(id: string) {
-      this.loading = true
+    // Marquer comme lu
+    async notificationAsRead(id: string | 'all') {
       try {
-        const response = await $fetch<{ success: boolean; data: { notification: Notification } }>('/api/notifications/get', {
-          query: { id }
-        })
-        if (response.success) {
-          this.currentNotification = response.data.notification
-          // If fetched specifically, mark as read if not already
-          if (!this.currentNotification.is_read) {
-            this.markAsRead(id)
-          }
-        }
-      } catch (err: any) {
-        this.error = 'Erreur lors de la récupération de la notification'
-      } finally {
-        this.loading = false
-      }
-    },
-
-    async markAsRead(id: string | 'all') {
-      try {
-        const response = await $fetch<{ success: boolean; data: { unread_count: number } }>('/api/notifications/mark-read', {
+        const response = await $fetch<{ success: boolean; data: { unread_count: number } }>('/api/user/notifications/mark-read', {
           method: 'PATCH',
           body: { id, all: id === 'all' ? '1' : '' }
         })
@@ -83,22 +104,5 @@ export const useNotificationsStore = defineStore('notifications', {
         return false
       }
     },
-
-    async deleteNotification(id: string) {
-      try {
-        const response = await $fetch<{ success: boolean }>('/api/notifications/delete', {
-          method: 'DELETE',
-          query: { id }
-        })
-        if (response.success) {
-          this.notifications = this.notifications.filter(n => n.id !== id)
-          return true
-        }
-        return false
-      } catch (err) {
-        console.error('Failed to delete notification')
-        return false
-      }
-    }
   }
 })

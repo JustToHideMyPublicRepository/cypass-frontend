@@ -209,7 +209,7 @@ onMounted(async () => {
   // Parallel fetch
   await Promise.all([
     documentsStore.fetchDocuments(5, 0),
-    notificationsStore.fetchNotifications(5, 0),
+    notificationsStore.notificationsList(5, 0),
     profilStore.getUserLogs({ limit: 5 }),
     vigitechStore.fetchUserIncidents(),
     vigitechStore.fetchUserComments(),

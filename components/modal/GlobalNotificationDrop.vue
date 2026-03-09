@@ -120,7 +120,7 @@ const formattedCount = computed(() => {
  * Marque toutes les notifications comme lues via le store
  */
 const handleMarkAllAsRead = async () => {
-  const success = await store.markAsRead('all')
+  const success = await store.notificationAsRead('all')
   if (success) {
     toastStore.showToast('success', 'Journal synchronisé', 'Toutes vos notifications sont marquées comme lues.')
   }
@@ -196,11 +196,11 @@ onMounted(() => {
   checkMobile()
   window.addEventListener('resize', checkMobile)
   document.addEventListener('click', handleClickOutside)
-  store.fetchNotifications(5, 0)
+  store.notificationsList(5, 0)
 
   // Rafraîchissement automatique toutes les 60 secondes
   refreshInterval = setInterval(() => {
-    store.fetchNotifications(5, 0)
+    store.notificationsList(5, 0)
   }, 60000)
 })
 

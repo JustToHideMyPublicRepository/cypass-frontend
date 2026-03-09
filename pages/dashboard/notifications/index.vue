@@ -113,14 +113,14 @@ const toggleSort = () => {
 }
 
 const handleMarkAllAsRead = async () => {
-  const success = await store.markAsRead('all')
+  const success = await store.notificationAsRead('all')
   if (success) {
     toastStore.showToast('success', 'Élément mis à jour', 'Toutes les notifications ont été marquées comme lues.')
   }
 }
 
 const handleMarkAsRead = async (id: string) => {
-  const success = await store.markAsRead(id)
+  const success = await store.notificationAsRead(id)
   if (success) {
     toastStore.showToast('success', 'Élément mis à jour', 'La notification a été marquée comme lue.')
   }
@@ -139,7 +139,7 @@ const handleDelete = (id: string) => {
 
 const confirmDelete = async () => {
   confirmModal.loading = true
-  const success = await store.deleteNotification(confirmModal.id)
+  const success = await store.notificationDelete(confirmModal.id)
   confirmModal.loading = false
   confirmModal.show = false
   if (success) {
@@ -149,7 +149,7 @@ const confirmDelete = async () => {
 
 const loadMore = () => {
   const newOffset = store.pagination.offset + store.pagination.limit
-  store.fetchNotifications(store.pagination.limit, newOffset, true)
+  store.notificationsList(store.pagination.limit, newOffset, true)
 }
 
 const goToDetail = (id: string) => {
@@ -164,7 +164,7 @@ const checkMobile = () => {
 onMounted(() => {
   checkMobile()
   window.addEventListener('resize', checkMobile)
-  store.fetchNotifications(100, 0) // Fetch more for local filtering
+  store.notificationsList(100, 0) // Fetch more for local filtering
 })
 
 onUnmounted(() => {
