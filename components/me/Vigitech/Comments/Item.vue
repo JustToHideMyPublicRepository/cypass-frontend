@@ -87,7 +87,6 @@
       <div class="flex items-center gap-4 shrink-0">
         <div class="hidden sm:block text-right">
           <p class="text-[11px] text-BtW font-black leading-tight">{{ relativeTime }}</p>
-          <p class="text-[8px] text-hsa font-black uppercase tracking-widest opacity-60">Il y a</p>
         </div>
         <div class="relative">
           <div
