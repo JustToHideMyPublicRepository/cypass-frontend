@@ -33,7 +33,7 @@
 
 <script setup lang="ts">
 import { IconBroadcast } from '@tabler/icons-vue'
-import { useVigitechStore } from '~/stores/vigitech'
+import { useVigitechStore } from '~/stores/back/user/vigitech'
 
 const store = useVigitechStore()
 

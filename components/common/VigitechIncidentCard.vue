@@ -121,8 +121,8 @@ import type { Incident } from '~/types/vigitech'
 import { decodeHtmlEntities } from '~/utils/format'
 import { formatRelativeTime } from '~/utils/date'
 import { mapIncidentType, mapThreatLevel, mapIncidentStatus } from '~/utils/vigitech'
-import { useToastStore } from '~/stores/toast'
-import { useAuthStore } from '~/stores/auth'
+import { useToastStore } from '~/stores/front/toast'
+import { useAuthStore } from '~/stores/back/user/auth'
 
 const props = defineProps<{
   incident: Incident

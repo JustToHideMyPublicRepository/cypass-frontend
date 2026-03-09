@@ -30,8 +30,8 @@
       :upload-result="store.uploadResult" @upload="handleUpload" @update:error="(val) => store.error = val"
       @error-clear="store.error = null" @close="closeModals" />
 
-    <ModalDocSentryVerify :show="modals.verify" :loading="store.loading" :error="store.error"
-      :result="store.verificationResult" @verify="handleVerify" @reset="store.verificationResult = null"
+    <ModalDocSentryVerify :show="modals.verify" :loading="publicStore.loading" :error="publicStore.error"
+      :result="publicStore.verificationResult" @verify="handleVerify" @reset="publicStore.verificationResult = null"
       @close="closeModals" />
 
     <!-- Trust Card Modal -->
@@ -41,10 +41,12 @@
 
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted, watch } from 'vue'
-import { useDocsentryStore } from '~/stores/docsentry'
-import { useToastStore } from '~/stores/toast'
+import { useUserDocsentryStore } from '~/stores/back/user/docsentry'
+import { usePublicDocsentryStore } from '~/stores/back/public/docsentry'
+import { useToastStore } from '~/stores/front/toast'
 
-const store = useDocsentryStore()
+const store = useUserDocsentryStore()
+const publicStore = usePublicDocsentryStore()
 const toast = useToastStore()
 
 const filters = ref({
@@ -95,15 +97,15 @@ const handleUpload = async (file: File) => {
 }
 
 const handleVerify = async (file: File) => {
-  const success = await store.verifyDocumentFull(file, null)
+  const success = await publicStore.verifyDocumentFull(file, null)
   if (success) {
-    if (store.verificationResult?.verified) {
+    if (publicStore.verificationResult?.verified) {
       toast.showToast('success', 'Authentique', 'Le document est certifié valide par CYPASS.')
     } else {
       toast.showToast('warning', 'Attention', 'La signature de ce document est invalide ou corrompue.')
     }
   } else {
-    toast.showToast('error', 'Erreur', store.error || 'Erreur lors de la vérification.')
+    toast.showToast('error', 'Erreur', publicStore.error || 'Erreur lors de la vérification.')
   }
 }
 
@@ -113,7 +115,8 @@ const closeModals = () => {
   modals.trust = false
   store.error = null
   store.uploadResult = null
-  store.verificationResult = null
+  publicStore.error = null
+  publicStore.verificationResult = null
 }
 
 const handleNextPage = () => {
@@ -144,7 +147,7 @@ watch([currentPage, filters], () => {
 
 onMounted(() => {
   store.fetchDocuments(limit, 0)
-  store.fetchPublicKey()
+  publicStore.fetchPublicKey()
 })
 
 useHead({

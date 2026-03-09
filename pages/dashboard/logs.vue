@@ -15,7 +15,7 @@
 import { ref, reactive, computed, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
-import { useProfilStore } from '~/stores/profil'
+import { useProfilStore } from '~/stores/back/user/profil'
 import { format, isValid, parseISO } from 'date-fns'
 import { getLogActionInfo } from '~/utils/logs'
 
@@ -136,7 +136,7 @@ const prevPage = () => {
   if (currentPage.value > 1) currentPage.value--
 }
 
-import { useSearchStore } from '~/stores/search'
+import { useSearchStore } from '~/stores/front/search'
 import { useShortcuts } from '~/composables/useShortcuts'
 
 const searchStore = useSearchStore()

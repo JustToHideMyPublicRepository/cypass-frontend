@@ -38,7 +38,7 @@
 </template>
 
 <script setup lang="ts">
-import { useShortcutsStore } from '~/stores/shortcuts'
+import { useShortcutsStore } from '~/stores/front/shortcuts'
 import { IconRotate } from '@tabler/icons-vue'
 
 // Propriétés de la modale de configuration des raccourcis

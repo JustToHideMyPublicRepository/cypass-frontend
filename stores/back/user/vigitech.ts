@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { Incident, Comment, CreateIncidentRequest } from '../types/vigitech'
+import type { Incident, Comment, CreateIncidentRequest } from '~/types/vigitech'
 
 export const useVigitechStore = defineStore('vigitech', {
   state: () => ({

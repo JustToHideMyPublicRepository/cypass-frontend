@@ -33,9 +33,9 @@
 </template>
 
 <script setup lang="ts">
-import { useReportStore } from '~/stores/report'
-import { useProfilStore } from '~/stores/profil'
-import { useToastStore } from '~/stores/toast'
+import { useReportStore } from '~/stores/back/user/report'
+import { useProfilStore } from '~/stores/back/user/profil'
+import { useToastStore } from '~/stores/front/toast'
 
 const reportStore = useReportStore()
 const profilStore = useProfilStore()

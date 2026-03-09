@@ -39,8 +39,8 @@
 </template>
 
 <script setup lang="ts">
-import { useVigitechStore } from '~/stores/vigitech'
-import { useToastStore } from '~/stores/toast'
+import { useVigitechStore } from '~/stores/back/user/vigitech'
+import { useToastStore } from '~/stores/front/toast'
 import type { Incident } from '~/types/vigitech'
 
 const store = useVigitechStore()

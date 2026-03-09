@@ -43,7 +43,7 @@
 
 <script setup lang="ts">
 import { IconLanguage, IconClock, IconChevronDown } from '@tabler/icons-vue'
-import { useSettingsPrefStore } from '~/stores/settingsPref'
+import { useSettingsPrefStore } from '~/stores/front/settingsPref'
 
 const settingsPref = useSettingsPrefStore()
 </script>

@@ -94,8 +94,8 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { IconBell, IconBellPlus, IconBellOff, IconCheck } from '@tabler/icons-vue'
-import { useNotificationsStore } from '~/stores/notifications'
-import { useToastStore } from '~/stores/toast'
+import { useNotificationsStore } from '~/stores/back/user/notifications'
+import { useToastStore } from '~/stores/front/toast'
 import { formatDistanceToNow } from 'date-fns'
 import { fr } from 'date-fns/locale'
 

@@ -20,10 +20,10 @@
 </template>
 
 <script setup lang="ts">
-import { useToastStore } from '@/stores/toast'
-import { useShortcutsStore } from '@/stores/shortcuts'
-import { useSearchStore } from '@/stores/search'
-import { useAiAnalysisStore } from '@/stores/aiAnalysis'
+import { useToastStore } from '@/stores/front/toast'
+import { useShortcutsStore } from '@/stores/front/shortcuts'
+import { useSearchStore } from '@/stores/front/search'
+import { useAiAnalysisStore } from '@/stores/front/aiAnalysis'
 
 const toastStore = useToastStore()
 const shortcutsStore = useShortcutsStore()

@@ -120,10 +120,10 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import { IconMenu2, IconX } from '@tabler/icons-vue'
-import { useAuthStore } from '~/stores/auth'
-import { useProfilStore } from '~/stores/profil'
+import { useAuthStore } from '~/stores/back/user/auth'
+import { useProfilStore } from '~/stores/back/user/profil'
 import { getLinkTooltip } from '~/data/shortcuts'
-import { useToastStore } from '~/stores/toast'
+import { useToastStore } from '~/stores/front/toast'
 
 const route = useRoute()
 

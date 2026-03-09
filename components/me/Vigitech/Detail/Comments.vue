@@ -84,10 +84,10 @@ import { IconMessage, IconChevronUp, IconChevronDown, IconEdit, IconTrash } from
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { getUserAvatarUrl } from '~/utils/user'
-import { useVigiPrefStore } from '~/stores/vigiPref'
-import { useAuthStore } from '~/stores/auth'
-import { useVigitechStore } from '~/stores/vigitech'
-import { useToastStore } from '~/stores/toast'
+import { useVigiPrefStore } from '~/stores/front/vigiPref'
+import { useAuthStore } from '~/stores/back/user/auth'
+import { useVigitechStore } from '~/stores/back/user/vigitech'
+import { useToastStore } from '~/stores/front/toast'
 
 const props = defineProps<{
   incidentId: string

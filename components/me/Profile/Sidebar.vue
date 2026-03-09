@@ -75,9 +75,9 @@ import { ref, computed } from 'vue'
 import { IconCamera } from '@tabler/icons-vue'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
-import { useAuthStore } from '~/stores/auth'
-import { useProfilStore } from '~/stores/profil'
-import { useToastStore } from '~/stores/toast'
+import { useAuthStore } from '~/stores/back/user/auth'
+import { useProfilStore } from '~/stores/back/user/profil'
+import { useToastStore } from '~/stores/front/toast'
 
 const props = defineProps<{
   user: any

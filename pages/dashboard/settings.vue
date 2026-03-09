@@ -24,7 +24,7 @@
 
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { useSettingsPrefStore } from '~/stores/settingsPref'
+import { useSettingsPrefStore } from '~/stores/front/settingsPref'
 
 const settingsPref = useSettingsPrefStore()
 

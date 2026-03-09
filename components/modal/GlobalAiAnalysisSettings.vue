@@ -92,7 +92,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { IconTarget, IconListCheck, IconAlertCircle, IconRotate, IconUserBolt, IconLayoutList } from '@tabler/icons-vue'
-import { useAiAnalysisStore } from '~/stores/aiAnalysis'
+import { useAiAnalysisStore } from '~/stores/front/aiAnalysis'
 
 const aiStore = useAiAnalysisStore()
 const showResetConfirm = ref(false)

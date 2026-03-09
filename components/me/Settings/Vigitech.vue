@@ -45,8 +45,8 @@
 
 <script setup lang="ts">
 import { IconRotate, IconChevronDown } from '@tabler/icons-vue'
-import { useVigiPrefStore } from '~/stores/vigiPref'
-import { useSettingsPrefStore } from '~/stores/settingsPref'
+import { useVigiPrefStore } from '~/stores/front/vigiPref'
+import { useSettingsPrefStore } from '~/stores/front/settingsPref'
 
 // Accès au store des préférences VigiTech
 const store = useVigiPrefStore()

@@ -85,8 +85,8 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'nuxt/app'
 import { IconChevronDown, IconUser, IconSettings, IconHelp, IconDevices, IconLogout, IconKeyboard, IconActivity, IconMenu2, IconFlag } from '@tabler/icons-vue'
-import { useAuthStore } from '~/stores/auth'
-import { useProfilStore } from '~/stores/profil'
+import { useAuthStore } from '~/stores/back/user/auth'
+import { useProfilStore } from '~/stores/back/user/profil'
 import { getLinkTooltip } from '~/data/shortcuts'
 const authStore = useAuthStore()
 const profilStore = useProfilStore()

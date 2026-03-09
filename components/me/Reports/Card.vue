@@ -87,7 +87,7 @@ import { formatRelativeTime } from '~/utils/date'
 import { differenceInHours } from 'date-fns'
 import { decodeHtmlEntities } from '~/utils/format'
 import { userReportReasons } from '~/utils/vigitech'
-import { useReportStore } from '~/stores/report'
+import { useReportStore } from '~/stores/back/user/report'
 
 const reportStore = useReportStore()
 const profilStore = useProfilStore()

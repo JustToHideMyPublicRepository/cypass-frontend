@@ -87,8 +87,8 @@ import {
   IconHelp, IconX, IconLifebuoy, IconStatusChange,
   IconKeyboard, IconBrandWhatsapp, IconSparkles, IconRotate
 } from '@tabler/icons-vue'
-import { useShortcutsStore } from '~/stores/shortcuts'
-import { useAiAnalysisStore } from '~/stores/aiAnalysis'
+import { useShortcutsStore } from '~/stores/front/shortcuts'
+import { useAiAnalysisStore } from '~/stores/front/aiAnalysis'
 import { useRoute } from 'vue-router'
 
 const store = useShortcutsStore()

@@ -86,8 +86,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { IconUserCircle, IconUserSquareRounded, IconEdit, IconMail, IconBuilding, IconAlertCircle } from '@tabler/icons-vue'
-import { useProfilStore } from '~/stores/profil'
-import { useToastStore } from '~/stores/toast'
+import { useProfilStore } from '~/stores/back/user/profil'
+import { useToastStore } from '~/stores/front/toast'
 
 defineProps<{
   modelValue: {

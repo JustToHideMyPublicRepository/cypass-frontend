@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { ReportEntry } from '../types/profil'
+import type { ReportEntry } from '~/types/profil'
 
 export const useReportStore = defineStore('report', {
   state: () => ({

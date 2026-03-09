@@ -56,9 +56,9 @@
 <script setup lang="ts">
 import { ref, reactive, computed, watch } from 'vue'
 import { IconFlag, IconChevronDown } from '@tabler/icons-vue'
-import { useVigitechStore } from '~/stores/vigitech'
-import { useReportStore } from '~/stores/report'
-import { useToastStore } from '~/stores/toast'
+import { useVigitechStore } from '~/stores/back/user/vigitech'
+import { useReportStore } from '~/stores/back/user/report'
+import { useToastStore } from '~/stores/front/toast'
 import { reportReasons } from '~/utils/vigitech'
 
 const props = defineProps<{

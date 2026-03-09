@@ -19,7 +19,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { supportData } from '~/data/support'
-import { useSearchStore } from '~/stores/search'
+import { useSearchStore } from '~/stores/front/search'
 
 const searchStore = useSearchStore()
 const router = useRouter()

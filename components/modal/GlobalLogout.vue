@@ -33,7 +33,7 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted } from 'vue'
 import { IconLogout } from '@tabler/icons-vue'
-import { useShortcutsStore } from '~/stores/shortcuts'
+import { useShortcutsStore } from '~/stores/front/shortcuts'
 import { getLinkTooltip } from '~/data/shortcuts'
 
 // Propriétés de la modale de déconnexion

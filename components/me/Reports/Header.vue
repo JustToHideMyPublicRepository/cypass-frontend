@@ -29,7 +29,7 @@
 
 <script setup lang="ts">
 import { IconRefresh, IconChevronDown } from '@tabler/icons-vue'
-import { useReportStore } from '~/stores/report'
+import { useReportStore } from '~/stores/back/user/report'
 
 const reportStore = useReportStore()
 

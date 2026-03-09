@@ -38,7 +38,7 @@
 <script setup lang="ts">
 import { reactive } from 'vue'
 import { IconChevronDown } from '@tabler/icons-vue'
-import { useSettingsPrefStore } from '~/stores/settingsPref'
+import { useSettingsPrefStore } from '~/stores/front/settingsPref'
 
 const settingsStore = useSettingsPrefStore()
 

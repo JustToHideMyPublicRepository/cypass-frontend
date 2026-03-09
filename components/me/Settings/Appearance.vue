@@ -112,8 +112,8 @@
 import { onMounted, onUnmounted } from 'vue'
 import { IconSun, IconMoon, IconDeviceDesktop, IconSolarPanel2, IconChevronDown, IconRotate } from '@tabler/icons-vue'
 import { useAutoTheme } from '~/composables/useAutoTheme'
-import { useSettingsPrefStore } from '~/stores/settingsPref'
-import { useToastStore } from '~/stores/toast'
+import { useSettingsPrefStore } from '~/stores/front/settingsPref'
+import { useToastStore } from '~/stores/front/toast'
 
 const { isAutoTimeEnabled, autoThemeSchedule, updateSchedule } = useAutoTheme()
 const settingsPref = useSettingsPrefStore()

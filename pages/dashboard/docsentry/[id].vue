@@ -3,7 +3,7 @@
     <MeDocsentryDetailHeader :filename="doc?.filename" />
 
     <!-- Skeleton Loading -->
-    <div v-if="store.loading" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div v-if="userStore.loading" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <div class="lg:col-span-2 space-y-6">
         <UiBaseCard>
           <div class="flex items-center gap-4 mb-6">
@@ -35,10 +35,10 @@
       </div>
     </div>
 
-    <div v-else-if="store.error" class="bg-red-500/10 border border-red-500/20 p-6 rounded-xl text-center">
+    <div v-else-if="userStore.error" class="bg-red-500/10 border border-red-500/20 p-6 rounded-xl text-center">
       <IconAlertCircle class="w-12 h-12 text-red-500 mx-auto mb-4" />
       <h3 class="text-lg font-semibold text-BtW mb-2">Erreur</h3>
-      <p class="text-hsa">{{ store.error }}</p>
+      <p class="text-hsa">{{ userStore.error }}</p>
       <UiBaseButton class="mt-4" @click="fetchDoc">Réessayer</UiBaseButton>
     </div>
 
@@ -62,14 +62,16 @@
 import { computed, onMounted, reactive } from 'vue'
 import { useRoute } from 'nuxt/app'
 import { IconAlertCircle } from '@tabler/icons-vue'
-import { useDocsentryStore } from '~/stores/docsentry'
-import { useToastStore } from '~/stores/toast'
+import { useUserDocsentryStore } from '~/stores/back/user/docsentry'
+import { usePublicDocsentryStore } from '~/stores/back/public/docsentry'
+import { useToastStore } from '~/stores/front/toast'
 
 const route = useRoute()
-const store = useDocsentryStore()
+const userStore = useUserDocsentryStore()
+const publicStore = usePublicDocsentryStore()
 const docId = route.params.id as string
 
-const doc = computed(() => store.currentDocument)
+const doc = computed(() => userStore.currentDocument)
 const isVerified = computed(() => !!(doc.value?.availability?.certificate || doc.value?.signature_info?.present))
 
 const toast = useToastStore()
@@ -86,7 +88,7 @@ const copyField = (text: string, field: string) => {
 }
 
 const fetchDoc = async () => {
-  await store.fetchDocumentById(docId)
+  await userStore.fetchDocumentById(docId)
 }
 
 const redirectToVerify = () => {
@@ -96,7 +98,7 @@ const redirectToVerify = () => {
 
 const downloadCertificate = async () => {
   if (!doc.value) return
-  const success = await store.downloadCertificate(doc.value.id, doc.value.filename)
+  const success = await publicStore.downloadCertificate(doc.value.id, doc.value.filename)
   if (!success) {
     toast.showToast('error', 'Erreur', 'Impossible de télécharger le certificat.')
   }

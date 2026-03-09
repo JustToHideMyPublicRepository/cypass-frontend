@@ -79,8 +79,8 @@
 <script setup lang="ts">
 import { IconShare, IconArrowUpRight, IconDownload, IconFlag, IconShieldCheck, IconSettings } from '@tabler/icons-vue'
 import { useVigitechAdvice } from '~/composables/useVigitechAdvice'
-import { useAuthStore } from '~/stores/auth'
-import { useToastStore } from '~/stores/toast'
+import { useAuthStore } from '~/stores/back/user/auth'
+import { useToastStore } from '~/stores/front/toast'
 
 const props = defineProps<{
   incident: any

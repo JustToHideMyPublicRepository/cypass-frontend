@@ -106,8 +106,8 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
 import { IconMail, IconLock, IconEye, IconEyeOff, IconArrowRight } from '@tabler/icons-vue'
-import { useAuthStore } from '~/stores/auth'
-import { useToastStore } from '~/stores/toast'
+import { useAuthStore } from '~/stores/back/user/auth'
+import { useToastStore } from '~/stores/front/toast'
 
 definePageMeta({
   layout: 'auth'

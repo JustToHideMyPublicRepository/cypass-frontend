@@ -18,7 +18,7 @@
 
 <script setup lang="ts">
 import { IconExternalLink } from '@tabler/icons-vue'
-import { useAuthStore } from '~/stores/auth'
+import { useAuthStore } from '~/stores/back/user/auth'
 import { computed } from 'vue'
 
 const authStore = useAuthStore()

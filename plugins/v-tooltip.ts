@@ -1,5 +1,5 @@
 import { defineNuxtPlugin, useRouter } from '#app'
-import { useShortcutsStore } from '~/stores/shortcuts'
+import { useShortcutsStore } from '~/stores/front/shortcuts'
 import { getLinkTooltip } from '~/data/shortcuts'
 
 export default defineNuxtPlugin((nuxtApp) => {

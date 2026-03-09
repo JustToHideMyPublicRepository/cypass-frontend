@@ -16,8 +16,8 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
-import { useShortcutsStore } from '~/stores/shortcuts'
-import { useSearchStore } from '~/stores/search'
+import { useShortcutsStore } from '~/stores/front/shortcuts'
+import { useSearchStore } from '~/stores/front/search'
 import { useShortcuts } from '~/composables/useShortcuts'
 
 definePageMeta({

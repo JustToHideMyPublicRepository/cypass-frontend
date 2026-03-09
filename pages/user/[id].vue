@@ -37,9 +37,9 @@
 <script setup lang="ts">
 import { IconArrowLeft } from '@tabler/icons-vue'
 import { getUserAvatarUrl } from '~/utils/user'
-import { useAuthStore } from '~/stores/auth'
-import { useToastStore } from '~/stores/toast'
-import { usePublicStore } from '~/stores/public'
+import { useAuthStore } from '~/stores/back/user/auth'
+import { useToastStore } from '~/stores/front/toast'
+import { useUserPublicStore } from '~/stores/back/public/userPublic'
 import { storeToRefs } from 'pinia'
 
 // Configuration de la page
@@ -54,8 +54,8 @@ const authStore = useAuthStore()
 const toast = useToastStore()
 
 // States managed by public store
-const publicStore = usePublicStore()
-const { user, publicIncidents, comments, loading, error } = storeToRefs(publicStore)
+const publicUserStore = useUserPublicStore()
+const { user, publicIncidents, comments, loading, error } = storeToRefs(publicUserStore)
 
 const modals = reactive({
   report: false
@@ -79,7 +79,7 @@ const userAvatarUrl = computed(() => {
 /**
  * Récupère les données du profil public via l'API.
  */
-const fetchPublicProfile = () => publicStore.getPublicProfile(String(route.params.id))
+const fetchPublicProfile = () => publicUserStore.getPublicProfile(String(route.params.id))
 
 /**
  * Gère le succès du signalement.

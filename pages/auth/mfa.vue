@@ -90,8 +90,8 @@
 
 <script setup lang="ts">
 import { IconShieldCheck, IconLoader2, IconArrowLeft } from '@tabler/icons-vue'
-import { useAuthStore } from '~/stores/auth'
-import { useToastStore } from '~/stores/toast'
+import { useAuthStore } from '~/stores/back/user/auth'
+import { useToastStore } from '~/stores/front/toast'
 
 definePageMeta({
   layout: 'auth'

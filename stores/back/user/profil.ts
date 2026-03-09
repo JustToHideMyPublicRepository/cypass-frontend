@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { useAuthStore } from './auth'
-import { type UserProfile, type Statistics, type LogEntry, type LogStatistics, type ProfilState } from '../types/profil'
+import { type UserProfile, type Statistics, type LogEntry, type LogStatistics, type ProfilState } from '~/types/profil'
 
 export const useProfilStore = defineStore('profil', {
   state: () => ({

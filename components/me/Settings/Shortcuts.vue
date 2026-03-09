@@ -44,8 +44,8 @@
 </template>
 
 <script setup lang="ts">
-import { useShortcutsStore } from '~/stores/shortcuts'
-import { useSettingsPrefStore } from '~/stores/settingsPref'
+import { useShortcutsStore } from '~/stores/front/shortcuts'
+import { useSettingsPrefStore } from '~/stores/front/settingsPref'
 import { IconRotate, IconChevronDown } from '@tabler/icons-vue'
 
 // Accès au store global des raccourcis

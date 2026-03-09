@@ -28,7 +28,7 @@
 
 <script setup lang="ts">
 import { IconSearch } from '@tabler/icons-vue'
-import { useSearchStore } from '~/stores/search'
+import { useSearchStore } from '~/stores/front/search'
 import { useRoute } from 'vue-router'
 
 defineProps<{

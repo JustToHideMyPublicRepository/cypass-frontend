@@ -25,8 +25,8 @@
 
 <script setup lang="ts">
 import { reactive, computed, onMounted, watch } from 'vue'
-import { useAuthStore } from '~/stores/auth'
-import { useProfilStore } from '~/stores/profil'
+import { useAuthStore } from '~/stores/back/user/auth'
+import { useProfilStore } from '~/stores/back/user/profil'
 
 useHead({
   title: 'Mon profil',

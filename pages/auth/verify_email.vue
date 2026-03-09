@@ -65,8 +65,8 @@
 </template>
 
 <script setup lang="ts">
-import { useAuthStore } from '~/stores/auth'
-import { useToastStore } from '~/stores/toast'
+import { useAuthStore } from '~/stores/back/user/auth'
+import { useToastStore } from '~/stores/front/toast'
 import { IconCheck, IconLoader, IconCircleX } from '@tabler/icons-vue'
 
 // Utilisation du layout d'authentification

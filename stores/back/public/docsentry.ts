@@ -1,134 +1,15 @@
 import { defineStore } from 'pinia'
-import { type CryptographicProof, type Document, type DocumentDetail, type UploadResult, type VerificationResult, type PublicKeyInfo } from '../types/documents'
+import { type VerificationResult, type PublicKeyInfo } from '~/types/documents'
 
-export const useDocsentryStore = defineStore('docsentry', {
+export const usePublicDocsentryStore = defineStore('publicDocsentry', {
   state: () => ({
-    documents: [] as Document[],
     loading: false,
     error: null as string | null,
-    uploadResult: null as UploadResult | null,
     verificationResult: null as VerificationResult | null,
     publicKeyInfo: null as PublicKeyInfo | null,
-    currentDocument: null as DocumentDetail | null,
-    pagination: {
-      total: 0,
-      limit: 20,
-      offset: 0,
-      has_more: false,
-      filters: {
-        filename: '',
-        file_type: '',
-        date_start: '',
-        date_end: ''
-      }
-    }
   }),
 
   actions: {
-    // Récupérer les documents
-    async fetchDocuments(limit: number = 20, offset: number = 0, filters: any = {}) {
-      this.loading = true
-      try {
-        const query: any = { limit, offset }
-        if (filters.filename) query.filename = filters.filename
-        if (filters.file_type && filters.file_type !== 'all') query.file_type = filters.file_type
-        if (filters.date_start) query.date_start = filters.date_start
-        if (filters.date_end) query.date_end = filters.date_end
-
-        const response = await $fetch<{
-          success: boolean;
-          data: {
-            documents: Document[],
-            pagination: {
-              total: number,
-              limit: number,
-              offset: number,
-              has_more: boolean
-            }
-          }
-        }>('/api/user/docsentry/get-all', {
-          query
-        })
-        if (response.success) {
-          this.documents = response.data.documents
-          if (response.data.pagination) {
-            this.pagination = {
-              ...this.pagination,
-              ...response.data.pagination
-            }
-          }
-        }
-      } catch (err) {
-        console.error('Failed to fetch documents', err)
-      } finally {
-        this.loading = false
-      }
-    },
-
-    // Récupérer les détails du document
-    async fetchDocumentById(id: string) {
-      this.loading = true
-      this.error = null
-      try {
-        const response = await $fetch<{ success: boolean; data: DocumentDetail }>('/api/user/docsentry/get', {
-          query: { id }
-        })
-        if (response.success) {
-          this.currentDocument = response.data
-          return true
-        }
-        return false
-      } catch (err: any) {
-        this.error = err.data?.message || 'Impossible de récupérer les détails du document'
-        return false
-      } finally {
-        this.loading = false
-      }
-    },
-
-    // Upload document
-    async uploadDocument(file: File) {
-      this.loading = true
-      this.error = null
-      this.uploadResult = null
-
-      try {
-        const formData = new FormData()
-        formData.append('document', file)
-
-        const response = await $fetch<{ success: boolean; message: string; data: UploadResult }>('/api/user/docsentry/upload', {
-          method: 'POST',
-          body: formData
-        })
-
-        if (response.success) {
-          this.uploadResult = response.data
-          // Refresh list if we had one
-          await this.fetchDocuments()
-          return true
-        }
-        this.error = response.message
-        return false
-      } catch (err: any) {
-        this.error = err.data?.message || 'Erreur lors de l’authentification du document'
-        return false
-      } finally {
-        this.loading = false
-      }
-    },
-
-
-
-
-
-
-
-
-
-
-
-
-
     // Télécharger certificat
     async downloadCertificate(id: string, filename: string) {
       try {

@@ -114,8 +114,8 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 import { IconStar, IconCopy, IconCheck, IconPencil, IconLink, IconTag, IconSettings as IconSettingsSmall } from '@tabler/icons-vue'
-import { useAiAnalysisStore } from '~/stores/aiAnalysis'
-import { useToastStore } from '~/stores/toast'
+import { useAiAnalysisStore } from '~/stores/front/aiAnalysis'
+import { useToastStore } from '~/stores/front/toast'
 import { useRoute } from 'vue-router'
 
 const aiStore = useAiAnalysisStore()

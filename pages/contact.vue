@@ -22,9 +22,9 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { useToastStore } from '~/stores/toast'
-import { useAuthStore } from '~/stores/auth'
-import { useSupportStore } from '~/stores/support'
+import { useToastStore } from '~/stores/front/toast'
+import { useAuthStore } from '~/stores/back/user/auth'
+import { useSupportStore } from '~/stores/back/public/support'
 
 definePageMeta({
   layout: 'guest'

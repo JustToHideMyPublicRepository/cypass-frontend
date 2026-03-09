@@ -104,8 +104,8 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import { IconSearchOff, IconChevronDown, IconChevronUp, IconPencil, IconRotate, IconCheck, IconX, IconKeyboardShow } from '@tabler/icons-vue'
-import { useShortcutsStore } from '~/stores/shortcuts'
-import { useToastStore } from '~/stores/toast'
+import { useShortcutsStore } from '~/stores/front/shortcuts'
+import { useToastStore } from '~/stores/front/toast'
 
 const store = useShortcutsStore()
 const toast = useToastStore()

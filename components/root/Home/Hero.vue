@@ -178,7 +178,7 @@
 
 <script setup lang="ts">
 import { IconShieldCheck, IconServer, IconArrowRight, IconShieldLock, IconAlertTriangle, IconCheck, IconFileAnalytics, IconUser, IconFileCheck, IconShield } from '@tabler/icons-vue'
-import { useAuthStore } from '~/stores/auth'
+import { useAuthStore } from '~/stores/back/user/auth'
 
 const authStore = useAuthStore()
 </script>

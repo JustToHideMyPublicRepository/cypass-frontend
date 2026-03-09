@@ -26,8 +26,8 @@
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'nuxt/app'
 import { IconTrash } from '@tabler/icons-vue'
-import { useNotificationsStore } from '~/stores/notifications'
-import { useToastStore } from '~/stores/toast'
+import { useNotificationsStore } from '~/stores/back/user/notifications'
+import { useToastStore } from '~/stores/front/toast'
 
 const route = useRoute()
 const store = useNotificationsStore()

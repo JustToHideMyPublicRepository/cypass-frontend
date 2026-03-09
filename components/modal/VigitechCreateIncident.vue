@@ -158,8 +158,8 @@ import {
   IconChevronDown, IconCloudUpload, IconCheck, IconAlertTriangle,
   IconMapPin, IconFileTypePdf, IconRefresh
 } from '@tabler/icons-vue'
-import { useVigitechStore } from '~/stores/vigitech'
-import { useToastStore } from '~/stores/toast'
+import { useVigitechStore } from '~/stores/back/user/vigitech'
+import { useToastStore } from '~/stores/front/toast'
 import { useGlobalDropZone } from '~/composables/useDropZone'
 import type { CreateIncidentRequest, Incident } from '~/types/vigitech'
 

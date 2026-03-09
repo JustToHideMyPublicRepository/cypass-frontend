@@ -138,8 +138,8 @@ import { ref } from 'vue'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import type { Document } from '~/types/documents'
-import { useToastStore } from '~/stores/toast'
-import { useDocsentryStore } from '~/stores/docsentry'
+import { useToastStore } from '~/stores/front/toast'
+import { usePublicDocsentryStore } from '~/stores/back/public/docsentry'
 
 const props = defineProps<{
   documents: Document[]
@@ -151,7 +151,7 @@ const props = defineProps<{
 const emit = defineEmits(['next-page', 'prev-page'])
 
 const toast = useToastStore()
-const docsentryStore = useDocsentryStore()
+const publicDocsentryStore = usePublicDocsentryStore()
 const expandedHashes = ref(new Set<string>())
 const copiedHashes = ref(new Set<string>())
 
@@ -171,7 +171,7 @@ const toggleHash = (id: string) => {
 }
 
 const downloadCertificate = async (id: string, filename: string) => {
-  const success = await docsentryStore.downloadCertificate(id, filename)
+  const success = await publicDocsentryStore.downloadCertificate(id, filename)
   if (!success) {
     toast.showToast('error', 'Erreur', 'Impossible de télécharger le certificat.')
   }

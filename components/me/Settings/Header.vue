@@ -22,7 +22,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { IconSquareChevronUpFilled, IconSquareChevronDownFilled, IconSquareMinusFilled } from '@tabler/icons-vue'
-import { useSettingsPrefStore } from '~/stores/settingsPref'
+import { useSettingsPrefStore } from '~/stores/front/settingsPref'
 
 const settingsStore = useSettingsPrefStore()
 

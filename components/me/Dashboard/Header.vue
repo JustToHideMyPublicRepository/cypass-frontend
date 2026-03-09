@@ -28,7 +28,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { IconShieldCheck } from '@tabler/icons-vue'
-import { useAuthStore } from '~/stores/auth'
+import { useAuthStore } from '~/stores/back/user/auth'
 import { getDynamicGreeting } from '~/utils/greeting'
 
 const props = defineProps<{

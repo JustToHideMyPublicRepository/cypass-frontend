@@ -1,9 +1,9 @@
 import { ref, watch, computed } from 'vue'
-import { useDocsentryStore } from '~/stores/docsentry'
+import { usePublicDocsentryStore } from '~/stores/back/public/docsentry'
 import { verifySteps, type Step } from '~/utils/docsentry'
 
 export const useVerify = () => {
-  const store = useDocsentryStore()
+  const store = usePublicDocsentryStore()
 
   const verifyMode = ref<'file' | 'hash' | 'qr'>('file')
   const pdfSubMode = ref<'original' | 'certificate'>('original')

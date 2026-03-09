@@ -14,6 +14,10 @@ export default defineNuxtConfig({
     '@vite-pwa/nuxt',
   ],
 
+  imports: {
+    dirs: ['stores/**', 'composables/**']
+  },
+
   pwa: {
     registerType: 'autoUpdate',
     manifest: {

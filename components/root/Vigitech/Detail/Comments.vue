@@ -163,10 +163,10 @@ import {
   IconMessage, IconChevronUp, IconChevronDown, IconSend, IconEdit, IconTrash,
   IconLock, IconRosetteDiscountCheck
 } from '@tabler/icons-vue'
-import { useAuthStore } from '~/stores/auth'
-import { useVigitechStore } from '~/stores/vigitech'
-import { useToastStore } from '~/stores/toast'
-import { useVigiPrefStore } from '~/stores/vigiPref'
+import { useAuthStore } from '~/stores/back/user/auth'
+import { useVigitechStore } from '~/stores/back/user/vigitech'
+import { useToastStore } from '~/stores/front/toast'
+import { useVigiPrefStore } from '~/stores/front/vigiPref'
 import { getUserAvatarUrl } from '~/utils/user'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'

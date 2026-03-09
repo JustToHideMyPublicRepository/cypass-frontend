@@ -28,9 +28,9 @@
 </template>
 
 <script setup lang="ts">
-import { useVigitechStore } from '~/stores/vigitech'
-import { useAuthStore } from '~/stores/auth'
-import { useToastStore } from '~/stores/toast'
+import { useVigitechStore } from '~/stores/back/user/vigitech'
+import { useAuthStore } from '~/stores/back/user/auth'
+import { useToastStore } from '~/stores/front/toast'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import type { Comment } from '~/types/vigitech'

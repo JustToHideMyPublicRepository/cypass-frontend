@@ -48,7 +48,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import { IconChevronDown } from '@tabler/icons-vue'
-import { useAuthStore } from '~/stores/auth'
+import { useAuthStore } from '~/stores/back/user/auth'
 import { getLinkTooltip } from '~/data/shortcuts'
 
 const props = defineProps<{

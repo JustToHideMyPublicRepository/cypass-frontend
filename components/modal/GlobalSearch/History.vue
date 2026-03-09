@@ -59,7 +59,7 @@
 
 <script setup lang="ts">
 import { IconHistory, IconX } from '@tabler/icons-vue'
-import { useSearchStore } from '~/stores/search'
+import { useSearchStore } from '~/stores/front/search'
 import { getSearchIcon, getSearchIconStyle } from '~/utils/search'
 
 const searchStore = useSearchStore()

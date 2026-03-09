@@ -97,8 +97,8 @@
 import { IconRosetteDiscountCheck, IconShieldOff, IconDownload } from '@tabler/icons-vue'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
-import { useToastStore } from '~/stores/toast'
-import { useDocsentryStore } from '~/stores/docsentry'
+import { useToastStore } from '~/stores/front/toast'
+import { usePublicDocsentryStore } from '~/stores/back/public/docsentry'
 
 const props = defineProps<{
   result: any
@@ -108,7 +108,7 @@ const props = defineProps<{
 defineEmits(['reset'])
 
 const toast = useToastStore()
-const docsentryStore = useDocsentryStore()
+const publicDocsentryStore = usePublicDocsentryStore()
 
 const downloadCertificate = async () => {
   const id = props.result.document?.id || props.result.id
@@ -119,7 +119,7 @@ const downloadCertificate = async () => {
     return
   }
 
-  const success = await docsentryStore.downloadCertificate(id, filename)
+  const success = await publicDocsentryStore.downloadCertificate(id, filename)
   if (!success) {
     toast.showToast('error', 'Erreur', 'Impossible de télécharger le certificat.')
   }

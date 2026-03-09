@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useShortcutsStore } from '~/stores/shortcuts'
+import { useShortcutsStore } from '~/stores/front/shortcuts'
 
 /**
  * Composable pour gérer les séquences de touches avec Shift

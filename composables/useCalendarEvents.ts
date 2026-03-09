@@ -1,8 +1,8 @@
 import { ref, computed } from 'vue'
-import { useDocsentryStore } from '~/stores/docsentry'
-import { useVigitechStore } from '~/stores/vigitech'
-import { useProfilStore } from '~/stores/profil'
-import { useAuthStore } from '~/stores/auth'
+import { useUserDocsentryStore } from '~/stores/back/user/docsentry'
+import { useVigitechStore } from '~/stores/back/user/vigitech'
+import { useProfilStore } from '~/stores/back/user/profil'
+import { useAuthStore } from '~/stores/back/user/auth'
 import { format, startOfMonth, endOfMonth } from 'date-fns'
 import { getCalendarFilterConfig } from '~/utils/calendar'
 import { getLogActionInfo } from '~/utils/logs'
@@ -13,15 +13,15 @@ export interface CalendarEvent {
   id: string
   title: string
   description?: string
-  date: string // ISO date string
+  date: string
   type: EventType
-  color: string // Tailwind color class (e.g., 'text-primary')
-  bgColor: string // Tailwind bg class (e.g., 'bg-primary/10')
+  color: string
+  bgColor: string
   url?: string
 }
 
 export const useCalendarEvents = () => {
-  const docsentryStore = useDocsentryStore()
+  const userDocsentryStore = useUserDocsentryStore()
   const vigitechStore = useVigitechStore()
   const profilStore = useProfilStore()
   const authStore = useAuthStore()
@@ -56,7 +56,7 @@ export const useCalendarEvents = () => {
 
       // Parallelize fetching
       const requests: any[] = [
-        docsentryStore.fetchDocuments(100, 0),
+        userDocsentryStore.fetchDocuments(100, 0),
         vigitechStore.fetchUserIncidents(),
         vigitechStore.fetchUserComments(),
       ]
@@ -90,8 +90,8 @@ export const useCalendarEvents = () => {
     const events: CalendarEvent[] = []
 
     // 1. Docsentry Documents
-    if (docsentryStore.documents) {
-      docsentryStore.documents.forEach(doc => {
+    if (userDocsentryStore.documents) {
+      userDocsentryStore.documents.forEach(doc => {
         events.push({
           id: `doc-${doc.id}`,
           title: doc.filename,

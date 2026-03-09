@@ -45,7 +45,7 @@
 </template>
 
 <script setup lang="ts">
-import { useToastStore } from '~/stores/toast'
+import { useToastStore } from '~/stores/front/toast'
 import { getRandomPastDate } from '~/utils/date'
 
 // Configuration de la page

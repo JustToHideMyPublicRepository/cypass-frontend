@@ -3,7 +3,7 @@
     <MeDashboardHeader :current-time="currentTime" />
 
     <!-- Stats Grid -->
-    <MeDashboardStats :documents-count="documentsStore.pagination.total" :documents-trend="docTrend"
+    <MeDashboardStats :documents-count="userDocsentryStore.pagination.total" :documents-trend="userDocsentryStore.trend"
       :vigitech-count="vigitechStore.userIncidents.length" :vigitech-trend="vigiTrend"
       :active-sessions="activeSessionsCount" :security-score="securityScore" />
 
@@ -11,7 +11,7 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       <MeDashboardRecentActivity :notifications="notificationsStore.notifications.slice(0, 4)"
         :loading="notificationsStore.loading" :format-time="formatTime" />
-      <MeDashboardRecentDocs :documents="documentsStore.documents.slice(0, 4)" :loading="documentsStore.loading"
+      <MeDashboardRecentDocs :documents="userDocsentryStore.documents.slice(0, 4)" :loading="userDocsentryStore.loading"
         :format-time="formatTime" :get-doc-status="getDocStatus" />
       <MeDashboardRecentIncidents :incidents="vigitechStore.userIncidents.slice(0, 4)" :loading="vigitechStore.loading"
         :format-time="formatTime" />
@@ -30,14 +30,14 @@
     </div>
 
     <!-- Modals -->
-    <ModalDocSentryAuth :show="modals.upload" :loading="documentsStore.loading" :error="documentsStore.error"
-      :upload-result="documentsStore.uploadResult" @upload="handleUpload"
-      @update:error="(val) => documentsStore.error = val" @error-clear="documentsStore.error = null"
+    <ModalDocSentryAuth :show="modals.upload" :loading="userDocsentryStore.loading" :error="userDocsentryStore.error"
+      :upload-result="userDocsentryStore.uploadResult" @upload="handleUpload"
+      @update:error="(val) => userDocsentryStore.error = val" @error-clear="userDocsentryStore.error = null"
       @close="closeModals" />
 
-    <ModalDocSentryVerify :show="modals.verify" :loading="documentsStore.loading" :error="documentsStore.error"
-      :result="documentsStore.verificationResult" @verify="handleVerify"
-      @reset="documentsStore.verificationResult = null" @close="closeModals" />
+    <ModalDocSentryVerify :show="modals.verify" :loading="publicDocsentryStore.loading"
+      :error="publicDocsentryStore.error" :result="publicDocsentryStore.verificationResult" @verify="handleVerify"
+      @reset="publicDocsentryStore.verificationResult = null" @close="closeModals" />
 
     <ModalVigitechCreateIncident :show="modals.createIncident" @close="closeModals"
       @success="vigitechStore.fetchUserIncidents()" />
@@ -45,19 +45,21 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, computed } from 'vue'
 import { format, startOfWeek, endOfWeek, subWeeks, isWithinInterval } from 'date-fns'
-import { useDocsentryStore } from '~/stores/docsentry'
-import { useNotificationsStore } from '~/stores/notifications'
-import { useProfilStore } from '~/stores/profil'
-import { useAuthStore } from '~/stores/auth'
-import { useVigitechStore } from '~/stores/vigitech'
-import { useToastStore } from '~/stores/toast'
+import { useUserDocsentryStore } from '~/stores/back/user/docsentry'
+import { usePublicDocsentryStore } from '~/stores/back/public/docsentry'
+import { useNotificationsStore } from '~/stores/back/user/notifications'
+import { useProfilStore } from '~/stores/back/user/profil'
+import { useAuthStore } from '~/stores/back/user/auth'
+import { useVigitechStore } from '~/stores/back/user/vigitech'
+import { useToastStore } from '~/stores/front/toast'
 import { calculateSecurityScore, type SecurityScoreResult } from '~/utils/security'
 
 const authStore = useAuthStore()
 const profilStore = useProfilStore()
-const documentsStore = useDocsentryStore()
+const userDocsentryStore = useUserDocsentryStore()
+const publicDocsentryStore = usePublicDocsentryStore()
 const notificationsStore = useNotificationsStore()
 const vigitechStore = useVigitechStore()
 const toast = useToastStore()
@@ -66,7 +68,6 @@ const currentTime = ref('')
 const activeSessionsCount = ref(0)
 const activeSessions = ref<any[]>([])
 const loading = ref(true)
-const docTrend = ref({ percentage: 0, difference: 0 })
 const vigiTrend = ref({ percentage: 0, difference: 0 })
 const securityScore = ref<SecurityScoreResult>({ score: 100, grade: 'A+', label: 'Excellent', color: 'text-success' })
 
@@ -86,26 +87,26 @@ const getDocStatus = (doc: any) => {
 }
 
 const handleUpload = async (file: File) => {
-  const success = await documentsStore.uploadDocument(file)
+  const success = await userDocsentryStore.uploadDocument(file)
   if (success) {
     toast.showToast('success', 'Document certifié', 'Votre document a été signé et enregistré avec succès.')
-    await documentsStore.fetchDocuments(5, 0)
-    await calculateDocTrend()
+    await userDocsentryStore.fetchDocuments(5, 0)
+    await userDocsentryStore.fetchTrend()
   } else {
-    toast.showToast('error', 'Échec', documentsStore.error || 'Une erreur est survenue.')
+    toast.showToast('error', 'Échec', userDocsentryStore.error || 'Une erreur est survenue.')
   }
 }
 
 const handleVerify = async (file: File) => {
-  const success = await documentsStore.verifyDocumentFull(file, null)
+  const success = await publicDocsentryStore.verifyDocumentFull(file, null)
   if (success) {
-    if (documentsStore.verificationResult?.verified) {
+    if (publicDocsentryStore.verificationResult?.verified) {
       toast.showToast('success', 'Authentique', 'Le document est certifié valide par CYPASS.')
     } else {
       toast.showToast('warning', 'Attention', 'La signature de ce document est invalide ou corrompue.')
     }
   } else {
-    toast.showToast('error', 'Erreur', documentsStore.error || 'Erreur lors de la vérification.')
+    toast.showToast('error', 'Erreur', publicDocsentryStore.error || 'Erreur lors de la vérification.')
   }
 }
 
@@ -113,9 +114,10 @@ const closeModals = () => {
   modals.upload = false
   modals.verify = false
   modals.createIncident = false
-  documentsStore.error = null
-  documentsStore.uploadResult = null
-  documentsStore.verificationResult = null
+  userDocsentryStore.error = null
+  userDocsentryStore.uploadResult = null
+  publicDocsentryStore.verificationResult = null
+  publicDocsentryStore.error = null
 }
 
 const calculateVigiTrend = async () => {
@@ -151,49 +153,13 @@ const calculateVigiTrend = async () => {
   }
 }
 
-const calculateDocTrend = async () => {
-  try {
-    const now = new Date()
-    // Current Week: Monday 00:00 to Now
-    const currentWeekStart = startOfWeek(now, { weekStartsOn: 1 })
-
-    // Previous Week: Previous Monday 00:00 to Previous Sunday 23:59
-    const previousWeekStart = startOfWeek(subWeeks(now, 1), { weekStartsOn: 1 })
-    const previousWeekEnd = endOfWeek(subWeeks(now, 1), { weekStartsOn: 1 })
-
-    const response = await $fetch<any>('/api/user/docsentry/list', {
-      query: { limit: 100, offset: 0 }
-    })
-
-    const docs = response?.data?.documents || []
-
-    const currentWeekCount = docs.filter((d: any) => {
-      const date = new Date(d.created_at)
-      return isWithinInterval(date, { start: currentWeekStart, end: now })
-    }).length
-
-    const previousWeekCount = docs.filter((d: any) => {
-      const date = new Date(d.created_at)
-      return isWithinInterval(date, { start: previousWeekStart, end: previousWeekEnd })
-    }).length
-
-    const diff = currentWeekCount - previousWeekCount
-    docTrend.value = {
-      percentage: previousWeekCount === 0 ? (currentWeekCount > 0 ? 100 : 0) : Math.round((diff / previousWeekCount) * 100),
-      difference: diff
-    }
-  } catch (err) {
-    console.error('Failed to calculate document trend', err)
-  }
-}
-
 const updateSecurityScore = () => {
   const logs = profilStore.logs || []
   const failedLogins = logs.filter(l => l.action.toLowerCase().includes('login') && l.status !== 'success').length
   const otherFailures = logs.filter(l => !l.action.toLowerCase().includes('login') && l.status !== 'success').length
 
   securityScore.value = calculateSecurityScore({
-    documentsCount: documentsStore.pagination.total,
+    documentsCount: userDocsentryStore.pagination.total,
     criticalIncidents: vigitechStore.userIncidents.filter(i => i.threat_level === 'critical').length,
     mediumIncidents: vigitechStore.userIncidents.filter(i => i.threat_level === 'medium').length,
     failedLogins,
@@ -208,7 +174,7 @@ onMounted(async () => {
 
   // Parallel fetch
   await Promise.all([
-    documentsStore.fetchDocuments(5, 0),
+    userDocsentryStore.fetchDocuments(5, 0),
     notificationsStore.notificationsList(5, 0),
     profilStore.getUserLogs({ limit: 5 }),
     vigitechStore.fetchUserIncidents(),
@@ -217,7 +183,7 @@ onMounted(async () => {
       activeSessions.value = sessions || []
       activeSessionsCount.value = sessions?.length || 0
     }),
-    calculateDocTrend(),
+    userDocsentryStore.fetchTrend(),
     calculateVigiTrend()
   ])
   updateSecurityScore()

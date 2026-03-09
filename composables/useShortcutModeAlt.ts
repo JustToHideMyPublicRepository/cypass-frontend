@@ -1,5 +1,5 @@
 import { watch } from 'vue'
-import { useShortcutsStore } from '~/stores/shortcuts'
+import { useShortcutsStore } from '~/stores/front/shortcuts'
 
 /**
  * Composable pour gérer l'état et l'affichage du mode ALT

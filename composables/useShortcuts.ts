@@ -1,8 +1,8 @@
 import { onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { useShortcutsStore } from '~/stores/shortcuts'
-import { useAuthStore } from '~/stores/auth'
-import { useProfilStore } from '~/stores/profil'
+import { useShortcutsStore } from '~/stores/front/shortcuts'
+import { useAuthStore } from '~/stores/back/user/auth'
+import { useProfilStore } from '~/stores/back/user/profil'
 import { useShortcutModeAlt } from './useShortcutModeAlt'
 import { useShortcutModeShift } from './useShortcutModeShift'
 

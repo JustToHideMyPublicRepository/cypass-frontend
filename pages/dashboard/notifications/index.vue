@@ -45,8 +45,8 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref, onUnmounted, computed } from 'vue'
 import { IconTrash } from '@tabler/icons-vue'
-import { useNotificationsStore } from '~/stores/notifications'
-import { useToastStore } from '~/stores/toast'
+import { useNotificationsStore } from '~/stores/back/user/notifications'
+import { useToastStore } from '~/stores/front/toast'
 
 const store = useNotificationsStore()
 const toastStore = useToastStore()
@@ -172,7 +172,7 @@ onUnmounted(() => {
 })
 
 useHead({
-  title: 'Toutes les Notifications',
+  title: 'Notifications',
   meta: [
     { name: 'description', content: 'Consultez vos alertes de sécurité, mises à jour et notifications importantes.' },
     { name: 'robots', content: 'noindex, nofollow' }

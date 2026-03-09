@@ -38,8 +38,8 @@
 </template>
 
 <script setup lang="ts">
-import { useVigitechStore } from '~/stores/vigitech'
-import { useVigiPrefStore } from '~/stores/vigiPref'
+import { useVigitechStore } from '~/stores/back/user/vigitech'
+import { useVigiPrefStore } from '~/stores/front/vigiPref'
 
 definePageMeta({
   layout: 'guest'

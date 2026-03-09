@@ -107,8 +107,8 @@
 
 <script setup lang="ts">
 import { IconEdit, IconShare, IconDownload, IconCheck, IconX, IconLock, IconAlertTriangle, IconBuilding, IconSettings, IconTrash } from '@tabler/icons-vue'
-import { useVigitechStore } from '~/stores/vigitech'
-import { useToastStore } from '~/stores/toast'
+import { useVigitechStore } from '~/stores/back/user/vigitech'
+import { useToastStore } from '~/stores/front/toast'
 import { mapIncidentStatus } from '~/utils/vigitech'
 
 const props = defineProps<{

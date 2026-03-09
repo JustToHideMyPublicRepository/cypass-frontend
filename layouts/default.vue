@@ -30,9 +30,9 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
-import { useAuthStore } from '~/stores/auth'
-import { useProfilStore } from '~/stores/profil'
-import { useToastStore } from '~/stores/toast'
+import { useAuthStore } from '~/stores/back/user/auth'
+import { useProfilStore } from '~/stores/back/user/profil'
+import { useToastStore } from '~/stores/front/toast'
 
 const isOpen = ref(false)
 const isCollapsed = ref(false)

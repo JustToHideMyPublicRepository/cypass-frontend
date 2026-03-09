@@ -75,7 +75,7 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { modules } from '@/data/modules'
 import { IconRocket } from '@tabler/icons-vue'
-import { useAuthStore } from '~/stores/auth'
+import { useAuthStore } from '~/stores/back/user/auth'
 
 definePageMeta({
   layout: false

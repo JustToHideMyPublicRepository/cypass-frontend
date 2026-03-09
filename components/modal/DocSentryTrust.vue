@@ -1,6 +1,6 @@
 <template>
   <UiBaseModal :show="show" title="Certificat de confiance" maxWidth="2xl" @close="$emit('close')">
-    <div v-if="store.publicKeyInfo" class="flex flex-col md:flex-row gap-6 items-start py-2">
+    <div v-if="publicDocsentryStore.publicKeyInfo" class="flex flex-col md:flex-row gap-6 items-start py-2">
       <!-- Icône de certification premium -->
       <div
         class="w-24 h-24 bg-primary/10 rounded-[2rem] flex items-center justify-center text-primary shrink-0 shadow-lg shadow-primary/5 animate-fade-in border border-primary/10">
@@ -14,19 +14,19 @@
             Certificat de confiance DocSentry
             <span class="badge badge-success !text-[10px]">Actif</span>
           </h3>
-          <p class="text-xs text-hsa">{{ store.publicKeyInfo.usage }}</p>
+          <p class="text-xs text-hsa">{{ publicDocsentryStore.publicKeyInfo.usage }}</p>
         </div>
 
         <!-- Informations clés -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div class="p-3 bg-ash/30 rounded-xl border border-ash/50">
             <p class="text-[9px] text-hsa uppercase font-black mb-1">Organisation Émettrice</p>
-            <p class="font-bold text-BtW text-xs">{{ store.publicKeyInfo.organization }}</p>
+            <p class="font-bold text-BtW text-xs">{{ publicDocsentryStore.publicKeyInfo.organization }}</p>
           </div>
           <div class="p-3 bg-ash/30 rounded-xl border border-ash/50">
             <p class="text-[9px] text-hsa uppercase font-black mb-1">Algorithme & Version</p>
-            <p class="font-bold text-BtW text-xs uppercase">{{ store.publicKeyInfo.algorithm }} ({{
-              store.publicKeyInfo.key_version }})</p>
+            <p class="font-bold text-BtW text-xs uppercase">{{ publicDocsentryStore.publicKeyInfo.algorithm }} ({{
+              publicDocsentryStore.publicKeyInfo.key_version }})</p>
           </div>
         </div>
 
@@ -34,7 +34,7 @@
         <div class="space-y-2">
           <div class="flex justify-between items-center px-1">
             <p class="text-[9px] text-hsa uppercase font-black">Empreinte de la Clé (Fingerprint)</p>
-            <UiBaseButton @click="copy(store.publicKeyInfo.public_key.fingerprint)" variant="ghost"
+            <UiBaseButton @click="copy(publicDocsentryStore.publicKeyInfo.public_key.fingerprint)" variant="ghost"
               class="!text-[10px] !text-primary !font-bold hover:!underline !flex !items-center !gap-1 !p-0 !h-auto !bg-transparent hover:!bg-transparent">
               <IconCopy v-if="!copied" class="w-3 h-3" />
               <IconCheck v-else class="w-3 h-3 text-success" />
@@ -43,7 +43,7 @@
           </div>
           <div
             class="p-3 bg-WtB/50 rounded-xl border border-ashAct font-code text-[11px] text-BtW break-all leading-tight">
-            {{ store.publicKeyInfo.public_key.fingerprint }}
+            {{ publicDocsentryStore.publicKeyInfo.public_key.fingerprint }}
           </div>
         </div>
 
@@ -51,9 +51,10 @@
         <div class="flex flex-wrap items-center justify-between gap-4 pt-2 text-[10px]">
           <div class="flex items-center gap-4 text-hsa">
             <span class="flex items-center gap-1">
-              <IconCalendar class="w-3 h-3" /> Mis à jour le {{ formatDate(store.publicKeyInfo.issued_at) }}
+              <IconCalendar class="w-3 h-3" /> Mis à jour le {{ formatDate(publicDocsentryStore.publicKeyInfo.issued_at)
+              }}
             </span>
-            <a :href="store.publicKeyInfo.documentation" target="_blank"
+            <a :href="publicDocsentryStore.publicKeyInfo.documentation" target="_blank"
               class="text-primary hover:underline font-bold flex items-center gap-0.5">
               Documentation
               <IconArrowUpRight class="w-3 h-3" />
@@ -69,8 +70,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { IconCertificate, IconCopy, IconCheck, IconCalendar, IconArrowUpRight } from '@tabler/icons-vue'
-import { useDocsentryStore } from '~/stores/docsentry'
-import { useToastStore } from '~/stores/toast'
+import { usePublicDocsentryStore } from '~/stores/back/public/docsentry'
+import { useToastStore } from '~/stores/front/toast'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 
@@ -81,7 +82,7 @@ defineProps<{
 
 defineEmits(['close'])
 
-const store = useDocsentryStore()
+const publicDocsentryStore = usePublicDocsentryStore()
 const copied = ref(false)
 
 const toast = useToastStore()

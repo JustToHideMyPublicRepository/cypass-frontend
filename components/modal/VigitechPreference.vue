@@ -36,7 +36,7 @@
 
 <script setup lang="ts">
 import { IconRotate } from '@tabler/icons-vue'
-import { useVigiPrefStore } from '~/stores/vigiPref'
+import { useVigiPrefStore } from '~/stores/front/vigiPref'
 
 defineProps<{
   show: boolean

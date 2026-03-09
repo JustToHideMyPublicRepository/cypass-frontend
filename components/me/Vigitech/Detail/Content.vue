@@ -57,7 +57,7 @@
 <script setup lang="ts">
 import { IconChevronUp, IconChevronDown, IconZoomIn, IconFileTypePdf, IconExternalLink } from '@tabler/icons-vue'
 import { decodeHtmlEntities } from '~/utils/format'
-import { useVigiPrefStore } from '~/stores/vigiPref'
+import { useVigiPrefStore } from '~/stores/front/vigiPref'
 
 const props = defineProps<{
   incident: any

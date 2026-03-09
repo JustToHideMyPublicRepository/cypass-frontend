@@ -12,7 +12,7 @@ interface PublicProfileResponse {
   message?: string
 }
 
-export const usePublicStore = defineStore('public', {
+export const useUserPublicStore = defineStore('userPublic', {
   state: () => ({
     user: null as any,
     publicIncidents: [] as any[],

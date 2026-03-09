@@ -39,8 +39,8 @@
 
 <script setup lang="ts">
 import { IconActivity, IconLock, IconAlertCircle } from '@tabler/icons-vue'
-import { useVigitechStore } from '~/stores/vigitech'
-import { useAuthStore } from '~/stores/auth'
+import { useVigitechStore } from '~/stores/back/user/vigitech'
+import { useAuthStore } from '~/stores/back/user/auth'
 import { decodeHtmlEntities } from '~/utils/format'
 import { getDynamicGreeting } from '~/utils/greeting'
 

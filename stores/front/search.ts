@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
-import { useAuthStore } from './auth'
-import { useVigitechStore } from './vigitech'
+import { useAuthStore } from '../back/user/auth'
+import { useUserDocsentryStore } from '../back/user/docsentry'
+import { useVigitechStore } from '../back/user/vigitech'
 import { shortcutsData } from '@/data/shortcuts'
 import { faqCategories } from '@/data/faq'
 import { supportData } from '@/data/support'
@@ -137,7 +138,7 @@ export const useSearchStore = defineStore('search', {
       this.isLoading = true
       try {
         const authStore = useAuthStore()
-        const docStore = useDocsentryStore()
+        const docStore = useUserDocsentryStore()
         const profStore = useProfilStore()
         const isAuthenticated = !!authStore.user
         const vigitechStore = useVigitechStore()

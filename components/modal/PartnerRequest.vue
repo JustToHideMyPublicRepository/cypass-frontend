@@ -81,9 +81,9 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
 import { IconWorldHeart, IconBuildingSkyscraper, IconUserCircle, IconMail } from '@tabler/icons-vue'
-import { useToastStore } from '~/stores/toast'
-import { useAuthStore } from '~/stores/auth'
-import { useSupportStore } from '~/stores/support'
+import { useToastStore } from '~/stores/front/toast'
+import { useAuthStore } from '~/stores/back/user/auth'
+import { useSupportStore } from '~/stores/back/public/support'
 
 // Propriétés de la modale de partenariat
 defineProps<{
