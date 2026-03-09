@@ -217,18 +217,6 @@ export const useVigitechStore = defineStore('vigitech', {
       }
     },
 
-    async reportIncident(incidentId: string, reason: string, details: string) {
-      try {
-        const response: any = await $fetch('/api/vigitech/report', {
-          method: 'POST',
-          body: { incident_id: incidentId, reason, details }
-        })
-        return { success: response.success, message: response.message }
-      } catch (err: any) {
-        return { success: false, message: err.data?.message || err.message || 'Erreur lors du signalement.' }
-      }
-    },
-
     async updateIncident(incidentId: string, data: Record<string, string | boolean>) {
       try {
         const body: Record<string, string> = {}

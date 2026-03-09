@@ -80,7 +80,7 @@ export const useReportUserStore = defineStore('reportUser', {
       this.loading = true
       this.error = null
       try {
-        const response: any = await $fetch('/api/user/report-user/report-user', {
+        const response: any = await $fetch('/api/user/report-user/report', {
           method: 'POST',
           body: { reported_user_id: targetId, reason, details }
         })
