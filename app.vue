@@ -84,9 +84,17 @@ useSeoMeta({
   twitterImage: heroImagePath,
 })
 
+const isStepProgressActive = useState('isStepProgressActive', () => false)
+
+const faviconPath = computed(() => {
+  if (isOffline.value) return '/favicon-faill.ico'
+  if (isStepProgressActive.value) return '/favicon-load.ico'
+  return '/favicon.ico'
+})
+
 useHead({
   link: [
-    { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+    { rel: 'icon', type: 'image/x-icon', href: faviconPath },
     { rel: 'canonical', href: baseUrl }
   ]
 });

@@ -5,19 +5,12 @@
     <!-- Full Screen Quiz View -->
     <template v-if="gameState.status !== 'invitation'">
       <!-- Theme Toggle -->
-      <div class="absolute top-6 right-6 z-50">
+      <div class="fixed top-6 right-6 z-50">
         <UiThemeToggle />
       </div>
 
-      <!-- Background Decoration -->
-      <div class="absolute inset-0 overflow-hidden pointer-events-none opacity-20">
-        <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/20 blur-[120px] rounded-full"></div>
-        <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-secondary/20 blur-[120px] rounded-full">
-        </div>
-      </div>
-
       <div class="w-full max-w-2xl relative z-10 flex flex-col gap-8">
-        <UtilsOfflineQuizHeader class="mt-24 pt-24" />
+        <UtilsOfflineQuizHeader />
 
         <UtilsOfflineQuizStats />
 

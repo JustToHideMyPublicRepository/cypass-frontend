@@ -163,6 +163,12 @@ useSeoMeta({
   ogDescription: errorMessage.value,
   twitterCard: 'summary_large_image',
 })
+
+useHead({
+  link: [
+    { rel: 'icon', type: 'image/x-icon', href: '/favicon-faill.ico' }
+  ]
+})
 </script>
 
 <style scoped>

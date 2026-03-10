@@ -72,6 +72,17 @@ const props = defineProps<{
   steps: Step[]
 }>()
 
+// État global pour indiquer que StepProgress est actif
+const isStepProgressActive = useState('isStepProgressActive', () => false)
+
+onMounted(() => {
+  isStepProgressActive.value = true
+})
+
+onUnmounted(() => {
+  isStepProgressActive.value = false
+})
+
 // Ajout d'une étape finale de sécurité persistante
 const allSteps = computed(() => {
   const steps = [...props.steps]
