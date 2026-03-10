@@ -107,7 +107,7 @@
 
 <script setup lang="ts">
 import { IconEdit, IconShare, IconDownload, IconCheck, IconX, IconLock, IconAlertTriangle, IconBuilding, IconSettings, IconTrash } from '@tabler/icons-vue'
-import { useVigitechStore } from '~/stores/back/user/vigitech'
+import { useUserVigitechStore } from '~/stores/back/user/vigitech'
 import { useToastStore } from '~/stores/front/toast'
 import { mapIncidentStatus } from '~/utils/vigitech'
 
@@ -127,7 +127,7 @@ const deleting = ref(false)
 const handleDelete = async () => {
   if (!props.incident?.id) return
   deleting.value = true
-  const result = await useVigitechStore().deleteIncident(props.incident.id)
+  const result = await useUserVigitechStore().deleteIncident(props.incident.id)
   if (result.success) {
     toast.showToast('success', 'Incident supprimé', result.message || 'L\'incident a été supprimé avec succès.')
     navigateTo('/dashboard/vigitech')

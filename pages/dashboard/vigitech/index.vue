@@ -39,11 +39,11 @@
 </template>
 
 <script setup lang="ts">
-import { useVigitechStore } from '~/stores/back/user/vigitech'
+import { useUserVigitechStore } from '~/stores/back/user/vigitech'
 import { useToastStore } from '~/stores/front/toast'
 import type { Incident } from '~/types/vigitech'
 
-const store = useVigitechStore()
+const store = useUserVigitechStore()
 const showCreateModal = ref(false)
 const editIncident = ref<Incident | null>(null)
 

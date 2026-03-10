@@ -164,7 +164,7 @@ import {
   IconLock, IconRosetteDiscountCheck
 } from '@tabler/icons-vue'
 import { useAuthStore } from '~/stores/back/user/auth'
-import { useVigitechStore } from '~/stores/back/user/vigitech'
+import { useUserVigitechStore } from '~/stores/back/user/vigitech'
 import { useToastStore } from '~/stores/front/toast'
 import { useVigiPrefStore } from '~/stores/front/vigiPref'
 import { getUserAvatarUrl } from '~/utils/user'
@@ -179,7 +179,7 @@ const props = defineProps<{
 }>()
 
 const authStore = useAuthStore()
-const store = useVigitechStore()
+const userVigitechStore = useUserVigitechStore()
 const toast = useToastStore()
 const prefStore = useVigiPrefStore()
 const showComments = ref(prefStore.display.showComments)
@@ -215,7 +215,7 @@ const confirmDeleteComment = (id: string) => {
 const handleDeleteComment = async () => {
   if (!commentIdToDelete.value) return
   deletingComment.value = true
-  const result = await store.deleteComment(commentIdToDelete.value, props.incidentId)
+  const result = await userVigitechStore.deleteComment(commentIdToDelete.value, props.incidentId)
   if (result.success) {
     toast.showToast('success', 'Commentaire supprimé', result.message || 'Le commentaire a été supprimé.')
   } else {
@@ -257,7 +257,7 @@ const cancelEditComment = () => {
 const saveEditComment = async (comment: any) => {
   if (!editCommentContent.value.trim()) return
   savingComment.value = true
-  const result = await store.updateComment(comment.id, editCommentContent.value.trim(), props.incidentId)
+  const result = await userVigitechStore.updateComment(comment.id, editCommentContent.value.trim(), props.incidentId)
   if (result.success) {
     toast.showToast('success', 'Commentaire modifié', result.message || 'Votre commentaire a été mis à jour.')
     editingCommentId.value = null
@@ -271,7 +271,7 @@ const saveEditComment = async (comment: any) => {
 const handleAddComment = async () => {
   if (!newComment.value.trim()) return
   submittingComment.value = true
-  const result = await store.addComment(props.incidentId, newComment.value.trim())
+  const result = await userVigitechStore.addComment(props.incidentId, newComment.value.trim())
   if (result.success) {
     newComment.value = ''
     toast.showToast('success', 'Commentaire ajouté', result.message || 'Votre commentaire a été publié.')

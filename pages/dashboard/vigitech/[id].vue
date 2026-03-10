@@ -21,8 +21,8 @@
         </UiBaseCard>
 
         <!-- Comments Section -->
-        <MeVigitechDetailComments :incidentId="incident.id" :comments="store.comments"
-          :loading="store.loadingComments" />
+        <MeVigitechDetailComments :incidentId="incident.id" :comments="publicVigitechStore.comments"
+          :loading="publicVigitechStore.loadingComments" />
       </div>
 
       <div class="space-y-6">
@@ -33,12 +33,14 @@
 </template>
 
 <script setup lang="ts">
-import { useVigitechStore } from '~/stores/back/user/vigitech'
+import { useUserVigitechStore } from '~/stores/back/user/vigitech'
+import { usePublicVigitechStore } from '~/stores/back/public/vigitech'
 import { useVigiPrefStore } from '~/stores/front/vigiPref'
 import { IconAlertCircle } from '@tabler/icons-vue'
 
 const route = useRoute()
-const store = useVigitechStore()
+const store = useUserVigitechStore()
+const publicVigitechStore = usePublicVigitechStore()
 const settingsStore = useVigiPrefStore()
 
 const incident = computed(() => store.currentIncident)
@@ -46,7 +48,7 @@ const incident = computed(() => store.currentIncident)
 const fetchData = async () => {
   const id = route.params.id as string
   await store.fetchUserIncidentById(id)
-  await store.fetchComments(id)
+  await publicVigitechStore.fetchComments(id)
 }
 
 onMounted(async () => {

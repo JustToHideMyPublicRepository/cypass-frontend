@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia'
 import { useAuthStore } from '../back/user/auth'
 import { useUserDocsentryStore } from '../back/user/docsentry'
-import { useVigitechStore } from '../back/user/vigitech'
+import { useUserVigitechStore } from '../back/user/vigitech'
+import { usePublicVigitechStore } from '../back/public/vigitech'
 import { shortcutsData } from '@/data/shortcuts'
 import { faqCategories } from '@/data/faq'
 import { supportData } from '@/data/support'
@@ -141,7 +142,8 @@ export const useSearchStore = defineStore('search', {
         const docStore = useUserDocsentryStore()
         const profStore = useProfilStore()
         const isAuthenticated = !!authStore.user
-        const vigitechStore = useVigitechStore()
+        const vigitechStore = useUserVigitechStore()
+        const publicVigitechStore = usePublicVigitechStore()
 
         // Proactive fetching (ONLY if authenticated or for public data if empty)
         const fetchPromises = []
@@ -152,8 +154,8 @@ export const useSearchStore = defineStore('search', {
         }
 
         // Always try to have public incidents for search
-        if (vigitechStore.publicIncidents.length === 0) {
-          fetchPromises.push(vigitechStore.fetchPublicIncidents())
+        if (publicVigitechStore.publicIncidents.length === 0) {
+          fetchPromises.push(publicVigitechStore.fetchPublicIncidents())
         }
 
         if (fetchPromises.length > 0) {
@@ -225,7 +227,7 @@ export const useSearchStore = defineStore('search', {
         }
 
         // 4. Search in VigiTech (PUBLIC)
-        vigitechStore.publicIncidents.forEach(inc => {
+        publicVigitechStore.publicIncidents.forEach(inc => {
           const title = (inc.title || '').toLowerCase()
           const desc = (inc.description || '').toLowerCase()
           if (title.includes(q) || desc.includes(q)) {

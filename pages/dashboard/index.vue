@@ -52,7 +52,7 @@ import { usePublicDocsentryStore } from '~/stores/back/public/docsentry'
 import { useNotificationsStore } from '~/stores/back/user/notifications'
 import { useProfilStore } from '~/stores/back/user/profil'
 import { useAuthStore } from '~/stores/back/user/auth'
-import { useVigitechStore } from '~/stores/back/user/vigitech'
+import { useUserVigitechStore } from '~/stores/back/user/vigitech'
 import { useToastStore } from '~/stores/front/toast'
 import { calculateSecurityScore, type SecurityScoreResult } from '~/utils/security'
 
@@ -61,7 +61,7 @@ const profilStore = useProfilStore()
 const userDocsentryStore = useUserDocsentryStore()
 const publicDocsentryStore = usePublicDocsentryStore()
 const notificationsStore = useNotificationsStore()
-const vigitechStore = useVigitechStore()
+const vigitechStore = useUserVigitechStore()
 const toast = useToastStore()
 
 const currentTime = ref('')

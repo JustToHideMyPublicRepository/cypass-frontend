@@ -154,11 +154,8 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, onUnmounted } from 'vue'
-import {
-  IconChevronDown, IconCloudUpload, IconCheck, IconAlertTriangle,
-  IconMapPin, IconFileTypePdf, IconRefresh
-} from '@tabler/icons-vue'
-import { useVigitechStore } from '~/stores/back/user/vigitech'
+import { IconChevronDown, IconCloudUpload, IconAlertTriangle, IconMapPin, IconFileTypePdf, IconRefresh } from '@tabler/icons-vue'
+import { useUserVigitechStore } from '~/stores/back/user/vigitech'
 import { useToastStore } from '~/stores/front/toast'
 import { useGlobalDropZone } from '~/composables/useDropZone'
 import type { CreateIncidentRequest, Incident } from '~/types/vigitech'
@@ -171,7 +168,7 @@ const props = defineProps<{
 const isEditMode = computed(() => !!props.incident)
 
 const emit = defineEmits(['close', 'success'])
-const store = useVigitechStore()
+const store = useUserVigitechStore()
 const toast = useToastStore()
 const { enable, disable } = useGlobalDropZone()
 

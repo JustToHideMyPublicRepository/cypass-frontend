@@ -39,7 +39,7 @@
 
 <script setup lang="ts">
 import { IconActivity, IconLock, IconAlertCircle } from '@tabler/icons-vue'
-import { useVigitechStore } from '~/stores/back/user/vigitech'
+import { usePublicVigitechStore } from '~/stores/back/public/vigitech'
 import { useAuthStore } from '~/stores/back/user/auth'
 import { decodeHtmlEntities } from '~/utils/format'
 import { getDynamicGreeting } from '~/utils/greeting'
@@ -48,7 +48,7 @@ definePageMeta({
   layout: 'guest'
 })
 
-const store = useVigitechStore()
+const store = usePublicVigitechStore()
 const authStore = useAuthStore()
 
 const filters = ref({

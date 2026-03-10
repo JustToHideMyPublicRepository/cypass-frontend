@@ -38,7 +38,7 @@
 </template>
 
 <script setup lang="ts">
-import { useVigitechStore } from '~/stores/back/user/vigitech'
+import { usePublicVigitechStore } from '~/stores/back/public/vigitech'
 import { useVigiPrefStore } from '~/stores/front/vigiPref'
 
 definePageMeta({
@@ -46,7 +46,7 @@ definePageMeta({
 })
 
 const route = useRoute()
-const store = useVigitechStore()
+const store = usePublicVigitechStore()
 const vigiPrefStore = useVigiPrefStore()
 
 const incident = computed(() => store.currentIncident)

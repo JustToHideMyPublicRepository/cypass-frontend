@@ -1,6 +1,6 @@
 import { ref, computed } from 'vue'
 import { useUserDocsentryStore } from '~/stores/back/user/docsentry'
-import { useVigitechStore } from '~/stores/back/user/vigitech'
+import { useUserVigitechStore } from '~/stores/back/user/vigitech'
 import { useProfilStore } from '~/stores/back/user/profil'
 import { useAuthStore } from '~/stores/back/user/auth'
 import { format, startOfMonth, endOfMonth } from 'date-fns'
@@ -22,7 +22,7 @@ export interface CalendarEvent {
 
 export const useCalendarEvents = () => {
   const userDocsentryStore = useUserDocsentryStore()
-  const vigitechStore = useVigitechStore()
+  const vigitechStore = useUserVigitechStore()
   const profilStore = useProfilStore()
   const authStore = useAuthStore()
 

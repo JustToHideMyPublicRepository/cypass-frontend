@@ -86,7 +86,7 @@ import { fr } from 'date-fns/locale'
 import { getUserAvatarUrl } from '~/utils/user'
 import { useVigiPrefStore } from '~/stores/front/vigiPref'
 import { useAuthStore } from '~/stores/back/user/auth'
-import { useVigitechStore } from '~/stores/back/user/vigitech'
+import { useUserVigitechStore } from '~/stores/back/user/vigitech'
 import { useToastStore } from '~/stores/front/toast'
 
 const props = defineProps<{
@@ -98,7 +98,7 @@ const props = defineProps<{
 
 const prefStore = useVigiPrefStore()
 const authStore = useAuthStore()
-const store = useVigitechStore()
+const store = useUserVigitechStore()
 const toast = useToastStore()
 
 const showComments = ref(prefStore.display.showComments)

@@ -65,7 +65,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits(['close', 'success'])
-const store = useVigitechStore()
+const store = useUserVigitechStore()
 const reportUserStore = useReportUserStore()
 const toast = useToastStore()
 const loading = ref(false)

@@ -33,9 +33,9 @@
 
 <script setup lang="ts">
 import { IconBroadcast } from '@tabler/icons-vue'
-import { useVigitechStore } from '~/stores/back/user/vigitech'
+import { useUserVigitechStore } from '~/stores/back/user/vigitech'
 
-const store = useVigitechStore()
+const store = useUserVigitechStore()
 
 const typeBreakdown = computed(() => {
   const counts: Record<string, number> = { phishing: 0, ransomware: 0, fake_profile: 0, harassment: 0, other: 0 }

@@ -40,6 +40,7 @@ export interface Comment {
   last_name?: string | null
   organization_name?: string | null
   avatar_url?: string | null
+  incident_title?: string | null
 }
 
 export interface CreateIncidentRequest {

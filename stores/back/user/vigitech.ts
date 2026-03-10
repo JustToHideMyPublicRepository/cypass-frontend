@@ -1,23 +1,12 @@
 import { defineStore } from 'pinia'
 import type { Incident, Comment, CreateIncidentRequest } from '~/types/vigitech'
+import { usePublicVigitechStore } from '../public/vigitech'
 
-export const useVigitechStore = defineStore('vigitech', {
+export const useUserVigitechStore = defineStore('userVigitech', {
   state: () => ({
     userIncidents: [] as Incident[],
-    publicIncidents: [] as Incident[],
-    publicPagination: {
-      total: 0,
-      limit: 10,
-      offset: 0
-    },
-    globalStats: {
-      total: 0,
-      phishing: 0,
-      critical: 0
-    },
     currentIncident: null as Incident | null,
-    comments: [] as Comment[],
-    userComments: [] as any[],
+    userComments: [] as Comment[],
     userCommentsTotal: 0,
     loadingComments: false,
     loading: false,
@@ -33,7 +22,7 @@ export const useVigitechStore = defineStore('vigitech', {
           body: { incident_id: incidentId, content }
         })
         if (response.success) {
-          await this.fetchComments(incidentId)
+          await usePublicVigitechStore().fetchComments(incidentId)
           return { success: true, message: response.message }
         }
         return { success: false, message: response.message || 'Impossible de publier le commentaire.' }
@@ -51,7 +40,7 @@ export const useVigitechStore = defineStore('vigitech', {
         })
         if (response.success) {
           if (incidentId) {
-            await this.fetchComments(incidentId)
+            await usePublicVigitechStore().fetchComments(incidentId)
           }
           // Also remove from user comments list if present
           this.userComments = this.userComments.filter(c => c.id !== commentId)
@@ -87,7 +76,7 @@ export const useVigitechStore = defineStore('vigitech', {
           body: { comment_id: commentId, content }
         })
         if (response.success && incidentId) {
-          await this.fetchComments(incidentId)
+          await usePublicVigitechStore().fetchComments(incidentId)
         }
         return { success: response.success, message: response.message }
       } catch (err: any) {
@@ -186,125 +175,7 @@ export const useVigitechStore = defineStore('vigitech', {
       }
     },
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    async fetchPublicIncidents(params: any = {}) {
-      this.loading = true
-      this.error = null
-      try {
-        const query = {
-          ...params,
-          limit: params.limit || this.publicPagination.limit,
-          offset: params.offset || this.publicPagination.offset
-        }
-        const response: any = await $fetch('/api/vigitech/all', { params: query })
-        if (response.success) {
-          this.publicIncidents = response.data
-          // Accurate total calculation if not provided by backend
-          if (response.total) {
-            this.publicPagination.total = response.total
-          } else {
-            // If data received is less than limit, we know the exact total
-            if (response.data.length < query.limit) {
-              this.publicPagination.total = query.offset + response.data.length
-            } else if (this.publicPagination.total < query.offset + response.data.length) {
-              // Otherwise, only update if it's higher than what we have
-              this.publicPagination.total = query.offset + response.data.length
-            }
-          }
-          this.publicPagination.limit = query.limit
-          this.publicPagination.offset = query.offset
-        } else {
-          this.error = response.message || 'Erreur lors de la récupération des incidents publics'
-        }
-      } catch (err: any) {
-        this.error = err.message
-      } finally {
-        this.loading = false
-      }
-    },
-
-    async fetchGlobalStats() {
-      try {
-        // Fetch a large number of incidents to calculate global stats
-        // In a real app, this should be a dedicated /stats endpoint
-        const response: any = await $fetch('/api/vigitech/all', {
-          params: { limit: 1000, offset: 0 }
-        })
-        if (response.success && response.data) {
-          const all = response.data
-          const total = response.total || all.length
-          this.globalStats = {
-            total,
-            phishing: all.filter((i: any) => i.type === 'phishing').length,
-            critical: all.filter((i: any) => i.threat_level === 'critical').length
-          }
-          // Sync pagination total
-          this.publicPagination.total = total
-        }
-      } catch (err: any) {
-        console.warn('Erreur chargement stats globales:', err.message)
-      }
-    },
-
-
-    async fetchPublicIncidentById(id: string) {
-      this.loading = true
-      this.error = null
-      try {
-        const response: any = await $fetch(`/api/vigitech/${id}`)
-        if (response.success) {
-          this.currentIncident = response.data
-        } else {
-          this.error = response.message || 'Incident non trouvé'
-        }
-      } catch (err: any) {
-        this.error = err.message
-      } finally {
-        this.loading = false
-      }
-    },
-
-    async fetchComments(incidentId: string) {
-      this.loadingComments = true
-      try {
-        const response: any = await $fetch('/api/vigitech/comments', {
-          params: { incident_id: incidentId }
-        })
-        if (response.success) {
-          this.comments = response.data || []
-        }
-      } catch (err: any) {
-        console.warn('Erreur chargement commentaires:', err.message)
-      } finally {
-        this.loadingComments = false
-      }
-    },
-
-
-
-
-
+    // Mettre à jour un incident
     async updateIncident(incidentId: string, data: Record<string, string | boolean>) {
       try {
         const body: Record<string, string> = {}
@@ -316,14 +187,12 @@ export const useVigitechStore = defineStore('vigitech', {
           }
         }
 
-        const response: any = await $fetch('/api/vigitech/update', {
+        const response: any = await $fetch('/api/user/vigitech/incident-update', {
           method: 'PUT',
           body: { incident_id: incidentId, ...body }
         })
         if (response.success) {
-          // Refresh the current incident data
           await this.fetchUserIncidentById(incidentId)
-          // Also update the item in the userIncidents list for real-time refresh on dashboard
           if (this.currentIncident) {
             const idx = this.userIncidents.findIndex(i => i.id === incidentId)
             if (idx !== -1) {
