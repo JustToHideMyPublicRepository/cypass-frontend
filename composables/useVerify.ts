@@ -1,9 +1,11 @@
 import { ref, watch, computed } from 'vue'
+import { useRouter } from 'nuxt/app'
 import { usePublicDocsentryStore } from '~/stores/back/public/docsentry'
 import { verifySteps, type Step } from '~/utils/docsentry'
 
 export const useVerify = () => {
   const store = usePublicDocsentryStore()
+  const router = useRouter()
 
   const verifyMode = ref<'file' | 'hash' | 'qr'>('file')
   const pdfSubMode = ref<'original' | 'certificate'>('original')
@@ -92,6 +94,14 @@ export const useVerify = () => {
     }
   }
 
+  const clearHashParam = () => {
+    const query = { ...router.currentRoute.value.query }
+    if (query.h) {
+      delete query.h
+      router.replace({ query })
+    }
+  }
+
   const reset = () => {
     pdfFile.value = null
     qrFile.value = null
@@ -101,6 +111,7 @@ export const useVerify = () => {
     resetSteps()
     store.error = null
     store.verificationResult = null
+    clearHashParam()
   }
 
   // Watchers to clear results when inputs change
@@ -109,6 +120,12 @@ export const useVerify = () => {
     result.value = null
     error.value = null
     resetSteps()
+
+    // Ne nettoyer le paramètre h que si l'utilisateur change manuellement l'input ou le mode
+    const queryH = router.currentRoute.value.query.h;
+    if (queryH && (verifyMode.value !== 'hash' || hashInput.value !== queryH)) {
+      clearHashParam()
+    }
   })
 
   return {

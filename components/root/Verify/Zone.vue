@@ -93,7 +93,7 @@
 
 <script setup lang="ts">
 import { ref, watch, onMounted, onUnmounted, computed } from 'vue'
-import { IconRosetteDiscountCheck, IconHash, IconFileText, IconX, IconQrcode, IconChevronDown, IconCamera } from '@tabler/icons-vue'
+import { IconRosetteDiscountCheck, IconHash, IconQrcode, IconCamera } from '@tabler/icons-vue'
 import type { Step } from '~/utils/docsentry'
 
 import { useGlobalDropZone } from '~/composables/useDropZone'
