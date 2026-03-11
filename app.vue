@@ -13,8 +13,8 @@
       <ModalGlobalAiAnalysisSettings />
     </NuxtLayout>
 
+    <UtilsCookieConsent />
     <UtilsOfflineQuiz v-if="isOffline" :connection-restored="connectionRestored" />
-
     <UtilsNoScript />
   </div>
 </template>

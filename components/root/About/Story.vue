@@ -57,9 +57,9 @@
                   </div>
 
                   <div class="text-purple-300">
-                    > 2025: Sélection & Incubation Cyber [OK]<br />
-                    > 2026: Lancement MVP & Expansion [EN COURS]<br />
-                    > 2027: Consolidation Nationale [PROGRAMMÉ]
+                    > Oct. 25: Sélection & Incubation Cyber [OK]<br />
+                    > Nov. 25: Lancement MVP & Expansion [EN COURS]<br />
+                    > 2026: Déploiement du MVP et une expansion[CONTINUE]
                   </div>
 
                   <div class="animate-pulse">_</div>
@@ -80,22 +80,22 @@
 const timeline = [
   {
     year: 'Avril 2025',
-    title: 'L\'Éveil',
+    title: 'L\'éveil',
     desc: 'Candidature au programme CyberIncub, marquant la première étape vers la révolution de la confiance numérique.'
   },
   {
     year: 'Octobre 2025',
-    title: 'La Sélection',
+    title: 'La sélection',
     desc: 'CYPASS est officiellement sélectionné parmi les dossiers les plus prometteurs pour intégrer l\'écosystème cyber.'
   },
   {
     year: 'Novembre 2025',
-    title: 'L\'Envol',
+    title: 'L\'envol',
     desc: 'Démarrage officiel du programme d\'incubation et accélération du développement des modules DocSentry et VigiTech.'
   },
   {
     year: '2026',
-    title: 'L\'Horizon',
+    title: 'L\'horizon',
     desc: 'L\'aventure continue avec le déploiement du MVP et une expansion continue de notre solution de confiance numérique.'
   }
 ]

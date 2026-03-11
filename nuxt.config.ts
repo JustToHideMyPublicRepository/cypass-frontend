@@ -4,7 +4,7 @@ export default defineNuxtConfig({
   devtools: { enabled: false },
 
   modules: [
-    ['nuxt-gtag', { id: 'G-GWSKZ9GGJX', enabled: true }],
+    ['nuxt-gtag', { id: 'G-GWSKZ9GGJX', enabled: false }],
     '@pinia/nuxt',
     '@nuxtjs/tailwindcss',
     '@nuxtjs/color-mode',
