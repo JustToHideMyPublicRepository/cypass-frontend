@@ -1,7 +1,7 @@
 <template>
-  <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
+  <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-24">
     <div v-for="(tier, index) in tiers" :key="tier.name"
-      class="group relative bg-ash/40 backdrop-blur-3xl p-8 rounded-[3rem] border-2 transition-all duration-700 hover:scale-[1.02] flex flex-col h-full"
+      class="group relative bg-ash/40 backdrop-blur-3xl p-8 rounded-2xl border-2 transition-all duration-700 hover:scale-[1.02] flex flex-col h-full"
       :class="tier.featured ? 'border-primary/40 shadow-[0_40px_100px_rgba(var(--primary-rgb),0.15)] ring-1 ring-primary/20' : 'border-ash/50 hover:border-primary/30'">
 
       <div v-if="tier.featured"

@@ -15,8 +15,8 @@
             technologies de pointe.
           </p>
           <div class="flex gap-3">
-            <a v-for="social in socialLinks" :key="social" href="#"
-              class="w-10 h-10 rounded-full bg-WtB border border-ash flex items-center justify-center text-hsa hover:text-white hover:bg-primary hover:border-primary transition-all duration-300">
+            <a v-for="social in socialLinks" :key="social" :href="getSocialLink(social)" target="_blank"
+              class="w-10 h-10 rounded-full bg-WtB border border-ash flex items-center justify-center text-hsa hover:text-WtB hover:bg-primary hover:border-ash transition-all duration-300">
               <component :is="getSocialIcon(social)" class="w-5 h-5" />
             </a>
           </div>
@@ -50,7 +50,6 @@
             </div>
           </div>
         </div>
-
       </div>
 
       <!-- Bottom Footer -->
@@ -71,11 +70,11 @@
 </template>
 <script setup lang="ts">
 import {
-  IconBrandX, IconBrandLinkedin, IconBrandGithub, IconShieldCheck, IconGlobe
+  IconBrandX, IconBrandLinkedin, IconBrandFacebook, IconShieldCheck, IconGlobe
 } from '@tabler/icons-vue'
 import { getLinkTooltip } from '~/data/shortcuts'
 
-const socialLinks = ['twitter', 'linkedin', 'github']
+const socialLinks = ['linkedin', 'twitter', 'facebook']
 
 const footerGroups = [
   {
@@ -113,8 +112,15 @@ const getSocialIcon = (name: string) => {
   switch (name) {
     case 'twitter': return IconBrandX
     case 'linkedin': return IconBrandLinkedin
-    case 'github': return IconBrandGithub
+    case 'facebook': return IconBrandFacebook
     default: return IconGlobe
   }
+}
+
+const getSocialLink = (name: string) => {
+  if (name === 'linkedin') return 'https://linkedin.com/in/SteveAsterAfovo'
+  if (name === 'twitter') return 'https://x.com/SteveAsterAfovo'
+  if (name === 'facebook') return 'https://facebook.com/SteveAsterAfovo.1'
+  return '#'
 }
 </script>

@@ -37,3 +37,18 @@ export const getSearchIconStyle = (type: string) => {
     default: return 'bg-ash/10 text-hsa'
   }
 }
+/**
+ * Configuration pour les placeholders tournants
+ */
+export const PLACEHOLDER_INTERVAL = 3000 // 3 secondes
+
+export const searchPlaceholders = [
+  'Trouver un document...',
+  'Vérifier un certificat...',
+  'Rechercher une alerte...',
+  'Rechercher une page...',
+  'Trouver de l\'aide...',
+  'Paramètres système...',
+  'Historique des scans...',
+  'Support technique...'
+]
