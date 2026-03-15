@@ -1,5 +1,5 @@
 <template>
-  <UiBaseCard class="border-l-4 transition-all hover:shadow-lg" :class="[
+  <UiBaseCard @contextmenu.prevent="handleContextMenu" class="border-l-4 transition-all hover:shadow-lg" :class="[
     incident.threat_level === 'critical' ? 'border-l-danger bg-danger/5' :
       incident.threat_level === 'medium' ? 'border-l-warning bg-warning/5' : 'border-l-success bg-success/5'
   ]">
@@ -131,6 +131,7 @@ import { mapIncidentType, mapThreatLevel, mapIncidentStatus } from '~/utils/vigi
 import { getUserAvatarUrl } from '~/utils/user'
 import { useToastStore } from '~/stores/front/toast'
 import { useAuthStore } from '~/stores/back/user/auth'
+import { useContextMenu, type ContextMenuItem } from '~/composables/useContextMenu'
 
 const props = defineProps<{
   incident: Incident
@@ -141,6 +142,7 @@ const props = defineProps<{
 const emit = defineEmits(['report', 'edit', 'delete'])
 const toast = useToastStore()
 const authStore = useAuthStore()
+const { showMenu } = useContextMenu()
 
 const isOwnIncident = computed(() => {
   return !!(authStore.user && props.incident.user_id === authStore.user.id)
@@ -152,6 +154,57 @@ const canEditIncident = computed(() => {
   const hoursDiff = (Date.now() - createdAt) / (1000 * 60 * 60)
   return hoursDiff <= 24
 })
+
+const handleContextMenu = (e: MouseEvent) => {
+  const menuItems: ContextMenuItem[] = [
+    {
+      label: 'Consulter les détails',
+      icon: IconEye,
+      action: async () => { await useRouter().push(props.detailUrl) }
+    },
+    {
+      label: 'Partager l\'incident',
+      icon: IconShare,
+      action: async () => { await shareIncident() }
+    }
+  ]
+
+  if (!isOwnIncident.value && authStore.user) {
+    menuItems.push({
+      label: 'Signaler cet incident',
+      icon: IconFlag,
+      action: async () => { handleReport() },
+      variant: 'danger'
+    })
+  }
+
+  if (isOwnIncident.value) {
+    if (canEditIncident.value) {
+      menuItems.push({
+        label: 'Modifier mon signalement',
+        icon: IconEdit,
+        action: async () => { emit('edit', props.incident) }
+      })
+    }
+    menuItems.push({
+      label: 'Supprimer mon signalement',
+      icon: IconTrash,
+      action: async () => { emit('delete', props.incident) },
+      variant: 'danger'
+    })
+  }
+
+  const menuMetadata = {
+    title: `Incident #${props.incident.id.split('-')[0]}`,
+    infos: [
+      { label: 'Menace', value: mapThreatLevel(props.incident.threat_level) },
+      { label: 'Publié le', value: new Date(props.incident.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }) },
+      { label: 'Vues', value: props.incident.views_count?.toString() || '0' }
+    ]
+  }
+
+  showMenu(e, menuItems, menuMetadata)
+}
 
 const handleReport = () => {
   if (isOwnIncident.value) return

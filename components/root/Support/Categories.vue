@@ -1,6 +1,7 @@
 <template>
   <div class="grid md:grid-cols-3 gap-6 md:gap-8">
     <div v-for="(category, index) in categories" :key="index" @click="$emit('select', category)"
+      @contextmenu.prevent="handleContextMenu(category, $event)"
       class="glass-panel p-6 md:p-8 rounded-2xl md:rounded-3xl hover:scale-[1.01] transition-transform duration-300 cursor-pointer group animate-fade-up border border-ash/50"
       :style="{ animationDelay: `${index * 100}ms` }">
       <div
@@ -20,9 +21,33 @@
 </template>
 
 <script setup lang="ts">
-import { IconArrowRight } from '@tabler/icons-vue'
+import { IconArrowRight, IconEye } from '@tabler/icons-vue'
+import { useContextMenu, type ContextMenuItem } from '~/composables/useContextMenu'
 
 defineProps<{
   categories: any[]
 }>()
+
+const emit = defineEmits(['select'])
+const { showMenu } = useContextMenu()
+
+const handleContextMenu = (category: any, e: MouseEvent) => {
+  const menuItems: ContextMenuItem[] = [
+    {
+      label: 'Explorer la catégorie',
+      icon: IconEye,
+      action: () => emit('select', category)
+    }
+  ]
+
+  const menuMetadata = {
+    title: 'Support CYPASS',
+    infos: [
+      { label: 'Catégorie', value: category.title },
+      { label: 'Articles', value: category.articles?.length?.toString() || '0' }
+    ]
+  }
+
+  showMenu(e, menuItems, menuMetadata)
+}
 </script>

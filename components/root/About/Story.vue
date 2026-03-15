@@ -59,7 +59,7 @@
                   <div class="text-purple-300">
                     > Oct. 25: Sélection & Incubation Cyber [OK]<br />
                     > Nov. 25: Lancement MVP & Expansion [EN COURS]<br />
-                    > 2026: Déploiement du MVP et une expansion[CONTINUE]
+                    > 2026: Déploiement du MVP et une expansion [CONTINUE]
                   </div>
 
                   <div class="animate-pulse">_</div>

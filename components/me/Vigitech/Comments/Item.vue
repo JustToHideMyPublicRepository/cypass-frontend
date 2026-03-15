@@ -1,5 +1,5 @@
 <template>
-  <div
+  <div @contextmenu.prevent="handleContextMenu"
     class="group relative bg-ash/40 backdrop-blur-3xl p-7 md:p-8 rounded-[3rem] border border-ash/30 hover:border-primary/40 hover:bg-ash/60 hover:shadow-[0_40px_100px_rgba(var(--primary-rgb),0.15)] transition-all duration-700 overflow-hidden flex flex-col h-full ring-1 ring-primary/0 hover:ring-primary/20">
 
     <!-- Premium Animated Glow Gradient -->
@@ -104,8 +104,9 @@
 </template>
 
 <script setup lang="ts">
-import { IconEdit, IconExternalLink, IconTrash, IconQuote } from '@tabler/icons-vue'
+import { IconEdit, IconExternalLink, IconTrash, IconQuote, IconEye } from '@tabler/icons-vue'
 import { formatRelativeTime } from '~/utils/date'
+import { useContextMenu, type ContextMenuItem } from '~/composables/useContextMenu'
 
 const props = defineProps<{
   comment: any
@@ -119,12 +120,50 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits(['edit', 'cancel', 'save', 'delete'])
+const { showMenu } = useContextMenu()
 
 const editContentLocal = ref(props.editContent)
 
 const relativeTime = computed(() => {
   return formatRelativeTime(props.comment.created_at)
 })
+
+const handleContextMenu = (e: MouseEvent) => {
+  if (props.isEditing) return
+
+  const menuItems: ContextMenuItem[] = [
+    {
+      label: 'Accéder à l\'incident',
+      icon: IconExternalLink,
+      action: () => navigateTo(`/vigitech/${props.comment.incident_id}`)
+    }
+  ]
+
+  if (props.canEdit) {
+    menuItems.push({
+      label: 'Modifier le commentaire',
+      icon: IconEdit,
+      action: () => emit('edit')
+    })
+  }
+
+  menuItems.push({
+    label: 'Supprimer le commentaire',
+    icon: IconTrash,
+    variant: 'danger',
+    action: () => emit('delete', props.comment.id)
+  })
+
+  const menuMetadata = {
+    title: 'Mon commentaire',
+    infos: [
+      { label: 'Publié le', value: props.formattedDate },
+      { label: 'ID Incident', value: props.comment.incident_id.split('-')[0] }
+    ]
+  }
+
+  showMenu(e, menuItems, menuMetadata)
+}
 
 watch(() => props.editContent, (val) => {
   editContentLocal.value = val

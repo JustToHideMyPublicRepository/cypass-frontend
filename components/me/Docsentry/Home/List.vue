@@ -49,7 +49,7 @@
           </tr>
 
           <!-- Data State -->
-          <tr v-else v-for="doc in documents" :key="doc.id" class="group hover:bg-primary/[0.02] transition-colors">
+          <tr v-else v-for="doc in documents" :key="doc.id" @contextmenu.prevent="handleContextMenu(doc, $event)" class="group hover:bg-primary/[0.02] transition-colors">
             <td class="px-6 py-5">
               <div class="flex items-center gap-4">
                 <div
@@ -133,13 +133,14 @@
 </template>
 
 <script setup lang="ts">
-import { IconFileText, IconDownload, IconFileOff, IconEye, IconCopy, IconCheck, IconChevronLeft, IconChevronRight } from '@tabler/icons-vue'
+import { IconFileText, IconDownload, IconFileOff, IconEye, IconCopy, IconCheck, IconChevronLeft, IconChevronRight, IconShare } from '@tabler/icons-vue'
 import { ref } from 'vue'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import type { Document } from '~/types/documents'
 import { useToastStore } from '~/stores/front/toast'
 import { usePublicDocsentryStore } from '~/stores/back/public/docsentry'
+import { useContextMenu, type ContextMenuItem } from '~/composables/useContextMenu'
 
 const props = defineProps<{
   documents: Document[]
@@ -152,6 +153,8 @@ const emit = defineEmits(['next-page', 'prev-page'])
 
 const toast = useToastStore()
 const publicDocsentryStore = usePublicDocsentryStore()
+const { showMenu } = useContextMenu()
+
 const expandedHashes = ref(new Set<string>())
 const copiedHashes = ref(new Set<string>())
 
@@ -160,6 +163,67 @@ const copyHash = (hash: string, id: string) => {
   copiedHashes.value.add(id)
   toast.showToast('info', 'Copié', 'Hash copié dans le presse-papier.')
   setTimeout(() => copiedHashes.value.delete(id), 2000)
+}
+
+const shareDocument = async (doc: Document) => {
+  const publicUrl = `${window.location.origin}/verify?h=${doc.hash}`
+  const shareData = {
+    title: `Document CYPASS: ${doc.filename}`,
+    text: `Vérifiez l'authenticité de ce document certifié par CYPASS.`,
+    url: publicUrl
+  }
+
+  try {
+    if (navigator.share) {
+      await navigator.share(shareData)
+    } else {
+      await navigator.clipboard.writeText(publicUrl)
+      toast.showToast('success', 'Lien public copié', 'Le lien de vérification a été copié.')
+    }
+  } catch (err) {
+    if (err instanceof Error && err.name !== 'AbortError') {
+      console.warn('Share failed', err)
+    }
+  }
+}
+
+const handleContextMenu = (doc: Document, e: MouseEvent) => {
+  const menuItems: ContextMenuItem[] = [
+    { 
+      label: 'Consulter les détails', 
+      icon: IconEye, 
+      action: () => navigateTo(`/dashboard/docsentry/${doc.id}`) 
+    },
+    { 
+      label: 'Copier le Hash', 
+      icon: IconCopy, 
+      action: () => copyHash(doc.hash, doc.id) 
+    },
+    { 
+      label: 'Partager le lien', 
+      icon: IconShare, 
+      action: () => shareDocument(doc) 
+    }
+  ]
+
+  if (doc.has_certificate) {
+    menuItems.push({
+      label: 'Télécharger le certificat',
+      icon: IconDownload,
+      action: () => downloadCertificate(doc.id, doc.filename)
+    })
+  }
+
+  const menuMetadata = {
+    title: 'Document Certifié',
+    infos: [
+      { label: 'Fichier', value: doc.filename },
+      { label: 'ID', value: doc.id.split('-')[0] },
+      { label: 'Date', value: formatDate(doc.created_at) }
+    ]
+  }
+
+  showMenu(e, menuItems, menuMetadata)
 }
 
 const toggleHash = (id: string) => {
