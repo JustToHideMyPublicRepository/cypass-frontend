@@ -13,6 +13,18 @@ export interface UserProfile {
   created_at: string
 }
 
+export interface UserSession {
+  id: string
+  user_agent: string
+  ip_address: string
+  os: string
+  browser: string
+  is_current: boolean
+  created_at: string
+  last_used_at: string
+  expires_at: string
+}
+
 export interface ReportEntry {
   id: string
   reporter_id: string
@@ -38,20 +50,21 @@ export interface Statistics {
 
 export interface LogEntry {
   id: string
-  action: string
+  action_type: string
   action_label: string
   details: any
   ip_address: string
   user_agent: string
+  os?: string
+  browser?: string
   status: 'success' | 'failed' | 'error' | string
-  timestamp: string
+  created_at: string
   log_type: 'user_actions' | 'requests' | 'errors' | 'security' | string
 }
 
 export interface LogStatistics {
   total_logs: number
-  by_type: Record<'user_actions' | 'requests' | 'errors' | 'security' | string, number>
-  by_action: Record<string, number>
+  by_type: Record<string, number>
   date_range: string
 }
 
@@ -62,6 +75,7 @@ export interface ProfilState {
   logStatistics: LogStatistics | null
   logUser: { id: string; email: string; role: string } | null
   logFilters: { date: string; type: string; limit: number } | null
+  currentLog: LogEntry | null
   loading: boolean
   error: string | null
   message: string | null

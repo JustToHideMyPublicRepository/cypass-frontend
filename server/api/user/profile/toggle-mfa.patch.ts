@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
     const params = new URLSearchParams()
     params.append('mfa_enabled', body.mfa_enabled ? 'true' : 'false')
 
-    const response: any = await $fetch(`${baseApi}/profile/toggle_mfa.php`, {
+    const response: any = await $fetch(`${baseApi}/profile/toggle_mfa`, {
       method: 'PATCH' as any,
       headers: {
         'Authorization': `Bearer ${token}`,

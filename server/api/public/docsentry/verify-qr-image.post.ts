@@ -22,7 +22,7 @@ export default defineEventHandler(async (event) => {
       }
     }
 
-    const response: any = await $fetch(`${baseApi}/documents/verify-qr-image.php`, {
+    const response: any = await $fetch(`${baseApi}/documents/verify-qr-image`, {
       method: 'POST',
       headers: { 'accept': 'application/json' },
       body: backendFormData

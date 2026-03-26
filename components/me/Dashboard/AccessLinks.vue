@@ -28,7 +28,7 @@ const ALL_LINKS = [
   { label: 'Mes documents', path: '/dashboard/docsentry', icon: IconFiles },
   { label: 'Notifications', path: '/dashboard/notifications', icon: IconBell },
   { label: 'Mes alertes', path: '/dashboard/vigitech', icon: IconAlertTriangle },
-  { label: 'Logs système', path: '/dashboard/logs', icon: IconHistory },
+  { label: 'Logs système', path: '/dashboard/activities', icon: IconHistory },
   { label: 'Profil', path: '/dashboard/profile', icon: IconUserCircle },
   { label: 'Paramètres', path: '/dashboard/settings', icon: IconSettings },
   { label: 'Sessions actives', path: '/dashboard/sessions', icon: IconDevices },

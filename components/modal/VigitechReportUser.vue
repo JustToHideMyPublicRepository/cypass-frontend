@@ -31,8 +31,16 @@
         <!-- Détails -->
         <div class="space-y-2">
           <label class="text-[10px] font-black text-hsa uppercase tracking-[0.2em] ml-1">Détails</label>
-          <textarea v-model="form.details" class="textarea input h-28 pt-4 w-full p-4" rows="4"
-            placeholder="Décrivez pourquoi vous signalez cet utilisateur..." required></textarea>
+          <div class="relative">
+            <textarea v-model="form.details"
+              class="w-full p-4 pb-10 rounded-xl bg-WtB border border-ash/50 text-sm font-bold outline-none focus:ring-2 focus:ring-primary transition-all resize-none shadow-inner"
+              rows="4" maxlength="1000" placeholder="Décrivez pourquoi vous signalez cet utilisateur..."
+              required></textarea>
+            <div class="absolute bottom-3 right-4 text-[10px] font-black tracking-widest"
+              :class="form.details.length > 900 ? (form.details.length >= 1000 ? 'text-danger' : 'text-warning') : 'text-hsa/50'">
+              {{ form.details.length }} / 1000
+            </div>
+          </div>
         </div>
 
         <!-- Actions -->
@@ -43,7 +51,7 @@
           </UiBaseButton>
           <UiBaseButton type="submit"
             class="flex-1 !rounded-2xl font-black tracking-widest shadow-xl px-10 !bg-danger hover:!bg-danger/90"
-            :loading="loading" :disabled="!form.reason">
+            :loading="loading" :disabled="!form.reason || !form.details.trim()">
             Signaler
           </UiBaseButton>
         </div>

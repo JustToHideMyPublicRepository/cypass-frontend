@@ -13,8 +13,23 @@
         </p>
       </div>
 
+      <!-- État de réussite avec ticket -->
+      <div v-if="ticketNumber" class="space-y-6 py-4 animate-fade-in relative z-10">
+        <div class="p-6 bg-success/10 border border-success/20 rounded-2xl text-center">
+          <IconCircleCheck class="w-12 h-12 text-success mx-auto mb-4" />
+          <h4 class="text-lg font-bold text-BtW mb-2">Demande envoyée avec succès!</h4>
+          <p class="text-sm text-hsa mb-6">
+            Votre demande de partenariat a été bien reçue. Conservez ce numéro de ticket pour tout suivi.
+          </p>
+          <UiTicketDisplay :ticket="ticketNumber" />
+        </div>
+        <UiBaseButton type="button" @click="closeAndReset" class="!rounded-2xl font-bold" block>
+          Fermer
+        </UiBaseButton>
+      </div>
+
       <!-- Formulaire de demande de partenariat -->
-      <form @submit.prevent="handleSubmit" class="space-y-6">
+      <form v-else @submit.prevent="handleSubmit" class="space-y-6 relative z-10">
         <div class="space-y-5">
           <!-- Champ Organisation -->
           <div class="space-y-2">
@@ -80,7 +95,7 @@
 
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
-import { IconWorldHeart, IconBuildingSkyscraper, IconUserCircle, IconMail } from '@tabler/icons-vue'
+import { IconWorldHeart, IconBuildingSkyscraper, IconUserCircle, IconMail, IconCircleCheck } from '@tabler/icons-vue'
 import { useToastStore } from '~/stores/front/toast'
 import { useAuthStore } from '~/stores/back/user/auth'
 import { useSupportStore } from '~/stores/back/public/support'
@@ -95,6 +110,7 @@ const toast = useToastStore()
 const authStore = useAuthStore()
 const supportStore = useSupportStore()
 const loading = ref(false)
+const ticketNumber = ref<string | null>(null)
 
 // État local du formulaire de partenariat
 const form = reactive({
@@ -127,16 +143,22 @@ const handleSubmit = async () => {
 
   if (response.success) {
     toast.showToast('success', 'Demande envoyée', response.message || 'Votre demande a été transmise avec succès.')
-    // Réinitialisation du formulaire après succès
+    ticketNumber.value = response.data?.ticket || null
+    // Réinitialisation du formulaire en arrière-plan
     form.organization_name = ''
     form.contact_name = ''
     form.email = ''
     form.message = ''
     emit('success')
-    emit('close')
   } else {
     toast.showToast('error', 'Échec de transmission', response.message || 'Une erreur système est survenue lors de l\'envoi.')
   }
   loading.value = false
+}
+
+// Fonction de fermeture et réinitialisation de l'état du ticket manuellement
+const closeAndReset = () => {
+  ticketNumber.value = null
+  emit('close')
 }
 </script>

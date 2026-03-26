@@ -20,9 +20,8 @@ export default defineEventHandler(async (event: H3Event): Promise<PublicProfileR
   }
 
   try {
-    const response = await $fetch<PublicProfileResponse>(`${baseApi}/profile/get_public.php`, {
+    const response = await $fetch<PublicProfileResponse>(`${baseApi}/profile/get_public/${id}`, {
       method: 'GET',
-      params: { id },
       headers: {
         'Accept': 'application/json'
       }

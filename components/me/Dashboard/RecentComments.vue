@@ -20,7 +20,7 @@
           </div>
           <div class="min-w-0">
             <h4 class="text-sm font-bold text-BtW truncate"> {{ comment.incident_title }} </h4>
-            <p class="text-[10px] text-hsa mt-0.5"> "{{ comment.content }}" </p>
+            <p class="text-[10px] text-hsa mt-0.5 truncate"> "{{ comment.content }}" </p>
           </div>
         </div>
         <span class="shrink-0 px-2.5 py-1 rounded-lg text-[10px] font-black"

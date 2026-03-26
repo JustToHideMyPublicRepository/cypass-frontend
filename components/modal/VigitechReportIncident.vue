@@ -31,9 +31,17 @@
         <!-- Détails -->
         <div class="space-y-2">
           <label class="text-[10px] font-black text-hsa uppercase tracking-[0.2em] ml-1">Détails
-            <span class="text-hsa/50"></span></label>
-          <textarea v-model="form.details" class="textarea input h-28 pt-4" rows="4"
-            placeholder="Décrivez pourquoi vous signalez cet incident..." required></textarea>
+            <span class="text-hsa/50 text-[9px] lowercase italic">(Min 10 caractères)</span></label>
+          <div class="relative">
+            <textarea v-model="form.details"
+              class="w-full p-4 pb-10 rounded-xl bg-WtB border border-ash/50 text-sm font-bold outline-none focus:ring-2 focus:ring-primary transition-all resize-none shadow-inner"
+              rows="4" maxlength="1000" placeholder="Décrivez pourquoi vous signalez cet incident..."
+              required></textarea>
+            <div class="absolute bottom-3 right-4 text-[10px] font-black tracking-widest"
+              :class="form.details.length > 900 ? (form.details.length >= 1000 ? 'text-danger' : 'text-warning') : 'text-hsa/50'">
+              {{ form.details.length }} / 1000
+            </div>
+          </div>
         </div>
 
         <!-- Actions -->
@@ -44,7 +52,7 @@
           </UiBaseButton>
           <UiBaseButton type="submit"
             class="flex-1 !rounded-2xl font-black tracking-widest shadow-xl px-10 shadow-danger/10 !bg-danger hover:!bg-danger/90"
-            :loading="loading" :disabled="!form.reason">
+            :loading="loading" :disabled="!form.reason || form.details.trim().length < 10">
             {{ isEditMode ? 'Enregistrer' : 'Signaler' }}
           </UiBaseButton>
         </div>
@@ -96,17 +104,21 @@ watch(() => props.show, (isVisible) => {
  */
 const handleSubmit = async () => {
   if (!form.reason) return
+  if (form.details.length < 10) {
+    toast.showToast('warning', 'Détails insuffisants', 'Veuillez fournir au moins 10 caractères pour les détails.')
+    return
+  }
   loading.value = true
 
-  let result: any = null
+  let result = false
   if (isEditMode.value && props.report) {
-    result = true
+    result = await reportIncidentStore.updateReport(props.report.id, form.reason, form.details)
   } else {
     result = await reportIncidentStore.reportIncident(props.incidentId, form.reason, form.details)
   }
 
-  // Handle boolean vs object result
-  const success = typeof result === 'boolean' ? result : result?.success
+  // Handle result
+  const success = result
 
   if (success) {
     toast.showToast('success', isEditMode.value ? 'Signalement mis à jour' : 'Signalement envoyé', reportIncidentStore.message || 'Action effectuée avec succès.')

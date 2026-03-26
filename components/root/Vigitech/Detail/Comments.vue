@@ -36,8 +36,13 @@
         <div class="relative group/input">
           <div v-if="authStore.user" class="space-y-4">
             <div class="relative">
-              <textarea v-model="newComment" rows="3" placeholder="Partagez votre analyse ou posez une question..."
-                class="w-full p-6 rounded-[2rem] bg-WtB/50 border border-ash/50 text-sm font-bold outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary/40 focus:bg-WtB transition-all placeholder-hsa/40 resize-none shadow-inner" />
+              <textarea v-model="newComment" rows="3" maxlength="1000"
+                placeholder="Partagez votre analyse ou posez une question..."
+                class="w-full p-6 pb-10 rounded-[2rem] bg-WtB/50 border border-ash/50 text-sm font-bold outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary/40 focus:bg-WtB transition-all placeholder-hsa/40 resize-none shadow-inner" />
+              <div class="absolute bottom-4 right-6 text-[10px] font-black tracking-widest"
+                :class="newComment.length > 900 ? (newComment.length >= 1000 ? 'text-danger' : 'text-warning') : 'text-hsa/50'">
+                {{ newComment.length }} / 1000
+              </div>
               <!-- Status indicators or secondary actions could go here -->
             </div>
             <div class="flex justify-end items-center gap-4">
@@ -119,8 +124,14 @@
 
               <!-- Inline edit mode -->
               <div v-if="editingCommentId === comment.id" class="mt-4 space-y-3">
-                <textarea v-model="editCommentContent" rows="3"
-                  class="w-full p-4 rounded-2xl bg-WtB border border-ash/50 text-sm font-bold outline-none focus:ring-2 focus:ring-primary transition-all resize-none shadow-inner" />
+                <div class="relative">
+                  <textarea v-model="editCommentContent" rows="3" maxlength="1000"
+                    class="w-full p-4 pb-8 rounded-2xl bg-WtB border border-ash/50 text-sm font-bold outline-none focus:ring-2 focus:ring-primary transition-all resize-none shadow-inner" />
+                  <div class="absolute bottom-2 right-4 text-[9px] font-black tracking-widest"
+                    :class="editCommentContent.length > 900 ? (editCommentContent.length >= 1000 ? 'text-danger' : 'text-warning') : 'text-hsa/50'">
+                    {{ editCommentContent.length }} / 1000
+                  </div>
+                </div>
                 <div class="flex gap-2 justify-end">
                   <UiBaseButton variant="ghost" size="sm" @click="cancelEditComment" class="!rounded-xl !text-[10px]">
                     Annuler
@@ -132,11 +143,26 @@
                 </div>
               </div>
               <div v-else class="relative">
-                <p class="text-sm text-BtW/90 leading-relaxed font-bold break-words">
-                  {{ comment.content }}
+                <p class="text-sm text-BtW/90 leading-relaxed break-words">
+                  {{ (comment.content.length > 200 && !expandedComments[comment.id]) ?
+                    comment.content.slice(0, 200) + '...' : comment.content }}
                 </p>
+                <button v-if="comment.content.length > 200" @click="toggleExpand(comment.id)"
+                  class="text-[10px] font-black uppercase tracking-widest text-primary hover:text-primary/80 mt-1 flex items-center gap-1 transition-colors">
+                  <component :is="expandedComments[comment.id] ? IconChevronUp : IconChevronDown" class="w-3 h-3" />
+                  {{ expandedComments[comment.id] ? 'Réduire' : 'Lire plus' }}
+                </button>
               </div>
             </div>
+          </div>
+
+          <!-- Load More Button -->
+          <div v-if="commentsPagination.hasMore" class="pt-6 flex justify-center">
+            <UiBaseButton variant="ghost" size="sm" @click="handleLoadMore" :loading="loadingMore"
+              class="!rounded-2xl !px-6 !py-2.5 text-[10px] font-black uppercase tracking-widest bg-ash/5 hover:bg-ash/10 text-hsa hover:text-primary transition-all">
+              <IconChevronDown class="w-4 h-4 mr-2" />
+              Voir plus de commentaires
+            </UiBaseButton>
           </div>
         </div>
 
@@ -165,6 +191,7 @@ import {
 } from '@tabler/icons-vue'
 import { useAuthStore } from '~/stores/back/user/auth'
 import { useUserVigitechStore } from '~/stores/back/user/vigitech'
+import { usePublicVigitechStore } from '~/stores/back/public/vigitech'
 import { useToastStore } from '~/stores/front/toast'
 import { useVigiPrefStore } from '~/stores/front/vigiPref'
 import { getUserAvatarUrl } from '~/utils/user'
@@ -180,6 +207,7 @@ const props = defineProps<{
 
 const authStore = useAuthStore()
 const userVigitechStore = useUserVigitechStore()
+const publicVigitechStore = usePublicVigitechStore()
 const toast = useToastStore()
 const prefStore = useVigiPrefStore()
 const showComments = ref(prefStore.display.showComments)
@@ -193,6 +221,14 @@ const submittingComment = ref(false)
 const editingCommentId = ref<string | null>(null)
 const editCommentContent = ref('')
 const savingComment = ref(false)
+const loadingMore = ref(false)
+const expandedComments = ref<Record<string, boolean>>({})
+
+const toggleExpand = (id: string) => {
+  expandedComments.value[id] = !expandedComments.value[id]
+}
+
+const commentsPagination = computed(() => publicVigitechStore.commentsPagination)
 
 const showDeleteConfirm = ref(false)
 const commentIdToDelete = ref<string | null>(null)
@@ -279,6 +315,12 @@ const handleAddComment = async () => {
     toast.showToast('error', 'Erreur', result.message || 'Impossible de publier le commentaire.')
   }
   submittingComment.value = false
+}
+
+const handleLoadMore = async () => {
+  loadingMore.value = true
+  await publicVigitechStore.fetchComments(props.incidentId, true)
+  loadingMore.value = false
 }
 </script>
 

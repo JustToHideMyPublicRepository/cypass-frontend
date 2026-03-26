@@ -7,9 +7,11 @@
       <div class="flex gap-3 sm:gap-4 flex-1 min-w-0">
         <!-- Date Block -->
         <div class="text-hsa shrink-0">
-          <div class="text-center w-12 pt-1">
-            <div class="text-[10px] font-black uppercase tracking-tighter">{{ formatMonth(incident.created_at) }}</div>
-            <div class="text-2xl font-black leading-none text-BtW">{{ getDay(incident.created_at) }}</div>
+          <div class="text-center w-12 pt-1" 
+               :class="{ 'opacity-60 transition-opacity cursor-help': isModified }"
+               :title="(isModified && incident.updated_at) ? `Modifié ${formatTimeDiff(incident.created_at, incident.updated_at)} après la publication` : undefined">
+            <div class="text-[10px] font-black uppercase tracking-tighter">{{ incident.created_at ? formatMonth(incident.created_at) : '-' }}</div>
+            <div class="text-2xl font-black leading-none text-BtW">{{ incident.created_at ? getDay(incident.created_at) : '-' }}</div>
           </div>
         </div>
 
@@ -56,7 +58,7 @@
               <IconMapPin class="w-3 h-3" /> <span class="truncate">{{ decodeHtmlEntities(incident.location) }}</span>
             </span>
             <span class="flex items-center gap-1">
-              <IconClock class="w-3 h-3" /> {{ formatRelativeTime(incident.created_at) }}
+              <IconClock class="w-3 h-3" /> {{ incident.created_at ? formatRelativeTime(incident.created_at) : '-' }}
             </span>
             <span v-if="incident.views_count != null" class="flex items-center gap-1">
               <IconEye class="w-3 h-3" /> {{ incident.views_count }}
@@ -126,7 +128,7 @@
 import { IconMapPin, IconClock, IconAlertCircle, IconLock, IconShare, IconChevronRight, IconEye, IconFlag, IconEdit, IconMessage, IconTrash, IconPaperclip } from '@tabler/icons-vue'
 import type { Incident } from '~/types/vigitech'
 import { decodeHtmlEntities } from '~/utils/format'
-import { formatRelativeTime } from '~/utils/date'
+import { formatRelativeTime, isSignificantDifference, formatTimeDiff } from '~/utils/date'
 import { mapIncidentType, mapThreatLevel, mapIncidentStatus } from '~/utils/vigitech'
 import { getUserAvatarUrl } from '~/utils/user'
 import { useToastStore } from '~/stores/front/toast'
@@ -146,6 +148,11 @@ const { showMenu } = useContextMenu()
 
 const isOwnIncident = computed(() => {
   return !!(authStore.user && props.incident.user_id === authStore.user.id)
+})
+
+const isModified = computed(() => {
+  if (!props.incident?.created_at || !props.incident?.updated_at) return false
+  return isSignificantDifference(props.incident.created_at, props.incident.updated_at)
 })
 
 const canEditIncident = computed(() => {
@@ -198,7 +205,7 @@ const handleContextMenu = (e: MouseEvent) => {
     title: `Incident #${props.incident.id.split('-')[0]}`,
     infos: [
       { label: 'Menace', value: mapThreatLevel(props.incident.threat_level) },
-      { label: 'Publié le', value: new Date(props.incident.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }) },
+      { label: 'Publié le', value: props.incident.created_at ? new Date(props.incident.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }) : '-' },
       { label: 'Vues', value: props.incident.views_count?.toString() || '0' }
     ]
   }

@@ -14,7 +14,7 @@ export default defineEventHandler(async (event: H3Event) => {
   }
 
   try {
-    const response = await $fetch<{ success: boolean; message: string; data: any }>(`${baseApi}/profile/sessions.php`, {
+    const response = await $fetch<{ success: boolean; message: string; data: any }>(`${baseApi}/profile/sessions`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',

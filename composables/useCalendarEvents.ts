@@ -63,16 +63,19 @@ export const useCalendarEvents = () => {
 
       if (date && date.length === 10) {
         // Daily view: just fetch that day
-        requests.push(profilStore.getUserLogs({ limit: 1000, type: 'all', date: date }))
+        requests.push(profilStore.getUserLogsPeriod({ limit: 1000, type: 'all', start_date: date, end_date: date }))
       } else {
-        // Month view: Fetch the last 30 days individually and merge (since backend is day-only)
-        const daysToFetch: string[] = []
-        const today = new Date()
-        for (let i = 0; i < 30; i++) {
-          const d = new Date(today.getTime() - i * 86400000)
-          daysToFetch.push(format(d, 'yyyy-MM-dd'))
+        // Month view
+        const logReqParams: any = { limit: 1000, type: 'all' }
+        if (date && date.length === 7) {
+          const d = new Date(date + '-01')
+          logReqParams.start_date = format(startOfMonth(d), 'yyyy-MM-dd')
+          logReqParams.end_date = format(endOfMonth(d), 'yyyy-MM-dd')
+        } else {
+          logReqParams.start_date = format(startOfMonth(new Date()), 'yyyy-MM-dd')
+          logReqParams.end_date = format(endOfMonth(new Date()), 'yyyy-MM-dd')
         }
-        requests.push(profilStore.getUserLogsRange(daysToFetch, 1000))
+        requests.push(profilStore.getUserLogsPeriod(logReqParams))
       }
 
       await Promise.all(requests)
@@ -142,11 +145,11 @@ export const useCalendarEvents = () => {
       profilStore.logs.forEach(log => {
         // Skip some very noisy logs if needed, or keep them all.
         // We'll keep them all for the calendar, but maybe filter out minor ones later.
-        let ts = log.timestamp
+        let ts = log.created_at
         if (ts && !ts.includes('T')) ts = ts.replace(' ', 'T')
 
-        const logInfo = getLogActionInfo(log.action)
-        const label = (log.action_label && log.action_label !== log.action) ? log.action_label : logInfo.label
+        const logInfo = getLogActionInfo(log.action_type)
+        const label = (log.action_label && log.action_label !== log.action_type) ? log.action_label : logInfo.label
 
         events.push({
           id: `log-${log.id}`,
@@ -156,7 +159,7 @@ export const useCalendarEvents = () => {
           type: 'log',
           color: getCalendarFilterConfig('log')?.classes.text || logInfo.color,
           bgColor: getCalendarFilterConfig('log')?.classes.bgLight || 'bg-hsa/10',
-          url: `/dashboard/logs?date=${format(new Date(ts), 'yyyy-MM-dd')}`
+          url: `/dashboard/activities/${log.id}`
         })
       })
     }

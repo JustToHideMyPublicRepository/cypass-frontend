@@ -1,7 +1,6 @@
 <template>
   <div class="space-y-6">
-    <MeVigitechHomeHeader title="VigiTech" subtitle="Vos signalements et veille cybernétique"
-      @create="showCreateModal = true" />
+    <MeVigitechHomeHeader @create="showCreateModal = true" />
 
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
       <div class="lg:col-span-3 space-y-6">
@@ -122,17 +121,26 @@ const hasActiveFilters = computed(() => {
     filters.value.level !== '' || filters.value.date_start !== '' || filters.value.date_end !== ''
 })
 
-const resetFilters = () => {
-  filters.value = { search: '', type: '', level: '', date_start: '', date_end: '' }
+const fetchData = () => {
+  const params: any = {}
+  if (filters.value.type) params.type = filters.value.type
+  if (filters.value.level) params.level = filters.value.level
+  store.fetchUserIncidents(params)
 }
+
+// Watch filters that are handled by backend
+watch([() => filters.value.type, () => filters.value.level], fetchData)
 
 const onIncidentCreated = () => {
-  // Logic after successful creation is handled in the store (fetchUserIncidents)
+  fetchData()
 }
 
-onMounted(() => {
-  store.fetchUserIncidents()
-})
+const resetFilters = () => {
+  filters.value = { search: '', type: '', level: '', date_start: '', date_end: '' }
+  fetchData()
+}
+
+onMounted(fetchData)
 
 useHead({
   title: 'Gestion des incidents',

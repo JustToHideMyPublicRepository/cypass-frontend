@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
       'accept': 'application/json'
     }
 
-    const response: any = await $fetch(`${baseApi}/documents/verify.php`, {
+    const response: any = await $fetch(`${baseApi}/documents/verify`, {
       method: 'GET',
       headers,
       query: {

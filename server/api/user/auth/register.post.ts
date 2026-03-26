@@ -6,7 +6,7 @@ export default defineEventHandler(async (event: H3Event) => {
   const baseApi = config.cypassBaseAPI
 
   try {
-    const response = await $fetch<{ success: boolean; message: string; data: any }>(`${baseApi}/auth/register.php`, {
+    const response = await $fetch<{ success: boolean; message: string; data: any }>(`${baseApi}/auth/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',

@@ -14,11 +14,10 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const response = await $fetch(`${baseApi}/vigitech/get_one_user.php`, {
+    const response = await $fetch(`${baseApi}/vigitech/get_one_user/${id}`, {
       headers: {
         'Authorization': `Bearer ${token}`
       },
-      query: { id }
     })
     return response
   } catch (err: any) {

@@ -7,7 +7,7 @@ export default defineEventHandler(async (event: H3Event) => {
 
   if (token) {
     try {
-      await $fetch(`${baseApi}/profile/logout.php`, {
+      await $fetch(`${baseApi}/profile/logout`, {
         method: 'POST' as any,
         headers: {
           'Authorization': `Bearer ${token}`

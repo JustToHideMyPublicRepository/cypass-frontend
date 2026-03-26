@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
         const backendFormData = new FormData()
         backendFormData.append('action', 'delete')
 
-        const response: any = await $fetch(`${baseApi}/profile/upload_avatar.php`, {
+        const response: any = await $fetch(`${baseApi}/profile/upload_avatar`, {
           method: 'POST' as any,
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -44,7 +44,7 @@ export default defineEventHandler(async (event) => {
       }
     }
 
-    const response: any = await $fetch(`${baseApi}/profile/upload_avatar.php`, {
+    const response: any = await $fetch(`${baseApi}/profile/upload_avatar`, {
       method: 'POST' as any,
       headers: {
         'Authorization': `Bearer ${token}`,

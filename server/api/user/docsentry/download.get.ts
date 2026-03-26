@@ -1,14 +1,17 @@
-import { defineEventHandler, getQuery, createError } from 'h3'
+import { defineEventHandler, getQuery, getCookie, createError } from 'h3'
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig()
   const baseApi = config.cypassBaseAPI
+  const token = getCookie(event, 'cypass_token')
   const query = getQuery(event)
 
   try {
-    const response = await $fetch.raw(`${baseApi}/documents/download.php`, {
+    const response = await $fetch.raw(`${baseApi}/documents/download/${query.id}`, {
       method: 'GET',
-      query: { id: query.id }
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
     })
 
     const contentType = response.headers.get('content-type')
@@ -21,7 +24,7 @@ export default defineEventHandler(async (event) => {
   } catch (error: any) {
     throw createError({
       statusCode: error.response?.status || 500,
-      message: error.data?.message || 'Erreur lors du téléchargement'
+      message: error.data?.message || error.message || 'Erreur lors du téléchargement'
     })
   }
 })

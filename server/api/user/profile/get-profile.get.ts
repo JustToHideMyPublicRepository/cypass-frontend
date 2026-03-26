@@ -13,7 +13,7 @@ export default defineEventHandler(async (event: H3Event) => {
   }
 
   try {
-    const response = await $fetch<{ success: boolean; user: any; statistics: any }>(`${baseApi}/profile/get_profile.php`, {
+    const response = await $fetch<{ success: boolean; user: any; statistics: any }>(`${baseApi}/profile/get_profile`, {
       method: 'GET',
       headers: {
         'Accept': 'application/json',

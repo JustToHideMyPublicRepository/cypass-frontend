@@ -100,7 +100,7 @@ const team = [
   },
   {
     name: "Steve Aster AFOVO",
-    role: "Responsable Financier et Administratif (CFO)",
+    role: "Responsable Recherche & Développement (R&D)",
     image: "https://cdn.jsdelivr.net/gh/progestionsoft/Files/_General/Images/Team/SteveAster.png",
     delay: 300,
     socials: [

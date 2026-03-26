@@ -10,28 +10,6 @@ export const usePublicDocsentryStore = defineStore('publicDocsentry', {
   }),
 
   actions: {
-    // Télécharger certificat
-    async downloadCertificate(id: string, filename: string) {
-      try {
-        const response = await $fetch('/api/public/docsentry/download', {
-          query: { id, type: 'certificate' },
-          responseType: 'blob'
-        })
-        const url = window.URL.createObjectURL(response as Blob)
-        const link = document.createElement('a')
-        link.href = url
-        link.setAttribute('download', `Certificat_${filename}`)
-        document.body.appendChild(link)
-        link.click()
-        document.body.removeChild(link)
-        window.URL.revokeObjectURL(url)
-        return true
-      } catch (err) {
-        console.error('Failed to download certificate', err)
-        return false
-      }
-    },
-
     // Récupérer la clé publique
     async fetchPublicKey() {
       try {

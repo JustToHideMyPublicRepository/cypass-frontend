@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
   if (commentId) params.append('comment_id', String(commentId))
 
   try {
-    const res = await fetch(`${baseApi}/vigitech/delete_comment.php`, {
+    const res = await fetch(`${baseApi}/vigitech/delete_comment`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${token}`,

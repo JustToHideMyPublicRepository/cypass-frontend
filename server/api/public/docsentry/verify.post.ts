@@ -25,7 +25,7 @@ export default defineEventHandler(async (event) => {
       }
     }
 
-    const response: any = await $fetch(`${baseApi}/documents/verify.php`, {
+    const response: any = await $fetch(`${baseApi}/documents/verify`, {
       method: 'POST',
       headers: {
         'accept': 'application/json'

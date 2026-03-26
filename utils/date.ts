@@ -1,3 +1,11 @@
+export const formatTime = (date: string | Date): string => {
+  if (!date) return ''
+  return new Date(date).toLocaleTimeString('fr-FR', {
+    hour: '2-digit',
+    minute: '2-digit'
+  })
+}
+
 export const formatDate = (date: string | Date): string => {
   if (!date) return ''
   return new Date(date).toLocaleDateString('fr-FR', {
@@ -7,12 +15,17 @@ export const formatDate = (date: string | Date): string => {
   })
 }
 
-export const formatTime = (date: string | Date): string => {
+export const formatShortDate = (date: string | Date, includeTime = false): string => {
   if (!date) return ''
-  return new Date(date).toLocaleTimeString('fr-FR', {
-    hour: '2-digit',
-    minute: '2-digit'
-  })
+  const d = new Date(date)
+  try {
+    const datePart = d.toLocaleDateString('fr-FR')
+    if (!includeTime) return datePart
+    const timePart = d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
+    return `${datePart} ${timePart}`
+  } catch (e) {
+    return date.toString()
+  }
 }
 
 export const formatDateInput = (date: string | Date): string => {
@@ -49,6 +62,32 @@ export const formatRelativeTime = (date: string | Date): string => {
   return `il y a ${diffInYears} an${diffInYears > 1 ? 's' : ''}`
 }
 
+export const isSignificantDifference = (start: string | Date, end: string | Date, thresholdSeconds = 30): boolean => {
+  if (!start || !end) return false
+  const s = new Date(start).getTime()
+  const e = new Date(end).getTime()
+  return (e - s) > (thresholdSeconds * 1000)
+}
+
+export const formatTimeDiff = (start: string | Date, end: string | Date): string => {
+  if (!start || !end) return ''
+  const s = new Date(start).getTime()
+  const e = new Date(end).getTime()
+  const diffInSeconds = Math.floor((e - s) / 1000)
+
+  if (diffInSeconds < 0) return ''
+  if (diffInSeconds < 60) return `${diffInSeconds} s`
+
+  const diffInMinutes = Math.floor(diffInSeconds / 60)
+  if (diffInMinutes < 60) return `${diffInMinutes} min`
+
+  const diffInHours = Math.floor(diffInMinutes / 60)
+  if (diffInHours < 24) return `${diffInHours} h`
+
+  const diffInDays = Math.floor(diffInHours / 24)
+  return `${diffInDays} j`
+}
+
 /**
  * Génère une date aléatoire dans le passé entre minDays et maxDays.
  */
@@ -63,3 +102,4 @@ export const getRandomPastDate = (minDays = 5, maxDays = 21): Date => {
 
   return date
 }
+

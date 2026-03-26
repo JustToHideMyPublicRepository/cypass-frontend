@@ -8,12 +8,35 @@
         </div>
 
         <div class="flex flex-wrap items-center gap-4">
-          <div class="space-y-1">
+          <div class="flex items-center gap-2 mr-2">
+            <input type="checkbox" id="usePeriodToggle" :checked="modelValue.usePeriod"
+              @change="updateFilter('usePeriod', ($event.target as HTMLInputElement).checked)"
+              class="rounded border-ash text-primary focus:ring-primary" />
+            <label for="usePeriodToggle"
+              class="text-[10px] font-black text-hsa uppercase tracking-widest cursor-pointer">Période</label>
+          </div>
+
+          <div v-if="!modelValue.usePeriod" class="space-y-1">
             <label class="text-[10px] font-black text-hsa/40 uppercase tracking-widest ml-1">Date</label>
-            <input type="date" :value="modelValue.date"
+            <input type="date" :value="modelValue.date" :max="today" @change="handleDateChange"
               @input="updateFilter('date', ($event.target as HTMLInputElement).value)"
               class="block w-full px-3 py-1.5 rounded-lg bg-WtB border border-ash text-xs font-bold text-BtW outline-none focus:ring-1 focus:ring-primary transition-all" />
           </div>
+
+          <template v-else>
+            <div class="space-y-1">
+              <label class="text-[10px] font-black text-hsa/40 uppercase tracking-widest ml-1">Du</label>
+              <input type="date" :value="modelValue.start_date" :max="today"
+                @input="updateFilter('start_date', ($event.target as HTMLInputElement).value)"
+                class="block w-full px-3 py-1.5 rounded-lg bg-WtB border border-ash text-xs font-bold text-BtW outline-none focus:ring-1 focus:ring-primary transition-all" />
+            </div>
+            <div class="space-y-1">
+              <label class="text-[10px] font-black text-hsa/40 uppercase tracking-widest ml-1">Au</label>
+              <input type="date" :value="modelValue.end_date" :max="today"
+                @input="updateFilter('end_date', ($event.target as HTMLInputElement).value)"
+                class="block w-full px-3 py-1.5 rounded-lg bg-WtB border border-ash text-xs font-bold text-BtW outline-none focus:ring-1 focus:ring-primary transition-all" />
+            </div>
+          </template>
 
           <div class="space-y-1">
             <label class="text-[10px] font-black text-hsa/40 uppercase tracking-widest ml-1">Catégorie</label>
@@ -50,7 +73,9 @@
         <p class="text-[10px] font-black text-primary uppercase tracking-widest">
           Affichage : {{ activeFilters.type === 'all' ? 'Toutes' : (getLogTypeInfo(activeFilters.type)?.label ||
             activeFilters.type) }} |
-          {{ formatDate(activeFilters.date) }} |
+          {{ activeFilters.start_date ? `${formatDate(activeFilters.start_date)} -
+          ${formatDate(activeFilters.end_date)}` :
+            formatDate(activeFilters.date) }} |
           Lim : {{ activeFilters.limit }}
         </p>
       </div>
@@ -64,18 +89,23 @@ import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { getLogTypeInfo } from '~/utils/logs'
 
+const today = format(new Date(), 'yyyy-MM-dd')
+
 const props = defineProps<{
   modelValue: {
     date: string
     type: string
     search: string
+    usePeriod?: boolean
+    start_date?: string
+    end_date?: string
   }
   activeFilters?: any
 }>()
 
 const emit = defineEmits(['update:modelValue', 'change'])
 
-const updateFilter = (key: string, value: string) => {
+const updateFilter = (key: string, value: string | boolean) => {
   emit('update:modelValue', { ...props.modelValue, [key]: value })
   emit('change')
 }
@@ -83,5 +113,16 @@ const updateFilter = (key: string, value: string) => {
 const formatDate = (dateString: string) => {
   if (!dateString) return ''
   return format(new Date(dateString), 'd MMM yyyy', { locale: fr })
+}
+
+const handleDateChange = (e: Event) => {
+  const val = (e.target as HTMLInputElement).value
+  if (val > today) {
+    updateFilter('date', today)
+      // Force input refresh
+      ; (e.target as HTMLInputElement).value = today
+  } else {
+    updateFilter('date', val)
+  }
 }
 </script>

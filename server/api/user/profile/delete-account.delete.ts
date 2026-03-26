@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
     if (body.confirm) params.append('confirm', 'true')
     if (body.current_password) params.append('current_password', body.current_password)
 
-    const response: any = await $fetch(`${baseApi}/profile/delete_account.php`, {
+    const response: any = await $fetch(`${baseApi}/profile/delete_account`, {
       method: 'DELETE' as any,
       headers: {
         'Authorization': `Bearer ${token}`,

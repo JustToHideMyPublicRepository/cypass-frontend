@@ -112,7 +112,7 @@ const dropdownLinks = [
   },
   {
     label: 'Journal d\'activité',
-    path: '/dashboard/logs',
+    path: '/dashboard/activities',
     icon: IconActivity
   },
   {

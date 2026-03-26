@@ -146,7 +146,7 @@ const getAuthLinks = (forMobile: boolean) => {
   const links = [
     { label: 'Tableau de bord', path: '/dashboard', type: 'link', mobile: true },
     { label: 'Mon profil', path: '/dashboard/profile', type: 'link' },
-    { label: "Journal d'activité", path: '/dashboard/logs', type: 'link' },
+    { label: "Journal d'activité", path: '/dashboard/activities', type: 'link' },
     { label: 'Sessions actives', path: '/dashboard/sessions', type: 'link' },
     { label: 'Centre d\'alertes', path: '/dashboard/reports', type: 'link' },
     {

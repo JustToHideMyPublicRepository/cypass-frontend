@@ -5,10 +5,11 @@ export default defineEventHandler(async (event) => {
   const baseApi = config.cypassBaseAPI
   const token = getCookie(event, 'cypass_token')
   const body = await readBody(event)
+  const id = body.report_id
 
   try {
-    const response: any = await $fetch(`${baseApi}/vigitech/update_report.php`, {
-      method: 'PUT',
+    const response: any = await $fetch(`${baseApi}/vigitech/delete_report/${id}`, {
+      method: 'DELETE',
       body,
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -19,7 +20,7 @@ export default defineEventHandler(async (event) => {
   } catch (error: any) {
     return {
       success: false,
-      message: error.data?.message || 'Erreur lors de la mise à jour du signalement'
+      message: error.data?.message || 'Erreur lors de la suppression du signalement'
     }
   }
 })

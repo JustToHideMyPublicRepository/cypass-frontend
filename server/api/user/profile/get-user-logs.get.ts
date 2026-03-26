@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
   const token = getCookie(event, 'cypass_token')
 
   try {
-    const response: any = await $fetch(`${baseApi}/profile/get_user_logs.php`, {
+    const response: any = await $fetch(`${baseApi}/profile/get_user_logs`, {
       method: 'GET' as 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,

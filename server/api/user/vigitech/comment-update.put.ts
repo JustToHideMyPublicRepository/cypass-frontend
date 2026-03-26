@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
   const body = await readBody(event)
 
   try {
-    const response = await $fetch(`${baseApi}/vigitech/update_comment.php`, {
+    const response = await $fetch(`${baseApi}/vigitech/update_comment`, {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${token}`,

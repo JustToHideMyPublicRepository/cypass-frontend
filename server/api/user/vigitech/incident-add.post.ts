@@ -29,7 +29,7 @@ export default defineEventHandler(async (event) => {
       }
     }
 
-    const response = await $fetch(`${baseApi}/vigitech/create_incident.php`, {
+    const response = await $fetch(`${baseApi}/vigitech/create_incident`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`

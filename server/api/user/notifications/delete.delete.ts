@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const response: any = await $fetch(`${baseApi}/notifications/delete.php`, {
+    const response: any = await $fetch(`${baseApi}/notifications/delete`, {
       method: 'DELETE',
       query: { id: query.id },
       headers: {

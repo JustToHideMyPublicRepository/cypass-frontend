@@ -127,7 +127,7 @@ const calculateVigiTrend = async () => {
     const previousWeekStart = startOfWeek(subWeeks(now, 1), { weekStartsOn: 1 })
     const previousWeekEnd = endOfWeek(subWeeks(now, 1), { weekStartsOn: 1 })
 
-    const response = await $fetch<any>('/api/vigitech/all', {
+    const response = await $fetch<any>('/api/user/vigitech/incident-list', {
       query: { limit: 100, offset: 0 }
     })
 
@@ -155,8 +155,8 @@ const calculateVigiTrend = async () => {
 
 const updateSecurityScore = () => {
   const logs = profilStore.logs || []
-  const failedLogins = logs.filter(l => l.action.toLowerCase().includes('login') && l.status !== 'success').length
-  const otherFailures = logs.filter(l => !l.action.toLowerCase().includes('login') && l.status !== 'success').length
+  const failedLogins = logs.filter(l => l.action_type.toLowerCase().includes('login') && l.status !== 'success').length
+  const otherFailures = logs.filter(l => !l.action_type.toLowerCase().includes('login') && l.status !== 'success').length
 
   securityScore.value = calculateSecurityScore({
     documentsCount: userDocsentryStore.pagination.total,

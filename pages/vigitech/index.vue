@@ -164,8 +164,15 @@ const fetchData = () => {
   }
   if (filters.value.type) params.type = filters.value.type
   if (filters.value.level) params.level = filters.value.level
+  
   store.fetchPublicIncidents(params)
 }
+
+// Watch filters that are handled by backend
+watch([() => filters.value.type, () => filters.value.level], () => {
+  store.publicPagination.offset = 0 // Reset pagination on filter change
+  fetchData()
+})
 
 const fetchAllData = () => {
   fetchData()

@@ -10,7 +10,7 @@
     <div class="flex items-center gap-3">
       <div class="relative group">
         <select :value="modelValue" @change="handleTypeChange"
-          class="appearance-none bg-ash/10 hover:bg-ash/20 border border-ashAct text-BtW text-xs font-black uppercase tracking-widest py-2 px-8 rounded-xl cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all">
+          class="appearance-none bg-ash hover:bg-ashAct border border-ashAct text-BtW text-xs font-black uppercase tracking-widest py-2 px-8 rounded-xl cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all">
           <option value="user">Utilisateurs</option>
           <option value="incident">Incidents</option>
         </select>

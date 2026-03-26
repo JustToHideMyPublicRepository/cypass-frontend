@@ -1,13 +1,14 @@
 <template>
   <div class="space-y-6">
-    <MeActivitiesHeader :user-email="logUser?.email" :loading="loading" @refresh="refreshLogs" @reset="resetFilters" />
+    <MeActivitiesHomeHeader :user-email="logUser?.email" :loading="loading" @refresh="refreshLogs"
+      @reset="resetFilters" />
 
-    <MeActivitiesStats :stats="logStatistics" />
+    <MeActivitiesHomeStats :stats="logStatistics" :filters="filters" />
 
-    <MeActivitiesFilters v-model="filters" :active-filters="logFilters" />
+    <MeActivitiesHomeFilters v-model="filters" :active-filters="logFilters" />
 
-    <MeActivitiesList :logs="paginatedLogs" :grouped-logs="groupedLogs" :loading="loading" :current-page="currentPage"
-      :total-pages="totalPages" @next-page="nextPage" @prev-page="prevPage" />
+    <MeActivitiesHomeList :logs="paginatedLogs" :grouped-logs="groupedLogs" :loading="loading"
+      :current-page="currentPage" :total-pages="totalPages" @next-page="nextPage" @prev-page="prevPage" />
   </div>
 </template>
 
@@ -16,7 +17,7 @@ import { ref, reactive, computed, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useProfilStore } from '~/stores/back/user/profil'
-import { format, isValid, parseISO } from 'date-fns'
+import { format, isValid, parseISO, startOfMonth } from 'date-fns'
 import { getLogActionInfo } from '~/utils/logs'
 
 const profilStore = useProfilStore()
@@ -25,23 +26,54 @@ const route = useRoute()
 const { logs, logStatistics, logUser, logFilters } = storeToRefs(profilStore)
 const loading = ref(false)
 
-const filters = ref({
-  date: (route.query.date as string) || format(new Date(), 'yyyy-MM-dd'),
-  type: 'all',
-  limit: 50,
-  search: ''
-})
+const getInitialFilters = () => {
+  const defaultFilters = {
+    date: (route.query.date as string) || format(new Date(), 'yyyy-MM-dd'),
+    type: 'all',
+    limit: 50,
+    search: '',
+    usePeriod: false,
+    start_date: format(startOfMonth(new Date()), 'yyyy-MM-dd'),
+    end_date: format(new Date(), 'yyyy-MM-dd')
+  }
+
+  if (import.meta.client) {
+    const saved = sessionStorage.getItem('cps_logs_filters')
+    if (saved) {
+      try {
+        const { data, timestamp } = JSON.parse(saved)
+        if (Date.now() - timestamp < 300000) { // 5 minutes
+          return { ...defaultFilters, ...data }
+        } else {
+          sessionStorage.removeItem('cps_logs_filters')
+        }
+      } catch (e) { }
+    }
+  }
+  return defaultFilters
+}
+
+const filters = ref(getInitialFilters())
 
 const currentPage = ref(1)
 const itemsPerPage = computed(() => filters.value.limit)
 
 const fetchLogs = async () => {
   loading.value = true
-  await profilStore.getUserLogs({
-    limit: 500,
-    type: filters.value.type,
-    date: filters.value.date || undefined
-  })
+  if (filters.value.usePeriod) {
+    await profilStore.getUserLogsPeriod({
+      limit: 500,
+      type: filters.value.type,
+      start_date: filters.value.start_date,
+      end_date: filters.value.end_date
+    })
+  } else {
+    await profilStore.getUserLogs({
+      limit: 500,
+      type: filters.value.type,
+      date: filters.value.date || undefined
+    })
+  }
   currentPage.value = 1
   loading.value = false
 }
@@ -52,9 +84,9 @@ const filteredLogs = computed(() => {
 
   const q = filters.value.search.toLowerCase()
   return logs.value.filter(log => {
-    const action = (log.action || '').toLowerCase()
+    const action = (log.action_type || '').toLowerCase()
     const label = (log.action_label || '').toLowerCase()
-    const mappedLabel = getLogActionInfo(log.action).label.toLowerCase()
+    const mappedLabel = getLogActionInfo(log.action_type).label.toLowerCase()
 
     let details = ''
     try {
@@ -85,8 +117,8 @@ const groupedLogs = computed(() => {
 
   paginatedLogs.value.forEach(log => {
     try {
-      if (!log.timestamp) return
-      const normalizedTs = log.timestamp.includes('T') ? log.timestamp : log.timestamp.replace(' ', 'T')
+      if (!log.created_at) return
+      const normalizedTs = log.created_at.includes('T') ? log.created_at : log.created_at.replace(' ', 'T')
       const dateObj = new Date(normalizedTs)
       if (isNaN(dateObj.getTime())) return
 
@@ -108,13 +140,21 @@ const groupedLogs = computed(() => {
 })
 
 // Watchers for automatic filtering
-watch([() => filters.value.date, () => filters.value.type], () => {
+watch([
+  () => filters.value.date,
+  () => filters.value.type,
+  () => filters.value.usePeriod,
+  () => filters.value.start_date,
+  () => filters.value.end_date
+], () => {
   fetchLogs()
 })
 
-watch(() => filters.value.search, () => {
-  currentPage.value = 1
-})
+watch(() => filters.value, (newVal) => {
+  if (import.meta.client) {
+    sessionStorage.setItem('cps_logs_filters', JSON.stringify({ data: newVal, timestamp: Date.now() }))
+  }
+}, { deep: true })
 
 const refreshLogs = () => {
   fetchLogs()
@@ -125,6 +165,9 @@ const resetFilters = () => {
   filters.value.type = 'all'
   filters.value.limit = 50
   filters.value.search = ''
+  filters.value.usePeriod = false
+  filters.value.start_date = format(startOfMonth(new Date()), 'yyyy-MM-dd')
+  filters.value.end_date = format(new Date(), 'yyyy-MM-dd')
   fetchLogs()
 }
 

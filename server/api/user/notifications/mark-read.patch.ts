@@ -7,12 +7,12 @@ export default defineEventHandler(async (event) => {
   const body = await readBody(event)
 
   try {
-    // Backend uses URLSearchParams for PATCH mark_as_read.php
+    // Backend uses URLSearchParams for PATCH
     const formData = new URLSearchParams()
     if (body.id) formData.append('id', body.id)
     if (body.all) formData.append('all', body.all)
 
-    const response: any = await $fetch(`${baseApi}/notifications/mark_as_read.php`, {
+    const response: any = await $fetch(`${baseApi}/notifications/mark_as_read`, {
       method: 'PATCH',
       headers: {
         'Authorization': `Bearer ${token}`,

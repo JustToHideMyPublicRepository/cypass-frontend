@@ -7,7 +7,7 @@
       <div class="grid lg:grid-cols-12 gap-8 lg:gap-20">
         <!-- Formulaire de contact (Gauche) -->
         <div class="lg:col-span-7 animate-fade-up" style="animation-delay: 100ms;">
-          <RootContactForm :form="form" :loading="loading" @submit="submitForm" />
+          <RootContactForm :form="form" :loading="loading" :ticket="ticketNumber" @submit="submitForm" />
         </div>
 
         <!-- Info & Carte (Droite) -->
@@ -42,6 +42,7 @@ const toast = useToastStore()
 const authStore = useAuthStore()
 const supportStore = useSupportStore()
 const loading = ref(false)
+const ticketNumber = ref<string | null>(null)
 const form = ref({
   name: '',
   email: '',
@@ -68,6 +69,7 @@ const submitForm = async () => {
   if (response.success) {
     toast.showToast('success', 'Message envoyé', response.message || 'Nous avons bien reçu votre message. Nous vous répondrons sous 24h.')
     form.value = { name: '', email: '', subject: '', message: '' }
+    ticketNumber.value = response.data?.ticket || null
   } else {
     toast.showToast('error', 'Échec de l\'envoi', response.message || 'Une erreur est survenue.')
   }

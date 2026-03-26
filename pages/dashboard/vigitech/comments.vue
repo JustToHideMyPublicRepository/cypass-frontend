@@ -14,7 +14,16 @@
           :avatarUrl="getCommentAvatar(comment)" :formattedDate="formatDate(comment.created_at)"
           :canEdit="canEdit(comment)" :isEditing="editingId === comment.id" :saving="savingId === comment.id"
           :editContent="editContent" @edit="startEdit(comment)" @cancel="cancelEdit" @save="saveEdit"
-          @delete="confirmDelete" />
+          @delete="confirmDelete" @show-detail="openDetail" />
+      </div>
+
+      <!-- Load More Button -->
+      <div v-if="commentsPagination.hasMore" class="pt-8 flex justify-center">
+        <UiBaseButton variant="ghost" size="lg" @click="handleLoadMore" :loading="loadingMore"
+          class="!rounded-[2rem] !px-10 !py-4 text-xs font-black uppercase tracking-[0.2em] bg-ash/5 hover:bg-ash/10 text-hsa hover:text-primary border border-ash/30 transition-all shadow-lg hover:shadow-primary/5">
+          <IconChevronDown class="w-4 h-4 mr-2" />
+          {{ loadingMore ? 'Chargement...' : 'Voir plus de commentaires' }}
+        </UiBaseButton>
       </div>
     </template>
 
@@ -24,28 +33,41 @@
     <UiConfirmModal :show="showDeleteConfirm" title="Supprimer le commentaire"
       message="Êtes-vous sûr de vouloir supprimer ce commentaire ?" confirm-text="Supprimer" :loading="deleting"
       variant="danger" @cancel="showDeleteConfirm = false" @confirm="handleDelete" />
+
+    <!-- Detailed Comment Modal -->
+    <ModalVigitechCommentDetail :show="showDetailModal" :comment="selectedComment" @close="closeDetail" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { useUserVigitechStore } from '~/stores/back/user/vigitech'
+import { usePublicVigitechStore } from '~/stores/back/public/vigitech'
 import { useAuthStore } from '~/stores/back/user/auth'
 import { useToastStore } from '~/stores/front/toast'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import type { Comment } from '~/types/vigitech'
 import { getUserAvatarUrl } from '~/utils/user'
+import { IconChevronDown } from '@tabler/icons-vue'
 
 const store = useUserVigitechStore()
+const publicStore = usePublicVigitechStore()
 const authStore = useAuthStore()
 const toast = useToastStore()
 
 const loading = ref(true)
+const loadingMore = ref(false)
 const userComments = computed(() => store.userComments)
 const userCommentsTotal = computed(() => store.userCommentsTotal)
+const commentsPagination = computed(() => store.userCommentsPagination)
+
 const editingId = ref<string | null>(null)
 const editContent = ref('')
 const savingId = ref<string | null>(null)
+
+// Detail Modal State
+const showDetailModal = ref(false)
+const selectedComment = ref<Comment | null>(null)
 
 const formatDate = (dateStr: string) => {
   if (!dateStr) return '-'
@@ -90,14 +112,40 @@ const saveEdit = async (val?: any) => {
   const result = await store.updateComment(editingId.value, contentToSave.trim(), comment.incident_id)
   if (result.success) {
     toast.showToast('success', 'Commentaire modifié', result.message || 'Votre commentaire a été mis à jour.')
-    // Refresh to get updated data
-    await store.fetchUserComments()
+    // Update local content without full refresh to preserve pagination
+    comment.content = contentToSave.trim()
     editingId.value = null
     editContent.value = ''
   } else {
     toast.showToast('error', 'Erreur', result.message || 'Impossible de modifier le commentaire.')
   }
   savingId.value = null
+}
+
+const handleLoadMore = async () => {
+  if (loadingMore.value) return
+  loadingMore.value = true
+  await store.fetchUserComments(true)
+  loadingMore.value = false
+}
+
+const openDetail = async (id: string) => {
+  showDetailModal.value = true
+  selectedComment.value = null // Show skeleton
+  const res = await store.fetchCommentById(id)
+  if (res.success) {
+    selectedComment.value = res.data
+  } else {
+    toast.showToast('error', 'Erreur', 'Impossible de charger les détails du commentaire.')
+    showDetailModal.value = false
+  }
+}
+
+const closeDetail = () => {
+  showDetailModal.value = false
+  setTimeout(() => {
+    selectedComment.value = null
+  }, 300)
 }
 
 const showDeleteConfirm = ref(false)

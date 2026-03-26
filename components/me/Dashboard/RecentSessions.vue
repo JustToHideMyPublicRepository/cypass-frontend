@@ -15,12 +15,10 @@
         class="flex items-center justify-between p-3 rounded-xl hover:bg-ash/50 transition-all group">
         <div class="flex items-center gap-3 min-w-0">
           <div class="p-2 bg-ash rounded-lg group-hover:bg-primary/10 transition-colors">
-            <IconDeviceLaptop v-if="session.device_type === 'desktop'"
-              class="w-4 h-4 text-hsa group-hover:text-primary" />
-            <IconDeviceMobile v-else class="w-4 h-4 text-hsa group-hover:text-primary" />
+            <component :is="getSessionIcon(session)" class="w-4 h-4 text-hsa group-hover:text-primary" />
           </div>
           <div class="min-w-0">
-            <h4 class="text-sm font-bold text-BtW truncate">{{ session.device_name || 'Appareil inconnu' }}</h4>
+            <h4 class="text-sm font-bold text-BtW truncate">{{ formatSessionLabel(session) }}</h4>
             <p class="text-[10px] text-hsa mt-0.5">
               {{ session.ip_address }} • {{ session.is_current ? 'Active' : formatRelativeTime(session.last_used_at)
               }}
@@ -34,8 +32,11 @@
 </template>
 
 <script setup lang="ts">
-import { IconDeviceLaptop, IconDeviceMobile } from '@tabler/icons-vue'
+import { markRaw } from 'vue'
 import { formatRelativeTime } from '~/utils/date'
+import { formatSessionLabel, getSessionIcon as getSessionIconRaw } from '~/utils/sessions'
+
+const getSessionIcon = (session: any) => markRaw(getSessionIconRaw(session))
 
 defineProps<{
   sessions: any[]

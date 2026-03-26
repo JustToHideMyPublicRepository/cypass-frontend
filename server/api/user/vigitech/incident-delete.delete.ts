@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
   if (incidentId) params.append('incident_id', String(incidentId))
 
   try {
-    const res = await fetch(`${baseApi}/vigitech/delete_incident.php`, {
+    const res = await fetch(`${baseApi}/vigitech/delete_incident`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${token}`,

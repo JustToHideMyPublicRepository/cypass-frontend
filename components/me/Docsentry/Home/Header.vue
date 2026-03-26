@@ -3,7 +3,7 @@
     <div class="space-y-1">
       <div class="flex items-center gap-2 mb-1">
         <div class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></div>
-        <span class="text-[10px] font-bold text-primary uppercase tracking-widest">Section Sécurisée</span>
+        <span class="text-[10px] font-bold text-primary uppercase tracking-widest">Section sécurisée</span>
       </div>
       <h1 class="text-3xl md:text-4xl font-black text-BtW tracking-tight">
         DocSentry <span class="text-hsa font-medium">/</span>

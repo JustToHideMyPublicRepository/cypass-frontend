@@ -49,7 +49,8 @@
           </tr>
 
           <!-- Data State -->
-          <tr v-else v-for="doc in documents" :key="doc.id" @contextmenu.prevent="handleContextMenu(doc, $event)" class="group hover:bg-primary/[0.02] transition-colors">
+          <tr v-else v-for="doc in documents" :key="doc.id" @contextmenu.prevent="handleContextMenu(doc, $event)"
+            class="group hover:bg-primary/[0.02] transition-colors">
             <td class="px-6 py-5">
               <div class="flex items-center gap-4">
                 <div
@@ -139,7 +140,7 @@ import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import type { Document } from '~/types/documents'
 import { useToastStore } from '~/stores/front/toast'
-import { usePublicDocsentryStore } from '~/stores/back/public/docsentry'
+import { useUserDocsentryStore } from '~/stores/back/user/docsentry'
 import { useContextMenu, type ContextMenuItem } from '~/composables/useContextMenu'
 
 const props = defineProps<{
@@ -152,7 +153,7 @@ const props = defineProps<{
 const emit = defineEmits(['next-page', 'prev-page'])
 
 const toast = useToastStore()
-const publicDocsentryStore = usePublicDocsentryStore()
+const userDocsentryStore = useUserDocsentryStore()
 const { showMenu } = useContextMenu()
 
 const expandedHashes = ref(new Set<string>())
@@ -189,20 +190,20 @@ const shareDocument = async (doc: Document) => {
 
 const handleContextMenu = (doc: Document, e: MouseEvent) => {
   const menuItems: ContextMenuItem[] = [
-    { 
-      label: 'Consulter les détails', 
-      icon: IconEye, 
-      action: () => navigateTo(`/dashboard/docsentry/${doc.id}`) 
+    {
+      label: 'Consulter les détails',
+      icon: IconEye,
+      action: () => navigateTo(`/dashboard/docsentry/${doc.id}`)
     },
-    { 
-      label: 'Copier le Hash', 
-      icon: IconCopy, 
-      action: () => copyHash(doc.hash, doc.id) 
+    {
+      label: 'Copier le Hash',
+      icon: IconCopy,
+      action: () => copyHash(doc.hash, doc.id)
     },
-    { 
-      label: 'Partager le lien', 
-      icon: IconShare, 
-      action: () => shareDocument(doc) 
+    {
+      label: 'Partager le lien',
+      icon: IconShare,
+      action: () => shareDocument(doc)
     }
   ]
 
@@ -235,9 +236,9 @@ const toggleHash = (id: string) => {
 }
 
 const downloadCertificate = async (id: string, filename: string) => {
-  const success = await publicDocsentryStore.downloadCertificate(id, filename)
+  const success = await userDocsentryStore.downloadCertificate(id, filename)
   if (!success) {
-    toast.showToast('error', 'Erreur', 'Impossible de télécharger le certificat.')
+    toast.showToast('error', 'Erreur', userDocsentryStore.error || 'Impossible de télécharger le certificat.')
   }
 }
 

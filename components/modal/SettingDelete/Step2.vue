@@ -15,15 +15,17 @@
     <div class="grid grid-cols-2 gap-6">
       <div class="space-y-2">
         <label class="text-[10px] font-black text-hsa uppercase tracking-[0.2em] ml-1">Documents</label>
-        <input type="number" :value="modelValue.documents"
-          @input="$emit('update:modelValue', { ...modelValue, documents: Number(($event.target as HTMLInputElement).value) })"
-          placeholder="0" class="input font-code text-center text-lg font-black" />
+        <input type="number" :value="modelValue.documents" min="0"
+          @input="$emit('update:modelValue', { ...modelValue, documents: Math.max(0, Number(($event.target as HTMLInputElement).value)) })"
+          @keydown="(e) => { if (e.key === '-') e.preventDefault() }" placeholder="0"
+          class="input font-code text-center text-lg font-black" />
       </div>
       <div class="space-y-2">
         <label class="text-[10px] font-black text-hsa uppercase tracking-[0.2em] ml-1">Incidents</label>
-        <input type="number" :value="modelValue.incidents"
-          @input="$emit('update:modelValue', { ...modelValue, incidents: Number(($event.target as HTMLInputElement).value) })"
-          placeholder="0" class="input font-code text-center text-lg font-black" />
+        <input type="number" :value="modelValue.incidents" min="0"
+          @input="$emit('update:modelValue', { ...modelValue, incidents: Math.max(0, Number(($event.target as HTMLInputElement).value)) })"
+          @keydown="(e) => { if (e.key === '-') e.preventDefault() }" placeholder="0"
+          class="input font-code text-center text-lg font-black" />
       </div>
     </div>
 

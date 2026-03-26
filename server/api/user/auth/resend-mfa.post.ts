@@ -22,7 +22,7 @@ export default defineEventHandler(async (event: H3Event): Promise<ResendMfaRespo
   }
 
   try {
-    const response = await $fetch<ResendMfaResponse>(`${baseApi}/auth/resend_mfa.php`, {
+    const response = await $fetch<ResendMfaResponse>(`${baseApi}/auth/resend_mfa`, {
       method: 'POST',
       body: new URLSearchParams(body).toString(),
       headers: {

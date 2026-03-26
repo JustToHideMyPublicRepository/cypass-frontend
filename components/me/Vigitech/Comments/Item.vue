@@ -19,9 +19,13 @@
           <div class="flex-1 min-w-0">
             <div class="relative">
               <IconQuote class="absolute -top-4 -left-6 w-12 h-12 text-primary/10 -z-0" />
-              <p
-                class="relative z-10 text-BtW text-lg md:text-xl leading-relaxed font-black transition-opacity tracking-tight">
-                {{ comment.content }}
+              <p class="relative z-10 text-BtW leading-relaxed transition-opacity tracking-tight break-words">
+                {{ isTruncated ? truncatedContent : comment.content }}
+                <button v-if="isTruncated" @click="$emit('show-detail', comment.id)"
+                  class="inline-flex items-center gap-1.5 text-primary hover:text-primary/80 transition-colors text-xs uppercase tracking-widest ml-2 bg-primary/5 px-3 py-1 rounded-full border border-primary/20 hover:border-primary/40">
+                  <IconEye class="w-3.5 h-3.5" />
+                  Voir plus
+                </button>
               </p>
             </div>
           </div>
@@ -46,7 +50,7 @@
       <div v-else class="space-y-4 animate-fade-in">
         <div class="relative group/field">
           <textarea v-model="editContentLocal" rows="3"
-            class="w-full p-5 rounded-[2rem] bg-[#0c0e12]/80 border border-ash/50 text-[14px] font-bold text-BtW outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary/40 transition-all resize-none shadow-inner" />
+            class="w-full p-5 rounded-[2rem] bg-ash/80 border border-ash/50 text-[14px] font-bold text-BtW outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary/40 transition-all resize-none shadow-inner" />
           <div
             class="absolute bottom-4 right-4 text-[10px] font-black text-hsa opacity-50 uppercase tracking-widest pointer-events-none">
             En édition
@@ -119,13 +123,21 @@ const props = defineProps<{
   editContent: string
 }>()
 
-const emit = defineEmits(['edit', 'cancel', 'save', 'delete'])
+const emit = defineEmits(['edit', 'cancel', 'save', 'delete', 'show-detail'])
 const { showMenu } = useContextMenu()
 
 const editContentLocal = ref(props.editContent)
 
 const relativeTime = computed(() => {
   return formatRelativeTime(props.comment.created_at)
+})
+
+const isTruncated = computed(() => {
+  return props.comment.content.length > 200
+})
+
+const truncatedContent = computed(() => {
+  return props.comment.content.slice(0, 200) + '...'
 })
 
 const handleContextMenu = (e: MouseEvent) => {

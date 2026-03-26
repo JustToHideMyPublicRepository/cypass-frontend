@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
   const query = getQuery(event)
 
   try {
-    const response: any = await $fetch(`${baseApi}/notifications/get_all.php`, {
+    const response: any = await $fetch(`${baseApi}/notifications/get_all`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,

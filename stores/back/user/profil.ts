@@ -10,6 +10,7 @@ export const useProfilStore = defineStore('profil', {
     logStatistics: null,
     logUser: null,
     logFilters: null,
+    currentLog: null,
     loading: false,
     error: null,
     message: null,
@@ -144,6 +145,61 @@ export const useProfilStore = defineStore('profil', {
         return false
       } catch (err: any) {
         this.error = err.data?.message || 'Erreur lors de la récupération des logs'
+        return false
+      } finally {
+        this.loading = false
+      }
+    },
+
+    // Récupérer un log spécifique
+    async getUserLogById(id: string) {
+      this.loading = true
+      this.error = null
+      this.currentLog = null
+      try {
+        const response = await $fetch<{ success: boolean; data: { log: LogEntry }; message: string }>(`/api/user/profile/get-user-id-log?id=${id}`, {
+          method: 'GET'
+        })
+        if (response.success && response.data?.log) {
+          this.currentLog = response.data.log
+          return response.data.log
+        }
+        this.error = response.message || 'Journal introuvable'
+        return null
+      } catch (err: any) {
+        this.error = err.data?.message || 'Erreur lors de la récupération du journal'
+        return null
+      } finally {
+        this.loading = false
+      }
+    },
+
+    // Récupérer les logs par période
+    async getUserLogsPeriod(params: { start_date?: string; end_date?: string; limit?: number; type?: string } = {}) {
+      this.loading = true
+      this.error = null
+      try {
+        const response = await $fetch<{
+          success: boolean;
+          data: {
+            logs: LogEntry[];
+            statistics: LogStatistics;
+            user: { id: string; email: string; role: string };
+            filters: any;
+          }
+        }>('/api/user/profile/get-user-periode-log', {
+          params
+        })
+        if (response.success && response.data) {
+          this.logs = response.data.logs
+          this.logStatistics = response.data.statistics
+          this.logUser = response.data.user
+          this.logFilters = response.data.filters
+          return true
+        }
+        return false
+      } catch (err: any) {
+        this.error = err.data?.message || 'Erreur lors de la récupération des logs sur la période'
         return false
       } finally {
         this.loading = false

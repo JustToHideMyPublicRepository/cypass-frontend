@@ -245,7 +245,7 @@ export const useSearchStore = defineStore('search', {
         // 5. Search in Logs (ONLY IF AUTHENTICATED)
         if (isAuthenticated) {
           profStore.logs.forEach((log, index) => {
-            const action = (log.action || '').toLowerCase()
+            const action = (log.action_type || '').toLowerCase()
             const label = (log.action_label || '').toLowerCase()
             let detailsStr = ''
             try {
@@ -257,10 +257,10 @@ export const useSearchStore = defineStore('search', {
 
             if (action.includes(q) || label.includes(q) || detailsStr.includes(q)) {
               searchResults.push({
-                id: `log-${index}`,
-                title: log.action_label || log.action || 'Activité',
-                description: typeof log.details === 'string' ? log.details : (log.action_label || log.timestamp),
-                path: '/dashboard/logs',
+                id: `log-${log.id || index}`,
+                title: log.action_label || log.action_type || 'Activité',
+                description: typeof log.details === 'string' ? log.details : (log.action_label || log.created_at),
+                path: `/dashboard/activities/${log.id}`,
                 type: 'log',
                 category: 'Journal d\'activité'
               })

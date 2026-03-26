@@ -6,7 +6,7 @@
           <IconActivity class="w-6 h-6 text-primary" />
         </div>
         <div>
-          <p class="text-[10px] font-black uppercase tracking-widest text-hsa opacity-60">Total aujourd'hui</p>
+          <p class="text-[10px] font-black uppercase tracking-widest text-hsa opacity-60">{{ getDynamicTitle() }}</p>
           <p class="text-xl font-bold text-BtW leading-tight">{{ stats?.total_logs ?? 0 }}</p>
         </div>
       </div>
@@ -20,7 +20,7 @@
         <div>
           <p class="text-[10px] font-black uppercase tracking-widest text-hsa opacity-60">Connexions</p>
           <p class="text-xl font-bold text-BtW leading-tight">
-            {{ stats?.by_action?.['USER_LOGIN'] || stats?.by_action?.['Connexion réussie'] || 0 }}
+            {{ stats?.by_type?.['USER_LOGIN'] || stats?.by_type?.['Connexion réussie'] || 0 }}
           </p>
         </div>
       </div>
@@ -34,7 +34,7 @@
         <div>
           <p class="text-[10px] font-black uppercase tracking-widest text-hsa opacity-60">Échecs</p>
           <p class="text-xl font-bold text-BtW leading-tight">
-            {{ stats?.by_action?.['LOGIN_FAILED'] || stats?.by_action?.['Tentative de connexion échouée'] || 0 }}
+            {{ stats?.by_type?.['LOGIN_FAILED'] || stats?.by_type?.['Tentative de connexion échouée'] || 0 }}
           </p>
         </div>
       </div>
@@ -44,8 +44,28 @@
 
 <script setup lang="ts">
 import { IconActivity, IconCircleCheck, IconAlertCircle } from '@tabler/icons-vue'
+import { format, isSameDay } from 'date-fns'
+import { fr } from 'date-fns/locale'
 
-defineProps<{
+const props = defineProps<{
   stats: any
+  filters?: any
 }>()
+
+const getDynamicTitle = () => {
+  if (!props.filters) return "Total aujourd'hui"
+  
+  if (props.filters.usePeriod) {
+    return 'Total sur la période'
+  }
+  
+  if (props.filters.date) {
+    if (isSameDay(new Date(props.filters.date), new Date())) {
+      return "Total aujourd'hui"
+    }
+    return "Total du " + format(new Date(props.filters.date), 'd MMM yyyy', { locale: fr })
+  }
+  
+  return "Total"
+}
 </script>

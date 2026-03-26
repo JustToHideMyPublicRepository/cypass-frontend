@@ -33,12 +33,10 @@ import { computed, onMounted, reactive } from 'vue'
 import { useRoute } from 'nuxt/app'
 import { IconAlertCircle } from '@tabler/icons-vue'
 import { useUserDocsentryStore } from '~/stores/back/user/docsentry'
-import { usePublicDocsentryStore } from '~/stores/back/public/docsentry'
 import { useToastStore } from '~/stores/front/toast'
 
 const route = useRoute()
 const userStore = useUserDocsentryStore()
-const publicStore = usePublicDocsentryStore()
 const docId = route.params.id as string
 
 const doc = computed(() => userStore.currentDocument)
@@ -68,9 +66,9 @@ const redirectToVerify = () => {
 
 const downloadCertificate = async () => {
   if (!doc.value) return
-  const success = await publicStore.downloadCertificate(doc.value.id, doc.value.filename)
+  const success = await userStore.downloadCertificate(doc.value.id, doc.value.filename)
   if (!success) {
-    toast.showToast('error', 'Erreur', 'Impossible de télécharger le certificat.')
+    toast.showToast('error', 'Erreur', userStore.error || 'Impossible de télécharger le certificat.')
   }
 }
 

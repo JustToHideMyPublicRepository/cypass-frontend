@@ -6,7 +6,7 @@ export default defineEventHandler(async (event: H3Event) => {
   const baseApi = config.cypassBaseAPI
 
   try {
-    const response = await $fetch<{ success: boolean; message: string; data: any }>(`${baseApi}/auth/verify_email.php`, {
+    const response = await $fetch<{ success: boolean; message: string; data: any }>(`${baseApi}/auth/verify_email`, {
       method: 'GET',
       params: { token: query.token },
       headers: {

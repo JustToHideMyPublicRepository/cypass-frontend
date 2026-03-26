@@ -9,6 +9,12 @@ export const usePublicVigitechStore = defineStore('publicVigitech', {
       limit: 10,
       offset: 0
     },
+    commentsPagination: {
+      total: 0,
+      limit: 10,
+      offset: 0,
+      hasMore: true
+    },
     globalStats: {
       total: 0,
       phishing: 0,
@@ -23,14 +29,43 @@ export const usePublicVigitechStore = defineStore('publicVigitech', {
 
   actions: {
     // Récuperer les commentaires d'un incident
-    async fetchComments(incidentId: string) {
+    async fetchComments(incidentId: string, append: boolean = false) {
       this.loadingComments = true
       try {
+        const limit = this.commentsPagination.limit
+        const offset = append ? this.commentsPagination.offset : 0
+
         const response: any = await $fetch('/api/public/vigitech/comment-list', {
-          params: { incident_id: incidentId }
+          params: {
+            incident_id: incidentId,
+            limit,
+            offset
+          }
         })
-        if (response.success) {
-          this.comments = response.data || []
+
+        if (response.success && response.data) {
+          const newComments = response.data || []
+
+          if (append) {
+            this.comments = [...this.comments, ...newComments]
+          } else {
+            this.comments = newComments
+          }
+
+          // Update pagination state
+          const totalReceived = newComments.length
+          const currentTotalCount = this.comments.length
+          const totalFromBackend = response.total || 0
+
+          this.commentsPagination.offset = append ? this.commentsPagination.offset + totalReceived : totalReceived
+          this.commentsPagination.total = totalFromBackend || currentTotalCount
+
+          // More robust hasMore check
+          if (totalFromBackend > 0) {
+            this.commentsPagination.hasMore = currentTotalCount < totalFromBackend
+          } else {
+            this.commentsPagination.hasMore = totalReceived >= limit
+          }
         }
       } catch (err: any) {
         console.warn('Erreur chargement commentaires:', err.message)
@@ -65,9 +100,9 @@ export const usePublicVigitechStore = defineStore('publicVigitech', {
       this.error = null
       try {
         const query = {
-          ...params,
           limit: params.limit || this.publicPagination.limit,
-          offset: params.offset || this.publicPagination.offset
+          offset: params.offset || this.publicPagination.offset,
+          ...params
         }
         const response: any = await $fetch('/api/public/vigitech/incident-list', { params: query })
         if (response.success) {

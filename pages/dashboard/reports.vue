@@ -17,10 +17,21 @@
       <MeReportsEmpty v-else-if="!currentReports.length" :active-tab="activeTab" />
 
       <!-- Liste -->
-      <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <MeReportsCard v-for="report in currentReports" :key="report.id" :report="report" :mode="activeTab"
-          :report-type="reportType" @view-details="handleViewDetails" @edit="handleEditReport"
-          @delete="handleDeleteReport" />
+      <div v-else class="space-y-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <MeReportsCard v-for="report in currentReports" :key="report.id" :report="report" :mode="activeTab"
+            :report-type="reportType" @view-details="handleViewDetails" @edit="handleEditReport"
+            @delete="handleDeleteReport" />
+        </div>
+
+        <!-- Pagination -->
+        <div v-if="hasMore" class="flex justify-center pt-4">
+          <UiBaseButton variant="ghost" size="sm" @click="handleLoadMore" :loading="loadingMore"
+            class="!rounded-2xl !px-8 !py-3 text-[10px] font-black uppercase tracking-widest bg-ash/5 hover:bg-ash/10 text-hsa hover:text-primary transition-all">
+            <IconChevronDown class="w-4 h-4 mr-2" />
+            Voir plus de signalements
+          </UiBaseButton>
+        </div>
       </div>
     </div>
 
@@ -31,6 +42,12 @@
     <!-- Modale de Modification (Incident) -->
     <ModalVigitechReportIncident :show="showEditModal" :incident-id="selectedEditReport?.incident_id || ''"
       :report="selectedEditReport" @close="showEditModal = false" @success="fetchData" />
+
+    <!-- Modale de Confirmation de Suppression -->
+    <UiConfirmModal :show="showConfirmDelete" title="Supprimer le signalement"
+      message="Êtes-vous sûr de vouloir supprimer ce signalement ? Cette action est irréversible."
+      confirm-text="Supprimer" cancel-text="Annuler" variant="danger" :loading="isDeleting" @close="showConfirmDelete = false"
+      @confirm="handleConfirmDelete" />
   </div>
 </template>
 
@@ -38,6 +55,7 @@
 import { useReportUserStore } from '~/stores/back/user/reportUser'
 import { useReportIncidentStore } from '~/stores/back/user/reportIncident'
 import { useToastStore } from '~/stores/front/toast'
+import { IconChevronDown } from '@tabler/icons-vue'
 
 const reportUserStore = useReportUserStore()
 const reportIncidentStore = useReportIncidentStore()
@@ -58,6 +76,18 @@ const selectedReport = ref<any>(null)
 
 const showEditModal = ref(false)
 const selectedEditReport = ref<any>(null)
+const loadingMore = ref(false)
+
+const showConfirmDelete = ref(false)
+const reportToDelete = ref<any>(null)
+const isDeleting = ref(false)
+
+const hasMore = computed(() => {
+  if (activeTab.value === 'sent') {
+    return currentStore.value.sentPagination.hasMore
+  }
+  return currentStore.value.receivedPagination.hasMore
+})
 
 const tabs: { id: 'sent' | 'received'; label: string }[] = [
   { id: 'sent', label: 'Envoyés' },
@@ -93,11 +123,28 @@ const handleEditReport = (report: any) => {
   showEditModal.value = true
 }
 
-const handleDeleteReport = async (report: any) => {
-  if (!confirm('Êtes-vous sûr de vouloir supprimer ce signalement ? Cette action est irréversible.')) return
+const handleDeleteReport = (report: any) => {
+  reportToDelete.value = report
+  showConfirmDelete.value = true
+}
 
-  if (reportType.value === 'incident') {
-    toast.showToast('info', 'Info', 'La suppression sera implémentée prochainement.')
+const handleConfirmDelete = async () => {
+  if (!reportToDelete.value) return
+  isDeleting.value = true
+
+  try {
+    const success = await reportIncidentStore.deleteReport(reportToDelete.value.id)
+    if (success) {
+      toast.showToast('success', 'Succès', 'Signalement supprimé avec succès.')
+      showConfirmDelete.value = false
+    } else {
+      toast.showToast('error', 'Erreur', reportIncidentStore.error || 'Impossible de supprimer le signalement.')
+    }
+  } catch (err: any) {
+    toast.showToast('error', 'Erreur', 'Une erreur est survenue lors de la suppression.')
+  } finally {
+    isDeleting.value = false
+    reportToDelete.value = null
   }
 }
 
@@ -107,6 +154,16 @@ const fetchData = async () => {
   } else {
     await currentStore.value.receivedReports()
   }
+}
+
+const handleLoadMore = async () => {
+  loadingMore.value = true
+  if (activeTab.value === 'sent') {
+    await currentStore.value.sentReports(true)
+  } else {
+    await currentStore.value.receivedReports(true)
+  }
+  loadingMore.value = false
 }
 
 // Watch active tab or report type to fetch data

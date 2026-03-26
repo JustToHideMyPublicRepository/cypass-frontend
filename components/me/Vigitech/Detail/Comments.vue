@@ -48,8 +48,14 @@
 
             <!-- Inline Edit -->
             <div v-if="editingCommentId === comment.id" class="pl-8 space-y-2">
-              <textarea v-model="editCommentContent" rows="2"
-                class="w-full p-3 rounded-xl bg-WtB border border-ash/50 text-xs font-medium outline-none focus:ring-2 focus:ring-primary transition-all resize-none" />
+              <div class="relative">
+                <textarea v-model="editCommentContent" rows="2" maxlength="1000"
+                  class="w-full p-3 pb-8 rounded-xl bg-WtB border border-ash/50 text-xs font-medium outline-none focus:ring-2 focus:ring-primary transition-all resize-none" />
+                <div class="absolute bottom-2 right-3 text-[8px] font-black tracking-widest"
+                  :class="editCommentContent.length > 900 ? (editCommentContent.length >= 1000 ? 'text-danger' : 'text-warning') : 'text-hsa/50'">
+                  {{ editCommentContent.length }} / 1000
+                </div>
+              </div>
               <div class="flex gap-2 justify-end">
                 <UiBaseButton variant="ghost" size="sm" @click="cancelEditComment" class="!rounded-lg !text-[9px]">
                   Annuler
@@ -60,7 +66,27 @@
                 </UiBaseButton>
               </div>
             </div>
-            <p v-else class="text-xs text-BtW leading-relaxed pl-8">{{ comment.content }}</p>
+            <div v-else class="pl-8 space-y-1">
+              <p class="text-xs text-BtW leading-relaxed break-words">
+                {{ (comment.content.length > 200 && !expandedComments[comment.id]) ?
+                  comment.content.slice(0, 200) + '...' : comment.content }}
+              </p>
+              <button v-if="comment.content.length > 200" @click="toggleExpand(comment.id)"
+                class="text-[9px] font-black uppercase tracking-widest text-primary hover:text-primary/80 transition-colors flex items-center gap-1">
+                <component :is="expandedComments[comment.id] ? IconChevronUp : IconChevronDown" class="w-3 h-3" />
+                {{ expandedComments[comment.id] ? 'Réduire' : 'Lire plus' }}
+              </button>
+            </div>
+          </div>
+
+          <!-- Load More Button -->
+          <div v-if="commentsPagination.hasMore" class="pt-4 flex justify-center">
+            <button @click="handleLoadMore" :disabled="loadingMore"
+              class="text-[10px] font-black uppercase tracking-widest text-hsa hover:text-primary transition-colors flex items-center gap-2">
+              <IconChevronDown v-if="!loadingMore" class="w-3.5 h-3.5" />
+              <div v-else class="w-3 h-3 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+              {{ loadingMore ? 'Chargement...' : 'Voir plus' }}
+            </button>
           </div>
         </div>
 
@@ -87,6 +113,7 @@ import { getUserAvatarUrl } from '~/utils/user'
 import { useVigiPrefStore } from '~/stores/front/vigiPref'
 import { useAuthStore } from '~/stores/back/user/auth'
 import { useUserVigitechStore } from '~/stores/back/user/vigitech'
+import { usePublicVigitechStore } from '~/stores/back/public/vigitech'
 import { useToastStore } from '~/stores/front/toast'
 
 const props = defineProps<{
@@ -99,6 +126,7 @@ const props = defineProps<{
 const prefStore = useVigiPrefStore()
 const authStore = useAuthStore()
 const store = useUserVigitechStore()
+const publicVigitechStore = usePublicVigitechStore()
 const toast = useToastStore()
 
 const showComments = ref(prefStore.display.showComments)
@@ -114,6 +142,14 @@ const savingComment = ref(false)
 const showDeleteConfirm = ref(false)
 const commentIdToDelete = ref<string | null>(null)
 const deletingComment = ref(false)
+const loadingMore = ref(false)
+const expandedComments = ref<Record<string, boolean>>({})
+
+const toggleExpand = (id: string) => {
+  expandedComments.value[id] = !expandedComments.value[id]
+}
+
+const commentsPagination = computed(() => publicVigitechStore.commentsPagination)
 
 const isOwner = (comment: any) => {
   return authStore.user && comment.user_id === authStore.user.id
@@ -168,6 +204,12 @@ const handleDeleteComment = async () => {
   deletingComment.value = false
   showDeleteConfirm.value = false
   commentIdToDelete.value = null
+}
+
+const handleLoadMore = async () => {
+  loadingMore.value = true
+  await publicVigitechStore.fetchComments(props.incidentId, true)
+  loadingMore.value = false
 }
 
 const getAvatar = (comment: any) => {

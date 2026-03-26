@@ -28,7 +28,7 @@ export const dashboardShortcuts: Record<string, ShortcutEntry> = {
   logs: {
     keys: ['d', 'l'],
     label: 'Journal d\'activité',
-    path: '/dashboard/logs',
+    path: '/dashboard/activities',
     isGlobal: true,
     group: 'Dashboard',
     modifier: 'Shift'

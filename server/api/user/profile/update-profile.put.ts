@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
     if (body.last_name) params.append('last_name', body.last_name)
     if (body.organization_name) params.append('organization_name', body.organization_name)
 
-    const response: any = await $fetch(`${baseApi}/profile/update_profile.php`, {
+    const response: any = await $fetch(`${baseApi}/profile/update_profile`, {
       method: 'PUT' as any,
       headers: {
         'Authorization': `Bearer ${token}`,

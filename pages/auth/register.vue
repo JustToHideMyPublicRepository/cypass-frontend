@@ -138,8 +138,8 @@ const handleRegister = async () => {
   isLoading.value = true
 
   const success = await authStore.register({
-    nom: form.lastName,
-    prenom: form.firstName,
+    first_name: form.firstName,
+    last_name: form.lastName,
     email: form.email,
     password: form.password,
     accept_conditions: form.acceptTerms

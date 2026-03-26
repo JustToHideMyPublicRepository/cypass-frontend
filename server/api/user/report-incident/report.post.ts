@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
   const body = await readBody(event)
 
   try {
-    const response = await $fetch(`${baseApi}/vigitech/report_incident.php`, {
+    const response = await $fetch(`${baseApi}/vigitech/report_incident`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,

@@ -25,6 +25,30 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
   }),
 
   actions: {
+    // Télécharger certificat
+    async downloadCertificate(id: string, filename: string) {
+      this.error = null
+      try {
+        const response = await $fetch('/api/user/docsentry/download', {
+          query: { id },
+          responseType: 'blob'
+        })
+        const url = window.URL.createObjectURL(response as Blob)
+        const link = document.createElement('a')
+        link.href = url
+        link.setAttribute('download', `Certificat_${filename}`)
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+        window.URL.revokeObjectURL(url)
+        return true
+      } catch (err: any) {
+        this.error = err.data?.message || err.message || 'Impossible de télécharger le certificat'
+        console.error('Failed to download certificate', err)
+        return false
+      }
+    },
+
     // Récupérer les documents
     async fetchDocuments(limit: number = 20, offset: number = 0, filters: any = {}) {
       this.loading = true

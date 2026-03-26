@@ -85,7 +85,7 @@ import type { ReportEntry } from '~/types/profil'
 import { formatRelativeTime } from '~/utils/date'
 import { differenceInHours } from 'date-fns'
 import { decodeHtmlEntities } from '~/utils/format'
-import { userReportReasons } from '~/utils/vigitech'
+import { userReportReasons, reportReasons } from '~/utils/vigitech'
 
 const profilStore = useProfilStore()
 
@@ -122,7 +122,8 @@ const mapStatus = (status: string) => {
 }
 
 const mapReason = (reason: string) => {
-  const found = userReportReasons.find(r => r.value === reason)
+  const reasons = props.reportType === 'user' ? userReportReasons : reportReasons
+  const found = reasons.find(r => r.value === reason)
   return found ? found.label : reason
 }
 </script>

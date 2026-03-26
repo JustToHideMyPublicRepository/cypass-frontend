@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
   const query = getQuery(event)
 
   try {
-    const response = await $fetch(`${baseApi}/vigitech/get_comments.php`, {
+    const response = await $fetch(`${baseApi}/vigitech/get_comments`, {
       query
     })
     return response

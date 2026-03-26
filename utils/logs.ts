@@ -1,4 +1,11 @@
-import { IconLogin, IconLogout, IconLock, IconMail, IconUser, IconPhoto, IconShieldLock, IconAlertTriangle, IconBug, IconExchange, IconActivity, IconFingerprint, IconAlertCircle, IconTrash } from '@tabler/icons-vue'
+import {
+  IconLogin, IconLogout, IconLock, IconMail, IconUser, IconPhotoEdit,
+  IconShieldLock, IconAlertTriangle, IconBug, IconExchange, IconActivity,
+  IconFingerprint, IconAlertCircle, IconTrash, IconUserPlus, IconMailCheck,
+  IconKey, IconDevicesPc, IconEye, IconFileUpload, IconFileDownload,
+  IconFileCheck, IconFileX, IconUrgent, IconGavel, IconRefresh,
+  IconSettings, IconPhotoCancel, IconUserEdit
+} from '@tabler/icons-vue'
 
 export const LOG_TYPES = {
   user_actions: {
@@ -30,7 +37,7 @@ export const LOG_TYPES = {
 export type LogTypeKey = keyof typeof LOG_TYPES
 
 export const ACTION_MAPPINGS: Record<string, { label: string, icon: any, color: string }> = {
-  // Authentication
+  // ── Authentification ──────────────────────────────────────
   'USER_LOGIN': {
     label: 'Connexion réussie',
     icon: IconLogin,
@@ -41,55 +48,187 @@ export const ACTION_MAPPINGS: Record<string, { label: string, icon: any, color: 
     icon: IconLogout,
     color: 'text-hsa'
   },
+  'USER_REGISTERED': {
+    label: 'Inscription',
+    icon: IconUserPlus,
+    color: 'text-success'
+  },
+  'EMAIL_VERIFIED': {
+    label: 'Email vérifié',
+    icon: IconMailCheck,
+    color: 'text-success'
+  },
   'TOKEN_CREATED': {
-    label: 'Jeton d\'accès généré',
+    label: 'Jeton d\'authentification créé',
     icon: IconFingerprint,
     color: 'text-primary'
   },
-  'MFA_INITIATED': {
-    label: 'MFA initialisée',
-    icon: IconShieldLock,
+  'ALL_TOKENS_REVOKED': {
+    label: 'Tous les jetons révoqués',
+    icon: IconKey,
     color: 'text-warning'
   },
-  'MFA_TOGGLED': {
-    label: 'Double authentification modifiée',
-    icon: IconShieldLock,
-    color: 'text-primary'
+  'ALL_SESSIONS_REVOKED': {
+    label: 'Toutes les autres sessions révoquées',
+    icon: IconDevicesPc,
+    color: 'text-warning'
+  },
+  'SESSION_REVOKED': {
+    label: 'Session révoquée',
+    icon: IconDevicesPc,
+    color: 'text-warning'
   },
 
-  // Account / Profile
-  'PROFILE_UPDATED': {
-    label: 'Profil mis à jour',
-    icon: IconUser,
-    color: 'text-primary'
-  },
-  'PASSWORD_UPDATED': {
-    label: 'Mot de passe modifié',
+  // ── Profil ────────────────────────────────────────────────
+  'PASSWORD_CHANGED': {
+    label: 'Modification du mot de passe',
     icon: IconLock,
     color: 'text-warning'
   },
-  'EMAIL_UPDATED': {
-    label: 'Email modifié',
+  'FAILED_PASSWORD_CHANGE': {
+    label: 'Échec modification du mot de passe',
+    icon: IconLock,
+    color: 'text-danger'
+  },
+  'EMAIL_CHANGED': {
+    label: 'Modification de l\'email',
     icon: IconMail,
     color: 'text-warning'
   },
+  'FAILED_EMAIL_CHANGE': {
+    label: 'Échec modification de l\'email',
+    icon: IconMail,
+    color: 'text-danger'
+  },
+  'PROFILE_UPDATE': {
+    label: 'Mise à jour du profil',
+    icon: IconUserEdit,
+    color: 'text-primary'
+  },
+  'VIEW_OWN_LOGS': {
+    label: 'Consultation de ses logs',
+    icon: IconEye,
+    color: 'text-primary'
+  },
   'AVATAR_UPLOADED': {
-    label: 'Avatar mis à jour',
-    icon: IconPhoto,
-    color: 'text-info'
+    label: 'Mise à jour de la photo de profil',
+    icon: IconPhotoEdit,
+    color: 'text-hsa'
   },
   'AVATAR_DELETED': {
-    label: 'Avatar supprimé',
+    label: 'Suppression de la photo de profil',
+    icon: IconPhotoCancel,
+    color: 'text-danger'
+  },
+
+  // ── MFA ───────────────────────────────────────────────────
+  'MFA_ENABLED': {
+    label: 'Activation de la MFA',
+    icon: IconShieldLock,
+    color: 'text-success'
+  },
+  'MFA_DISABLED': {
+    label: 'Désactivation de la MFA',
+    icon: IconShieldLock,
+    color: 'text-warning'
+  },
+  'FAILED_MFA_TOGGLE': {
+    label: 'Échec de modification de la MFA',
+    icon: IconShieldLock,
+    color: 'text-danger'
+  },
+  'MFA_VERIFIED': {
+    label: 'Vérification MFA réussie',
+    icon: IconShieldLock,
+    color: 'text-success'
+  },
+
+  // ── Documents ─────────────────────────────────────────────
+  'DOCUMENT_UPLOADED': {
+    label: 'Téléchargement de document',
+    icon: IconFileUpload,
+    color: 'text-info'
+  },
+  'DOCUMENT_DOWNLOADED': {
+    label: 'Téléchargement de document',
+    icon: IconFileDownload,
+    color: 'text-info'
+  },
+  'DOCUMENT_AUTHENTICATED': {
+    label: 'Authentification de document',
+    icon: IconFileCheck,
+    color: 'text-success'
+  },
+  'DOCUMENT_DELETED': {
+    label: 'Suppression de document',
+    icon: IconFileX,
+    color: 'text-danger'
+  },
+
+  // ── VigiTech ──────────────────────────────────────────────
+  'INCIDENT_CREATED': {
+    label: 'Création d\'incident',
+    icon: IconUrgent,
+    color: 'text-warning'
+  },
+  'INCIDENT_MODERATED': {
+    label: 'Modération d\'incident',
+    icon: IconGavel,
+    color: 'text-info'
+  },
+  'INCIDENT_UPDATED': {
+    label: 'Mise à jour d\'incident',
+    icon: IconRefresh,
+    color: 'text-primary'
+  },
+
+  // ── Admin ─────────────────────────────────────────────────
+  'VIEW_LOGS': {
+    label: 'Consultation des logs (admin)',
+    icon: IconEye,
+    color: 'text-primary'
+  },
+  'ADMIN_ACTION': {
+    label: 'Action administrateur',
+    icon: IconSettings,
+    color: 'text-primary'
+  },
+
+  // ── Sécurité ──────────────────────────────────────────────
+  'LOGIN_FAILED': {
+    label: 'Tentative de connexion échouée',
+    icon: IconAlertTriangle,
+    color: 'text-danger'
+  },
+  'INVALID_TOKEN': {
+    label: 'Jeton invalide',
+    icon: IconBug,
+    color: 'text-danger'
+  },
+  'UNAUTHORIZED_ACCESS': {
+    label: 'Accès non autorisé',
+    icon: IconShieldLock,
+    color: 'text-danger'
+  },
+  'SUSPICIOUS_ACTIVITY': {
+    label: 'Activité suspecte détectée',
+    icon: IconAlertTriangle,
+    color: 'text-danger'
+  },
+
+  // ── Compte ────────────────────────────────────────────────
+  'ACCOUNT_DELETION_REQUESTED': {
+    label: 'Demande de suppression de compte',
     icon: IconTrash,
     color: 'text-danger'
   },
-  'ACCOUNT_DELETED': {
-    label: 'Compte supprimé',
+  'FAILED_DELETE_AUTH': {
+    label: 'Tentative de suppression de compte échouée',
     icon: IconTrash,
     color: 'text-danger'
   },
 
-  // Generic / Default
+  // ── Générique / Défaut ────────────────────────────────────
   'DEFAULT': {
     label: 'Action système',
     icon: IconActivity,
@@ -107,8 +246,8 @@ export const ACTION_MAPPINGS: Record<string, { label: string, icon: any, color: 
   }
 }
 
-export const getLogActionInfo = (action: string) => {
-  const upperAction = action?.toUpperCase() || ''
+export const getLogActionInfo = (action_type: string) => {
+  const upperAction = action_type?.toUpperCase() || ''
   return ACTION_MAPPINGS[upperAction] || ACTION_MAPPINGS['DEFAULT']
 }
 

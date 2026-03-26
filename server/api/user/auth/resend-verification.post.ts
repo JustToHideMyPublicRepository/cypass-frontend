@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const response = await $fetch(`${baseApi}/auth/resend_verification.php`, {
+    const response = await $fetch(`${baseApi}/auth/resend_verification`, {
       method: 'POST',
       body: new URLSearchParams({ email: body.email })
     })

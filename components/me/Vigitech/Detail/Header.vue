@@ -18,6 +18,11 @@
         class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-ash/10 text-[10px] uppercase font-black tracking-widest text-hsa">
         <IconEye class="w-3.5 h-3.5" /> {{ incident.views_count }} vue{{ incident.views_count !== 1 ? 's' : '' }}
       </div>
+      <div v-if="isModified"
+        class="px-3 py-1 rounded-full bg-secondary/10 text-secondary text-[10px] uppercase font-black tracking-widest cursor-help"
+        :title="`Modifié ${formatTimeDiff(incident.created_at, incident.updated_at)} après la publication`">
+        Modifié
+      </div>
     </div>
 
     <h2 class="text-2xl md:text-3xl font-black text-BtW leading-tight">
@@ -62,6 +67,8 @@ import { fr } from 'date-fns/locale'
 import { decodeHtmlEntities } from '~/utils/format'
 import { mapIncidentType, mapThreatLevel } from '~/utils/vigitech'
 import { getUserAvatarUrl } from '~/utils/user'
+import { useAuthStore } from '~/stores/back/user/auth'
+import { isSignificantDifference, formatTimeDiff } from '~/utils/date'
 
 const props = defineProps<{
   incident: any
@@ -70,6 +77,10 @@ const props = defineProps<{
 const formattedDate = computed(() => {
   if (!props.incident?.created_at) return '-'
   return format(new Date(props.incident.created_at), 'PPP p', { locale: fr })
+})
+
+const isModified = computed(() => {
+  return props.incident && isSignificantDifference(props.incident.created_at, props.incident.updated_at)
 })
 
 const userAvatarUrl = computed(() => {

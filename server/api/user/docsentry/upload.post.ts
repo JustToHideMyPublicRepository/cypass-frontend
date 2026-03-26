@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
       }
     }
 
-    const response: any = await $fetch(`${baseApi}/documents/upload.php`, {
+    const response: any = await $fetch(`${baseApi}/documents/upload`, {
       method: 'POST' as any,
       headers: {
         'Authorization': `Bearer ${token}`,

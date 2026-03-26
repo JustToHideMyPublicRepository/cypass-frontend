@@ -1,17 +1,22 @@
 <template>
-  <div class="p-12 text-center bg-danger/5 border border-danger/10 rounded-[3rem]">
-    <IconBug class="w-12 h-12 text-danger mx-auto mb-4" />
-    <h3 class="text-xl font-black text-BtW">Une erreur est survenue</h3>
-    <p class="text-sm font-bold text-hsa mt-2">{{ error }}</p>
-    <UiBaseButton @click="$emit('retry')" class="mt-6 !rounded-2xl">Réessayer</UiBaseButton>
+  <div class="text-center py-20 bg-ash/10 rounded-[2.5rem] border-2 border-dashed border-ashAct">
+    <IconBug class="w-16 h-16 mx-auto mb-4 opacity-10 text-danger" />
+    <h3 class="text-xl font-black text-BtW">Chargement impossible</h3>
+    <p class="text-xs text-hsa font-bold mt-2">
+      Nous ne parvenons pas à charger vos rapports pour le moment.
+    </p>
+    <UiBaseButton @click="$emit('retry')" variant="ghost" size="sm" class="mt-8 !rounded-xl border-ashAct">
+      <IconRefresh class="w-4 h-4 mr-2" />
+      Réessayer
+    </UiBaseButton>
   </div>
 </template>
 
 <script setup lang="ts">
-import { IconBug } from '@tabler/icons-vue'
+import { IconBug, IconRefresh } from '@tabler/icons-vue'
 
 defineProps<{
-  error: string
+  error?: string
 }>()
 
 defineEmits(['retry'])

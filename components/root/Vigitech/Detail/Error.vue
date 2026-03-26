@@ -7,7 +7,7 @@
     <div class="space-y-4">
       <h2 class="text-3xl font-black text-BtW tracking-tighter">Oups ! Une erreur est survenue</h2>
       <p class="text-hsa font-medium leading-relaxed">
-        {{ message || 'Nous rencontrons des difficultés techniques pour récupérer les détails de cet incident.' }}
+        Nous rencontrons des difficultés techniques pour récupérer les détails de cet incident.
       </p>
     </div>
     <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">

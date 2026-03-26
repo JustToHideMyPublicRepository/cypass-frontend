@@ -19,11 +19,16 @@
 
         <div class="mt-4 flex items-center justify-between gap-2">
           <!-- Trend Icon + Difference Badge -->
-          <div v-if="stat.trend" class="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-white/20 backdrop-blur-md">
-            <component :is="stat.trend.difference >= 0 ? IconTrendingUp : IconTrendingDown"
-              class="w-3.5 h-3.5 text-WtB" />
-            <span class="text-[10px] font-bold text-WtB">
-              {{ stat.trend.difference >= 0 ? '+' : '' }}{{ stat.trend.difference }}
+          <div v-if="stat.trend" class="flex items-center gap-1.5 px-2 py-1 rounded-lg backdrop-blur-md" :class="[
+            stat.trend.difference > 0 ? 'bg-success/20 text-success' :
+              stat.trend.difference < 0 ? 'bg-danger/20 text-danger' :
+                'bg-white/20 text-white'
+          ]">
+            <component
+              :is="stat.trend.difference > 0 ? IconTrendingUp : (stat.trend.difference < 0 ? IconTrendingDown : IconLayoutAlignMiddle)"
+              class="w-3.5 h-3.5" />
+            <span class="text-[10px] font-bold">
+              {{ stat.trend.difference > 0 ? '+' : '' }}{{ stat.trend.difference }}
             </span>
           </div>
 
@@ -52,7 +57,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { IconFileCertificate, IconAlertTriangle, IconDevices, IconShieldLock, IconTrendingUp, IconTrendingDown, IconInfoCircle, type Icon } from '@tabler/icons-vue'
+import { IconFileCertificate, IconAlertTriangle, IconDevices, IconShieldLock, IconTrendingUp, IconTrendingDown, IconLayoutAlignMiddle, type Icon } from '@tabler/icons-vue'
 import type { SecurityScoreResult } from '~/utils/security'
 
 interface Trend {
@@ -93,7 +98,7 @@ const statsConfig = computed<StatCard[]>(() => [
     trend: props.documentsTrend,
     tooltip: '<b>Intégrité garantie</b><br>Preuve d\'authenticité immuable enregistrée pour chaque document certifié.',
     displaySubLabel: props.documentsTrend
-      ? `${props.documentsTrend.percentage >= 0 ? '+' : ''}${props.documentsTrend.percentage}% par rapport à la semaine dernière`
+      ? `${props.documentsTrend.percentage > 0 ? '+' : ''}${props.documentsTrend.percentage}% par rapport à la semaine dernière`
       : 'Documents sécurisés'
   },
   {
@@ -104,7 +109,7 @@ const statsConfig = computed<StatCard[]>(() => [
     trend: props.vigitechTrend,
     tooltip: '<b>Veille collaborative</b><br>Incidents que vous avez identifiés et signalés à la communauté.',
     displaySubLabel: props.vigitechTrend
-      ? `${props.vigitechTrend.percentage >= 0 ? '+' : ''}${props.vigitechTrend.percentage}% par rapport à la semaine dernière`
+      ? `${props.vigitechTrend.percentage > 0 ? '+' : ''}${props.vigitechTrend.percentage}% par rapport à la semaine dernière`
       : props.vigitechCount > 0 ? `${props.vigitechCount} incidents répertoriés` : 'Aucun incident actif'
   },
   {

@@ -90,7 +90,7 @@
           <div class="space-y-2 mt-2">
             <p class="text-[10px] text-hsa font-black tracking-[0.2em] ml-1">Signature Numérique</p>
             <p
-              class="font-code text-[10px] break-all text-BtW bg-BtW/5 text-ashAct/10 p-4 rounded-2xl border border-ashAct/20 shadow-inner">
+              class="font-code text-[10px] text-BtW break-all bg-WtB/50 p-4 rounded-2xl border border-ashAct/30 shadow-inner">
               {{ uploadResult.cryptographic_proof.digital_signature }}
             </p>
           </div>
@@ -123,12 +123,17 @@
 
     <!-- Actions du pied de page -->
     <template #footer>
-      <div class="flex flex-col sm:flex-row gap-4 w-full">
+      <div v-if="uploadResult" class="w-full">
+        <UiBaseButton variant="primary" class="w-full !rounded-2xl font-black py-4 h-auto shadow-xl" @click="close">
+          D'accord
+        </UiBaseButton>
+      </div>
+      <div v-else class="flex flex-col sm:flex-row gap-4 w-full">
         <UiBaseButton variant="ghost" class="flex-1 !rounded-2xl font-bold py-4 h-auto border-none" @click="close">
           Annuler
         </UiBaseButton>
         <UiBaseButton variant="primary" class="flex-1 !rounded-2xl font-black py-4 h-auto shadow-xl" :loading="loading"
-          :disabled="!file || !!uploadResult" @click="handleUpload">
+          :disabled="!file" @click="handleUpload">
           Signer le document
         </UiBaseButton>
       </div>

@@ -52,8 +52,20 @@
         <RootVerifySignatureDetails :signatureInfo="result.signature_info" />
 
         <div v-if="result.verified" class="space-y-4">
-          <UiBaseButton variant="primary" block size="lg" @click="downloadCertificate">
-            <IconDownload class="w-5 h-5 mr-2" /> Télécharger le Certificat CYPASS
+          <UiAppTooltip v-if="!authStore.user" 
+            title="Accès Protégé" 
+            content="Pour des raisons de protection et d'accès aux données, le téléchargement du certificat est réservé aux utilisateurs connectés."
+            width-class="w-72"
+            class="w-full">
+            <template #trigger>
+              <UiBaseButton variant="primary" block size="lg" disabled class="opacity-50 grayscale cursor-not-allowed">
+                <IconDownload class="w-5 h-5 mr-2" /> Télécharger le certificat CYPASS
+              </UiBaseButton>
+            </template>
+          </UiAppTooltip>
+          
+          <UiBaseButton v-else variant="primary" block size="lg" @click="downloadCertificate">
+            <IconDownload class="w-5 h-5 mr-2" /> Télécharger le certificat CYPASS
           </UiBaseButton>
 
           <div class="pt-4 flex flex-col md:flex-row justify-between items-center gap-4 text-xs italic">
@@ -98,7 +110,8 @@ import { IconRosetteDiscountCheck, IconShieldOff, IconDownload } from '@tabler/i
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { useToastStore } from '~/stores/front/toast'
-import { usePublicDocsentryStore } from '~/stores/back/public/docsentry'
+import { useAuthStore } from '~/stores/back/user/auth'
+import { useUserDocsentryStore } from '~/stores/back/user/docsentry'
 
 const props = defineProps<{
   result: any
@@ -108,7 +121,8 @@ const props = defineProps<{
 defineEmits(['reset'])
 
 const toast = useToastStore()
-const publicDocsentryStore = usePublicDocsentryStore()
+const authStore = useAuthStore()
+const userDocsentryStore = useUserDocsentryStore()
 
 const downloadCertificate = async () => {
   const id = props.result.document?.id || props.result.id
@@ -119,9 +133,9 @@ const downloadCertificate = async () => {
     return
   }
 
-  const success = await publicDocsentryStore.downloadCertificate(id, filename)
+  const success = await userDocsentryStore.downloadCertificate(id, filename)
   if (!success) {
-    toast.showToast('error', 'Erreur', 'Impossible de télécharger le certificat.')
+    toast.showToast('error', 'Erreur', userDocsentryStore.error || 'Impossible de télécharger le certificat.')
   }
 }
 

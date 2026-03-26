@@ -22,8 +22,14 @@
         <!-- Titre -->
         <div class="md:col-span-2 space-y-2 text-left">
           <label class="text-xs font-black text-hsa uppercase tracking-widest px-1">Titre de l'incident</label>
-          <input v-model="form.title" type="text" placeholder="Ex: Tentative de phishing WhatsApp"
-            class="w-full h-12 px-4 rounded-xl bg-ash/30 border border-ash focus:ring-2 focus:ring-primary outline-none transition-all font-bold text-sm" />
+          <div class="relative">
+            <input v-model="form.title" type="text" placeholder="Ex: Tentative de phishing WhatsApp" maxlength="150"
+              class="w-full h-12 px-4 pr-20 rounded-xl bg-ash/30 border border-ash focus:ring-2 focus:ring-primary outline-none transition-all font-bold text-sm" />
+            <div class="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-black tracking-widest"
+              :class="form.title.length > 130 ? (form.title.length >= 150 ? 'text-danger' : 'text-warning') : 'text-hsa/50'">
+              {{ form.title.length }} / 150
+            </div>
+          </div>
         </div>
 
         <!-- Type d'incident -->
@@ -77,7 +83,7 @@
           <label class="relative inline-flex items-center cursor-pointer">
             <input type="checkbox" v-model="form.is_anonymous" class="sr-only peer">
             <div
-              class="w-11 h-6 bg-ash/30 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary uppercase text-[10px]">
+              class="w-11 h-6 bg-ashAct peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-BtW after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary peer-checked:after:bg-WtB uppercase text-[10px]">
             </div>
           </label>
         </div>
@@ -85,13 +91,19 @@
         <!-- Description -->
         <div class="md:col-span-2 space-y-2 text-left">
           <label class="text-xs font-black text-hsa uppercase tracking-widest px-1">Description Détailée</label>
-          <textarea v-model="form.description" rows="4"
-            placeholder="Décrivez l'incident avec le plus de précisions possibles..."
-            class="w-full p-4 rounded-xl bg-ash/30 border border-ash focus:ring-2 focus:ring-primary outline-none transition-all font-bold text-sm resize-none"></textarea>
+          <div class="relative">
+            <textarea v-model="form.description" rows="4" maxlength="3000"
+              placeholder="Décrivez l'incident avec le plus de précisions possibles..."
+              class="w-full p-4 pb-10 rounded-xl bg-ash/30 border border-ash focus:ring-2 focus:ring-primary outline-none transition-all font-bold text-sm resize-none"></textarea>
+            <div class="absolute bottom-4 right-6 text-[10px] font-black tracking-widest"
+              :class="form.description.length > 2700 ? (form.description.length >= 3000 ? 'text-danger' : 'text-warning') : 'text-hsa/50'">
+              {{ form.description.length }} / 3000
+            </div>
+          </div>
         </div>
 
         <!-- Drop Zone -->
-        <div class="md:col-span-2 space-y-2 text-left">
+        <div v-if="!isEditMode" class="md:col-span-2 space-y-2 text-left">
           <label class="text-xs font-black text-hsa uppercase tracking-widest px-1">Preuve / Capture d'écran</label>
           <div class="relative group">
             <div @click="triggerFileUpload"

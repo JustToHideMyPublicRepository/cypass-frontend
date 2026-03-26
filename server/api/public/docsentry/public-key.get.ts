@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
   const baseApi = config.cypassBaseAPI
 
   try {
-    const response: any = await $fetch(`${baseApi}/documents/public-key.php`, {
+    const response: any = await $fetch(`${baseApi}/documents/public-key`, {
       method: 'GET',
       headers: {
         'accept': 'application/json'

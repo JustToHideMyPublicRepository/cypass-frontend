@@ -15,17 +15,14 @@
         <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div class="flex items-start gap-4">
             <div class="p-4 bg-WtB rounded-2xl shadow-sm border border-ashAct">
-              <IconDeviceDesktop
-                v-if="currentSession.user_agent.includes('Windows') || currentSession.user_agent.includes('Mac')"
-                class="w-8 h-8 text-primary" />
-              <IconDeviceMobile v-else class="w-8 h-8 text-primary" />
+              <component :is="getSessionIcon(currentSession)" class="w-8 h-8 text-primary" />
             </div>
             <div class="space-y-1">
               <div class="flex items-center gap-2">
                 <h3 class="font-bold text-lg text-BtW">
-                  {{ formatUserAgent(currentSession.user_agent) }}
+                  {{ formatSessionLabel(currentSession) }}
                 </h3>
-                <span class="px-2 py-0.5 text-xs bg-success text-white rounded-full font-bold">ACTUELLE</span>
+                <span class="px-2 py-0.5 text-xs bg-success text-WtB rounded-full font-bold">ACTUELLE</span>
               </div>
               <p class="text-sm font-code text-hsa bg-ash px-2 py-0.5 rounded inline-block">
                 {{ currentSession.ip_address }}
@@ -57,13 +54,12 @@
           class="relative group border border-ash hover:border-primary/30 transition-all duration-300">
           <div class="flex items-start gap-4">
             <div class="p-3 bg-ash rounded-xl group-hover:bg-primary/10 transition-colors">
-              <IconDeviceDesktop v-if="session.user_agent.includes('Windows') || session.user_agent.includes('Mac')"
+              <component :is="getSessionIcon(session)"
                 class="w-6 h-6 text-hsa group-hover:text-primary transition-colors" />
-              <IconDeviceMobile v-else class="w-6 h-6 text-hsa group-hover:text-primary transition-colors" />
             </div>
             <div class="flex-grow min-w-0">
               <h3 class="font-bold text-BtW truncate">
-                {{ formatUserAgent(session.user_agent) }}
+                {{ formatSessionLabel(session) }}
               </h3>
               <p class="text-xs font-code text-hsa mb-2">
                 {{ session.ip_address }}
@@ -93,26 +89,12 @@
 </template>
 
 <script setup lang="ts">
-import { markRaw } from 'vue'
-import {
-  IconDeviceDesktop as IconDeviceDesktopRaw,
-  IconDeviceMobile as IconDeviceMobileRaw,
-  IconShieldCheck as IconShieldCheckRaw,
-  IconClock as IconClockRaw,
-  IconHistory as IconHistoryRaw,
-  IconPlus as IconPlusRaw,
-  IconLogout as IconLogoutRaw
-} from '@tabler/icons-vue'
-
-const IconDeviceDesktop = markRaw(IconDeviceDesktopRaw)
-const IconDeviceMobile = markRaw(IconDeviceMobileRaw)
-const IconShieldCheck = markRaw(IconShieldCheckRaw)
-const IconClock = markRaw(IconClockRaw)
-const IconHistory = markRaw(IconHistoryRaw)
-const IconPlus = markRaw(IconPlusRaw)
-const IconLogout = markRaw(IconLogoutRaw)
+import { IconShieldCheck, IconClock, IconHistory, IconPlus, IconLogout } from '@tabler/icons-vue'
 import { format, formatDistanceToNow } from 'date-fns'
 import { fr } from 'date-fns/locale'
+import { formatSessionLabel, getSessionIcon as getSessionIconRaw } from '~/utils/sessions'
+
+const getSessionIcon = (session: any) => markRaw(getSessionIconRaw(session))
 
 defineProps<{
   sessions: any[]
@@ -123,15 +105,6 @@ defineProps<{
 defineEmits(['confirm-revoke'])
 
 // Helpers
-const formatUserAgent = (ua: string) => {
-  if (ua.includes('Windows')) return 'Windows PC'
-  if (ua.includes('Mac')) return 'Mac'
-  if (ua.includes('Linux')) return 'Linux Desktop'
-  if (ua.includes('iPhone')) return 'iPhone'
-  if (ua.includes('Android')) return 'Android Device'
-  return 'Appareil Inconnu'
-}
-
 const formatDateDistance = (dateString: string) => {
   if (!dateString) return ''
   return formatDistanceToNow(new Date(dateString), { locale: fr })

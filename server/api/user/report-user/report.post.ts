@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
 
   try {
     // Use native fetch to avoid ofetch rewriting Content-Type or body
-    const res = await fetch(`${baseApi}/profile/report_user.php`, {
+    const res = await fetch(`${baseApi}/profile/report_user`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,

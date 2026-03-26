@@ -118,9 +118,9 @@ const getSocialIcon = (name: string) => {
 }
 
 const getSocialLink = (name: string) => {
-  if (name === 'linkedin') return 'https://linkedin.com/in/SteveAsterAfovo'
-  if (name === 'twitter') return 'https://x.com/SteveAsterAfovo'
-  if (name === 'facebook') return 'https://facebook.com/SteveAsterAfovo.1'
+  if (name === 'linkedin') return 'https://www.linkedin.com/company/CypassSecu'
+  if (name === 'twitter') return 'https://x.com/CypassSecu'
+  if (name === 'facebook') return 'https://web.facebook.com/CypassSecu'
   return '#'
 }
 </script>

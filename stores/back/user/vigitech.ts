@@ -8,6 +8,12 @@ export const useUserVigitechStore = defineStore('userVigitech', {
     currentIncident: null as Incident | null,
     userComments: [] as Comment[],
     userCommentsTotal: 0,
+    userCommentsPagination: {
+      total: 0,
+      limit: 10,
+      offset: 0,
+      hasMore: true
+    },
     loadingComments: false,
     loading: false,
     error: null as string | null
@@ -53,13 +59,34 @@ export const useUserVigitechStore = defineStore('userVigitech', {
     },
 
     // Récuperer les commentaires de l'utilisateur
-    async fetchUserComments() {
+    async fetchUserComments(append: boolean = false) {
       this.loadingComments = true
       try {
-        const response: any = await $fetch('/api/user/vigitech/comment-list')
+        const limit = this.userCommentsPagination.limit
+        const offset = append ? this.userCommentsPagination.offset : 0
+
+        const response: any = await $fetch('/api/user/vigitech/comment-list', {
+          params: { limit, offset }
+        })
+
         if (response.success && response.data) {
-          this.userComments = response.data.comments || []
-          this.userCommentsTotal = response.data.total || 0
+          const newComments = response.data.comments || []
+          if (append) {
+            this.userComments = [...this.userComments, ...newComments]
+          } else {
+            this.userComments = newComments
+          }
+
+          // Update pagination state
+          const totalReceived = newComments.length
+          const currentTotalCount = this.userComments.length
+          const totalFromBackend = response.data.total || 0
+
+          this.userCommentsPagination.offset = append ? this.userCommentsPagination.offset + totalReceived : totalReceived
+          this.userCommentsPagination.total = totalFromBackend || currentTotalCount
+          this.userCommentsPagination.hasMore = totalFromBackend > 0 ? (currentTotalCount < totalFromBackend) : (totalReceived >= limit)
+
+          this.userCommentsTotal = this.userCommentsPagination.total
         }
       } catch (err: any) {
         console.warn('Erreur chargement commentaires utilisateur:', err.message)
@@ -158,11 +185,13 @@ export const useUserVigitechStore = defineStore('userVigitech', {
     },
 
     // Récupérer tous les incidents
-    async fetchUserIncidents() {
+    async fetchUserIncidents(params: any = {}) {
       this.loading = true
       this.error = null
       try {
-        const response: any = await $fetch('/api/user/vigitech/incident-list')
+        const response: any = await $fetch('/api/user/vigitech/incident-list', {
+          params
+        })
         if (response.success) {
           this.userIncidents = response.data
         } else {
@@ -205,5 +234,16 @@ export const useUserVigitechStore = defineStore('userVigitech', {
         return { success: false, message: err.data?.message || err.message || 'Erreur lors de la mise à jour.' }
       }
     },
+
+    async fetchCommentById(id: string) {
+      try {
+        const response: any = await $fetch('/api/user/vigitech/comment-get', {
+          query: { id }
+        })
+        return response
+      } catch (err: any) {
+        return { success: false, message: err.message }
+      }
+    }
   }
 })

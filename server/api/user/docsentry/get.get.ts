@@ -14,14 +14,11 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const response: any = await $fetch(`${baseApi}/documents/get.php`, {
+    const response: any = await $fetch(`${baseApi}/documents/get/${query.id}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
         'accept': 'application/json'
-      },
-      query: {
-        id: query.id
       }
     })
 

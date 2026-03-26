@@ -75,5 +75,6 @@ export interface PublicKeyInfo {
   }
   usage: string
   documentation: string
+  created_at: string
   issued_at: string
 }
