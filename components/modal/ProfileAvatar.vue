@@ -53,7 +53,7 @@
             </div>
 
             <!-- Badge de suppression -->
-            <button v-if="currentAvatar && !selectedFile" @click.stop="$emit('delete')"
+            <button v-if="currentAvatar && !selectedFile" @click.stop="showDeleteConfirm = true"
               class="absolute top-4 right-4 z-30 bg-white hover:bg-danger text-danger hover:text-white p-2.5 rounded-full shadow-2xl border border-ash transition-all hover:scale-110 active:scale-95 cursor-pointer flex items-center justify-center"
               title="Supprimer la photo actuelle">
               <IconTrash class="w-5 h-5" />
@@ -112,6 +112,11 @@
   <ModalGlobalFileError :show="showFileError" :title="fileErrorTitle" :message="fileErrorMessage"
     :file-name="errorFileName" :file-type="errorFileType" :file-size="errorFileSize"
     :accepted-formats="'JPG, PNG, WebP, GIF (Max 2 Mo)'" @close="showFileError = false" />
+
+  <!-- Modale de confirmation de suppression -->
+  <UiConfirmModal :show="showDeleteConfirm" title="Supprimer la photo"
+    message="Êtes-vous sûr de vouloir supprimer votre photo de profil ?" confirm-text="Supprimer" cancel-text="Annuler"
+    variant="danger" :icon="IconTrash" @confirm="confirmDelete" @cancel="showDeleteConfirm = false" />
 </template>
 
 <script setup lang="ts">
@@ -185,6 +190,13 @@ const fileErrorMessage = ref('')
 const errorFileName = ref('')
 const errorFileType = ref('')
 const errorFileSize = ref('')
+
+// État pour la confirmation de suppression
+const showDeleteConfirm = ref(false)
+const confirmDelete = () => {
+  emit('delete')
+  showDeleteConfirm.value = false
+}
 
 /**
  * Affiche l'erreur de fichier de manière élégante
