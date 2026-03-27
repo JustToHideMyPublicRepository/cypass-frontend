@@ -24,7 +24,10 @@
           class="glass-panel p-5 rounded-xl border border-ash/50 space-y-3 transition-all hover:border-ash group">
           <div class="flex items-center justify-between">
             <span class="text-[10px] font-black uppercase tracking-widest opacity-60">{{ incident.date }}</span>
-            <span class="badge badge-primary text-[9px]">{{ incident.type }}</span>
+            <span class="badge text-[9px]" :class="getStatusInfo(incident.type).bgColor + ' ' + getStatusInfo(incident.type).textColor">
+              <component :is="getStatusInfo(incident.type).icon" class="w-3 h-3 inline-block mr-1" />
+              {{ getStatusInfo(incident.type).label }}
+            </span>
           </div>
           <h4 class="font-bold text-sm md:text-base group-hover:text-primary transition-colors">{{ incident.title }}
           </h4>
@@ -60,7 +63,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
 import { useStatusStore } from '~/stores/back/public/status'
-import { getIncidentStatusInfo } from '~/utils/status'
+import { getIncidentStatusInfo, getStatusInfo } from '~/utils/status'
 import { IconChevronLeft, IconChevronRight, IconCalendar, IconCalendarWeek, IconCalendarMonth, IconCalendarTime, IconHistory } from '@tabler/icons-vue'
 
 const statusStore = useStatusStore()

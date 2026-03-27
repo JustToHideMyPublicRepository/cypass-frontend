@@ -1,4 +1,4 @@
-import { IconCheck, IconAlertTriangle, IconAlertCircle, IconInfoCircle, IconSearch, IconEye } from '@tabler/icons-vue'
+import { IconCheck, IconAlertTriangle, IconAlertCircle, IconInfoCircle, IconSearch, IconEye, IconCalendar, IconShieldLock, IconTool } from '@tabler/icons-vue'
 
 export const STATUS_CONFIG = {
   'operational': {
@@ -27,27 +27,53 @@ export const STATUS_CONFIG = {
     bgColor: 'bg-warning/20',
     textColor: 'text-warning'
   },
-  'partial_outage': {
-    label: 'Interruption partielle',
-    color: 'text-orange-500',
-    dot: 'bg-orange-500',
-    shadow: '0 0 8px rgba(249,115,22,0.6)',
-    level: 2,
-    icon: IconAlertTriangle,
-    message: 'Interruption partielle de service',
-    borderColor: 'border-orange-500',
-    shadowColor: 'shadow-orange-500/10',
-    bgColor: 'bg-orange-500/20',
-    textColor: 'text-orange-500'
+  'maintenance': {
+    label: 'Maintenance',
+    color: 'text-blue-500',
+    dot: 'bg-blue-500',
+    shadow: '0 0 8px rgba(59,130,246,0.6)',
+    level: 1,
+    icon: IconTool,
+    message: 'Maintenance en cours',
+    borderColor: 'border-blue-500',
+    shadowColor: 'shadow-blue-500/10',
+    bgColor: 'bg-blue-500/20',
+    textColor: 'text-blue-500'
   },
-  'major_incident': {
-    label: 'Incident majeur',
+  'planned': {
+    label: 'Planifié',
+    color: 'text-purple-500',
+    dot: 'bg-purple-500',
+    shadow: '0 0 8px rgba(168,85,247,0.6)',
+    level: 1,
+    icon: IconCalendar,
+    message: 'Intervention planifiée',
+    borderColor: 'border-purple-500',
+    shadowColor: 'shadow-purple-500/10',
+    bgColor: 'bg-purple-500/20',
+    textColor: 'text-purple-500'
+  },
+  'security': {
+    label: 'Sécurité',
+    color: 'text-indigo-500',
+    dot: 'bg-indigo-500',
+    shadow: '0 0 8px rgba(99,102,241,0.6)',
+    level: 2,
+    icon: IconShieldLock,
+    message: 'Intervention de sécurité',
+    borderColor: 'border-indigo-500',
+    shadowColor: 'shadow-indigo-500/10',
+    bgColor: 'bg-indigo-500/20',
+    textColor: 'text-indigo-500'
+  },
+  'outage': {
+    label: 'Panne majeure',
     color: 'text-danger',
     dot: 'bg-danger',
     shadow: '0 0 8px rgba(239,68,68,0.6)',
     level: 3,
     icon: IconAlertCircle,
-    message: 'Incident majeur en cours',
+    message: 'Interruption de service',
     borderColor: 'border-danger',
     shadowColor: 'shadow-danger/10',
     bgColor: 'bg-danger/20',
@@ -76,6 +102,11 @@ export const INCIDENT_STATUS_CONFIG = {
     icon: IconEye,
     colorClass: 'text-info'
   },
+  'scheduled': {
+    label: 'Planifié',
+    icon: IconCalendar,
+    colorClass: 'text-purple-500'
+  },
   'default': {
     label: 'Inconnu',
     icon: IconInfoCircle,
@@ -84,7 +115,7 @@ export const INCIDENT_STATUS_CONFIG = {
 }
 
 export const getStatusInfo = (status: string) => {
-  return STATUS_CONFIG[status as keyof typeof STATUS_CONFIG] || STATUS_CONFIG['major_incident']
+  return STATUS_CONFIG[status as keyof typeof STATUS_CONFIG] || STATUS_CONFIG['outage']
 }
 
 export const getIncidentStatusInfo = (status: string = 'default') => {
@@ -99,6 +130,6 @@ export const getGlobalStatus = (components: { status: string }[]) => {
 
   if (maxLevel === 0) return { ...getStatusInfo('operational'), globalLabel: 'Opérationnel' }
   if (maxLevel === 1) return { ...getStatusInfo('degraded'), globalLabel: 'Ralenti' }
-  if (maxLevel === 2) return { ...getStatusInfo('partial_outage'), globalLabel: 'Perturbé' }
-  return { ...getStatusInfo('major_incident'), globalLabel: 'Critique' }
+  if (maxLevel === 2) return { ...getStatusInfo('security'), globalLabel: 'Perturbé' }
+  return { ...getStatusInfo('outage'), globalLabel: 'Critique' }
 }
