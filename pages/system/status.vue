@@ -1,14 +1,14 @@
 <template>
-  <div class="max-w-6xl mx-auto space-y-8 md:space-y-12 relative z-10 px-4 sm:px-6">
-    <RootStatusHero />
+  <div class="max-w-6xl mx-auto space-y-8 md:space-y-12 relative z-10 px-4 sm:px-6 p-4">
+    <RootSystemStatusHero />
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12 items-start">
       <div class="lg:col-span-2 space-y-8 md:space-y-12">
-        <RootStatusMainCard />
-        <RootStatusComponents />
+        <RootSystemStatusMainCard />
+        <RootSystemStatusComponents />
       </div>
       <div class="lg:col-span-1 h-full">
-        <RootStatusHistory />
+        <RootSystemStatusHistory />
       </div>
     </div>
   </div>
@@ -26,6 +26,7 @@ const systemStore = useSystemStore()
 
 onMounted(() => {
   systemStore.fetchSystemStatus()
+  systemStore.fetchSystemHystory()
 })
 
 useHead({

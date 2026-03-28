@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const res = await fetch(`${baseApi}/profile/get_sent_report/${id}`, {
+    const res = await fetch(`${baseApi}/user/report_user/get_sent/${id}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,

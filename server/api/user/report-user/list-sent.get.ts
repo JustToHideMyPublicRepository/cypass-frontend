@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const res = await fetch(`${baseApi}/profile/list_sent_reports`, {
+    const res = await fetch(`${baseApi}/user/report_user/list_sent`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,

@@ -68,7 +68,7 @@ export const navigationShortcuts: Record<string, ShortcutEntry> = {
   status: {
     keys: ['t'],
     label: 'État des services',
-    path: '/status',
+    path: '/system/status',
     isGlobal: true,
     group: 'Navigation',
     modifier: 'Shift'

@@ -13,6 +13,7 @@ export const useSystemStore = defineStore('system', {
   }),
 
   actions: {
+    // Récupérer le statut du système
     async fetchSystemStatus() {
       this.components = []
       this.lastUpdate = null
@@ -32,6 +33,8 @@ export const useSystemStore = defineStore('system', {
         this.loadingComponents = false
       }
     },
+
+    // Récupérer l'historique du système
     async fetchSystemHystory(period?: string) {
       if (period) this.currentPeriod = period
       this.hystory = []

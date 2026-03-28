@@ -92,7 +92,7 @@ const footerGroups = [
       { label: 'FAQ', path: '/faq' },
       { label: 'Centre d\'aide', path: '/support' },
       { label: 'Contact', path: '/contact' },
-      { label: 'État du système', path: '/status' },
+      { label: 'État du système', path: '/system/status' },
     ]
   },
   {

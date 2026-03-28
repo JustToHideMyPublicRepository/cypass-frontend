@@ -8,7 +8,7 @@ Disallow: /dashboard/
 Disallow: /system/search
 Disallow: /user/
 Disallow: /coming-soon
-Disallow: /status
+Disallow: /system/status
 
 # NUXT, ARCHITECTURE et PREVENT DUPLICATE CONTENT
 Disallow: /_payload.json

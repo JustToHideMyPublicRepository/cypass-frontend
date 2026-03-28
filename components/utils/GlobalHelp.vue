@@ -136,7 +136,7 @@ const helpLinks = [
   {
     label: 'État du système',
     desc: 'Disponibilité des services',
-    path: '/status',
+    path: '/system/status',
     icon: IconStatusChange
   },
   {
