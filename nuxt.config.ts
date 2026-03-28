@@ -109,7 +109,7 @@ export default defineNuxtConfig({
       '/user/**',
       '/system/search',
       '/coming-soon',
-      '/status'
+      '/system/status'
     ],
     xslColumns: [
       { label: 'URL', width: '50%' },

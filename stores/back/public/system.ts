@@ -44,8 +44,8 @@ export const useSystemStore = defineStore('system', {
         const res = await $fetch<any>('/api/public/system/history', {
           params: { period: this.currentPeriod }
         })
-        if (res?.success && res.data?.hystory) {
-          this.hystory = res.data.hystory
+        if (res?.success && res.data?.histories) {
+          this.hystory = res.data.histories
         } else {
           this.hystory = []
         }
