@@ -22,7 +22,7 @@
 
     <!-- Confirm Modal -->
     <UiConfirmModal :show="confirmModal.show" :title="confirmModal.title" :message="confirmModal.message"
-      :loading="profilStore.loading" variant="danger" confirmText="Déconnecter" @confirm="handleConfirmRevoke"
+      :loading="activitiesStore.loading" variant="danger" confirmText="Déconnecter" @confirm="handleConfirmRevoke"
       @cancel="confirmModal.show = false" />
   </div>
 </template>
@@ -30,11 +30,11 @@
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted } from 'vue'
 import { useAuthStore } from '~/stores/back/user/auth'
-import { useProfilStore } from '~/stores/back/user/profil'
+import { useActivitiesStore } from '~/stores/back/user/activities'
 import { useToastStore } from '~/stores/front/toast'
 
 const authStore = useAuthStore()
-const profilStore = useProfilStore()
+const activitiesStore = useActivitiesStore()
 const toastStore = useToastStore()
 const sessions = ref<any[]>([])
 const loading = ref(true)
@@ -54,7 +54,7 @@ const confirmModal = reactive({
 
 const loadSessions = async () => {
   loading.value = true
-  sessions.value = await profilStore.sessionsGet()
+  sessions.value = await activitiesStore.sessionsGet()
   loading.value = false
 }
 
@@ -81,13 +81,13 @@ const revokeAll = () => {
 const handleConfirmRevoke = async () => {
   if (confirmModal.isAll) revokingAll.value = true
 
-  const success = await profilStore.sessionsDelete(confirmModal.targetId, confirmModal.isAll)
+  const success = await activitiesStore.sessionsDelete(confirmModal.targetId, confirmModal.isAll)
   if (success) {
-    toastStore.showToast('success', 'Succès', profilStore.message || 'Action réussie.')
+    toastStore.showToast('success', 'Succès', activitiesStore.message || 'Action réussie.')
     confirmModal.show = false
     await loadSessions()
   } else {
-    toastStore.showToast('error', 'Erreur', profilStore.error || 'Une erreur est survenue.')
+    toastStore.showToast('error', 'Erreur', activitiesStore.error || 'Une erreur est survenue.')
   }
   revokingAll.value = false
 }

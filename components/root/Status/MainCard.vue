@@ -11,7 +11,7 @@
         {{ globalInfo?.message || 'Vérification de l\'état du système...' }}
       </h2>
       <p class="text-sm md:text-base text-hsa mt-1">
-        Dernière mise à jour : {{ statusStore.lastUpdate || '...' }}
+        Dernière mise à jour : {{ systemStore.lastUpdate || '...' }}
       </p>
     </div>
   </div>
@@ -20,13 +20,13 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { IconInfoCircle } from '@tabler/icons-vue'
-import { useStatusStore } from '~/stores/back/public/status'
-import { getGlobalStatus } from '~/utils/status'
+import { useSystemStore } from '~/stores/back/public/system'
+import { getGlobalStatus } from '~/utils/system'
 
-const statusStore = useStatusStore()
+const systemStore = useSystemStore()
 
 const globalInfo = computed(() => {
-  const global = getGlobalStatus(statusStore.components)
+  const global = getGlobalStatus(systemStore.components)
   if (!global) return null
   return {
     borderColor: global.borderColor,

@@ -66,9 +66,11 @@
 import { ref, computed } from 'vue'
 import { IconMail, IconLock, IconChevronRight } from '@tabler/icons-vue'
 import { useProfilStore } from '~/stores/back/user/profil'
+import { useSecurityStore } from '~/stores/back/user/security'
 import { useToastStore } from '~/stores/front/toast'
 
 const profilStore = useProfilStore()
+const securityStore = useSecurityStore()
 const toastStore = useToastStore()
 
 const showEmailModal = ref(false)
@@ -79,12 +81,12 @@ const mfaEnabled = computed({
   get: () => profilStore.profile?.mfa_enabled ?? false,
   set: async (val) => {
     loadingMfa.value = true
-    const success = await profilStore.toggleMfa(val)
+    const success = await securityStore.toggleMfa(val)
 
     if (success) {
       toastStore.showToast('success', 'Sécurité mise à jour', `La double authentification est désormais ${val ? 'activée' : 'désactivée'}.`)
     } else {
-      toastStore.showToast('error', 'Erreur', profilStore.error || 'Impossible de modifier le paramètre MFA.')
+      toastStore.showToast('error', 'Erreur', securityStore.error || 'Impossible de modifier le paramètre MFA.')
     }
     loadingMfa.value = false
   }

@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { useAuthStore } from '../back/user/auth'
 import { useUserDocsentryStore } from '../back/user/docsentry'
 import { useUserVigitechStore } from '../back/user/vigitech'
+import { useActivitiesStore } from '../back/user/activities'
 import { usePublicVigitechStore } from '../back/public/vigitech'
 import { shortcutsData } from '@/data/shortcuts'
 import { faqCategories } from '@/data/faq'
@@ -141,6 +142,7 @@ export const useSearchStore = defineStore('search', {
         const authStore = useAuthStore()
         const docStore = useUserDocsentryStore()
         const profStore = useProfilStore()
+        const activitiesStore = useActivitiesStore()
         const isAuthenticated = !!authStore.user
         const vigitechStore = useUserVigitechStore()
         const publicVigitechStore = usePublicVigitechStore()
@@ -149,7 +151,7 @@ export const useSearchStore = defineStore('search', {
         const fetchPromises = []
         if (isAuthenticated) {
           if (docStore.documents.length === 0) fetchPromises.push(docStore.fetchDocuments(100))
-          if (profStore.logs.length === 0) fetchPromises.push(profStore.getUserLogs({ limit: 100 }))
+          if (activitiesStore.logs.length === 0) fetchPromises.push(activitiesStore.getUserLogs({ limit: 100 }))
           if (vigitechStore.userIncidents.length === 0) fetchPromises.push(vigitechStore.fetchUserIncidents())
         }
 

@@ -19,7 +19,7 @@ export const useNotificationsStore = defineStore('notifications', {
     // Supression de notifications    
     async notificationDelete(id: string) {
       try {
-        const response = await $fetch<{ success: boolean }>('/api/user/notifications/delete', {
+        const response = await $fetch<{ success: boolean }>('/api/user/notification/delete', {
           method: 'DELETE',
           query: { id }
         })
@@ -38,7 +38,7 @@ export const useNotificationsStore = defineStore('notifications', {
     async notificationGet(id: string) {
       this.loading = true
       try {
-        const response = await $fetch<{ success: boolean; data: { notification: Notification } }>('/api/user/notifications/get', {
+        const response = await $fetch<{ success: boolean; data: { notification: Notification } }>('/api/user/notification/get', {
           query: { id }
         })
         if (response.success) {
@@ -59,7 +59,7 @@ export const useNotificationsStore = defineStore('notifications', {
     async notificationsList(limit: number = 20, offset: number = 0, append: boolean = false) {
       this.loading = true
       try {
-        const response = await $fetch<{ success: boolean; data: NotificationResponse }>('/api/user/notifications/list', {
+        const response = await $fetch<{ success: boolean; data: NotificationResponse }>('/api/user/notification/list', {
           query: { limit, offset }
         })
         if (response.success) {
@@ -84,7 +84,7 @@ export const useNotificationsStore = defineStore('notifications', {
     // Marquer comme lu
     async notificationAsRead(id: string | 'all') {
       try {
-        const response = await $fetch<{ success: boolean; data: { unread_count: number } }>('/api/user/notifications/mark-read', {
+        const response = await $fetch<{ success: boolean; data: { unread_count: number } }>('/api/user/notification/mark-read', {
           method: 'PATCH',
           body: { id, all: id === 'all' ? '1' : '' }
         })

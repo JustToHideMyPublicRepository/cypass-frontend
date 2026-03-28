@@ -26,7 +26,7 @@ export const useUserPublicStore = defineStore('userPublic', {
       this.loading = true
       this.error = null
       try {
-        const response = await $fetch<PublicProfileResponse>('/api/public/profile/get-public', {
+        const response = await $fetch<PublicProfileResponse>('/api/public/user/get', {
           params: { id }
         })
 

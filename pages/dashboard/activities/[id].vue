@@ -23,15 +23,17 @@
 import { computed, onMounted } from 'vue'
 import { useRoute } from 'nuxt/app'
 import { useProfilStore } from '~/stores/back/user/profil'
+import { useActivitiesStore } from '~/stores/back/user/activities'
 
 const route = useRoute()
 const profilStore = useProfilStore()
+const activitiesStore = useActivitiesStore()
 
 const logId = route.params.id as string
-const log = computed(() => profilStore.currentLog)
+const log = computed(() => activitiesStore.currentLog)
 
 const fetchLog = async () => {
-  await profilStore.getUserLogById(logId)
+  await activitiesStore.getUserLogById(logId)
 }
 
 onMounted(() => {

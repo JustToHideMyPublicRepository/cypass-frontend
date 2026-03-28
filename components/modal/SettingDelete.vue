@@ -20,6 +20,7 @@
 <script setup lang="ts">
 import { ref, reactive, computed, watch, onMounted, onUnmounted } from 'vue'
 import { useProfilStore } from '~/stores/back/user/profil'
+import { useSecurityStore } from '~/stores/back/user/security'
 import { useToastStore } from '~/stores/front/toast'
 
 /**
@@ -32,6 +33,7 @@ const props = defineProps<{
 const emit = defineEmits(['close'])
 
 const profilStore = useProfilStore()
+const securityStore = useSecurityStore()
 const toastStore = useToastStore()
 
 // États de navigation et données de validation
@@ -134,12 +136,12 @@ const confirmDelete = async () => {
   loading.value = true
   error.value = null
 
-  const success = await profilStore.deleteAccount(password.value)
+  const success = await securityStore.deleteAccount(password.value)
   if (!success) {
-    error.value = profilStore.error || 'Mot de passe incorrect ou erreur réseau.'
+    error.value = securityStore.error || 'Mot de passe incorrect ou erreur réseau.'
     toastStore.showToast('error', 'Échec de validation', error.value)
   } else {
-    toastStore.showToast('success', 'Procédure lancée', profilStore.message || 'Suppression programmée sous 48h.')
+    toastStore.showToast('success', 'Procédure lancée', securityStore.message || 'Suppression programmée sous 48h.')
     closeModal()
   }
   loading.value = false

@@ -6,7 +6,7 @@ export default defineEventHandler(async (event: H3Event) => {
   const baseApi = config.cypassBaseAPI
 
   try {
-    const response = await $fetch<{ success: boolean; message: string; data: any }>(`${baseApi}/support/contact`, {
+    const response = await $fetch<{ success: boolean; message: string; data: any }>(`${baseApi}/public/support/contact`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',

@@ -29,7 +29,7 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
     async downloadCertificate(id: string, filename: string) {
       this.error = null
       try {
-        const response = await $fetch('/api/user/docsentry/download', {
+        const response = await $fetch('/api/user/docsentry/get-certificate', {
           query: { id },
           responseType: 'blob'
         })
@@ -70,7 +70,7 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
               has_more: boolean
             }
           }
-        }>('/api/user/docsentry/get-all', {
+        }>('/api/user/docsentry/list', {
           query
         })
         if (response.success) {
@@ -120,7 +120,7 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
         const formData = new FormData()
         formData.append('document', file)
 
-        const response = await $fetch<{ success: boolean; message: string; data: UploadResult }>('/api/user/docsentry/upload', {
+        const response = await $fetch<{ success: boolean; message: string; data: UploadResult }>('/api/user/docsentry/certificate', {
           method: 'POST',
           body: formData
         })

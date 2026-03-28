@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
 
   // Construct the clean backend root URL
   const apiBase = (config.cypassBaseAPI || '').trim().replace(/\/+$/, '')
-  const backendRoot = apiBase.replace(/\/api$/i, '')
+  const backendRoot = apiBase.replace(/\/api(\/v\d+)?$/i, '')
 
   // Final target URL
   const targetUrl = `${backendRoot}/${relativePath}`

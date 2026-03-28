@@ -70,39 +70,13 @@ export const useProfilStore = defineStore('profil', {
       }
     },
 
-    // Supression de compte
-    async deleteAccount(password: string) {
-      this.loading = true
-      this.error = null
-      try {
-        const response = await $fetch<{ success: boolean; message: string }>('/api/user/profile/delete-account', {
-          method: 'DELETE',
-          body: {
-            confirm: true,
-            current_password: password
-          }
-        })
-        if (response.success) {
-          this.message = response.message
-          await this.logout()
-          return true
-        }
-        return false
-      } catch (err: any) {
-        this.error = err.data?.message || 'Erreur lors de la suppression du compte'
-        return false
-      } finally {
-        this.loading = false
-      }
-    },
-
     // Récupérer le profil
     async getProfile() {
       this.loading = true
       this.error = null
       try {
         const headers = import.meta.server ? useRequestHeaders(['cookie']) as any : {}
-        const response = await $fetch<{ success: boolean; user: UserProfile; statistics: Statistics }>('/api/user/profile/get-profile', { headers })
+        const response = await $fetch<{ success: boolean; user: UserProfile; statistics: Statistics }>('/api/user/profile/me', { headers })
         if (response.success) {
           this.profile = response.user
           this.statistics = response.statistics
@@ -113,121 +87,6 @@ export const useProfilStore = defineStore('profil', {
         return false
       } catch (err: any) {
         this.error = err.data?.message || 'Une erreur est survenue lors de la récupération du profil'
-        return false
-      } finally {
-        this.loading = false
-      }
-    },
-
-    // Récupérer les logs
-    async getUserLogs(params: { limit?: number; type?: string; date?: string } = {}) {
-      this.loading = true
-      this.error = null
-      try {
-        const response = await $fetch<{
-          success: boolean;
-          data: {
-            logs: LogEntry[];
-            statistics: LogStatistics;
-            user: { id: string; email: string; role: string };
-            filters: { date: string; type: string; limit: number };
-          }
-        }>('/api/user/profile/get-user-logs', {
-          params
-        })
-        if (response.success) {
-          this.logs = response.data.logs
-          this.logStatistics = response.data.statistics
-          this.logUser = response.data.user
-          this.logFilters = response.data.filters
-          return true
-        }
-        return false
-      } catch (err: any) {
-        this.error = err.data?.message || 'Erreur lors de la récupération des logs'
-        return false
-      } finally {
-        this.loading = false
-      }
-    },
-
-    // Récupérer un log spécifique
-    async getUserLogById(id: string) {
-      this.loading = true
-      this.error = null
-      this.currentLog = null
-      try {
-        const response = await $fetch<{ success: boolean; data: { log: LogEntry }; message: string }>(`/api/user/profile/get-user-id-log?id=${id}`, {
-          method: 'GET'
-        })
-        if (response.success && response.data?.log) {
-          this.currentLog = response.data.log
-          return response.data.log
-        }
-        this.error = response.message || 'Journal introuvable'
-        return null
-      } catch (err: any) {
-        this.error = err.data?.message || 'Erreur lors de la récupération du journal'
-        return null
-      } finally {
-        this.loading = false
-      }
-    },
-
-    // Récupérer les logs par période
-    async getUserLogsPeriod(params: { start_date?: string; end_date?: string; limit?: number; type?: string } = {}) {
-      this.loading = true
-      this.error = null
-      try {
-        const response = await $fetch<{
-          success: boolean;
-          data: {
-            logs: LogEntry[];
-            statistics: LogStatistics;
-            user: { id: string; email: string; role: string };
-            filters: any;
-          }
-        }>('/api/user/profile/get-user-periode-log', {
-          params
-        })
-        if (response.success && response.data) {
-          this.logs = response.data.logs
-          this.logStatistics = response.data.statistics
-          this.logUser = response.data.user
-          this.logFilters = response.data.filters
-          return true
-        }
-        return false
-      } catch (err: any) {
-        this.error = err.data?.message || 'Erreur lors de la récupération des logs sur la période'
-        return false
-      } finally {
-        this.loading = false
-      }
-    },
-
-    // Récupérer les logs par plage de dates
-    async getUserLogsRange(dates: string[], limit: number = 500) {
-      this.loading = true
-      this.error = null
-      try {
-        const fetchPromises = dates.map(date =>
-          $fetch<any>('/api/user/profile/get-user-logs', { params: { limit, date, type: 'all' } })
-        )
-        const results = await Promise.all(fetchPromises)
-        let allLogs: LogEntry[] = []
-        results.forEach(res => {
-          if (res.success && res.data?.logs) {
-            allLogs = [...allLogs, ...res.data.logs]
-          }
-        })
-        // Unique by ID to avoid duplicates if any
-        this.logs = allLogs.filter((log, index, self) =>
-          index === self.findIndex((t) => t.id === log.id)
-        )
-        return true
-      } catch (err: any) {
-        this.error = err.data?.message || 'Erreur lors de la récupération de la plage de logs'
         return false
       } finally {
         this.loading = false
@@ -247,88 +106,12 @@ export const useProfilStore = defineStore('profil', {
       }
     },
 
-    // Révoquer une session
-    async sessionsDelete(tokenId: string, revokeAll: boolean = false) {
-      this.loading = true
-      this.error = null
-      try {
-        const response = await $fetch<{ success: boolean; message: string }>('/api/user/profile/sessions', {
-          method: 'DELETE',
-          body: {
-            token_id: tokenId,
-            revoke_all: revokeAll
-          }
-        })
-        if (response.success) {
-          this.message = response.message
-          return true
-        }
-        this.error = response.message
-        return false
-      } catch (err: any) {
-        this.error = err.data?.message || 'Impossible de révoquer la session'
-        return false
-      } finally {
-        this.loading = false
-      }
-    },
-
-    // Récupérer les sessions
-    async sessionsGet() {
-      this.loading = true
-      this.error = null
-      try {
-        const response = await $fetch<{ success: boolean; message: string; data: { sessions: any[] } }>('/api/user/profile/sessions', {
-          method: 'GET'
-        })
-        if (response.success) {
-          return response.data.sessions
-        }
-        return []
-      } catch (err: any) {
-        this.error = err.data?.message || 'Impossible de récupérer les sessions'
-        return []
-      } finally {
-        this.loading = false
-      }
-    },
-
-    // Activer/Désactiver le MFA
-    async toggleMfa(enabled: boolean) {
-      this.loading = true
-      this.error = null
-      try {
-        const response = await $fetch<{ success: boolean; data: { mfa_enabled: boolean }; message: string }>('/api/user/profile/toggle-mfa', {
-          method: 'PATCH',
-          body: { mfa_enabled: enabled }
-        })
-
-        if (response.success) {
-          this.message = response.message
-          if (this.profile) {
-            this.profile.mfa_enabled = response.data.mfa_enabled
-          }
-          const authStore = useAuthStore()
-          if (authStore.user) {
-            authStore.user.mfa_enabled = response.data.mfa_enabled
-          }
-          return true
-        }
-        return false
-      } catch (err: any) {
-        this.error = err.data?.message || 'Erreur lors du changement du MFA'
-        return false
-      } finally {
-        this.loading = false
-      }
-    },
-
     // Mise à jour des informations personnelles
     async updateProfile(data: { first_name?: string; last_name?: string; organization_name?: string }) {
       this.loading = true
       this.error = null
       try {
-        const response = await $fetch<{ success: boolean; message: string }>('/api/user/profile/update-profile', {
+        const response = await $fetch<{ success: boolean; message: string }>('/api/user/profile/update', {
           method: 'PUT',
           body: data
         })
@@ -362,7 +145,7 @@ export const useProfilStore = defineStore('profil', {
         const formData = new FormData()
         formData.append('avatar', file)
 
-        const response = await $fetch<{ success: boolean; data: { avatar_url: string }; message: string }>('/api/user/profile/upload-avatar', {
+        const response = await $fetch<{ success: boolean; data: { avatar_url: string }; message: string }>('/api/user/profile/change-avatar', {
           method: 'POST',
           body: formData
         })
@@ -388,7 +171,7 @@ export const useProfilStore = defineStore('profil', {
       this.loading = true
       this.error = null
       try {
-        const response = await $fetch<{ success: boolean; message: string }>('/api/user/profile/upload-avatar', {
+        const response = await $fetch<{ success: boolean; message: string }>('/api/user/profile/change-avatar', {
           method: 'POST',
           body: { action: 'delete' }
         })

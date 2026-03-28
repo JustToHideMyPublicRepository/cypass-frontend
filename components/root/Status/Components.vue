@@ -3,7 +3,8 @@
     <h3 class="text-base md:text-lg font-bold pl-2">Composants</h3>
 
     <div v-if="loading" class="space-y-3">
-      <div v-for="i in 6" :key="i" class="glass-panel p-4 md:px-6 rounded-xl md:rounded-2xl border border-ash/50 flex items-center justify-between gap-4">
+      <div v-for="i in 6" :key="i"
+        class="glass-panel p-4 md:px-6 rounded-xl md:rounded-2xl border border-ash/50 flex items-center justify-between gap-4">
         <UiAppSkeleton type="text" width="160px" />
         <div class="flex items-center gap-3">
           <UiAppSkeleton type="text" width="80px" height="12px" />
@@ -28,14 +29,14 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useStatusStore } from '~/stores/back/public/status'
-import { getStatusInfo } from '~/utils/status'
+import { useSystemStore } from '~/stores/back/public/system'
+import { getStatusInfo } from '~/utils/system'
 
-const statusStore = useStatusStore()
-const loading = computed(() => statusStore.loadingComponents && statusStore.components.length === 0)
+const systemStore = useSystemStore()
+const loading = computed(() => systemStore.loadingComponents && systemStore.components.length === 0)
 
 const mappedComponents = computed(() => {
-  return statusStore.components.map(c => {
+  return systemStore.components.map(c => {
     const info = getStatusInfo(c.status)
     return {
       name: c.name,

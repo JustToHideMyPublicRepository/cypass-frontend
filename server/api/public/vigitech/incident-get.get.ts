@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
   const id = event.context.params?.id || getQuery(event).id as string
 
   try {
-    const response = await $fetch(`${baseApi}/vigitech/get_one/${id}`)
+    const response = await $fetch(`${baseApi}/public/vigitech/get_incident/${id}`)
     return response
   } catch (err: any) {
     throw createError({

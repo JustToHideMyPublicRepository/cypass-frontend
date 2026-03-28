@@ -16,16 +16,16 @@
 
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { useStatusStore } from '~/stores/back/public/status'
+import { useSystemStore } from '~/stores/back/public/system'
 
 definePageMeta({
   layout: 'guest'
 })
 
-const statusStore = useStatusStore()
+const systemStore = useSystemStore()
 
 onMounted(() => {
-  statusStore.fetchSystemStatus()
+  systemStore.fetchSystemStatus()
 })
 
 useHead({

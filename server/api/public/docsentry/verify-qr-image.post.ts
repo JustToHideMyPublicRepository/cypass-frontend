@@ -22,7 +22,7 @@ export default defineEventHandler(async (event) => {
       }
     }
 
-    const response: any = await $fetch(`${baseApi}/documents/verify-qr-image`, {
+    const response: any = await $fetch(`${baseApi}/public/docsentry/verify-qr-image`, {
       method: 'POST',
       headers: { 'accept': 'application/json' },
       body: backendFormData

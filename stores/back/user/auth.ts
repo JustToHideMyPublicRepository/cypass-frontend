@@ -32,7 +32,7 @@ export const useAuthStore = defineStore('auth', {
       this.loading = true
       this.error = null
       try {
-        const response = await $fetch<{ success: boolean; message: string }>('/api/user/auth/forgot-password', {
+        const response = await $fetch<{ success: boolean; message: string }>('/api/user/auth/password-forgot', {
           method: 'POST',
           body: { email }
         })
@@ -122,7 +122,7 @@ export const useAuthStore = defineStore('auth', {
       this.loading = true
       this.error = null
       try {
-        const response = await $fetch<{ success: boolean; message: string }>('/api/user/auth/resend-mfa', {
+        const response = await $fetch<{ success: boolean; message: string }>('/api/user/auth/mfa-resend', {
           method: 'POST',
           body: { email: this.mfaSession.email }
         })
@@ -145,7 +145,7 @@ export const useAuthStore = defineStore('auth', {
       this.loading = true
       this.error = null
       try {
-        const response = await $fetch<{ success: boolean; message: string }>('/api/user/auth/resend-verification', {
+        const response = await $fetch<{ success: boolean; message: string }>('/api/user/auth/email-resend', {
           method: 'POST',
           body: { email }
         })
@@ -168,7 +168,7 @@ export const useAuthStore = defineStore('auth', {
       this.loading = true
       this.error = null
       try {
-        const response = await $fetch<{ success: boolean; message: string }>('/api/user/auth/reset-password', {
+        const response = await $fetch<{ success: boolean; message: string }>('/api/user/auth/password-reset', {
           method: 'POST',
           body: {
             token: data.token,
@@ -197,7 +197,7 @@ export const useAuthStore = defineStore('auth', {
       try {
         const headers = import.meta.server ? useRequestHeaders(['cookie']) as any : {}
 
-        const response = await $fetch<{ success: boolean; data: { user: User } }>('/api/user/auth/verify_token', { headers })
+        const response = await $fetch<{ success: boolean; data: { user: User } }>('/api/user/auth/token-verify', { headers })
         if (response.success) {
           this.user = response.data.user
         }
@@ -213,7 +213,7 @@ export const useAuthStore = defineStore('auth', {
       this.loading = true
       this.error = null
       try {
-        const response = await $fetch<{ success: boolean; message: string }>('/api/user/auth/verify-email', {
+        const response = await $fetch<{ success: boolean; message: string }>('/api/user/auth/email-verify', {
           method: 'GET',
           params: { token }
         })
@@ -241,7 +241,7 @@ export const useAuthStore = defineStore('auth', {
           success: boolean;
           message: string;
           data: { user: User; token: string }
-        }>('/api/user/auth/verify-mfa', {
+        }>('/api/user/auth/mfa-verify', {
           method: 'POST',
           body: {
             email: this.mfaSession.email,

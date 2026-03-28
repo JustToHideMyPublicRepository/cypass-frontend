@@ -51,6 +51,7 @@ import { useUserDocsentryStore } from '~/stores/back/user/docsentry'
 import { usePublicDocsentryStore } from '~/stores/back/public/docsentry'
 import { useNotificationsStore } from '~/stores/back/user/notifications'
 import { useProfilStore } from '~/stores/back/user/profil'
+import { useActivitiesStore } from '~/stores/back/user/activities'
 import { useAuthStore } from '~/stores/back/user/auth'
 import { useUserVigitechStore } from '~/stores/back/user/vigitech'
 import { useToastStore } from '~/stores/front/toast'
@@ -58,6 +59,7 @@ import { calculateSecurityScore, type SecurityScoreResult } from '~/utils/securi
 
 const authStore = useAuthStore()
 const profilStore = useProfilStore()
+const activitiesStore = useActivitiesStore()
 const userDocsentryStore = useUserDocsentryStore()
 const publicDocsentryStore = usePublicDocsentryStore()
 const notificationsStore = useNotificationsStore()
@@ -176,10 +178,10 @@ onMounted(async () => {
   await Promise.all([
     userDocsentryStore.fetchDocuments(5, 0),
     notificationsStore.notificationsList(5, 0),
-    profilStore.getUserLogs({ limit: 5 }),
+    activitiesStore.getUserLogs({ limit: 5 }),
     vigitechStore.fetchUserIncidents(),
     vigitechStore.fetchUserComments(),
-    profilStore.sessionsGet().then((sessions: any[]) => {
+    activitiesStore.sessionsGet().then((sessions: any[]) => {
       activeSessions.value = sessions || []
       activeSessionsCount.value = sessions?.length || 0
     }),

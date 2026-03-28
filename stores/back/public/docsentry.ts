@@ -63,7 +63,7 @@ export const usePublicDocsentryStore = defineStore('publicDocsentry', {
       this.verificationResult = null
 
       try {
-        const response = await $fetch<VerificationResult & { success: boolean }>('/api/public/docsentry/verify', {
+        const response = await $fetch<VerificationResult & { success: boolean }>('/api/public/docsentry/verify-hash', {
           method: 'GET',
           query: { h: hash }
         })
@@ -98,7 +98,7 @@ export const usePublicDocsentryStore = defineStore('publicDocsentry', {
         if (originalFile) formData.append('original_file', originalFile)
         if (certificateFile) formData.append('certificate_file', certificateFile)
 
-        const response = await $fetch<VerificationResult & { success: boolean }>('/api/public/docsentry/verify', {
+        const response = await $fetch<VerificationResult & { success: boolean }>('/api/public/docsentry/verify-file', {
           method: 'POST',
           body: formData
         })

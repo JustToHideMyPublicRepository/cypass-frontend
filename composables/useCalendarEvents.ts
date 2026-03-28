@@ -2,6 +2,7 @@ import { ref, computed } from 'vue'
 import { useUserDocsentryStore } from '~/stores/back/user/docsentry'
 import { useUserVigitechStore } from '~/stores/back/user/vigitech'
 import { useProfilStore } from '~/stores/back/user/profil'
+import { useActivitiesStore } from '~/stores/back/user/activities'
 import { useAuthStore } from '~/stores/back/user/auth'
 import { format, startOfMonth, endOfMonth } from 'date-fns'
 import { getCalendarFilterConfig } from '~/utils/calendar'
@@ -24,6 +25,7 @@ export const useCalendarEvents = () => {
   const userDocsentryStore = useUserDocsentryStore()
   const vigitechStore = useUserVigitechStore()
   const profilStore = useProfilStore()
+  const activitiesStore = useActivitiesStore()
   const authStore = useAuthStore()
 
   const loading = ref(false)
@@ -63,7 +65,7 @@ export const useCalendarEvents = () => {
 
       if (date && date.length === 10) {
         // Daily view: just fetch that day
-        requests.push(profilStore.getUserLogsPeriod({ limit: 1000, type: 'all', start_date: date, end_date: date }))
+        requests.push(activitiesStore.getUserLogsPeriod({ limit: 1000, type: 'all', start_date: date, end_date: date }))
       } else {
         // Month view
         const logReqParams: any = { limit: 1000, type: 'all' }
@@ -75,12 +77,12 @@ export const useCalendarEvents = () => {
           logReqParams.start_date = format(startOfMonth(new Date()), 'yyyy-MM-dd')
           logReqParams.end_date = format(endOfMonth(new Date()), 'yyyy-MM-dd')
         }
-        requests.push(profilStore.getUserLogsPeriod(logReqParams))
+        requests.push(activitiesStore.getUserLogsPeriod(logReqParams))
       }
 
       await Promise.all(requests)
       // Sessions don't have a state, we fetch and store locally
-      sessions.value = await profilStore.sessionsGet()
+      sessions.value = await activitiesStore.sessionsGet()
     } catch (error) {
       console.error('Error fetching calendar events:', error)
     } finally {
@@ -143,8 +145,6 @@ export const useCalendarEvents = () => {
     // 4. Logs
     if (profilStore.logs) {
       profilStore.logs.forEach(log => {
-        // Skip some very noisy logs if needed, or keep them all.
-        // We'll keep them all for the calendar, but maybe filter out minor ones later.
         let ts = log.created_at
         if (ts && !ts.includes('T')) ts = ts.replace(' ', 'T')
 

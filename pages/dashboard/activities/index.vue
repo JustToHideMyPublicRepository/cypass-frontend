@@ -16,14 +16,14 @@
 import { ref, reactive, computed, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
-import { useProfilStore } from '~/stores/back/user/profil'
+import { useActivitiesStore } from '~/stores/back/user/activities'
 import { format, isValid, parseISO, startOfMonth } from 'date-fns'
 import { getLogActionInfo } from '~/utils/logs'
 
-const profilStore = useProfilStore()
+const activitiesStore = useActivitiesStore()
 const route = useRoute()
 
-const { logs, logStatistics, logUser, logFilters } = storeToRefs(profilStore)
+const { logs, logStatistics, logUser, logFilters } = storeToRefs(activitiesStore)
 const loading = ref(false)
 
 const getInitialFilters = () => {
@@ -61,14 +61,14 @@ const itemsPerPage = computed(() => filters.value.limit)
 const fetchLogs = async () => {
   loading.value = true
   if (filters.value.usePeriod) {
-    await profilStore.getUserLogsPeriod({
+    await activitiesStore.getUserLogsPeriod({
       limit: 500,
       type: filters.value.type,
       start_date: filters.value.start_date,
       end_date: filters.value.end_date
     })
   } else {
-    await profilStore.getUserLogs({
+    await activitiesStore.getUserLogs({
       limit: 500,
       type: filters.value.type,
       date: filters.value.date || undefined
