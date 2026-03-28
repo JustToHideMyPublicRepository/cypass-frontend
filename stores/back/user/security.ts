@@ -19,6 +19,58 @@ export const useSecurityStore = defineStore('security', {
   } as ProfilState),
 
   actions: {
+    // Mise à jour d'email
+    async changeEmail(newEmail: string, currentPassword: string) {
+      this.loading = true
+      this.error = null
+      try {
+        const response = await $fetch<{ success: boolean; message: string }>('/api/user/security/change-email', {
+          method: 'PUT',
+          body: { new_email: newEmail, current_password: currentPassword }
+        })
+        if (response.success) {
+          this.message = response.message
+          // Profile needs refresh to show "pending" status badge
+          await useProfilStore().getProfile()
+          return true
+        }
+        this.error = response.message
+        return false
+      } catch (err: any) {
+        this.error = err.data?.message || 'Une erreur est survenue'
+        return false
+      } finally {
+        this.loading = false
+      }
+    },
+
+    // Mise à jour de mot de passe
+    async changePassword(current: string, newPass: string, confirm: string) {
+      this.loading = true
+      this.error = null
+      try {
+        const response = await $fetch<{ success: boolean; message: string }>('/api/user/security/change-password', {
+          method: 'PUT',
+          body: {
+            current_password: current,
+            new_password: newPass,
+            confirm_password: confirm
+          }
+        })
+        if (response.success) {
+          this.message = response.message
+          return true
+        }
+        this.error = response.message
+        return false
+      } catch (err: any) {
+        this.error = err.data?.message || 'Une erreur est survenue'
+        return false
+      } finally {
+        this.loading = false
+      }
+    },
+
     // Supression de compte
     async deleteAccount(password: string) {
       this.loading = true

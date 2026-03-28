@@ -18,58 +18,6 @@ export const useProfilStore = defineStore('profil', {
   } as ProfilState),
 
   actions: {
-    // Mise à jour d'email
-    async changeEmail(newEmail: string, currentPassword: string) {
-      this.loading = true
-      this.error = null
-      try {
-        const response = await $fetch<{ success: boolean; message: string }>('/api/user/profile/change-email', {
-          method: 'PUT',
-          body: { new_email: newEmail, current_password: currentPassword }
-        })
-        if (response.success) {
-          this.message = response.message
-          // Profile needs refresh to show "pending" status badge
-          await this.getProfile()
-          return true
-        }
-        this.error = response.message
-        return false
-      } catch (err: any) {
-        this.error = err.data?.message || 'Une erreur est survenue'
-        return false
-      } finally {
-        this.loading = false
-      }
-    },
-
-    // Mise à jour de mot de passe
-    async changePassword(current: string, newPass: string, confirm: string) {
-      this.loading = true
-      this.error = null
-      try {
-        const response = await $fetch<{ success: boolean; message: string }>('/api/user/profile/change-password', {
-          method: 'PUT',
-          body: {
-            current_password: current,
-            new_password: newPass,
-            confirm_password: confirm
-          }
-        })
-        if (response.success) {
-          this.message = response.message
-          return true
-        }
-        this.error = response.message
-        return false
-      } catch (err: any) {
-        this.error = err.data?.message || 'Une erreur est survenue'
-        return false
-      } finally {
-        this.loading = false
-      }
-    },
-
     // Récupérer le profil
     async getProfile() {
       this.loading = true

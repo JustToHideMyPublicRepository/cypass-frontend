@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const response = await $fetch(`${baseApi}/user/profile/change_password`, {
+    const response = await $fetch(`${baseApi}/user/security/change_password`, {
       method: 'PUT' as any,
       headers: {
         'Authorization': `Bearer ${token}`

@@ -54,10 +54,10 @@
     </UiBaseCard>
 
     <!-- Modals -->
-    <ModalProfileEmail :show="showEmailModal" :loading="profilStore.loading" @close="showEmailModal = false"
+    <ModalProfileEmail :show="showEmailModal" :loading="securityStore.loading" @close="showEmailModal = false"
       @submit="handleEmailUpdate" />
 
-    <ModalProfilePassword :show="showPasswordModal" :loading="profilStore.loading" @close="showPasswordModal = false"
+    <ModalProfilePassword :show="showPasswordModal" :loading="securityStore.loading" @close="showPasswordModal = false"
       @submit="handlePasswordUpdate" />
   </div>
 </template>
@@ -93,22 +93,22 @@ const mfaEnabled = computed({
 })
 
 const handleEmailUpdate = async (data: any) => {
-  const success = await profilStore.changeEmail(data.newEmail, data.password)
+  const success = await securityStore.changeEmail(data.newEmail, data.password)
   if (success) {
-    toastStore.showToast('success', 'Email modifié', profilStore.message || 'Vérifiez votre nouvelle adresse.')
+    toastStore.showToast('success', 'Email modifié', securityStore.message || 'Vérifiez votre nouvelle adresse.')
     showEmailModal.value = false
   } else {
-    toastStore.showToast('error', 'Erreur', profilStore.error || 'Échec du changement d\'email.')
+    toastStore.showToast('error', 'Erreur', securityStore.error || 'Échec du changement d\'email.')
   }
 }
 
 const handlePasswordUpdate = async (data: any) => {
-  const success = await profilStore.changePassword(data.current, data.new, data.confirm)
+  const success = await securityStore.changePassword(data.current, data.new, data.confirm)
   if (success) {
-    toastStore.showToast('success', 'Mot de passe mis à jour', profilStore.message || 'Votre mot de passe a été changé.')
+    toastStore.showToast('success', 'Mot de passe mis à jour', securityStore.message || 'Votre mot de passe a été changé.')
     showPasswordModal.value = false
   } else {
-    toastStore.showToast('error', 'Erreur', profilStore.error || 'Échec du changement de mot de passe.')
+    toastStore.showToast('error', 'Erreur', securityStore.error || 'Échec du changement de mot de passe.')
   }
 }
 </script>
