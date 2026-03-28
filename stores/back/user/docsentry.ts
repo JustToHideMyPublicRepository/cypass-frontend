@@ -149,7 +149,7 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
         const previousWeekStart = startOfWeek(subWeeks(now, 1), { weekStartsOn: 1 })
         const previousWeekEnd = endOfWeek(subWeeks(now, 1), { weekStartsOn: 1 })
 
-        const response = await $fetch<any>('/api/user/docsentry/get-all', {
+        const response = await $fetch<any>('/api/user/docsentry/list', {
           query: { limit: 100, offset: 0 }
         })
 
