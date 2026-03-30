@@ -24,7 +24,7 @@ export default defineEventHandler(async (event: H3Event) => {
   }
 
   try {
-    const response = await $fetch<MfaResponse>(`${baseApi}/user/auth/mfa_verify`, {
+    const response = await $fetch<MfaResponse>(`${baseApi}/user/auth/mfaMtd_topt_verify`, {
       method: 'POST',
       body: new URLSearchParams(body).toString(),
       headers: {

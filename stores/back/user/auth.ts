@@ -61,8 +61,11 @@ export const useAuthStore = defineStore('auth', {
           data: {
             user?: User;
             token?: string;
-            require_mfa?: boolean;
+            mfa_required?: boolean;
             email?: string;
+            available_methods?: string[];
+            default_method?: string | null;
+            mfa_disabled_until?: string | null;
           }
         }>('/api/user/auth/login', {
           method: 'POST',
@@ -70,10 +73,20 @@ export const useAuthStore = defineStore('auth', {
         })
 
         if (response.success) {
-          if (response.data.require_mfa) {
+          // Détection ultra-robuste du MFA (dans 'data' ou à la racine)
+          const mfaRequired = response.data?.mfa_required || (response.data as any)?.require_mfa || (response as any).mfa_required
+
+          if (mfaRequired) {
+            const data = response.data || (response as any)
+            const rawMethods = data.available_methods || (data as any).methods || ['totp']
+            const availableMethods = Array.isArray(rawMethods) ? rawMethods : Object.keys(rawMethods)
+            const defaultMethod = data.default_method || (availableMethods.length === 1 ? availableMethods[0] : null)
+
             this.mfaSession = {
-              email: response.data.email || credentials.email,
-              loginTime: Date.now()
+              email: data.email || credentials.email,
+              loginTime: Date.now(),
+              available_methods: availableMethods,
+              active_method: defaultMethod
             }
             this.message = response.message
             return { requireMfa: true }
@@ -122,7 +135,7 @@ export const useAuthStore = defineStore('auth', {
       this.loading = true
       this.error = null
       try {
-        const response = await $fetch<{ success: boolean; message: string }>('/api/user/auth/mfa-resend', {
+        const response = await $fetch<{ success: boolean; message: string }>('/api/user/auth/mfaMtd-topt-resend', {
           method: 'POST',
           body: { email: this.mfaSession.email }
         })
@@ -231,7 +244,107 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    // Vérifier le code MFA
+    // Sélectionner une méthode MFA
+    async selectMfaMethod(method: string) {
+      if (!this.mfaSession) return false
+      this.loading = true
+      this.error = null
+      try {
+        const response: any = await $fetch('/api/user/auth/mfa-select-method', {
+          method: 'POST',
+          body: { email: this.mfaSession.email, method }
+        })
+        if (response.success) {
+          this.mfaSession.active_method = method
+          this.message = response.message
+          return true
+        }
+        this.error = response.message
+        return false
+      } catch (err: any) {
+        this.error = err.data?.message || 'Erreur lors de la sélection'
+        return false
+      } finally {
+        this.loading = false
+      }
+    },
+
+    // Connexion avec Authenticator
+    async loginWithAuthenticator(code: string) {
+      if (!this.mfaSession) return false
+      this.loading = true
+      this.error = null
+      try {
+        const response: any = await $fetch('/api/user/auth/mfaMtd-auth-app', {
+          method: 'POST',
+          body: { email: this.mfaSession.email, code }
+        })
+        if (response.success) {
+          this.user = response.data.user
+          this.message = response.message
+          this.mfaSession = null
+          return true
+        }
+        this.error = response.message
+        return false
+      } catch (err: any) {
+        this.error = err.data?.message || 'Code incorrect ou expiré'
+        return false
+      } finally {
+        this.loading = false
+      }
+    },
+
+    // Envoyer un lien magique (MFA)
+    async loginWithMagicLink() {
+      if (!this.mfaSession) return false
+      this.loading = true
+      this.error = null
+      try {
+        const response: any = await $fetch('/api/user/auth/mfaMtd-magic-link', {
+          method: 'POST',
+          body: { email: this.mfaSession.email }
+        })
+        if (response.success) {
+          this.message = response.message
+          return true
+        }
+        this.error = response.message
+        return false
+      } catch (err: any) {
+        this.error = err.data?.message || 'Erreur lors de l\'envoi'
+        return false
+      } finally {
+        this.loading = false
+      }
+    },
+
+    // Vérifier un lien magique
+    async verifyMagicLink(email: string, token: string) {
+      this.loading = true
+      this.error = null
+      try {
+        const response: any = await $fetch('/api/user/auth/mfaMtd-magic-verify', {
+          method: 'GET',
+          params: { email, token }
+        })
+        if (response.success) {
+          this.user = response.data.user
+          this.message = response.message
+          this.mfaSession = null
+          return true
+        }
+        this.error = response.message
+        return false
+      } catch (err: any) {
+        this.error = err.data?.message || 'Lien invalide ou expiré'
+        return false
+      } finally {
+        this.loading = false
+      }
+    },
+
+    // Vérifier le code MFA (Security Code ou TOTP Email)
     async verifyMfa(code: string) {
       if (!this.mfaSession) return false
       this.loading = true
@@ -241,7 +354,7 @@ export const useAuthStore = defineStore('auth', {
           success: boolean;
           message: string;
           data: { user: User; token: string }
-        }>('/api/user/auth/mfa-verify', {
+        }>('/api/user/auth/mfaMtd-topt-verify', {
           method: 'POST',
           body: {
             email: this.mfaSession.email,

@@ -111,8 +111,12 @@ const handleLogin = async () => {
 
   if (result.requireMfa) {
     toastStore.showToast('success', 'Vérification requise', authStore.message || 'Un code a été envoyé.')
-    setTimeout(() => navigateTo('/auth/mfa'), 1000)
-  } else if (result.success) {
+    loading.value = false
+    navigateTo('/auth/mfa')
+    return
+  }
+
+  if (result.success) {
     toastStore.showToast('success', 'Bienvenue', authStore.message || 'Connexion réussie !')
     setTimeout(() => navigateTo('/dashboard'), 1000)
   } else {

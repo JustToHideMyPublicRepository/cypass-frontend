@@ -11,8 +11,7 @@
             <span class="text-2xl font-bold text-BtW">CYPASS</span>
           </NuxtLink>
           <p class="text-hsa leading-relaxed text-sm">
-            Infrastructure nationale de confiance numérique. Nous sécurisons l'avenir numérique du Bénin avec des
-            technologies de pointe.
+            Built to protect, Designed to last (Conçu pour protéger, Conçu pour durer)
           </p>
           <div class="flex gap-3">
             <a v-for="social in socialLinks" :key="social" :href="getSocialLink(social)" target="_blank"
