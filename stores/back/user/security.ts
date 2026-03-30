@@ -107,17 +107,17 @@ export const useSecurityStore = defineStore('security', {
           body.disable_days = days
         }
 
-        const response = await $fetch<{ success: boolean; data: { mfa_enabled: boolean; mfa_active?: boolean; mfa_disabled_until?: string | null }; message: string }>('/api/user/security/toggle-mfa', {
+        const response = await $fetch<{ success: boolean; data: { mfa_enabled: boolean; mfa_active?: boolean; mfa_disabled_until?: string | null }; message: string }>('/api/user/security/mfa-toggle', {
           method: 'PATCH',
           body
         })
 
         if (response.success) {
           this.message = response.message
-          
+
           const profilStore = useProfilStore()
           await profilStore.getProfile()
-          
+
           return true
         }
         return false
@@ -143,7 +143,7 @@ export const useSecurityStore = defineStore('security', {
       this.loading = true
       this.error = null
       try {
-        const response = await $fetch<{ success: boolean; data: { codes: string[]; remaining_count: number; expires_at: string }; message: string }>('/api/user/security/security-codes', {
+        const response = await $fetch<{ success: boolean; data: { codes: string[]; remaining_count: number; expires_at: string }; message: string }>('/api/user/security/mfaMtd-sec-codes', {
           method: 'POST',
           body: { password }
         })
@@ -165,7 +165,7 @@ export const useSecurityStore = defineStore('security', {
       this.loading = true
       this.error = null
       try {
-        const response = await $fetch<{ success: boolean; data: { codes: string[]; expires_at: string }; message: string }>('/api/user/security/security-codes-reset', {
+        const response = await $fetch<{ success: boolean; data: { codes: string[]; expires_at: string }; message: string }>('/api/user/security/mfaMtd-sec-reset', {
           method: 'POST'
         })
         if (response.success) {
@@ -212,7 +212,7 @@ export const useSecurityStore = defineStore('security', {
       this.loading = true
       this.error = null
       try {
-        const response = await $fetch<{ success: boolean; data: { secret: string; qr_code_url: string; qr_code_inline: string }; message: string }>('/api/user/security/authenticator-setup', {
+        const response = await $fetch<{ success: boolean; data: { secret: string; qr_code_url: string; qr_code_inline: string }; message: string }>('/api/user/security/mfaMtd-auth-setup', {
           method: 'POST'
         })
         if (response.success) {
@@ -233,7 +233,7 @@ export const useSecurityStore = defineStore('security', {
       this.loading = true
       this.error = null
       try {
-        const response = await $fetch<{ success: boolean; message: string }>('/api/user/security/authenticator-confirm', {
+        const response = await $fetch<{ success: boolean; message: string }>('/api/user/security/mfaMtd-auth-confirm', {
           method: 'POST',
           body: { code }
         })

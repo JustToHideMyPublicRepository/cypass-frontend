@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
     const formData = new FormData()
     formData.append('code', body.code)
 
-    const response: any = await $fetch(`${baseApi}/user/security/authenticator_confirm`, {
+    const response: any = await $fetch(`${baseApi}/user/security/mfaMtd_auth_confirm`, {
       method: 'POST' as any,
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -32,7 +32,7 @@ export default defineEventHandler(async (event) => {
     if (error.response?.status === 422 || error.response?.status === 400) {
       return error.data
     }
-    
+
     throw createError({
       statusCode: error.response?.status || 500,
       message: error.data?.message || 'Erreur lors de la confirmation du code'

@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
       params.append('disable_days', String(body.disable_days))
     }
 
-    const response: any = await $fetch(`${baseApi}/user/security/toggle_mfa`, {
+    const response: any = await $fetch(`${baseApi}/user/security/mfa_toggle`, {
       method: 'PATCH' as any,
       headers: {
         'Authorization': `Bearer ${token}`,

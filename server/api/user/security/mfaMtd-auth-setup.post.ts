@@ -1,32 +1,31 @@
 import { defineEventHandler, getCookie, createError } from 'h3'
 
 export default defineEventHandler(async (event) => {
-  const token = getCookie(event, 'cypass_token')
   const config = useRuntimeConfig()
   const baseApi = config.cypassBaseAPI
+  const token = getCookie(event, 'cypass_token')
 
   if (!token) {
     throw createError({
       statusCode: 401,
-      statusMessage: 'Unauthorized'
+      message: 'Non autorisé'
     })
   }
 
   try {
-    const response = await $fetch(`${baseApi}/user/security/security_codes_reset`, {
-      method: 'POST',
+    const response: any = await $fetch(`${baseApi}/user/security/mfaMtd_auth_setup`, {
+      method: 'POST' as any,
       headers: {
         'Authorization': `Bearer ${token}`,
-        'Accept': 'application/json'
+        'accept': 'application/json'
       }
     })
 
     return response
   } catch (error: any) {
     throw createError({
-      statusCode: error.statusCode || 500,
-      statusMessage: error.data?.message || error.statusMessage || 'Internal Server Error',
-      data: error.data
+      statusCode: error.response?.status || 500,
+      message: error.data?.message || 'Erreur lors de la configuration de l\'authentificateur'
     })
   }
 })

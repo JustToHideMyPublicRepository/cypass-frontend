@@ -1,6 +1,6 @@
-import { defineEventHandler, readBody, createError } from 'h3'
+import { defineEventHandler, readBody, createError, setCookie, type H3Event } from 'h3'
 
-export default defineEventHandler(async (event) => {
+export default defineEventHandler(async (event: H3Event) => {
   const config = useRuntimeConfig()
   const baseApi = config.cypassBaseAPI
   const body = await readBody(event)
@@ -17,6 +17,21 @@ export default defineEventHandler(async (event) => {
         'accept': 'application/json'
       }
     })
+
+    if (response.success && response.data?.token) {
+      setCookie(event, 'cypass_token', response.data.token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 60 * 60 * 24 // 24 hours
+      })
+      
+      const { token, ...safeData } = response.data
+      return {
+        ...response,
+        data: safeData
+      }
+    }
 
     return response
   } catch (error: any) {

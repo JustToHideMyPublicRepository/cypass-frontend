@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const response = await $fetch(`${baseApi}/user/security/security_codes`, {
+    const response = await $fetch(`${baseApi}/user/security/mfaMtd_sec_codes`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,
