@@ -3,9 +3,15 @@
     <p class="text-[10px] font-black text-hsa uppercase tracking-[0.2em] mb-6 text-center">
       Choisissez une méthode sécurisée
     </p>
-    <div class="grid grid-cols-1 gap-3">
+    <div class="grid grid-cols-1 gap-3 relative">
+      <!-- Loading Overlay -->
+      <div v-if="loading" class="absolute inset-0 z-10 flex items-center justify-center bg-WtB/50 backdrop-blur-[1px] rounded-2xl">
+        <UiLogoLoader size="sm" />
+      </div>
+
       <button v-for="method in availableMethods" :key="method" @click="handleSelectMethod(method)"
-        class="flex items-center gap-4 p-4 rounded-2xl border border-ashAct bg-ash/5 hover:bg-primary/5 hover:border-primary/30 transition-all duration-300 text-left group">
+        :disabled="loading"
+        class="flex items-center gap-4 p-4 rounded-2xl border border-ashAct bg-ash/5 hover:bg-primary/5 hover:border-primary/30 transition-all duration-300 text-left group disabled:opacity-50">
         <div
           :class="['p-3 rounded-xl transition-colors', getMfaMethodInfo(method).bg, getMfaMethodInfo(method).color]">
           <component :is="getMfaMethodInfo(method).icon" class="w-6 h-6" />

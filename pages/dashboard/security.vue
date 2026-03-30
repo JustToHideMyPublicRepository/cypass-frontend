@@ -8,7 +8,8 @@
         <MeSecurityMethods :methods="profilStore.profile?.mfa_methods || []" :loading="isInitialLoading"
           :updating-method="updatingMethod"
           @verify-backup-codes="showVerifyModal = true" @set-default="handleSetDefaultMethod"
-          @setup-authenticator="handleSetupAuthenticator" @setup-passkey="showPasskeyModal = true" />
+          @setup-authenticator="handleSetupAuthenticator" @setup-passkey="showPasskeyModal = true"
+          @toggle-method="handleToggleMethod" />
       </div>
 
       <!-- Right: Global Security Info -->
@@ -115,6 +116,36 @@ const handleSetDefaultMethod = async (method: string) => {
   } else {
     toastStore.showToast('error', 'Erreur', securityStore.error || 'Impossible de mettre à jour la méthode.')
   }
+  updatingMethod.value = null
+}
+
+const handleToggleMethod = async (method: string, action: 'enable' | 'disable' | 'reset') => {
+  // Prevent disabling TOTP (redundant check with backend)
+  if (method === 'totp' && action !== 'enable') return
+
+  updatingMethod.value = method
+  
+  let success = false
+  if (action === 'reset' && method === 'security_code') {
+    // Specialized logic for security codes reset
+    const data = await securityStore.resetSecurityCodes()
+    if (data) {
+      fetchedCodes.value = data.codes
+      expiresAt.value = data.expires_at
+      showCodesModal.value = true
+      success = true
+    }
+  } else {
+    success = await securityStore.toggleMfaMethod(method, action)
+  }
+
+  if (success) {
+    const actionLabel = action === 'enable' ? 'activée' : (action === 'disable' ? 'désactivée' : 'réinitialisée')
+    toastStore.showToast('success', 'Succès', `La méthode a été ${actionLabel}.`)
+  } else {
+    toastStore.showToast('error', 'Erreur', securityStore.error || 'Impossible de mettre à jour la méthode.')
+  }
+  
   updatingMethod.value = null
 }
 

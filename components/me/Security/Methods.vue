@@ -90,13 +90,36 @@
                 </UiBaseButton>
               </div>
 
-              <div class="flex items-center gap-2">
-                <div
-                  :class="['w-2 h-2 rounded-full', method.is_enabled ? 'bg-success shadow-[0_0_8px_rgba(34,197,94,0.5)]' : 'bg-ashAct']">
+              <div class="flex items-center gap-4">
+                <!-- Reset Action (if applicable) -->
+                <button 
+                  v-if="['authenticator', 'passkey', 'security_code'].includes(method.method) && method.is_enabled"
+                  class="p-2 text-hsa hover:text-danger hover:bg-danger/10 rounded-xl transition-all"
+                  title="Réinitialiser la méthode"
+                  :disabled="updatingMethod === method.method"
+                  @click="$emit('toggle-method', method.method, 'reset')"
+                >
+                  <IconRotateClockwise2 class="w-4 h-4" />
+                </button>
+
+                <!-- Toggle Switch -->
+                <div class="flex items-center gap-3">
+                  <div v-if="updatingMethod === method.method" class="w-10 flex justify-center">
+                    <UiLogoLoader size="xs" />
+                  </div>
+                  <label v-else-if="method.method !== 'totp'" class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" :checked="method.is_enabled" 
+                      @change="(e) => $emit('toggle-method', method.method, (e.target as HTMLInputElement).checked ? 'enable' : 'disable')" 
+                      class="sr-only peer"
+                      :disabled="updatingMethod === method.method">
+                    <div class="input-toggle-slider"></div>
+                  </label>
+                  
+                  <div v-else class="flex items-center gap-2">
+                    <div class="w-2 h-2 rounded-full bg-success shadow-[0_0_8px_rgba(34,197,94,0.5)]"></div>
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-success">Actif</span>
+                  </div>
                 </div>
-                <span class="text-[10px] font-bold uppercase tracking-widest text-hsa">
-                  {{ method.is_enabled ? 'Activé' : 'Désactivé' }}
-                </span>
               </div>
             </div>
           </div>
@@ -113,7 +136,7 @@
 </template>
 
 <script setup lang="ts">
-import { IconEye, IconLockOff, IconStar, IconSettings, IconFingerprint } from '@tabler/icons-vue'
+import { IconEye, IconLockOff, IconStar, IconSettings, IconFingerprint, IconRotateClockwise2 } from '@tabler/icons-vue'
 import { getMfaMethodInfo } from '~/utils/mfa'
 
 defineProps<{
@@ -122,5 +145,5 @@ defineProps<{
   updatingMethod?: string | null
 }>()
 
-defineEmits(['verify-backup-codes', 'set-default', 'setup-authenticator', 'setup-passkey'])
+defineEmits(['verify-backup-codes', 'set-default', 'setup-authenticator', 'setup-passkey', 'toggle-method'])
 </script>

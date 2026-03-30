@@ -391,7 +391,7 @@ export const useAuthStore = defineStore('auth', {
           if (response.data?.user) this.user = response.data.user
           this.message = response.message || response.data?.message
           this.mfaSession = null
-          return true
+          return response
         }
         this.error = response.message
         return false

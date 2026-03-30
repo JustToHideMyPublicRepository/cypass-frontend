@@ -292,5 +292,29 @@ export const useSecurityStore = defineStore('security', {
         authStore.user.avatar_url = url
       }
     },
+
+    // Activer/Désactiver/Réinitialiser une méthode MFA spécifique
+    async toggleMfaMethod(method: string, action: 'enable' | 'disable' | 'reset') {
+      this.loading = true
+      this.error = null
+      try {
+        const response = await $fetch<{ success: boolean; message: string }>('/api/user/security/mfa-method-toggle', {
+          method: 'PATCH',
+          body: { method, action }
+        })
+        if (response.success) {
+          this.message = response.message
+          await useProfilStore().getProfile()
+          return true
+        }
+        this.error = response.message
+        return false
+      } catch (err: any) {
+        this.error = err.data?.message || 'Erreur lors de l\'action sur la méthode MFA'
+        return false
+      } finally {
+        this.loading = false
+      }
+    }
   }
 })

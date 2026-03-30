@@ -10,7 +10,7 @@ export default defineEventHandler(async (event: H3Event) => {
     if (body.email) formData.append('email', body.email)
     if (body.code) formData.append('code', body.code)
 
-    const response: any = await $fetch(`${baseApi}/user/auth/mfaMTd_sec_codes`, {
+    const response: any = await $fetch(`${baseApi}/user/auth/mfaMtd_sec_codes`, {
       method: 'POST',
       body: formData,
       headers: {
@@ -25,7 +25,7 @@ export default defineEventHandler(async (event: H3Event) => {
         sameSite: 'lax',
         maxAge: 60 * 60 * 24 // 24 hours
       })
-      
+
       const { token, ...safeData } = response.data
       return {
         ...response,
