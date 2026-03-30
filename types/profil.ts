@@ -9,7 +9,21 @@ export interface UserProfile {
   status: 'pending' | 'active' | 'pending_delete' | 'deleted' | 'suspended'
   email_verified: boolean
   mfa_enabled: boolean
+  mfa_active?: boolean
+  mfa_disabled_until?: string | null
+  mfa_method?: string
+  mfa_default_method?: string
+  mfa_methods?: MfaMethodInfo[]
+  has_security_codes?: boolean
   is_reported?: boolean
+  created_at: string
+}
+
+export interface MfaMethodInfo {
+  method: 'magic_link' | 'security_code' | 'totp' | 'webauthn' | string
+  label: string
+  is_enabled: boolean
+  is_default: boolean
   created_at: string
 }
 

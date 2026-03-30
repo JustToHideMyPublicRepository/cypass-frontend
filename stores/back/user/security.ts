@@ -98,24 +98,26 @@ export const useSecurityStore = defineStore('security', {
     },
 
     // Activer/Désactiver le MFA
-    async toggleMfa(enabled: boolean) {
+    async toggleMfa(enabled: boolean, days?: number) {
       this.loading = true
       this.error = null
       try {
-        const response = await $fetch<{ success: boolean; data: { mfa_enabled: boolean }; message: string }>('/api/user/security/toggle-mfa', {
+        const body: any = { mfa_enabled: enabled }
+        if (!enabled && days) {
+          body.disable_days = days
+        }
+
+        const response = await $fetch<{ success: boolean; data: { mfa_enabled: boolean; mfa_active?: boolean; mfa_disabled_until?: string | null }; message: string }>('/api/user/security/toggle-mfa', {
           method: 'PATCH',
-          body: { mfa_enabled: enabled }
+          body
         })
 
         if (response.success) {
           this.message = response.message
-          if (this.profile) {
-            this.profile.mfa_enabled = response.data.mfa_enabled
-          }
-          const authStore = useAuthStore()
-          if (authStore.user) {
-            authStore.user.mfa_enabled = response.data.mfa_enabled
-          }
+          
+          const profilStore = useProfilStore()
+          await profilStore.getProfile()
+          
           return true
         }
         return false
@@ -134,6 +136,153 @@ export const useSecurityStore = defineStore('security', {
 
     closeLogoutModal() {
       this.isLogoutModalOpen = false
+    },
+
+    // Récupérer les codes de sécurité
+    async getSecurityCodes(password: string) {
+      this.loading = true
+      this.error = null
+      try {
+        const response = await $fetch<{ success: boolean; data: { codes: string[]; remaining_count: number; expires_at: string }; message: string }>('/api/user/security/security-codes', {
+          method: 'POST',
+          body: { password }
+        })
+        if (response.success) {
+          return response.data
+        }
+        this.error = response.message
+        return null
+      } catch (err: any) {
+        this.error = err.data?.message || 'Erreur lors de la récupération des codes'
+        return null
+      } finally {
+        this.loading = false
+      }
+    },
+
+    // Réinitialiser les codes de sécurité
+    async resetSecurityCodes() {
+      this.loading = true
+      this.error = null
+      try {
+        const response = await $fetch<{ success: boolean; data: { codes: string[]; expires_at: string }; message: string }>('/api/user/security/security-codes-reset', {
+          method: 'POST'
+        })
+        if (response.success) {
+          // Refresh profile to update has_security_codes
+          await useProfilStore().getProfile()
+          return response.data
+        }
+        this.error = response.message
+        return null
+      } catch (err: any) {
+        this.error = err.data?.message || 'Erreur lors de la réinitialisation des codes'
+        return null
+      } finally {
+        this.loading = false
+      }
+    },
+
+    // Définir la méthode MFA par défaut
+    async setDefaultMfaMethod(method: string) {
+      this.loading = true
+      this.error = null
+      try {
+        const response = await $fetch<{ success: boolean; message: string }>('/api/user/security/mfa-default-method', {
+          method: 'PATCH',
+          body: { method }
+        })
+        if (response.success) {
+          this.message = response.message
+          await useProfilStore().getProfile()
+          return true
+        }
+        this.error = response.message
+        return false
+      } catch (err: any) {
+        this.error = err.data?.message || 'Erreur lors de la mise à jour'
+        return false
+      } finally {
+        this.loading = false
+      }
+    },
+
+    // Initialiser la configuration Authenticator
+    async authenticatorSetup() {
+      this.loading = true
+      this.error = null
+      try {
+        const response = await $fetch<{ success: boolean; data: { secret: string; qr_code_url: string; qr_code_inline: string }; message: string }>('/api/user/security/authenticator-setup', {
+          method: 'POST'
+        })
+        if (response.success) {
+          return response.data
+        }
+        this.error = response.message
+        return null
+      } catch (err: any) {
+        this.error = err.data?.message || 'Erreur lors de l\'initialisation'
+        return null
+      } finally {
+        this.loading = false
+      }
+    },
+
+    // Confirmer la configuration Authenticator
+    async authenticatorConfirm(code: string) {
+      this.loading = true
+      this.error = null
+      try {
+        const response = await $fetch<{ success: boolean; message: string }>('/api/user/security/authenticator-confirm', {
+          method: 'POST',
+          body: { code }
+        })
+        if (response.success) {
+          await useProfilStore().getProfile()
+          return true
+        }
+        this.error = response.message
+        return false
+      } catch (err: any) {
+        this.error = err.data?.message || 'Le code est invalide'
+        return false
+      } finally {
+        this.loading = false
+      }
+    },
+
+    // Récupérer les options Passkey
+    async getPasskeyOptions() {
+      this.loading = true
+      this.error = null
+      try {
+        const response: any = await $fetch('/api/user/security/passkey-options')
+        return response
+      } catch (err: any) {
+        this.error = err.data?.message || 'Erreur lors de la récupération des options'
+        return null
+      } finally {
+        this.loading = false
+      }
+    },
+
+    // Enregistrer la Passkey
+    async registerPasskey(data: any) {
+      this.loading = true
+      this.error = null
+      try {
+        const response: any = await $fetch('/api/user/security/passkey-register', {
+          method: 'POST',
+          body: data
+        })
+        await useProfilStore().getProfile()
+        return response || { success: true }
+      } catch (err: any) {
+        this.error = err.data?.message || 'Erreur lors de l\'enregistrement'
+        return null
+      } finally {
+        this.loading = false
+      }
     },
 
     // Synchronisation de l'avatar avec AuthStore

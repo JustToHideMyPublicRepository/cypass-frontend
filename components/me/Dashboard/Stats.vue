@@ -20,9 +20,9 @@
         <div class="mt-4 flex items-center justify-between gap-2">
           <!-- Trend Icon + Difference Badge -->
           <div v-if="stat.trend" class="flex items-center gap-1.5 px-2 py-1 rounded-lg backdrop-blur-md" :class="[
-            stat.trend.difference > 0 ? 'bg-success/20 text-success' :
-              stat.trend.difference < 0 ? 'bg-danger/20 text-danger' :
-                'bg-white/20 text-white'
+            stat.trend.difference > 0 ? 'bg-success/60 text-WtB' :
+              stat.trend.difference < 0 ? 'bg-danger/60 text-WtB' :
+                'bg-BtW/60 text-WtB'
           ]">
             <component
               :is="stat.trend.difference > 0 ? IconTrendingUp : (stat.trend.difference < 0 ? IconTrendingDown : IconLayoutAlignMiddle)"

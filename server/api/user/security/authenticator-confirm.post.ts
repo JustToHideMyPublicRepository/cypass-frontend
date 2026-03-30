@@ -14,27 +14,28 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const params = new URLSearchParams()
-    params.append('mfa_enabled', body.mfa_enabled ? 'true' : 'false')
-    if (body.disable_days) {
-      params.append('disable_days', String(body.disable_days))
-    }
+    const formData = new FormData()
+    formData.append('code', body.code)
 
-    const response: any = await $fetch(`${baseApi}/user/security/toggle_mfa`, {
-      method: 'PATCH' as any,
+    const response: any = await $fetch(`${baseApi}/user/security/authenticator_confirm`, {
+      method: 'POST' as any,
       headers: {
         'Authorization': `Bearer ${token}`,
-        'accept': 'application/json',
-        'Content-Type': 'application/x-www-form-urlencoded'
+        'accept': 'application/json'
       },
-      body: params.toString()
+      body: formData
     })
 
     return response
   } catch (error: any) {
+    // Return the response directly if it's a validation error (422) or similar
+    if (error.response?.status === 422 || error.response?.status === 400) {
+      return error.data
+    }
+    
     throw createError({
       statusCode: error.response?.status || 500,
-      message: error.data?.message || 'Erreur lors de la modification du MFA'
+      message: error.data?.message || 'Erreur lors de la confirmation du code'
     })
   }
 })

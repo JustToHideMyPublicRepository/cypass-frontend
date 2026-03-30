@@ -96,6 +96,10 @@
     @apply bg-danger text-white hover:bg-dangerAct shadow-lg shadow-danger/30 hover:scale-[1.01] relative;
   }
 
+  .btn-warning {
+    @apply bg-warning text-WtB hover:bg-warningAct shadow-lg shadow-warning/30 hover:scale-[1.01] relative;
+  }
+
   /* Champs de saisie */
   .input {
     @apply w-full px-4 py-3 rounded-xl bg-ash border border-WtBAct placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300;

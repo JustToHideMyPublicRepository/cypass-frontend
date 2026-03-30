@@ -14,27 +14,23 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const params = new URLSearchParams()
-    params.append('mfa_enabled', body.mfa_enabled ? 'true' : 'false')
-    if (body.disable_days) {
-      params.append('disable_days', String(body.disable_days))
-    }
-
-    const response: any = await $fetch(`${baseApi}/user/security/toggle_mfa`, {
-      method: 'PATCH' as any,
+    // Laragear/WebAuthn expects the raw JSON response from the credential ceremony
+    // + an optional 'name' field.
+    const response: any = await $fetch(`${baseApi}/user/security/passkey_register`, {
+      method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,
         'accept': 'application/json',
-        'Content-Type': 'application/x-www-form-urlencoded'
+        'content-type': 'application/json'
       },
-      body: params.toString()
+      body: body
     })
 
     return response
   } catch (error: any) {
     throw createError({
       statusCode: error.response?.status || 500,
-      message: error.data?.message || 'Erreur lors de la modification du MFA'
+      message: error.data?.message || 'Erreur lors de l\'enregistrement de la Passkey'
     })
   }
 })

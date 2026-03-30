@@ -1,7 +1,7 @@
 <template>
   <!-- Conteneur principal du Skeleton -->
   <div :class="[
-    'bg-ash relative overflow-hidden',
+    bg, 'relative overflow-hidden',
     animated ? 'animate-pulse' : '',
     typeClasses[type],
     customClass
@@ -14,7 +14,8 @@
     <!-- Éléments récursifs si count > 1 -->
     <template v-if="count > 1">
       <div v-for="i in count" :key="i" :class="[
-        'bg-ash/80 relative overflow-hidden mb-2 last:mb-0',
+        bg + '/80',
+        'relative overflow-hidden mb-2 last:mb-0',
         typeClasses[type],
       ]" :style="style"></div>
     </template>
@@ -32,6 +33,7 @@ interface Props {
   radius?: string
   count?: number
   animated?: boolean
+  bg?: string
   class?: string
 }
 
@@ -39,6 +41,7 @@ const props = withDefaults(defineProps<Props>(), {
   type: 'rect',
   count: 1,
   animated: true,
+  bg: 'bg-ash',
   class: ''
 })
 

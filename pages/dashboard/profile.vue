@@ -16,7 +16,8 @@
 
       <!-- Right Column: Personal Info & Security -->
       <div class="lg:col-span-2 space-y-6">
-        <MeProfilePersonalInfo v-model="form" :email-verified="!!profilStore.profile?.email_verified" />
+        <MeProfilePersonalInfo v-model="form" :email-verified="!!profilStore.profile?.email_verified"
+          :loading="profilStore.loading" />
         <MeProfileSecurity />
       </div>
     </div>

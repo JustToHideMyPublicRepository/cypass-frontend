@@ -37,14 +37,29 @@
 
         <!-- 2FA -->
         <div class="flex items-center justify-between">
-          <div>
-            <h3 class="font-bold text-BtW">Double Authentification (2FA)</h3>
-            <p class="text-sm text-hsa">Sécurisez votre compte avec une étape supplémentaire.</p>
+          <div class="flex items-center gap-3">
+            <div>
+              <h3 class="font-bold text-BtW flex items-center gap-2">
+                Double authentification (2FA)
+                <UiAppTooltip v-if="mfaDisabledUntil"
+                  :content="`Votre MFA est suspendu. Son statut sera automatiquement mis à jour le <b>${formatDate(mfaDisabledUntil)}</b>.`"
+                  title="Suspension temporaire" icon-class="text-warning opacity-100" />
+              </h3>
+              <p class="text-sm text-hsa">
+                <template v-if="mfaDisabledUntil">
+                  <span class="text-warning font-medium">Suspendu jusqu'au {{ formatDate(mfaDisabledUntil) }}</span>
+                </template>
+                <template v-else>
+                  Sécurisez votre compte avec une étape supplémentaire.
+                </template>
+              </p>
+            </div>
           </div>
           <div class="flex items-center gap-3">
             <UiLogoLoader v-if="loadingMfa" size="xs" />
             <label class="relative inline-flex items-center cursor-pointer">
-              <input type="checkbox" v-model="mfaEnabled" class="sr-only peer" :disabled="loadingMfa">
+              <input type="checkbox" :checked="mfaActive" @change="handleMfaToggle" class="sr-only peer"
+                :disabled="loadingMfa">
               <div class="input-toggle-slider">
               </div>
             </label>
@@ -59,6 +74,10 @@
 
     <ModalProfilePassword :show="showPasswordModal" :loading="securityStore.loading" @close="showPasswordModal = false"
       @submit="handlePasswordUpdate" />
+
+    <!-- Modal Désactivation MFA -->
+    <ModalProfileMfaDisable :show="showMfaDurationModal" :loading="loadingMfa" @close="showMfaDurationModal = false"
+      @confirm="confirmMfaDisable" />
   </div>
 </template>
 
@@ -75,22 +94,52 @@ const toastStore = useToastStore()
 
 const showEmailModal = ref(false)
 const showPasswordModal = ref(false)
+const showMfaDurationModal = ref(false)
 const loadingMfa = ref(false)
 
-const mfaEnabled = computed({
-  get: () => profilStore.profile?.mfa_enabled ?? false,
-  set: async (val) => {
-    loadingMfa.value = true
-    const success = await securityStore.toggleMfa(val)
+const mfaActive = computed(() => profilStore.profile?.mfa_active ?? false)
+const mfaDisabledUntil = computed(() => profilStore.profile?.mfa_disabled_until)
 
-    if (success) {
-      toastStore.showToast('success', 'Sécurité mise à jour', `La double authentification est désormais ${val ? 'activée' : 'désactivée'}.`)
-    } else {
-      toastStore.showToast('error', 'Erreur', securityStore.error || 'Impossible de modifier le paramètre MFA.')
-    }
-    loadingMfa.value = false
+const formatDate = (dateStr: string) => {
+  return new Date(dateStr).toLocaleString('fr-FR', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  })
+}
+
+const handleMfaToggle = (event: Event) => {
+  const checkbox = event.target as HTMLInputElement
+  const newVal = checkbox.checked
+
+  if (newVal) {
+    // Activation directe
+    executeMfaToggle(true)
+  } else {
+    // Demander la durée
+    checkbox.checked = true // Garder coché jusqu'à confirmation
+    showMfaDurationModal.value = true
   }
-})
+}
+
+const confirmMfaDisable = async (days: number) => {
+  await executeMfaToggle(false, days)
+  showMfaDurationModal.value = false
+}
+
+const executeMfaToggle = async (val: boolean, days?: number) => {
+  loadingMfa.value = true
+  const success = await securityStore.toggleMfa(val, days)
+
+  if (success) {
+    toastStore.showToast('success', 'Sécurité mise à jour', `La double authentification est désormais ${val ? 'activée' : 'suspendue'}.`)
+  } else {
+    toastStore.showToast('error', 'Erreur', securityStore.error || 'Impossible de modifier le paramètre MFA.')
+  }
+  loadingMfa.value = false
+}
 
 const handleEmailUpdate = async (data: any) => {
   const success = await securityStore.changeEmail(data.newEmail, data.password)

@@ -14,27 +14,23 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const params = new URLSearchParams()
-    params.append('mfa_enabled', body.mfa_enabled ? 'true' : 'false')
-    if (body.disable_days) {
-      params.append('disable_days', String(body.disable_days))
-    }
+    const formData = new FormData()
+    formData.append('method', body.method)
 
-    const response: any = await $fetch(`${baseApi}/user/security/toggle_mfa`, {
+    const response: any = await $fetch(`${baseApi}/user/security/mfa_default_method`, {
       method: 'PATCH' as any,
       headers: {
         'Authorization': `Bearer ${token}`,
-        'accept': 'application/json',
-        'Content-Type': 'application/x-www-form-urlencoded'
+        'accept': 'application/json'
       },
-      body: params.toString()
+      body: formData
     })
 
     return response
   } catch (error: any) {
     throw createError({
       statusCode: error.response?.status || 500,
-      message: error.data?.message || 'Erreur lors de la modification du MFA'
+      message: error.data?.message || 'Erreur lors de la mise à jour de la méthode par défaut'
     })
   }
 })

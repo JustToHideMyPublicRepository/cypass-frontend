@@ -7,6 +7,11 @@ export interface User {
   avatar_url: string | null
   role: string
   mfa_enabled: boolean
+  mfa_active?: boolean
+  mfa_disabled_until?: string | null
+  mfa_method?: string
+  mfa_default_method?: string
+  has_security_codes?: boolean
   created_at: string
 }
 

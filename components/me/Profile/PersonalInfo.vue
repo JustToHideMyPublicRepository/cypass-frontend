@@ -20,9 +20,12 @@
               <div class="p-2 bg-primary/10 rounded-lg">
                 <IconUserCircle class="w-5 h-5 text-primary" />
               </div>
-              <div class="text-left">
+              <div class="text-left flex-1">
                 <p class="text-[10px] font-bold text-hsa uppercase tracking-widest">Prénom</p>
-                <p class="font-bold text-BtW text-lg leading-none mt-1">{{ modelValue.first_name || '-' }}</p>
+                <div v-if="loading" class="mt-1">
+                  <UiAppSkeleton type="text" width="70%" height="1.25rem" bg="bg-ashAct" />
+                </div>
+                <p v-else class="font-bold text-BtW text-lg leading-none mt-1">{{ modelValue.first_name || '-' }}</p>
               </div>
             </div>
           </div>
@@ -33,9 +36,12 @@
               <div class="p-2 bg-secondary/10 rounded-lg">
                 <IconUserSquareRounded class="w-5 h-5 text-secondary" />
               </div>
-              <div class="text-left">
+              <div class="text-left flex-1">
                 <p class="text-[10px] font-bold text-hsa uppercase tracking-widest">Nom de famille</p>
-                <p class="font-bold text-BtW text-lg leading-none mt-1">{{ modelValue.last_name || '-' }}</p>
+                <div v-if="loading" class="mt-1">
+                  <UiAppSkeleton type="text" width="70%" height="1.25rem" bg="bg-ashAct" />
+                </div>
+                <p v-else class="font-bold text-BtW text-lg leading-none mt-1">{{ modelValue.last_name || '-' }}</p>
               </div>
             </div>
           </div>
@@ -46,9 +52,13 @@
               <div class="p-2 bg-success/10 rounded-lg shrink-0">
                 <IconMail class="w-5 h-5 text-success" />
               </div>
-              <div class="text-left overflow-hidden">
+              <div class="text-left flex-1 overflow-hidden">
                 <p class="text-[10px] font-bold text-hsa uppercase tracking-widest">Email de contact</p>
-                <p class="font-bold text-BtW truncate" :title="modelValue.email">{{ modelValue.email }}</p>
+                <div v-if="loading" class="mt-1">
+                  <UiAppSkeleton type="text" width="90%" height="1rem" bg="bg-ashAct" />
+                </div>
+                <p v-else class="font-bold text-BtW truncate" :title="modelValue.email">{{ modelValue.email || '-' }}
+                </p>
               </div>
             </div>
             <UiStatusBadge :status="emailVerified ? 'Verified' : 'Pending'" class="shrink-0 ml-2" />
@@ -60,9 +70,12 @@
               <div class="p-2 bg-warning/10 rounded-lg shrink-0">
                 <IconBuilding class="w-5 h-5 text-warning" />
               </div>
-              <div class="text-left overflow-hidden">
+              <div class="text-left flex-1 overflow-hidden">
                 <p class="text-[10px] font-bold text-hsa uppercase tracking-widest">Organisation</p>
-                <p class="font-bold text-BtW truncate">{{ modelValue.organization_name || '-' }}</p>
+                <div v-if="loading" class="mt-1">
+                  <UiAppSkeleton type="text" width="70%" height="1rem" bg="bg-ashAct" />
+                </div>
+                <p v-else class="font-bold text-BtW truncate">{{ modelValue.organization_name || '-' }}</p>
               </div>
             </div>
           </div>
@@ -97,6 +110,7 @@ defineProps<{
     organization_name: string
   }
   emailVerified: boolean
+  loading?: boolean
 }>()
 
 const profilStore = useProfilStore()

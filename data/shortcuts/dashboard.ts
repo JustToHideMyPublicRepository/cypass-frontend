@@ -9,6 +9,14 @@ export const dashboardShortcuts: Record<string, ShortcutEntry> = {
     group: 'Dashboard',
     modifier: 'Shift'
   },
+  security: {
+    keys: ['d', 'y'],
+    label: 'Sécurité',
+    path: '/dashboard/security',
+    isGlobal: true,
+    group: 'Dashboard',
+    modifier: 'Shift'
+  },
   docsentry: {
     keys: ['d', 'd'],
     label: 'Docsentry',
