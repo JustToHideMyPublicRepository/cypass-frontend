@@ -61,7 +61,7 @@
                 </p>
               </div>
             </div>
-            <UiStatusBadge :status="emailVerified ? 'Verified' : 'Pending'" class="shrink-0 ml-2" />
+            <UiStatusBadge :status="emailVerified ? 'Validé' : 'En attente'" class="shrink-0 ml-2" />
           </div>
 
           <!-- Organization block -->

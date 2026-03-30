@@ -25,7 +25,9 @@
             <div class="flex items-center justify-end gap-1.5">
               <div :class="[
                 'w-1.5 h-1.5 rounded-full',
-                profilStore.profile?.email_verified ? 'bg-success' : 'bg-warning'
+                profilStore.profile 
+                  ? (profilStore.profile.email_verified ? 'bg-success' : 'bg-warning') 
+                  : ((authStore.user as any)?.status === 'active' || (authStore.user as any)?.email_verified_at || (authStore.user as any)?.email_verified ? 'bg-success' : 'bg-warning')
               ]"></div>
               <div class="text-xs text-hsa">{{ authStore.user?.email || profilStore.profile?.email }}</div>
             </div>
@@ -49,7 +51,9 @@
                 <p class="text-xs text-hsa truncate">{{ authStore.user?.email || profilStore.profile?.email }}</p>
                 <div :class="[
                   'w-1.5 h-1.5 rounded-full shrink-0',
-                  profilStore.profile?.email_verified ? 'bg-green-500' : 'bg-yellow-500'
+                  profilStore.profile 
+                    ? (profilStore.profile.email_verified ? 'bg-success' : 'bg-warning') 
+                    : ((authStore.user as any)?.status === 'active' || (authStore.user as any)?.email_verified_at || (authStore.user as any)?.email_verified ? 'bg-success' : 'bg-warning')
                 ]"></div>
               </div>
             </div>

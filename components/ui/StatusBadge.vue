@@ -19,8 +19,8 @@ const props = defineProps<{
 // Calcul des classes de conteneur selon le statut
 const statusClass = computed(() => {
   const s = props.status.toLowerCase()
-  if (['active', 'verified'].includes(s)) return 'bg-success/10 text-success border-success/20 shadow-success/5'
-  if (['pending', 'medium'].includes(s)) return 'bg-warning/10 text-warning border-warning/20 shadow-warning/5'
+  if (['active', 'verified', 'validé'].includes(s)) return 'bg-success/10 text-success border-success/20 shadow-success/5'
+  if (['pending', 'medium', 'en attente'].includes(s)) return 'bg-warning/10 text-warning border-warning/20 shadow-warning/5'
   if (['rejected', 'high'].includes(s)) return 'bg-danger/10 text-danger border-danger/20 shadow-danger/5'
   if (['low'].includes(s)) return 'bg-primary/10 text-primary border-primary/20 shadow-primary/5'
   return 'bg-ash/50 text-hsa border-ashAct/50'
@@ -29,8 +29,8 @@ const statusClass = computed(() => {
 // Calcul de la couleur du point indicateur
 const dotClass = computed(() => {
   const s = props.status.toLowerCase()
-  if (['active', 'verified'].includes(s)) return 'bg-success'
-  if (['pending', 'medium'].includes(s)) return 'bg-warning'
+  if (['active', 'verified', 'validé'].includes(s)) return 'bg-success'
+  if (['pending', 'medium', 'en attente'].includes(s)) return 'bg-warning'
   if (['rejected', 'high'].includes(s)) return 'bg-danger'
   if (['low'].includes(s)) return 'bg-primary'
   return 'bg-hsa'
