@@ -256,7 +256,7 @@ export const useSecurityStore = defineStore('security', {
       this.loading = true
       this.error = null
       try {
-        const response: any = await $fetch('/api/user/security/passkey-options')
+        const response: any = await $fetch('/api/user/security/mfaMtd-passkey-options')
         return response
       } catch (err: any) {
         this.error = err.data?.message || 'Erreur lors de la récupération des options'
@@ -271,7 +271,7 @@ export const useSecurityStore = defineStore('security', {
       this.loading = true
       this.error = null
       try {
-        const response: any = await $fetch('/api/user/security/passkey-register', {
+        const response: any = await $fetch('/api/user/security/mfaMtd-passkey-verify', {
           method: 'POST',
           body: data
         })

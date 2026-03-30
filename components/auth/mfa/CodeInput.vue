@@ -55,7 +55,6 @@ const activeMethod = computed(() => authStore.mfaSession?.active_method)
 
 const codeLength = computed(() => {
   if (activeMethod.value === 'authenticator') return 6
-  if (activeMethod.value === 'security_code') return 12
   return 9 // totp (email) par défaut
 })
 
@@ -127,7 +126,7 @@ const verify = async (code: string) => {
   if (activeMethod.value === 'authenticator') {
     success = await authStore.loginWithAuthenticator(code)
   } else {
-    // totp or security_code
+    // totp (email)
     success = await authStore.verifyMfa(code)
   }
 
@@ -161,7 +160,7 @@ const startTimer = () => {
 }
 
 watch(activeMethod, (newMethod) => {
-  if (newMethod && ['totp', 'authenticator', 'security_code'].includes(newMethod)) {
+  if (newMethod && ['totp', 'authenticator'].includes(newMethod)) {
     digits.value = Array(codeLength.value).fill('')
     setTimeout(() => focusInput(0), 100)
   }

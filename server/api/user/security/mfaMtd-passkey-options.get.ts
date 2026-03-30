@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const response: any = await $fetch(`${baseApi}/user/security/passkey_options`, {
+    const response: any = await $fetch(`${baseApi}/user/security/mfaMtd_passkey_options`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,

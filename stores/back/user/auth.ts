@@ -376,5 +376,74 @@ export const useAuthStore = defineStore('auth', {
         this.loading = false
       }
     },
+
+    // Connexion avec un Code de Secours
+    async loginWithSecurityCode(code: string) {
+      if (!this.mfaSession) return false
+      this.loading = true
+      this.error = null
+      try {
+        const response: any = await $fetch('/api/user/auth/mfaMtd-sec-codes', {
+          method: 'POST',
+          body: { email: this.mfaSession.email, code }
+        })
+        if (response.success || response.message) {
+          if (response.data?.user) this.user = response.data.user
+          this.message = response.message || response.data?.message
+          this.mfaSession = null
+          return true
+        }
+        this.error = response.message
+        return false
+      } catch (err: any) {
+        this.error = err.data?.message || 'Code de secours invalide'
+        return false
+      } finally {
+        this.loading = false
+      }
+    },
+
+    // Obtenir les options Passkey
+    async getPasskeyOptions() {
+      if (!this.mfaSession) return null
+      this.error = null
+      try {
+        const response: any = await $fetch('/api/user/auth/mfaMtd-passkey-options', {
+          method: 'GET',
+          params: { email: this.mfaSession.email }
+        })
+        return response
+      } catch (err: any) {
+        this.error = err.data?.message || 'Options WebAuthn inaccessibles'
+        return null
+      }
+    },
+
+    // Connexion via Passkey
+    async loginWithPasskey(assertion: any) {
+      if (!this.mfaSession) return false
+      this.loading = true
+      this.error = null
+      try {
+        const response: any = await $fetch('/api/user/auth/mfaMtd-passkey-verify', {
+          method: 'POST',
+          body: assertion
+        })
+        if (response.success || response.token || response.user) {
+          const user = response.data?.user || response.user
+          if (user) this.user = user
+          this.message = response.message || 'Connecté via Passkey'
+          this.mfaSession = null
+          return true
+        }
+        this.error = response.message
+        return false
+      } catch (err: any) {
+        this.error = err.data?.message || 'Vérification Passkey échouée'
+        return false
+      } finally {
+        this.loading = false
+      }
+    },
   }
 })

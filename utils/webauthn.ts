@@ -65,3 +65,36 @@ export function prepareCredentialResponse(credential: PublicKeyCredential) {
     clientExtensionResults: credential.getClientExtensionResults()
   }
 }
+
+/**
+ * Prepares options received from the server for navigator.credentials.get.
+ */
+export function prepareAssertionOptions(options: any): PublicKeyCredentialRequestOptions {
+  return {
+    ...options,
+    challenge: base64urlToUint8Array(options.challenge),
+    allowCredentials: (options.allowCredentials || []).map((cred: any) => ({
+      ...cred,
+      id: base64urlToUint8Array(cred.id)
+    }))
+  }
+}
+
+/**
+ * Prepares the assertion response for sending to the server.
+ */
+export function prepareAssertionResponse(credential: PublicKeyCredential) {
+  const response = credential.response as AuthenticatorAssertionResponse
+  return {
+    id: credential.id,
+    rawId: bufferToBase64url(credential.rawId),
+    type: credential.type,
+    response: {
+      clientDataJSON: bufferToBase64url(response.clientDataJSON),
+      authenticatorData: bufferToBase64url(response.authenticatorData),
+      signature: bufferToBase64url(response.signature),
+      userHandle: response.userHandle ? bufferToBase64url(response.userHandle) : null
+    },
+    clientExtensionResults: credential.getClientExtensionResults()
+  }
+}

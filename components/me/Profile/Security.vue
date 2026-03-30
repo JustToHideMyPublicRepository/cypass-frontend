@@ -2,7 +2,7 @@
   <div class="space-y-6">
     <UiBaseCard title="Sécurité et Accès" class="border-l-4 border-l-warning">
       <div class="space-y-6">
-        <!-- Change Actions   -->
+        <!-- Change Actions -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <UiBaseButton @click="showEmailModal = true" variant="ghost"
             class="!flex !items-center !justify-between !p-4 !rounded-xl !bg-ash border border-ashAct hover:!border-primary/50 transition-all group !h-auto w-full">

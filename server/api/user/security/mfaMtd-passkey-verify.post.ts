@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
   try {
     // Laragear/WebAuthn expects the raw JSON response from the credential ceremony
     // + an optional 'name' field.
-    const response: any = await $fetch(`${baseApi}/user/security/passkey_register`, {
+    const response: any = await $fetch(`${baseApi}/user/security/mfaMtd_passkey_verify`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,
