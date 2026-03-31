@@ -14,6 +14,19 @@ export const STATUS_CONFIG = {
     bgColor: 'bg-success/20',
     textColor: 'text-success'
   },
+  'partial_outage': {
+    label: 'Panne partielle',
+    color: 'text-warning',
+    dot: 'bg-warning',
+    shadow: '0 0 8px rgba(249,115,22,0.6)',
+    level: 1,
+    icon: IconInfoCircle,
+    message: 'Certains services sont indisponibles',
+    borderColor: 'border-warning',
+    shadowColor: 'shadow-warning/10',
+    bgColor: 'bg-warning/20',
+    textColor: 'text-warning'
+  },
   'degraded': {
     label: 'Performance dégradée',
     color: 'text-warning',

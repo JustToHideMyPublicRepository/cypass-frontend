@@ -132,7 +132,7 @@ const verify = async (code: string) => {
 
   if (success) {
     toastStore.showToast('success', 'Connecté', 'Authentification réussie.')
-    setTimeout(() => navigateTo('/dashboard'), 500)
+    navigateTo('/dashboard')
   } else {
     toastStore.showToast('error', 'Échec', authStore.error || 'Code invalide.')
     digits.value = Array(codeLength.value).fill('')
@@ -162,7 +162,7 @@ const startTimer = () => {
 watch(activeMethod, (newMethod) => {
   if (newMethod && ['totp', 'authenticator'].includes(newMethod)) {
     digits.value = Array(codeLength.value).fill('')
-    setTimeout(() => focusInput(0), 100)
+    focusInput(0)
   }
 }, { immediate: true })
 

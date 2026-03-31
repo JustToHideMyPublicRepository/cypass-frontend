@@ -137,7 +137,7 @@ const handleRegister = async () => {
 
   if (success) {
     toastStore.showToast('success', 'Félicitations', authStore.message || 'Compte créé avec succès')
-    setTimeout(() => navigateTo('/auth/login'), 2000)
+    navigateTo('/auth/login')
   } else {
     toastStore.showToast('error', 'Erreur', authStore.error || "Une erreur est survenue")
   }

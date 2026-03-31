@@ -5,20 +5,27 @@
     </p>
     <div class="grid grid-cols-1 gap-3 relative">
       <!-- Loading Overlay -->
-      <div v-if="loading" class="absolute inset-0 z-10 flex items-center justify-center bg-WtB/50 backdrop-blur-[1px] rounded-2xl">
+      <div v-if="loading"
+        class="absolute inset-0 z-10 flex items-center justify-center bg-WtB/50 backdrop-blur-[1px] rounded-2xl">
         <UiLogoLoader size="sm" />
       </div>
 
-      <button v-for="method in availableMethods" :key="method" @click="handleSelectMethod(method)"
-        :disabled="loading"
-        class="flex items-center gap-4 p-4 rounded-2xl border border-ashAct bg-ash/5 hover:bg-primary/5 hover:border-primary/30 transition-all duration-300 text-left group disabled:opacity-50">
-        <div
-          :class="['p-3 rounded-xl transition-colors', getMfaMethodInfo(method).bg, getMfaMethodInfo(method).color]">
+      <button v-for="method in availableMethods" :key="method" @click="handleSelectMethod(method)" :disabled="loading"
+        class="flex items-center gap-4 p-4 rounded-2xl border border-ashAct bg-ash/5 hover:bg-primary/5 hover:border-primary/30 transition-all duration-300 text-left group disabled:opacity-50 relative overflow-hidden">
+
+        <!-- Badge Méthode par défaut -->
+        <div v-if="method === authStore.mfaSession?.default_method"
+          class="absolute top-0 right-0 bg-primary/10 text-primary text-[8px] font-black px-2 py-1 rounded-bl-xl uppercase tracking-tighter">
+          Défaut
+        </div>
+
+        <div :class="['p-3 rounded-xl transition-colors', getMfaMethodInfo(method).bg, getMfaMethodInfo(method).color]">
           <component :is="getMfaMethodInfo(method).icon" class="w-6 h-6" />
         </div>
         <div class="flex-1">
-          <h4 class="font-bold text-BtW group-hover:text-primary transition-colors">{{
-            getMfaMethodInfo(method).label }}</h4>
+          <h4 class="font-bold text-BtW group-hover:text-primary transition-colors flex items-center gap-2">
+            {{ getMfaMethodInfo(method).label }}
+          </h4>
           <p class="text-[10px] text-hsa font-medium">{{ getMfaMethodInfo(method).description }}</p>
         </div>
         <IconChevronRight

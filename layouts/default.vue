@@ -64,6 +64,6 @@ const handleLogout = () => {
 const confirmLogout = () => {
   profilStore.closeLogoutModal()
   profilStore.logout()
-  toastStore.showToast('success', 'Déconnexion', profilStore.message || 'À bientôt.')
+  toastStore.showToast('success', 'Déconnexion', profilStore.message || 'Déconnecté avec succès.')
 }
 </script>

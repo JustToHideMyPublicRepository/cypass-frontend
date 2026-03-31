@@ -19,8 +19,8 @@ export const useProfilStore = defineStore('profil', {
 
   actions: {
     // Récupérer le profil
-    async getProfile() {
-      this.loading = true
+    async getProfile(silent: boolean = false) {
+      if (!silent) this.loading = true
       this.error = null
       try {
         const headers = import.meta.server ? useRequestHeaders(['cookie']) as any : {}
@@ -37,7 +37,7 @@ export const useProfilStore = defineStore('profil', {
         this.error = err.data?.message || 'Une erreur est survenue lors de la récupération du profil'
         return false
       } finally {
-        this.loading = false
+        if (!silent) this.loading = false
       }
     },
 

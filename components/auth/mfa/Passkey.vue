@@ -4,7 +4,7 @@
       <div class="p-4 bg-primary/10 rounded-3xl mb-6 text-primary animate-pulse">
         <IconPasswordFingerprint class="w-12 h-12" />
       </div>
-      
+
       <h3 class="text-lg font-bold text-BtW mb-2">Authentification par Passkey</h3>
       <p class="text-sm text-hsa max-w-xs mx-auto">
         Utilisez votre empreinte digitale, reconnaissance faciale ou le code de votre appareil pour vous connecter.
@@ -13,21 +13,15 @@
 
     <!-- Actions -->
     <div class="space-y-4">
-      <UiBaseButton
-        @click="handlePasskeyLogin"
-        :loading="loading"
-        variant="primary"
-        class="w-full h-14 !rounded-2xl shadow-lg shadow-primary/20"
-      >
+      <UiBaseButton @click="handlePasskeyLogin" :loading="loading" variant="primary"
+        class="w-full h-14 !rounded-2xl shadow-lg shadow-primary/20">
         <IconFingerprint class="w-5 h-5 mr-2" />
         Vérifier mon identité
       </UiBaseButton>
 
       <div class="text-center">
-        <button
-          @click="resetSelection"
-          class="text-[10px] text-secondary hover:text-primary hover:underline font-black uppercase tracking-widest transition-colors"
-        >
+        <button @click="resetSelection"
+          class="text-[10px] text-secondary hover:text-primary hover:underline font-black uppercase tracking-widest transition-colors">
           Essayer une autre méthode
         </button>
       </div>
@@ -57,7 +51,7 @@ const error = ref('')
 const handlePasskeyLogin = async () => {
   loading.value = true
   error.value = ''
-  
+
   try {
     // 1. Get options from server
     const options = await authStore.getPasskeyOptions()
@@ -75,12 +69,10 @@ const handlePasskeyLogin = async () => {
 
     // 5. Verify on server
     const success = await authStore.loginWithPasskey(assertion)
-    
+
     if (success) {
       toastStore.showToast('success', 'Connecté', 'Authentification passkey réussie.')
-      setTimeout(() => {
-        window.location.href = '/dashboard'
-      }, 500)
+      window.location.href = '/dashboard'
     } else {
       throw new Error(authStore.error || 'La validation de votre Passkey a échoué.')
     }
@@ -105,9 +97,6 @@ const resetSelection = () => {
 
 // Auto-trigger on mount for better UX
 onMounted(() => {
-  // Small delay to let the UI render
-  setTimeout(() => {
-    handlePasskeyLogin()
-  }, 800)
+  handlePasskeyLogin()
 })
 </script>

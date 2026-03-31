@@ -31,7 +31,7 @@ export const useSecurityStore = defineStore('security', {
         if (response.success) {
           this.message = response.message
           // Profile needs refresh to show "pending" status badge
-          await useProfilStore().getProfile()
+          await useProfilStore().getProfile(true)
           return true
         }
         this.error = response.message
@@ -116,7 +116,7 @@ export const useSecurityStore = defineStore('security', {
           this.message = response.message
 
           const profilStore = useProfilStore()
-          await profilStore.getProfile()
+          await profilStore.getProfile(true)
 
           return true
         }
@@ -170,7 +170,7 @@ export const useSecurityStore = defineStore('security', {
         })
         if (response.success) {
           // Refresh profile to update has_security_codes
-          await useProfilStore().getProfile()
+          await useProfilStore().getProfile(true)
           return response.data
         }
         this.error = response.message
@@ -194,7 +194,7 @@ export const useSecurityStore = defineStore('security', {
         })
         if (response.success) {
           this.message = response.message
-          await useProfilStore().getProfile()
+          await useProfilStore().getProfile(true)
           return true
         }
         this.error = response.message
@@ -238,7 +238,7 @@ export const useSecurityStore = defineStore('security', {
           body: { code }
         })
         if (response.success) {
-          await useProfilStore().getProfile()
+          await useProfilStore().getProfile(true)
           return true
         }
         this.error = response.message
@@ -275,7 +275,7 @@ export const useSecurityStore = defineStore('security', {
           method: 'POST',
           body: data
         })
-        await useProfilStore().getProfile()
+        await useProfilStore().getProfile(true)
         return response || { success: true }
       } catch (err: any) {
         this.error = err.data?.message || 'Erreur lors de l\'enregistrement'
@@ -304,7 +304,7 @@ export const useSecurityStore = defineStore('security', {
         })
         if (response.success) {
           this.message = response.message
-          await useProfilStore().getProfile()
+          await useProfilStore().getProfile(true)
           return true
         }
         this.error = response.message

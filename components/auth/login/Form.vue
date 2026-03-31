@@ -105,7 +105,7 @@ const handleLogin = async () => {
 
   if (result.success) {
     toastStore.showToast('success', 'Bienvenue', authStore.message || 'Connexion réussie !')
-    setTimeout(() => navigateTo('/dashboard'), 1000)
+    navigateTo('/dashboard')
   } else {
     toastStore.showToast('error', 'Erreur de connexion', authStore.error || "Identifiants invalides.")
   }

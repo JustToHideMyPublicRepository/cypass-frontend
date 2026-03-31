@@ -1,8 +1,7 @@
 <template>
   <div class="space-y-8 text-center py-4">
     <div class="flex justify-center">
-      <div
-        class="w-20 h-20 bg-secondary/10 text-secondary rounded-full flex items-center justify-center animate-pulse">
+      <div class="w-20 h-20 bg-secondary/10 text-secondary rounded-full flex items-center justify-center animate-pulse">
         <IconMailFast class="w-10 h-10" />
       </div>
     </div>
@@ -40,7 +39,7 @@ const handleMagicLink = async () => {
   loading.value = true
   const success = await authStore.loginWithMagicLink()
   if (success) {
-    toastStore.showToast('success', 'Email envoyé', 'Le lien magique est en route.')
+    toastStore.showToast('success', 'Lien magique', authStore.message || 'Lien sécurisée envoyé avec succès')
   } else {
     toastStore.showToast('error', 'Erreur', authStore.error || 'Impossible d\'envoyer l\'email.')
   }

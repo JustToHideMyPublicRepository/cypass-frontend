@@ -86,7 +86,8 @@ export const useAuthStore = defineStore('auth', {
               email: data.email || credentials.email,
               loginTime: Date.now(),
               available_methods: availableMethods,
-              active_method: defaultMethod
+              default_method: defaultMethod,
+              active_method: null // On affiche d'abord le sélecteur
             }
             this.message = response.message
             return { requireMfa: true }

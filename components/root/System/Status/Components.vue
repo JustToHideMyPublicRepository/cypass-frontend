@@ -16,7 +16,11 @@
     <template v-else>
       <div v-for="component in mappedComponents" :key="component.name"
         class="glass-panel p-4 md:px-6 rounded-xl md:rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-4 border border-ash/50">
-        <span class="font-medium text-sm md:text-base">{{ component.name }}</span>
+        <div class="flex items-center gap-2">
+          <UiAppTooltip v-if="component.description" :content="component.description" :title="component.name"
+            width-class="w-72" />
+          <span class="font-medium text-sm md:text-base">{{ component.name }}</span>
+        </div>
         <div class="flex items-center gap-2 md:gap-3 w-full sm:w-auto justify-between sm:justify-start">
           <span class="text-xs font-bold" :class="component.statusColor">{{ component.statusLabel }}</span>
           <div class="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full" :class="component.dotColor"
@@ -40,6 +44,7 @@ const mappedComponents = computed(() => {
     const info = getStatusInfo(c.status)
     return {
       name: c.name,
+      description: c.description,
       statusLabel: info.label,
       statusColor: info.color,
       dotColor: info.dot,

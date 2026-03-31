@@ -21,6 +21,7 @@ export interface AuthState {
     email: string
     loginTime: number
     available_methods: string[]
+    default_method: string | null
     active_method: string | null
   } | null
   loading: boolean
