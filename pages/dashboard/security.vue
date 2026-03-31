@@ -1,10 +1,10 @@
 <template>
-  <div class="space-y-8">
+  <div class="space-y-6 md:space-y-8">
     <MeSecurityHeader />
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
       <!-- Left: MFA Methods List -->
-      <div class="md:col-span-2 space-y-6">
+      <div class="lg:col-span-2 space-y-6">
         <MeSecurityMethods :methods="profilStore.profile?.mfa_methods || []" :loading="isInitialLoading"
           :updating-method="updatingMethod"
           @verify-backup-codes="showVerifyModal = true" @set-default="handleSetDefaultMethod"

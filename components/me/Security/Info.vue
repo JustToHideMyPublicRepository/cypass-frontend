@@ -1,6 +1,6 @@
 <template>
   <div
-    class="p-6 rounded-[2.5rem] bg-gradient-to-br from-primary/10 via-ashAct/5 to-transparent border border-primary/10 relative overflow-hidden group">
+    class="p-5 md:p-6 rounded-[2rem] md:rounded-[2.5rem] bg-gradient-to-br from-primary/10 via-ashAct/5 to-transparent border border-primary/10 relative overflow-hidden group">
     <div
       class="absolute -top-12 -right-12 w-32 h-32 bg-primary/10 rounded-full blur-3xl group-hover:bg-primary/20 transition-all duration-700">
     </div>
