@@ -24,8 +24,12 @@
               <IconMail class="w-5 h-5" />
             </div>
             <input type="email" v-model="form.newEmail" required placeholder="nouveau@exemple.com"
-              class="input pl-12" />
+              class="input pl-12 transition-all outline-none"
+              :class="form.newEmail && !isEmailValid ? 'border-danger/30 ring-danger/10' : ''" />
           </div>
+          <p v-if="form.newEmail && !isEmailValid" class="text-[10px] font-bold text-danger ml-2 animate-fade-in">
+            Les adresses avec "+" ne sont pas autorisées.
+          </p>
         </div>
 
         <!-- Champ Mot de passe actuel -->
@@ -52,8 +56,8 @@
         <UiBaseButton variant="ghost" type="button" @click="$emit('close')" class="!rounded-2xl border-none font-bold">
           Annuler
         </UiBaseButton>
-        <UiBaseButton type="submit" variant="primary" :loading="loading"
-          class="!rounded-2xl font-black tracking-widest shadow-xl">
+        <UiBaseButton type="submit" variant="primary" :loading="loading" :disabled="!isFormValid || loading"
+          class="!rounded-2xl font-black tracking-widest shadow-xl disabled:opacity-50">
           Confirmer
         </UiBaseButton>
       </div>
@@ -62,8 +66,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import { IconMail, IconLock, IconAlertCircle, IconEye, IconEyeOff } from '@tabler/icons-vue'
+import { EMAIL_REGEX } from '~/utils/validation'
 
 // Propriétés de la modale ProfileEmail
 defineProps<{
@@ -82,8 +87,20 @@ const form = reactive({
   password: ''
 })
 
+// Validation de l'email
+const isEmailValid = computed(() => {
+  if (!form.newEmail) return false
+  return EMAIL_REGEX.test(form.newEmail)
+})
+
+// Validation du formulaire
+const isFormValid = computed(() => {
+  return isEmailValid.value && form.password.length > 0
+})
+
 // Gestion de la soumission sécurisée
 const handleSubmit = () => {
+  if (!isFormValid.value) return
   emit('submit', { ...form })
 }
 </script>

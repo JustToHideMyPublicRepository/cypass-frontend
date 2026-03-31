@@ -26,9 +26,13 @@
           <IconMail class="w-5 h-5" />
         </div>
         <input type="email" v-model="form.email" required
-          class="w-full pl-12 pr-4 py-3 rounded-xl bg-ash/30 border border-ashAct focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none text-BtW"
+          class="w-full pl-12 pr-4 py-3 rounded-xl bg-ash/30 border transition-all outline-none text-BtW"
+          :class="form.email && !isEmailValid ? 'border-danger/50 ring-4 ring-danger/10' : 'border-ashAct focus:ring-4 focus:ring-primary/10 focus:border-primary'"
           placeholder="votre@exemple.com" />
       </div>
+      <p v-if="form.email && !isEmailValid" class="text-[10px] font-bold text-danger ml-1 animate-fade-in">
+        Les adresses avec "+" ne sont pas autorisées.
+      </p>
     </div>
 
     <!-- Mot de passe -->
@@ -56,12 +60,13 @@
     </div>
 
     <!-- Acceptation des conditions -->
-    <div class="flex items-start gap-3 p-3 rounded-xl bg-ash/20 border border-ash/50">
+    <div class="flex items-start gap-3 p-3 rounded-xl transition-all duration-300"
+      :class="form.acceptTerms ? 'bg-primary/5 border border-primary/20' : 'bg-ash/20 border border-ash/50 opacity-60'">
       <div class="flex items-center h-6">
         <input id="terms" type="checkbox" v-model="form.acceptTerms"
           class="w-5 h-5 rounded border-ashAct text-primary focus:ring-primary bg-ash/50 cursor-pointer" />
       </div>
-      <label for="terms" class="text-sm text-hsa leading-snug cursor-pointer">
+      <label for="terms" class="text-sm text-hsa leading-snug cursor-pointer select-none">
         Je confirme avoir lu et j'accepte les
         <NuxtLink to="/legal/terms" class="text-primary hover:underline font-black">CGU</NuxtLink>
         et la
@@ -72,7 +77,8 @@
 
     <!-- Bouton d'inscription -->
     <div class="pt-2">
-      <UiBaseButton type="submit" block :loading="isLoading" size="lg" class="shadow-lg shadow-primary/20 group">
+      <UiBaseButton type="submit" block :loading="isLoading" :disabled="!isFormValid || isLoading" size="lg"
+        class="shadow-lg shadow-primary/20 group disabled:opacity-50 disabled:grayscale">
         Créer mon compte
         <IconArrowRight v-if="!isLoading" class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
       </UiBaseButton>
@@ -96,10 +102,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import { IconMail, IconLock, IconEye, IconEyeOff, IconArrowRight } from '@tabler/icons-vue'
 import { useAuthStore } from '~/stores/back/user/auth'
 import { useToastStore } from '~/stores/front/toast'
+import { EMAIL_REGEX } from '~/utils/validation'
 
 const isLoading = ref(false)
 const showPassword = ref(false)
@@ -116,12 +123,26 @@ const form = reactive({
 const authStore = useAuthStore()
 const toastStore = useToastStore()
 
+// Validation de l'email (Pas de "+" autorisé)
+const isEmailValid = computed(() => {
+  if (!form.email) return false
+  return EMAIL_REGEX.test(form.email)
+})
+
+// Validation globale du formulaire
+const isFormValid = computed(() => {
+  return (
+    form.firstName.trim() !== '' &&
+    form.lastName.trim() !== '' &&
+    isEmailValid.value &&
+    form.password.length >= 12 &&
+    form.acceptTerms
+  )
+})
+
 // Gestion de la création de compte
 const handleRegister = async () => {
-  if (!form.acceptTerms) {
-    toastStore.showToast('warning', 'Attention', "Veuillez accepter les conditions d'utilisation")
-    return
-  }
+  if (!isFormValid.value) return
 
   isLoading.value = true
 
