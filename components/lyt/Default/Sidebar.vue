@@ -91,7 +91,7 @@
         <div class="w-full bg-ash h-1 rounded-full overflow-hidden">
           <div class="bg-primary h-full transition-all duration-500" :style="{ width: `${planUsageProgress}%` }"></div>
         </div>
-        <NuxtLink to="/dashboard/billing"
+        <NuxtLink to="/dashboard/billing" @click="$emit('close')"
           class="flex items-center justify-between group/manage pt-1.5 hover:opacity-80 transition-opacity">
           <span
             class="text-[9px] font-black text-hsa uppercase tracking-[0.2em] group-hover/manage:text-primary transition-colors">
