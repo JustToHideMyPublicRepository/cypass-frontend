@@ -136,9 +136,8 @@ const isLinkActive = (path: string) => {
 const NavHeader = [
   { label: 'Vérifier', path: '/verify' },
   { label: 'VigiTech', path: '/vigitech' },
-  // { label: 'Tarifs', path: '/pricings' },
   { label: 'Support', path: '/support' },
-  { label: 'Contact', path: '/contact' },
+  { label: 'Tarifs', path: '/pricings' },
 ]
 
 // Auth Links

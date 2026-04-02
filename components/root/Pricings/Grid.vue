@@ -37,8 +37,14 @@
 
       <div class="mt-10">
         <UiBaseButton :variant="tier.featured ? 'primary' : 'secondary'"
-          class="!w-full !rounded-[2rem] !py-5 !text-xs !font-black uppercase tracking-[0.2em]">
-          {{ tier.cta }}
+          class="!w-full !rounded-[2rem] !py-5 !text-xs !font-black uppercase tracking-[0.2em]"
+          :disabled="loadingTier === tier.slug" @click="handleAction(tier)">
+          <template v-if="loadingTier === tier.slug">
+            <UiLogoLoader size="xs" container-class="text-WtB" />
+          </template>
+          <template v-else>
+            {{ getCtaText(tier) }}
+          </template>
         </UiBaseButton>
       </div>
     </div>
@@ -46,8 +52,44 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import { IconCircleCheck } from '@tabler/icons-vue'
 import { pricingTiers } from '~/utils/pricing'
+import { useAuthStore } from '~/stores/back/user/auth'
+import { useSubscriptionStore } from '~/stores/back/user/subscription'
 
+const authStore = useAuthStore()
+const subscriptionStore = useSubscriptionStore()
 const tiers = pricingTiers
+const loadingTier = ref<string | null>(null)
+
+const getCtaText = (tier: any) => {
+  if (!authStore.user && (tier.slug === 'starter' || tier.slug === 'business')) {
+    return 'Se connecter'
+  }
+  return tier.cta
+}
+
+const handleAction = async (tier: any) => {
+  // Cas 1: Redirection directe (Gratuit ou Entreprise)
+  if (tier.link) {
+    return navigateTo(tier.link)
+  }
+
+  // Cas 2: Non connecté -> Redirection login
+  if (!authStore.user) {
+    return navigateTo('/auth/login')
+  }
+
+  // Cas 3: Connexion et achat de pack
+  loadingTier.value = tier.slug
+  try {
+    const checkoutUrl = await subscriptionStore.subscribe(tier.slug)
+    if (checkoutUrl) {
+      window.location.href = checkoutUrl
+    }
+  } finally {
+    loadingTier.value = null
+  }
+}
 </script>

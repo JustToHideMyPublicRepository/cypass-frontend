@@ -13,7 +13,8 @@
       <!-- Avatar Section -->
       <div class="relative w-36 h-36 mx-auto mb-8">
         <div @click="showImageViewer = true"
-          class="relative z-10 w-full h-full rounded-full p-1.5 bg-gradient-to-tr from-primary to-secondary shadow-2xl cursor-pointer hover:scale-105 transition-transform duration-300">
+          class="relative z-10 w-full h-full rounded-full shadow-2xl cursor-pointer hover:scale-105 transition-transform duration-300 flex items-center justify-center overflow-hidden"
+          :class="planBorderClass || 'p-1 bg-ash/20 border border-hsa'">
           <div class="w-full h-full rounded-full overflow-hidden bg-ash border-4 border-WtB shadow-inner">
             <img :src="authStore.avatarUrl" alt="Avatar"
               class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
@@ -78,6 +79,7 @@ import { fr } from 'date-fns/locale'
 import { useAuthStore } from '~/stores/back/user/auth'
 import { useProfilStore } from '~/stores/back/user/profil'
 import { useToastStore } from '~/stores/front/toast'
+import { getPlanBorderClass } from '~/utils/pricing'
 
 const props = defineProps<{
   user: any
@@ -87,6 +89,8 @@ const props = defineProps<{
 const authStore = useAuthStore()
 const profilStore = useProfilStore()
 const toastStore = useToastStore()
+
+const planBorderClass = computed(() => getPlanBorderClass(profilStore.profile?.plan?.name))
 
 const showAvatarModal = ref(false)
 const showImageViewer = ref(false)

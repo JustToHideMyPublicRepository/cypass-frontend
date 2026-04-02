@@ -21,18 +21,22 @@
         <button @click="isDropdownOpen = !isDropdownOpen"
           class="flex items-center gap-3 hover:opacity-80 transition-opacity">
           <div class="text-right hidden sm:block">
-            <div class="text-sm font-medium text-BtW">{{ authStore.fullName }}</div>
+            <div class="text-sm font-medium transition-colors"
+              :class="profilStore.profile?.is_reported ? 'text-warning' : 'text-BtW'">
+              {{ authStore.fullName }}
+            </div>
             <div class="flex items-center justify-end gap-1.5">
               <div :class="[
                 'w-1.5 h-1.5 rounded-full',
-                profilStore.profile 
-                  ? (profilStore.profile.email_verified ? 'bg-success' : 'bg-warning') 
+                profilStore.profile
+                  ? (profilStore.profile.email_verified ? 'bg-success' : 'bg-warning')
                   : ((authStore.user as any)?.status === 'active' || (authStore.user as any)?.email_verified_at || (authStore.user as any)?.email_verified ? 'bg-success' : 'bg-warning')
               ]"></div>
               <div class="text-xs text-hsa">{{ authStore.user?.email || profilStore.profile?.email }}</div>
             </div>
           </div>
-          <div class="w-10 h-10 rounded-full bg-ash overflow-hidden border border-ashAct">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden border border-ashAct"
+            :class="planBorderClass">
             <img :src="authStore.avatarUrl" alt="Profile" class="w-full h-full object-cover" />
           </div>
           <IconChevronDown class="w-4 h-4 text-hsa transition-transform" :class="{ 'rotate-180': isDropdownOpen }" />
@@ -44,17 +48,32 @@
           leave-active-class="transition duration-75 ease-in" leave-from-class="transform scale-100 opacity-100"
           leave-to-class="transform scale-95 opacity-0">
           <div v-if="isDropdownOpen"
-            class="absolute right-0 mt-2 w-56 origin-top-right rounded-xl bg-WtB border border-ash shadow-lg z-50 overflow-hidden">
-            <div class="p-3 border-b border-ash">
-              <p class="text-sm font-medium text-BtW">{{ authStore.fullName }}</p>
-              <div class="flex items-center gap-2">
+            class="absolute right-0 mt-2 w-64 origin-top-right rounded-xl bg-WtB border border-ash shadow-lg z-50 overflow-hidden">
+            <div class="p-3 border-b border-ash bg-ash/20">
+              <p class="text-sm font-bold truncate transition-colors"
+                :class="profilStore.profile?.is_reported ? 'text-warning' : 'text-BtW'">
+                {{ authStore.fullName }}
+              </p>
+              <div class="flex items-center gap-2 mb-2">
                 <p class="text-xs text-hsa truncate">{{ authStore.user?.email || profilStore.profile?.email }}</p>
                 <div :class="[
                   'w-1.5 h-1.5 rounded-full shrink-0',
-                  profilStore.profile 
-                    ? (profilStore.profile.email_verified ? 'bg-success' : 'bg-warning') 
+                  profilStore.profile
+                    ? (profilStore.profile.email_verified ? 'bg-success' : 'bg-warning')
                     : ((authStore.user as any)?.status === 'active' || (authStore.user as any)?.email_verified_at || (authStore.user as any)?.email_verified ? 'bg-success' : 'bg-warning')
                 ]"></div>
+              </div>
+
+              <div v-if="profilStore.profile?.plan" class="mt-2 pt-2 border-t border-ash/20 flex flex-col gap-1.5">
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] font-black text-hsa uppercase tracking-wider">Abonnement</span>
+                  <span class="text-[10px] font-black px-1.5 py-0.5 rounded uppercase" :class="planBadgeClass">
+                    {{ profilStore.profile.plan.name }}</span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] font-black text-hsa uppercase tracking-wider">Crédits restants</span>
+                  <span class="text-[10px] font-black text-BtW">{{ profilStore.profile.plan.credits }}</span>
+                </div>
               </div>
             </div>
 
@@ -92,6 +111,8 @@ import { IconChevronDown, IconUser, IconLock, IconSettings, IconHelp, IconDevice
 import { useAuthStore } from '~/stores/back/user/auth'
 import { useProfilStore } from '~/stores/back/user/profil'
 import { getLinkTooltip } from '~/data/shortcuts'
+import { getPlanBorderClass, getPlanBadgeClass } from '~/utils/pricing'
+
 const authStore = useAuthStore()
 const profilStore = useProfilStore()
 const route = useRoute()
@@ -102,6 +123,9 @@ const isLinkActive = (path: string) => {
 
 const isDropdownOpen = ref(false)
 const dropdownRef = ref<HTMLElement | null>(null)
+
+const planBorderClass = computed(() => getPlanBorderClass(profilStore.profile?.plan?.name))
+const planBadgeClass = computed(() => getPlanBadgeClass(profilStore.profile?.plan?.name))
 
 const dropdownLinks = [
   {

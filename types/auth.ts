@@ -1,3 +1,5 @@
+import { type UserPlan } from './profil'
+
 export interface User {
   id: string
   email: string
@@ -12,6 +14,8 @@ export interface User {
   mfa_method?: string
   mfa_default_method?: string
   has_security_codes?: boolean
+  is_reported?: boolean
+  plan?: UserPlan
   created_at: string
 }
 

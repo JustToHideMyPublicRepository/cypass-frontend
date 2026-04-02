@@ -1,9 +1,54 @@
 import { IconUser, IconBriefcase, IconBuildingSkyscraper, IconActivity } from '@tabler/icons-vue'
 
+export const PLAN_CONFIG = {
+  'free': {
+    label: 'Individuel',
+    badgeClass: 'bg-ash text-hsa',
+    borderClass: '',
+    credits: 5
+  },
+  'starter': {
+    label: 'Starter',
+    badgeClass: 'bg-secondary/10 text-secondary',
+    borderClass: 'p-[2px] bg-gradient-to-tr from-secondary to-warning',
+    credits: 100
+  },
+  'business': {
+    label: 'Business',
+    badgeClass: 'bg-primary/10 text-primary',
+    borderClass: 'p-[2px] bg-gradient-to-tr from-primary to-success',
+    credits: 500
+  },
+  'entreprise': {
+    label: 'Entreprise',
+    badgeClass: 'bg-success/10 text-success',
+    borderClass: 'p-[2px] bg-gradient-to-tr from-success to-danger',
+    credits: 1000000 // Représente l'illimité
+  }
+} as const
+
+export const getPlanInfo = (name: string | undefined) => {
+  const normalized = name?.toLowerCase() || 'free'
+  if (normalized.includes('starter')) return PLAN_CONFIG.starter
+  if (normalized.includes('business')) return PLAN_CONFIG.business
+  if (normalized.includes('entreprise')) return PLAN_CONFIG.entreprise
+  return PLAN_CONFIG.free
+}
+
+export const getPlanBorderClass = (name: string | undefined) => {
+  return getPlanInfo(name).borderClass
+}
+
+export const getPlanBadgeClass = (name: string | undefined) => {
+  return getPlanInfo(name).badgeClass
+}
+
 export const pricingTiers = [
   {
     name: 'Individuel',
+    slug: 'free',
     subtitle: 'Gratuit',
+    credits: 5,
     price: '0 FCFA',
     description: 'Protection essentielle pour découvrir CYPASS et sécuriser vos premiers documents.',
     icon: IconUser,
@@ -16,11 +61,14 @@ export const pricingTiers = [
       'Vérification QR Camera'
     ],
     cta: 'Démarrer gratuitement',
+    link: '/dashboard',
     featured: false
   },
   {
     name: 'Pack Starter',
+    slug: 'starter',
     subtitle: '100 crédits',
+    credits: 100,
     price: '10.000 FCFA',
     description: 'Idéal pour les consultants et indépendants ayant un flux régulier de documents.',
     icon: IconBriefcase,
@@ -33,12 +81,14 @@ export const pricingTiers = [
       'Badges de confiance Pro',
       'Support prioritaire (e-mail)'
     ],
-    cta: 'Acheter le pack',
+    cta: 'Acheter',
     featured: true
   },
   {
     name: 'Pack Business',
+    slug: 'business',
     subtitle: '500 crédits',
+    credits: 500,
     price: '40.000 FCFA',
     description: 'Conçu pour les TPE/PME souhaitant une gestion de confiance à grande échelle.',
     icon: IconBuildingSkyscraper,
@@ -51,12 +101,14 @@ export const pricingTiers = [
       'Support prioritaire (WhatsApp)',
       'Accès API limité'
     ],
-    cta: 'Acheter le pack',
+    cta: 'Acheter',
     featured: false
   },
   {
     name: 'Entreprise',
+    slug: 'entreprise',
     subtitle: 'Sur mesure',
+    credits: 1000000,
     price: 'Contact',
     description: 'Infrastructure dédiée et volume illimité pour les grandes institutions.',
     icon: IconActivity,
@@ -69,7 +121,8 @@ export const pricingTiers = [
       'SLA Garanti 99.9%',
       'Account Manager dédié'
     ],
-    cta: 'Contacter le service',
+    cta: 'Nous contacter',
+    link: '/contact',
     featured: false
   }
 ]

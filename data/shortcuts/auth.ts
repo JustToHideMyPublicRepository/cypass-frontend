@@ -36,7 +36,7 @@ export const authShortcuts: Record<string, ShortcutEntry> = {
   reset_password: {
     keys: ['a', 'p'],
     label: 'Réinitialiser Mot de passe',
-    path: '/auth/reset-password',
+    path: '/auth/reset_password',
     isGlobal: true,
     group: 'Authentification',
     modifier: 'Shift'

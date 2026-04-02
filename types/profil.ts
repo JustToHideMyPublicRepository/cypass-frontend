@@ -1,3 +1,9 @@
+export interface UserPlan {
+  name: string
+  last_subscription_at: string | null
+  credits: number
+}
+
 export interface UserProfile {
   id: string
   email: string
@@ -16,6 +22,7 @@ export interface UserProfile {
   mfa_methods?: MfaMethodInfo[]
   has_security_codes?: boolean
   is_reported?: boolean
+  plan?: UserPlan
   created_at: string
 }
 
