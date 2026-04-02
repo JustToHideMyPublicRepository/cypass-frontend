@@ -97,8 +97,8 @@ const statusConfig = computed<StatusItem>(() => {
         icon: markRaw(IconCircleCheck),
         iconColor: 'text-success',
         iconBg: 'bg-success/10 border-2 border-success/20',
-        primaryAction: { label: 'Vers mon tableau de bord', to: '/dashboard', variant: 'primary' },
-        secondaryAction: { label: 'Voir mon historique', to: '/me/profile/security' }
+        primaryAction: { label: 'Détails de la facturation', to: `/dashboard/billing/${transactionId.value}`, variant: 'primary' },
+        secondaryAction: { label: 'Voir mon historique', to: '/dashboard/billing' }
       }
     case 'declined':
       return {

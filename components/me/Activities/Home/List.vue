@@ -24,7 +24,7 @@
           <div class="h-px bg-ashAct flex-grow"></div>
         </h2>
 
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <UiBaseCard v-for="log in logGroup" :key="log.id" @click="navigateTo(`/dashboard/activities/${log.id}`)"
             class="group hover:border-primary/30 transition-all duration-300 relative border border-ashAct cursor-pointer"
             :class="{ 'border-l-4 border-l-danger': log.status !== 'success' }">

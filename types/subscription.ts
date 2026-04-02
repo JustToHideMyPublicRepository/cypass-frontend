@@ -2,10 +2,11 @@ export interface Subscription {
   id: string
   user_id: string
   fedapay_id: string
-  amount: string
+  amount: number | string
   currency: string
   status: 'approved' | 'declined' | 'canceled' | 'pending'
   package_name: string
+  payment_method?: string
   credits_awarded: number
   metadata: {
     transaction_id: number | string
