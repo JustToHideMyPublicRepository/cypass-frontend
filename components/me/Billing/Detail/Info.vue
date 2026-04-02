@@ -4,8 +4,10 @@
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
       <div class="flex items-center gap-4">
         <div :class="[
-          'w-14 h-14 rounded-2xl flex items-center justify-center shadow-inner',
-          subscription.status === 'approved' ? 'bg-success/10 text-success' : 'bg-warning/10 text-warning'
+          'w-14 h-14 rounded-2xl flex items-center justify-center shadow-inner transition-colors',
+          subscription.status === 'approved' ? 'bg-success/10 text-success' :
+            subscription.status === 'canceled' ? 'bg-danger/10 text-danger' :
+              'bg-warning/10 text-warning'
         ]">
           <IconReceipt class="w-8 h-8" />
         </div>
@@ -13,11 +15,15 @@
           <div class="flex items-center gap-2 mb-1">
             <span :class="[
               'px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-widest',
-              subscription.status === 'approved' ? 'bg-success text-white' : 'bg-warning text-white'
+              subscription.status === 'approved' ? 'bg-success text-white' :
+                subscription.status === 'canceled' ? 'bg-danger text-white' :
+                  'bg-warning text-white'
             ]">
-              {{ subscription.status === 'approved' ? 'Transaction Réussie' : 'En attente' }}
+              {{ subscription.status === 'approved' ? 'Transaction Réussie' :
+                subscription.status === 'canceled' ? 'Paiement Annulé' : 'En attente' }}
             </span>
-            <span class="text-[10px] font-black text-hsa uppercase tracking-[0.2em] opacity-40">#{{ subscription.id.slice(-8) }}</span>
+            <span class="text-[10px] font-black text-hsa uppercase tracking-[0.2em] opacity-40">#{{
+              subscription.id.slice(-8) }}</span>
           </div>
           <h1 class="text-3xl font-black text-BtW tracking-tighter uppercase leading-none">
             {{ subscription.package_name }}

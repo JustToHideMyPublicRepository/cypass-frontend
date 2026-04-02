@@ -12,8 +12,8 @@
       </div>
 
       <div class="lg:col-span-1">
-        <MeBillingDetailSupport :approved="subscription.status === 'approved'"
-          @download="subscriptionStore.downloadReceipt(subscription.id)" />
+        <MeBillingDetailSupport :approved="subscription.status === 'approved'" :status="subscription.status"
+          :checkout-url="subscription.metadata.url" @download="subscriptionStore.downloadReceipt(subscription.id)" />
       </div>
     </div>
 

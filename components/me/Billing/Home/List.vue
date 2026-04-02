@@ -63,9 +63,11 @@
             <div class="min-w-[100px] flex justify-end">
               <span :class="[
                 'px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-tighter',
-                sub.status === 'approved' ? 'bg-success/10 text-success' : 'bg-warning/10 text-warning'
+                sub.status === 'approved' ? 'bg-success/10 text-success' :
+                  sub.status === 'canceled' ? 'bg-danger/10 text-danger' :
+                    'bg-warning/10 text-warning'
               ]">
-                {{ sub.status === 'approved' ? 'Payé' : 'En attente' }}
+                {{ sub.status === 'approved' ? 'Payé' : sub.status === 'canceled' ? 'Annulé' : 'En attente' }}
               </span>
             </div>
           </div>
@@ -76,6 +78,11 @@
               class="!h-10 !w-10 !p-0 !rounded-xl !bg-ash/50 hover:!bg-primary/10 hover:text-primary transition-all"
               title="Télécharger le reçu">
               <IconDownload class="w-4 h-4" />
+            </UiBaseButton>
+            <UiBaseButton v-if="sub.status === 'pending'" :to="sub.metadata.url" variant="ghost" target="_blank"
+              class="!h-10 !w-10 !p-0 !rounded-xl !bg-primary/10 text-primary hover:!bg-primary/20 transition-all"
+              title="Finaliser le paiement">
+              <IconCreditCard class="w-4 h-4" />
             </UiBaseButton>
             <UiBaseButton :to="`/dashboard/billing/${sub.id}`" variant="ghost"
               class="!h-10 !w-10 !p-0 !rounded-xl !bg-ash/50 hover:!bg-primary/10 hover:text-primary transition-all"
@@ -91,7 +98,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { IconReceipt, IconCalendar, IconDownload, IconExternalLink, IconCopy, IconCheck } from '@tabler/icons-vue'
+import { IconReceipt, IconCalendar, IconDownload, IconExternalLink, IconCopy, IconCheck, IconCreditCard } from '@tabler/icons-vue'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import type { Subscription } from '~/types/subscription'
