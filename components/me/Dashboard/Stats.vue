@@ -25,7 +25,7 @@
                 'bg-BtW/60 text-WtB'
           ]">
             <component
-              :is="stat.trend.difference > 0 ? IconTrendingUp : (stat.trend.difference < 0 ? IconTrendingDown : IconLayoutAlignMiddle)"
+              :is="stat.trend.difference > 0 ? IconTrendingUp : (stat.trend.difference < 0 ? IconTrendingDown : IconBrandStackshare)"
               class="w-3.5 h-3.5" />
             <span class="text-[10px] font-bold">
               {{ stat.trend.difference > 0 ? '+' : '' }}{{ stat.trend.difference }}
@@ -57,7 +57,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { IconFileCertificate, IconAlertTriangle, IconDevices, IconShieldLock, IconTrendingUp, IconTrendingDown, IconLayoutAlignMiddle, type Icon } from '@tabler/icons-vue'
+import { IconFileCertificate, IconAlertTriangle, IconDevices, IconShieldLock, IconTrendingUp, IconTrendingDown, IconBrandStackshare, type Icon } from '@tabler/icons-vue'
 import type { SecurityScoreResult } from '~/utils/security'
 
 interface Trend {

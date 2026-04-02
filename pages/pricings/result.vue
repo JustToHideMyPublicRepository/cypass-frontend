@@ -56,10 +56,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, markRaw } from 'vue'
+import { computed, onMounted, markRaw, ref } from 'vue'
 import { useRoute } from '#imports'
 import { IconCircleCheck, IconX, IconInfoCircle, IconAlertTriangle } from '@tabler/icons-vue'
 import { useProfilStore } from '~/stores/back/user/profil'
+import { useSubscriptionStore } from '~/stores/back/user/subscription'
 
 definePageMeta({
   layout: 'guest',
@@ -67,10 +68,31 @@ definePageMeta({
 
 const route = useRoute()
 const profilStore = useProfilStore()
+const subscriptionStore = useSubscriptionStore()
 
 const status = computed(() => (route.query.status as string) || 'error')
-const transactionId = computed(() => route.query.id as string)
+const queryId = computed(() => route.query.id as string)
+const transactionId = computed(() => route.query.transaction_id as string || queryId.value)
+
+// Resolved ULID payment_id (fetched from backend)
+const resolvedPaymentId = ref<string | null>(null)
+const paymentId = computed(() => resolvedPaymentId.value || queryId.value)
 const errorMessage = computed(() => route.query.message as string)
+
+useHead({
+  title: computed(() => {
+    switch (status.value) {
+      case 'approved': return 'Paiement réussi'
+      case 'pending': return 'Paiement en attente'
+      case 'canceled': return 'Paiement annulé'
+      default: return 'Erreur de paiement'
+    }
+  }),
+  meta: [
+    { name: 'description', content: 'Résultat de votre transaction sur CYPASS' },
+    { name: 'robots', content: 'noindex, nofollow' }
+  ]
+})
 
 interface StatusAction {
   label: string
@@ -97,18 +119,32 @@ const statusConfig = computed<StatusItem>(() => {
         icon: markRaw(IconCircleCheck),
         iconColor: 'text-success',
         iconBg: 'bg-success/10 border-2 border-success/20',
-        primaryAction: { label: 'Détails de la facturation', to: `/dashboard/billing/${transactionId.value}`, variant: 'primary' },
-        secondaryAction: { label: 'Voir mon historique', to: '/dashboard/billing' }
+        primaryAction: {
+          label: 'Détails de la facturation',
+          to: `/dashboard/billing/${paymentId.value}`,
+          variant: 'primary'
+        },
+        secondaryAction: {
+          label: 'Voir mon historique',
+          to: '/dashboard/billing'
+        }
       }
-    case 'declined':
+    case 'pending':
       return {
-        title: 'Paiement refusé',
-        description: 'La transaction a été refusée. Veuillez vérifier vos informations de paiement et réessayer.',
+        title: 'Paiement en attente',
+        description: 'La transaction est en attente. Veuillez vérifier vos informations de paiement et réessayer.',
         icon: markRaw(IconX),
-        iconColor: 'text-danger',
-        iconBg: 'bg-danger/10 border-2 border-danger/20',
-        primaryAction: { label: 'Réessayer le paiement', to: '/pricings', variant: 'primary' },
-        secondaryAction: { label: 'Besoin d\'aide ?', to: '/support' }
+        iconColor: 'text-warning',
+        iconBg: 'bg-warning/10 border-2 border-warning/20',
+        primaryAction: {
+          label: 'Poursuivre le paiement',
+          to: `/dashboard/billing/${paymentId.value}`,
+          variant: 'warning'
+        },
+        secondaryAction: {
+          label: 'Retour aux tarifs',
+          to: '/pricings'
+        }
       }
     case 'canceled':
       return {
@@ -117,7 +153,11 @@ const statusConfig = computed<StatusItem>(() => {
         icon: markRaw(IconInfoCircle),
         iconColor: 'text-warning',
         iconBg: 'bg-warning/10 border-2 border-warning/20',
-        primaryAction: { label: 'Retour aux tarifs', to: '/pricings', variant: 'secondary' },
+        primaryAction: {
+          label: 'Retour aux tarifs',
+          to: '/pricings',
+          variant: 'secondary'
+        },
         secondaryAction: null
       }
     case 'missing_id':
@@ -129,13 +169,31 @@ const statusConfig = computed<StatusItem>(() => {
         icon: markRaw(IconAlertTriangle),
         iconColor: 'text-warning',
         iconBg: 'bg-warning/10 border-2 border-warning/20',
-        primaryAction: { label: 'Retour aux tarifs', to: '/pricings', variant: 'secondary' },
-        secondaryAction: { label: 'Contacter le support', to: '/support' }
+        primaryAction: {
+          label: 'Retour aux tarifs',
+          to: '/pricings',
+          variant: 'secondary'
+        },
+        secondaryAction: {
+          label: 'Contacter le support',
+          to: '/support'
+        }
       }
   }
 })
 
 onMounted(async () => {
+  // Resolve the ULID payment_id from the transaction_id
+  if (transactionId.value) {
+    try {
+      const subs = await subscriptionStore.getLatestSubscriptions()
+      const match = subs.find((s: any) => String(s.fedapay_id) === String(transactionId.value))
+      if (match) {
+        resolvedPaymentId.value = match.id
+      }
+    } catch { /* ignore */ }
+  }
+
   if (status.value === 'approved') {
     // Refresh user profile to update credits
     await profilStore.getProfile()

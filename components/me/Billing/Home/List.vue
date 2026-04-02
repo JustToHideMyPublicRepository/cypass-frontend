@@ -33,7 +33,9 @@
               <IconReceipt class="w-6 h-6" />
             </div>
             <div class="min-w-0">
-              <h4 class="font-black text-BtW truncate uppercase tracking-tight text-sm">{{ sub.package_name }}</h4>
+              <NuxtLink :to="`/dashboard/billing/${sub.id}`" class="font-black text-BtW truncate uppercase tracking-tight text-sm hover:text-primary transition-colors">
+                {{ sub.package_name }}
+              </NuxtLink>
               <p class="text-[10px] font-bold text-hsa flex items-center gap-1.5 uppercase">
                 <IconCalendar class="w-3 h-3" />
                 {{ formatDate(sub.created_at) }}
@@ -41,8 +43,7 @@
               <div v-if="sub.fedapay_id"
                 class="mt-1.5 flex items-center gap-1.5 px-2 py-0.5 bg-ashAct/50 rounded-lg w-fit group/copy cursor-pointer border border-ash/50 hover:border-primary/30 transition-all"
                 @click="copyToClipboard(sub.fedapay_id)">
-                <span class="text-[8px] font-black text-hsa uppercase tracking-[0.1em]">Ref: {{ sub.fedapay_id
-                }}</span>
+                <span class="text-[8px] font-black text-hsa uppercase tracking-[0.1em]">Ref: {{ sub.fedapay_id }}</span>
                 <component :is="copiedId === sub.fedapay_id ? IconCheck : IconCopy"
                   class="w-2.5 h-2.5 text-hsa group-hover/copy:text-primary transition-colors"
                   :class="{ 'text-success': copiedId === sub.fedapay_id }" />
@@ -52,13 +53,21 @@
 
           <!-- Amount & Credits -->
           <div class="flex flex-wrap items-center gap-6 md:px-6">
-            <div class="text-right min-w-[80px]">
-              <p class="text-[9px] font-black text-hsa uppercase tracking-widest opacity-60">Montant</p>
-              <p class="text-sm font-black text-BtW">{{ sub.amount }} FCFA</p>
-            </div>
-            <div class="text-right min-w-[80px]">
-              <p class="text-[9px] font-black text-hsa uppercase tracking-widest opacity-60">Crédits</p>
-              <p class="text-sm font-black text-primary">+{{ sub.credits_awarded }}</p>
+            <template v-if="sub.status === 'approved'">
+              <div class="text-right min-w-[80px]">
+                <p class="text-[9px] font-black text-hsa uppercase tracking-widest opacity-60">Montant</p>
+                <p class="text-sm font-black text-BtW">{{ formatAmount(sub.amount) }} FCFA</p>
+              </div>
+              <div class="text-right min-w-[80px]">
+                <p class="text-[9px] font-black text-hsa uppercase tracking-widest opacity-60">Crédits</p>
+                <p class="text-sm font-black text-primary">+{{ sub.credits_awarded }}</p>
+              </div>
+            </template>
+            <div v-else class="min-w-[160px] text-right">
+              <p class="text-[9px] font-black text-hsa uppercase tracking-widest opacity-60">Info</p>
+              <p class="text-xs font-bold" :class="sub.status === 'pending' ? 'text-warning' : 'text-danger'">
+                {{ sub.status === 'pending' ? 'Paiement non finalisé' : 'Transaction annulée' }}
+              </p>
             </div>
             <div class="min-w-[100px] flex justify-end">
               <span :class="[
@@ -79,7 +88,7 @@
               title="Télécharger le reçu">
               <IconDownload class="w-4 h-4" />
             </UiBaseButton>
-            <UiBaseButton v-if="sub.status === 'pending'" :to="sub.metadata.url" variant="ghost" target="_blank"
+            <UiBaseButton v-if="sub.status === 'pending' && sub.metadata?.url" :to="sub.metadata.url" variant="ghost" target="_blank"
               class="!h-10 !w-10 !p-0 !rounded-xl !bg-primary/10 text-primary hover:!bg-primary/20 transition-all"
               title="Finaliser le paiement">
               <IconCreditCard class="w-4 h-4" />
@@ -113,6 +122,11 @@ const emit = defineEmits(['download'])
 
 const toastStore = useToastStore()
 const copiedId = ref<string | null>(null)
+
+const formatAmount = (val: number | string) => {
+  const amount = typeof val === 'string' ? parseFloat(val) : val
+  return new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 0 }).format(Math.round(amount))
+}
 
 const formatDate = (dateString: string) => {
   try {

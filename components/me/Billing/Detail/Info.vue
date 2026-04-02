@@ -31,8 +31,16 @@
         </div>
       </div>
       <div class="text-left md:text-right">
-        <p class="text-[10px] font-black text-hsa uppercase tracking-[0.2em] opacity-40 mb-1">Montant payé</p>
-        <p class="text-3xl font-black text-primary tracking-tighter">{{ formatAmount(subscription.amount) }} <span class="text-sm">FCFA</span></p>
+        <template v-if="subscription.status === 'approved'">
+          <p class="text-[10px] font-black text-hsa uppercase tracking-[0.2em] opacity-40 mb-1">Montant payé</p>
+          <p class="text-3xl font-black text-primary tracking-tighter">{{ formatAmount(subscription.amount) }} <span class="text-sm">FCFA</span></p>
+        </template>
+        <template v-else>
+          <p class="text-[10px] font-black text-hsa uppercase tracking-[0.2em] opacity-40 mb-1">Statut</p>
+          <p class="text-xl font-black tracking-tighter" :class="subscription.status === 'pending' ? 'text-warning' : 'text-danger'">
+            {{ subscription.status === 'pending' ? 'Non finalisé' : 'Annulé' }}
+          </p>
+        </template>
       </div>
     </div>
 
@@ -63,11 +71,14 @@
       <div class="space-y-6">
         <div class="flex items-start gap-4">
           <div class="w-10 h-10 rounded-xl bg-ash/50 flex items-center justify-center shrink-0">
-            <IconPlus class="w-5 h-5 text-primary" />
+            <IconPlus class="w-5 h-5" :class="subscription.status === 'approved' ? 'text-primary' : 'text-hsa'" />
           </div>
           <div>
             <p class="text-[10px] font-black text-hsa uppercase tracking-widest opacity-60 mb-0.5">Crédits ajoutés</p>
-            <p class="text-xl font-black text-primary">+{{ subscription.credits_awarded }} <span class="text-[10px] uppercase">unités</span></p>
+            <template v-if="subscription.status === 'approved'">
+              <p class="text-xl font-black text-primary">+{{ subscription.credits_awarded }} <span class="text-[10px] uppercase">unités</span></p>
+            </template>
+            <p v-else class="text-sm font-bold text-hsa">Aucun crédit accordé</p>
           </div>
         </div>
 
@@ -108,7 +119,7 @@ const copied = ref(false)
 
 const formatAmount = (val: number | string) => {
   const amount = typeof val === 'string' ? parseFloat(val) : val
-  return new Intl.NumberFormat('fr-FR').format(amount)
+  return new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 0 }).format(Math.round(amount))
 }
 
 const formatDate = (dateString: string) => {
