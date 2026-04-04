@@ -6,9 +6,9 @@ User-Agent: *
 Disallow: /auth/
 Disallow: /dashboard/
 Disallow: /system/search
+Disallow: /system/status
 Disallow: /user/
 Disallow: /coming-soon
-Disallow: /system/status
 
 # NUXT, ARCHITECTURE et PREVENT DUPLICATE CONTENT
 Disallow: /_payload.json

@@ -9,34 +9,10 @@ export const authShortcuts: Record<string, ShortcutEntry> = {
     group: 'Authentification',
     modifier: 'Shift'
   },
-  mfa: {
-    keys: ['a', 'f'],
-    label: 'MFA',
-    path: '/auth/mfa',
-    isGlobal: true,
-    group: 'Authentification',
-    modifier: 'Shift'
-  },
   register: {
     keys: ['a', 'r'],
     label: 'Inscription',
     path: '/auth/register',
-    isGlobal: true,
-    group: 'Authentification',
-    modifier: 'Shift'
-  },
-  verify_email: {
-    keys: ['a', 'm'],
-    label: 'Vérifier Email',
-    path: '/auth/verify_email',
-    isGlobal: true,
-    group: 'Authentification',
-    modifier: 'Shift'
-  },
-  reset_password: {
-    keys: ['a', 'p'],
-    label: 'Réinitialiser Mot de passe',
-    path: '/auth/reset_password',
     isGlobal: true,
     group: 'Authentification',
     modifier: 'Shift'

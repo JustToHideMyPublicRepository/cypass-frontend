@@ -5,7 +5,7 @@
       <UiBaseButton @click.stop="store.toggleHelp()" variant="ghost"
         class="!rounded-full !bg-primary !text-ash shadow-2xl shadow-primary/40 !flex !items-center !justify-center hover:scale-110 active:scale-95 transition-all duration-300 group !p-2 !h-auto !w-auto">
         <IconHelp v-if="!store.isHelpOpen" class="w-6 h-6" />
-        <IconX v-else class="w-6 h-6" />
+        <IconXboxX v-else class="w-6 h-6" />
 
         <!-- Effet de pulsation -->
         <span class="absolute inset-0 rounded-full bg-primary animate-ping opacity-20 pointer-events-none"></span>
@@ -83,10 +83,7 @@
 
 <script setup lang="ts">
 import { watch, onMounted, onUnmounted } from 'vue'
-import {
-  IconHelp, IconX, IconLifebuoy, IconStatusChange,
-  IconKeyboard, IconBrandWhatsapp, IconSparkles, IconRotate
-} from '@tabler/icons-vue'
+import { IconHelp, IconXboxX, IconLifebuoy, IconStatusChange, IconKeyboard, IconBrandWhatsapp, IconSparkles, IconRotate } from '@tabler/icons-vue'
 import { useShortcutsStore } from '~/stores/front/shortcuts'
 import { useAiAnalysisStore } from '~/stores/front/aiAnalysis'
 import { useRoute } from 'vue-router'

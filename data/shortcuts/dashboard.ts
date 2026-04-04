@@ -1,18 +1,26 @@
 import type { ShortcutEntry } from './index'
 
 export const dashboardShortcuts: Record<string, ShortcutEntry> = {
-  dashboard_home: {
-    keys: ['d', 'i'],
-    label: 'Tableau de bord',
-    path: '/dashboard',
+  calendar: {
+    keys: ['d', 'c'],
+    label: 'Calendrier',
+    path: '/dashboard/calendar',
     isGlobal: true,
     group: 'Dashboard',
     modifier: 'Shift'
   },
-  security: {
-    keys: ['d', 'y'],
-    label: 'Sécurité',
-    path: '/dashboard/security',
+  reports: {
+    keys: ['d', 'r'],
+    label: 'Centre d\'alertes',
+    path: '/dashboard/reports',
+    isGlobal: true,
+    group: 'Dashboard',
+    modifier: 'Shift'
+  },
+  vigitech_comment: {
+    keys: ['d', 'm'],
+    label: 'Commentaires',
+    path: '/dashboard/vigitech/comments',
     isGlobal: true,
     group: 'Dashboard',
     modifier: 'Shift'
@@ -25,10 +33,10 @@ export const dashboardShortcuts: Record<string, ShortcutEntry> = {
     group: 'Dashboard',
     modifier: 'Shift'
   },
-  calendar: {
-    keys: ['d', 'c'],
-    label: 'Calendrier',
-    path: '/dashboard/calendar',
+  billing: {
+    keys: ['d', 'b'],
+    label: 'Facturation',
+    path: '/dashboard/billing',
     isGlobal: true,
     group: 'Dashboard',
     modifier: 'Shift'
@@ -49,18 +57,26 @@ export const dashboardShortcuts: Record<string, ShortcutEntry> = {
     group: 'Dashboard',
     modifier: 'Shift'
   },
+  settings: {
+    keys: ['d', 't'],
+    label: 'Paramètres',
+    path: '/dashboard/settings',
+    isGlobal: true,
+    group: 'Dashboard',
+    modifier: 'Shift'
+  },
   profile: {
     keys: ['d', 'p'],
-    label: 'Mon Profil',
+    label: 'Profil',
     path: '/dashboard/profile',
     isGlobal: true,
     group: 'Dashboard',
     modifier: 'Shift'
   },
-  reports: {
-    keys: ['d', 'r'],
-    label: 'Centre d\'alertes',
-    path: '/dashboard/reports',
+  security: {
+    keys: ['d', 'y'],
+    label: 'Sécurité',
+    path: '/dashboard/security',
     isGlobal: true,
     group: 'Dashboard',
     modifier: 'Shift'
@@ -73,10 +89,10 @@ export const dashboardShortcuts: Record<string, ShortcutEntry> = {
     group: 'Dashboard',
     modifier: 'Shift'
   },
-  settings: {
-    keys: ['d', 't'],
-    label: 'Paramètres',
-    path: '/dashboard/settings',
+  dashboard_home: {
+    keys: ['d', 'i'],
+    label: 'Tableau de bord',
+    path: '/dashboard',
     isGlobal: true,
     group: 'Dashboard',
     modifier: 'Shift'
@@ -85,14 +101,6 @@ export const dashboardShortcuts: Record<string, ShortcutEntry> = {
     keys: ['d', 'v'],
     label: 'Vigitech',
     path: '/dashboard/vigitech',
-    isGlobal: true,
-    group: 'Dashboard',
-    modifier: 'Shift'
-  },
-  vigitech_comment: {
-    keys: ['d', 'm'],
-    label: 'Mes commentaires',
-    path: '/dashboard/vigitech/comments',
     isGlobal: true,
     group: 'Dashboard',
     modifier: 'Shift'

@@ -1,6 +1,19 @@
 import type { ShortcutEntry } from './index'
 
 export const actionShortcuts: Record<string, ShortcutEntry> = {
+  help: {
+    keys: ['?'],
+    label: 'Aide et raccourcis',
+    path: '/system/shortcuts',
+    isGlobal: true,
+    group: 'Actions',
+  },
+  toggle_help_modal: {
+    keys: [' '],
+    label: 'Aide rapide',
+    isGlobal: true,
+    group: 'Actions',
+  },
   toggle_theme: {
     keys: ['l'],
     label: 'Changer le thème',
@@ -8,33 +21,12 @@ export const actionShortcuts: Record<string, ShortcutEntry> = {
     group: 'Actions',
     modifier: 'Ctrl + Shift'
   },
-  scroll_top: {
-    keys: ['↑'],
-    label: 'Aller en haut de la page',
-    isGlobal: false,
+  logout: {
+    keys: ['d'],
+    label: 'Déconnexion',
+    isGlobal: true,
     group: 'Actions',
-    modifier: 'Shift'
-  },
-  scroll_bottom: {
-    keys: ['↓'],
-    label: 'Aller en bas de la page',
-    isGlobal: false,
-    group: 'Actions',
-    modifier: 'Shift'
-  },
-  history_back: {
-    keys: ['←'],
-    label: 'Page précédente',
-    isGlobal: false,
-    group: 'Actions',
-    modifier: 'Shift'
-  },
-  history_forward: {
-    keys: ['→'],
-    label: 'Page suivante',
-    isGlobal: false,
-    group: 'Actions',
-    modifier: 'Shift'
+    modifier: 'Ctrl + Shift'
   },
   search_global: {
     keys: ['k'],
@@ -50,11 +42,4 @@ export const actionShortcuts: Record<string, ShortcutEntry> = {
     group: 'Actions',
     modifier: 'Ctrl'
   },
-  logout: {
-    keys: ['d'],
-    label: 'Déconnexion',
-    isGlobal: true,
-    group: 'Actions',
-    modifier: 'Ctrl + Shift'
-  }
 }

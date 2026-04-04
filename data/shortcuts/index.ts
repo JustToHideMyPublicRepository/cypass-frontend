@@ -1,10 +1,10 @@
 import { actionShortcuts } from './actions'
 import { authShortcuts } from './auth'
 import { dashboardShortcuts } from './dashboard'
-import { generalShortcuts } from './general'
 import { legalShortcuts } from './legal'
 import { modalBtnShortcuts } from './modal-btn'
 import { moduleShortcuts } from './module'
+import { pageShortcuts } from './page'
 import { navigationShortcuts } from './navigation'
 
 export interface ShortcutEntry {
@@ -23,11 +23,11 @@ export const shortcutsData: Record<string, ShortcutEntry> = {
   ...actionShortcuts,
   ...authShortcuts,
   ...dashboardShortcuts,
-  ...generalShortcuts,
   ...legalShortcuts,
   ...modalBtnShortcuts,
   ...moduleShortcuts,
   ...navigationShortcuts,
+  ...pageShortcuts,
 }
 
 /**

@@ -1,9 +1,17 @@
 import type { ShortcutEntry } from './index'
 
 export const legalShortcuts: Record<string, ShortcutEntry> = {
+  terms: {
+    keys: ['l', 't'],
+    label: 'Conditions d\'utilisation',
+    path: '/legal/terms',
+    isGlobal: true,
+    group: 'Légal',
+    modifier: 'Shift'
+  },
   mentions: {
     keys: ['l', 'm'],
-    label: 'Mentions Légales',
+    label: 'Mentions légales',
     path: '/legal/mentions',
     isGlobal: true,
     group: 'Légal',
@@ -11,16 +19,8 @@ export const legalShortcuts: Record<string, ShortcutEntry> = {
   },
   privacy: {
     keys: ['l', 'p'],
-    label: 'Politique de Confidentialité',
+    label: 'Politique de confidentialité',
     path: '/legal/privacy',
-    isGlobal: true,
-    group: 'Légal',
-    modifier: 'Shift'
-  },
-  terms: {
-    keys: ['l', 't'],
-    label: 'Conditions d\'Utilisation',
-    path: '/legal/terms',
     isGlobal: true,
     group: 'Légal',
     modifier: 'Shift'

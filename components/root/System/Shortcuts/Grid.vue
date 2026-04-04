@@ -85,7 +85,7 @@
             class="!flex !items-center !gap-2 !text-[11px] md:!text-xs !font-bold text-hsa hover:!text-primary transition-colors !px-3 md:!px-4 !py-1.5 md:!py-2 !rounded-xl hover:!bg-ash !h-auto">
             <component :is="isExpanded(category.title) ? IconChevronUp : IconChevronDown"
               class="w-3.5 h-3.5 md:w-4 md:h-4" />
-            {{ isExpanded(category.title) ? 'Voir moins' : `Voir plus (${category.items.length - 3} de plus)` }}
+            {{ isExpanded(category.title) ? 'Voir moins' : `Voir ${extandPlus(category)} de plus` }}
           </UiBaseButton>
         </div>
       </div>
@@ -117,6 +117,7 @@ defineProps<{
   }[]
 }>()
 
+const extandPlus = (category: any) => category.items.length - 3
 const expandedCategories = ref<Set<string>>(new Set())
 
 const toggleCategory = (title: string) => {

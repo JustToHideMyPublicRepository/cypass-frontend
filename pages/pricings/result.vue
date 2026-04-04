@@ -58,7 +58,7 @@
 <script setup lang="ts">
 import { computed, onMounted, markRaw, ref } from 'vue'
 import { useRoute } from '#imports'
-import { IconCircleCheck, IconX, IconInfoCircle, IconAlertTriangle } from '@tabler/icons-vue'
+import { IconCircleCheck, IconClockBolt, IconInfoCircle, IconAlertTriangle } from '@tabler/icons-vue'
 import { useProfilStore } from '~/stores/back/user/profil'
 import { useSubscriptionStore } from '~/stores/back/user/subscription'
 
@@ -133,7 +133,7 @@ const statusConfig = computed<StatusItem>(() => {
       return {
         title: 'Paiement en attente',
         description: 'La transaction est en attente. Veuillez vérifier vos informations de paiement et réessayer.',
-        icon: markRaw(IconX),
+        icon: markRaw(IconClockBolt),
         iconColor: 'text-warning',
         iconBg: 'bg-warning/10 border-2 border-warning/20',
         primaryAction: {
