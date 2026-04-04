@@ -7,17 +7,17 @@
       :vigitech-count="vigitechStore.userIncidents.length" :vigitech-trend="vigiTrend"
       :active-sessions="activeSessionsCount" :security-score="securityScore" />
 
-    <!-- Data Insights Row -->
+    <!-- Blocs des récents -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       <MeDashboardRecentActivity :notifications="notificationsStore.notifications.slice(0, 4)"
         :loading="notificationsStore.loading" :format-time="formatTime" />
+      <MeDashboardRecentLogs :logs="activitiesStore.logs.slice(0, 4)" :loading="loading" :format-time="formatTime" />
+      <MeDashboardRecentSessions :sessions="activeSessions.slice(0, 4)" :loading="loading" />
       <MeDashboardRecentDocs :documents="userDocsentryStore.documents.slice(0, 4)" :loading="userDocsentryStore.loading"
         :format-time="formatTime" :get-doc-status="getDocStatus" />
       <MeDashboardRecentIncidents :incidents="vigitechStore.userIncidents.slice(0, 4)" :loading="vigitechStore.loading"
         :format-time="formatTime" />
       <MeDashboardRecentComments :comments="recentComments.slice(0, 4)" :loading="vigitechStore.loadingComments" />
-      <MeDashboardRecentSessions :sessions="activeSessions.slice(0, 4)" :loading="loading" />
-      <MeDashboardActivityFeed :logs="profilStore.logs.slice(0, 4)" :loading="loading" :format-time="formatTime" />
     </div>
 
     <!-- Quick Actions, Access Links & Trust Center Row -->
@@ -50,15 +50,11 @@ import { format, startOfWeek, endOfWeek, subWeeks, isWithinInterval } from 'date
 import { useUserDocsentryStore } from '~/stores/back/user/docsentry'
 import { usePublicDocsentryStore } from '~/stores/back/public/docsentry'
 import { useNotificationsStore } from '~/stores/back/user/notifications'
-import { useProfilStore } from '~/stores/back/user/profil'
 import { useActivitiesStore } from '~/stores/back/user/activities'
-import { useAuthStore } from '~/stores/back/user/auth'
 import { useUserVigitechStore } from '~/stores/back/user/vigitech'
 import { useToastStore } from '~/stores/front/toast'
 import { calculateSecurityScore, type SecurityScoreResult } from '~/utils/security'
 
-const authStore = useAuthStore()
-const profilStore = useProfilStore()
 const activitiesStore = useActivitiesStore()
 const userDocsentryStore = useUserDocsentryStore()
 const publicDocsentryStore = usePublicDocsentryStore()
@@ -156,7 +152,7 @@ const calculateVigiTrend = async () => {
 }
 
 const updateSecurityScore = () => {
-  const logs = profilStore.logs || []
+  const logs = activitiesStore.logs || []
   const failedLogins = logs.filter(l => l.action_type.toLowerCase().includes('login') && l.status !== 'success').length
   const otherFailures = logs.filter(l => !l.action_type.toLowerCase().includes('login') && l.status !== 'success').length
 

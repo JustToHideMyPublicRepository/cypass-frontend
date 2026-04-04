@@ -42,7 +42,7 @@ import { IconLockShare, IconShieldLock } from '@tabler/icons-vue'
 
 const features = [
   { title: 'Hashage SHA-256' },
-  { title: 'Signature Asymétrique' },
-  { title: 'Preuve d\'Existance' }
+  { title: 'Signature asymétrique' },
+  { title: 'Preuve d\'existence' }
 ]
 </script>
