@@ -40,7 +40,7 @@ jobs:
           port: ${{ secrets.FRONT_SSH_PORT }}
           source: ".output,deploy.sh,package.json"
           target: "/var/www/cybercub/cypass/"
-          rm: false
+          rm: true
           strip_components: 0
 
       - name: 🚀 Run deployment script
