@@ -1,0 +1,56 @@
+name: 🚀 Deploy Frontend to Cybercub
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    name: Build & Deploy via SSH
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🔍 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: './Front/package-lock.json'
+
+      - name: 📦 Install dependencies
+        working-directory: ./Front
+        run: npm ci
+
+      - name: 🏗️ Build Nuxt application
+        working-directory: ./Front
+        run: npm run build
+        env:
+          CYPASS_API_URL: ${{ secrets.CYPASS_API_URL }}
+
+      - name: 📂 Transfer files to server (SCP)
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.FRONT_SSH_HOST }}
+          username: ${{ secrets.FRONT_SSH_USER }}
+          password: ${{ secrets.FRONT_SSH_PASSWORD }}
+          port: ${{ secrets.FRONT_SSH_PORT }}
+          source: "Front/.output,Front/deploy.sh,Front/package.json"
+          target: "/var/www/cybercub/cypass/"
+          rm: false
+          strip_components: 1
+
+      - name: 🚀 Run deployment script
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.FRONT_SSH_HOST }}
+          username: ${{ secrets.FRONT_SSH_USER }}
+          password: ${{ secrets.FRONT_SSH_PASSWORD }}
+          port: ${{ secrets.FRONT_SSH_PORT }}
+          script: |
+            cd /var/www/cybercub/cypass/
+            chmod +x deploy.sh
+            ./deploy.sh
