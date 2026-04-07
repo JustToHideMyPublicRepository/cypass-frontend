@@ -22,10 +22,11 @@
                 <div
                   class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
                   <div class="flex gap-2">
-                    <a v-for="social in member.socials" :key="social.name" :href="social.url"
+                    <a v-for="social in member.socials" :key="social.name" :href="social.url" target="_blank"
+                      rel="noopener noreferrer"
                       class="p-2 bg-white/20 hover:bg-white/40 rounded-full backdrop-blur-sm transition-colors text-white"
                       :title="social.name">
-                      <component :is="social.icon" class="w-4 h-4" />
+                      <component :is="socialIcons[social.name]" class="w-4 h-4" />
                     </a>
                   </div>
                 </div>
@@ -42,84 +43,59 @@
 <script setup lang="ts">
 import { IconBrandLinkedin, IconBrandX, IconBrandFacebook } from '@tabler/icons-vue'
 
+const socialIcons: Record<string, any> = {
+  LinkedIn: IconBrandLinkedin,
+  Facebook: IconBrandFacebook,
+  X: IconBrandX
+}
+
+const imgBase = "https://cdn.jsdelivr.net/gh/JustToHideMyPublicRepository/Files/Images"
+const lkBase = "https://www.linkedin.com/in"
+const fbBase = "https://www.facebook.com"
+const xBase = "https://X.com"
+
 // Membres de l'équipe
 const team = [
   {
-    name: "Charmaine YEBADOKPO",
-    role: "Responsable Sécurité (CISO)",
-    image: "https://cdn.jsdelivr.net/gh/progestionsoft/Files/_General/Images/Team/Charmaine.png",
+    name: "Steve Aster AFOVO",
+    role: "Responsable Recherche & Développement (R&D)",
+    image: `${imgBase}/SteveAsterAfovo.png`,
     delay: 0,
     socials: [
-      {
-        name: 'LinkedIn',
-        icon: IconBrandLinkedin,
-        url: '#'
-      },
-      {
-        name: 'Facebook',
-        icon: IconBrandFacebook,
-        url: '#'
-      }
+      { name: 'LinkedIn', url: `${lkBase}/SteveAsterAfovo` },
+      { name: 'Facebook', url: `${fbBase}/SteveAsterAfovo1` },
+      { name: 'X', url: `${xBase}/SteveAsterAfovo` }
     ]
   },
   {
     name: "Elisée ATONDE",
     role: "Responsable Technique (CTO)",
-    image: "https://cdn.jsdelivr.net/gh/progestionsoft/Files/_General/Images/Team/Elysee.png",
+    image: `${imgBase}/EliseeAtonde.png`,
     delay: 100,
     socials: [
-      {
-        name: 'LinkedIn',
-        icon: IconBrandLinkedin,
-        url: '#'
-      },
-      {
-        name: 'Facebook',
-        icon: IconBrandFacebook,
-        url: '#'
-      }
+      { name: 'LinkedIn', url: `${lkBase}/elisée-atonde-7b189a1bb` },
+      { name: 'Facebook', url: `${fbBase}/profile.php?id=100072329951064` },
+      { name: 'X', url: `${xBase}/elisee_atonde` }
+    ]
+  },
+  {
+    name: "Charmaine YEBADOKPO",
+    role: "Responsable Sécurité (CISO)",
+    image: `${imgBase}/CharmaineYebadokpo.png`,
+    delay: 200,
+    socials: [
+      { name: 'LinkedIn', url: `${lkBase}/charmaine-a-yebadokpo-586aba1b2` },
+      { name: 'Facebook', url: `${fbBase}/yeb.charme` }
     ]
   },
   {
     name: "Christelle AKIOLA",
     role: "Développeuse fronten-end",
-    image: "https://cdn.jsdelivr.net/gh/progestionsoft/Files/_General/Images/Team/Christelle.png",
-    delay: 200,
-    socials: [
-      {
-        name: 'LinkedIn',
-        icon: IconBrandLinkedin,
-        url: '#'
-      },
-      {
-        name: 'Facebook',
-        icon: IconBrandFacebook,
-        url: '#'
-      }
-    ]
-  },
-  {
-    name: "Steve Aster AFOVO",
-    role: "Responsable Recherche & Développement (R&D)",
-    image: "https://cdn.jsdelivr.net/gh/progestionsoft/Files/_General/Images/Team/SteveAster.png",
+    image: `${imgBase}/ChristelleAkiola.png`,
     delay: 300,
     socials: [
-      {
-        name: 'LinkedIn',
-        icon: IconBrandLinkedin,
-        url: '#'
-      },
-      {
-        name: 'Facebook',
-        icon: IconBrandFacebook,
-        url: '#'
-      },
-      {
-        name: 'X',
-        icon: IconBrandX,
-        url: '#'
-      }
+      { name: 'Facebook', url: `${fbBase}/naomie.abiodoun` }
     ]
-  }
+  },
 ]
 </script>

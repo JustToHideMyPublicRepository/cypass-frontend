@@ -64,7 +64,7 @@
       </div>
 
       <p class="text-[9px] md:text-[10px] text-hsa uppercase tracking-[0.2em] font-bold opacity-50">
-        Infrastructure Nationale de Confiance • République du Bénin
+        Built to protect, Designed to last • République du Bénin
       </p>
     </div>
   </div>

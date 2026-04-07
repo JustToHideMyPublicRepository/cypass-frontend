@@ -11,7 +11,7 @@
             <span class="text-2xl font-bold text-BtW">CYPASS</span>
           </NuxtLink>
           <p class="text-hsa leading-relaxed text-sm">
-            Built to protect, Designed to last (Conçu pour protéger, Conçu pour durer)
+            Built to protect, Designed to last
           </p>
           <div class="flex gap-3">
             <a v-for="social in socialLinks" :key="social" :href="getSocialLink(social)" target="_blank"

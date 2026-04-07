@@ -45,16 +45,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import {
-  startOfMonth,
-  endOfMonth,
-  startOfWeek,
-  endOfWeek,
-  eachDayOfInterval,
-  format,
-  isSameMonth,
-  isSameDay
-} from 'date-fns'
+import { startOfMonth, endOfMonth, startOfWeek, endOfWeek, eachDayOfInterval, format, isSameMonth, isSameDay } from 'date-fns'
 import { useRouter } from 'vue-router'
 import type { CalendarEvent } from '~/composables/useCalendarEvents'
 

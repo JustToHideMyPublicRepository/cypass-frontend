@@ -3,7 +3,7 @@
     <div class="flex flex-col md:flex-row justify-between items-center gap-6 md:gap-4">
       <div class="flex items-center text-center md:text-left order-2 md:order-1">
         <p class="text-xs text-hsa leading-relaxed">
-          &copy; {{ new Date().getFullYear() }} CYPASS. Infrastructure Nationale de Confiance.
+          &copy; {{ new Date().getFullYear() }} CYPASS. Built to protect, Designed to last
         </p>
       </div>
 

@@ -1,7 +1,6 @@
 import { ref, computed } from 'vue'
 import { useUserDocsentryStore } from '~/stores/back/user/docsentry'
 import { useUserVigitechStore } from '~/stores/back/user/vigitech'
-import { useProfilStore } from '~/stores/back/user/profil'
 import { useActivitiesStore } from '~/stores/back/user/activities'
 import { useAuthStore } from '~/stores/back/user/auth'
 import { format, startOfMonth, endOfMonth } from 'date-fns'
@@ -24,9 +23,7 @@ export interface CalendarEvent {
 export const useCalendarEvents = () => {
   const userDocsentryStore = useUserDocsentryStore()
   const vigitechStore = useUserVigitechStore()
-  const profilStore = useProfilStore()
   const activitiesStore = useActivitiesStore()
-  const authStore = useAuthStore()
 
   const loading = ref(false)
   const sessions = ref<any[]>([])
@@ -143,8 +140,8 @@ export const useCalendarEvents = () => {
     }
 
     // 4. Logs
-    if (profilStore.logs) {
-      profilStore.logs.forEach(log => {
+    if (activitiesStore.logs) {
+      activitiesStore.logs.forEach(log => {
         let ts = log.created_at
         if (ts && !ts.includes('T')) ts = ts.replace(' ', 'T')
 

@@ -2,7 +2,7 @@ import type { ShortcutEntry } from './index'
 
 export const pageShortcuts: Record<string, ShortcutEntry> = {
   about: {
-    keys: ['b'],
+    keys: ['a'],
     label: 'À propos',
     path: '/about',
     isGlobal: true,
@@ -74,7 +74,7 @@ export const pageShortcuts: Record<string, ShortcutEntry> = {
     modifier: 'Shift'
   },
   pricing: {
-    keys: ['r'],
+    keys: ['b'],
     label: 'Tarification',
     path: '/pricings',
     isGlobal: true,
