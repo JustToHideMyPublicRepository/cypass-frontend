@@ -19,14 +19,14 @@ jobs:
         with:
           node-version: '22'
           cache: 'npm'
-          cache-dependency-path: './Front/package-lock.json'
+          cache-dependency-path: './package-lock.json'
 
       - name: 📦 Install dependencies
-        working-directory: ./Front
+        working-directory: ./
         run: npm ci
 
       - name: 🏗️ Build Nuxt application
-        working-directory: ./Front
+        working-directory: ./
         run: npm run build
         env:
           CYPASS_API_URL: ${{ secrets.CYPASS_API_URL }}
@@ -38,10 +38,10 @@ jobs:
           username: ${{ secrets.FRONT_SSH_USER }}
           password: ${{ secrets.FRONT_SSH_PASSWORD }}
           port: ${{ secrets.FRONT_SSH_PORT }}
-          source: "Front/.output,Front/deploy.sh,Front/package.json"
+          source: ".output,deploy.sh,package.json"
           target: "/var/www/cybercub/cypass/"
           rm: false
-          strip_components: 1
+          strip_components: 0
 
       - name: 🚀 Run deployment script
         uses: appleboy/ssh-action@v1.0.3
