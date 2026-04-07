@@ -2,7 +2,7 @@
   <UiBaseCard title="Commentaires récents" subtitle="Réponses sur les incidents">
     <template #header>
       <UiBaseButton variant="secondary" size="sm" class="!px-2 !py-1 !text-[10px]"
-        @click="navigateTo('/dashboard/vigitech/comments')">Tout</UiBaseButton>
+        @click="router.push('/dashboard/vigitech/comments')">Tout</UiBaseButton>
     </template>
     <div class="space-y-4">
       <div v-if="loading && !comments.length" class="py-10">
@@ -13,7 +13,7 @@
       </div>
       <div v-for="comment in comments" :key="comment.id"
         class="flex items-center justify-between p-3 rounded-xl hover:bg-ash/50 transition-all cursor-pointer group"
-        @click="navigateTo(`/dashboard/vigitech/comments`)">
+        @click="router.push(`/dashboard/vigitech/comments`)">
         <div class="flex items-center gap-3 min-w-0">
           <div class="p-2 bg-ash rounded-lg group-hover:bg-primary/10 transition-colors">
             <IconMessage class="w-4 h-4 text-hsa group-hover:text-primary" />
@@ -35,6 +35,8 @@
 <script setup lang="ts">
 import { IconMessage } from '@tabler/icons-vue'
 import { formatRelativeTime } from '~/utils/date'
+
+const router = useRouter()
 
 defineProps<{
   comments: any[]

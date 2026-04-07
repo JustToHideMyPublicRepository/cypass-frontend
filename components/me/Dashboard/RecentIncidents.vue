@@ -2,18 +2,21 @@
   <UiBaseCard title="Derniers incidents" subtitle="Derniers incidents signalés">
     <template #header>
       <UiBaseButton variant="secondary" size="sm" class="!px-2 !py-1 !text-[10px]"
-        @click="navigateTo('/dashboard/vigitech')">Veille</UiBaseButton>
+        @click="router.push('/dashboard/vigitech')">Veille</UiBaseButton>
     </template>
     <div class="space-y-1">
+      <!-- Loading State -->
       <div v-if="loading && !incidents.length" class="py-10">
         <UiLogoLoader size="sm" />
       </div>
       <div v-else-if="!incidents.length" class="py-10 text-center text-hsa">
         Aucun incident récent
       </div>
+
+      <!-- Incidents List -->
       <div v-for="incident in incidents" :key="incident.id"
         class="flex items-center justify-between p-3 rounded-xl hover:bg-ash/50 transition-all cursor-pointer group"
-        @click="navigateTo(`/dashboard/vigitech/${incident.id}`)">
+        @click="router.push(`/dashboard/vigitech/${incident.id}`)">
         <div class="flex items-center gap-3 min-w-0">
           <div class="p-2 bg-ash rounded-lg group-hover:bg-primary/10 transition-colors">
             <IconAlertTriangle class="w-4 h-4 text-hsa group-hover:text-primary" />
@@ -31,6 +34,8 @@
 
 <script setup lang="ts">
 import { IconAlertTriangle } from '@tabler/icons-vue'
+
+const router = useRouter()
 
 defineProps<{
   incidents: any[]

@@ -2,15 +2,18 @@
   <UiBaseCard title="Sessions Actives" subtitle="Appareils connectés">
     <template #header>
       <UiBaseButton variant="secondary" size="sm" class="!px-2 !py-1 !text-[10px]"
-        @click="navigateTo('/dashboard/sessions')">Gérer</UiBaseButton>
+        @click="router.push('/dashboard/sessions')">Gérer</UiBaseButton>
     </template>
     <div class="space-y-1">
+      <!-- Loading State -->
       <div v-if="loading && !sessions.length" class="py-10">
         <UiLogoLoader size="sm" />
       </div>
       <div v-else-if="!sessions.length" class="py-10 text-center text-hsa">
         Aucune session active
       </div>
+
+      <!-- Sessions List -->
       <div v-for="session in sessions" :key="session.id"
         class="flex items-center justify-between p-3 rounded-xl hover:bg-ash/50 transition-all group">
         <div class="flex items-center gap-3 min-w-0">
@@ -35,6 +38,8 @@
 import { markRaw } from 'vue'
 import { formatRelativeTime } from '~/utils/date'
 import { formatSessionLabel, getSessionIcon as getSessionIconRaw } from '~/utils/sessions'
+
+const router = useRouter()
 
 const getSessionIcon = (session: any) => markRaw(getSessionIconRaw(session))
 

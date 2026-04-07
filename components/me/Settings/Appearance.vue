@@ -17,8 +17,8 @@
         <div class="flex items-center gap-4">
           <!-- Icône dynamique selon la préférence actuelle -->
           <div class="p-2 bg-WtB rounded-lg shadow-sm">
-            <IconDeviceDesktop v-if="$colorMode.preference === 'system'" class="w-6 h-6 text-primary" />
-            <IconMoon v-else-if="$colorMode.preference === 'dark'" class="w-6 h-6 text-primary" />
+            <IconDeviceDesktop v-if="colorMode.preference === 'system'" class="w-6 h-6 text-primary" />
+            <IconMoon v-else-if="colorMode.preference === 'dark'" class="w-6 h-6 text-primary" />
             <IconSun v-else class="w-6 h-6 text-warning" />
           </div>
           <!-- Label et description -->
@@ -28,14 +28,29 @@
               votre périphérique.</p>
           </div>
         </div>
-        <!-- Sélecteur de thème natif -->
+        <!-- Sélecteur de thème -->
         <ClientOnly>
-          <select v-model="$colorMode.preference" :disabled="isAutoTimeEnabled"
-            class="px-4 py-2 rounded-lg bg-WtB border border-ash focus:ring-2 focus:ring-primary outline-none text-BtW text-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
-            <option value="system">Système</option>
-            <option value="light">Clair</option>
-            <option value="dark">Sombre</option>
-          </select>
+          <div class="flex gap-3">
+            <button v-for="mode in ['system', 'light', 'dark']" :key="mode" @click="colorMode.preference = mode"
+              :disabled="isAutoTimeEnabled"
+              class="flex-1 flex flex-col items-center gap-2 p-3 rounded-2xl border transition-all duration-300 group"
+              :class="[
+                colorMode.preference === mode
+                  ? 'bg-primary/10 border-primary text-primary shadow-sm scale-[1.02]'
+                  : 'bg-WtB border-ash text-hsa hover:border-ashAct hover:bg-ash/10',
+                isAutoTimeEnabled ? 'opacity-50 cursor-not-allowed grayscale' : 'cursor-pointer'
+              ]">
+              <div class="p-2 rounded-xl transition-colors"
+                :class="colorMode.preference === mode ? 'bg-primary/20' : 'bg-ash/30 group-hover:bg-ash/50'">
+                <IconDeviceDesktop v-if="mode === 'system'" class="w-5 h-5" />
+                <IconSun v-else-if="mode === 'light'" class="w-5 h-5 text-warning" />
+                <IconMoon v-else class="w-5 h-5" />
+              </div>
+              <span class="text-[10px] font-black uppercase tracking-widest">{{
+                mode === 'system' ? 'Système' : mode === 'light' ? 'Clair' : 'Sombre'
+              }}</span>
+            </button>
+          </div>
         </ClientOnly>
       </div>
 
@@ -48,14 +63,21 @@
             </div>
             <div>
               <h3 class="font-bold text-BtW">Planification automatique</h3>
-              <p class="text-sm text-hsa">La plateforme bascule automatiquement entre le mode clair et sombre selon
-                l'heure de votre système.</p>
+              <p class="text-sm text-hsa">
+                La plateforme bascule automatiquement entre le mode clair et sombre selon l'heure de votre système.</p>
             </div>
           </div>
-          <label class="relative inline-flex items-center cursor-pointer">
-            <input type="checkbox" v-model="isAutoTimeEnabled" class="sr-only peer">
-            <div class="input-toggle-slider"></div>
-          </label>
+          <div class="flex flex-col items-end gap-2">
+            <div v-if="isAutoTimeEnabled"
+              class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-[9px] font-black uppercase tracking-widest">
+              <IconHistory class="w-3 h-3" />
+              Prochain : {{ nextSwitchInfo }}
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" v-model="isAutoTimeEnabled" class="sr-only peer">
+              <div class="input-toggle-slider"></div>
+            </label>
+          </div>
         </div>
 
         <!-- Section Personnalisation (Visible uniquement si Auto est activé) -->
@@ -110,14 +132,33 @@
 
 <script setup lang="ts">
 import { onMounted, onUnmounted } from 'vue'
-import { IconSun, IconMoon, IconDeviceDesktop, IconSolarPanel2, IconChevronDown, IconRotate } from '@tabler/icons-vue'
+import { IconSun, IconMoon, IconDeviceDesktop, IconSolarPanel2, IconChevronDown, IconRotate, IconHistory } from '@tabler/icons-vue'
 import { useAutoTheme } from '~/composables/useAutoTheme'
 import { useSettingsPrefStore } from '~/stores/front/settingsPref'
 import { useToastStore } from '~/stores/front/toast'
+import { computed } from 'vue'
 
+const colorMode = useColorMode()
 const { isAutoTimeEnabled, autoThemeSchedule, updateSchedule } = useAutoTheme()
 const settingsPref = useSettingsPrefStore()
 const toast = useToastStore()
+
+/**
+ * Calcule l'heure du prochain basculement automatique.
+ */
+const nextSwitchInfo = computed(() => {
+  const now = new Date()
+  const [startH, startM] = autoThemeSchedule.value.dayStart.split(':').map(Number)
+  const [endH, endM] = autoThemeSchedule.value.dayEnd.split(':').map(Number)
+
+  const currentTimeMinutes = now.getHours() * 60 + now.getMinutes()
+  const startTimeMinutes = startH * 60 + startM
+  const endTimeMinutes = endH * 60 + endM
+
+  if (currentTimeMinutes < startTimeMinutes) return autoThemeSchedule.value.dayStart
+  if (currentTimeMinutes < endTimeMinutes) return autoThemeSchedule.value.dayEnd
+  return autoThemeSchedule.value.dayStart
+})
 
 const days = [
   { id: 1, label: 'Lun' },

@@ -25,7 +25,7 @@
         </h2>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <UiBaseCard v-for="log in logGroup" :key="log.id" @click="navigateTo(`/dashboard/activities/${log.id}`)"
+          <UiBaseCard v-for="log in logGroup" :key="log.id" @click="router.push(`/dashboard/activities/${log.id}`)"
             class="group hover:border-primary/30 transition-all duration-300 relative border border-ashAct cursor-pointer"
             :class="{ 'border-l-4 border-l-danger': log.status !== 'success' }">
             <div class="flex items-center gap-4">
@@ -66,7 +66,8 @@
                     {{ getLogTypeInfo(log.log_type)?.label || 'Activités utilisateur' }}
                   </span>
 
-                  <span v-if="log.details && Object.keys(log.details).length > 0" class="text-[9px] font-black uppercase tracking-widest text-hsa/40 bg-ash px-2 py-1 rounded-lg w-fit">
+                  <span v-if="log.details && Object.keys(log.details).length > 0"
+                    class="text-[9px] font-black uppercase tracking-widest text-hsa/40 bg-ash px-2 py-1 rounded-lg w-fit">
                     {{ formatQuickDetails(log.details) }}
                   </span>
                 </div>
@@ -91,6 +92,7 @@ import { fr } from 'date-fns/locale'
 import { getLogActionInfo, getLogTypeInfo } from '~/utils/logs'
 import { formatSessionLabel, getSessionIcon as getSessionIconRaw } from '~/utils/sessions'
 
+const router = useRouter()
 const getSessionIcon = (log: any) => markRaw(getSessionIconRaw(log))
 
 defineProps<{

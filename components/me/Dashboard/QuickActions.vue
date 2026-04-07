@@ -28,7 +28,7 @@
         <span class="text-[10px] font-bold uppercase tracking-wider text-center">Signaler</span>
       </UiBaseButton>
 
-      <UiBaseButton @click="navigateTo('/dashboard/vigitech/comments')" variant="ghost"
+      <UiBaseButton @click="router.push('/dashboard/vigitech/comments')" variant="ghost"
         class="!flex !flex-col !items-center !justify-center !p-4 !rounded-2xl !bg-indigo-500/10 !text-indigo-600 hover:!bg-indigo-600 hover:!text-white transition-all group !h-auto shadow-sm">
         <div
           class="w-10 h-10 rounded-xl bg-indigo-500/20 flex items-center justify-center mb-2 group-hover:bg-white/20 transition-colors">
@@ -42,6 +42,8 @@
 
 <script setup lang="ts">
 import { IconPlus, IconShieldCheck, IconAlertTriangle, IconMessages } from '@tabler/icons-vue'
+
+const router = useRouter()
 
 defineEmits(['upload', 'verify', 'create'])
 </script>

@@ -2,7 +2,7 @@
   <UiBaseCard title="Journal d'aujourd'hui">
     <template #header>
       <UiBaseButton variant="secondary" size="sm" class="!px-2 !py-1 !text-[10px]"
-        @click="navigateTo('/dashboard/activities')">Logs</UiBaseButton>
+        @click="router.push('/dashboard/activities')">Logs</UiBaseButton>
     </template>
     <div class="space-y-4">
       <div v-if="loading && !logs.length" class="py-10">
@@ -13,7 +13,7 @@
       </div>
       <div v-for="log in logs" :key="log.id"
         class="flex items-center gap-3 p-3 rounded-xl hover:bg-ash/50 transition-all cursor-pointer group"
-        @click="navigateTo(`/dashboard/activities/${log.id}`)">
+        @click="router.push(`/dashboard/activities/${log.id}`)">
         <div class="flex items-center gap-3 min-w-0">
           <div class="p-2 bg-ash rounded-lg group-hover:bg-primary/10 transition-colors"
             :class="`${getLogActionInfo(log.action_type).color.replace('text-', 'bg-')}/5`">
@@ -36,6 +36,8 @@
 
 <script setup lang="ts">
 import { getLogActionInfo } from '~/utils/logs'
+
+const router = useRouter()
 
 defineProps<{
   logs: any[]

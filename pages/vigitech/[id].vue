@@ -40,6 +40,7 @@
 <script setup lang="ts">
 import { usePublicVigitechStore } from '~/stores/back/public/vigitech'
 import { useVigiPrefStore } from '~/stores/front/vigiPref'
+import { decodeHtmlEntities } from '~/utils/format'
 
 definePageMeta({
   layout: 'guest'
