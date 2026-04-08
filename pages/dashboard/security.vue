@@ -1,6 +1,7 @@
 <template>
   <div class="space-y-6 md:space-y-8">
-    <MeSecurityHeader />
+  <MeSecurityHeader :mfa-active="mfaActive" :loading-mfa="loadingMfa" :mfa-disabled-until="mfaDisabledUntil"
+      @toggle-mfa="handleMfaToggle" />
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
       <!-- Left: MFA Methods List -->
@@ -31,6 +32,9 @@
 
     <ModalSecurityPasskey :show="showPasskeyModal" :loading="securityStore.loading" @close="showPasskeyModal = false"
       @success="showPasskeyModal = false" />
+
+    <ModalProfileMfaDisable :show="showMfaDurationModal" :loading="loadingMfa" @close="showMfaDurationModal = false"
+      @confirm="confirmMfaDisable" />
   </div>
 </template>
 
@@ -57,6 +61,11 @@ const expiresAt = ref<string>('')
 const authenticatorData = ref<any>(null)
 const updatingMethod = ref<string | null>(null)
 const isInitialLoading = ref(true)
+const loadingMfa = ref(false)
+const showMfaDurationModal = ref(false)
+
+const mfaActive = computed(() => profilStore.profile?.mfa_active ?? false)
+const mfaDisabledUntil = computed(() => profilStore.profile?.mfa_disabled_until)
 
 onMounted(async () => {
   await profilStore.getProfile()
@@ -147,6 +156,31 @@ const handleToggleMethod = async (method: string, action: 'enable' | 'disable' |
   }
   
   updatingMethod.value = null
+}
+
+const handleMfaToggle = (newVal: boolean) => {
+  if (newVal) {
+    executeMfaToggle(true)
+  } else {
+    showMfaDurationModal.value = true
+  }
+}
+
+const confirmMfaDisable = async (days: number) => {
+  await executeMfaToggle(false, days)
+  showMfaDurationModal.value = false
+}
+
+const executeMfaToggle = async (val: boolean, days?: number) => {
+  loadingMfa.value = true
+  const success = await securityStore.toggleMfa(val, days)
+
+  if (success) {
+    toastStore.showToast('success', 'Sécurité mise à jour', `La double authentification est désormais ${val ? 'activée' : 'suspendue'}.`)
+  } else {
+    toastStore.showToast('error', 'Erreur', securityStore.error || 'Impossible de modifier le paramètre MFA.')
+  }
+  loadingMfa.value = false
 }
 
 useHead({

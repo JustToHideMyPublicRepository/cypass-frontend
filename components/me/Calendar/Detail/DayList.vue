@@ -13,6 +13,7 @@
           <IconFileText v-if="event.type === 'docsentry'" class="w-6 h-6" />
           <IconAlertTriangle v-else-if="event.type === 'vigitech'" class="w-6 h-6" />
           <IconMessage v-else-if="event.type === 'comment'" class="w-6 h-6" />
+          <IconAlertOctagon v-else-if="event.type === 'report'" class="w-6 h-6" />
           <IconDeviceDesktop v-else-if="event.type === 'session'" class="w-6 h-6" />
           <IconActivity v-else class="w-6 h-6" />
         </div>
@@ -39,11 +40,17 @@
               {{ event.type }}
             </span>
 
-            <NuxtLink v-if="event.url" :to="event.url"
+            <NuxtLink v-if="event.url && event.type !== 'comment' && event.type !== 'report'" :to="event.url"
               class="text-xs font-bold text-primary hover:underline flex items-center gap-1">
               Afficher les détails
               <IconArrowRight class="w-3 h-3" />
             </NuxtLink>
+
+            <button v-else-if="event.type === 'comment' || event.type === 'report'" @click="$emit('open-modal', event)"
+              class="text-xs font-bold text-primary hover:underline flex items-center gap-1">
+              Afficher un aperçu
+              <IconSquareAsterisk class="w-3 h-3" />
+            </button>
           </div>
         </div>
       </div>
@@ -90,12 +97,14 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 import { format } from 'date-fns'
-import { IconClock, IconArrowRight, IconCalendarOff, IconFileText, IconAlertTriangle, IconMessage, IconActivity, IconDeviceDesktop } from '@tabler/icons-vue'
+import { IconClock, IconArrowRight, IconCalendarOff, IconFileText, IconAlertTriangle, IconMessage, IconActivity, IconDeviceDesktop, IconAlertOctagon, IconSquareAsterisk } from '@tabler/icons-vue'
 import type { CalendarEvent } from '~/composables/useCalendarEvents'
 
 const props = defineProps<{
   events: CalendarEvent[]
 }>()
+
+defineEmits(['open-modal'])
 
 const currentPage = ref(1)
 const itemsPerPage = 5

@@ -1,4 +1,4 @@
-import { IconFileText, IconAlertTriangle, IconMessage, IconActivity, IconDeviceDesktop } from '@tabler/icons-vue'
+import { IconFileText, IconAlertTriangle, IconMessage, IconActivity, IconDeviceDesktop, IconAlertOctagon } from '@tabler/icons-vue'
 
 export const CALENDAR_FILTERS = [
   {
@@ -59,6 +59,18 @@ export const CALENDAR_FILTERS = [
       peerCheckedBg: 'peer-checked:bg-success',
       peerCheckedBorder: 'peer-checked:border-success',
       groupHoverBorder: 'group-hover:border-success/50'
+    }
+  },
+  {
+    id: 'report',
+    label: 'Signalements',
+    icon: IconAlertOctagon,
+    classes: {
+      text: 'text-purple-500',
+      bgLight: 'bg-purple-500/10',
+      peerCheckedBg: 'peer-checked:bg-purple-500',
+      peerCheckedBorder: 'peer-checked:border-purple-500',
+      groupHoverBorder: 'group-hover:border-purple-500/50'
     }
   }
 ] as const

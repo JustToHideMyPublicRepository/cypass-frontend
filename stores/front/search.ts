@@ -14,7 +14,7 @@ interface SearchResult {
   description?: string
   path?: string
   icon?: string
-  type: 'shortcuts' | 'navigation' | 'docsentry' | 'vigitech' | 'incident' | 'log' | 'faq' | 'support'
+  type: 'shortcuts' | 'navigation' | 'docsentry' | 'vigitech' | 'incident' | 'log' | 'faq' | 'support' | 'session'
   category?: string
   isShortcut?: boolean
 }
@@ -153,6 +153,7 @@ export const useSearchStore = defineStore('search', {
           if (docStore.documents.length === 0) fetchPromises.push(docStore.fetchDocuments(100))
           if (activitiesStore.logs.length === 0) fetchPromises.push(activitiesStore.getUserLogs({ limit: 100 }))
           if (vigitechStore.userIncidents.length === 0) fetchPromises.push(vigitechStore.fetchUserIncidents())
+          fetchPromises.push(activitiesStore.sessionsGet())
         }
 
         // Always try to have public incidents for search
@@ -163,6 +164,9 @@ export const useSearchStore = defineStore('search', {
         if (fetchPromises.length > 0) {
           await Promise.all(fetchPromises)
         }
+
+        // Based on sessions.vue, sessionsGet returns the sessions.
+        const currentSessions = isAuthenticated ? await activitiesStore.sessionsGet() : []
 
         const searchResults: SearchResult[] = []
         const q = query.toLowerCase()
@@ -305,6 +309,26 @@ export const useSearchStore = defineStore('search', {
             }
           })
         })
+
+        // 8. Search in Sessions (ONLY IF AUTHENTICATED)
+        if (isAuthenticated && currentSessions.length > 0) {
+          currentSessions.forEach(sess => {
+            const browser = (sess.browser || '').toLowerCase()
+            const os = (sess.os || '').toLowerCase()
+            const ip = (sess.ip_address || '').toLowerCase()
+
+            if (browser.includes(q) || os.includes(q) || ip.includes(q)) {
+              searchResults.push({
+                id: `sess-${sess.id}`,
+                title: `${sess.browser} sur ${sess.os}`,
+                description: `Session active depuis l'adresse IP ${sess.ip_address}`,
+                path: '/dashboard/sessions',
+                type: 'session',
+                category: 'Sessions actives'
+              })
+            }
+          })
+        }
 
         this.results = searchResults
       } catch (e) {

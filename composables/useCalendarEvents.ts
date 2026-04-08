@@ -6,8 +6,10 @@ import { useAuthStore } from '~/stores/back/user/auth'
 import { format, startOfMonth, endOfMonth } from 'date-fns'
 import { getCalendarFilterConfig } from '~/utils/calendar'
 import { getLogActionInfo } from '~/utils/logs'
+import { useReportUserStore } from '~/stores/back/user/reportUser'
+import { useReportIncidentStore } from '~/stores/back/user/reportIncident'
 
-export type EventType = 'docsentry' | 'vigitech' | 'comment' | 'log' | 'session'
+export type EventType = 'docsentry' | 'vigitech' | 'comment' | 'log' | 'session' | 'report'
 
 export interface CalendarEvent {
   id: string
@@ -18,6 +20,7 @@ export interface CalendarEvent {
   color: string
   bgColor: string
   url?: string
+  rawItem?: any
 }
 
 export const useCalendarEvents = () => {
@@ -58,6 +61,10 @@ export const useCalendarEvents = () => {
         userDocsentryStore.fetchDocuments(100, 0),
         vigitechStore.fetchUserIncidents(),
         vigitechStore.fetchUserComments(),
+        useReportUserStore().sentReports(),
+        useReportUserStore().receivedReports(),
+        useReportIncidentStore().sentReports(),
+        useReportIncidentStore().receivedReports(),
       ]
 
       if (date && date.length === 10) {
@@ -178,6 +185,27 @@ export const useCalendarEvents = () => {
       })
     }
 
+    // 6. Reports
+    const reportUserStore = useReportUserStore()
+    const reportIncidentStore = useReportIncidentStore()
+
+    const allUserReports = [...reportUserStore.sentReportsList, ...reportUserStore.receivedReportsList]
+    const allIncidentReports = [...reportIncidentStore.sentReportsList, ...reportIncidentStore.receivedReportsList]
+    const allReports = [...allUserReports, ...allIncidentReports]
+
+    allReports.forEach(report => {
+      events.push({
+        id: `rep-${report.id}`,
+        title: report.reason || 'Signalement',
+        description: report.details || 'Signalement enregistré',
+        date: report.created_at,
+        type: 'report',
+        color: getCalendarFilterConfig('report')?.classes.text || 'text-rose-500',
+        bgColor: getCalendarFilterConfig('report')?.classes.bgLight || 'bg-rose-500/10',
+        rawItem: report
+      })
+    })
+
     // Sort descending
     return events.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
   })
@@ -202,7 +230,7 @@ export const useCalendarEvents = () => {
   })
 
   // Filter implementation
-  const filterTypes = ref<EventType[]>(['docsentry', 'vigitech', 'comment', 'log', 'session'])
+  const filterTypes = ref<EventType[]>(['docsentry', 'vigitech', 'comment', 'log', 'session', 'report'])
 
   const toggleFilter = (type: EventType) => {
     if (filterTypes.value.includes(type)) {

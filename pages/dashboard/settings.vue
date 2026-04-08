@@ -19,9 +19,6 @@
 
     <!-- Language & Region -->
     <MeSettingsRegion />
-
-    <!-- Danger Zone -->
-    <MeSettingsDanger />
   </div>
 </template>
 

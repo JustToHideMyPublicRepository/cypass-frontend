@@ -13,7 +13,7 @@
       </div>
       <div v-for="comment in comments" :key="comment.id"
         class="flex items-center justify-between p-3 rounded-xl hover:bg-ash/50 transition-all cursor-pointer group"
-        @click="router.push(`/dashboard/vigitech/comments`)">
+        @click="openDetail(comment)">
         <div class="flex items-center gap-3 min-w-0">
           <div class="p-2 bg-ash rounded-lg group-hover:bg-primary/10 transition-colors">
             <IconMessage class="w-4 h-4 text-hsa group-hover:text-primary" />
@@ -29,19 +29,39 @@
         </span>
       </div>
     </div>
+    
+    <!-- Détail du commentaire -->
+    <ModalVigitechCommentDetail :show="showDetail" :comment="selectedComment" @close="showDetail = false" />
   </UiBaseCard>
 </template>
 
 <script setup lang="ts">
-import { IconMessage } from '@tabler/icons-vue'
-import { formatRelativeTime } from '~/utils/date'
+import { useUserVigitechStore } from '~/stores/back/user/vigitech'
+import { useToastStore } from '~/stores/front/toast'
 
 const router = useRouter()
+const store = useUserVigitechStore()
+const toast = useToastStore()
 
 defineProps<{
   comments: any[]
   loading: boolean
 }>()
+
+const showDetail = ref(false)
+const selectedComment = ref<any>(null)
+
+const openDetail = async (comment: any) => {
+  showDetail.value = true
+  selectedComment.value = null // Show skeleton
+  const res = await store.fetchCommentById(comment.id)
+  if (res.success) {
+    selectedComment.value = res.data
+  } else {
+    toast.showToast('error', 'Erreur', 'Impossible de charger les détails du commentaire.')
+    showDetail.value = false
+  }
+}
 
 const getBadgeLabelColor = (dateStr: string) => {
   const diff = Date.now() - new Date(dateStr).getTime()

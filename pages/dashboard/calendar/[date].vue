@@ -19,9 +19,16 @@
 
       <!-- Events List -->
       <div class="lg:col-span-3">
-        <MeCalendarDetailDayList :events="currentDayEvents" />
+        <MeCalendarDetailDayList :events="currentDayEvents" @open-modal="handleOpenModal" />
       </div>
     </div>
+
+    <!-- Modals -->
+    <ModalVigitechCommentDetail :show="showCommentModal" :comment="selectedComment"
+      @close="showCommentModal = false" />
+
+    <ModalReportDetail :show="showReportModal" :report="selectedReport" :report-type="reportType"
+      :mode="reportMode" @close="showReportModal = false" />
   </div>
 </template>
 
@@ -32,6 +39,7 @@ import { format, parseISO, isValid } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { useCalendarEvents } from '~/composables/useCalendarEvents'
 import { CALENDAR_FILTERS as AVAILABLE_FILTERS } from '~/utils/calendar'
+import { useAuthStore } from '~/stores/back/user/auth'
 
 const route = useRoute()
 const dateParam = route.params.date as string
@@ -60,6 +68,14 @@ const formattedDate = computed(() => {
   return format(currentDate.value, 'EEEE d MMMM yyyy', { locale: fr })
 })
 
+// Modal States
+const showCommentModal = ref(false)
+const selectedComment = ref<any>(null)
+const showReportModal = ref(false)
+const selectedReport = ref<any>(null)
+const reportType = ref<'user' | 'incident'>('user')
+const reportMode = ref<'sent' | 'received'>('sent')
+
 // Counts and Insights
 const currentDayCounts = computed(() => {
   const counts: Record<string, number> = {
@@ -67,7 +83,8 @@ const currentDayCounts = computed(() => {
     vigitech: 0,
     comment: 0,
     log: 0,
-    session: 0
+    session: 0,
+    report: 0
   }
 
   const allDayEvents = eventsByDate.value[dateParam] || []
@@ -108,6 +125,19 @@ const dailyInsightText = computed(() => {
 const currentDayEvents = computed(() => {
   return filteredEventsByDate.value[dateParam] || []
 })
+
+const handleOpenModal = (event: any) => {
+  if (event.type === 'comment') {
+    selectedComment.value = event.rawItem
+    showCommentModal.value = true
+  } else if (event.type === 'report') {
+    selectedReport.value = event.rawItem
+    // Determine type and mode from rawItem if possible, or fallback
+    reportType.value = event.rawItem.reported_user_id ? 'user' : 'incident'
+    reportMode.value = event.rawItem.sender_id === useAuthStore().user?.id ? 'sent' : 'received'
+    showReportModal.value = true
+  }
+}
 
 useHead({
   title: `${formattedDate.value} - Calendrier`,

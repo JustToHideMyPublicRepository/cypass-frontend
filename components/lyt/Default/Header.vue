@@ -144,11 +144,6 @@ const dropdownLinks = [
     icon: IconActivity
   },
   {
-    label: 'Centre d\'alertes',
-    path: '/dashboard/reports',
-    icon: IconFlag
-  },
-  {
     label: 'Sécurité',
     path: '/dashboard/security',
     icon: IconLock
@@ -157,6 +152,11 @@ const dropdownLinks = [
     label: 'Paramètres',
     path: '/dashboard/settings',
     icon: IconSettings
+  },
+  {
+    label: 'Centre d\'alertes',
+    path: '/dashboard/reports',
+    icon: IconFlag
   },
   {
     label: 'Raccourcis clavier',

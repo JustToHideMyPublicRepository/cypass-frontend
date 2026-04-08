@@ -1,8 +1,4 @@
-import {
-  IconKeyboard, IconLayoutDashboard, IconFileDescription,
-  IconAlertTriangle, IconShieldCheck, IconActivity, IconSearch,
-  IconQuestionMark, IconLifebuoy
-} from '@tabler/icons-vue'
+import { IconKeyboard, IconLayoutDashboard, IconFileDescription, IconAlertTriangle, IconShieldCheck, IconActivity, IconSearch, IconQuestionMark, IconLifebuoy, IconDeviceDesktop } from '@tabler/icons-vue'
 
 /**
  * Retourne l'icône correspondant au type de résultat de recherche.
@@ -17,6 +13,7 @@ export const getSearchIcon = (type: string) => {
     case 'log': return IconActivity
     case 'faq': return IconQuestionMark
     case 'support': return IconLifebuoy
+    case 'session': return IconDeviceDesktop
     default: return IconSearch
   }
 }
@@ -34,6 +31,7 @@ export const getSearchIconStyle = (type: string) => {
     case 'log': return 'bg-purple-500/10 text-purple-500'
     case 'faq': return 'bg-yellow-500/10 text-yellow-500'
     case 'support': return 'bg-rose-500/10 text-rose-500'
+    case 'session': return 'bg-success/10 text-success'
     default: return 'bg-ash/10 text-hsa'
   }
 }
