@@ -1,11 +1,15 @@
 import { defineStore } from 'pinia'
+import { useProfilStore } from './profil'
 import type { Notification, NotificationResponse } from '~/types/notifications'
+import type { NotificationSettings } from '~/types/profil'
 
 export const useNotificationsStore = defineStore('notifications', {
   state: () => ({
     notifications: [] as Notification[],
     currentNotification: null as Notification | null,
     unreadCount: 0,
+    notificationSettings: null as NotificationSettings | null,
+    settingsLoading: false,
     loading: false,
     error: null as string | null,
     pagination: {
@@ -102,6 +106,79 @@ export const useNotificationsStore = defineStore('notifications', {
       } catch (err) {
         console.error('Failed to mark notification as read')
         return false
+      }
+    },
+
+    // Récupérer les préférences de notification
+    async fetchNotificationSettings() {
+      this.settingsLoading = true
+      try {
+        const response = await $fetch<{ success: boolean; data: NotificationSettings }>('/api/user/notification/settings-get')
+        if (response.success) {
+          this.notificationSettings = response.data
+          return true
+        }
+        return false
+      } catch (err: any) {
+        console.error('Erreur récupération préférences notifications')
+        return false
+      } finally {
+        this.settingsLoading = false
+      }
+    },
+
+    // Mettre à jour les préférences de notification
+    async updateNotificationSettings(settings: Partial<NotificationSettings>) {
+      this.settingsLoading = true
+      try {
+        const response = await $fetch<{ success: boolean; message: string; data: NotificationSettings }>('/api/user/notification/settings-set', {
+          method: 'PATCH',
+          body: settings
+        })
+        if (response.success) {
+          this.notificationSettings = response.data
+
+          // Sync with ProfilStore
+          const profilStore = useProfilStore()
+          if (profilStore.profile) {
+            profilStore.profile.notification_settings = response.data
+          }
+
+          return { success: true, message: response.message }
+        }
+        return { success: false, message: 'Erreur lors de la mise à jour' }
+      } catch (err: any) {
+        console.error('Erreur mise à jour préférences notifications')
+        return { success: false, message: err.data?.message || 'Erreur serveur' }
+      } finally {
+        this.settingsLoading = false
+      }
+    },
+
+    // Réinitialiser les préférences de notification
+    async resetNotificationSettings() {
+      this.settingsLoading = true
+      try {
+        const response = await $fetch<{ success: boolean; message: string; data: NotificationSettings }>('/api/user/notification/settings-reset', {
+          method: 'PATCH'
+        })
+        if (response.success) {
+          this.notificationSettings = response.data
+
+          // Sync with ProfilStore
+          const profilStore = useProfilStore()
+          if (profilStore.profile) {
+            profilStore.profile.notification_settings = response.data
+          }
+
+          return { success: true, message: response.message }
+        }
+        return { success: false, message: 'Erreur lors de la réinitialisation' }
+      } catch (err: any) {
+        console.error('Erreur réinitialisation préférences notifications')
+        return { success: false, message: err.data?.message || 'Erreur serveur' }
+      } finally {
+        this.settingsLoading = false
       }
     },
   }

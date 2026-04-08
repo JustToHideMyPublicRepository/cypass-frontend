@@ -4,6 +4,13 @@ export interface UserPlan {
   credits: number
 }
 
+export interface NotificationSettings {
+  security: boolean
+  documents: boolean
+  incidents: boolean
+  profile: boolean
+}
+
 export interface UserProfile {
   id: string
   email: string
@@ -23,6 +30,7 @@ export interface UserProfile {
   has_security_codes?: boolean
   is_reported?: boolean
   plan?: UserPlan
+  notification_settings?: NotificationSettings
   created_at: string
 }
 

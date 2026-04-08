@@ -71,6 +71,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useRoute } from 'vue-router'
 import { IconEye, IconEyeOff, IconMail, IconLock } from '@tabler/icons-vue'
 import { useAuthStore } from '~/stores/back/user/auth'
 import { useToastStore } from '~/stores/front/toast'
@@ -86,6 +87,7 @@ const loading = ref(false)
 
 const authStore = useAuthStore()
 const toastStore = useToastStore()
+const route = useRoute()
 
 // Gestion de la connexion
 const handleLogin = async () => {
@@ -105,7 +107,8 @@ const handleLogin = async () => {
 
   if (result.success) {
     toastStore.showToast('success', 'Bienvenue', authStore.message || 'Connexion réussie !')
-    navigateTo('/dashboard')
+    const redirectPath = route.query.redirect as string || '/dashboard'
+    navigateTo(redirectPath)
   } else {
     toastStore.showToast('error', 'Erreur de connexion', authStore.error || "Identifiants invalides.")
   }

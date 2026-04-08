@@ -94,7 +94,7 @@ const categoryCounts = computed(() => {
     const cat = getCategory(n.type)
     acc[cat] = (acc[cat] || 0) + 1
     return acc
-  }, { DOC: 0, SEC: 0, PRF: 0, OTHER: 0 } as Record<string, number>)
+  }, { DOC: 0, SEC: 0, INC: 0, PRF: 0, OTHER: 0 } as Record<string, number>)
 })
 
 const hasActiveFilters = computed(() => {
