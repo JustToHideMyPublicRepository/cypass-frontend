@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
   const id = body.report_id
 
   try {
-    const response: any = await $fetch(`${baseApi}/vigitech/delete_report/${id}`, {
+    const response: any = await $fetch(`${baseApi}/user/report_incident/delete/${id}`, {
       method: 'DELETE',
       body,
       headers: {

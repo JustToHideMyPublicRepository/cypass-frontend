@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const res = await fetch(`${baseApi}/vigitech/list_received_reports`, {
+    const res = await fetch(`${baseApi}/user/report_incident/list_received`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,

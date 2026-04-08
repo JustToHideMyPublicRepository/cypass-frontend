@@ -11,7 +11,6 @@ export default defineEventHandler(async (event) => {
 
   const body = await readBody(event)
 
-  // Build form data exactly like the cURL example
   const params = new URLSearchParams()
   if (body.reported_user_id) params.append('reported_user_id', String(body.reported_user_id))
   if (body.reason) params.append('reason', String(body.reason))
