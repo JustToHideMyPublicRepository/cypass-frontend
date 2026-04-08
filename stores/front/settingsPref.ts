@@ -7,7 +7,8 @@ export const useSettingsPrefStore = defineStore('settingsPref', {
       notifications: true,
       shortcuts: true,
       vigitech: true,
-      region: true
+      region: true,
+      newsletter: true
     }
   }),
 
@@ -25,6 +26,7 @@ export const useSettingsPrefStore = defineStore('settingsPref', {
       this.display.shortcuts = value
       this.display.vigitech = value
       this.display.region = value
+      this.display.newsletter = value
       this.saveToLocalStorage()
     },
 

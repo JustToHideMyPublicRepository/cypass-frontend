@@ -13,7 +13,8 @@ export const useActivitiesStore = defineStore('activities', {
     loading: false,
     error: null,
     message: null,
-    isLogoutModalOpen: false
+    isLogoutModalOpen: false,
+    newsletterLoading: false
   } as ProfilState),
 
   actions: {

@@ -8,6 +8,9 @@
     <!-- Notifications -->
     <MeSettingsNotifications />
 
+    <!-- Newsletter -->
+    <MeSettingsNewsletter />
+
     <!-- Shortcuts Settings -->
     <MeSettingsShortcuts />
 

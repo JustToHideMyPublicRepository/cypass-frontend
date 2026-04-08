@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { useAuthStore } from './auth'
-import { type UserProfile, type Statistics, type LogEntry, type LogStatistics, type ProfilState } from '~/types/profil'
+import { type UserProfile, type Statistics, type LogEntry, type LogStatistics, type ProfilState, type NewsletterSettings } from '~/types/profil'
 
 export const useProfilStore = defineStore('profil', {
   state: () => ({
@@ -14,7 +14,8 @@ export const useProfilStore = defineStore('profil', {
     loading: false,
     error: null,
     message: null,
-    isLogoutModalOpen: false
+    isLogoutModalOpen: false,
+    newsletterLoading: false
   } as ProfilState),
 
   actions: {
@@ -154,6 +155,71 @@ export const useProfilStore = defineStore('profil', {
       const authStore = useAuthStore()
       if (authStore.user) {
         authStore.user.avatar_url = url
+      }
+    },
+
+    // Récupérer les préférences de newsletter
+    async fetchNewsletterSettings() {
+      this.newsletterLoading = true
+      try {
+        const response = await $fetch<{ success: boolean; data: NewsletterSettings }>('/api/user/profile/newsletter-get')
+        if (response.success) {
+          if (this.profile) {
+            this.profile.newsletter_settings = response.data
+          }
+          return true
+        }
+        return false
+      } catch (err: any) {
+        console.error('Erreur récupération préférences newsletter')
+        return false
+      } finally {
+        this.newsletterLoading = false
+      }
+    },
+
+    // Mettre à jour les préférences de newsletter
+    async updateNewsletterSettings(settings: Partial<NewsletterSettings>) {
+      this.newsletterLoading = true
+      try {
+        const response = await $fetch<{ success: boolean; message: string; data: NewsletterSettings }>('/api/user/profile/newsletter-set', {
+          method: 'PATCH',
+          body: settings
+        })
+        if (response.success) {
+          if (this.profile) {
+            this.profile.newsletter_settings = response.data
+          }
+          return { success: true, message: response.message }
+        }
+        return { success: false, message: 'Erreur lors de la mise à jour' }
+      } catch (err: any) {
+        console.error('Erreur mise à jour préférences newsletter')
+        return { success: false, message: err.data?.message || 'Erreur serveur' }
+      } finally {
+        this.newsletterLoading = false
+      }
+    },
+
+    // Réinitialiser les préférences de newsletter
+    async resetNewsletterSettings() {
+      this.newsletterLoading = true
+      try {
+        const response = await $fetch<{ success: boolean; message: string; data: NewsletterSettings }>('/api/user/profile/newsletter-reset', {
+          method: 'PATCH'
+        })
+        if (response.success) {
+          if (this.profile) {
+            this.profile.newsletter_settings = response.data
+          }
+          return { success: true, message: response.message }
+        }
+        return { success: false, message: 'Erreur lors de la réinitialisation' }
+      } catch (err: any) {
+        console.error('Erreur réinitialisation préférences newsletter')
+        return { success: false, message: err.data?.message || 'Erreur serveur' }
+      } finally {
+        this.newsletterLoading = false
       }
     },
   }

@@ -11,6 +11,12 @@ export interface NotificationSettings {
   profile: boolean
 }
 
+export interface NewsletterSettings {
+  marketing: boolean
+  product: boolean
+  security: boolean
+}
+
 export interface UserProfile {
   id: string
   email: string
@@ -31,6 +37,7 @@ export interface UserProfile {
   is_reported?: boolean
   plan?: UserPlan
   notification_settings?: NotificationSettings
+  newsletter_settings?: NewsletterSettings
   created_at: string
 }
 
@@ -109,4 +116,5 @@ export interface ProfilState {
   error: string | null
   message: string | null
   isLogoutModalOpen: boolean
+  newsletterLoading?: boolean
 }
