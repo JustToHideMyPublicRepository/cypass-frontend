@@ -31,7 +31,11 @@ jobs:
         env:
           CYPASS_API_URL: ${{ secrets.CYPASS_API_URL }}
 
-      - name: 🛠️ Pre-deployment Cleanup
+      - name: 📝 Generate .env file
+        run: |
+          echo "CYPASS_API_URL=${{ secrets.CYPASS_API_URL }}" > .env
+
+      - name: 🛠️ Pre-deployment Cleanup & Stop
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.FRONT_SSH_HOST }}
@@ -39,10 +43,21 @@ jobs:
           password: ${{ secrets.FRONT_SSH_PASSWORD }}
           port: ${{ secrets.FRONT_SSH_PORT }}
           script: |
+            # Charger les profils pour s'assurer que pm2 est dans le PATH
+            [ -f ~/.bashrc ] && . ~/.bashrc
+            [ -f ~/.profile ] && . ~/.profile
+            
             echo "🛑 Stopping PM2 process..."
-            pm2 stop cypass-front || true
-            echo "🧹 Cleaning previous build..."
-            rm -rf /var/www/cybercub/cypass/.output
+            # Essayer pm2 direct, sinon via npm si installé localement
+            if command -v pm2 >/dev/null 2>&1; then
+              pm2 stop cypass-front || true
+            else
+              npx pm2 stop cypass-front || true
+            fi
+            
+            echo "🧹 Cleaning directory for fresh install..."
+            # On vide tout le dossier de destination
+            rm -rf /var/www/cybercub/cypass/*
 
       - name: 📂 Transfer files to server (SCP)
         uses: appleboy/scp-action@v0.1.7
@@ -51,9 +66,10 @@ jobs:
           username: ${{ secrets.FRONT_SSH_USER }}
           password: ${{ secrets.FRONT_SSH_PASSWORD }}
           port: ${{ secrets.FRONT_SSH_PORT }}
-          source: ".output,deploy.sh,package.json"
+          source: ".output,deploy.sh,package.json,.env"
           target: "/var/www/cybercub/cypass/"
           rm: false
+          overwrite: true
           strip_components: 0
 
       - name: 🚀 Run deployment script
