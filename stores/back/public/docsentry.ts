@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { type VerificationResult, type PublicKeyInfo } from '~/types/documents'
+import { type VerificationResult, type PublicKeyInfo } from '~/types/docsentry'
 
 export const usePublicDocsentryStore = defineStore('publicDocsentry', {
   state: () => ({

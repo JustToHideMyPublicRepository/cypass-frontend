@@ -138,7 +138,7 @@ import { IconFileText, IconDownload, IconFileOff, IconEye, IconCopy, IconCheck, 
 import { ref } from 'vue'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
-import type { Document } from '~/types/documents'
+import type { Document } from '~/types/docsentry'
 import { useToastStore } from '~/stores/front/toast'
 import { useUserDocsentryStore } from '~/stores/back/user/docsentry'
 import { useContextMenu, type ContextMenuItem } from '~/composables/useContextMenu'

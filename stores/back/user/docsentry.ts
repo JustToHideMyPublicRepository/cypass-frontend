@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { startOfWeek, endOfWeek, subWeeks, isWithinInterval } from 'date-fns'
-import { type Document, type DocumentDetail, type UploadResult } from '~/types/documents'
+import { type Document, type DocumentDetail, type UploadResult } from '~/types/docsentry'
 
 export const useUserDocsentryStore = defineStore('userDocsentry', {
   state: () => ({
