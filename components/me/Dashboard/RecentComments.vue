@@ -29,13 +29,14 @@
         </span>
       </div>
     </div>
-    
+
     <!-- Détail du commentaire -->
     <ModalVigitechCommentDetail :show="showDetail" :comment="selectedComment" @close="showDetail = false" />
   </UiBaseCard>
 </template>
 
 <script setup lang="ts">
+import { IconMessage } from '@tabler/icons-vue'
 import { useUserVigitechStore } from '~/stores/back/user/vigitech'
 import { useToastStore } from '~/stores/front/toast'
 

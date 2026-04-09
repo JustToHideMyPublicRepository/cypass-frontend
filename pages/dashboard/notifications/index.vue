@@ -9,7 +9,7 @@
       @filter-category="cat => filterState.category = filterState.category === cat ? '' : cat" />
 
     <!-- Filters -->
-    <MeNotificationsFilters v-model="filterState" :has-active-filters="hasActiveFilters"
+    <MeNotificationsFilters :model-value="filterState" :has-active-filters="hasActiveFilters"
       @update:status="val => filterState.status = val" @update:priority="val => filterState.priority = val"
       @toggle-sort="toggleSort" @reset="resetFilters" />
 

@@ -162,7 +162,8 @@ const currentMonthCounts = computed(() => {
     vigitech: 0,
     comment: 0,
     log: 0,
-    session: 0
+    session: 0,
+    report: 0
   }
 
   const eventsMap = props.eventsByDate

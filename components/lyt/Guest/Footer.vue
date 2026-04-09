@@ -59,20 +59,36 @@
           </p>
         </div>
 
+        <!-- Newsletter Button -->
+        <div class="">
+          <button @click="showNewsletterModal = true"
+            class="group relative inline-flex items-center gap-2 px-6 py-3 bg-WtB border border-ash rounded-2xl hover:border-primary transition-all duration-300 overflow-hidden shadow-sm">
+            <div
+              class="absolute inset-0 bg-primary/5 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out">
+            </div>
+            <IconMail class="w-5 h-5 text-hsa group-hover:text-primary transition-colors relative z-10" />
+            <span class="text-sm font-bold text-BtW group-hover:text-primary transition-colors relative z-10">
+              S'inscrire à la newsletter</span>
+          </button>
+        </div>
+
         <div class="flex items-center gap-2 opacity-70">
           <span class="text-[10px] font-bold tracking-widest text-hsa uppercase">République du Bénin</span>
-          <img src="https://flagcdn.com/w40/bj.png" alt="Flag of Benin" class="h-4 rounded shadow-sm opacity-80" />
+          <img src="https://flagcdn.com/w40/bj.png" alt="Benin" class="h-4 rounded shadow-sm opacity-80" />
         </div>
       </div>
     </div>
+
+    <!-- Modals -->
+    <ModalNewsletterSubscribe :show="showNewsletterModal" @close="showNewsletterModal = false" />
   </footer>
 </template>
 <script setup lang="ts">
-import {
-  IconBrandX, IconBrandLinkedin, IconBrandFacebook, IconShieldCheck, IconGlobe
-} from '@tabler/icons-vue'
+import { ref } from 'vue'
+import { IconBrandX, IconBrandLinkedin, IconBrandFacebook, IconShieldCheck, IconGlobe, IconMail } from '@tabler/icons-vue'
 import { getLinkTooltip } from '~/data/shortcuts'
 
+const showNewsletterModal = ref(false)
 const socialLinks = ['linkedin', 'twitter', 'facebook']
 
 const footerGroups = [
@@ -97,7 +113,7 @@ const footerGroups = [
   {
     title: 'Ressources',
     links: [
-      { label: 'Mentions Légales', path: '/legal/mentions' },
+      { label: 'Mentions légales', path: '/legal/mentions' },
       { label: 'Confidentialité', path: '/legal/privacy' },
       { label: 'CGU', path: '/legal/terms' },
       { label: 'Raccourcis', path: '/system/shortcuts' },
