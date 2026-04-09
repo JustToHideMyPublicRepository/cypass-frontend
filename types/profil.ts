@@ -53,6 +53,7 @@ export interface UserSession {
   id: string
   user_agent: string
   ip_address: string
+  location: string
   os: string
   browser: string
   is_current: boolean

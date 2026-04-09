@@ -32,11 +32,12 @@ import { ref, reactive, computed, onMounted } from 'vue'
 import { useAuthStore } from '~/stores/back/user/auth'
 import { useActivitiesStore } from '~/stores/back/user/activities'
 import { useToastStore } from '~/stores/front/toast'
+import type { UserSession } from '~/types/profil'
 
 const authStore = useAuthStore()
 const activitiesStore = useActivitiesStore()
 const toastStore = useToastStore()
-const sessions = ref<any[]>([])
+const sessions = ref<UserSession[]>([])
 const loading = ref(true)
 const revokingAll = ref(false)
 

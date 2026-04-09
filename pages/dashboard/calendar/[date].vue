@@ -24,11 +24,10 @@
     </div>
 
     <!-- Modals -->
-    <ModalVigitechCommentDetail :show="showCommentModal" :comment="selectedComment"
-      @close="showCommentModal = false" />
+    <ModalVigitechCommentDetail :show="showCommentModal" :comment="selectedComment" @close="showCommentModal = false" />
 
-    <ModalReportDetail :show="showReportModal" :report="selectedReport" :report-type="reportType"
-      :mode="reportMode" @close="showReportModal = false" />
+    <ModalReportDetail :show="showReportModal" :report="selectedReport" :report-type="reportType" :mode="reportMode"
+      @close="showReportModal = false" />
   </div>
 </template>
 
@@ -40,6 +39,8 @@ import { fr } from 'date-fns/locale'
 import { useCalendarEvents } from '~/composables/useCalendarEvents'
 import { CALENDAR_FILTERS as AVAILABLE_FILTERS } from '~/utils/calendar'
 import { useAuthStore } from '~/stores/back/user/auth'
+import { useUserVigitechStore } from '~/stores/back/user/vigitech'
+import { useToastStore } from '~/stores/front/toast'
 
 const route = useRoute()
 const dateParam = route.params.date as string
@@ -126,10 +127,20 @@ const currentDayEvents = computed(() => {
   return filteredEventsByDate.value[dateParam] || []
 })
 
-const handleOpenModal = (event: any) => {
+const vigitechStore = useUserVigitechStore()
+const toast = useToastStore()
+
+const handleOpenModal = async (event: any) => {
   if (event.type === 'comment') {
-    selectedComment.value = event.rawItem
+    selectedComment.value = null
     showCommentModal.value = true
+    const res = await vigitechStore.fetchCommentById(event.rawItem.id)
+    if (res.success) {
+      selectedComment.value = res.data
+    } else {
+      toast.showToast('error', 'Erreur', 'Impossible de charger le commentaire.')
+      showCommentModal.value = false
+    }
   } else if (event.type === 'report') {
     selectedReport.value = event.rawItem
     // Determine type and mode from rawItem if possible, or fallback

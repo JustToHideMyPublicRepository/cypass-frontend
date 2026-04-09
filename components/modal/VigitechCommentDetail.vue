@@ -4,16 +4,14 @@
       <!-- Incident Title Header -->
       <div class="p-5 rounded-[2.5rem] bg-ash/5 border border-ash/30 flex items-center justify-between gap-4">
         <div class="flex items-center gap-4 min-w-0">
-          <div class="shrink-0 w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center border border-primary/20">
+          <div
+            class="shrink-0 w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center border border-primary/20">
             <IconMessageChatbot class="w-6 h-6 text-primary" />
           </div>
           <div class="min-w-0">
             <p class="text-[10px] font-black uppercase tracking-widest text-hsa mb-0.5">Incident associé</p>
-            <NuxtLink 
-              v-if="comment.incident_id"
-              :to="`/vigitech/${comment.incident_id}`"
-              class="text-sm font-black text-BtW hover:text-primary transition-colors hover:underline block truncate"
-            >
+            <NuxtLink v-if="comment.incident_id" :to="`/vigitech/${comment.incident_id}`"
+              class="text-sm font-black text-BtW hover:text-primary transition-colors hover:underline block truncate">
               {{ comment.incident_title || 'Incident inconnu' }}
             </NuxtLink>
             <p v-else class="text-sm font-black text-BtW">Incident non spécifié</p>
@@ -50,8 +48,10 @@
         <h4 class="text-[10px] font-black uppercase tracking-widest text-hsa px-1">Analyse complète</h4>
         <div class="p-8 rounded-[3rem] bg-WtB border border-ash shadow-inner relative overflow-hidden group">
           <!-- Background accent -->
-          <div class="absolute -top-12 -right-12 w-24 h-24 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-colors"></div>
-          
+          <div
+            class="absolute -top-12 -right-12 w-24 h-24 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-colors">
+          </div>
+
           <p class="relative text-sm text-BtW whitespace-pre-wrap leading-relaxed font-medium break-words">
             {{ comment.content }}
           </p>

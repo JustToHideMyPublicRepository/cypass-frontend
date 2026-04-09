@@ -141,7 +141,8 @@ export const useCalendarEvents = () => {
           type: 'comment',
           color: getCalendarFilterConfig('comment')?.classes.text || 'text-warning',
           bgColor: getCalendarFilterConfig('comment')?.classes.bgLight || 'bg-warning/10',
-          url: `/dashboard/vigitech/comments`
+          url: `/dashboard/vigitech/comments`,
+          rawItem: comment
         })
       })
     }

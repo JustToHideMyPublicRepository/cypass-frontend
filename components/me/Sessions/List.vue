@@ -24,10 +24,17 @@
                 </h3>
                 <span class="px-2 py-0.5 text-xs bg-success text-WtB rounded-full font-bold">ACTUELLE</span>
               </div>
-              <p class="text-sm font-code text-hsa bg-ash px-2 py-0.5 rounded inline-block">
-                {{ currentSession.ip_address }}
-              </p>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-1 pt-2">
+              <div class="flex flex-wrap items-center gap-2">
+                <p class="text-sm font-code text-hsa bg-ash px-2 py-0.5 rounded inline-block">
+                  {{ currentSession.ip_address }}
+                </p>
+                <p
+                  class="text-xs font-semibold text-primary bg-primary/10 px-2 py-0.5 rounded-full flex items-center gap-1">
+                  <IconMapPin class="w-3 h-3" />
+                  {{ currentSession.location || 'Inconnue' }}
+                </p>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-1 pt-2">
                 <p class="text-xs text-hsa flex items-center gap-1.5">
                   <IconPlus class="w-3.5 h-3.5" /> Créée le : {{ formatFullDate(currentSession.created_at) }}
                 </p>
@@ -61,9 +68,15 @@
               <h3 class="font-bold text-BtW truncate">
                 {{ formatSessionLabel(session) }}
               </h3>
-              <p class="text-xs font-code text-hsa mb-2">
-                {{ session.ip_address }}
-              </p>
+              <div class="flex items-center gap-2 mb-2">
+                <p class="text-xs font-code text-hsa">
+                  {{ session.ip_address }}
+                </p>
+                <span class="text-[10px] font-bold text-primary/70 flex items-center gap-0.5">
+                  <IconMapPin class="w-2.5 h-2.5" />
+                  {{ session.location || 'Inconnue' }}
+                </span>
+              </div>
 
               <div class="space-y-1">
                 <p class="text-[10px] text-hsa uppercase font-semibold">Dernière activité</p>
@@ -89,17 +102,18 @@
 </template>
 
 <script setup lang="ts">
-import { IconShieldCheck, IconClock, IconHistory, IconPlus, IconLogout } from '@tabler/icons-vue'
+import { IconShieldCheck, IconClock, IconHistory, IconPlus, IconLogout, IconMapPin } from '@tabler/icons-vue'
 import { format, formatDistanceToNow } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { formatSessionLabel, getSessionIcon as getSessionIconRaw } from '~/utils/sessions'
+import type { UserSession } from '~/types/profil'
 
-const getSessionIcon = (session: any) => markRaw(getSessionIconRaw(session))
+const getSessionIcon = (session: UserSession) => markRaw(getSessionIconRaw(session))
 
 defineProps<{
-  sessions: any[]
-  currentSession?: any
-  otherSessions: any[]
+  sessions: UserSession[]
+  currentSession?: UserSession
+  otherSessions: UserSession[]
 }>()
 
 defineEmits(['confirm-revoke'])
