@@ -121,7 +121,6 @@ const footerGroups = [
   }
 ]
 
-
 // Helper
 const getSocialIcon = (name: string) => {
   switch (name) {

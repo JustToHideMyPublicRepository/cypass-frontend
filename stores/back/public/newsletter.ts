@@ -39,6 +39,65 @@ export const usePublicNewsletterStore = defineStore('publicNewsletter', {
       } finally {
         this.loading = false
       }
+    },
+
+    async updatePreferences(payload: { 
+      email: string; 
+      token: string; 
+      first_name?: string; 
+      last_name?: string; 
+      marketing?: boolean; 
+      product?: boolean; 
+      security?: boolean 
+    }): Promise<any> {
+      this.loading = true
+      this.error = null
+      try {
+        const response = await $fetch<any>('/api/public/newsletter/preferences', {
+          method: 'PATCH',
+          body: payload
+        })
+        return response
+      } catch (err: any) {
+        this.error = err.data?.message || err.message || 'Impossible de mettre à jour vos préférences.'
+        return { success: false, message: this.error }
+      } finally {
+        this.loading = false
+      }
+    },
+
+    async unsubscribe(payload: { email: string; token?: string; confirm: boolean; confirmation_text: string }): Promise<any> {
+      this.loading = true
+      this.error = null
+      try {
+        const response = await $fetch<any>('/api/public/newsletter/unsubscribe', {
+          method: 'POST',
+          body: payload
+        })
+        return response
+      } catch (err: any) {
+        this.error = err.data?.message || err.message || 'Erreur lors de la désinscription.'
+        return { success: false, message: this.error }
+      } finally {
+        this.loading = false
+      }
+    },
+
+    async requestManagementLink(email: string): Promise<any> {
+      this.loading = true
+      this.error = null
+      try {
+        const response = await $fetch<any>('/api/public/newsletter/request-access', {
+          method: 'POST',
+          body: { email }
+        })
+        return response
+      } catch (err: any) {
+        this.error = err.data?.message || err.message || 'Impossible d\'envoyer le lien de gestion.'
+        return { success: false, message: this.error }
+      } finally {
+        this.loading = false
+      }
     }
   }
 })
