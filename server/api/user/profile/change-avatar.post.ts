@@ -44,7 +44,7 @@ export default defineEventHandler(async (event) => {
       }
     }
 
-    const response: any = await $fetch(`${baseApi}/profile/upload_avatar`, {
+    const response: any = await $fetch(`${baseApi}/user/profile/upload_avatar`, {
       method: 'POST' as any,
       headers: {
         'Authorization': `Bearer ${token}`,
