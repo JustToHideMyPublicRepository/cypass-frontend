@@ -14,12 +14,17 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
+    const apiQuery: Record<string, any> = {}
+    if (query.sort) apiQuery.sort = query.sort
+    if (query.search) apiQuery.search = query.search
+
     const response: any = await $fetch(`${baseApi}/user/docsentry/get/${query.id}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
         'accept': 'application/json'
-      }
+      },
+      query: Object.keys(apiQuery).length > 0 ? apiQuery : undefined
     })
 
     return response

@@ -27,9 +27,10 @@
       <p class="text-[10px] text-hsa font-medium leading-relaxed mb-4 uppercase tracking-widest">
         Générez des versions enfants personnalisées pour vos destinataires.
       </p>
-      <MeDocsentryDetailMultiVersionForm :document-id="documentId" @update:loading="$emit('update:loading', $event)" />
+      <MeDocsentryDetailMultiVersionForm :document-id="documentId" @update:loading="$emit('update:loading', $event)" @success="$emit('refresh-doc')" />
     </UiBaseCard>
 
+    <!-- Sovereignty -->
     <UiBaseCard class="bg-primary/5 border-primary/20">
       <div class="flex items-center gap-3 mb-4">
         <div class="p-2 rounded bg-primary text-WtB">
@@ -60,7 +61,7 @@ const props = defineProps<{
   createdAt: string
 }>()
 
-defineEmits(['verify', 'download', 'share', 'download-zip', 'update:loading'])
+defineEmits(['verify', 'download', 'share', 'download-zip', 'update:loading', 'refresh-doc'])
 
 const canGenerateVersions = computed(() => {
   if (!props.createdAt) return false

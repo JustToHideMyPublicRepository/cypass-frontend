@@ -11,7 +11,8 @@
         <IconChevronDown class="w-5 h-5 transition-transform" :class="{ 'rotate-180': !isCollapsed }" />
       </button>
 
-      <div v-if="!collapsible || !isCollapsed" class="mt-4 p-6 bg-ash/20 rounded-[2rem] border border-ashAct/30 space-y-6">
+      <div v-if="!collapsible || !isCollapsed"
+        class="mt-4 p-6 bg-ash/20 rounded-[2rem] border border-ashAct/30 space-y-6">
         <div class="flex p-1 bg-ash/30 rounded-xl border border-ashAct/20">
           <button @click="multiVersionType = 'csv'"
             class="flex-1 py-2 px-4 rounded-lg text-[10px] font-black tracking-widest uppercase transition-all"
@@ -31,8 +32,7 @@
             class="border-2 border-dashed border-primary/20 rounded-2xl p-8 text-center bg-WtB/50 hover:bg-primary/5 hover:border-primary/40 transition-all cursor-pointer group"
             @click="triggerCsvSelect">
             <input type="file" ref="csvInput" class="hidden" accept=".csv" @change="handleCsvChange">
-            <IconCloudUpload
-              class="w-8 h-8 text-primary/40 mx-auto mb-3 group-hover:scale-110 transition-transform" />
+            <IconCloudUpload class="w-8 h-8 text-primary/40 mx-auto mb-3 group-hover:scale-110 transition-transform" />
             <p class="text-[11px] font-bold text-BtW">Cliquez pour importer votre CSV</p>
             <p class="text-[9px] text-hsa mt-1 uppercase tracking-tighter">Noms des destinataires uniquement</p>
           </div>
@@ -48,16 +48,13 @@
         <!-- Saisie Manuelle (Tag View) -->
         <div v-if="multiVersionType === 'manual'" class="space-y-4">
           <div class="space-y-2">
-            <label class="text-[10px] text-hsa font-black tracking-widest uppercase ml-1">Ajouter des destinataires</label>
+            <label class="text-[10px] text-hsa font-black tracking-widest uppercase ml-1">Ajouter des
+              destinataires</label>
             <div class="relative group">
-              <input 
-                v-model="newRecipient" 
-                @keyup.enter="addRecipient"
-                type="text" 
+              <input v-model="newRecipient" @keyup.enter="addRecipient" type="text"
                 placeholder="Entrez un nom et appuyez sur Entrée..."
                 class="w-full bg-WtB border border-ashAct/30 rounded-xl p-4 pr-12 text-xs font-medium text-BtW placeholder:text-hsa/40 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all">
-              <button 
-                @click="addRecipient"
+              <button @click="addRecipient"
                 class="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 bg-primary/10 text-primary rounded-lg hover:bg-primary hover:text-white transition-all">
                 <IconPlus class="w-4 h-4" />
               </button>
@@ -75,13 +72,17 @@
             </div>
           </div>
           <div v-else class="text-center py-6 border-2 border-dashed border-ash/30 rounded-2xl bg-ash/5">
-            <p class="text-[10px] text-hsa font-black tracking-widest uppercase opacity-40">Aucun destinataire ajouté</p>
+            <p class="text-[10px] text-hsa font-black tracking-widest uppercase opacity-40">Aucun destinataire ajouté
+            </p>
           </div>
         </div>
 
-        <UiBaseButton variant="primary" class="w-full !rounded-xl font-black py-3 h-auto shadow-lg"
-          :loading="multiVersionLoading" :disabled="!isMultiVersionValid" @click="handleMultiVersionSubmit">
-          Lancer la génération
+        <UiBaseButton variant="primary" class="w-full !rounded-xl font-black py-3 h-auto shadow-lg relative overflow-hidden"
+          :disabled="!isMultiVersionValid || multiVersionLoading" @click="handleMultiVersionSubmit">
+          <div v-if="multiVersionLoading" class="absolute inset-0 flex items-center justify-center bg-primary">
+             <UiLogoLoader size="sm" container-class="text-WtB" />
+          </div>
+          <span :class="{ 'opacity-0': multiVersionLoading }">Lancer la génération</span>
         </UiBaseButton>
       </div>
     </div>
@@ -113,7 +114,7 @@ const props = defineProps<{
   collapsible?: boolean
 }>()
 
-const emit = defineEmits(['update:loading'])
+const emit = defineEmits(['update:loading', 'success'])
 
 const docsentryStore = useUserDocsentryStore()
 
@@ -161,7 +162,7 @@ const handleMultiVersionSubmit = async () => {
 
   multiVersionLoading.value = true
   emit('update:loading', true)
-  
+
   try {
     const success = await docsentryStore.generateMultiVersion({
       document_id: props.documentId,
@@ -171,6 +172,7 @@ const handleMultiVersionSubmit = async () => {
 
     if (success) {
       multiVersionSuccess.value = true
+      emit('success')
     }
   } finally {
     multiVersionLoading.value = false

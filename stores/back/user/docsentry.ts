@@ -116,12 +116,15 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
     },
 
     // Récupérer les détails du document
-    async fetchDocumentById(id: string) {
-      this.loading = true
+    async fetchDocumentById(id: string, sort?: string, search?: string, background: boolean = false) {
+      if (!background) this.loading = true
       this.error = null
       try {
+        const query: any = { id }
+        if (sort) query.sort = sort
+        if (search) query.search = search
         const response = await $fetch<{ success: boolean; data: DocumentDetail }>('/api/user/docsentry/get', {
-          query: { id }
+          query
         })
         if (response.success) {
           this.currentDocument = response.data
@@ -132,7 +135,7 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
         this.error = err.data?.message || 'Impossible de récupérer les détails du document'
         return false
       } finally {
-        this.loading = false
+        if (!background) this.loading = false
       }
     },
 
@@ -169,7 +172,6 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
 
     // Générer des versions enfants (multi-version)
     async generateMultiVersion(params: { document_id: string; recipients_csv?: File; recipients_manual?: string }) {
-      this.loading = true
       this.error = null
 
       try {
@@ -197,8 +199,6 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
       } catch (err: any) {
         this.error = err.data?.message || 'Erreur lors du lancement du traitement multi-version'
         return false
-      } finally {
-        this.loading = false
       }
     },
 

@@ -1,16 +1,16 @@
 <template>
   <UiBaseCard>
-    <div class="flex items-start justify-between mb-6">
+    <div class="flex flex-col sm:flex-row sm:items-start justify-between mb-6 gap-4">
       <div class="flex items-center gap-4">
-        <div class="p-3 rounded-xl bg-primary/10 text-primary">
+        <div class="p-3 rounded-xl bg-primary/10 text-primary shrink-0">
           <IconFileText class="w-8 h-8" />
         </div>
-        <div>
-          <h2 class="text-xl font-bold text-BtW">{{ doc.filename }}</h2>
-          <p class="text-sm text-hsa">ID: {{ doc.id }}</p>
+        <div class="min-w-0 flex-1">
+          <h2 class="text-xl font-bold text-BtW truncate">{{ doc.filename }}</h2>
+          <p class="text-sm text-hsa truncate">ID: {{ doc.id }}</p>
         </div>
       </div>
-      <UiStatusBadge :status="isVerified ? 'Verified' : 'Pending'" />
+      <UiStatusBadge :status="isVerified ? 'Verified' : 'Pending'" class="shrink-0" />
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
