@@ -1,5 +1,5 @@
 export * from './auth'
-export * from './documents'
+export * from './docsentry'
 export * from './notifications'
 export * from './profil'
 export * from './status'

@@ -34,9 +34,33 @@
             <p class="text-[10px] text-hsa uppercase font-black">Date d'Exécution</p>
             <p class="font-bold text-BtW">{{ formatDate(result.document?.created_at || result.verification_time) }}</p>
           </div>
+          <div v-if="result.document?.recipient_name" class="p-4 bg-primary/5 rounded-2xl border border-primary/20 space-y-1">
+            <p class="text-[10px] text-primary uppercase font-black">Destinataire / Récipiendaire</p>
+            <p class="font-bold text-BtW">{{ result.document.recipient_name }}</p>
+          </div>
           <div class="p-4 bg-WtB/50 rounded-2xl border border-ash/50 space-y-1">
             <p class="text-[10px] text-hsa uppercase font-black">Identifiant (ID)</p>
             <p class="font-code text-xs text-BtW">{{ result.document?.id || result.id || 'N/A' }}</p>
+          </div>
+        </div>
+
+        <!-- Document Parent (Si version enfant) -->
+        <div v-if="result.document?.parent" class="p-4 md:p-5 rounded-2xl md:rounded-3xl bg-primary/5 border border-primary/10 space-y-3">
+          <div class="flex items-center gap-2 text-primary">
+            <IconFiles class="w-4 h-4" />
+            <span class="text-[10px] font-black uppercase tracking-widest">Document Parent (Original)</span>
+          </div>
+          <div class="space-y-3">
+            <div class="flex justify-between items-center text-xs">
+              <span class="text-hsa font-medium">Nom du fichier</span>
+              <span class="text-BtW font-bold">{{ result.document.parent.filename }}</span>
+            </div>
+            <div class="flex justify-between items-center text-xs">
+              <span class="text-hsa font-medium">Empreinte (Hash)</span>
+              <code class="font-code text-[10px] text-BtW/70 bg-WtB/50 px-2 py-0.5 rounded border border-ash/30">
+                {{ truncateHash(result.document.parent.hash) }}
+              </code>
+            </div>
           </div>
         </div>
 
@@ -106,7 +130,7 @@
 </template>
 
 <script setup lang="ts">
-import { IconRosetteDiscountCheck, IconShieldOff, IconDownload } from '@tabler/icons-vue'
+import { IconRosetteDiscountCheck, IconShieldOff, IconDownload, IconFiles } from '@tabler/icons-vue'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { useToastStore } from '~/stores/front/toast'

@@ -13,6 +13,12 @@ export interface Document {
   type: string
   has_certificate: boolean
   has_versions: boolean
+  recipient_name?: string | null
+  parent?: {
+    id: string
+    filename: string
+    hash: string
+  } | null
 }
 
 export interface SignatureInfo {
@@ -55,6 +61,12 @@ export interface VerificationResult {
     file_type: string
     signer: string
     created_at: string
+    recipient_name: string | null
+    parent: {
+      id: string
+      filename: string
+      hash: string
+    } | null
   }
   signature_info: {
     algorithm: string
