@@ -2,33 +2,19 @@
   <UiBaseModal :show="show" title="Authentifier un document" maxWidth="2xl" @close="close">
     <div class="max-h-[60vh] overflow-y-auto pr-2 no-scrollbar space-y-6 py-2">
       <!-- Zone de dépôt de fichier -->
-      <ModalDocSentryAuthDropZone 
-        v-if="!file" 
-        @select-file="triggerFileSelect" 
-      />
+      <ModalDocSentryAuthDropZone v-if="!file" @select-file="triggerFileSelect" />
 
       <input type="file" ref="fileInput" class="hidden" accept=".pdf" @change="handleFileChange">
 
       <!-- Aperçu du fichier sélectionné -->
-      <ModalDocSentryAuthFilePreview 
-        v-if="file && !uploadResult" 
-        :file="file" 
-        @remove="file = null" 
-      />
+      <ModalDocSentryAuthFilePreview v-if="file && !uploadResult" :file="file" @remove="file = null" />
 
       <!-- Résultat de l'authentification -->
-      <ModalDocSentryAuthAuthResult 
-        v-if="uploadResult" 
-        ref="authResultRef"
-        :result="uploadResult" 
-        @update:loading="(val: boolean) => multiVersionLoading = val"
-      />
+      <ModalDocSentryAuthResult v-if="uploadResult" ref="authResultRef" :result="uploadResult"
+        @update:loading="(val: boolean) => multiVersionLoading = val" />
 
       <!-- État de chargement (Progression) -->
-      <ModalDocSentryAuthLoadingState 
-        v-if="loading && !uploadResult" 
-        :active-steps="activeSteps" 
-      />
+      <ModalDocSentryAuthLoadingState v-if="loading && !uploadResult" :active-steps="activeSteps" />
 
       <!-- Message d'erreur -->
       <div v-if="error"
@@ -42,14 +28,8 @@
 
     <!-- Actions du pied de page -->
     <template #footer>
-      <ModalDocSentryAuthFooter 
-        :has-result="!!uploadResult"
-        :loading="loading" 
-        :has-file="!!file" 
-        :multi-version-loading="multiVersionLoading"
-        @close="close" 
-        @upload="handleUpload" 
-      />
+      <ModalDocSentryAuthFooter :has-result="!!uploadResult" :loading="loading" :has-file="!!file"
+        :multi-version-loading="multiVersionLoading" @close="close" @upload="handleUpload" />
     </template>
   </UiBaseModal>
 
@@ -208,7 +188,7 @@ const handleUpload = async () => {
  */
 const close = () => {
   if (multiVersionLoading.value) return
-  
+
   file.value = null
   if (authResultRef.value) {
     authResultRef.value.resetForm()
