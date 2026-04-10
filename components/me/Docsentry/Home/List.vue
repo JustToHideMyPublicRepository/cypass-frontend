@@ -13,49 +13,20 @@
         </thead>
         <tbody class="divide-y divide-ash/50">
           <!-- Loading State -->
-          <template v-if="loading">
-            <tr v-for="i in 5" :key="i">
-              <td colspan="5" class="px-6 py-4">
-                <div class="flex items-center gap-4">
-                  <UiAppSkeleton type="avatar" />
-                  <div class="space-y-2 flex-1">
-                    <UiAppSkeleton width="40%" height="12px" />
-                    <UiAppSkeleton width="20%" height="8px" />
-                  </div>
-                  <div class="hidden md:block w-32">
-                    <UiAppSkeleton height="10px" />
-                  </div>
-                  <div class="hidden md:block w-24">
-                    <UiAppSkeleton height="10px" />
-                  </div>
-                </div>
-              </td>
-            </tr>
-          </template>
+          <MeDocsentryHomeListLoading v-if="loading" />
 
           <!-- Empty State -->
-          <tr v-else-if="documents.length === 0">
-            <td colspan="5" class="px-6 py-20 text-center">
-              <div class="flex flex-col items-center justify-center space-y-4 opacity-30">
-                <div class="p-4 bg-ash rounded-full">
-                  <IconFileOff class="w-12 h-12 text-hsa" />
-                </div>
-                <div class="space-y-1">
-                  <p class="text-lg font-bold text-BtW">Aucun document</p>
-                  <p class="text-sm">Commencez par certifier votre premier document.</p>
-                </div>
-              </div>
-            </td>
-          </tr>
+          <MeDocsentryHomeListEmpty v-else-if="documents.length === 0" />
 
           <!-- Data State -->
           <tr v-else v-for="doc in documents" :key="doc.id" @contextmenu.prevent="handleContextMenu(doc, $event)"
             class="group hover:bg-primary/[0.02] transition-colors">
             <td class="px-6 py-5">
               <div class="flex items-center gap-4">
-                <div
-                  class="w-10 h-10 flex items-center justify-center rounded-xl bg-primary/10 text-primary group-hover:scale-110 transition-transform">
-                  <IconFileText class="w-5 h-5" />
+                <div class="w-10 h-10 flex items-center justify-center rounded-xl transition-transform"
+                  :class="doc.has_versions ? 'bg-success/10 text-success' : 'bg-primary/10 text-primary group-hover:scale-110'">
+                  <IconFiles v-if="doc.has_versions" class="w-5 h-5" />
+                  <IconFile v-else class="w-5 h-5" />
                 </div>
                 <div>
                   <NuxtLink :to="`/dashboard/docsentry/${doc.id}`"
@@ -112,29 +83,17 @@
     </div>
 
     <!-- Pagination -->
-    <div v-if="totalPages > 1" class="flex items-center justify-between px-6 py-5 border-t border-ash/50 bg-ash/10">
-      <div class="flex items-center gap-2">
-        <div class="w-1 h-1 rounded-full bg-primary animate-pulse"></div>
-        <p class="text-[10px] font-bold uppercase tracking-widest text-hsa">
-          Page {{ currentPage }} / {{ totalPages }}
-        </p>
-      </div>
-      <div class="flex items-center gap-3">
-        <UiBaseButton @click="$emit('prev-page')" :disabled="currentPage === 1" variant="ghost"
-          class="!flex !items-center !justify-center !p-2 !rounded-xl border border-ash !bg-WtB text-hsa hover:!bg-ash hover:!text-BtW transition-all disabled:opacity-30 disabled:cursor-not-allowed !h-auto !w-auto">
-          <IconChevronLeft class="w-4 h-4" />
-        </UiBaseButton>
-        <UiBaseButton @click="$emit('next-page')" :disabled="currentPage === totalPages" variant="ghost"
-          class="!flex !items-center !justify-center !p-2 !rounded-xl border border-ash !bg-WtB text-hsa hover:!bg-ash hover:!text-BtW transition-all disabled:opacity-30 disabled:cursor-not-allowed !h-auto !w-auto">
-          <IconChevronRight class="w-4 h-4" />
-        </UiBaseButton>
-      </div>
-    </div>
+    <MeDocsentryHomeListPagination 
+      :current-page="currentPage" 
+      :total-pages="totalPages" 
+      @next-page="$emit('next-page')" 
+      @prev-page="$emit('prev-page')" 
+    />
   </UiBaseCard>
 </template>
 
 <script setup lang="ts">
-import { IconFileText, IconDownload, IconFileOff, IconEye, IconCopy, IconCheck, IconChevronLeft, IconChevronRight, IconShare } from '@tabler/icons-vue'
+import { IconFile, IconDownload, IconEye, IconCopy, IconCheck, IconShare, IconFiles } from '@tabler/icons-vue'
 import { ref } from 'vue'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
@@ -156,7 +115,6 @@ const toast = useToastStore()
 const userDocsentryStore = useUserDocsentryStore()
 const { showMenu } = useContextMenu()
 
-const expandedHashes = ref(new Set<string>())
 const copiedHashes = ref(new Set<string>())
 
 const copyHash = (hash: string, id: string) => {
@@ -225,14 +183,6 @@ const handleContextMenu = (doc: Document, e: MouseEvent) => {
   }
 
   showMenu(e, menuItems, menuMetadata)
-}
-
-const toggleHash = (id: string) => {
-  if (expandedHashes.value.has(id)) {
-    expandedHashes.value.delete(id)
-  } else {
-    expandedHashes.value.add(id)
-  }
 }
 
 const downloadCertificate = async (id: string, filename: string) => {

@@ -26,6 +26,17 @@
         </select>
       </div>
 
+      <!-- Versions Filter -->
+      <div class="space-y-1.5">
+        <label class="text-[10px] font-bold text-hsa uppercase tracking-[0.1em] ml-1">Multiversions</label>
+        <select v-model="model.with_versions"
+          class="w-full h-10 px-3 rounded-xl border border-ash bg-ash/50 text-sm focus:ring-2 focus:ring-primary outline-none transition-all cursor-pointer appearance-none">
+          <option value="all">Tous</option>
+          <option value="yes">Avec versions</option>
+          <option value="no">Sans version</option>
+        </select>
+      </div>
+
       <!-- Advanced Dates -->
       <div class="space-y-4 pt-2 border-t border-ash">
         <div class="space-y-1.5">
@@ -64,6 +75,7 @@ interface Filters {
   file_type: string
   date_start: string
   date_end: string
+  with_versions: string
 }
 
 const props = defineProps<{
@@ -88,6 +100,7 @@ const hasActiveFilters = computed(() => {
   return model.value.filename !== '' ||
     model.value.file_type !== 'all' ||
     model.value.date_start !== '' ||
-    model.value.date_end !== ''
+    model.value.date_end !== '' ||
+    model.value.with_versions !== 'all'
 })
 </script>

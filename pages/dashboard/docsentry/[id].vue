@@ -2,6 +2,16 @@
   <div class="space-y-6">
     <MeDocsentryDetailHeader :filename="doc?.filename" />
 
+    <!-- Global Loading Overlay -->
+    <div v-if="globalLoading"
+      class="fixed inset-0 z-[100] flex items-center justify-center bg-WtB/80 backdrop-blur-md animate-fade-in">
+      <div class="text-center space-y-4">
+        <UiLogoLoader />
+        <p class="text-[10px] font-black uppercase tracking-[0.3em] text-primary animate-pulse">Traitement en cours...
+        </p>
+      </div>
+    </div>
+
     <!-- Skeleton Loading -->
     <MeDocsentryDetailLoading v-if="userStore.loading" />
 
@@ -17,23 +27,30 @@
       <div class="lg:col-span-2 space-y-6">
         <MeDocsentryDetailInfo :doc="doc" :is-verified="isVerified" :copied-fields="copiedFields" @copy="copyField" />
 
+        <!-- Child Versions -->
+        <MeDocsentryDetailVersions v-if="doc.versions && doc.versions.length > 0" :versions="doc.versions"
+          @copy="copyField" />
+
         <!-- Cryptographic Proof -->
         <MeDocsentryDetailProof :doc="doc" :copied-fields="copiedFields" @copy="copyField" />
       </div>
 
       <!-- Actions & Sidebar -->
-      <MeDocsentryDetailSidebar :has-certificate="!!doc.availability?.certificate" @verify="redirectToVerify"
-        @download="downloadCertificate" @share="shareDocument" />
+      <MeDocsentryDetailSidebar :document-id="doc.id" :has-certificate="!!doc.availability?.certificate"
+        :has-versions="doc.has_versions" :created-at="doc.created_at" @verify="redirectToVerify"
+        @download="downloadCertificate" @download-zip="downloadZip" @share="shareDocument"
+        @update:loading="val => globalLoading = val" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, reactive } from 'vue'
+import { computed, onMounted, reactive, ref } from 'vue'
 import { useRoute } from 'nuxt/app'
 import { IconAlertCircle } from '@tabler/icons-vue'
 import { useUserDocsentryStore } from '~/stores/back/user/docsentry'
 import { useToastStore } from '~/stores/front/toast'
+import UiLogoLoader from '~/components/ui/LogoLoader.vue'
 
 const route = useRoute()
 const userStore = useUserDocsentryStore()
@@ -41,6 +58,8 @@ const docId = route.params.id as string
 
 const doc = computed(() => userStore.currentDocument)
 const isVerified = computed(() => !!(doc.value?.availability?.certificate || doc.value?.signature_info?.present))
+
+const globalLoading = ref(false)
 
 const toast = useToastStore()
 const copiedFields = reactive<Record<string, boolean>>({
@@ -69,6 +88,16 @@ const downloadCertificate = async () => {
   const success = await userStore.downloadCertificate(doc.value.id, doc.value.filename)
   if (!success) {
     toast.showToast('error', 'Erreur', userStore.error || 'Impossible de télécharger le certificat.')
+  }
+}
+
+const downloadZip = async () => {
+  if (!doc.value) return
+  const success = await userStore.downloadZip(doc.value.id, doc.value.filename)
+  if (!success) {
+    toast.showToast('error', 'Erreur', userStore.error || 'Impossible de télécharger l’archive ZIP.')
+  } else {
+    toast.showToast('success', 'Téléchargement', 'L’archive ZIP est prête.')
   }
 }
 

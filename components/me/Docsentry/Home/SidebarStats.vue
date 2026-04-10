@@ -4,7 +4,7 @@
       <div class="flex items-center justify-between p-3 rounded-xl bg-ash/50 border border-ash/50">
         <div class="flex items-center gap-3">
           <div class="p-2 rounded-lg bg-primary/10 text-primary">
-            <IconFileFilled class="w-4 h-4" />
+            <IconFileTextFilled class="w-4 h-4" />
           </div>
           <span class="text-xs font-bold text-hsa uppercase tracking-wider">Total Docs</span>
         </div>
@@ -35,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import { IconFileFilled, IconShieldCheckFilled } from '@tabler/icons-vue'
+import { IconFileTextFilled, IconShieldCheckFilled } from '@tabler/icons-vue'
 
 defineProps<{
   total: number

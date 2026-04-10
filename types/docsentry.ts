@@ -10,7 +10,9 @@ export interface Document {
   hash: string
   created_at: string
   file_type: string
+  type: string
   has_certificate: boolean
+  has_versions: boolean
 }
 
 export interface SignatureInfo {
@@ -20,6 +22,13 @@ export interface SignatureInfo {
   signed_at?: string
 }
 
+export interface DocumentVersion {
+  id: string
+  recipient: string
+  hash: string
+  signed_at: string
+}
+
 export interface DocumentDetail extends Document {
   signed_at: string
   signature_info: SignatureInfo
@@ -27,6 +36,7 @@ export interface DocumentDetail extends Document {
     certificate: boolean
     original_stored: boolean
   }
+  versions?: DocumentVersion[]
 }
 
 export interface UploadResult {

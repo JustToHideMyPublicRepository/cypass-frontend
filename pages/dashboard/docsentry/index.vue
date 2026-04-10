@@ -12,13 +12,13 @@
 
       <!-- Sidebar: Filters & Info -->
       <div class="space-y-6">
+        <!-- Filters -->
+        <MeDocsentryHomeFilters v-model="filters" :available-types="availableTypes" @reset="resetFilters" />
+
         <!-- Stats Gadget -->
         <MeDocsentryHomeSidebarStats :total="store.pagination.total"
           :verified="store.documents.filter(d => d.has_certificate).length"
           :usage="Math.min(Math.round((store.pagination.total / 50) * 100), 100)" />
-
-        <!-- Filters -->
-        <MeDocsentryHomeFilters v-model="filters" :available-types="availableTypes" @reset="resetFilters" />
 
         <!-- Trust Info Section -->
         <MeDocsentryHomeTrustInfo @open-trust="modals.trust = true" />
@@ -53,7 +53,8 @@ const filters = ref({
   filename: '',
   file_type: 'all',
   date_start: '',
-  date_end: ''
+  date_end: '',
+  with_versions: 'all'
 })
 
 const modals = reactive({
@@ -67,6 +68,7 @@ const resetFilters = () => {
   filters.value.file_type = 'all'
   filters.value.date_start = ''
   filters.value.date_end = ''
+  filters.value.with_versions = 'all'
   currentPage.value = 1
 }
 

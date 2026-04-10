@@ -19,7 +19,8 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
         filename: '',
         file_type: '',
         date_start: '',
-        date_end: ''
+        date_end: '',
+        with_versions: 'all'
       }
     }
   }),
@@ -49,6 +50,30 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
       }
     },
 
+    // Télécharger l'archive ZIP
+    async downloadZip(id: string, filename: string) {
+      this.error = null
+      try {
+        const response = await $fetch('/api/user/docsentry/download-zip', {
+          query: { id },
+          responseType: 'blob'
+        })
+        const url = window.URL.createObjectURL(response as Blob)
+        const link = document.createElement('a')
+        link.href = url
+        link.setAttribute('download', `Archive_${filename.replace('.pdf', '')}.zip`)
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+        window.URL.revokeObjectURL(url)
+        return true
+      } catch (err: any) {
+        this.error = err.data?.message || err.message || 'Impossible de télécharger l’archive ZIP'
+        console.error('Failed to download ZIP archive', err)
+        return false
+      }
+    },
+
     // Récupérer les documents
     async fetchDocuments(limit: number = 20, offset: number = 0, filters: any = {}) {
       this.loading = true
@@ -58,6 +83,7 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
         if (filters.file_type && filters.file_type !== 'all') query.file_type = filters.file_type
         if (filters.date_start) query.date_start = filters.date_start
         if (filters.date_end) query.date_end = filters.date_end
+        if (filters.with_versions && filters.with_versions !== 'all') query.with_versions = filters.with_versions
 
         const response = await $fetch<{
           success: boolean;
@@ -135,6 +161,41 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
         return false
       } catch (err: any) {
         this.error = err.data?.message || 'Erreur lors de l’authentification du document'
+        return false
+      } finally {
+        this.loading = false
+      }
+    },
+
+    // Générer des versions enfants (multi-version)
+    async generateMultiVersion(params: { document_id: string; recipients_csv?: File; recipients_manual?: string }) {
+      this.loading = true
+      this.error = null
+
+      try {
+        const formData = new FormData()
+        formData.append('document_id', params.document_id)
+        
+        if (params.recipients_csv) {
+          formData.append('recipients_csv', params.recipients_csv)
+        }
+        
+        if (params.recipients_manual) {
+          formData.append('recipients_manual', params.recipients_manual)
+        }
+
+        const response = await $fetch<{ success: boolean; message: string }>('/api/user/docsentry/multi-version', {
+          method: 'POST',
+          body: formData
+        })
+
+        if (response.success) {
+          return true
+        }
+        this.error = response.message
+        return false
+      } catch (err: any) {
+        this.error = err.data?.message || 'Erreur lors du lancement du traitement multi-version'
         return false
       } finally {
         this.loading = false
