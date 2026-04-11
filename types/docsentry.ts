@@ -35,6 +35,12 @@ export interface DocumentVersion {
   signed_at: string
 }
 
+export interface MultiVersionGeneration {
+  generated_at: string
+  recipients_count: number
+  recipients: string[]
+}
+
 export interface DocumentDetail extends Document {
   signed_at: string
   signature_info: SignatureInfo
@@ -42,6 +48,10 @@ export interface DocumentDetail extends Document {
     certificate: boolean
     original_stored: boolean
   }
+  is_zip_downloaded: boolean
+  certificate_download_count: number
+  multi_version_generation_count: number
+  multi_version_generations?: MultiVersionGeneration[]
   versions?: DocumentVersion[]
 }
 

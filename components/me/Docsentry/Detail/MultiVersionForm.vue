@@ -77,13 +77,20 @@
           </div>
         </div>
 
-        <UiBaseButton variant="primary" class="w-full !rounded-xl font-black py-3 h-auto shadow-lg relative overflow-hidden"
-          :disabled="!isMultiVersionValid || multiVersionLoading" @click="handleMultiVersionSubmit">
-          <div v-if="multiVersionLoading" class="absolute inset-0 flex items-center justify-center bg-primary">
-             <UiLogoLoader size="sm" container-class="text-WtB" />
-          </div>
-          <span :class="{ 'opacity-0': multiVersionLoading }">Lancer la génération</span>
-        </UiBaseButton>
+        <UiAppTooltip class="block w-full"
+          content="Attention : Une nouvelle génération écrasera l'archive ZIP précédente. Assurez-vous d'avoir bien téléchargé l'actuelle."
+          width-class="w-72">
+          <template #trigger>
+            <UiBaseButton variant="primary"
+              class="w-full !rounded-xl font-black py-3 h-auto shadow-lg relative overflow-hidden block"
+              :disabled="!isMultiVersionValid || multiVersionLoading" @click="handleMultiVersionSubmit">
+              <div v-if="multiVersionLoading" class="absolute inset-0 flex items-center justify-center bg-primary">
+                <UiLogoLoader size="sm" container-class="text-WtB" />
+              </div>
+              <span :class="{ 'opacity-0': multiVersionLoading }">Lancer la génération</span>
+            </UiBaseButton>
+          </template>
+        </UiAppTooltip>
       </div>
     </div>
 
@@ -104,10 +111,9 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import {
-  IconFiles, IconChevronDown, IconCloudUpload, IconFileDescription, IconX, IconRocket, IconPlus
-} from '@tabler/icons-vue'
+import { IconFiles, IconChevronDown, IconCloudUpload, IconFileDescription, IconX, IconRocket, IconPlus } from '@tabler/icons-vue'
 import { useUserDocsentryStore } from '~/stores/back/user/docsentry'
+import { useToastStore } from '~/stores/front/toast'
 
 const props = defineProps<{
   documentId: string
@@ -117,6 +123,7 @@ const props = defineProps<{
 const emit = defineEmits(['update:loading', 'success'])
 
 const docsentryStore = useUserDocsentryStore()
+const toast = useToastStore()
 
 // États locaux
 const isCollapsed = ref(true)
@@ -173,6 +180,8 @@ const handleMultiVersionSubmit = async () => {
     if (success) {
       multiVersionSuccess.value = true
       emit('success')
+    } else {
+      toast.showToast('error', 'Erreur', docsentryStore.error || 'Erreur lors de la génération multi-version.')
     }
   } finally {
     multiVersionLoading.value = false

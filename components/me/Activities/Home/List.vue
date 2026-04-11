@@ -39,11 +39,6 @@
                     {{ (log.action_label && log.action_label !== log.action_type) ? log.action_label :
                       getLogActionInfo(log.action_type).label }}
                   </h3>
-
-                  <span v-if="log.status !== 'success'"
-                    class="px-2 py-0.5 text-[8px] bg-danger text-white rounded-full font-black uppercase w-fit">
-                    {{ getLogActionInfo(log.action_type).label }}
-                  </span>
                 </div>
 
                 <div class="flex flex-wrap items-center gap-x-6 gap-y-1">
@@ -60,8 +55,8 @@
                 </div>
 
                 <div class="mt-3 flex flex-col md:flex-row md:items-center gap-2 md:gap-3">
-                  <span
-                    class="px-2 py-0.5 text-[9px] bg-ash text-hsa rounded-full font-bold uppercase flex items-center gap-1.5 w-fit">
+                  <span class="px-2 py-0.5 text-[9px] rounded-full font-bold uppercase flex items-center gap-1.5 w-fit"
+                    :class="[getLogTypeInfo(log.log_type)?.bgColor || 'bg-ash', getLogTypeInfo(log.log_type)?.color || 'text-hsa']">
                     <component :is="getLogTypeInfo(log.log_type)?.icon" class="w-3 h-3 opacity-60" />
                     {{ getLogTypeInfo(log.log_type)?.label || 'Activités utilisateur' }}
                   </span>

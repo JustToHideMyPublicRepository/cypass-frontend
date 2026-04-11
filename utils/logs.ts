@@ -4,7 +4,7 @@ import {
   IconFingerprint, IconAlertCircle, IconTrash, IconUserPlus, IconMailCheck,
   IconKey, IconDevicesPc, IconEye, IconFileUpload, IconFileDownload,
   IconFileCheck, IconFileX, IconUrgent, IconGavel, IconRefresh,
-  IconSettings, IconPhotoCancel, IconUserEdit
+  IconSettings, IconPhotoCancel, IconUserEdit, IconCreditCard, IconCoins
 } from '@tabler/icons-vue'
 
 export const LOG_TYPES = {
@@ -142,6 +142,11 @@ export const ACTION_MAPPINGS: Record<string, { label: string, icon: any, color: 
     icon: IconShieldLock,
     color: 'text-success'
   },
+  'MFA_TEMP_DISABLED': {
+    label: 'Désactivation temporaire de la MFA',
+    icon: IconShieldLock,
+    color: 'text-warning'
+  },
 
   // ── Documents ─────────────────────────────────────────────
   'DOCUMENT_UPLOADED': {
@@ -163,6 +168,21 @@ export const ACTION_MAPPINGS: Record<string, { label: string, icon: any, color: 
     label: 'Suppression de document',
     icon: IconFileX,
     color: 'text-danger'
+  },
+  'DOCUMENT_UPLOAD_FAILED': {
+    label: 'Échec de téléchargement de document',
+    icon: IconFileX,
+    color: 'text-danger'
+  },
+  'MULTI_VERSION_UPLOAD_FAILED': {
+    label: 'Échec de téléchargement multi-versions',
+    icon: IconFileX,
+    color: 'text-danger'
+  },
+  'MULTI_VERSION_UPLOAD_SUCCESS': {
+    label: 'Téléchargement multi-versions réussi',
+    icon: IconFileCheck,
+    color: 'text-success'
   },
 
   // ── VigiTech ──────────────────────────────────────────────
@@ -226,6 +246,23 @@ export const ACTION_MAPPINGS: Record<string, { label: string, icon: any, color: 
     label: 'Tentative de suppression de compte échouée',
     icon: IconTrash,
     color: 'text-danger'
+  },
+
+  // ── Paiements ──────────────────────────────────────────────
+  'PAYMENT_SUCCESS': {
+    label: 'Paiement réussi',
+    icon: IconCreditCard,
+    color: 'text-success'
+  },
+  'PAYMENT_FAILED': {
+    label: 'Paiement échoué',
+    icon: IconCreditCard,
+    color: 'text-danger'
+  },
+  'CREDITS_ADDED': {
+    label: 'Crédits ajoutés au compte',
+    icon: IconCoins,
+    color: 'text-success'
   },
 
   // ── Générique / Défaut ────────────────────────────────────

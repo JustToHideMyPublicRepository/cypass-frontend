@@ -20,7 +20,8 @@
           <span class="h-2 w-2 rounded-full bg-hsa/30" v-else-if="!mfaActive"></span>
           <span class="h-2 w-2 rounded-full bg-warning" v-else></span>
 
-          <h4 class="text-[10px] font-black uppercase tracking-widest text-BtW">Double Authentification</h4>
+          <h4 class="text-[10px] font-black uppercase tracking-widest text-BtW">
+            Statut de la double authentification</h4>
         </div>
         <p class="text-[10px] font-bold mt-0.5" :class="statusClass">
           {{ statusLabel }}
@@ -31,7 +32,7 @@
         class="flex items-center gap-3 bg-white/50 dark:bg-black/20 p-2 pr-3 rounded-xl md:rounded-[1.5rem] border border-white/80 dark:border-white/5">
         <UiLogoLoader v-if="loadingMfa" size="xs" />
         <label class="relative inline-flex items-center cursor-pointer">
-          <input type="checkbox" :checked="mfaActive" @change="$emit('toggle-mfa', !mfaActive)" class="sr-only peer"
+          <input type="checkbox" :checked="mfaActive" @change="handleToggle" class="sr-only peer"
             :disabled="loadingMfa">
           <div class="input-toggle-slider scale-90">
           </div>
@@ -50,7 +51,18 @@ const props = defineProps<{
   mfaDisabledUntil?: string | null
 }>()
 
-defineEmits(['toggle-mfa'])
+const emit = defineEmits(['toggle-mfa'])
+
+const handleToggle = (event: Event) => {
+  const checkbox = event.target as HTMLInputElement
+  const newVal = checkbox.checked
+
+  if (!newVal) {
+    // Keep visually checked until parent confirms disable
+    checkbox.checked = true
+  }
+  emit('toggle-mfa', newVal)
+}
 
 const statusLabel = computed(() => {
   if (props.mfaDisabledUntil) return `Suspendue jusqu'au ${formatDate(props.mfaDisabledUntil)}`

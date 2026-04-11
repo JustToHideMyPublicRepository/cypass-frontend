@@ -44,7 +44,18 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
         window.URL.revokeObjectURL(url)
         return true
       } catch (err: any) {
-        this.error = err.data?.message || err.message || 'Impossible de télécharger le certificat'
+        this.error = 'Impossible de télécharger le certificat'
+        if (err.data instanceof Blob) {
+          try {
+            const text = await err.data.text()
+            const json = JSON.parse(text)
+            this.error = json.message || err.message || this.error
+          } catch (e) {
+            this.error = err.message || this.error
+          }
+        } else {
+          this.error = err.data?.message || err.message || this.error
+        }
         console.error('Failed to download certificate', err)
         return false
       }
@@ -61,14 +72,25 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
         const url = window.URL.createObjectURL(response as Blob)
         const link = document.createElement('a')
         link.href = url
-        link.setAttribute('download', `Archive_${filename.replace('.pdf', '')}.zip`)
+        link.setAttribute('download', `CYPASS_archive_${filename.replace('.pdf', '')}.zip`)
         document.body.appendChild(link)
         link.click()
         document.body.removeChild(link)
         window.URL.revokeObjectURL(url)
         return true
       } catch (err: any) {
-        this.error = err.data?.message || err.message || 'Impossible de télécharger l’archive ZIP'
+        this.error = 'Impossible de télécharger l’archive ZIP'
+        if (err.data instanceof Blob) {
+          try {
+            const text = await err.data.text()
+            const json = JSON.parse(text)
+            this.error = json.message || err.message || this.error
+          } catch (e) {
+            this.error = err.message || this.error
+          }
+        } else {
+          this.error = err.data?.message || err.message || this.error
+        }
         console.error('Failed to download ZIP archive', err)
         return false
       }
@@ -177,11 +199,11 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
       try {
         const formData = new FormData()
         formData.append('document_id', params.document_id)
-        
+
         if (params.recipients_csv) {
           formData.append('recipients_csv', params.recipients_csv)
         }
-        
+
         if (params.recipients_manual) {
           formData.append('recipients_manual', params.recipients_manual)
         }

@@ -3,10 +3,10 @@
     <MeDocsentryDetailHeader :filename="doc?.filename" />
 
     <!-- Skeleton Loading -->
-    <MeDocsentryDetailLoading v-if="userStore.loading" />
+    <MeDocsentryDetailLoading v-if="userStore.loading && !doc" />
 
-    <div v-else-if="userStore.error" class="bg-red-500/10 border border-red-500/20 p-6 rounded-xl text-center">
-      <IconAlertCircle class="w-12 h-12 text-red-500 mx-auto mb-4" />
+    <div v-else-if="userStore.error && !doc" class="bg-danger/10 border border-danger/20 p-6 rounded-xl text-center">
+      <IconAlertCircle class="w-12 h-12 text-danger mx-auto mb-4" />
       <h3 class="text-lg font-semibold text-BtW mb-2">Erreur</h3>
       <p class="text-hsa">{{ userStore.error }}</p>
       <UiBaseButton class="mt-4" @click="fetchDoc">Réessayer</UiBaseButton>
@@ -26,9 +26,15 @@
       </div>
 
       <!-- Actions & Sidebar -->
-      <MeDocsentryDetailSidebar :document-id="doc.id" :has-certificate="!!doc.availability?.certificate"
-        :has-versions="doc.has_versions" :created-at="doc.created_at" @verify="redirectToVerify"
-        @download="downloadCertificate" @download-zip="downloadZip" @share="shareDocument" @refresh-doc="startPollingForVersions" />
+      <div class="space-y-6">
+        <MeDocsentryDetailSidebar :document-id="doc.id" :has-certificate="!!doc.availability?.certificate"
+          :has-versions="doc.has_versions" :created-at="doc.created_at" :is-zip-downloaded="doc.is_zip_downloaded"
+          :certificate-download-count="doc.certificate_download_count"
+          :multi-version-generations="doc.multi_version_generations"
+          :multi-version-generation-count="doc.multi_version_generation_count" @verify="redirectToVerify"
+          @download="downloadCertificate" @download-zip="downloadZip" @share="shareDocument"
+          @refresh-doc="startPollingForVersions" />
+      </div>
     </div>
   </div>
 </template>
@@ -36,10 +42,9 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from 'vue'
 import { useRoute } from 'nuxt/app'
-import { IconAlertCircle } from '@tabler/icons-vue'
+import { IconAlertCircle, IconDownload } from '@tabler/icons-vue'
 import { useUserDocsentryStore } from '~/stores/back/user/docsentry'
 import { useToastStore } from '~/stores/front/toast'
-import UiLogoLoader from '~/components/ui/LogoLoader.vue'
 
 const route = useRoute()
 const userStore = useUserDocsentryStore()
@@ -73,9 +78,9 @@ let pollingInterval: any = null
 const startPollingForVersions = () => {
   let attempts = 0
   const initialCount = doc.value?.versions?.length || 0
-  
+
   if (pollingInterval) clearInterval(pollingInterval)
-  
+
   // Faire une première tentative immédiate au bout d'1 seconde
   setTimeout(() => fetchDoc(true), 1000)
 
@@ -83,7 +88,7 @@ const startPollingForVersions = () => {
     attempts++
     await fetchDoc(true)
     const newCount = doc.value?.versions?.length || 0
-    if (newCount > initialCount || attempts >= 15) { // Arrêt si on trouve de nouvelles versions ou au bout de 45s
+    if (newCount > initialCount || attempts >= 15) {
       clearInterval(pollingInterval)
     }
   }, 3000)
@@ -107,6 +112,8 @@ const downloadCertificate = async () => {
   const success = await userStore.downloadCertificate(doc.value.id, doc.value.filename)
   if (!success) {
     toast.showToast('error', 'Erreur', userStore.error || 'Impossible de télécharger le certificat.')
+  } else if (userStore.currentDocument) {
+    userStore.currentDocument.certificate_download_count = (userStore.currentDocument.certificate_download_count || 0) + 1
   }
 }
 
@@ -117,6 +124,9 @@ const downloadZip = async () => {
     toast.showToast('error', 'Erreur', userStore.error || 'Impossible de télécharger l’archive ZIP.')
   } else {
     toast.showToast('success', 'Téléchargement', 'L’archive ZIP est prête.')
+    if (userStore.currentDocument) {
+      userStore.currentDocument.is_zip_downloaded = true
+    }
   }
 }
 
