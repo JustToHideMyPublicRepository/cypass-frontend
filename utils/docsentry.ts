@@ -1,8 +1,18 @@
+import { IconFile, IconFiles } from '@tabler/icons-vue'
+
 export interface Step {
   id: string
   label: string
   description: string
   status: 'pending' | 'loading' | 'completed' | 'error'
+}
+
+export const getDocumentStyle = (hasVersions: boolean) => {
+  return {
+    icon: hasVersions ? IconFiles : IconFile,
+    color: hasVersions ? 'text-success' : 'text-primary',
+    bgColor: hasVersions ? 'bg-success/10' : 'bg-primary/10'
+  }
 }
 
 export const authSteps: Step[] = [

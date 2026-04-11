@@ -6,7 +6,7 @@
         <button @click="downloadJson"
           class="flex items-center gap-2 text-[10px] font-black tracking-widest uppercase hover:text-white transition-colors text-slate-400">
           <IconDownload class="w-3.5 h-3.5" />
-          Télécharger
+          <span class="hidden sm:inline">Télécharger</span>
         </button>
 
         <!-- Copy Button -->
@@ -15,7 +15,7 @@
           :class="copied ? 'text-success' : 'text-slate-400'">
           <IconCopy v-if="!copied" class="w-3.5 h-3.5" />
           <IconCheck v-else class="w-3.5 h-3.5 font-bold" />
-          {{ copied ? 'Copié' : 'Copier' }}
+          <span class="hidden sm:inline">{{ copied ? 'Copié' : 'Copier' }}</span>
         </button>
       </div>
     </template>

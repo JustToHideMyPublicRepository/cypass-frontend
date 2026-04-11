@@ -24,9 +24,8 @@
             <td class="px-6 py-5">
               <div class="flex items-center gap-4">
                 <div class="w-10 h-10 flex items-center justify-center rounded-xl transition-transform"
-                  :class="doc.has_versions ? 'bg-success/10 text-success' : 'bg-primary/10 text-primary group-hover:scale-110'">
-                  <IconFiles v-if="doc.has_versions" class="w-5 h-5" />
-                  <IconFile v-else class="w-5 h-5" />
+                  :class="[getDocumentStyle(doc.has_versions).bgColor, getDocumentStyle(doc.has_versions).color, !doc.has_versions ? 'group-hover:scale-110' : '']">
+                  <component :is="getDocumentStyle(doc.has_versions).icon" class="w-5 h-5" />
                 </div>
                 <div>
                   <NuxtLink :to="`/dashboard/docsentry/${doc.id}`"
@@ -98,6 +97,7 @@ import { ref } from 'vue'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import type { Document } from '~/types/docsentry'
+import { getDocumentStyle } from '~/utils/docsentry'
 import { useToastStore } from '~/stores/front/toast'
 import { useUserDocsentryStore } from '~/stores/back/user/docsentry'
 import { useContextMenu, type ContextMenuItem } from '~/composables/useContextMenu'

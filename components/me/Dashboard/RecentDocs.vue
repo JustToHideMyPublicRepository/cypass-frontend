@@ -18,8 +18,10 @@
         class="flex items-center justify-between p-3 rounded-xl hover:bg-ash/50 transition-all cursor-pointer group"
         @click="router.push(`/dashboard/docsentry/${doc.id}`)">
         <div class="flex items-center gap-3 min-w-0">
-          <div class="p-2 bg-ash rounded-lg group-hover:bg-primary/10 transition-colors">
-            <IconFileCertificate class="w-4 h-4 text-hsa group-hover:text-primary" />
+          <div class="p-2 rounded-lg transition-colors"
+            :class="getDocumentStyle(doc.has_versions).bgColor">
+            <component :is="getDocumentStyle(doc.has_versions).icon" class="w-4 h-4"
+              :class="getDocumentStyle(doc.has_versions).color" />
           </div>
           <div class="min-w-0">
             <h4 class="text-sm font-bold text-BtW truncate">{{ doc.filename }}</h4>
@@ -33,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import { IconFileCertificate } from '@tabler/icons-vue'
+import { getDocumentStyle } from '~/utils/docsentry'
 
 const router = useRouter()
 

@@ -26,10 +26,10 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <UiBaseCard v-for="log in logGroup" :key="log.id" @click="router.push(`/dashboard/activities/${log.id}`)"
-            class="group hover:border-primary/30 transition-all duration-300 relative border border-ashAct cursor-pointer"
+            class="group hover:border-primary/30 transition-all duration-300 relative border border-ashAct cursor-pointer p-4 sm:p-5"
             :class="{ 'border-l-4 border-l-danger': log.status !== 'success' }">
-            <div class="flex items-center gap-4">
-              <div class="p-3 rounded-xl transition-colors shrink-0" :class="getActionClass(log.action_type)">
+            <div class="flex flex-col sm:flex-row sm:items-start gap-4">
+              <div class="p-3 rounded-xl transition-colors shrink-0 w-fit" :class="getActionClass(log.action_type)">
                 <component :is="getActionIcon(log.action_type)" class="w-5 h-5" />
               </div>
 
@@ -41,14 +41,14 @@
                   </h3>
                 </div>
 
-                <div class="flex flex-wrap items-center gap-x-6 gap-y-1">
-                  <p class="text-[11px] text-hsa flex items-center gap-1.5">
+                <div class="flex flex-wrap items-center gap-x-3 gap-y-2 sm:gap-x-6 sm:gap-y-1">
+                  <p class="text-[11px] text-hsa flex items-center gap-1.5 whitespace-nowrap">
                     <IconClock class="w-3.5 h-3.5 opacity-40" /> {{ formatTime(log.created_at) }}
                   </p>
-                  <p class="text-[11px] font-code text-hsa flex items-center gap-1.5 opacity-60">
+                  <p class="text-[11px] font-code text-hsa flex items-center gap-1.5 opacity-60 whitespace-nowrap">
                     <IconPlus class="w-3.5 h-3.5 opacity-40" /> {{ log.ip_address }}
                   </p>
-                  <p class="text-[11px] text-hsa flex items-center gap-1.5 truncate max-w-[200px]"
+                  <p class="text-[11px] text-hsa flex items-center gap-1.5 truncate max-w-full sm:max-w-[200px]"
                     :title="log.user_agent">
                     <component :is="getSessionIcon(log)" class="w-3.5 h-3.5 opacity-40" /> {{ formatSessionLabel(log) }}
                   </p>

@@ -7,14 +7,14 @@
       </p>
     </div>
 
-    <div class="flex items-center gap-3">
-      <UiBaseButton variant="ghost" @click="$emit('refresh')" :loading="loading">
+    <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+      <UiBaseButton variant="ghost" @click="$emit('refresh')" :loading="loading" class="flex-grow sm:flex-grow-0">
         <template #icon>
           <IconRefresh class="w-4 h-4" />
         </template>
         Actualiser
       </UiBaseButton>
-      <UiBaseButton variant="secondary" outlined @click="$emit('reset')">
+      <UiBaseButton variant="secondary" outlined @click="$emit('reset')" class="flex-grow sm:flex-grow-0">
         Réinitialiser
       </UiBaseButton>
     </div>

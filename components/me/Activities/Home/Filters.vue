@@ -1,19 +1,19 @@
 <template>
   <UiBaseCard class="bg-ash/30 border border-dashed border-ash">
-    <div class="flex flex-wrap items-center justify-between gap-4">
-      <div class="flex flex-wrap items-center gap-4 md:gap-8">
-        <div class="flex items-center gap-2">
+    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+      <div class="flex flex-col md:flex-row md:items-start gap-4 md:gap-8 flex-grow">
+        <div class="flex items-center gap-2 shrink-0 pt-2 lg:pt-0">
           <IconFilter class="w-4 h-4 text-hsa opacity-50" />
           <span class="text-xs font-bold text-hsa uppercase tracking-[0.2em]">Filtres :</span>
         </div>
 
-        <div class="flex flex-wrap items-center gap-4">
-          <div class="flex items-center gap-2 mr-2">
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl:flex xl:flex-wrap items-end gap-4 flex-grow">
+          <div class="flex items-center gap-2 mb-2 xl:mb-1.5 self-center sm:self-end shrink-0">
             <input type="checkbox" id="usePeriodToggle" :checked="modelValue.usePeriod"
               @change="updateFilter('usePeriod', ($event.target as HTMLInputElement).checked)"
-              class="rounded border-ash text-primary focus:ring-primary" />
+              class="rounded border-ash text-primary focus:ring-primary h-4 w-4" />
             <label for="usePeriodToggle"
-              class="text-[10px] font-black text-hsa uppercase tracking-widest cursor-pointer">Période</label>
+              class="text-[10px] font-black text-hsa uppercase tracking-widest cursor-pointer select-none">Période</label>
           </div>
 
           <div v-if="!modelValue.usePeriod" class="space-y-1">
@@ -50,16 +50,16 @@
             </select>
           </div>
 
-          <div class="space-y-1">
+          <div class="space-y-1 sm:col-span-2 xl:col-span-1 xl:min-w-[240px] flex-grow">
             <label class="text-[10px] font-black text-hsa/40 uppercase tracking-widest ml-1">Recherche</label>
             <div class="relative group">
               <IconSearch
                 class="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-hsa opacity-50 group-focus-within:text-primary transition-colors" />
               <input type="text" :value="modelValue.search"
                 @input="updateFilter('search', ($event.target as HTMLInputElement).value)" placeholder="Filtrer..."
-                class="block w-full pl-9 pr-16 py-1.5 rounded-lg bg-WtB border border-ash text-xs font-bold text-BtW outline-none focus:ring-1 focus:ring-primary transition-all" />
+                class="block w-full pl-9 pr-14 py-2 rounded-lg bg-WtB border border-ash text-xs font-bold text-BtW outline-none focus:ring-1 focus:ring-primary transition-all" />
               <div
-                class="absolute right-2 top-1/2 -translate-y-1/2 hidden md:flex items-center gap-0.5 pointer-events-none">
+                class="absolute right-2 top-1/2 -translate-y-1/2 hidden xl:flex items-center gap-0.5 pointer-events-none">
                 <kbd class="kbd-tip">Ctrl</kbd>
                 <span class="text-[10px] text-hsa">+</span>
                 <kbd class="kbd-tip">K</kbd>

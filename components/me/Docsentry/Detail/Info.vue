@@ -2,8 +2,9 @@
   <UiBaseCard>
     <div class="flex flex-col sm:flex-row sm:items-start justify-between mb-6 gap-4">
       <div class="flex items-center gap-4">
-        <div class="p-3 rounded-xl bg-primary/10 text-primary shrink-0">
-          <IconFileText class="w-8 h-8" />
+        <div class="p-3 rounded-xl shrink-0 transition-transform group-hover:scale-110"
+          :class="[getDocumentStyle(doc.has_versions).bgColor, getDocumentStyle(doc.has_versions).color]">
+          <component :is="getDocumentStyle(doc.has_versions).icon" class="w-8 h-8" />
         </div>
         <div class="min-w-0 flex-1">
           <h2 class="text-xl font-bold text-BtW truncate">{{ doc.filename }}</h2>
@@ -39,7 +40,8 @@
 </template>
 
 <script setup lang="ts">
-import { IconFileText, IconCopy, IconCheck } from '@tabler/icons-vue'
+import { IconCopy, IconCheck } from '@tabler/icons-vue'
+import { getDocumentStyle } from '~/utils/docsentry'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 

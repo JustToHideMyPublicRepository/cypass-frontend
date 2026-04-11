@@ -1,5 +1,5 @@
 <template>
-  <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+  <div class="grid grid-cols-1 min-[400px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
     <!-- Total Logs -->
     <UiBaseCard class="bg-ash/5 border-l-4 border-l-ashAct">
       <div class="flex items-center gap-3">
@@ -7,7 +7,7 @@
           <IconActivity class="w-5 h-5 text-primary" />
         </div>
         <div>
-          <p class="text-[9px] font-black uppercase tracking-widest text-hsa opacity-60 line-clamp-1">{{
+          <p class="text-[8px] sm:text-[9px] font-black uppercase tracking-widest text-hsa opacity-60 line-clamp-1">{{
             getDynamicTitle() }}</p>
           <p class="text-xl font-bold text-BtW leading-tight">{{ stats?.total_logs ?? 0 }}</p>
         </div>
@@ -21,7 +21,7 @@
           <IconCircleCheck class="w-5 h-5 text-success" />
         </div>
         <div>
-          <p class="text-[9px] font-black uppercase tracking-widest text-hsa opacity-60">Connexions</p>
+          <p class="text-[8px] sm:text-[9px] font-black uppercase tracking-widest text-hsa opacity-60">Connexions</p>
           <p class="text-xl font-bold text-BtW leading-tight">
             {{ stats?.by_type?.['USER_LOGIN'] || stats?.by_type?.['Connexion réussie'] || 0 }}
           </p>
@@ -36,7 +36,7 @@
           <IconAlertCircle class="w-5 h-5 text-danger" />
         </div>
         <div>
-          <p class="text-[9px] font-black uppercase tracking-widest text-hsa opacity-60">Échecs</p>
+          <p class="text-[8px] sm:text-[9px] font-black uppercase tracking-widest text-hsa opacity-60">Échecs</p>
           <p class="text-xl font-bold text-BtW leading-tight">{{ totalErrors }}</p>
         </div>
       </div>
@@ -49,7 +49,7 @@
           <IconFileUpload class="w-5 h-5 text-primary" />
         </div>
         <div>
-          <p class="text-[9px] font-black uppercase tracking-widest text-hsa opacity-60">Documents</p>
+          <p class="text-[8px] sm:text-[9px] font-black uppercase tracking-widest text-hsa opacity-60">Documents</p>
           <p class="text-xl font-bold text-BtW leading-tight">{{ totalDocuments }}</p>
         </div>
       </div>
@@ -62,7 +62,7 @@
           <IconShieldLock class="w-5 h-5 text-warning" />
         </div>
         <div>
-          <p class="text-[9px] font-black uppercase tracking-widest text-hsa opacity-60">Sécurité</p>
+          <p class="text-[8px] sm:text-[9px] font-black uppercase tracking-widest text-hsa opacity-60">Sécurité</p>
           <p class="text-xl font-bold text-BtW leading-tight">{{ totalSecurity }}</p>
         </div>
       </div>
