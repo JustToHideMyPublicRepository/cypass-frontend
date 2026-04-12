@@ -73,7 +73,7 @@ const resetFilters = () => {
 }
 
 const currentPage = ref(1)
-const limit = 20
+const limit = 10
 const totalPages = computed(() => Math.ceil(store.pagination.total / limit) || 1)
 
 const filteredDocuments = computed(() => {
