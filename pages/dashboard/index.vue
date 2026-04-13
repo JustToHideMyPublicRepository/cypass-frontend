@@ -8,6 +8,12 @@
       :active-sessions="activeSessionsCount" :security-score="securityScore" />
 
     <!-- Blocs des récents -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <MeDashboardGraphCertification :documents="userDocsentryStore.documents" :loading="userDocsentryStore.loading" />
+      <MeDashboardGraphThreat :incidents="vigitechStore.userIncidents" :loading="vigitechStore.loading" />
+    </div>
+
+    <!-- Blocs des récents -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       <MeDashboardRecentActivity :notifications="notificationsStore.notifications.slice(0, 4)"
         :loading="notificationsStore.loading" :format-time="formatTime" />
