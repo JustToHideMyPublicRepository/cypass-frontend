@@ -26,36 +26,62 @@ const props = defineProps<{
 const chartData = computed(() => {
   const days = Array.from({ length: 7 }, (_, i) => startOfDay(subDays(new Date(), 6 - i)))
 
-  const counts = days.map(day => {
-    return props.documents.filter(doc => isSameDay(new Date(doc.created_at), day)).length
+  const simpleCounts = days.map(day => {
+    return props.documents.filter(doc => !doc.has_versions && isSameDay(new Date(doc.created_at), day)).length
+  })
+
+  const versionCounts = days.map(day => {
+    return props.documents.filter(doc => doc.has_versions && isSameDay(new Date(doc.created_at), day)).length
   })
 
   return {
     labels: days.map(day => format(day, 'dd MMM', { locale: fr })),
-    data: counts
+    simples: simpleCounts,
+    versions: versionCounts
   }
 })
 
-const series = computed(() => [{
-  name: 'Certifications',
-  data: chartData.value.data
-}])
+const series = computed(() => [
+  {
+    name: 'Versions uniques',
+    data: chartData.value.simples
+  },
+  {
+    name: 'Multi-versions',
+    data: chartData.value.versions
+  }
+])
+
+const colorMode = useColorMode()
+const isDark = computed(() => colorMode.value === 'dark')
 
 const chartOptions = computed(() => ({
   chart: {
     fontFamily: 'inherit',
     toolbar: { show: false },
-    zoom: { enabled: false }
+    zoom: { enabled: false },
+    animations: { enabled: true }
   },
-  colors: ['#00C853'], // Success color
+  theme: {
+    mode: isDark.value ? 'dark' : 'light'
+  },
+  colors: ['#00C853', '#00B8D4'],
   fill: {
     type: 'gradient',
     gradient: {
       shadeIntensity: 1,
-      opacityFrom: 0.45,
+      opacityFrom: 0.3,
       opacityTo: 0.05,
-      stops: [20, 100, 100, 100]
+      stops: [0, 90, 100]
     }
+  },
+  legend: {
+    position: 'top',
+    horizontalAlign: 'right',
+    fontSize: '12px',
+    fontWeight: 600,
+    markers: { radius: 12 },
+    labels: { colors: isDark.value ? '#cbd5e1' : '#334155' }
   },
   dataLabels: { enabled: false },
   stroke: { curve: 'smooth', width: 3 },
@@ -64,21 +90,21 @@ const chartOptions = computed(() => ({
     axisBorder: { show: false },
     axisTicks: { show: false },
     labels: {
-      style: { colors: '#94a3b8', fontSize: '12px' }
+      style: { colors: isDark.value ? '#64748b' : '#94a3b8', fontSize: '12px' }
     }
   },
   yaxis: {
     labels: {
-      style: { colors: '#94a3b8', fontSize: '12px' }
+      style: { colors: isDark.value ? '#64748b' : '#94a3b8', fontSize: '12px' }
     }
   },
   grid: {
-    borderColor: '#f1f5f9',
+    borderColor: isDark.value ? '#1e293b' : '#f1f5f9',
     strokeDashArray: 4,
     padding: { left: 0, right: 0, bottom: 0 }
   },
   tooltip: {
-    theme: 'light',
+    theme: isDark.value ? 'dark' : 'light',
     x: { show: true }
   }
 }))

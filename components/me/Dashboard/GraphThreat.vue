@@ -4,7 +4,7 @@
 
     <div class="h-[300px] w-full">
       <ClientOnly>
-        <apexchart v-if="!loading" type="donut" height="100%" :options="chartOptions" :series="series" />
+        <apexchart v-if="!loading" type="bar" height="100%" :options="chartOptions" :series="series" />
         <div v-else class="h-full w-full flex items-center justify-center">
           <UiLogoLoader size="sm" />
         </div>
@@ -15,65 +15,73 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { mapIncidentType, mapThreatLevel } from '~/utils/vigitech'
 
 const props = defineProps<{
   incidents: any[]
   loading?: boolean
 }>()
 
-const distribution = computed(() => {
-  const counts = {
-    critical: 0,
-    medium: 0,
-    low: 0
-  }
+const levels = ['low', 'medium', 'critical']
+const types = ['phishing', 'ransomware', 'fake_profile', 'harassment', 'other']
 
-  props.incidents.forEach(incident => {
-    if (counts.hasOwnProperty(incident.threat_level)) {
-      counts[incident.threat_level as keyof typeof counts]++
+const series = computed(() => {
+  return types.map(type => {
+    return {
+      name: mapIncidentType(type),
+      data: levels.map(level => {
+        return props.incidents.filter(i => i.threat_level === level && i.type === type).length
+      })
     }
   })
-
-  return counts
 })
 
-const series = computed(() => [
-  distribution.value.critical,
-  distribution.value.medium,
-  distribution.value.low
-])
+const colorMode = useColorMode()
+const isDark = computed(() => colorMode.value === 'dark')
 
 const chartOptions = computed(() => ({
-  labels: ['Critique', 'Moyen', 'Faible'],
-  colors: ['#ef4444', '#f59e0b', '#10b981'], // Red, Orange, Green
   chart: {
-    fontFamily: 'inherit'
+    type: 'bar',
+    stacked: true,
+    toolbar: { show: false },
+    fontFamily: 'inherit',
+    animations: { enabled: true }
+  },
+  theme: {
+    mode: isDark.value ? 'dark' : 'light'
   },
   plotOptions: {
-    pie: {
-      donut: {
-        size: '70%',
-        labels: {
-          show: true,
-          total: {
-            show: true,
-            label: 'Total',
-            fontSize: '16px',
-            fontWeight: 600,
-            color: '#334155'
-          }
-        }
-      }
+    bar: {
+      horizontal: false,
+      columnWidth: '50%',
+      borderRadius: 8,
+      dataLabels: { total: { enabled: true, style: { fontWeight: 600, color: isDark.value ? '#cbd5e1' : '#334155' } } }
     }
   },
-  dataLabels: { enabled: false },
+  colors: ['#ef4444', '#f59e0b', '#10b981', '#3b82f6', '#94a3b8'], // Diverse colors for types
+  xaxis: {
+    categories: levels.map(l => mapThreatLevel(l)),
+    labels: { style: { colors: isDark.value ? '#64748b' : '#94a3b8', fontWeight: 600 } },
+    axisBorder: { show: false },
+    axisTicks: { show: false }
+  },
+  yaxis: {
+    labels: { style: { colors: isDark.value ? '#64748b' : '#94a3b8' } }
+  },
+  grid: {
+    borderColor: isDark.value ? '#1e293b' : '#f1f5f9',
+    strokeDashArray: 4
+  },
   legend: {
     position: 'bottom',
-    fontSize: '14px',
-    markers: { radius: 12 }
+    fontSize: '12px',
+    markers: { radius: 12 },
+    labels: { colors: isDark.value ? '#cbd5e1' : '#334155' }
   },
+  dataLabels: { enabled: false },
   tooltip: {
-    theme: 'light'
+    theme: isDark.value ? 'dark' : 'light',
+    y: { formatter: (val: number) => `${val} incident(s)` }
   }
 }))
 </script>
