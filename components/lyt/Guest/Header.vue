@@ -75,46 +75,9 @@
       </div>
     </header>
 
-    <!-- Mobile Menu Drawer -->
-    <Transition enter-active-class="transition duration-200 ease-out"
-      enter-from-class="transform -translate-y-4 opacity-0" enter-to-class="transform translate-y-0 opacity-100"
-      leave-active-class="transition duration-150 ease-in" leave-from-class="transform translate-y-0 opacity-100"
-      leave-to-class="transform -translate-y-4 opacity-0">
-      <div v-if="isMobileMenuOpen"
-        class="fixed inset-0 z-40 md:hidden pt-24 px-4 bg-WtB/95 backdrop-blur-xl flex flex-col items-center">
-        <div class="flex flex-col gap-4 w-full max-w-sm text-center">
-          <NuxtLink v-for="item in NavHeader" :key="item.label" :to="item.path" @click="isMobileMenuOpen = false"
-            class="p-3 rounded-xl text-lg font-medium hover:bg-ash transition-colors"
-            :class="{ 'text-primary': isLinkActive(item.path) }">
-            {{ item.label }}
-          </NuxtLink>
-
-          <hr class="border-ash my-2" />
-
-          <template v-if="!authStore.user">
-            <UiBaseButton to="/auth/login" @click="isMobileMenuOpen = false" class="p-4 rounded-xl text-lg font-medium">
-              Connexion
-            </UiBaseButton>
-          </template>
-          <template v-else>
-            <template v-for="link in getAuthLinks(true)" :key="link.path">
-              <UiBaseButton v-if="link.type === 'link'" :to="link.path" @click="isMobileMenuOpen = false"
-                class="p-4 rounded-xl text-lg font-medium">
-                {{ link.label }}
-              </UiBaseButton>
-              <UiBaseButton v-else-if="link.type === 'button'" @click="link.action" variant="ghost"
-                class="!p-4 rounded-xl !text-lg !font-medium" :class="link.class">
-                {{ link.label }}
-              </UiBaseButton>
-            </template>
-          </template>
-        </div>
-
-        <div class="mt-8 pt-8 border-t border-ash w-full text-center">
-          <p class="text-sm text-hsa mb-4">CYPASS &copy; {{ new Date().getFullYear() }}</p>
-        </div>
-      </div>
-    </Transition>
+    <!-- Mobile Menu -->
+    <LytGuestMobile :show="isMobileMenuOpen" :nav-header="NavHeader" :auth-links="getAuthLinks(true)"
+      @close="isMobileMenuOpen = false" />
 
     <!-- Logout Modal -->
     <ModalGlobalLogout :show="profilStore.isLogoutModalOpen" @close="profilStore.closeLogoutModal()"

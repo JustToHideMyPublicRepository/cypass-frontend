@@ -8,9 +8,12 @@
       :active-sessions="activeSessionsCount" :security-score="securityScore" />
 
     <!-- Blocs des graphiques -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <MeDashboardGraphCertification :documents="userDocsentryStore.documents" :loading="userDocsentryStore.loading" />
-      <MeDashboardGraphThreat :incidents="vigitechStore.userIncidents" :loading="vigitechStore.loading" />
+    <div v-if="hasCertificationData || hasThreatData" class="grid grid-cols-1 gap-6"
+      :class="{ 'lg:grid-cols-2': hasCertificationData && hasThreatData }">
+      <MeDashboardGraphCertification v-if="hasCertificationData" :documents="userDocsentryStore.documents"
+        :loading="userDocsentryStore.loading" />
+      <MeDashboardGraphThreat v-if="hasThreatData" :incidents="vigitechStore.userIncidents"
+        :loading="vigitechStore.loading" />
     </div>
 
     <!-- Blocs des récents -->
@@ -77,6 +80,15 @@ const securityScore = ref<SecurityScoreResult>({ score: 100, grade: 'A+', label:
 
 const recentComments = computed(() => {
   return vigitechStore.userComments
+})
+
+const hasCertificationData = computed(() => {
+  // On affiche si en chargement (pour voir le loader du composant) ou s'il y a des docs
+  return userDocsentryStore.loading || userDocsentryStore.pagination.total > 0
+})
+
+const hasThreatData = computed(() => {
+  return vigitechStore.loading || vigitechStore.userIncidents.length > 0
 })
 
 const modals = reactive({

@@ -5,12 +5,15 @@ export default defineEventHandler(async (event: H3Event) => {
   const config = useRuntimeConfig()
   const baseApi = config.cypassBaseAPI
 
+  const cookie = getHeader(event, 'cookie')
+
   try {
     const response = await $fetch.raw<{ success: boolean; message: string; data: any }>(`${baseApi}/user/auth/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
-        'Accept': 'application/json'
+        'Accept': 'application/json',
+        'Cookie': cookie || ''
       },
       body: new URLSearchParams(body).toString()
     })

@@ -11,7 +11,7 @@
         <span class="text-[10px] font-bold text-hsa uppercase tracking-wider">
           {{ authStore.user ? 'Compte' : 'Continuer avec' }}
         </span>
-        <span class="text-sm font-bold group-hover:text-primary transition-colors max-w-[100px] truncate"
+        <span class="text-sm font-bold group-hover:text-primary transition-colors max-w-[150px] truncate"
           :class="(profilStore.profile?.is_reported || authStore.user?.is_reported) ? 'text-warning' : 'text-BtW'">
           {{ displayName }}
         </span>
@@ -130,7 +130,7 @@ const dropdownRef = ref<HTMLElement | null>(null)
 
 const displayName = computed(() => {
   if (authStore.user) return authStore.user.first_name
-  if (props.hints && props.hints.length > 0) return props.hints[0].name.split(' ')[0]
+  if (props.hints && props.hints.length > 0) return props.hints[0].name
   return ''
 })
 
