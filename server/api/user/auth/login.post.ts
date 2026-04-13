@@ -6,7 +6,7 @@ export default defineEventHandler(async (event: H3Event) => {
   const baseApi = config.cypassBaseAPI
 
   try {
-    const response = await $fetch<{ success: boolean; message: string; data: any }>(`${baseApi}/user/auth/login`, {
+    const response = await $fetch.raw<{ success: boolean; message: string; data: any }>(`${baseApi}/user/auth/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -15,9 +15,17 @@ export default defineEventHandler(async (event: H3Event) => {
       body: new URLSearchParams(body).toString()
     })
 
-    if (response.success && response.data.token) {
-      // Set the token as a secure HttpOnly cookie
-      setCookie(event, 'cypass_token', response.data.token, {
+    const data = response._data
+
+    if (data?.success && data?.data.token) {
+      // Forward cookies from backend (like cypass_auth_hints)
+      const setCookies = response.headers.getSetCookie()
+      setCookies.forEach(cookie => {
+        appendHeader(event, 'set-cookie', cookie)
+      })
+
+      // Set the token as a secure HttpOnly cookie (override if provided by backend, or just set it)
+      setCookie(event, 'cypass_token', data.data.token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax',
@@ -25,14 +33,14 @@ export default defineEventHandler(async (event: H3Event) => {
       })
 
       // Return the response without the token to the client
-      const { token, ...userData } = response.data
+      const { token, ...userData } = data.data
       return {
-        ...response,
+        ...data,
         data: userData
       }
     }
 
-    return response
+    return data
   } catch (error: any) {
     throw createError({
       statusCode: error.statusCode || 500,

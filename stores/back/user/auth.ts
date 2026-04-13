@@ -4,6 +4,7 @@ import { type User, type AuthState } from '~/types/auth'
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     user: null,
+    hints: [],
     loading: false,
     initialized: false,
     error: null,
@@ -444,6 +445,52 @@ export const useAuthStore = defineStore('auth', {
         return false
       } finally {
         this.loading = false
+      }
+    },
+
+    // Récupérer les indices de compte
+    async fetchHints() {
+      try {
+        const response = await $fetch<{ success: boolean; data: any[] }>('/api/user/auth/hints')
+        if (response.success) {
+          this.hints = response.data
+        }
+      } catch (err) {
+        console.error('Failed to fetch auth hints', err)
+      }
+    },
+
+    // Supprimer un indice de compte
+    async removeHint(id: string) {
+      try {
+        const response = await $fetch<{ success: boolean; data: any[] }>(`/api/user/auth/hints/${id}`, {
+          method: 'DELETE'
+        })
+        if (response.success) {
+          this.hints = response.data
+          return true
+        }
+        return false
+      } catch (err) {
+        console.error('Failed to remove auth hint', err)
+        return false
+      }
+    },
+
+    // Tout oublier
+    async clearAllHints() {
+      try {
+        const response = await $fetch<{ success: boolean }>('/api/user/auth/hints', {
+          method: 'DELETE'
+        })
+        if (response.success) {
+          this.hints = []
+          return true
+        }
+        return false
+      } catch (err) {
+        console.error('Failed to clear auth hints', err)
+        return false
       }
     },
   }

@@ -1,8 +1,8 @@
 <template>
   <form @submit.prevent="handleLogin" class="bg-WtB shadow-2xl rounded-3xl p-6 md:p-8 border border-ash/50">
     <div class="space-y-5">
-      <!-- Champ Email -->
-      <div>
+      <!-- Champ Email (caché si hint sélectionné) -->
+      <div v-if="!hint">
         <label for="email" class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Email</label>
         <div class="relative group">
           <div
@@ -12,6 +12,20 @@
           <input v-model="email" id="email" type="email" placeholder="votre@email.com" required
             class="w-full pl-12 pr-4 py-3 rounded-xl border border-ashAct focus:ring-4 focus:ring-primary/10 focus:border-primary bg-ash/30 transition-all outline-none text-BtW" />
         </div>
+      </div>
+
+      <!-- Informations du compte sélectionné -->
+      <div v-else class="flex flex-col items-center gap-3 py-2">
+        <div class="relative w-20 h-20 rounded-full overflow-hidden border-4 border-WtB shadow-md">
+          <img :src="getUserAvatarUrl(hint.avatar_url, hint.name)" alt="Avatar" class="w-full h-full object-cover" />
+        </div>
+        <div class="text-center">
+          <p class="text-lg font-black text-BtW">{{ hint.name }}</p>
+          <p class="text-sm text-hsa font-medium">{{ hint.email }}</p>
+        </div>
+        <button type="button" @click="$emit('back')" class="text-[10px] font-black text-primary uppercase hover:underline">
+          Utiliser un autre compte
+        </button>
       </div>
 
       <!-- Champ Mot de passe -->
@@ -75,9 +89,15 @@ import { useRoute } from 'vue-router'
 import { IconEye, IconEyeOff, IconMail, IconLock } from '@tabler/icons-vue'
 import { useAuthStore } from '~/stores/back/user/auth'
 import { useToastStore } from '~/stores/front/toast'
+import { getUserAvatarUrl } from '~/utils/user'
 
 defineEmits<{
   (e: 'forgotPassword'): void
+  (e: 'back'): void
+}>()
+
+const props = defineProps<{
+  hint?: any
 }>()
 
 const email = ref('')
@@ -94,7 +114,7 @@ const handleLogin = async () => {
   loading.value = true
 
   const result = await authStore.login({
-    email: email.value,
+    email: props.hint ? props.hint.email : email.value,
     password: password.value
   })
 

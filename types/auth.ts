@@ -19,8 +19,17 @@ export interface User {
   created_at: string
 }
 
+export interface AccountHint {
+  id: string
+  name: string
+  email_hash: string
+  avatar_url: string | null
+  organization: string | null
+}
+
 export interface AuthState {
   user: User | null
+  hints: AccountHint[]
   mfaSession: {
     email: string
     loginTime: number

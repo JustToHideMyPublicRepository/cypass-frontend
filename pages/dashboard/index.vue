@@ -7,7 +7,7 @@
       :vigitech-count="vigitechStore.userIncidents.length" :vigitech-trend="vigiTrend"
       :active-sessions="activeSessionsCount" :security-score="securityScore" />
 
-    <!-- Blocs des récents -->
+    <!-- Blocs des graphiques -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <MeDashboardGraphCertification :documents="userDocsentryStore.documents" :loading="userDocsentryStore.loading" />
       <MeDashboardGraphThreat :incidents="vigitechStore.userIncidents" :loading="vigitechStore.loading" />

@@ -34,7 +34,12 @@
 
             <!-- Auth Action -->
             <template v-if="!authStore.user">
-              <UiBaseButton to="/auth/login" v-tooltip="getLinkTooltip('/auth/login')"
+              <!-- Guest Account Hints -->
+              <template v-if="authStore.hints.length > 0">
+                <LytGuestDropdown :hints="authStore.hints" />
+              </template>
+
+              <UiBaseButton v-else to="/auth/login" v-tooltip="getLinkTooltip('/auth/login')"
                 class="px-5 py-2.5 rounded-full text-sm">
                 Connexion
               </UiBaseButton>
@@ -184,8 +189,13 @@ const handleScroll = () => {
   scrolled.value = window.scrollY > 20
 }
 
-onMounted(() => {
+onMounted(async () => {
   window.addEventListener('scroll', handleScroll)
+
+  // Fetch account hints if not logged in
+  if (!authStore.user) {
+    await authStore.fetchHints()
+  }
 })
 
 onUnmounted(() => {

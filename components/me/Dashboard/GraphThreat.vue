@@ -1,12 +1,12 @@
 <template>
-  <BaseCard title="Répartition des Menaces">
+  <BaseCard title="Répartition des menaces">
     <h3>Répartition des menaces</h3>
 
     <div class="h-[300px] w-full">
       <ClientOnly>
         <apexchart v-if="!loading" type="donut" height="100%" :options="chartOptions" :series="series" />
         <div v-else class="h-full w-full flex items-center justify-center">
-          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          <UiLogoLoader size="sm" />
         </div>
       </ClientOnly>
     </div>
