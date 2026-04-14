@@ -22,6 +22,7 @@ export interface User {
 export interface AccountHint {
   id: string
   name: string
+  email: string
   email_hash: string
   avatar_url: string | null
   organization: string | null

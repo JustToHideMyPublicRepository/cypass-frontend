@@ -23,7 +23,8 @@
           <p class="text-lg font-black text-BtW">{{ hint.name }}</p>
           <p class="text-sm text-hsa font-medium">{{ hint.email }}</p>
         </div>
-        <button type="button" @click="$emit('back')" class="text-[10px] font-black text-primary uppercase hover:underline">
+        <button type="button" @click="$emit('back')"
+          class="text-[10px] font-black text-primary uppercase hover:underline">
           Utiliser un autre compte
         </button>
       </div>

@@ -29,7 +29,7 @@
       </div>
 
       <div class="flex flex-col gap-2">
-        <button v-if="hints.length > 1" @click="showConfirm = true" 
+        <button v-if="hints.length > 1" @click="showConfirm = true"
           class="w-full py-3 rounded-xl border border-danger/30 text-danger text-[10px] font-black uppercase tracking-widest hover:bg-danger/5 transition-all flex items-center justify-center gap-2">
           <IconTrash class="w-3 h-3" />
           Tout oublier
@@ -44,16 +44,10 @@
     </template>
 
     <!-- Modal de confirmation pour tout oublier -->
-    <UiConfirmModal 
-      :show="showConfirm"
-      title="Oublier tous les comptes ?"
+    <UiConfirmModal :show="showConfirm" title="Oublier tous les comptes ?"
       message="Cette action supprimera tous les comptes mémorisés sur cet appareil. Vous devrez ressaisir vos identifiants lors de votre prochaine connexion."
-      confirm-text="Oui, tout oublier"
-      cancel-text="Annuler"
-      variant="danger"
-      @cancel="showConfirm = false"
-      @confirm="handleClearAll"
-    />
+      confirm-text="Oui, tout oublier" cancel-text="Annuler" variant="danger" @cancel="showConfirm = false"
+      @confirm="handleClearAll" />
   </div>
 </template>
 
