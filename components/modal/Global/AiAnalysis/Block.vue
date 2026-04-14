@@ -4,7 +4,7 @@
       <!-- Header Info -->
       <div class="p-4 bg-primary/5 rounded-2xl border border-primary/10 mb-4 shrink-0">
         <p class="text-xs text-hsa font-medium leading-relaxed">
-          Synthèse stratégique de la page actuelle. Le modèle marqué par une étoile sera votre favori pour l'analyse
+          Synthèse stratégique de la page actuelle. Le modèle marqué par une étoile sera votre favori pour l'analyses
           directe.
         </p>
       </div>

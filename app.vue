@@ -9,7 +9,7 @@
         :type="toastStore.type" :title="toastStore.title" :message="toastStore.message"
         :duration="toastStore.duration" />
       <ModalGlobalSearch />
-      <ModalGlobalAiAnalysis />
+      <ModalGlobalAiAnalysisBlock />
       <ModalGlobalAiAnalysisSettings />
     </NuxtLayout>
 

@@ -13,7 +13,7 @@
     <div class="flex items-center gap-4">
       <ClientOnly>
         <UiThemeToggle />
-        <ModalGlobalNotificationDrop />
+        <ModalGlobalNotification />
       </ClientOnly>
 
       <!-- Profile Dropdown -->

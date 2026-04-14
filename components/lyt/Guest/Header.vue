@@ -53,7 +53,7 @@
 
             <!-- Notifications (if authenticated) -->
             <ClientOnly v-if="authStore.user">
-              <ModalGlobalNotificationDrop />
+              <ModalGlobalNotification />
             </ClientOnly>
           </nav>
 
@@ -61,7 +61,7 @@
           <div class="md:hidden flex items-center gap-2">
             <!-- Notifications (if authenticated) -->
             <ClientOnly v-if="authStore.user">
-              <ModalGlobalNotificationDrop />
+              <ModalGlobalNotification />
             </ClientOnly>
 
             <UiThemeToggle />
