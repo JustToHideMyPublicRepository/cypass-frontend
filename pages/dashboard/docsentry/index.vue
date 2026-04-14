@@ -26,16 +26,16 @@
     </div>
 
     <!-- Modals -->
-    <ModalDocSentryAuth :show="modals.upload" :loading="store.loading" :error="store.error"
+    <ModalDocsentryAuth :show="modals.upload" :loading="store.loading" :error="store.error"
       :upload-result="store.uploadResult" @upload="handleUpload" @update:error="(val) => store.error = val"
       @error-clear="store.error = null" @close="closeModals" />
 
-    <ModalDocSentryVerify :show="modals.verify" :loading="publicStore.loading" :error="publicStore.error"
+    <ModalDocsentryVerify :show="modals.verify" :loading="publicStore.loading" :error="publicStore.error"
       :result="publicStore.verificationResult" @verify="handleVerify" @reset="publicStore.verificationResult = null"
       @close="closeModals" />
 
     <!-- Trust Card Modal -->
-    <ModalDocSentryTrust :show="modals.trust" @close="modals.trust = false" />
+    <ModalDocsentryTrust :show="modals.trust" @close="modals.trust = false" />
   </div>
 </template>
 

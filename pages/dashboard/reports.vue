@@ -36,7 +36,7 @@
     </div>
 
     <!-- Modale de Détails -->
-    <ModalReportDetail :show="showDetail" :mode="activeTab" :report-type="reportType" :report="selectedReport"
+    <ModalReportShowDetail :show="showDetail" :mode="activeTab" :report-type="reportType" :report="selectedReport"
       @close="showDetail = false" />
 
     <!-- Modale de Modification (Incident) -->

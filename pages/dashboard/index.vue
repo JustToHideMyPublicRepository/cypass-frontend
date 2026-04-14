@@ -39,12 +39,12 @@
     </div>
 
     <!-- Modals -->
-    <ModalDocSentryAuth :show="modals.upload" :loading="userDocsentryStore.loading" :error="userDocsentryStore.error"
+    <ModalDocsentryAuth :show="modals.upload" :loading="userDocsentryStore.loading" :error="userDocsentryStore.error"
       :upload-result="userDocsentryStore.uploadResult" @upload="handleUpload"
       @update:error="(val) => userDocsentryStore.error = val" @error-clear="userDocsentryStore.error = null"
       @close="closeModals" />
 
-    <ModalDocSentryVerify :show="modals.verify" :loading="publicDocsentryStore.loading"
+    <ModalDocsentryVerify :show="modals.verify" :loading="publicDocsentryStore.loading"
       :error="publicDocsentryStore.error" :result="publicDocsentryStore.verificationResult" @verify="handleVerify"
       @reset="publicDocsentryStore.verificationResult = null" @close="closeModals" />
 

@@ -26,7 +26,7 @@
     <!-- Modals -->
     <ModalVigitechCommentDetail :show="showCommentModal" :comment="selectedComment" @close="showCommentModal = false" />
 
-    <ModalReportDetail :show="showReportModal" :report="selectedReport" :report-type="reportType" :mode="reportMode"
+    <ModalReportShowDetail :show="showReportModal" :report="selectedReport" :report-type="reportType" :mode="reportMode"
       @close="showReportModal = false" />
   </div>
 </template>
