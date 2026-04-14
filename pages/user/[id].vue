@@ -29,7 +29,7 @@
     </div>
 
     <!-- Modal de signalement -->
-    <ModalVigitechReportUser v-if="user" :show="modals.report" :target-id="String(route.params.id)"
+    <ModalReportAddUser v-if="user" :show="modals.report" :target-id="String(route.params.id)"
       @close="modals.report = false" @success="handleReportSuccess" />
   </div>
 </template>

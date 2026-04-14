@@ -8,7 +8,8 @@
         <div>
           <h4 class="text-sm font-bold text-BtW mb-1">Confirmation requise</h4>
           <p class="text-xs text-hsa leading-relaxed">
-            Pour accéder à vos codes de sécurité, veuillez confirmer votre identité en saisissant votre mot de passe actuel.
+            Pour accéder à vos codes de sécurité, veuillez confirmer votre identité en saisissant votre mot de passe
+            actuel.
           </p>
         </div>
       </div>

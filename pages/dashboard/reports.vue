@@ -40,14 +40,14 @@
       @close="showDetail = false" />
 
     <!-- Modale de Modification (Incident) -->
-    <ModalVigitechReportIncident :show="showEditModal" :incident-id="selectedEditReport?.incident_id || ''"
+    <ModalReportAddIncident :show="showEditModal" :incident-id="selectedEditReport?.incident_id || ''"
       :report="selectedEditReport" @close="showEditModal = false" @success="fetchData" />
 
     <!-- Modale de Confirmation de Suppression -->
     <UiConfirmModal :show="showConfirmDelete" title="Supprimer le signalement"
       message="Êtes-vous sûr de vouloir supprimer ce signalement ? Cette action est irréversible."
-      confirm-text="Supprimer" cancel-text="Annuler" variant="danger" :loading="isDeleting" @close="showConfirmDelete = false"
-      @confirm="handleConfirmDelete" />
+      confirm-text="Supprimer" cancel-text="Annuler" variant="danger" :loading="isDeleting"
+      @close="showConfirmDelete = false" @confirm="handleConfirmDelete" />
   </div>
 </template>
 

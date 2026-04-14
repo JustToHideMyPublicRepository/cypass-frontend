@@ -8,7 +8,8 @@
         <div>
           <h4 class="text-sm font-bold text-BtW mb-1">Information importante</h4>
           <p class="text-xs text-hsa leading-relaxed">
-            Chaque code ne peut être utilisé qu'une seule fois. Conservez-les dans un endroit sûr et secret (physique ou gestionnaire de mots de passe).
+            Chaque code ne peut être utilisé qu'une seule fois. Conservez-les dans un endroit sûr et secret (physique ou
+            gestionnaire de mots de passe).
           </p>
         </div>
       </div>
@@ -22,12 +23,11 @@
           </code>
           <div class="flex items-center gap-1 relative z-10">
             <button @click="toggleReveal(index)" class="p-2 text-hsa hover:text-primary transition-colors"
-               title="Afficher/Masquer">
+              title="Afficher/Masquer">
               <IconEye v-if="!revealedCodes[index]" class="w-5 h-5" />
               <IconEyeOff v-else class="w-5 h-5" />
             </button>
-            <button @click="copy(code, index)" class="p-2 text-hsa hover:text-success transition-colors"
-               title="Copier">
+            <button @click="copy(code, index)" class="p-2 text-hsa hover:text-success transition-colors" title="Copier">
               <IconCheck v-if="copiedIndex === index" class="w-5 h-5" />
               <IconCopy v-else class="w-5 h-5" />
             </button>
@@ -40,7 +40,8 @@
           <p class="text-[10px] font-black uppercase text-hsa tracking-widest opacity-60">Expiration des codes</p>
           <p class="text-xs font-bold text-BtW italic">{{ formatDate(expiresAt) }}</p>
         </div>
-        <UiBaseButton variant="secondary" size="sm" class="!rounded-xl font-bold py-2.5 px-4 h-auto" :loading="loading" @click="$emit('reset')">
+        <UiBaseButton variant="secondary" size="sm" class="!rounded-xl font-bold py-2.5 px-4 h-auto" :loading="loading"
+          @click="$emit('reset')">
           <IconRefresh class="w-4 h-4 mr-2" />
           Régénérer les codes
         </UiBaseButton>

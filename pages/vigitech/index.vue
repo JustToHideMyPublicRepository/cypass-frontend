@@ -32,7 +32,7 @@
     </div>
 
     <!-- Report Modal -->
-    <ModalVigitechReportIncident :show="showReportModal" :incidentId="reportTargetId" @close="showReportModal = false"
+    <ModalReportAddIncident :show="showReportModal" :incidentId="reportTargetId" @close="showReportModal = false"
       @success="fetchData" />
   </div>
 </template>
@@ -164,7 +164,7 @@ const fetchData = () => {
   }
   if (filters.value.type) params.type = filters.value.type
   if (filters.value.level) params.level = filters.value.level
-  
+
   store.fetchPublicIncidents(params)
 }
 

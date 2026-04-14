@@ -69,7 +69,7 @@
     </UiBaseCard>
 
     <!-- Modals -->
-    <ModalVigitechReportIncident v-if="incident" :show="showReportModal" :incidentId="incident.id"
+    <ModalReportAddIncident v-if="incident" :show="showReportModal" :incidentId="incident.id"
       @close="showReportModal = false" @success="$emit('fetch')" />
 
     <ModalVigitechPreference :show="showSettingsModal" @close="showSettingsModal = false" />

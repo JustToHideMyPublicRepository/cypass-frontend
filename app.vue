@@ -8,7 +8,7 @@
       <UiAppToast :model-value="toastStore.show" @update:model-value="val => toastStore.show = val"
         :type="toastStore.type" :title="toastStore.title" :message="toastStore.message"
         :duration="toastStore.duration" />
-      <ModalGlobalSearch />
+      <ModalGlobalSearchBlock />
       <ModalGlobalAiAnalysisBlock />
       <ModalGlobalAiAnalysisSettings />
     </NuxtLayout>
