@@ -2,7 +2,7 @@
   <UiBaseCard title="Activités récentes">
     <template #header>
       <UiBaseButton variant="secondary" size="sm" class="!px-2 !py-1 !text-[10px]"
-        @click="router.push('/dashboard/notifications')">Voir tout
+        @click="router.push('/dashboard/notification')">Voir tout
       </UiBaseButton>
     </template>
     <div class="space-y-4">
@@ -17,7 +17,7 @@
       <!-- Activity List -->
       <div v-for="alert in notifications" :key="alert.id"
         class="flex items-start gap-4 p-3 rounded-xl hover:bg-ash/50 transition-all cursor-pointer group"
-        @click="router.push(`/dashboard/notifications/${alert.id}`)">
+        @click="router.push(`/dashboard/notification/${alert.id}`)">
         <div :class="[
           'w-2 h-2 rounded-full mt-2 flex-shrink-0 transition-transform group-hover:scale-125',
           alert.priority === 'high' ? 'bg-danger' : 'bg-primary'

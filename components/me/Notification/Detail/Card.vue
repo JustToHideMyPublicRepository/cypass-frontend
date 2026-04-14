@@ -92,7 +92,7 @@
         <UiBaseButton variant="secondary" @click="$emit('delete')" class="flex-1">
           <IconTrash class="w-4 h-4 mr-2" /> Supprimer
         </UiBaseButton>
-        <UiBaseButton variant="primary" to="/dashboard/notifications" class="flex-1">
+        <UiBaseButton variant="primary" to="/dashboard/notification" class="flex-1">
           Retour à la liste
         </UiBaseButton>
       </div>

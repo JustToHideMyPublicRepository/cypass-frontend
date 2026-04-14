@@ -26,7 +26,7 @@ import {
 const ALL_LINKS = [
   { label: 'Evenements', path: '/dashboard/calendar', icon: IconCalendar },
   { label: 'Mes documents', path: '/dashboard/docsentry', icon: IconFiles },
-  { label: 'Notifications', path: '/dashboard/notifications', icon: IconBell },
+  { label: 'Notifications', path: '/dashboard/notification', icon: IconBell },
   { label: 'Mes alertes', path: '/dashboard/vigitech', icon: IconAlertTriangle },
   { label: 'Logs système', path: '/dashboard/activities', icon: IconHistory },
   { label: 'Profil', path: '/dashboard/profile', icon: IconUserCircle },

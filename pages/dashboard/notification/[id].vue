@@ -1,7 +1,7 @@
 <template>
   <div class="max-w-2xl mx-auto space-y-6">
     <!-- Header -->
-    <MeNotificationsDetailHeader :title="notif?.title" />
+    <MeNotificationDetailHeader :title="notif?.title" />
 
     <!-- Loading -->
     <div v-if="store.loading && !notif" class="py-10">
@@ -10,7 +10,7 @@
 
     <!-- Content -->
     <div v-else-if="notif" class="animate-fade-up">
-      <MeNotificationsDetailCard :notification="notif" @delete="handleDelete" />
+      <MeNotificationDetailCard :notification="notif" @delete="handleDelete" />
     </div>
 
     <!-- Confirmation Modal -->
@@ -50,7 +50,7 @@ const confirmDelete = async () => {
   confirmShow.value = false
   if (success) {
     toastStore.showToast('success', 'Supprimé', 'La notification a été supprimée.')
-    navigateTo('/dashboard/notifications')
+    navigateTo('/dashboard/notification')
   }
 }
 

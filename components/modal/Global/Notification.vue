@@ -81,7 +81,7 @@
           </div>
 
           <!-- Pied de page : Tout voir -->
-          <NuxtLink to="/dashboard/notifications" @click="isOpen = false"
+          <NuxtLink to="/dashboard/notification" @click="isOpen = false"
             class="p-4 border-t border-ash text-center text-xs font-black uppercase tracking-[0.2em] text-hsa hover:text-primary hover:bg-ash/10 transition-all">
             Explorer tout le journal
           </NuxtLink>
@@ -138,7 +138,7 @@ const toggleDropdown = () => {
  */
 const goToNotification = (id: string) => {
   isOpen.value = false
-  navigateTo(`/dashboard/notifications/${id}`)
+  navigateTo(`/dashboard/notification/${id}`)
 }
 
 /**

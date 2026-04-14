@@ -1,15 +1,15 @@
 <template>
   <div class="max-w-4xl mx-auto space-y-4 md:space-y-6">
     <!-- Header -->
-    <MeNotificationsHeader :unread-count="store.unreadCount" @mark-all-read="handleMarkAllAsRead" />
+    <MeNotificationHomeHeader :unread-count="store.unreadCount" @mark-all-read="handleMarkAllAsRead" />
 
     <!-- Stats -->
-    <MeNotificationsStats :total="store.notifications.length" :counts="categoryCounts"
+    <MeNotificationHomeStats :total="store.notifications.length" :counts="categoryCounts"
       :active-category="filterState.category"
       @filter-category="cat => filterState.category = filterState.category === cat ? '' : cat" />
 
     <!-- Filters -->
-    <MeNotificationsFilters :model-value="filterState" :has-active-filters="hasActiveFilters"
+    <MeNotificationHomeFilters :model-value="filterState" :has-active-filters="hasActiveFilters"
       @update:status="val => filterState.status = val" @update:priority="val => filterState.priority = val"
       @toggle-sort="toggleSort" @reset="resetFilters" />
 
@@ -19,10 +19,10 @@
         <UiLogoLoader size="xl" />
       </div>
 
-      <MeNotificationsEmpty v-else-if="!filteredNotifications.length" />
+      <MeNotificationHomeEmpty v-else-if="!filteredNotifications.length" />
 
       <div v-else class="divide-y divide-ash">
-        <MeNotificationsCard v-for="notif in filteredNotifications" :key="notif.id" :notification="notif"
+        <MeNotificationHomeCard v-for="notif in filteredNotifications" :key="notif.id" :notification="notif"
           :is-mobile="isMobile" @click="goToDetail" @mark-read="handleMarkAsRead" @delete="handleDelete" />
       </div>
 
@@ -153,7 +153,7 @@ const loadMore = () => {
 }
 
 const goToDetail = (id: string) => {
-  navigateTo(`/dashboard/notifications/${id}`)
+  navigateTo(`/dashboard/notification/${id}`)
 }
 
 const isMobile = ref(false)

@@ -52,7 +52,7 @@ export const dashboardShortcuts: Record<string, ShortcutEntry> = {
   notification: {
     keys: ['d', 'n'],
     label: 'Notification',
-    path: '/dashboard/notifications',
+    path: '/dashboard/notification',
     isGlobal: true,
     group: 'Dashboard',
     modifier: 'Shift'
