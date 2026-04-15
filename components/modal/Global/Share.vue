@@ -79,7 +79,7 @@ const socialLinks = computed(() => {
     {
       name: 'LinkedIn',
       icon: IconBrandLinkedin,
-      url: `https://www.linkedin.com/shareArticle?mini=true&url=${encUrl}&title=${encText}&summary=${encText}&source=${encUrl}`,
+      url: `https://www.linkedin.com/sharing/share-offsite/?url=${encUrl}`,
       containerClass: 'bg-[#0A66C2]/10 hover:bg-[#0A66C2]/20 border border-[#0A66C2]/20 hover:border-[#0A66C2]/30',
       iconClass: 'text-[#0A66C2]'
     },
@@ -93,7 +93,7 @@ const socialLinks = computed(() => {
     {
       name: 'Facebook',
       icon: IconBrandFacebook,
-      url: `https://www.facebook.com/sharer/sharer.php?u=${encUrl}&quote=${encText}`,
+      url: `https://www.facebook.com/sharer/sharer.php?u=${encUrl}`,
       containerClass: 'bg-[#1877F2]/10 hover:bg-[#1877F2]/20 border border-[#1877F2]/20 hover:border-[#1877F2]/30',
       iconClass: 'text-[#1877F2]'
     },
