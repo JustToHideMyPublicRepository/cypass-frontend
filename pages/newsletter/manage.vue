@@ -8,23 +8,23 @@
 
       <div class="p-8 relative z-10">
         <!-- Header -->
-        <RootNewsletterManageHeader :has-access="hasAccess && status === 'success'" :email="email" />
+        <RootNewsletterHeader :has-access="hasAccess && status === 'success'" :email="email" />
 
         <!-- Verification Loader -->
-        <RootNewsletterManageLoader v-if="hasAccess && status === 'loading'" />
+        <RootNewsletterLoader v-if="hasAccess && status === 'loading'" />
 
         <!-- Verification Error -->
-        <RootNewsletterManageError v-else-if="hasAccess && status === 'error'" :message="errorMessage"
+        <RootNewsletterError v-else-if="hasAccess && status === 'error'" :message="errorMessage"
           @reset="status = 'idle'" />
 
         <!-- Management Form (Access Granted) -->
-        <RootNewsletterManageContent v-else-if="hasAccess && status === 'success'" v-model:first-name="firstName"
+        <RootNewsletterContent v-else-if="hasAccess && status === 'success'" v-model:first-name="firstName"
           v-model:last-name="lastName" :preferences="preferences" :loading-key="loadingKey" :loading="loading"
           @blur:profile="handleProfileUpdate" @toggle="(key, value) => togglePreference(key as PreferenceKey, value)"
           @confirm="confirmUnsubscribe = true" />
 
         <!-- Request Access View (No valid token) -->
-        <RootNewsletterManageRequest v-else v-model="requestEmail" :loading="loading" @submit="requestLink" />
+        <RootNewsletterRequest v-else v-model="requestEmail" :loading="loading" @submit="requestLink" />
       </div>
     </div>
 

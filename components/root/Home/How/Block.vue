@@ -45,11 +45,11 @@
           <div class="font-code text-[10px] text-success/40">SYS: STABLE</div>
         </div>
 
-        <!-- Étape 1 : Audit (Terminal) -->
+        <!-- Étape 1 : Audit -->
         <div class="group relative">
           <div class="relative z-10 mx-auto w-full max-w-[320px]">
             <!-- Fenêtre Terminal -->
-            <RootHomeHowItWorksAuditTerminal />
+            <RootHomeHowAudit />
 
             <!-- Description -->
             <div class="mt-6 text-center">
@@ -68,7 +68,7 @@
         <div class="group relative">
           <div class="relative z-10 mx-auto w-full max-w-[320px]">
             <!-- Carte d'identité -->
-            <RootHomeHowItWorksCertificationCard />
+            <RootHomeHowCertification />
 
             <!-- Description -->
             <div class="mt-6 text-center">
@@ -87,7 +87,7 @@
         <div class="group relative">
           <div class="relative z-10 mx-auto w-full max-w-[320px]">
             <!-- Interface Radar -->
-            <RootHomeHowItWorksMonitoringRadar />
+            <RootHomeHowMonitoring />
 
             <!-- Description -->
             <div class="mt-6 text-center">

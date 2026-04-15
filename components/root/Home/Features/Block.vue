@@ -71,12 +71,12 @@
           </div>
 
           <!-- Visuels des composants -->
-          <RootHomeFeaturesDocSentry v-if="service.id === 'docsentry'" />
-          <RootHomeFeaturesVigiTech v-else-if="service.id === 'vigitech'" />
-          <RootHomeFeaturesSecuScan v-else-if="service.id === 'secuscan'" />
-          <RootHomeFeaturesLeakMonitor v-else-if="service.id === 'leakmonitor'" />
+          <RootHomeFeaturesDocsentry v-if="service.id === 'docsentry'" />
+          <RootHomeFeaturesVigitech v-else-if="service.id === 'vigitech'" />
+          <RootHomeFeaturesSecuscan v-else-if="service.id === 'secuscan'" />
+          <RootHomeFeaturesLeakmonitor v-else-if="service.id === 'leakmonitor'" />
 
-          <!-- Image de secours (au cas où) -->
+          <!-- Image de secours -->
           <img v-else-if="service.image" :src="service.image" :alt="service.title"
             class="rounded-3xl w-full object-cover h-[400px] shadow-2xl"
             :class="{ 'grayscale opacity-60': service.status !== 'available' }" />

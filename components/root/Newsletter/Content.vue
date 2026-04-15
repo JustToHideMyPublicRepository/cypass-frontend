@@ -32,11 +32,11 @@
     </div>
 
     <!-- Preferences -->
-    <RootNewsletterManagePreferences :preferences="preferences" :loading-key="loadingKey"
+    <RootNewsletterPreferences :preferences="preferences" :loading-key="loadingKey"
       @toggle="(key, value) => $emit('toggle', key, value)" />
 
     <!-- Unsubscribe Section -->
-    <RootNewsletterManageUnsubscribe :loading="loading" @confirm="$emit('confirm')" />
+    <RootNewsletterUnsubscribe :loading="loading" @confirm="$emit('confirm')" />
   </div>
 </template>
 

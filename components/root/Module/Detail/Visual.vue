@@ -5,16 +5,16 @@
     </div>
 
     <!-- VISUEL: SECUSCAN (Terminal) -->
-    <RootModuleDetailVisualSecuScan v-if="service.id === 'secuscan'" />
+    <RootModuleDetailVisualSecuscan v-if="service.id === 'secuscan'" />
 
     <!-- VISUEL: VIGITECH (Radar) -->
-    <RootModuleDetailVisualVigiTech v-else-if="service.id === 'vigitech'" />
+    <RootModuleDetailVisualVigitech v-else-if="service.id === 'vigitech'" />
 
     <!-- VISUEL: DOCSENTRY (Certificat) -->
-    <RootModuleDetailVisualDocSentry v-else-if="service.id === 'docsentry'" />
+    <RootModuleDetailVisualDocsentry v-else-if="service.id === 'docsentry'" />
 
     <!-- VISUEL: LEAKMONITOR (Explorateur) -->
-    <RootModuleDetailVisualLeakMonitor v-else />
+    <RootModuleDetailVisualLeakmonitor v-else />
   </div>
 </template>
 

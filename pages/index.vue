@@ -3,8 +3,8 @@
     <RootHomeBackground />
     <RootHomeHero />
     <RootHomePartners />
-    <RootHomeHowItWorks />
-    <RootHomeFeatures />
+    <RootHomeHowBlock />
+    <RootHomeFeaturesBlock />
     <RootHomeStats />
     <RootHomeTestimonials />
     <RootHomeFaq />
