@@ -46,7 +46,7 @@
     </div>
 
     <!-- Account Delete Modal -->
-    <ModalSettingDelete :show="showDeleteModal" @close="showDeleteModal = false" />
+    <ModalSecurityDeleteBlock :show="showDeleteModal" @close="showDeleteModal = false" />
   </div>
 </template>
 

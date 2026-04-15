@@ -25,7 +25,8 @@
         :is-logged-in="!!authStore.user" @report="modals.report = true" />
 
       <!-- Section Activité -->
-      <RootUserActivity :public-incidents="publicIncidents" :comments="comments" :user-avatar-url="userAvatarUrl" />
+      <RootUserActivityBlock :public-incidents="publicIncidents" :comments="comments"
+        :user-avatar-url="userAvatarUrl" />
     </div>
 
     <!-- Modal de signalement -->

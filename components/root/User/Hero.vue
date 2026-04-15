@@ -103,7 +103,7 @@
     </div>
 
     <!-- Visionneuse d'image plein écran -->
-    <ModalImageViewer v-if="userAvatarUrl" :show="showImageViewer" :image-url="userAvatarUrl"
+    <ModalGlobalImageViewer v-if="userAvatarUrl" :show="showImageViewer" :image-url="userAvatarUrl"
       @close="showImageViewer = false" />
   </UiBaseCard>
 </template>

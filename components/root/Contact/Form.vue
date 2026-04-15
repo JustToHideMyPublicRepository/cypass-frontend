@@ -8,7 +8,7 @@
     <!-- Titre du formulaire -->
     <h3 class="text-xl md:text-2xl font-bold mb-6 md:mb-8">Envoyez-nous un message</h3>
 
-    <UiTicketDisplay v-if="ticket" :ticket="ticket" class="mb-6 z-10 relative" />
+    <UtilsTicketDisplay v-if="ticket" :ticket="ticket" class="mb-6 z-10 relative" />
 
     <form @submit.prevent="$emit('submit')" class="space-y-4 md:space-y-6 relative z-10">
       <div class="grid md:grid-cols-2 gap-4 md:gap-6">

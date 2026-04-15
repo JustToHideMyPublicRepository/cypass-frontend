@@ -10,7 +10,7 @@
 
     <!-- Paramètres Modale -->
     <ModalShortcutsSetting :show="showSettings" @close="showSettings = false" />
-    <ModalShortcutsExpertDetails :show="showExpert" @close="showExpert = false" />
+    <ModalShortcutsDetails :show="showExpert" @close="showExpert = false" />
   </div>
 </template>
 

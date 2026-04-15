@@ -1,16 +1,15 @@
 <template>
   <div class="space-y-6 md:space-y-8">
-  <MeSecurityHeader :mfa-active="mfaActive" :loading-mfa="loadingMfa" :mfa-disabled-until="mfaDisabledUntil"
+    <MeSecurityHeader :mfa-active="mfaActive" :loading-mfa="loadingMfa" :mfa-disabled-until="mfaDisabledUntil"
       @toggle-mfa="handleMfaToggle" />
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
       <!-- Left: MFA Methods List -->
       <div class="lg:col-span-2 space-y-6">
         <MeSecurityMethods :methods="profilStore.profile?.mfa_methods || []" :loading="isInitialLoading"
-          :updating-method="updatingMethod"
-          @verify-backup-codes="showVerifyModal = true" @set-default="handleSetDefaultMethod"
-          @setup-authenticator="handleSetupAuthenticator" @setup-passkey="showPasskeyModal = true"
-          @toggle-method="handleToggleMethod" />
+          :updating-method="updatingMethod" @verify-backup-codes="showVerifyModal = true"
+          @set-default="handleSetDefaultMethod" @setup-authenticator="handleSetupAuthenticator"
+          @setup-passkey="showPasskeyModal = true" @toggle-method="handleToggleMethod" />
       </div>
 
       <!-- Right: Global Security Info -->
@@ -20,15 +19,15 @@
     </div>
 
     <!-- Modals -->
-    <ModalSecurityVerifyPassword :show="showVerifyModal" :loading="securityStore.loading" :error="securityStore.error"
+    <ModalSecurityCodeVerify :show="showVerifyModal" :loading="securityStore.loading" :error="securityStore.error"
       @close="showVerifyModal = false" @confirm="handleVerifyPassword" />
 
-    <ModalSecurityBackupCodes :show="showCodesModal" :codes="fetchedCodes || []" :expires-at="expiresAt"
+    <ModalSecurityCodeBackup :show="showCodesModal" :codes="fetchedCodes || []" :expires-at="expiresAt"
       :loading="securityStore.loading" @close="showCodesModal = false" @reset="handleRegenerate" />
 
-    <ModalSecurityAuthenticator :show="showAuthenticatorModal" :qr-code-inline="authenticatorData?.qr_code_inline || null"
-      :secret="authenticatorData?.secret || null" :loading="securityStore.loading" @close="showAuthenticatorModal = false"
-      @confirm="handleConfirmAuthenticator" />
+    <ModalSecurityAuthenticator :show="showAuthenticatorModal"
+      :qr-code-inline="authenticatorData?.qr_code_inline || null" :secret="authenticatorData?.secret || null"
+      :loading="securityStore.loading" @close="showAuthenticatorModal = false" @confirm="handleConfirmAuthenticator" />
 
     <ModalSecurityPasskey :show="showPasskeyModal" :loading="securityStore.loading" @close="showPasskeyModal = false"
       @success="showPasskeyModal = false" />
@@ -75,7 +74,7 @@ onMounted(async () => {
 const handleSetupAuthenticator = async () => {
   authenticatorData.value = null
   showAuthenticatorModal.value = true
-  
+
   const data = await securityStore.authenticatorSetup()
   if (data) {
     authenticatorData.value = data
@@ -133,7 +132,7 @@ const handleToggleMethod = async (method: string, action: 'enable' | 'disable' |
   if (method === 'totp' && action !== 'enable') return
 
   updatingMethod.value = method
-  
+
   let success = false
   if (action === 'reset' && method === 'security_code') {
     // Specialized logic for security codes reset
@@ -154,7 +153,7 @@ const handleToggleMethod = async (method: string, action: 'enable' | 'disable' |
   } else {
     toastStore.showToast('error', 'Erreur', securityStore.error || 'Impossible de mettre à jour la méthode.')
   }
-  
+
   updatingMethod.value = null
 }
 

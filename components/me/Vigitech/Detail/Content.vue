@@ -50,7 +50,7 @@
     </div>
 
     <!-- Image Viewer Modal -->
-    <ModalImageViewer :show="viewer.show" :imageUrl="viewer.url" @close="viewer.show = false" />
+    <ModalGlobalImageViewer :show="viewer.show" :imageUrl="viewer.url" @close="viewer.show = false" />
   </div>
 </template>
 

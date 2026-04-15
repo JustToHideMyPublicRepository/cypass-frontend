@@ -1,6 +1,6 @@
 <template>
   <div class="space-y-6">
-    <UiBreadcrumbs :items="[
+    <UiAppBreadcrumbs :items="[
       { label: 'Tableau de bord', path: '/dashboard' },
       { label: 'DocSentry', path: '/dashboard/docsentry' },
       { label: filename || 'Détails' }

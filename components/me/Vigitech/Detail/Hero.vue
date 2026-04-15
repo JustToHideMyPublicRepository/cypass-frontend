@@ -1,6 +1,6 @@
 <template>
   <div class="space-y-4 animate-fade-in">
-    <UiBreadcrumbs :items="[
+    <UiAppBreadcrumbs :items="[
       { label: 'Tableau de bord', path: '/dashboard' },
       { label: 'VigiTech', path: '/dashboard/vigitech' },
       { label: decodeHtmlEntities(incident?.title || 'Détail de l\'incident') }

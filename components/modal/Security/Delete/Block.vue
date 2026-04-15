@@ -3,14 +3,14 @@
     <div class="space-y-8 py-2">
 
       <!-- Étape 1 : Conditions et Impact -->
-      <ModalSettingDeleteStep1 v-if="step === 1" @cancel="closeModal" @next="nextStep" />
+      <ModalSecurityDeleteStep1 v-if="step === 1" @cancel="closeModal" @next="nextStep" />
 
       <!-- Étape 2 : Validation des Statistiques -->
-      <ModalSettingDeleteStep2 v-else-if="step === 2" v-model="verificationStats" :statistics="profilStore.statistics"
+      <ModalSecurityDeleteStep2 v-else-if="step === 2" v-model="verificationStats" :statistics="profilStore.statistics"
         :is-valid="isValidStats" @cancel="closeModal" @next="nextStep" />
 
       <!-- Étape 3 : Confirmation par Mot de Passe -->
-      <ModalSettingDeleteStep3 v-else-if="step === 3" v-model:password="password" :show-password="showPassword"
+      <ModalSecurityDeleteStep3 v-else-if="step === 3" v-model:password="password" :show-password="showPassword"
         :error="error" :loading="loading" @toggle-password="showPassword = !showPassword" @cancel="closeModal"
         @confirm="confirmDelete" />
     </div>

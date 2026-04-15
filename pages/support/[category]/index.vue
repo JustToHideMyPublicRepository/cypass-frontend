@@ -2,7 +2,7 @@
   <div class="relative pb-12 md:pb-20 px-4 sm:px-6 lg:px-8">
     <div class="max-w-7xl mx-auto space-y-8 md:space-y-12">
       <!-- Fil d'Ariane -->
-      <UiBreadcrumbs :items="breadcrumbItems" />
+      <UiAppBreadcrumbs :items="breadcrumbItems" />
 
       <!-- En-tête de catégorie -->
       <div v-if="category" class="flex flex-col md:flex-row md:items-center gap-6 animate-fade-in">

@@ -21,7 +21,7 @@
           <p class="text-sm text-hsa mb-6">
             Votre demande de partenariat a été bien reçue. Conservez ce numéro de ticket pour tout suivi.
           </p>
-          <UiTicketDisplay :ticket="ticketNumber" />
+          <UtilsTicketDisplay :ticket="ticketNumber" />
         </div>
         <UiBaseButton type="button" @click="closeAndReset" class="!rounded-2xl font-bold" block>
           Fermer

@@ -1,7 +1,7 @@
 <template>
   <div class="relative min-h-[85vh] py-12 px-4">
     <div class="max-w-6xl mx-auto space-y-8">
-      <UiBreadcrumbs :items="[
+      <UiAppBreadcrumbs :items="[
         { label: 'Accueil', path: '/' },
         { label: 'VigiTech', path: '/vigitech' },
         { label: decodeHtmlEntities(incident?.title || 'Détail de l\'incident') }

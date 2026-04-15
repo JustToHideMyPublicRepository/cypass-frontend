@@ -66,7 +66,7 @@
     <ModalProfileAvatar :show="showAvatarModal" :current-avatar="user?.avatar_url" :is-loading="profilStore.loading"
       @close="showAvatarModal = false" @submit="handleAvatarUpload" @delete="handleAvatarDelete" />
 
-    <ModalImageViewer v-if="authStore.avatarUrl" :show="showImageViewer" :image-url="authStore.avatarUrl"
+    <ModalGlobalImageViewer v-if="authStore.avatarUrl" :show="showImageViewer" :image-url="authStore.avatarUrl"
       @close="showImageViewer = false" />
   </div>
 </template>
