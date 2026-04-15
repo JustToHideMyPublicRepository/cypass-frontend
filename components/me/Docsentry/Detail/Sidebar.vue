@@ -36,7 +36,8 @@
     </div>
 
     <!-- Multi-Version Generation History -->
-    <MeDocsentryDetailGenerationHistory v-if="multiVersionGenerationCount !== undefined && multiVersionGenerationCount > 0"
+    <MeDocsentryDetailGenerationHistory
+      v-if="multiVersionGenerationCount !== undefined && multiVersionGenerationCount > 0"
       :generations="multiVersionGenerations || []" :count="multiVersionGenerationCount" />
 
     <!-- MultiVersion Generation Form -->

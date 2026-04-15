@@ -73,6 +73,9 @@
       @close="showReportModal = false" @success="$emit('fetch')" />
 
     <ModalVigitechPreference :show="showSettingsModal" @close="showSettingsModal = false" />
+
+    <ModalGlobalShare :show="showShareModal" :title="`Cyber-Alerte CYPASS: ${incident?.title}`"
+      :text="`${incident?.description?.substring(0, 100)}...`" :url="shareUrl" @close="showShareModal = false" />
   </div>
 </template>
 
@@ -93,32 +96,17 @@ const toast = useToastStore()
 const { getAdvice } = useVigitechAdvice()
 const showReportModal = ref(false)
 const showSettingsModal = ref(false)
+const showShareModal = ref(false)
+const shareUrl = ref('')
 
 const isOwnIncident = computed(() => {
   return !!(authStore.user && props.incident?.user_id === authStore.user.id)
 })
 
-const shareIncident = async () => {
+const shareIncident = () => {
   if (!props.incident) return
-  const fullUrl = window.location.href
-  const shareData = {
-    title: `Cyber-Alerte CYPASS: ${props.incident.title}`,
-    text: `${props.incident.description.substring(0, 100)}...`,
-    url: fullUrl
-  }
-
-  try {
-    if (navigator.share) {
-      await navigator.share(shareData)
-    } else {
-      await navigator.clipboard.writeText(fullUrl)
-      toast.showToast('success', 'Lien copié', 'Le lien de l\'incident a été copié.')
-    }
-  } catch (err) {
-    if (err instanceof Error && err.name !== 'AbortError') {
-      console.warn('Share failed', err)
-    }
-  }
+  shareUrl.value = window.location.href
+  showShareModal.value = true
 }
 
 const getFullUrl = (path: string) => {

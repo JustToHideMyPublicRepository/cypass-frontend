@@ -36,6 +36,10 @@
           @refresh-doc="startPollingForVersions" />
       </div>
     </div>
+
+    <!-- Modals -->
+    <ModalGlobalShare :show="showShareModal" :title="shareTitle" :text="shareText" :url="shareUrl"
+      @close="showShareModal = false" />
   </div>
 </template>
 
@@ -62,6 +66,11 @@ const copiedFields = reactive<Record<string, boolean>>({
 const sort = ref('recent')
 const search = ref('')
 const isFiltering = ref(false)
+
+const showShareModal = ref(false)
+const shareUrl = ref('')
+const shareTitle = ref('')
+const shareText = ref('')
 
 const copyField = (text: string, field: string) => {
   navigator.clipboard.writeText(text)
@@ -130,28 +139,13 @@ const downloadZip = async () => {
   }
 }
 
-const shareDocument = async () => {
+const shareDocument = () => {
   if (!doc.value) return
 
-  const publicUrl = `${window.location.origin}/verify?h=${doc.value.hash}`
-  const shareData = {
-    title: `Document CYPASS: ${doc.value.filename}`,
-    text: `Vérifiez l'authenticité de ce document certifié par CYPASS.`,
-    url: publicUrl
-  }
-
-  try {
-    if (navigator.share) {
-      await navigator.share(shareData)
-    } else {
-      await navigator.clipboard.writeText(publicUrl)
-      toast.showToast('success', 'Lien public copié', 'Le lien de vérification a été copié dans le presse-papier.')
-    }
-  } catch (err) {
-    if (err instanceof Error && err.name !== 'AbortError') {
-      console.warn('Share failed', err)
-    }
-  }
+  shareUrl.value = `${window.location.origin}/verify?h=${doc.value.hash}`
+  shareTitle.value = `Document CYPASS: ${doc.value.filename}`
+  shareText.value = `Vérifiez l'authenticité de ce document certifié par CYPASS.`
+  showShareModal.value = true
 }
 
 onMounted(() => {

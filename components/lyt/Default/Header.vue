@@ -128,46 +128,14 @@ const planBorderClass = computed(() => getPlanBorderClass(profilStore.profile?.p
 const planBadgeClass = computed(() => getPlanBadgeClass(profilStore.profile?.plan?.name))
 
 const dropdownLinks = [
-  {
-    label: 'Mon profil',
-    path: '/dashboard/profile',
-    icon: IconUser
-  },
-  {
-    label: 'Sessions',
-    path: '/dashboard/sessions',
-    icon: IconDevices
-  },
-  {
-    label: 'Journal d\'activité',
-    path: '/dashboard/activities',
-    icon: IconActivity
-  },
-  {
-    label: 'Sécurité',
-    path: '/dashboard/security',
-    icon: IconLock
-  },
-  {
-    label: 'Paramètres',
-    path: '/dashboard/settings',
-    icon: IconSettings
-  },
-  {
-    label: 'Centre d\'alertes',
-    path: '/dashboard/reports',
-    icon: IconFlag
-  },
-  {
-    label: 'Raccourcis clavier',
-    path: '/system/shortcuts',
-    icon: IconKeyboard
-  },
-  {
-    label: 'Aide & support',
-    path: '/support',
-    icon: IconHelp
-  }
+  { label: 'Mon profil', path: '/dashboard/profile', icon: IconUser },
+  { label: 'Sessions', path: '/dashboard/sessions', icon: IconDevices },
+  { label: 'Journal d\'activité', path: '/dashboard/activities', icon: IconActivity },
+  { label: 'Sécurité', path: '/dashboard/security', icon: IconLock },
+  { label: 'Paramètres', path: '/dashboard/settings', icon: IconSettings },
+  { label: 'Centre d\'alertes', path: '/dashboard/reports', icon: IconFlag },
+  { label: 'Raccourcis clavier', path: '/system/shortcuts', icon: IconKeyboard },
+  { label: 'Aide & support', path: '/support', icon: IconHelp }
 ]
 
 defineEmits(['toggle-menu', 'logout'])

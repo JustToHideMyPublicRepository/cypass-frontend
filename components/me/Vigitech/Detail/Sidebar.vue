@@ -102,6 +102,9 @@
       message="Êtes-vous sûr de vouloir supprimer cet incident ? Cette action est irréversible."
       confirm-text="Supprimer" :loading="deleting" variant="danger" @cancel="showDeleteConfirm = false"
       @confirm="handleDelete" />
+
+    <ModalGlobalShare :show="showShareModal" :title="`Cyber-Alerte CYPASS: ${incident?.title}`"
+      :text="`${incident?.description?.substring(0, 100)}...`" :url="shareUrl" @close="showShareModal = false" />
   </div>
 </template>
 
@@ -123,6 +126,8 @@ const showEditModal = ref(false)
 const showSettingsModal = ref(false)
 const showDeleteConfirm = ref(false)
 const deleting = ref(false)
+const showShareModal = ref(false)
+const shareUrl = ref('')
 
 const handleDelete = async () => {
   if (!props.incident?.id) return
@@ -160,28 +165,11 @@ const getFullUrl = (path: string) => {
   return `/evidence/${path}`
 }
 
-const shareIncident = async () => {
+const shareIncident = () => {
   if (!props.incident) return
   const baseUrl = config.publicUrl || window.location.origin
-  const shareUrl = `${baseUrl}/vigitech/${props.incident.id}`
-  const shareData = {
-    title: `Cyber-Alerte CYPASS: ${props.incident.title}`,
-    text: `${props.incident.description.substring(0, 100)}...`,
-    url: shareUrl
-  }
-
-  try {
-    if (navigator.share) {
-      await navigator.share(shareData)
-    } else {
-      await navigator.clipboard.writeText(shareUrl)
-      toast.showToast('success', 'Lien copié', 'Le lien de l\'incident a été copié.')
-    }
-  } catch (err) {
-    if (err instanceof Error && err.name !== 'AbortError') {
-      console.warn('Share failed', err)
-    }
-  }
+  shareUrl.value = `${baseUrl}/vigitech/${props.incident.id}`
+  showShareModal.value = true
 }
 
 const downloadEvidence = () => {

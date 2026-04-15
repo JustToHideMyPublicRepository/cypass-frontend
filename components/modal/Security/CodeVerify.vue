@@ -52,7 +52,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { IconShieldLock, IconEye, IconEyeOff, IconAlertCircle } from '@tabler/icons-vue'
 
 const props = defineProps<{
@@ -69,6 +69,13 @@ const showPassword = ref(false)
 const handleConfirm = () => {
   if (!password.value) return
   emit('confirm', password.value)
-  password.value = ''
 }
+
+// Reset state when modal closes
+watch(() => props.show, (newVal) => {
+  if (!newVal) {
+    password.value = ''
+    showPassword.value = false
+  }
+})
 </script>

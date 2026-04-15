@@ -82,17 +82,16 @@
     </div>
 
     <!-- Pagination -->
-    <MeDocsentryHomeListPagination 
-      :current-page="currentPage" 
-      :total-pages="totalPages" 
-      @next-page="$emit('next-page')" 
-      @prev-page="$emit('prev-page')" 
-    />
+    <MeDocsentryHomeListPagination :current-page="currentPage" :total-pages="totalPages" @next-page="$emit('next-page')"
+      @prev-page="$emit('prev-page')" />
+
+    <ModalGlobalShare :show="showShareModal" :title="shareTitle" :text="shareText" :url="shareUrl"
+      @close="showShareModal = false" />
   </UiBaseCard>
 </template>
 
 <script setup lang="ts">
-import { IconFile, IconDownload, IconEye, IconCopy, IconCheck, IconShare, IconFiles } from '@tabler/icons-vue'
+import { IconDownload, IconEye, IconCopy, IconCheck, IconShare } from '@tabler/icons-vue'
 import { ref } from 'vue'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
@@ -115,6 +114,10 @@ const toast = useToastStore()
 const userDocsentryStore = useUserDocsentryStore()
 const { showMenu } = useContextMenu()
 
+const showShareModal = ref(false)
+const shareUrl = ref('')
+const shareTitle = ref('')
+const shareText = ref('')
 const copiedHashes = ref(new Set<string>())
 
 const copyHash = (hash: string, id: string) => {
@@ -124,26 +127,11 @@ const copyHash = (hash: string, id: string) => {
   setTimeout(() => copiedHashes.value.delete(id), 2000)
 }
 
-const shareDocument = async (doc: Document) => {
-  const publicUrl = `${window.location.origin}/verify?h=${doc.hash}`
-  const shareData = {
-    title: `Document CYPASS: ${doc.filename}`,
-    text: `Vérifiez l'authenticité de ce document certifié par CYPASS.`,
-    url: publicUrl
-  }
-
-  try {
-    if (navigator.share) {
-      await navigator.share(shareData)
-    } else {
-      await navigator.clipboard.writeText(publicUrl)
-      toast.showToast('success', 'Lien public copié', 'Le lien de vérification a été copié.')
-    }
-  } catch (err) {
-    if (err instanceof Error && err.name !== 'AbortError') {
-      console.warn('Share failed', err)
-    }
-  }
+const shareDocument = (doc: Document) => {
+  shareUrl.value = `${window.location.origin}/verify?h=${doc.hash}`
+  shareTitle.value = `Document CYPASS: ${doc.filename}`
+  shareText.value = `Vérifiez l'authenticité de ce document certifié par CYPASS.`
+  showShareModal.value = true
 }
 
 const handleContextMenu = (doc: Document, e: MouseEvent) => {

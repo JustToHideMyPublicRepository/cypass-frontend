@@ -7,11 +7,12 @@
       <div class="flex gap-3 sm:gap-4 flex-1 min-w-0">
         <!-- Date Block -->
         <div class="text-hsa shrink-0">
-          <div class="text-center w-12 pt-1" 
-               :class="{ 'opacity-60 transition-opacity cursor-help': isModified }"
-               :title="(isModified && incident.updated_at) ? `Modifié ${formatTimeDiff(incident.created_at, incident.updated_at)} après la publication` : undefined">
-            <div class="text-[10px] font-black uppercase tracking-tighter">{{ incident.created_at ? formatMonth(incident.created_at) : '-' }}</div>
-            <div class="text-2xl font-black leading-none text-BtW">{{ incident.created_at ? getDay(incident.created_at) : '-' }}</div>
+          <div class="text-center w-12 pt-1" :class="{ 'opacity-60 transition-opacity cursor-help': isModified }"
+            :title="(isModified && incident.updated_at) ? `Modifié ${formatTimeDiff(incident.created_at, incident.updated_at)} après la publication` : undefined">
+            <div class="text-[10px] font-black uppercase tracking-tighter">{{ incident.created_at ?
+              formatMonth(incident.created_at) : '-' }}</div>
+            <div class="text-2xl font-black leading-none text-BtW">{{ incident.created_at ? getDay(incident.created_at)
+              : '-' }}</div>
           </div>
         </div>
 
@@ -121,6 +122,8 @@
         <IconLock class="w-3.5 h-3.5" /> Masqué au public : {{ incident.blocking_reason || 'Motif non spécifié' }}
       </div>
     </div>
+    <ModalGlobalShare :show="showShareModal" :title="`Cyber-Alerte CYPASS: ${incident.title}`"
+      :text="`${incident.description.substring(0, 100)}...`" :url="shareUrl" @close="showShareModal = false" />
   </UiBaseCard>
 </template>
 
@@ -145,6 +148,9 @@ const emit = defineEmits(['report', 'edit', 'delete'])
 const toast = useToastStore()
 const authStore = useAuthStore()
 const { showMenu } = useContextMenu()
+
+const showShareModal = ref(false)
+const shareUrl = ref('')
 
 const isOwnIncident = computed(() => {
   return !!(authStore.user && props.incident.user_id === authStore.user.id)
@@ -219,26 +225,9 @@ const handleReport = () => {
   toast.showToast('info', 'Signalement', 'Ouverture du formulaire de signalement...')
 }
 
-const shareIncident = async () => {
-  const fullUrl = `${window.location.origin}/vigitech/${props.incident.id}`
-  const shareData = {
-    title: `Cyber-Alerte CYPASS: ${props.incident.title}`,
-    text: `${props.incident.description.substring(0, 100)}...`,
-    url: fullUrl
-  }
-
-  try {
-    if (navigator.share) {
-      await navigator.share(shareData)
-    } else {
-      await navigator.clipboard.writeText(fullUrl)
-      toast.showToast('success', 'Lien copié', 'Le lien de l\'incident a été copié.')
-    }
-  } catch (err) {
-    if (err instanceof Error && err.name !== 'AbortError') {
-      console.warn('Share failed', err)
-    }
-  }
+const shareIncident = () => {
+  shareUrl.value = `${window.location.origin}/vigitech/${props.incident.id}`
+  showShareModal.value = true
 }
 
 const statusClass = computed(() => {

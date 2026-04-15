@@ -112,17 +112,15 @@ const NavHeader = [
 const getAuthLinks = (forMobile: boolean) => {
   const links = [
     { label: 'Tableau de bord', path: '/dashboard', type: 'link', mobile: true },
-    { label: 'Mon profil', path: '/dashboard/profile', type: 'link' },
-    { label: "Journal d'activité", path: '/dashboard/activities', type: 'link' },
-    { label: 'Sessions actives', path: '/dashboard/sessions', type: 'link' },
-    { label: 'Centre d\'alertes', path: '/dashboard/reports', type: 'link' },
+    { label: 'Mon profil', path: '/dashboard/profile', type: 'link', mobile: true },
+    { label: 'Mes sessions', path: '/dashboard/sessions', type: 'link', mobile: true },
+    { label: "Mes activités", path: '/dashboard/activities', type: 'link', mobile: true },
+    { label: 'Sécurité', path: '/dashboard/security', type: 'link', mobile: true },
+    { label: 'Paramètres', path: '/dashboard/settings', type: 'link', mobile: true },
+    { label: 'Centre d\'alertes', path: '/dashboard/reports', type: 'link', mobile: true },
     {
-      label: 'Déconnexion',
-      path: 'logout',
-      type: 'button',
-      action: handleLogout,
-      class: 'text-danger hover:bg-danger/10',
-      mobile: true
+      label: 'Déconnexion', path: 'logout', type: 'button', mobile: true,
+      action: handleLogout, class: 'text-danger hover:bg-danger/10',
     },
   ]
 
