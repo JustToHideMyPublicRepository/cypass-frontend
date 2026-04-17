@@ -72,7 +72,7 @@ interface Testimonial {
 const testimonials: Testimonial[] = [
   {
     initials: 'VG',
-    author: 'Vincent Gbenon',
+    author: 'Vincent Gbenonde',
     role: 'Directeur Général',
     quote: 'CYPASS nous a permis d\'accélérer la dématérialisation de nos procédures administratives tout en garantissant une conformité totale avec le Code du Numérique.',
     organization: 'QUICK LIFE',
