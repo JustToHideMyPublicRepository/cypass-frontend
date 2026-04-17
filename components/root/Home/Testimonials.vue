@@ -71,27 +71,27 @@ interface Testimonial {
 
 const testimonials: Testimonial[] = [
   {
-    initials: 'AD',
-    author: 'Alain Dossou',
-    role: 'DSI, Ministère du Numérique',
+    initials: 'VG',
+    author: 'Vincent Gbenon',
+    role: 'Directeur Général',
     quote: 'CYPASS nous a permis d\'accélérer la dématérialisation de nos procédures administratives tout en garantissant une conformité totale avec le Code du Numérique.',
-    organization: 'Gouvernement',
+    organization: 'QUICK LIFE',
     icon: IconBuildingSkyscraper
   },
   {
-    initials: 'SK',
-    author: 'Sarah Kouton',
-    role: 'CISO, Banque Atlantique',
+    initials: 'DH',
+    author: 'Delluc Hounmenou',
+    role: 'Chief Executive Officer',
     quote: 'La solution DocSentry est la seule sur le marché à offrir ce niveau de garantie juridique pour nos signatures électroniques. Indispensable pour notre secteur.',
-    organization: 'Secteur Bancaire',
+    organization: 'HODD Global',
     icon: IconBuildingBank
   },
   {
-    initials: 'JP',
-    author: 'Jean-Paul Agbo',
-    role: 'Directeur Technique, InnovTech',
+    initials: 'AC',
+    author: 'Archimède Codjovi',
+    role: 'Responsable commercial',
     quote: 'Avec VigiTech, nous avons une visibilité en temps réel sur les menaces émergentes. C\'est comme avoir une équipe SOC dédiée, mais mutualisée.',
-    organization: 'Technologie',
+    organization: 'Univers Plus',
     icon: IconServer
   }
 ]
