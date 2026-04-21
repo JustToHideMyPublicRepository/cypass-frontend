@@ -6,7 +6,7 @@
     <RootHomeHowBlock />
     <RootHomeFeaturesBlock />
     <RootHomeStats />
-    <RootHomeTestimonials />
+    <!-- <RootHomeTestimonials /> -->
     <RootHomeFaq />
     <RootHomeCta />
   </div>

@@ -119,6 +119,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     cypassBaseAPI: process.env.CYPASS_API_URL,
+    supportBaseAPI: process.env.SUPPORT_API_URL,
     public: {}
   },
 
