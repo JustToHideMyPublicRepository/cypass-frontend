@@ -11,7 +11,7 @@
               <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
             </span>
             <span class="text-xs font-bold uppercase tracking-widest">
-              Sécurité & Confiance Absolue</span>
+              Certifiez. Signalez. Protégez</span>
           </div>
 
           <h1
@@ -37,9 +37,13 @@
           </h1>
 
           <p class="text-hsa max-w-2xl mx-auto lg:mx-0 leading-relaxed font-light">
-            <span class="font-bold">DocSentry</span> certifie chaque document avec une empreinte
-            cryptographique infalsifiable. <span class="font-bold">VigiTech</span> transforme
-            chaque citoyen en lanceur d'alerte cyber protégé. Un seul outil.
+            Avec CYPASS, <NuxtLink to="/verify"
+              class="font-bold hover:underline decoration-primary decoration-2 underline-offset-4 transition-all">chaque
+              document</NuxtLink> que vous
+            émettez devient une preuve, <NuxtLink to="/vigitech"
+              class="font-bold hover:underline decoration-primary decoration-2 underline-offset-4 transition-all">chaque
+              incident</NuxtLink> que vous signalez devient
+            une alerte et <span class="font-bold">chaque donnée sensible</span> devient surveillée.
           </p>
 
           <!-- Boutons -->
@@ -70,15 +74,10 @@
 
           <div
             class="pt-10 grid grid-cols-2 lg:flex lg:flex-wrap items-center justify-center lg:justify-start gap-4 lg:gap-6 text-xs md:text-sm font-semibold text-hsa">
-            <div
+            <div v-for="feature in heroFeatures" :key="feature.label"
               class="flex items-center gap-2 bg-WtB/50 px-3 md:px-4 py-2 rounded-lg backdrop-blur-sm border border-ash/50">
-              <IconShieldCheck class="w-5 h-5 text-primary" />
-              <span>Données chiffrées</span>
-            </div>
-            <div
-              class="flex items-center gap-2 bg-WtB/50 px-3 md:px-4 py-2 rounded-lg backdrop-blur-sm border border-ash/50">
-              <IconServer class="w-5 h-5 text-primary" />
-              <span>Hébergé au Bénin</span>
+              <component :is="feature.icon" class="w-5 h-5 text-primary" />
+              <span>{{ feature.label }}</span>
             </div>
           </div>
         </div>
@@ -151,10 +150,16 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
-import { IconShieldCheck, IconServer, IconArrowRight, IconShield, IconFileCheck, IconRosetteDiscountCheck, IconFingerprint } from '@tabler/icons-vue'
+import { IconShieldCheck, IconArrowRight, IconShield, IconFileCheck, IconRosetteDiscountCheck, IconFingerprint, IconWorld } from '@tabler/icons-vue'
 import { useAuthStore } from '~/stores/back/user/auth'
 
 const authStore = useAuthStore()
+
+const heroFeatures = [
+  { label: 'Souveraineté', icon: markRaw(IconShieldCheck) },
+  { label: 'Intégrité', icon: markRaw(IconRosetteDiscountCheck) },
+  { label: 'Accessibilité', icon: markRaw(IconWorld) }
+]
 
 const animatedRoles = [
   'certifier vos contrats.',
