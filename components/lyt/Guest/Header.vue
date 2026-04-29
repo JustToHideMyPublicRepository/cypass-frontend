@@ -14,7 +14,8 @@
                 <img src="/img/logo.png" alt="Logo CYPASS" class="w-full h-full object-contain" />
               </div>
             </div>
-            <span class="text-xl font-bold tracking-tight group-hover:text-BtW transition-colors">
+            <span class="text-xl font-bold tracking-tight group-hover:text-BtW transition-all duration-300"
+              :class="scrolled ? 'opacity-0 max-w-0 pointer-events-none' : 'opacity-100 max-w-[200px] ml-2'">
               CYPASS
             </span>
           </NuxtLink>
@@ -40,7 +41,7 @@
               </template>
 
               <UiBaseButton v-else to="/auth/login" v-tooltip="getLinkTooltip('/auth/login')"
-                class="px-5 py-2.5 rounded-full text-sm">
+                class="px-5 py-2.5 rounded-xl text-sm font-bold shadow-BtW/20">
                 Connexion
               </UiBaseButton>
             </template>

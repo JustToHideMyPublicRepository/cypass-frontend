@@ -14,11 +14,11 @@
             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
             <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
           </span>
-          Pipeline de Confiance
+          Comment ça marche ?
         </span>
         <h2 class="font-extrabold text-BtW tracking-tight">
-          Comment ça <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-success">
-            marche ?</span>
+          Protection en <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-success">
+            temps réel </span>
         </h2>
         <p class="text-hsa leading-relaxed">
           Un processus fluide, étape par étape, pour garantir votre sécurité numérique.

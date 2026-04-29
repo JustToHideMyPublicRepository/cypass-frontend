@@ -7,8 +7,8 @@
           <IconShieldCheck class="w-7 h-7" />
         </div>
         <div>
-          <h3 class="text-3xl md:text-4xl font-black text-BtW tracking-tighter">VigiTech</h3>
-          <p class="text-secondary font-bold uppercase tracking-widest text-[10px]">Signalement & Veille</p>
+          <h3 class="font-black text-BtW tracking-tighter">VigiTech</h3>
+          <p class="text-secondary font-bold uppercase tracking-widest text-xs">Signalement & Veille</p>
         </div>
       </div>
 

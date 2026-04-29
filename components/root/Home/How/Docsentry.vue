@@ -7,8 +7,8 @@
           <IconFileCheck class="w-7 h-7" />
         </div>
         <div>
-          <h3 class="text-3xl md:text-4xl font-black text-BtW tracking-tighter">DocSentry</h3>
-          <p class="text-primary font-bold uppercase tracking-widest text-[10px]">Certification & Vérification</p>
+          <h3 class="font-black text-BtW tracking-tighter">DocSentry</h3>
+          <p class="text-primary font-bold uppercase tracking-widest text-xs">Certification & Vérification</p>
         </div>
       </div>
 
