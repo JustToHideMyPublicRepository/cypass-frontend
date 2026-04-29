@@ -2,7 +2,7 @@ import type { ShortcutEntry } from './index'
 
 export const pageShortcuts: Record<string, ShortcutEntry> = {
   about: {
-    keys: ['a'],
+    keys: ['o'],
     label: 'À propos',
     path: '/about',
     isGlobal: true,

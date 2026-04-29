@@ -1,5 +1,5 @@
 <template>
-  <section class="relative py-8">
+  <section class="relative py-8 overflow-hidden lg:overflow-visible">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       <div class="grid lg:grid-cols-2 gap-16 items-center">
         <!-- Texte -->
@@ -11,14 +11,14 @@
               <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
             </span>
             <span class="text-xs font-bold uppercase tracking-widest">
-              Plateforme nationale unifiée</span>
+              Sécurité & Confiance Absolue</span>
           </div>
 
           <h1
-            class="text-4xl md:text-7xl font-extrabold tracking-tight leading-[1.1] text-transparent bg-clip-text bg-gradient-to-r from-textClr via-hsa to-BtW leading-tight">
-            Souveraineté <br />
+            class="font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-textClr via-hsa to-BtW leading-tight">
+            Votre bouclier <br class="hidden lg:block" />
             <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-success relative">
-              Numérique
+              numérique
               <svg class="absolute w-full h-3 -bottom-1 left-0 text-primary opacity-30" viewBox="0 0 200 9" fill="none"
                 xmlns="http://www.w3.org/2000/svg">
                 <path
@@ -26,13 +26,20 @@
                   stroke="currentColor" stroke-width="3" stroke-linecap="round" />
               </svg>
             </span>
-            & Sécurité
+            pour
+            <div
+              class="h-[1.5em] lg:h-[1.2em] relative overflow-hidden block w-full mt-2 lg:mt-4 text-[0.8em] md:text-[0.7em] lg:text-[0.65em] font-black">
+              <span class="text-transparent bg-clip-text bg-gradient-to-r from-secondary to-primary inline-block">
+                {{ currentText }}
+              </span>
+              <span class="inline-block w-[3px] h-[0.9em] bg-primary animate-pulse align-middle ml-1"></span>
+            </div>
           </h1>
 
-          <p class="text-lg md:text-2xl text-hsa max-w-2xl mx-auto lg:mx-0 leading-relaxed font-light">
-            L'infrastructure de confiance protégeant l'écosystème numérique du Bénin.
-            <span class="font-semibold text-primary">Certification, Veille & Audit</span>
-            en temps réel.
+          <p class="text-hsa max-w-2xl mx-auto lg:mx-0 leading-relaxed font-light">
+            <span class="font-bold">DocSentry</span> certifie chaque document avec une empreinte
+            cryptographique infalsifiable. <span class="font-bold">VigiTech</span> transforme
+            chaque citoyen en lanceur d'alerte cyber protégé. Un seul outil.
           </p>
 
           <!-- Boutons -->
@@ -77,99 +84,65 @@
         </div>
 
         <!-- Composition de carte de verre -->
-        <div class="relative hidden lg:block perspective-1000 animate-fade-left">
-
-          <!-- Éléments d'arrière-plan flottants -->
+        <div class="relative w-full perspective-1000 animate-fade-left mt-8 lg:mt-0">
           <div
             class="absolute -top-20 -right-20 w-64 h-64 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full blur-[80px] opacity-40 animate-pulse-slow">
           </div>
 
-          <!-- Carte principale du Tableau de Bord -->
-          <UiAppFrame type="browser" url="https://secure.cypass.bj/dashboard" :glass="true" rounded="rounded-3xl"
-            padding="p-0"
-            class="transform rotate-y-12 rotate-x-6 hover:rotate-0 transition-all duration-700 ease-out z-20 group">
-            <!-- Contenu du Tableau de Bord -->
-            <div class="bg-bgClr p-6 rounded-b-2xl h-[450px] relative overflow-hidden">
+          <UiAppFrame type="browser" url="https://verify.cypass.bj/" :glass="true" rounded="rounded-3xl" padding="p-0"
+            class="w-full max-w-full lg:w-auto transform lg:translate-x-1/5 xl:translate-x-1/3 transition-transform duration-700 ease-out z-20 shadow-2xl mx-auto">
 
+            <div
+              class="bg-bgClr p-4 md:p-6 rounded-b-2xl h-auto md:h-[450px] relative overflow-hidden w-full lg:w-[500px] xl:w-[600px] max-w-full">
               <!-- Grille décorative -->
               <div
                 class="absolute inset-0 bg-[url('https://heropatterns.com/img/patterns/circuit-board.png')] opacity-5">
               </div>
 
-              <div class="grid grid-cols-2 gap-4 relative z-10">
-                <!-- Carte de statistiques -->
-                <div
-                  class="col-span-2 bg-gradient-to-r from-primary to-secondary rounded-2xl p-6 text-ash shadow-lg relative overflow-hidden group/card">
-                  <div class="absolute top-0 right-0 p-3 opacity-20">
-                    <IconShieldLock class="w-24 h-24 rotate-12" />
-                  </div>
-                  <h3 class="text-sm font-medium mb-1">Niveau de menace</h3>
-                  <div class="text-WtB text-4xl font-bold mb-4 flex items-center gap-3">
-                    Faible
-                    <span
-                      class="px-2 py-1 bg-success/20 text-success border border-success/30 text-xs rounded-full">Stable</span>
-                  </div>
-                  <div class="w-full bg-black/20 rounded-full h-2 mb-2">
-                    <div class="bg-success h-2 rounded-full w-[15%] shadow-[0_0_10px_rgba(74,222,128,0.5)]">
-                    </div>
-                  </div>
-                  <p class="text-xs">Dernière mise à jour: à l'instant</p>
+              <!-- Fake Verify UI -->
+              <div
+                class="p-6 md:p-8 rounded-3xl bg-success/5 border border-success/20 relative z-10 shadow-lg text-left">
+                <div class="absolute top-0 right-0 p-6 opacity-10">
+                  <IconRosetteDiscountCheck class="w-24 h-24 text-success" />
+                </div>
+                <div class="flex items-center gap-2 md:gap-3 text-success mb-6 relative z-10">
+                  <IconRosetteDiscountCheck class="w-8 h-8" />
+                  <span class="text-lg md:text-xl font-black italic">DOCUMENT AUTHENTIQUE</span>
                 </div>
 
-                <!-- Mini cartes -->
-                <div
-                  class="bg-WtB p-4 rounded-2xl shadow-sm border border-ash flex flex-col items-center justify-center gap-2 hover:scale-105 transition-transform duration-300">
-                  <div class="w-12 h-12 rounded-xl bg-warning/20 flex items-center justify-center">
-                    <IconAlertTriangle class="w-6 h-6 text-warning" />
-                  </div>
-                  <span class="text-2xl font-bold text-BtW">0</span>
-                  <span class="text-xs text-hsa">Alertes Critiques</span>
+                <div class="p-4 bg-primary/10 rounded-2xl border border-primary/20 mb-6">
+                  <p class="text-[10px] text-hsa uppercase font-black tracking-widest mb-1">Document Certifié</p>
+                  <p class="text-lg md:text-xl font-black text-BtW truncate">Contrat-Partenariat-2026.pdf</p>
                 </div>
 
-                <div
-                  class="bg-WtB p-4 rounded-2xl shadow-sm border border-ash flex flex-col items-center justify-center gap-2 hover:scale-105 transition-transform duration-300">
-                  <div class="w-12 h-12 rounded-xl bg-success/20 flex items-center justify-center">
-                    <IconCheck class="w-6 h-6 text-success" />
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                  <div class="p-4 bg-WtB/50 rounded-2xl border border-ash/50 space-y-1">
+                    <p class="text-[10px] text-hsa uppercase font-black">Émetteur du Document</p>
+                    <p class="font-bold text-BtW">CYPASS</p>
                   </div>
-                  <span class="text-2xl font-bold text-BtW">100%</span>
-                  <span class="text-xs text-hsa">Conformité</span>
+                  <div class="p-4 bg-WtB/50 rounded-2xl border border-ash/50 space-y-1">
+                    <p class="text-[10px] text-hsa uppercase font-black">Date d'Exécution</p>
+                    <p class="font-bold text-BtW">Aujourd'hui, 09:41</p>
+                  </div>
                 </div>
 
-                <!-- Élément de liste -->
-                <div
-                  class="col-span-2 bg-WtB p-4 rounded-2xl shadow-sm border border-ash flex items-center justify-between">
-                  <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-full bg-ash flex items-center justify-center">
-                      <IconFileAnalytics class="w-5 h-5 text-hsa" />
-                    </div>
-                    <div>
-                      <div class="text-sm font-bold text-BtW">Rapport Audit
-                        #882</div>
-                      <div class="text-xs text-hsa">Généré le 14 Janv.</div>
-                    </div>
+                <div class="space-y-2 mb-6">
+                  <p class="text-[10px] text-hsa uppercase font-black tracking-widest px-1">Empreinte Numérique
+                    (SHA-256)</p>
+                  <div
+                    class="flex items-center gap-2 p-3 bg-ash/30 rounded-xl border border-ash/50 font-code text-[10px] text-hsa opacity-80 break-all">
+                    <IconFingerprint class="w-4 h-4 text-primary shrink-0" />
+                    e3b0c44298fc1c149afbf4c8996fb924...
                   </div>
-                  <UiBaseButton variant="ghost"
-                    class="!px-3 !py-1 !text-xs !font-bold !text-primary !bg-ash !rounded-lg !h-auto !w-auto">Voir
-                  </UiBaseButton>
+                </div>
+
+                <div class="flex justify-center pt-2 pb-2">
+                  <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=cypass-verify"
+                    class="w-20 h-20 rounded-lg mix-blend-multiply opacity-80" alt="QR Code" />
                 </div>
               </div>
             </div>
           </UiAppFrame>
-
-          <!-- Badge flottant -->
-          <div
-            class="absolute bottom-10 -left-10 glass-panel p-4 rounded-xl flex items-center gap-3 z-30 animate-float-delayed">
-            <div class="relative">
-              <span class="absolute top-0 right-0 w-3 h-3 bg-success border-2 border-WtB rounded-full z-10"></span>
-              <div class="w-12 h-12 bg-ashAct rounded-full flex items-center justify-center overflow-hidden">
-                <IconUser class="w-7 h-7 text-primary" />
-              </div>
-            </div>
-            <div>
-              <div class="text-sm font-bold text-BtW">Session Sécurisée</div>
-              <div class="text-xs text-hsa">Chiffrement SHA-256</div>
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -177,8 +150,64 @@
 </template>
 
 <script setup lang="ts">
-import { IconShieldCheck, IconServer, IconArrowRight, IconShieldLock, IconAlertTriangle, IconCheck, IconFileAnalytics, IconUser, IconFileCheck, IconShield } from '@tabler/icons-vue'
+import { ref, onMounted, onUnmounted } from 'vue'
+import { IconShieldCheck, IconServer, IconArrowRight, IconShield, IconFileCheck, IconRosetteDiscountCheck, IconFingerprint } from '@tabler/icons-vue'
 import { useAuthStore } from '~/stores/back/user/auth'
 
 const authStore = useAuthStore()
+
+const animatedRoles = [
+  'certifier vos contrats.',
+  'signaler une fraude.',
+  'Vérifier un document.',
+  'détecter une falsification.',
+  'protéger vos données.'
+]
+
+const currentRoleIndex = ref(0)
+const currentText = ref('')
+let typingInterval: ReturnType<typeof setInterval>
+let erasingInterval: ReturnType<typeof setInterval>
+let typingTimeout: ReturnType<typeof setTimeout>
+
+const typeWord = () => {
+  const word = animatedRoles[currentRoleIndex.value]
+  let charIndex = 0
+  currentText.value = ''
+
+  typingInterval = setInterval(() => {
+    if (charIndex < word.length) {
+      currentText.value += word.charAt(charIndex)
+      charIndex++
+    } else {
+      clearInterval(typingInterval)
+      typingTimeout = setTimeout(eraseWord, 2500)
+    }
+  }, 45)
+}
+
+const eraseWord = () => {
+  let charIndex = currentText.value.length
+
+  erasingInterval = setInterval(() => {
+    if (charIndex > 0) {
+      currentText.value = currentText.value.slice(0, -1)
+      charIndex--
+    } else {
+      clearInterval(erasingInterval)
+      currentRoleIndex.value = (currentRoleIndex.value + 1) % animatedRoles.length
+      typingTimeout = setTimeout(typeWord, 600)
+    }
+  }, 25)
+}
+
+onMounted(() => {
+  typeWord()
+})
+
+onUnmounted(() => {
+  clearInterval(typingInterval)
+  clearInterval(erasingInterval)
+  clearTimeout(typingTimeout)
+})
 </script>
