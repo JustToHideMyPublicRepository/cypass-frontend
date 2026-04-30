@@ -216,7 +216,7 @@ export const addonComparison = [
   },
   {
     feature: 'Signalements officiels',
-    tooltip: 'Votre nom d\'entité est affiché à la place de "Anonyme".',
+    tooltip: 'ous connaîtrez l\'utilisateur qui vous signale au lieu d\'un bagde d\'anonymat.',
     qr: false,
     verified: true,
     archive: false,
