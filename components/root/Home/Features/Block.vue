@@ -42,8 +42,14 @@
 
           <!-- Text Column -->
           <div class="relative">
+            <div class="h-0.5 w-24 bg-ash/30 rounded-full mb-6 overflow-hidden hidden md:block">
+              <div v-if="!isPaused" :key="'progress-' + activeIndex" class="h-full rounded-full"
+                :class="currentService.theme === 'green' ? 'bg-success' : 'bg-primary'"
+                style="animation: progress-bar 300s linear forwards;" />
+            </div>
+
             <Transition name="slide-text" mode="out-in">
-              <div :key="activeIndex" class="space-y-5 md:space-y-7">
+              <div :key="activeIndex" class="space-y-6 md:space-y-8">
                 <span class="badge" :class="currentService.status === 'available'
                   ? (currentService.theme === 'blue' ? 'badge-primary' : 'badge-success')
                   : 'bg-hsa text-ash border-hsa'">
@@ -144,7 +150,7 @@ import { modules } from '@/data/modules'
 
 const featureServices = computed(() => modules)
 
-// --- Carousel State ---
+// Carousel State
 const activeIndex = ref(0)
 const isPaused = ref(false)
 const progressKey = ref(0)
@@ -152,21 +158,19 @@ let timer: ReturnType<typeof setInterval> | null = null
 
 const currentService = computed(() => featureServices.value[activeIndex.value])
 const maxIndex = computed(() => featureServices.value.length - 1)
-
-// --- Ref ---
 const sectionEl = ref<HTMLElement | null>(null)
 
 // Whether this section is in the viewport (for wheel capture)
 const isInView = ref(false)
 
-// --- Navigation ---
+// Navigation
 function goTo(index: number) {
   activeIndex.value = index
   progressKey.value++
   resetTimer()
 }
 
-// --- Auto-rotation ---
+// Auto-rotation
 function startTimer() {
   stopTimer()
   timer = setInterval(() => {
@@ -174,7 +178,7 @@ function startTimer() {
       activeIndex.value = activeIndex.value < maxIndex.value ? activeIndex.value + 1 : 0
       progressKey.value++
     }
-  }, 5000)
+  }, 300000)
 }
 
 function stopTimer() {
@@ -192,7 +196,7 @@ function resume() {
   resetTimer()
 }
 
-// --- Wheel capture: intercept scroll only when section is visible ---
+// Wheel capture: intercept scroll only when section is visible
 let wheelCooldown = false
 
 function onWheel(e: WheelEvent) {
@@ -224,7 +228,7 @@ function onWheel(e: WheelEvent) {
   setTimeout(() => { wheelCooldown = false }, 600)
 }
 
-// --- IntersectionObserver to track visibility ---
+// IntersectionObserver to track visibility
 let observer: IntersectionObserver | null = null
 
 onMounted(() => {
@@ -253,7 +257,7 @@ onUnmounted(() => {
 
 <style scoped>
 .slide-text-enter-active {
-  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .slide-text-leave-active {
@@ -262,7 +266,7 @@ onUnmounted(() => {
 
 .slide-text-enter-from {
   opacity: 0;
-  transform: translateY(30px);
+  transform: translateY(40px) scale(0.98);
 }
 
 .slide-text-leave-to {
@@ -271,20 +275,32 @@ onUnmounted(() => {
 }
 
 .slide-visual-enter-active {
-  transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .slide-visual-leave-active {
-  transition: all 0.3s cubic-bezier(0.4, 0, 1, 1);
+  transition: all 0.4s cubic-bezier(0.4, 0, 1, 1);
 }
 
 .slide-visual-enter-from {
   opacity: 0;
-  transform: scale(0.92) translateX(40px);
+  transform: scale(0.9) translateX(50px);
 }
 
 .slide-visual-leave-to {
   opacity: 0;
-  transform: scale(0.95) translateX(-30px);
+  transform: scale(0.95) translateX(-40px);
+}
+
+@keyframes progress-bar {
+  0% {
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+
+  100% {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
 }
 </style>

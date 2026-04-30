@@ -8,7 +8,7 @@
         <IconXboxX v-else class="w-6 h-6" />
 
         <!-- Effet de pulsation -->
-        <span class="absolute inset-0 rounded-full bg-primary animate-ping opacity-20 pointer-events-none"></span>
+        <!-- <span class="absolute inset-0 rounded-full bg-primary animate-ping opacity-20 pointer-events-none"></span> -->
       </UiBaseButton>
 
       <!-- Menu flottant d'aide -->

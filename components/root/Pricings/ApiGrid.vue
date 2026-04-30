@@ -22,7 +22,7 @@
             <component :is="tier.icon" class="w-10 h-10 p-2 rounded-xl"
               :class="tier.featured ? 'bg-secondary/10 text-secondary' : 'bg-ash text-hsa'" />
             <span v-if="tier.subtitle" class="text-xs font-black uppercase tracking-widest px-3 py-1 rounded-full"
-              :class="tier.featured ? 'bg-secondary text-BtW' : 'bg-ash/80 text-hsa'">{{ tier.subtitle }}</span>
+              :class="tier.featured ? 'bg-secondary text-WtB' : 'bg-ash/80 text-hsa'">{{ tier.subtitle }}</span>
           </div>
           <h3 class="text-2xl font-black text-BtW">{{ tier.name }}</h3>
           <p class="text-[28px] font-black text-BtW mt-2">{{ tier.price }}</p>
@@ -63,62 +63,10 @@
 
         <div class="mt-auto pt-6 border-t border-ash/10">
           <NuxtLink :to="tier.link" class="block w-full text-center py-3 px-4 rounded-xl font-bold transition-all"
-            :class="tier.featured ? 'bg-secondary text-BtW hover:bg-secondary/90' : 'bg-BtW text-WtB hover:opacity-90'">
+            :class="tier.featured ? 'bg-secondary text-WtB hover:bg-secondary/90' : 'bg-BtW text-WtB hover:opacity-90'">
             {{ tier.cta }}
           </NuxtLink>
         </div>
-      </div>
-    </div>
-
-    <!-- Platform Features -->
-    <div class="pt-8">
-      <h2 class="text-3xl font-black text-BtW mb-8">Tarification des Webhooks & Services</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-        <div class="bg-ash/40 backdrop-blur-md p-8 rounded-2xl border border-ash/50 flex flex-col h-full">
-          <div class="mb-3">
-            <IconWebhook class="w-8 h-8 text-secondary mb-4" />
-            <h3 class="text-lg font-black text-BtW">Webhooks Réception</h3>
-          </div>
-          <p class="text-sm text-hsa mb-6 font-medium leading-relaxed flex-1">Recevez les statuts de certification et
-            KYC de vos flux de manière asynchrone sur vos propres domaines.</p>
-          <div class="mt-auto pt-5 border-t border-ash/10">
-            <div class="text-[10px] font-black text-hsa uppercase tracking-widest mb-1">Coût par appel</div>
-            <div class="text-lg font-black text-BtW">Inclus (<span class="text-sm text-success">Gratuit</span>)</div>
-          </div>
-        </div>
-
-        <div class="bg-ash/40 backdrop-blur-md p-8 rounded-2xl border border-ash/50 flex flex-col h-full">
-          <div class="mb-3">
-            <IconUsers class="w-8 h-8 text-primary mb-4" />
-            <h3 class="text-lg font-black text-BtW">ActiveDirectory & SSO</h3>
-          </div>
-          <p class="text-sm text-hsa mb-6 font-medium leading-relaxed flex-1">Synchronisation SCIM/SSO pour gérer les
-            accès et automatiser la certification des documents des collaborateurs.</p>
-          <div class="mt-auto pt-5 border-t border-ash/10">
-            <div class="text-[10px] font-black text-hsa uppercase tracking-widest mb-1">Coût de maintenance</div>
-            <div class="text-lg font-black text-BtW">50K FCFA / mois</div>
-          </div>
-        </div>
-
-        <div
-          class="bg-ash/40 backdrop-blur-md p-8 rounded-2xl border border-ash/50 flex flex-col h-full bg-gradient-to-br from-ash/40 to-ash/20">
-          <div class="mb-3">
-            <IconDatabase class="w-8 h-8 text-danger mb-4" />
-            <h3 class="text-lg font-black text-BtW">Déploiement Sur-mesure</h3>
-          </div>
-          <p class="text-sm text-hsa mb-6 font-medium leading-relaxed flex-1">Déploiement exclusif et cloisonnement de
-            CYPASS Engine au sein de votre propre infrastructure On-Premise.</p>
-          <div class="mt-auto pt-5 border-t border-ash/10">
-            <div class="text-[10px] font-black text-hsa uppercase tracking-widest mb-1">Coût par noeud actif</div>
-            <div class="text-lg font-black text-BtW">Sur devis</div>
-            <NuxtLink to="/contact" class="text-xs font-bold text-primary mt-2 flex items-center gap-1 hover:underline">
-              Contacter l'équipe commerciale
-              <IconArrowRight class="w-4 h-4" />
-            </NuxtLink>
-          </div>
-        </div>
-
       </div>
     </div>
   </div>

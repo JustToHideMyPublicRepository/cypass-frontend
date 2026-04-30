@@ -49,7 +49,7 @@ export const modules: CypassModule[] = [
     icon: IconCertificate,
     status: 'available',
     theme: 'green',
-    badge: 'MVP Actif',
+    badge: 'Nouveau',
     cta: 'Découvrir la signature',
     list: [
       'Hachage du contenu binaire',

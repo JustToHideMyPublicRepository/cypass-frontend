@@ -6,6 +6,7 @@
     <RootHomeHowBlock />
     <RootHomeFeaturesBlock />
     <RootHomeStats />
+    <RootHomePricingsPreview />
     <!-- <RootHomeTestimonials /> -->
     <RootHomeFaq />
     <RootHomeCta />
