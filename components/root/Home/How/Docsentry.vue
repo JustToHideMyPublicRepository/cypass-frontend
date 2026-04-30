@@ -167,12 +167,12 @@ const docSentrySteps: Step[] = [
   },
   {
     title: 'Validation',
-    description: 'Vérification instantanée du type, de la taille.',
+    description: 'Vérification instantanée du type et de la taille.',
     visual: markRaw(MockValidation)
   },
   {
     title: 'Empreinte & Signature',
-    description: 'Calcul de l\'empreinte unique et signature par clé privée Ed25519.',
+    description: 'Calcul de l\'empreinte unique et signature du document.',
     visual: markRaw(MockHashSignature)
   },
   {

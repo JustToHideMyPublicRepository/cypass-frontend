@@ -1,4 +1,9 @@
-import { IconUser, IconBriefcase, IconBuildingSkyscraper, IconActivity } from '@tabler/icons-vue'
+import { markRaw } from 'vue'
+import {
+  IconUser, IconBriefcase, IconBuildingSkyscraper, IconActivity,
+  IconQrcode, IconRosetteDiscountCheck, IconArchive, IconRadar, IconUsers,
+  IconCode, IconApi, IconServer
+} from '@tabler/icons-vue'
 
 export const PLAN_CONFIG = {
   'free': {
@@ -51,7 +56,7 @@ export const pricingTiers = [
     credits: 5,
     price: '0 FCFA',
     description: 'Découvrez CYPASS et certifiez vos premiers documents sans engagement.',
-    icon: IconUser,
+    icon: markRaw(IconUser),
     bgClass: 'bg-primary/5',
     features: [
       '5 crédits offerts à l\'inscription',
@@ -73,7 +78,7 @@ export const pricingTiers = [
     credits: 80,
     price: '10K FCFA',
     description: 'Idéal pour les consultants et indépendants ayant un flux régulier de documents.',
-    icon: IconBriefcase,
+    icon: markRaw(IconBriefcase),
     bgClass: 'bg-secondary/5',
     features: [
       'Tout dans Individuel',
@@ -90,7 +95,7 @@ export const pricingTiers = [
     credits: 400,
     price: '40K FCFA',
     description: 'Conçu pour les TPE/PME souhaitant une gestion de confiance à grande échelle.',
-    icon: IconBuildingSkyscraper,
+    icon: markRaw(IconBuildingSkyscraper),
     bgClass: 'bg-danger/5',
     features: [
       'Tout dans Starter',
@@ -108,7 +113,7 @@ export const pricingTiers = [
     credits: 1000000,
     price: 'Contact',
     description: 'Infrastructure dédiée et volume illimité pour les grandes institutions.',
-    icon: IconActivity,
+    icon: markRaw(IconActivity),
     bgClass: 'bg-primary/10',
     features: [
       'Crédits illimités (volume négocié)',
@@ -189,5 +194,150 @@ export const pricingComparison = [
     starter: false,
     business: false,
     ent: true
+  }
+]
+
+export const individualTiers = pricingTiers
+
+export const addonTiers = [
+  {
+    name: 'QR Personnalisé',
+    slug: 'qr-custom',
+    price: '2 000 FCFA / mois',
+    description: 'Faites de votre QR Code un élément de votre identité visuelle.',
+    icon: markRaw(IconQrcode),
+    features: [
+      'Couleur personnalisée du QR Code',
+      'Ajout de votre logo au centre',
+      'Choix de la taille et du niveau de correction',
+      'Style arrondi ou carré des modules',
+      'Prévisualisation avant génération',
+      'Compatible toutes offres individuelles'
+    ],
+    cta: 'Activer',
+    featured: false
+  },
+  {
+    name: 'CYPASS Verified',
+    slug: 'verified',
+    price: '2 500 FCFA / mois',
+    description: 'Un badge de confiance qui donne plus de poids à vos signalements et certifications.',
+    icon: markRaw(IconRosetteDiscountCheck),
+    features: [
+      'Badge ✓ Verified visible sur votre profil public',
+      'Nom affiché au lieu de "Anonyme" sur les signalements publics',
+      'Signalements prioritaires dans le dashboard VigiTech',
+      'Champ de saisie étendu (2 000 car. au lieu de 500)',
+      'Historique public de vos signalements validés',
+      'Crédibilité renforcée auprès des modérateurs'
+    ],
+    cta: 'Activer',
+    featured: true
+  },
+  {
+    name: 'DocSentry Archive',
+    slug: 'archive',
+    price: '1 500 FCFA / mois',
+    description: 'Conservez et retrouvez vos documents certifiés sur le long terme.',
+    icon: markRaw(IconArchive),
+    features: [
+      'Archivage sécurisé jusqu\'à 10 ans',
+      'Moteur de recherche sur vos documents certifiés',
+      'Export groupé de vos certificats (ZIP)',
+      'Historique complet des vérifications reçues',
+      'Notifications si un tiers vérifie votre document',
+      'Compatible toutes offres individuelles'
+    ],
+    cta: 'Activer',
+    featured: false
+  },
+  {
+    name: 'VigiTech Pro',
+    slug: 'vigitech-pro',
+    price: '2 000 FCFA / mois',
+    description: 'Accédez à la veille cyber avancée et aux alertes avant diffusion publique.',
+    icon: markRaw(IconRadar),
+    features: [
+      'Alertes cyber en avant-première (avant publication)',
+      'Filtres avancés par type, région, secteur',
+      'Abonnement à des catégories d\'incidents spécifiques',
+      'Rapport de veille mensuel personnalisé',
+      'Accès aux statistiques agrégées du territoire',
+      'Notifications push et e-mail configurable'
+    ],
+    cta: 'Activer',
+    featured: false
+  },
+]
+
+export const apiTiers = [
+  {
+    name: 'API Free',
+    slug: 'api-free',
+    subtitle: 'Sandbox',
+    price: '0 FCFA',
+    description: 'Intégrez et testez l\'API CYPASS dans votre environnement de développement.',
+    icon: markRaw(IconCode),
+    bgClass: 'bg-ash/5',
+    features: [
+      '100 appels / mois offerts',
+      'Accès endpoints DocSentry (certif. + vérif.)',
+      'Environnement sandbox dédié',
+      'Documentation OpenAPI 3.0 / Swagger',
+      'Clé API unique par compte',
+      'Rate limit : 10 req / minute'
+    ],
+    cta: 'Obtenir ma clé API',
+    link: '/developers',
+    featured: false
+  },
+  {
+    name: 'API Starter',
+    slug: 'api-starter',
+    subtitle: 'Pay-as-you-go',
+    price: 'Dès 25 FCFA / appel',
+    description: 'Payez uniquement ce que vous consommez. Idéal pour les projets à volumétrie variable.',
+    icon: markRaw(IconApi),
+    bgClass: 'bg-secondary/5',
+    pricing: [
+      { range: '0 – 500 appels/mois', unitPrice: '25 FCFA / appel' },
+      { range: '501 – 2 000 appels/mois', unitPrice: '20 FCFA / appel' },
+      { range: '2 001 – 10 000 appels/mois', unitPrice: '15 FCFA / appel' },
+      { range: '10 000+ appels/mois', unitPrice: 'Tarif négocié' }
+    ],
+    features: [
+      'Endpoints DocSentry et VigiTech',
+      'Webhooks sur événements',
+      'Dashboard consommation temps réel',
+      'Historique des appels (30 jours)',
+      'Rate limit : 60 req / minute',
+      'Support technique par e-mail'
+    ],
+    cta: 'Commencer',
+    link: '/developers/api',
+    featured: true
+  },
+  {
+    name: 'API Entreprise',
+    slug: 'api-entreprise',
+    subtitle: 'Volume & SLA',
+    price: 'Sur devis',
+    description: 'Pour les institutions et éditeurs de logiciels intégrant CYPASS à grande échelle.',
+    icon: markRaw(IconServer),
+    bgClass: 'bg-primary/10',
+    features: [
+      'Volume d\'appels illimité (SLA garanti)',
+      'Accès tous endpoints + futurs modules',
+      'IP whitelisting & authentification mTLS',
+      'Webhooks avancés + asynchrone',
+      'Intégration Marque Blanche possible',
+      'Environnement de production dédié',
+      'Rate limit personnalisé',
+      'Support technique dédié',
+      'Rapport d\'usage mensuel détaillé'
+    ],
+    cta: 'Nous contacter',
+    link: '/contact',
+    featured: false
   }
 ]

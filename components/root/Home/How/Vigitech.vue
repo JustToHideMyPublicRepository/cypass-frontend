@@ -144,7 +144,7 @@ const vigiTechSteps: Step[] = [
     visual: markRaw(MockProof)
   },
   {
-    title: 'Veille Live',
+    title: 'Veille live',
     description: 'Publication immédiate sur le tableau de veille communautaire.',
     visual: markRaw(MockPublication)
   },

@@ -11,25 +11,32 @@
 
       <div class="space-y-6 flex-1">
         <div class="flex items-center gap-4">
-          <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-primary" :class="tier.bgClass">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-primary shrink-0" :class="tier.bgClass || 'bg-ash/10'">
             <component :is="tier.icon" class="w-7 h-7" />
           </div>
           <div>
-            <h3 class="text-xl font-black text-BtW">{{ tier.name }}</h3>
-            <p class="text-[10px] font-black text-hsa uppercase tracking-widest">{{ tier.subtitle }}</p>
+            <h3 class="text-xl font-black text-BtW leading-tight">{{ tier.name }}</h3>
+            <p v-if="tier.subtitle" class="text-[10px] font-black text-hsa uppercase tracking-widest mt-0.5">{{ tier.subtitle }}</p>
           </div>
         </div>
 
         <div class="pt-4 border-t border-ash/10">
           <div class="flex items-baseline gap-1">
-            <span class="text-4xl font-black text-BtW">{{ tier.price }}</span>
+            <span class="text-3xl lg:text-4xl font-black text-BtW">{{ tier.price }}</span>
           </div>
           <p class="text-xs text-hsa mt-2 leading-relaxed font-medium opacity-70">{{ tier.description }}</p>
         </div>
 
-        <ul class="space-y-4 pt-6">
+        <div v-if="tier.pricing" class="mt-4 bg-primary/5 rounded-xl border border-primary/10 overflow-hidden">
+          <div v-for="(p, i) in tier.pricing" :key="i" class="flex justify-between items-center px-4 py-2 text-xs border-b border-primary/5 last:border-0">
+            <span class="font-medium text-hsa">{{ p.range }}</span>
+            <span class="font-bold text-BtW">{{ p.unitPrice }}</span>
+          </div>
+        </div>
+
+        <ul class="space-y-4 pt-6 mt-auto">
           <li v-for="feature in tier.features" :key="feature" class="flex items-start gap-3">
-            <IconCircleCheck class="w-5 h-5 text-primary shrink-0 transition-transform group-hover:scale-110" />
+            <IconCheck class="w-5 h-5 text-primary shrink-0 transition-transform group-hover:scale-110" />
             <span class="text-sm font-bold text-BtW/90 leading-snug">{{ feature }}</span>
           </li>
         </ul>
@@ -53,14 +60,16 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { IconCircleCheck } from '@tabler/icons-vue'
-import { pricingTiers } from '~/utils/pricing'
+import { IconCheck } from '@tabler/icons-vue'
 import { useAuthStore } from '~/stores/back/user/auth'
 import { useSubscriptionStore } from '~/stores/back/user/subscription'
 
+defineProps<{
+  tiers: any[]
+}>()
+
 const authStore = useAuthStore()
 const subscriptionStore = useSubscriptionStore()
-const tiers = pricingTiers
 const loadingTier = ref<string | null>(null)
 
 const getCtaText = (tier: any) => {
