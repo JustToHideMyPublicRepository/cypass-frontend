@@ -4,9 +4,7 @@
       <div class="max-w-md space-y-6 animate-fade-in text-center">
         <div
           class="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto border border-primary/20">
-          <svg class="w-10 h-10 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M18.36 6.64a9 9 0 1 1-12.73 0M12 2v10" />
-          </svg>
+          <IconPower class="w-10 h-10 text-primary" />
         </div>
         <div class="space-y-2 text-center">
           <h1 class="text-2xl font-black text-WtB tracking-tight">JavaScript requis</h1>
@@ -21,3 +19,7 @@
     </div>
   </noscript>
 </template>
+
+<script setup lang="ts">
+import { IconPower } from '@tabler/icons-vue'
+</script>

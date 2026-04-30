@@ -3,19 +3,20 @@
     <div class="p-8 md:p-12">
       <h2 class="text-2xl font-black text-BtW mb-10 flex items-center gap-4">
         <div class="w-10 h-10 rounded-2xl bg-secondary/10 flex items-center justify-center text-secondary">
-          <IconLayoutBoard class="w-6 h-6" />
+          <IconPuzzle class="w-6 h-6" />
         </div>
-        Comparez les fonctionnalités
+        Comparatif des Extensions
       </h2>
 
-      <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse">
-          <thead>
-            <tr class="border-b border-ash/10">
-              <th class="py-6 pr-4 text-[10px] font-black text-hsa uppercase tracking-[0.2em] w-[40%]">Solution</th>
+      <div class="overflow-auto max-h-[65vh] rounded-xl ring-1 ring-ash/5">
+        <table class="w-full text-left border-collapse min-w-[700px] relative">
+          <thead class="sticky top-0 z-20">
+            <tr class="border-b border-ash/20">
+              <th class="py-6 pr-4 text-[10px] font-black text-hsa uppercase tracking-[0.2em] w-[40%]">Fonctionnalité
+                clé</th>
               <th v-for="t in tiers" :key="t.name"
                 class="py-6 px-4 text-[10px] font-black text-center uppercase tracking-[0.2em]"
-                :class="t.featured ? 'text-primary' : 'text-hsa'">
+                :class="t.featured ? 'text-secondary' : 'text-hsa'">
                 {{ t.name }}
               </th>
             </tr>
@@ -29,19 +30,19 @@
                 </div>
               </td>
               <td class="py-6 px-4 text-center">
-                <IconCircleCheck v-if="row.basic" class="w-5 h-5 text-primary/40 mx-auto" />
+                <IconCircleCheck v-if="row.qr" class="w-5 h-5 text-secondary/40 mx-auto" />
                 <span v-else class="text-hsa/30">—</span>
               </td>
               <td class="py-6 px-4 text-center">
-                <IconCircleCheck v-if="row.starter" class="w-5 h-5 text-primary/70 mx-auto" />
+                <IconCircleCheck v-if="row.verified" class="w-5 h-5 text-secondary/70 mx-auto" />
                 <span v-else class="text-hsa/30">—</span>
               </td>
               <td class="py-6 px-4 text-center">
-                <IconCircleCheck v-if="row.business" class="w-5 h-5 text-primary mx-auto" />
+                <IconCircleCheck v-if="row.archive" class="w-5 h-5 text-secondary mx-auto" />
                 <span v-else class="text-hsa/30">—</span>
               </td>
               <td class="py-6 pl-4 text-center">
-                <IconCircleCheck v-if="row.ent" class="w-5 h-5 text-primary mx-auto" />
+                <IconCircleCheck v-if="row.pro" class="w-5 h-5 text-secondary mx-auto" />
                 <span v-else class="text-hsa/30">—</span>
               </td>
             </tr>
@@ -53,9 +54,9 @@
 </template>
 
 <script setup lang="ts">
-import { IconCircleCheck, IconLayoutBoard } from '@tabler/icons-vue'
-import { pricingTiers, pricingComparison } from '~/utils/pricing'
+import { IconCircleCheck, IconPuzzle } from '@tabler/icons-vue'
+import { addonTiers, addonComparison } from '~/utils/pricing'
 
-const tiers = pricingTiers
-const comparison = pricingComparison
+const tiers = addonTiers
+const comparison = addonComparison
 </script>

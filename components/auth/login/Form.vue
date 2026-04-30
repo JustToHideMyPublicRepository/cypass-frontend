@@ -3,7 +3,7 @@
     <div class="space-y-5">
       <!-- Champ Email (caché si hint sélectionné) -->
       <div v-if="!hint">
-        <label for="email" class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Email</label>
+        <label for="email" class="block font-bold text-slate-400 uppercase tracking-widest mb-2">Email</label>
         <div class="relative group">
           <div
             class="absolute left-4 top-1/2 -translate-y-1/2 text-hsa group-focus-within:text-primary transition-colors">
@@ -32,7 +32,7 @@
       <!-- Champ Mot de passe -->
       <div>
         <div class="flex justify-between items-center mb-2">
-          <label for="password" class="block text-xs font-bold text-slate-400 uppercase tracking-widest">Mot de
+          <label for="password" class="block font-bold text-slate-400 uppercase tracking-widest">Mot de
             passe</label>
           <UiBaseButton type="button" @click="$emit('forgotPassword')" variant="ghost" size="sm"
             class="!text-[10px] !text-primary hover:!bg-primary/5 !p-1 !h-auto !min-h-0 uppercase tracking-wider font-black">

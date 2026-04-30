@@ -6,36 +6,27 @@
 
     <RootPricingsHeader />
 
-    <!-- TABS -->
-    <div class="flex justify-center mb-16 relative z-10 scale-90 sm:scale-100 origin-center transition-transform">
-      <div
-        class="bg-ash/50 backdrop-blur-xl p-1.5 rounded-[2.5rem] border border-ash/60 inline-flex items-center shadow-lg">
-        <button v-for="tab in tabs" :key="tab.id" @click="activeTab = tab.id"
-          class="relative px-6 sm:px-8 py-3 rounded-full text-sm font-bold transition-all duration-300 outline-none"
-          :class="activeTab === tab.id ? 'text-BtW' : 'text-hsa hover:text-BtW'">
-          <!-- Background Indicator -->
-          <span v-if="activeTab === tab.id"
-            class="absolute inset-0 bg-WtB shadow mt-0.5 rounded-full -z-10 ring-1 ring-ash/20 transition-all"></span>
-          {{ tab.label }}
-        </button>
-      </div>
-    </div>
+    <RootPricingsTabs v-model="activeTab" :tabs="tabs" />
 
     <!-- CONTENT -->
     <div class="transition-all duration-500 animate-in fade-in slide-in-from-bottom-4"
       style="animation-duration: 400ms;" :key="activeTab">
-      <RootPricingsGrid v-if="activeTab === 'individual'" :tiers="individualTiers" />
-      <RootPricingsGrid v-else-if="activeTab === 'enterprise'" :tiers="addonTiers" />
-      <RootPricingsGrid v-else-if="activeTab === 'api'" :tiers="apiTiers" />
+      <RootPricingsGrid v-if="activeTab === 'basic'" :tiers="individualTiers" />
+      <RootPricingsGrid v-else-if="activeTab === 'extension'" :tiers="addonTiers" />
+      <RootPricingsApiGrid v-else-if="activeTab === 'api'" :tiers="apiTiers" />
     </div>
 
-    <RootPricingsComparison v-if="activeTab !== 'api' && activeTab !== 'enterprise'" />
+    <RootPricingsComparisonBasic v-if="activeTab === 'basic'" />
+    <RootPricingsComparisonAddons v-else-if="activeTab === 'extension'" />
+    <RootPricingsComparisonApi v-else-if="activeTab === 'api'" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, markRaw, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { individualTiers, addonTiers, apiTiers } from '~/utils/pricing'
+import { IconUser, IconPuzzle, IconCode } from '@tabler/icons-vue'
 
 definePageMeta({
   layout: 'guest'
@@ -49,11 +40,25 @@ useHead({
   ]
 })
 
+const route = useRoute()
+const router = useRouter()
+
 const tabs = [
-  { id: 'basic', label: 'Basique' },
-  { id: 'extension', label: 'Extensions' },
-  { id: 'api', label: 'API' }
+  { id: 'basic', label: 'Basique', icon: markRaw(IconUser) },
+  { id: 'extension', label: 'Extensions', icon: markRaw(IconPuzzle) },
+  { id: 'api', label: 'API', icon: markRaw(IconCode) }
 ]
 
-const activeTab = ref('basic')
+const validTabs = tabs.map(t => t.id)
+const defaultTab = 'basic'
+
+const activeTab = ref(
+  validTabs.includes(route.query.tab as string)
+    ? (route.query.tab as string)
+    : defaultTab
+)
+
+watch(activeTab, (newTab) => {
+  router.replace({ query: { ...route.query, tab: newTab } })
+})
 </script>

@@ -16,13 +16,13 @@ export const PLAN_CONFIG = {
     label: 'Starter',
     badgeClass: 'bg-secondary/10 text-secondary',
     borderClass: 'p-[2px] bg-gradient-to-tr from-secondary to-warning',
-    credits: 100
+    credits: 80
   },
   'business': {
     label: 'Business',
     badgeClass: 'bg-primary/10 text-primary',
     borderClass: 'p-[2px] bg-gradient-to-tr from-primary to-success',
-    credits: 500
+    credits: 400
   },
   'entreprise': {
     label: 'Entreprise',
@@ -130,7 +130,7 @@ export const pricingTiers = [
   }
 ]
 
-export const pricingComparison = [
+export const basicComparison = [
   {
     feature: 'Certification DocSentry',
     tooltip: 'La technologie DocSentry permet d\'ancrer vos documents sur la blockchain pour garantir leur intégrité.',
@@ -197,13 +197,101 @@ export const pricingComparison = [
   }
 ]
 
+export const addonComparison = [
+  {
+    feature: 'Configuration visuelle du QR',
+    tooltip: 'Personnalisez les couleurs, le logo, la taille',
+    qr: true,
+    verified: false,
+    archive: false,
+    pro: false
+  },
+  {
+    feature: 'Badge public certifié',
+    tooltip: 'Affiche un badge de confiance visible par tous.',
+    qr: false,
+    verified: true,
+    archive: false,
+    pro: false
+  },
+  {
+    feature: 'Signalements officiels',
+    tooltip: 'Votre nom d\'entité est affiché à la place de "Anonyme".',
+    qr: false,
+    verified: true,
+    archive: false,
+    pro: false
+  },
+  {
+    feature: 'Alertes avant publication',
+    tooltip: 'Recevez les détections de fuites ou incidents en avant première.',
+    qr: false,
+    verified: false,
+    archive: false,
+    pro: true
+  },
+  {
+    feature: 'Exportation groupée (ZIP)',
+    tooltip: 'Téléchargez vos rapports ou certificats en masse.',
+    qr: false,
+    verified: false,
+    archive: true,
+    pro: true
+  }
+]
+
+export const apiComparison = [
+  {
+    feature: 'Environnement de requêtes',
+    tooltip: 'Sandbox permet de tester sans engager de frais, Production est pour les flux réels.',
+    free: 'Sandbox',
+    starter: 'Production',
+    ent: 'Dédié'
+  },
+  {
+    feature: 'Rate limit (Appels/min)',
+    tooltip: 'Nombre de requêtes maximum autorisées par minute.',
+    free: '10 / min',
+    starter: '60 / min',
+    ent: 'Personnalisé'
+  },
+  {
+    feature: 'Webhooks de réception',
+    tooltip: 'Notifications asynchrones envoyées vers vos propres serveurs.',
+    free: false,
+    starter: true,
+    ent: true
+  },
+  {
+    feature: 'Dashboard analytique temps réel',
+    tooltip: 'Statistiques sur les endpoints utilisés et coûts générés.',
+    free: false,
+    starter: true,
+    ent: true
+  },
+  {
+    feature: 'Authentification mTLS',
+    tooltip: 'Niveau de sécurité maximal exigeant un certificat matériel ou IP whitelisting.',
+    free: false,
+    starter: false,
+    ent: true
+  },
+  {
+    feature: 'Support technique',
+    tooltip: 'Niveau d\'assistance associé à l\'intégration.',
+    free: 'Documentation',
+    starter: 'E-mail',
+    ent: 'Dédié (WhatsApp / Tel)'
+  }
+]
+
 export const individualTiers = pricingTiers
 
 export const addonTiers = [
   {
-    name: 'QR Personnalisé',
+    name: 'QR perso',
     slug: 'qr-custom',
-    price: '2 000 FCFA / mois',
+    price: '2K FCFA / mois',
     description: 'Faites de votre QR Code un élément de votre identité visuelle.',
     icon: markRaw(IconQrcode),
     features: [
@@ -220,14 +308,14 @@ export const addonTiers = [
   {
     name: 'CYPASS Verified',
     slug: 'verified',
-    price: '2 500 FCFA / mois',
+    price: '2,5K FCFA / mois',
     description: 'Un badge de confiance qui donne plus de poids à vos signalements et certifications.',
     icon: markRaw(IconRosetteDiscountCheck),
     features: [
-      'Badge ✓ Verified visible sur votre profil public',
-      'Nom affiché au lieu de "Anonyme" sur les signalements publics',
+      'Badge Verified visible sur votre profil public',
+      'Voir le nom de ceux qui vous signale au lieu d\'afficher "Anonyme"',
       'Signalements prioritaires dans le dashboard VigiTech',
-      'Champ de saisie étendu (2 000 car. au lieu de 500)',
+      'Champ de saisie étendu (3 000 car. au lieu de 1 000)',
       'Historique public de vos signalements validés',
       'Crédibilité renforcée auprès des modérateurs'
     ],
@@ -237,11 +325,10 @@ export const addonTiers = [
   {
     name: 'DocSentry Archive',
     slug: 'archive',
-    price: '1 500 FCFA / mois',
+    price: '1,5K FCFA / mois',
     description: 'Conservez et retrouvez vos documents certifiés sur le long terme.',
     icon: markRaw(IconArchive),
     features: [
-      'Archivage sécurisé jusqu\'à 10 ans',
       'Moteur de recherche sur vos documents certifiés',
       'Export groupé de vos certificats (ZIP)',
       'Historique complet des vérifications reçues',
@@ -254,7 +341,7 @@ export const addonTiers = [
   {
     name: 'VigiTech Pro',
     slug: 'vigitech-pro',
-    price: '2 000 FCFA / mois',
+    price: '2K FCFA / mois',
     description: 'Accédez à la veille cyber avancée et aux alertes avant diffusion publique.',
     icon: markRaw(IconRadar),
     features: [

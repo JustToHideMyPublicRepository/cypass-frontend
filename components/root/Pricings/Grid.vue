@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-24">
+  <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 mb-24">
     <div v-for="(tier, index) in tiers" :key="tier.name"
       class="group relative bg-ash/40 backdrop-blur-3xl p-8 rounded-2xl border-2 transition-all duration-700 hover:scale-[1.02] flex flex-col h-full"
       :class="tier.featured ? 'border-primary/40 shadow-[0_40px_100px_rgba(var(--primary-rgb),0.15)] ring-1 ring-primary/20' : 'border-ash/50 hover:border-primary/30'">
@@ -11,12 +11,14 @@
 
       <div class="space-y-6 flex-1">
         <div class="flex items-center gap-4">
-          <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-primary shrink-0" :class="tier.bgClass || 'bg-ash/10'">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-primary shrink-0"
+            :class="tier.bgClass || 'bg-ash/10'">
             <component :is="tier.icon" class="w-7 h-7" />
           </div>
           <div>
             <h3 class="text-xl font-black text-BtW leading-tight">{{ tier.name }}</h3>
-            <p v-if="tier.subtitle" class="text-[10px] font-black text-hsa uppercase tracking-widest mt-0.5">{{ tier.subtitle }}</p>
+            <p v-if="tier.subtitle" class="text-[10px] font-black text-hsa uppercase tracking-widest mt-0.5">{{
+              tier.subtitle }}</p>
           </div>
         </div>
 
@@ -28,7 +30,8 @@
         </div>
 
         <div v-if="tier.pricing" class="mt-4 bg-primary/5 rounded-xl border border-primary/10 overflow-hidden">
-          <div v-for="(p, i) in tier.pricing" :key="i" class="flex justify-between items-center px-4 py-2 text-xs border-b border-primary/5 last:border-0">
+          <div v-for="(p, i) in tier.pricing" :key="i"
+            class="flex justify-between items-center px-4 py-2 text-xs border-b border-primary/5 last:border-0">
             <span class="font-medium text-hsa">{{ p.range }}</span>
             <span class="font-bold text-BtW">{{ p.unitPrice }}</span>
           </div>
