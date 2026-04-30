@@ -17,7 +17,8 @@
           Comment ça marche ?
         </span>
         <h2 class="font-extrabold text-BtW tracking-tight">
-          Protection en <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-success">
+          Protection en <span
+            class="font-handwritting text-transparent bg-clip-text bg-gradient-to-r from-primary to-success">
             temps réel </span>
         </h2>
         <p class="text-hsa leading-relaxed">
