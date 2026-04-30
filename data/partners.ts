@@ -51,5 +51,12 @@ export const partners: Partner[] = [
     website: 'https://www.gouv.bj/',
     initials: 'GOUV',
     style: 'text-2xl font-bold font-serif'
-  }
+  },
+  {
+    name: 'l\'Envol',
+    role: 'Incubateur dédié à l’Économie Sociale et Solidaire et à l’entrepreneuriat numérique féminin',
+    logo: 'https://www.lenvolbj.org/wp-content/uploads/2023/12/cropped-ENVOL_LOGO.png',
+    website: 'https://www.lenvolbj.org/',
+    initials: 'Envol',
+  },
 ]

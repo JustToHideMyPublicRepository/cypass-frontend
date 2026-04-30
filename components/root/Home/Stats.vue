@@ -36,8 +36,8 @@ const stats = [
   },
   {
     value: 'ISO',
-    label: '18004 certified',
-    colorClass: 'text-orange-400'
+    label: '18004 certifié',
+    colorClass: 'text-warning'
   }
 ]
 </script>

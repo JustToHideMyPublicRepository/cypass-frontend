@@ -1,31 +1,23 @@
 <template>
-  <div class="mb-8 group/flow">
-    <div class="max-w-7xl mx-auto mb-12 flex items-center justify-between px-4">
-      <div class="flex items-center gap-5">
-        <div
-          class="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20 shadow-lg">
-          <IconFileCheck class="w-7 h-7" />
-        </div>
-        <div>
-          <h3 class="font-black text-BtW tracking-tighter">DocSentry</h3>
-          <p class="text-primary font-bold uppercase tracking-widest text-xs">Certification & Vérification</p>
-        </div>
-      </div>
+  <div class="group/flow relative">
+    <!-- Carousel Control: Left -->
+    <div class="hidden md:block absolute left-4 top-1/2 -translate-y-1/2 z-30">
+      <button @click="scroll(docSentryScroll, 'left')"
+        class="p-3 rounded-full bg-WtB/80 backdrop-blur-md shadow-xl border border-ash/30 text-primary hover:bg-primary hover:text-WtB transition-all transform hover:scale-110">
+        <IconCircleChevronLeft class="w-6 h-6" />
+      </button>
+    </div>
 
-      <div class="hidden md:flex items-center gap-4">
-        <button @click="scroll(docSentryScroll, 'left')"
-          class="p-2 rounded-xl bg-ash/20 hover:bg-ash/40 transition-colors text-BtW">
-          <IconArrowLeft class="w-5 h-5" />
-        </button>
-        <button @click="scroll(docSentryScroll, 'right')"
-          class="p-2 rounded-xl bg-ash/20 hover:bg-ash/40 transition-colors text-BtW">
-          <IconArrowRight class="w-5 h-5" />
-        </button>
-      </div>
+    <!-- Carousel Control: Right -->
+    <div class="hidden md:block absolute right-4 top-1/2 -translate-y-1/2 z-30">
+      <button @click="scroll(docSentryScroll, 'right')"
+        class="p-3 rounded-full bg-WtB/80 backdrop-blur-md shadow-xl border border-ash/30 text-primary hover:bg-primary hover:text-WtB transition-all transform hover:scale-110">
+        <IconCircleChevronRight class="w-6 h-6" />
+      </button>
     </div>
 
     <!-- Carousel horizontal -->
-    <div class="relative">
+    <div class="relative overflow-visible">
       <div ref="docSentryScroll"
         class="flex overflow-x-auto gap-6 md:gap-10 pb-12 px-4 md:px-12 snap-x snap-mandatory scroll-smooth overflow-y-visible no-scrollbar">
         <div v-for="(step, index) in docSentrySteps" :key="index"
@@ -53,8 +45,9 @@
             <h4
               class="text-lg font-extrabold text-BtW tracking-tight group-hover/step:text-primary transition-colors flex items-center justify-center gap-2">
               <span
-                class="flex-shrink-0 w-6 h-6 rounded-lg bg-primary/10 text-primary text-[10px] flex items-center justify-center border border-primary/20">{{
-                  index + 1 }}</span>
+                class="flex-shrink-0 w-6 h-6 rounded-lg bg-primary/10 text-primary text-[10px] flex items-center justify-center border border-primary/20">
+                {{ index + 1 }}
+              </span>
               {{ step.title }}
             </h4>
             <p
@@ -70,7 +63,7 @@
 
 <script setup lang="ts">
 import { markRaw, h, ref, type Component } from 'vue'
-import { IconFileCheck, IconUpload, IconFingerprint, IconKey, IconFileText, IconQrcode, IconCheck, IconLock, IconArrowLeft, IconArrowRight, IconRosetteDiscountCheck } from '@tabler/icons-vue'
+import { IconUpload, IconFingerprint, IconKey, IconQrcode, IconCheck, IconLock, IconCircleChevronLeft, IconCircleChevronRight, IconRosetteDiscountCheck } from '@tabler/icons-vue'
 
 interface Step {
   title: string

@@ -47,6 +47,6 @@ const stats = [
   { value: '100%', label: 'Conformité' },
   { value: '24/7', label: 'Surveillance' },
   { value: 'SHA-256', label: 'Chiffrement' },
-  { value: 'ISO', label: 'Certifié' },
+  { value: '18004', label: 'ISO certifié' },
 ]
 </script>

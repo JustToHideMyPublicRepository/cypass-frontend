@@ -1,6 +1,5 @@
-import { IconScanEye, IconCertificate, IconRadar2, IconEye } from '@tabler/icons-vue'
+import { IconScan, IconCertificate, IconAlertTriangle, IconEye } from '@tabler/icons-vue'
 
-// Interface pour les bénéfices/avantages d'un service
 export interface ServiceBenefit {
   title: string
   qty: string
@@ -20,9 +19,7 @@ export interface ServiceFeatureIcon {
   icon: any
 }
 
-/**
- * Interface principale représentant un service CYPASS (Module)
- */
+// Interface principale représentant un service CYPASS (Module)
 export interface CypassModule {
   id: string
   title: string
@@ -35,13 +32,9 @@ export interface CypassModule {
   badge?: string
   cta?: string
   image?: string
-
-  // Données pour Features.vue
   features?: ServiceFeatureIcon[]
   list?: string[]
   specs?: string[]
-
-  // Données pour la page détail [id].vue
   benefits?: ServiceBenefit[]
   techSpecs?: ServiceTechSpec[]
 }
@@ -50,109 +43,187 @@ export const modules: CypassModule[] = [
   {
     id: 'docsentry',
     title: 'DocSentry',
-    subtitle: 'Certification & Archivage',
-    description: 'Infrastructure PKI souveraine pour la signature électronique qualifiée, le cachetage serveur et l\'archivage à valeur probante.',
-    fullDescription: 'Infrastructure PKI souveraine permettant la signature électronique qualifiée, le cachetage serveur et l\'archivage à valeur probante de tous vos documents administratifs, en totale conformité avec les réglementations en vigueur.',
+    subtitle: 'Certification & Intégrité documentaire',
+    description: 'Certifiez vos documents avec une empreinte cryptographique infalsifiable et un QR Code vérifiable instantanément, sans compte et sans friction.',
+    fullDescription: 'DocSentry génère une preuve d\'intégrité cryptographique pour chaque document soumis, matérialisée par un QR Code et une page de certification attachée. Toute falsification devient immédiatement détectable, par n\'importe quel tiers, en temps réel ou hors ligne.',
     icon: IconCertificate,
     status: 'available',
     theme: 'green',
-    badge: 'Populaire',
+    badge: 'MVP Actif',
     cta: 'Découvrir la signature',
     list: [
-      'Signature électronique qualifiée (eIDAS)',
-      'Cachetage serveur automatisé',
-      'Archivage à valeur probante (10 ans)',
-      'API REST pour intégration'
+      'Hachage du contenu binaire',
+      'Signature numérique',
+      'QR Code vérifiable sans compte',
+      'API REST pour intégration',
     ],
-    specs: ['eIDAS Ready', 'API REST'],
+    specs: ['Ed25519', 'SHA-256'],
     benefits: [
-      { title: 'eIDAS Ready', qty: 'Conforme aux règlements européens et béninois.', desc: 'Conformité légale totale' },
-      { title: 'API REST', qty: 'Intégration facile dans vos workflows existants.', desc: 'Pour vos applications métier' },
-      { title: 'Preuve Légale', qty: 'Validité juridique garantie devant les tribunaux.' },
-      { title: 'Archivage Long', qty: 'Conservation sécurisée jusqu\'à 10 ans.' }
+      {
+        title: 'Intégrité garantie',
+        qty: 'Toute modification du document est détectée instantanément.',
+        desc: 'Zéro falsification possible'
+      },
+      {
+        title: 'Vérification publique',
+        qty: 'N\'importe quel tiers vérifie l\'authenticité par simple scan du QR Code.',
+        desc: 'Sans compte requis'
+      },
+      {
+        title: 'Conformité légale',
+        qty: 'Signature numérique reconnue par la loi n°2017-20 du Bénin.',
+        desc: 'Valeur juridique locale'
+      },
+      {
+        title: 'API REST',
+        qty: 'Intégration directe dans vos systèmes documentaires existants.',
+        desc: 'Pour institutions et PME'
+      }
     ],
     techSpecs: [
-      { label: 'Signature Stds', value: 'PAdES / XAdES' },
-      { label: 'Encryption', value: 'RSA-4096 / SHA-256' },
-      { label: 'Hébergement', value: 'Souverain (BJ)' }
+      { label: 'Hachage', value: 'SHA-256' },
+      { label: 'Signature', value: 'Ed25519 (Sodium)' },
+      { label: 'QR Code', value: 'ISO 18004' },
+      { label: 'Storage policie', value: 'Zero Knowledge' }
     ]
   },
   {
     id: 'vigitech',
     title: 'VigiTech',
-    subtitle: 'Veille & Alerte Cyber',
-    description: 'Réseau d\'alerte communautaire et SOC virtuel pour signaler les incidents et recevoir des notifications ciblées en temps réel.',
-    fullDescription: 'Votre tour de contrôle cybernétique. Un réseau d\'alerte communautaire et un SOC (Security Operations Center) qui permet de signaler les incidents et de recevoir des notifications ciblées en temps réel.',
-    icon: IconRadar2,
+    subtitle: 'Signalement & Veille Cyber',
+    description: 'Réseau d\'alerte communautaire pour signaler les incidents et recevoir des notifications ciblées en temps réel.',
+    fullDescription: 'VigiTech est un réseau communautaire de signalement cyber qui permet à tout citoyen ou organisation de remonter un incident (phishing, ransomware, fraude documentaire) avec ou sans preuve numérique. Les incidents qualifiés alimentent un dashboard de veille en temps réel.',
+    icon: IconAlertTriangle,
     status: 'available',
     theme: 'green',
     badge: 'Nouveau',
     cta: 'Rejoindre le réseau',
     list: [
       'Signalement d\'incidents anonymisé',
+      'Dépôt de preuve numérique (image, PDF)',
+      'Dashboard de veille cyber en temps réel',
       'Flux de menaces en temps réel',
-      'Notifications ciblées par secteur',
-      'Tableaux de bord de surveillance'
     ],
-    specs: ['SOC Virtuel', 'Alertes 24/7'],
+    specs: ['Anonymat', 'Temps réel'],
     benefits: [
-      { title: 'Alerte Communautaire', qty: 'Signalement collaboratif des menaces.' },
-      { title: 'Veille Ciblée', qty: 'Notifications filtrées par secteur d\'activité.' },
-      { title: 'Réponse Rapide', qty: 'Validation et diffusion immédiate des alertes.' },
-      { title: 'SOC Virtuel', qty: 'Dashboards de surveillance unifiés.' }
+      {
+        title: 'Anonymat garanti',
+        qty: 'Votre identité est découplée du contenu avant toute persistance.',
+        desc: 'Zéro traçabilité si anonyme'
+      },
+      {
+        title: 'Veille collective',
+        qty: 'Chaque signalement alimente la carte des menaces cyber du territoire.',
+        desc: 'Intelligence communautaire'
+      },
+      {
+        title: 'Veille ciblée',
+        qty: 'Notifications filtrées par secteur d\'activité.',
+        desc: 'Restez informé des menaces pertinentes'
+      },
+      {
+        title: 'Preuve numérique',
+        qty: 'Joignez captures d\'écran ou PDF comme pièce forensique à votre signalement.',
+        desc: 'Incidents documentés'
+      }
     ],
     techSpecs: [
-      { label: 'Protocoles', value: 'STIX / TAXII' },
-      { label: 'SLA Réponse', value: '< 15 min' },
-      { label: 'Support', value: '24/7' }
+      { label: 'Anonymisation', value: 'Découplage ID/contenu' },
+      { label: 'Pièces jointes', value: 'JPEG, PNG, PDF' },
     ]
   },
   {
     id: 'secuscan',
     title: 'SecuScan',
-    subtitle: 'Audit de Vulnérabilité',
-    description: 'Scanner de vulnérabilité continu pour détecter les failles de vos applications et infrastructures avant les attaquants.',
-    fullDescription: 'Une solution complète d\'analyse de vulnérabilité qui scanne en continu vos applications, API et infrastructures cloud pour détecter les failles de sécurité avant les attaquants, garantissant une posture de sécurité robuste.',
-    icon: IconScanEye,
+    subtitle: 'Audit & Vulnérabilités Web',
+    description: 'Analysez automatiquement votre site ou application et obtenez un rapport priorisé de vos vulnérabilités, sans expert interne requis.',
+    fullDescription: 'SecuScan scanne vos actifs web selon le référentiel OWASP Top 10 et génère un rapport priorisé par niveau de criticité avec des recommandations correctives actionnables. Conçu pour les PME et développeurs africains sans équipe sécurité dédiée.',
+    icon: IconScan,
     status: 'coming_soon',
     theme: 'blue',
-    badge: 'Bêta',
-    cta: 'Demander un accès',
-    specs: ['OWASP Top 10', 'Automated'],
+    badge: 'Bientôt',
+    cta: 'En savoir plus',
+    list: [
+      'Scan automatisé selon OWASP Top 10',
+      'Rapport priorisé par niveau de criticité',
+      'Recommandations correctives actionnables',
+      'Export PDF certifiable via DocSentry',
+    ],
+    specs: ['OWASP Top 10', 'PDF Export'],
     benefits: [
-      { title: 'OWASP Top 10', qty: 'Couverture complète des failles web courantes.' },
-      { title: 'Rapports PDF', qty: 'Exports détaillés pour les équipes techniques et la direction.' },
-      { title: 'Zéro Faux Positif', qty: 'Algorithme de validation par IA pour réduire le bruit.' },
-      { title: 'Scan Continu', qty: 'Surveillance 24/7 de votre périmètre exposé.' }
+      {
+        title: 'Sans expert requis',
+        qty: 'Un rapport clair, priorisé et actionnable, même sans équipe sécurité.',
+        desc: 'Accessible aux PME'
+      },
+      {
+        title: 'Référentiel international',
+        qty: 'Audit basé sur l\'OWASP Top 10, standard mondial de sécurité web.',
+        desc: 'Crédibilité garantie'
+      },
+      {
+        title: 'Surveillance continue',
+        qty: 'Planifiez des scans récurrents pour détecter toute nouvelle exposition.',
+        desc: 'Pas juste un audit ponctuel'
+      },
+      {
+        title: 'Rapport certifiable',
+        qty: 'Exportez et certifiez votre rapport via DocSentry pour vos audits.',
+        desc: 'Preuve de conformité'
+      }
     ],
     techSpecs: [
-      { label: 'Scanner Engine', value: 'Nmap / OpenVAS Custom' },
-      { label: 'Compliance', value: 'ISO 27001' },
-      { label: 'Deployment', value: 'SaaS / On-Premise' }
+      { label: 'Référentiel', value: 'OWASP Top 10' },
+      { label: 'Criticité', value: '4 niveaux' },
+      { label: 'Export', value: 'PDF' },
+      { label: 'Hébergement', value: 'Souverain (BJ)' }
     ]
   },
   {
     id: 'leakmonitor',
     title: 'LeakMonitor',
-    subtitle: 'Fuites de Données',
-    description: 'Surveillance du darkweb et des accès aux documents sensibles pour prévenir les exfiltrations de données critiques.',
-    fullDescription: 'Système avancé de surveillance des fuites de données et de traçabilité des accès aux documents sensibles. Détecte les comportements anormaux, surveille le darkweb et prévient les exfiltrations de données critiques.',
+    subtitle: 'Surveillance & Fuites de Données',
+    description: 'Surveillance en temps réel du darkweb et des accès aux documents sensibles pour prévenir les exfiltrations de données critiques.',
+    fullDescription: 'LeakMonitor surveille en continu les sources dark web, forums underground et bases de données compromises à la recherche d\'indicateurs de compromission liés à votre organisation. Alertes temps réel, rapports de conformité RGPD/loi n°2017-20, et escalade vers VigiTech pour les incidents critiques.',
     icon: IconEye,
     status: 'coming_soon',
     theme: 'blue',
-    badge: 'En Dév',
+    badge: 'Bientôt',
     cta: 'En savoir plus',
-    specs: ['DLP', 'Darkweb'],
+    list: [
+      'Surveillance dark web et sources underground',
+      'Alertes temps réel sur vos données exposées',
+      'Rapports de conformité',
+      'Escalade automatique vers VigiTech',
+    ],
+    specs: ['Dark Web', 'RGPD'],
     benefits: [
-      { title: 'DLP Avancé', qty: 'Data Loss Prevention pour vos documents critiques.' },
-      { title: 'Audit Log', qty: 'Journalisation inviolable de tous les accès.' },
-      { title: 'Alertes Temps Réel', qty: 'Soyez notifié dès qu\'une anomalie est détectée.' },
-      { title: 'Veille Darkweb', qty: 'Scan proactif des bases de données fuitées.' }
+      {
+        title: 'Détection précoce',
+        qty: 'Sachez avant vos clients ou partenaires que vos données ont fui.',
+        desc: 'Réagissez avant le désastre'
+      },
+      {
+        title: 'Conformité active',
+        qty: 'Prouvez à vos auditeurs que vous surveillez activement vos expositions.',
+        desc: 'RGPD & loi n°2017-20'
+      },
+      {
+        title: 'Périmètre large',
+        qty: 'Emails, domaines, identifiants, tout votre périmètre est surveillé.',
+        desc: 'Couverture complète'
+      },
+      {
+        title: 'Escalade intégrée',
+        qty: 'Les fuites critiques déclenchent automatiquement une alerte VigiTech.',
+        desc: 'Boucle de réponse fermée'
+      }
     ],
     techSpecs: [
-      { label: 'Detection', value: 'AI / Pattern Matching' },
-      { label: 'Sources', value: 'Darkweb / Pastebin' },
-      { label: 'Notification', value: 'Email / SMS / Webhook' }
+      { label: 'Sources', value: 'Dark web + underground' },
+      { label: 'Fingerprinting', value: 'Email, domaine, ID' },
+      { label: 'Conformité', value: 'RGPD / Loi n°2017-20' },
+      { label: 'Hébergement', value: 'Souverain (BJ)' }
     ]
-  }
+  },
 ]

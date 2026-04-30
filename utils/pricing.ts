@@ -23,7 +23,7 @@ export const PLAN_CONFIG = {
     label: 'Entreprise',
     badgeClass: 'bg-success/10 text-success',
     borderClass: 'p-[2px] bg-gradient-to-tr from-success to-danger',
-    credits: 1000000 // Représente l'illimité
+    credits: 1000000 // Illimité
   }
 } as const
 
@@ -69,7 +69,7 @@ export const pricingTiers = [
     slug: 'starter',
     subtitle: '100 crédits',
     credits: 100,
-    price: '10.000 FCFA',
+    price: '10K FCFA',
     description: 'Idéal pour les consultants et indépendants ayant un flux régulier de documents.',
     icon: IconBriefcase,
     bgClass: 'bg-secondary/5',
@@ -89,7 +89,7 @@ export const pricingTiers = [
     slug: 'business',
     subtitle: '500 crédits',
     credits: 500,
-    price: '40.000 FCFA',
+    price: '40K FCFA',
     description: 'Conçu pour les TPE/PME souhaitant une gestion de confiance à grande échelle.',
     icon: IconBuildingSkyscraper,
     bgClass: 'bg-danger/5',

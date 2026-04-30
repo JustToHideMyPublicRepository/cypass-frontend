@@ -37,6 +37,7 @@ export default {
       fontFamily: {
         heading: ['Montserrat', 'Roboto'],
         body: ['Inter', '"Open Sans"'],
+        handwritting: ['"Indie Flower"', '"Handlee"'],
         code: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', '"Liberation Mono"', '"Courier New"', 'monospace']
       },
       keyframes: {
@@ -64,6 +65,10 @@ export default {
           '0%, 100%': { transform: 'translateY(0)' },
           '50%': { transform: 'translateY(-4px)' },
         },
+        'progress-fill': {
+          '0%': { width: '0%' },
+          '100%': { width: '100%' },
+        },
 
       },
       animation: {
@@ -73,9 +78,10 @@ export default {
         'fade-left': 'fade-left 0.8s ease-out forwards',
         'fade-right': 'fade-right 0.8s ease-out forwards',
         'bounce-subtle': 'bounce-subtle 2s ease-in-out infinite',
-
         'pulse-slow': 'pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'pulse-slower': 'pulse 10s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'spin-slow': 'spin 10s linear infinite',
+        'progress-fill': 'progress-fill 5s linear forwards',
       },
     },
   },

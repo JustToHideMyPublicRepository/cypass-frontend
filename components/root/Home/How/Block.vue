@@ -25,11 +25,87 @@
         </p>
       </div>
 
-      <!-- Flux DocSentry -->
-      <RootHomeHowDocsentry />
+      <!-- Sélecteur de Flux -->
+      <div class="max-w-4xl mx-auto mb-16 flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16">
+        <!-- Tab DocSentry -->
+        <button @click="activeTab = 'docsentry'"
+          class="group/tab flex items-center gap-5 transition-all duration-700 ease-out text-left"
+          :class="activeTab === 'docsentry' ? 'scale-100 opacity-100' : 'scale-90 opacity-40 hover:opacity-70'">
+          <div
+            class="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20 shadow-lg">
+            <IconFileCheck class="w-7 h-7" />
+          </div>
+          <div>
+            <h3 class="font-black text-BtW tracking-tighter text-xl">DocSentry</h3>
+            <p class="text-primary font-bold uppercase tracking-widest text-xs">Certification & Vérification</p>
+          </div>
+        </button>
 
-      <!-- Flux VigiTech -->
-      <RootHomeHowVigitech />
+        <!-- Divider -->
+        <div class="h-px w-20 bg-ash/30 md:hidden"></div>
+
+        <!-- Tab VigiTech -->
+        <button @click="activeTab = 'vigitech'"
+          class="group/tab flex items-center gap-5 transition-all duration-700 ease-out text-left"
+          :class="activeTab === 'vigitech' ? 'scale-100 opacity-100' : 'scale-90 opacity-40 hover:opacity-70'">
+          <div
+            class="w-14 h-14 rounded-2xl bg-secondary/10 flex items-center justify-center text-secondary border border-secondary/20 shadow-lg">
+            <IconShieldCheck class="w-7 h-7" />
+          </div>
+          <div>
+            <h3 class="font-black text-BtW tracking-tighter text-xl">VigiTech</h3>
+            <p class="text-secondary font-bold uppercase tracking-widest text-xs">Signalement & Veille</p>
+          </div>
+        </button>
+      </div>
+
+      <!-- Contenu des Flux -->
+      <div class="relative min-h-[400px]">
+        <transition name="flow-fade" mode="out-in">
+          <RootHomeHowDocsentry v-if="activeTab === 'docsentry'" key="docsentry" />
+          <RootHomeHowVigitech v-else key="vigitech" />
+        </transition>
+      </div>
     </div>
   </section>
 </template>
+
+<script setup lang="ts">
+import { ref, onMounted, onUnmounted } from 'vue'
+import { IconFileCheck, IconShieldCheck } from '@tabler/icons-vue'
+
+const activeTab = ref<'docsentry' | 'vigitech'>('docsentry')
+let rotationInterval: any = null
+
+const startRotation = () => {
+  // 5 minutes = 300,000 ms
+  rotationInterval = setInterval(() => {
+    activeTab.value = activeTab.value === 'docsentry' ? 'vigitech' : 'docsentry'
+  }, 300000)
+}
+
+onMounted(() => {
+  startRotation()
+})
+
+onUnmounted(() => {
+  if (rotationInterval) clearInterval(rotationInterval)
+})
+</script>
+
+<style scoped>
+.flow-fade-enter-active,
+.flow-fade-leave-active {
+  transition: all 0.5s ease;
+}
+
+.flow-fade-enter-from {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.flow-fade-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+</style>

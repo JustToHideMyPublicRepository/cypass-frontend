@@ -11,13 +11,14 @@
               <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
             </span>
             <span class="text-xs font-bold uppercase tracking-widest">
-              Certifiez. Signalez. Protégez</span>
+              Certifiez, Signalez et Protégez</span>
           </div>
 
           <h1
             class="font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-textClr via-hsa to-BtW leading-tight">
             Votre bouclier <br class="hidden lg:block" />
-            <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-success relative">
+            <span
+              class="font-handwritting text-transparent bg-clip-text bg-gradient-to-r from-primary to-success relative">
               numérique
               <svg class="absolute w-full h-3 -bottom-1 left-0 text-primary opacity-30" viewBox="0 0 200 9" fill="none"
                 xmlns="http://www.w3.org/2000/svg">
@@ -29,21 +30,24 @@
             pour
             <div
               class="h-[1.5em] lg:h-[1.2em] relative overflow-hidden block w-full mt-2 lg:mt-4 text-[0.8em] md:text-[0.7em] lg:text-[0.65em] font-black">
-              <span class="text-transparent bg-clip-text bg-gradient-to-r from-secondary to-primary inline-block">
+              <span
+                class="font-handwritting text-transparent bg-clip-text bg-gradient-to-r from-secondary to-primary inline-block">
                 {{ currentText }}
               </span>
               <span class="inline-block w-[3px] h-[0.9em] bg-primary animate-pulse align-middle ml-1"></span>
             </div>
           </h1>
 
-          <p class="text-hsa max-w-2xl mx-auto lg:mx-0 leading-relaxed font-light">
-            Avec CYPASS, <NuxtLink to="/verify"
+          <p class="text-hsa max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+            Avec CYPASS,
+            <NuxtLink to="/verify"
+              class="font-bold hover:underline decoration-primary decoration-2 underline-offset-4 transition-all">
+              chaque
+              document</NuxtLink> émis devient une preuve,
+            <NuxtLink to="/vigitech"
               class="font-bold hover:underline decoration-primary decoration-2 underline-offset-4 transition-all">chaque
-              document</NuxtLink> que vous
-            émettez devient une preuve, <NuxtLink to="/vigitech"
-              class="font-bold hover:underline decoration-primary decoration-2 underline-offset-4 transition-all">chaque
-              incident</NuxtLink> que vous signalez devient
-            une alerte et <span class="font-bold">chaque donnée sensible</span> devient surveillée.
+              incident</NuxtLink> signalé devient une alerte et <span class="font-bold">chaque donnée sensible</span>
+            devient surveillée.
           </p>
 
           <!-- Boutons -->

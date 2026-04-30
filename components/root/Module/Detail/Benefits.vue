@@ -10,6 +10,9 @@
       </div>
       <h3 class="font-bold text-base md:text-lg mb-1 md:mb-2">{{ benefit.title }}</h3>
       <p class="text-hsa text-xs md:text-sm leading-relaxed">{{ benefit.qty }}</p>
+      <div v-if="benefit.desc" class="mt-3 inline-flex items-center px-2.5 py-1 rounded-md text-[11px] font-medium" :class="theme === 'blue' ? 'bg-primary/10 text-primary' : 'bg-success/10 text-success'">
+        {{ benefit.desc }}
+      </div>
     </div>
   </div>
 </template>
