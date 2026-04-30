@@ -1,9 +1,5 @@
 import { markRaw } from 'vue'
-import {
-  IconUser, IconBriefcase, IconBuildingSkyscraper, IconActivity,
-  IconQrcode, IconRosetteDiscountCheck, IconArchive, IconRadar, IconUsers,
-  IconCode, IconApi, IconServer
-} from '@tabler/icons-vue'
+import { IconUser, IconBriefcase, IconBuildingSkyscraper, IconActivity, IconQrcode, IconRosetteDiscountCheck, IconArchive, IconRadar, IconCode, IconApi, IconServer } from '@tabler/icons-vue'
 
 export const PLAN_CONFIG = {
   'free': {
