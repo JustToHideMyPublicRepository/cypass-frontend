@@ -1,6 +1,25 @@
 <template>
   <UiBaseModal :show="show" title="Certificat de confiance" maxWidth="2xl" @close="$emit('close')">
-    <div v-if="publicDocsentryStore.publicKeyInfo" class="flex flex-col md:flex-row gap-6 items-start py-2">
+    <div v-if="publicDocsentryStore.loadingPublicKeyInfo" class="flex flex-col md:flex-row gap-6 items-start py-2">
+      <div class="w-24 h-24 bg-ash/10 rounded-[2rem] shrink-0">
+        <UiAppSkeleton type="rect" width="100%" height="100%" class="rounded-[2rem]" />
+      </div>
+      <div class="flex-1 space-y-6">
+        <div class="space-y-2">
+          <UiAppSkeleton type="text" width="60%" height="24px" />
+          <UiAppSkeleton type="text" width="40%" height="12px" />
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <UiAppSkeleton v-for="i in 2" :key="i" type="rect" height="60px" class="rounded-xl" />
+        </div>
+        <div class="space-y-3">
+          <UiAppSkeleton type="text" width="30%" height="10px" />
+          <UiAppSkeleton type="rect" height="80px" class="rounded-xl" />
+        </div>
+      </div>
+    </div>
+
+    <div v-else-if="publicDocsentryStore.publicKeyInfo" class="flex flex-col md:flex-row gap-6 items-start py-2">
       <!-- Icône de certification premium -->
       <div
         class="w-24 h-24 bg-primary/10 rounded-[2rem] flex items-center justify-center text-primary shrink-0 shadow-lg shadow-primary/5 animate-fade-in border border-primary/10">

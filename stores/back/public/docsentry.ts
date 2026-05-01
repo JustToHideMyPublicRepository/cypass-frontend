@@ -9,11 +9,13 @@ export const usePublicDocsentryStore = defineStore('publicDocsentry', {
     publicKeyInfo: null as PublicKeyInfo | null,
     enrichmentCategories: [] as EnrichmentCategory[],
     loadingCategories: false,
+    loadingPublicKeyInfo: false,
   }),
 
   actions: {
     // Récupérer la clé publique
     async fetchPublicKey() {
+      this.loadingPublicKeyInfo = true
       try {
         const response = await $fetch<PublicKeyInfo>('/api/public/docsentry/public-key')
         if (response.success) {
@@ -21,6 +23,8 @@ export const usePublicDocsentryStore = defineStore('publicDocsentry', {
         }
       } catch (err) {
         console.error('Failed to fetch public key', err)
+      } finally {
+        this.loadingPublicKeyInfo = false
       }
     },
 

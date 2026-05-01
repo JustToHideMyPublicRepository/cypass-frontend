@@ -16,7 +16,20 @@
         </div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div v-if="store.loadingCategories" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div v-for="i in 4" :key="i" class="p-4 bg-ash/10 rounded-2xl border border-ash/50 flex items-start gap-4">
+          <UiAppSkeleton type="rect" width="40px" height="40px" class="rounded-xl" />
+          <div class="flex-1 space-y-2">
+            <UiAppSkeleton type="text" width="60%" height="16px" />
+            <div class="space-y-1">
+              <UiAppSkeleton type="text" width="80%" height="10px" />
+              <UiAppSkeleton type="text" width="40%" height="10px" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div v-for="category in store.enrichmentCategories" :key="category.key"
           class="p-4 bg-ash/30 rounded-2xl border border-ash/50 hover:border-primary/30 transition-all group">
           <div class="flex items-center gap-3 mb-4">
