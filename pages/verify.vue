@@ -11,7 +11,7 @@
     </div>
 
     <!-- Modals -->
-    <ModalDocsentryEnrich :show="modals.enrich" @close="modals.enrich = false" />
+    <modalDocsentryInfoEnrich :show="modals.enrich" @close="modals.enrich = false" />
   </div>
 </template>
 

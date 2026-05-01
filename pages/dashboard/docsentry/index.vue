@@ -39,13 +39,13 @@
     <ModalDocsentryChoice :show="modals.choice" @close="modals.choice = false" @select="handleChoice" />
 
     <!-- Trust Card Modal -->
-    <ModalDocsentryTrust :show="modals.trust" @close="modals.trust = false" />
+    <modalDocsentryInfoTrust :show="modals.trust" @close="modals.trust = false" />
     <!-- Enriched Certification Modal -->
     <ModalDocsentryEnrichedAuth :show="modals.enriched" @close="modals.enriched = false"
       @success="handleEnrichedSuccess" />
 
     <!-- Enrich Categories Modal -->
-    <ModalDocsentryEnrich :show="modals.enrich" @close="modals.enrich = false" />
+    <modalDocsentryInfoEnrich :show="modals.enrich" @close="modals.enrich = false" />
   </div>
 </template>
 

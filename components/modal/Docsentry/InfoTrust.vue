@@ -53,15 +53,18 @@
           <div class="flex justify-center pt-1">
             <button @click="isDetailsExpanded = !isDetailsExpanded"
               class="text-[10px] font-bold text-hsa hover:text-primary flex items-center gap-1 transition-colors group">
-              <component :is="isDetailsExpanded ? IconChevronUp : IconChevronDown" class="w-3 h-3 group-hover:animate-bounce-subtle" />
+              <component :is="isDetailsExpanded ? IconChevronUp : IconChevronDown"
+                class="w-3 h-3 group-hover:animate-bounce-subtle" />
               {{ isDetailsExpanded ? 'Masquer les détails techniques' : 'Afficher les formats Base64 & Hex' }}
             </button>
           </div>
 
           <!-- Section extensible Base64 & Hex -->
           <transition enter-active-class="transition duration-300 ease-out"
-            enter-from-class="transform scale-95 opacity-0 -translate-y-2" enter-to-class="transform scale-100 opacity-100 translate-y-0"
-            leave-active-class="transition duration-200 ease-in" leave-from-class="transform scale-100 opacity-100 translate-y-0"
+            enter-from-class="transform scale-95 opacity-0 -translate-y-2"
+            enter-to-class="transform scale-100 opacity-100 translate-y-0"
+            leave-active-class="transition duration-200 ease-in"
+            leave-from-class="transform scale-100 opacity-100 translate-y-0"
             leave-to-class="transform scale-95 opacity-0 -translate-y-2">
             <div v-show="isDetailsExpanded" class="grid grid-cols-1 gap-3 pt-2">
               <div class="space-y-1.5">

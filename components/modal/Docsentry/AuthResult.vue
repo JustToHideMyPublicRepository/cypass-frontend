@@ -1,7 +1,6 @@
 <template>
   <div class="space-y-6">
-    <div
-      class="p-6 rounded-[2rem] bg-success/5 border-2 border-success/20 animate-fade-up shadow-lg shadow-success/5">
+    <div class="p-6 rounded-[2rem] bg-success/5 border-2 border-success/20 animate-fade-up shadow-lg shadow-success/5">
       <div class="flex items-center gap-4 text-success mb-5">
         <div class="p-2 bg-success/10 rounded-xl">
           <IconCircleCheck class="w-6 h-6" />
@@ -56,8 +55,8 @@
     </div>
 
     <!-- Section Multi-version (Génération de versions enfants) -->
-    <MeDocsentryDetailMultiVersionForm ref="multiVersionFormRef" :document-id="result.document_id"
-      collapsible @update:loading="$emit('update:loading', $event)" />
+    <MeDocsentryDetailMultiVersionForm ref="multiVersionFormRef" :document-id="result.document_id" collapsible
+      @update:loading="$emit('update:loading', $event)" />
   </div>
 </template>
 
@@ -82,9 +81,9 @@ const copyHash = (hash: string) => {
 
 // Reset function exposed
 const resetForm = () => {
-    if (multiVersionFormRef.value) {
-        multiVersionFormRef.value.reset()
-    }
+  if (multiVersionFormRef.value) {
+    multiVersionFormRef.value.reset()
+  }
 }
 
 defineExpose({ resetForm })
