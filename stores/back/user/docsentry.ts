@@ -171,7 +171,7 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
         const formData = new FormData()
         formData.append('document', file)
 
-        const response = await $fetch<{ success: boolean; message: string; data: UploadResult }>('/api/user/docsentry/certificate', {
+        const response = await $fetch<{ success: boolean; message: string; data: UploadResult }>('/api/user/docsentry/certificate-simple', {
           method: 'POST',
           body: formData
         })

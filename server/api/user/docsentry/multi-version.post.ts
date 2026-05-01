@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
     }
 
     const backendFormData = new FormData()
-    
+
     for (const item of formData) {
       if (item.name === 'recipients_csv' && item.data) {
         const blob = new Blob([new Uint8Array(item.data)], { type: item.type })
@@ -27,7 +27,7 @@ export default defineEventHandler(async (event) => {
       }
     }
 
-    const response: any = await $fetch(`${baseApi}/user/docsentry/multi-version`, {
+    const response: any = await $fetch(`${baseApi}/user/docsentry/multi_version`, {
       method: 'POST' as any,
       headers: {
         'Authorization': `Bearer ${token}`,

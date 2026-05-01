@@ -5,6 +5,7 @@
     <RootHomePartners />
     <RootHomeHowBlock />
     <RootHomeFeaturesBlock />
+    <RootHomeDesignPrinciples />
     <RootHomeStats />
     <RootHomePricingsPreview />
     <!-- <RootHomeTestimonials /> -->

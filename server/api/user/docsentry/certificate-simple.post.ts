@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
       }
     }
 
-    const response: any = await $fetch(`${baseApi}/user/docsentry/certificate`, {
+    const response: any = await $fetch(`${baseApi}/user/docsentry/certificate_simple`, {
       method: 'POST' as any,
       headers: {
         'Authorization': `Bearer ${token}`,
