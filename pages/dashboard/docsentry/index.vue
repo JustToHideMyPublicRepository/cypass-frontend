@@ -13,7 +13,8 @@
       <!-- Sidebar: Filters & Info -->
       <div class="space-y-6">
         <!-- Filters -->
-        <MeDocsentryHomeFilters v-model="filters" :available-types="availableTypes" @reset="resetFilters" />
+        <MeDocsentryHomeFilters v-model="filters" :available-types="availableTypes"
+          :categories="publicStore.enrichmentCategories" @reset="resetFilters" />
 
         <!-- Stats Gadget -->
         <MeDocsentryHomeSidebarStats :total="store.pagination.total"
@@ -65,7 +66,8 @@ const filters = ref({
   date_start: '',
   date_end: '',
   with_versions: 'all',
-  certification_mode: 'all'
+  certification_mode: 'all',
+  document_category: 'all'
 })
 
 const modals = reactive({
@@ -84,6 +86,7 @@ const resetFilters = () => {
   filters.value.date_end = ''
   filters.value.with_versions = 'all'
   filters.value.certification_mode = 'all'
+  filters.value.document_category = 'all'
   currentPage.value = 1
 }
 
@@ -124,7 +127,6 @@ const handleUpload = async (file: File) => {
 
 const handleEnrichedSuccess = () => {
   toast.showToast('success', 'Certification Enrichie', 'Le document a été certifié avec toutes ses métadonnées.')
-  closeModals()
 }
 
 const handleVerify = async (file: File) => {

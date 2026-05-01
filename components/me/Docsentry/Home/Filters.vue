@@ -21,19 +21,19 @@
         </div>
       </div>
 
-      <!-- File Type -->
-      <div class="space-y-1.5">
-        <label class="text-[10px] font-bold text-hsa uppercase tracking-[0.1em] ml-1">Type de document</label>
-        <select v-model="model.file_type"
-          class="w-full h-10 px-3 rounded-xl border border-ash bg-ash/50 text-sm focus:ring-2 focus:ring-primary outline-none transition-all cursor-pointer appearance-none">
-          <option value="all">Tous les types</option>
-          <option v-for="type in availableTypes" :key="type" :value="type">
-            {{ type }}
-          </option>
-        </select>
-      </div>
-
       <div class="grid grid-cols-2 gap-3">
+        <!-- File Type -->
+        <div class="space-y-1.5">
+          <label class="text-[10px] font-bold text-hsa uppercase tracking-[0.1em] ml-1">Type</label>
+          <select v-model="model.file_type"
+            class="w-full h-10 px-3 rounded-xl border border-ash bg-ash/50 text-sm focus:ring-2 focus:ring-primary outline-none transition-all cursor-pointer appearance-none">
+            <option value="all">Tous</option>
+            <option v-for="type in availableTypes" :key="type" :value="type">
+              {{ type }}
+            </option>
+          </select>
+        </div>
+
         <!-- Versions Filter -->
         <div class="space-y-1.5">
           <label class="text-[10px] font-bold text-hsa uppercase tracking-[0.1em] ml-1">Multiversion</label>
@@ -44,7 +44,9 @@
             <option value="no">Non</option>
           </select>
         </div>
+      </div>
 
+      <div class="grid grid-cols-2 gap-3">
         <!-- Mode Filter -->
         <div class="space-y-1.5">
           <label class="text-[10px] font-bold text-hsa uppercase tracking-[0.1em] ml-1">Certification</label>
@@ -53,6 +55,18 @@
             <option value="all">Tous</option>
             <option value="simple">Simple</option>
             <option value="enrichie">Enrichie</option>
+          </select>
+        </div>
+
+        <!-- Mode Filter -->
+        <div v-show="model.certification_mode === 'enrichie'" class="space-y-1.5 animate-slide-up">
+          <label class="text-[10px] font-bold text-hsa uppercase tracking-[0.1em] ml-1">Catégorie</label>
+          <select v-model="model.document_category"
+            class="w-full h-10 px-3 rounded-xl border border-ash bg-ash/50 text-sm focus:ring-2 focus:ring-primary outline-none transition-all cursor-pointer appearance-none">
+            <option value="all">Toutes les catégories</option>
+            <option v-for="cat in categories" :key="cat.key" :value="cat.key">
+              {{ cat.label }}
+            </option>
           </select>
         </div>
       </div>
@@ -89,6 +103,7 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted } from 'vue'
 import { IconSearch, IconX, IconChevronDown } from '@tabler/icons-vue'
+import { type EnrichmentCategory } from '~/types/docsentry'
 
 interface Filters {
   filename: string
@@ -97,10 +112,12 @@ interface Filters {
   date_end: string
   with_versions: string
   certification_mode: string
+  document_category: string
 }
 
 const props = defineProps<{
   availableTypes: string[]
+  categories?: EnrichmentCategory[]
 }>()
 
 const emit = defineEmits(['reset'])
@@ -135,6 +152,7 @@ const hasActiveFilters = computed(() => {
     model.value.date_start !== '' ||
     model.value.date_end !== '' ||
     model.value.with_versions !== 'all' ||
-    model.value.certification_mode !== 'all'
+    model.value.certification_mode !== 'all' ||
+    model.value.document_category !== 'all'
 })
 </script>

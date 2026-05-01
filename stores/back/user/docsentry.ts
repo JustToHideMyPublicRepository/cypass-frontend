@@ -21,7 +21,8 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
         date_start: '',
         date_end: '',
         with_versions: 'all',
-        certification_mode: 'all'
+        certification_mode: 'all',
+        document_category: 'all'
       }
     }
   }),
@@ -108,6 +109,7 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
         if (filters.date_end) query.date_end = filters.date_end
         if (filters.with_versions && filters.with_versions !== 'all') query.with_versions = filters.with_versions
         if (filters.certification_mode && filters.certification_mode !== 'all') query.certification_mode = filters.certification_mode
+        if (filters.document_category && filters.document_category !== 'all') query.document_category = filters.document_category
 
         const response = await $fetch<{
           success: boolean;
