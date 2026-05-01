@@ -57,7 +57,8 @@ const filters = ref({
   file_type: 'all',
   date_start: '',
   date_end: '',
-  with_versions: 'all'
+  with_versions: 'all',
+  certification_mode: 'all'
 })
 
 const modals = reactive({
@@ -73,6 +74,7 @@ const resetFilters = () => {
   filters.value.date_start = ''
   filters.value.date_end = ''
   filters.value.with_versions = 'all'
+  filters.value.certification_mode = 'all'
   currentPage.value = 1
 }
 

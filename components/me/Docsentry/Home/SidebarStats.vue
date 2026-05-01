@@ -1,6 +1,13 @@
 <template>
   <UiBaseCard title="Statistiques">
-    <div class="space-y-4">
+    <template #header>
+      <button @click="isCollapsed = !isCollapsed" class="p-1 hover:bg-ash rounded-lg transition-colors text-hsa"
+        :title="isCollapsed ? 'Déplier' : 'Replier'">
+        <IconChevronDown class="w-4 h-4 transition-transform duration-300" :class="{ 'rotate-180': !isCollapsed }" />
+      </button>
+    </template>
+
+    <div v-show="!isCollapsed" class="space-y-4 animate-fade-in">
       <div class="flex items-center justify-between p-3 rounded-xl bg-ash/50 border border-ash/50">
         <div class="flex items-center gap-3">
           <div class="p-2 rounded-lg bg-primary/10 text-primary">
@@ -35,11 +42,25 @@
 </template>
 
 <script setup lang="ts">
-import { IconFileTextFilled, IconShieldCheckFilled } from '@tabler/icons-vue'
+import { ref, watch, onMounted } from 'vue'
+import { IconFileTextFilled, IconShieldCheckFilled, IconChevronDown } from '@tabler/icons-vue'
 
 defineProps<{
   total: number
   verified: number
   usage: number
 }>()
+
+const isCollapsed = ref(false)
+
+onMounted(() => {
+  const saved = localStorage.getItem('cps_docsentry_stats')
+  if (saved !== null) {
+    isCollapsed.value = JSON.parse(saved)
+  }
+})
+
+watch(isCollapsed, (newVal) => {
+  localStorage.setItem('cps_docsentry_stats', JSON.stringify(newVal))
+})
 </script>

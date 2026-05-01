@@ -13,6 +13,7 @@ export interface Document {
   type: string
   has_certificate: boolean
   has_versions: boolean
+  certification_mode: 'simple' | 'enrichie'
   recipient_name?: string | null
   parent?: {
     id: string
@@ -50,6 +51,8 @@ export interface DocumentDetail extends Document {
   }
   is_zip_downloaded: boolean
   certificate_download_count: number
+  certification_mode: 'simple' | 'enrichie'
+  enriched_metadata?: Record<string, any>
   multi_version_generation_count: number
   multi_version_generations?: MultiVersionGeneration[]
   versions?: DocumentVersion[]

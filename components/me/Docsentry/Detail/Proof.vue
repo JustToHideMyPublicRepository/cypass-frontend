@@ -2,7 +2,7 @@
   <UiBaseCard v-if="doc.signature_info">
     <div class="flex items-center gap-2 mb-6 text-BtW">
       <IconShieldCheck class="w-5 h-5 text-primary" />
-      <h3 class="font-bold">Preuve Cryptographique</h3>
+      <h3 class="font-bold">Preuve cryptographique</h3>
     </div>
 
     <div class="space-y-4">

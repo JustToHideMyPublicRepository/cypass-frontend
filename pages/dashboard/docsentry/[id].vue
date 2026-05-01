@@ -18,8 +18,11 @@
         <MeDocsentryDetailInfo :doc="doc" :is-verified="isVerified" :copied-fields="copiedFields" @copy="copyField" />
 
         <!-- Child Versions -->
-        <MeDocsentryDetailVersions v-if="doc.has_versions" :versions="doc.versions || []" :loading="isFiltering"
+        <MeDocsentryDetailVersions v-if="doc.certification_mode === 'simple' && doc.has_versions" :versions="doc.versions || []" :loading="isFiltering"
           @copy="copyField" @update-filters="handleFilters" />
+
+        <!-- Enriched Metadata -->
+        <MeDocsentryDetailEnriched v-if="doc.certification_mode === 'enrichie'" :metadata="doc.enriched_metadata" />
 
         <!-- Cryptographic Proof -->
         <MeDocsentryDetailProof :doc="doc" :copied-fields="copiedFields" @copy="copyField" />
@@ -28,10 +31,10 @@
       <!-- Actions & Sidebar -->
       <div class="space-y-6">
         <MeDocsentryDetailSidebar :document-id="doc.id" :has-certificate="!!doc.availability?.certificate"
-          :has-versions="doc.has_versions" :created-at="doc.created_at" :is-zip-downloaded="doc.is_zip_downloaded"
+          :has-versions="doc.certification_mode === 'simple' && doc.has_versions" :created-at="doc.created_at" :is-zip-downloaded="doc.certification_mode === 'simple' && doc.is_zip_downloaded"
           :certificate-download-count="doc.certificate_download_count"
-          :multi-version-generations="doc.multi_version_generations"
-          :multi-version-generation-count="doc.multi_version_generation_count" @verify="redirectToVerify"
+          :multi-version-generations="doc.certification_mode === 'simple' ? doc.multi_version_generations : []"
+          :multi-version-generation-count="doc.certification_mode === 'simple' ? doc.multi_version_generation_count : 0" @verify="redirectToVerify"
           @download="downloadCertificate" @download-zip="downloadZip" @share="shareDocument"
           @refresh-doc="startPollingForVersions" />
       </div>

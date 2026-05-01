@@ -26,29 +26,41 @@ const props = defineProps<{
 const chartData = computed(() => {
   const days = Array.from({ length: 7 }, (_, i) => startOfDay(subDays(new Date(), 6 - i)))
 
-  const simpleCounts = days.map(day => {
-    return props.documents.filter(doc => !doc.has_versions && isSameDay(new Date(doc.created_at), day)).length
+  const simpleDocs = props.documents.filter(doc => doc.certification_mode === 'simple')
+  const enrichieDocs = props.documents.filter(doc => doc.certification_mode === 'enrichie')
+
+  const uniqueCounts = days.map(day => {
+    return simpleDocs.filter(doc => !doc.has_versions && isSameDay(new Date(doc.created_at), day)).length
   })
 
   const versionCounts = days.map(day => {
-    return props.documents.filter(doc => doc.has_versions && isSameDay(new Date(doc.created_at), day)).length
+    return simpleDocs.filter(doc => doc.has_versions && isSameDay(new Date(doc.created_at), day)).length
+  })
+
+  const enrichieCounts = days.map(day => {
+    return enrichieDocs.filter(doc => isSameDay(new Date(doc.created_at), day)).length
   })
 
   return {
     labels: days.map(day => format(day, 'dd MMM', { locale: fr })),
-    simples: simpleCounts,
-    versions: versionCounts
+    uniques: uniqueCounts,
+    versions: versionCounts,
+    enrichies: enrichieCounts
   }
 })
 
 const series = computed(() => [
   {
-    name: 'Versions uniques',
-    data: chartData.value.simples
+    name: 'Simple (Unique)',
+    data: chartData.value.uniques
   },
   {
-    name: 'Multi-versions',
+    name: 'Simple (Multi)',
     data: chartData.value.versions
+  },
+  {
+    name: 'Enrichie',
+    data: chartData.value.enrichies
   }
 ])
 
@@ -65,7 +77,7 @@ const chartOptions = computed(() => ({
   theme: {
     mode: isDark.value ? 'dark' : 'light'
   },
-  colors: ['#00C853', '#00B8D4'],
+  colors: ['#00C853', '#00B8D4', '#6200EA'],
   fill: {
     type: 'gradient',
     gradient: {

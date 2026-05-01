@@ -67,7 +67,7 @@
       </div>
       <p class="text-sm text-hsa leading-relaxed">
         Ce document est certifié par l'infrastructure de confiance CYPASS, garantissant son origine et son intégrité
-        immuable sur le territoire national.
+        immuable.
       </p>
     </UiBaseCard>
   </div>
