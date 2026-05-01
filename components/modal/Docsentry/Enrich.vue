@@ -53,8 +53,9 @@
 </template>
 
 <script setup lang="ts">
-import {  IconListDetails,  IconSchool,  IconFileCertificate,  IconClipboardText,  IconFileText,  IconBulb } from '@tabler/icons-vue'
+import { IconListDetails, IconBulb } from '@tabler/icons-vue'
 import { usePublicDocsentryStore } from '~/stores/back/public/docsentry'
+import { getDocCategoryIcon } from '~/utils/docsentry'
 
 defineProps<{
   show: boolean
@@ -64,13 +65,5 @@ defineEmits(['close'])
 
 const store = usePublicDocsentryStore()
 
-const getIconByCategory = (key: string) => {
-  switch (key) {
-    case 'diplome': return IconSchool
-    case 'attestation': return IconFileCertificate
-    case 'certificat': return IconClipboardText
-    case 'releve_notes': return IconFileText
-    default: return IconFileText
-  }
-}
+const getIconByCategory = (key: string) => getDocCategoryIcon(key)
 </script>

@@ -33,9 +33,7 @@
           class="p-4 rounded-xl border-2 transition-all text-left flex items-start gap-3 group"
           :class="form.category?.key === cat.key ? 'border-primary bg-primary/5' : 'border-ash bg-ash/20 hover:border-primary/30'">
           <div class="p-2 rounded-lg bg-primary/10 text-primary group-hover:scale-110 transition-transform">
-            <IconCertificate v-if="cat.key === 'diplome'" class="w-5 h-5" />
-            <IconFileCertificate v-else-if="cat.key === 'certificat'" class="w-5 h-5" />
-            <IconFileDescription v-else class="w-5 h-5" />
+            <component :is="getDocCategoryIcon(cat.key)" class="w-5 h-5" />
           </div>
           <div>
             <h4 class="font-bold text-BtW text-sm">{{ cat.label }}</h4>
@@ -44,7 +42,8 @@
         </button>
       </div>
       <div class="flex justify-end pt-4">
-        <UiBaseButton :disabled="!form.category || publicStore.loadingCategories" @click="currentStep = 2">Continuer</UiBaseButton>
+        <UiBaseButton :disabled="!form.category || publicStore.loadingCategories" @click="currentStep = 2">Continuer
+        </UiBaseButton>
       </div>
     </div>
 
@@ -108,13 +107,11 @@
 
 <script setup lang="ts">
 import { ref, reactive, watch } from 'vue'
-import {
-  IconCertificate, IconFileCertificate, IconFileDescription,
-  IconCloudUpload, IconFileText, IconX, IconAlertCircle
-} from '@tabler/icons-vue'
+import { IconAlertCircle } from '@tabler/icons-vue'
 import { usePublicDocsentryStore } from '~/stores/back/public/docsentry'
 import { useUserDocsentryStore } from '~/stores/back/user/docsentry'
 import { useGlobalDropZone } from '~/composables/useDropZone'
+import { getDocCategoryIcon } from '~/utils/docsentry'
 
 const props = defineProps<{
   show: boolean

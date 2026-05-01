@@ -1,5 +1,8 @@
-import { IconFile, IconFiles, IconDatabaseEdit } from '@tabler/icons-vue'
+import { IconSchool, IconFileCertificate, IconClipboardText, IconFileText, IconFileDescription, IconCertificate, IconFileCheck, IconLayersIntersect } from '@tabler/icons-vue'
 
+/**
+ * Interface représentant une étape du processus de vérification
+ */
 export interface Step {
   id: string
   label: string
@@ -7,83 +10,102 @@ export interface Step {
   status: 'pending' | 'loading' | 'completed' | 'error'
 }
 
-export const getDocumentStyle = (hasVersions: boolean, mode?: 'simple' | 'enrichie') => {
-  if (mode === 'enrichie') {
+
+/**
+ * Retourne le style visuel associé à un document selon son mode et ses versions
+ */
+export const getDocumentStyle = (hasVersions: boolean, mode: string) => {
+  const isEnriched = mode === 'enrichie' || mode === 'enriched'
+
+  if (hasVersions) {
     return {
-      icon: IconDatabaseEdit,
+      bgColor: 'bg-primary/5',
       color: 'text-primary',
-      bgColor: 'bg-primary/10'
+      icon: IconLayersIntersect
     }
   }
+
+  if (isEnriched) {
+    return {
+      bgColor: 'bg-primary/10',
+      color: 'text-primary',
+      icon: IconCertificate
+    }
+  }
+
   return {
-    icon: hasVersions ? IconFiles : IconFile,
-    color: hasVersions ? 'text-success' : 'text-primary',
-    bgColor: hasVersions ? 'bg-success/10' : 'bg-primary/10'
+    bgColor: 'bg-success/10',
+    color: 'text-success',
+    icon: IconFileCheck
   }
 }
 
-export const authSteps: Step[] = [
+/**
+ * Étapes par défaut de la vérification de document
+ */
+export const verifySteps: Step[] = [
   {
-    id: 'prepare',
-    label: 'Préparation',
-    description: 'Initialisation du document pour traitement',
+    id: 'file-metadata',
+    label: 'Analyse',
+    description: 'Lecture des métadonnées du document',
     status: 'pending'
   },
   {
-    id: 'hash',
-    label: 'Empreinte numérique',
-    description: 'Génération du hash SHA-256 unique',
+    id: 'hash-calculation',
+    label: 'Calcul',
+    description: 'Génération de l\'empreinte SHA-256',
     status: 'pending'
   },
   {
-    id: 'network',
-    label: 'Réseau souverain',
-    description: 'Communication avec les serveurs CYPASS',
-    status: 'pending'
-  },
-  {
-    id: 'sign',
-    label: 'Signature numérique',
-    description: 'Application du sceau cryptographique Ed25519',
-    status: 'pending'
-  },
-  {
-    id: 'finalize',
-    label: 'Finalisation',
-    description: 'Génération du certificat de conformité',
+    id: 'integrity-check',
+    label: 'Vérification',
+    description: 'Validation de la signature souveraine',
     status: 'pending'
   }
 ]
 
-export const verifySteps: Step[] = [
+/**
+ * Étapes par défaut de l'authentification de document
+ */
+export const authSteps: Step[] = [
   {
-    id: 'metadata',
-    label: 'Métadonnées',
-    description: 'Lecture des informations du document',
+    id: 'file-processing',
+    label: 'Traitement',
+    description: 'Analyse et préparation du document',
     status: 'pending'
   },
   {
-    id: 'extract',
-    label: 'Extraction',
-    description: 'Calcul et extraction de l\'empreinte cryptographique',
+    id: 'hash-generation',
+    label: 'Empreinte',
+    description: 'Calcul de la signature numérique unique',
     status: 'pending'
   },
   {
-    id: 'ledger',
-    label: 'Comparaison',
-    description: 'Vérification dans le registre CYPASS',
-    status: 'pending'
-  },
-  {
-    id: 'authenticity',
-    label: 'Authenticité',
-    description: 'Validation de l\'intégrité de la signature',
-    status: 'pending'
-  },
-  {
-    id: 'report',
-    label: 'Rapport',
-    description: 'Génération du rapport de vérification final',
+    id: 'encryption-signature',
+    label: 'Sécurisation',
+    description: 'Application du sceau cryptographique CYPASS',
     status: 'pending'
   }
 ]
+
+
+
+/**
+ * Retourne l'icône associée à une catégorie de document
+ * @param key Clé de la catégorie (diplome, attestation, certificat, etc.)
+ */
+export const getDocCategoryIcon = (key: string) => {
+  const k = key?.toLowerCase()
+  switch (k) {
+    case 'diplome':
+      return IconSchool
+    case 'attestation':
+      return IconFileCertificate
+    case 'certificat':
+      return IconClipboardText
+    case 'releve_notes':
+      return IconFileText
+    default:
+      return IconFileDescription
+  }
+}
