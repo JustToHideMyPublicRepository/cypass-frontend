@@ -1,5 +1,5 @@
 <template>
-  <div class="relative flex items-center p-1.5 bg-WtB/50 backdrop-blur-xl rounded-full border border-ash/30 shadow-inner">
+  <div class="relative flex items-center p-1.5 bg-WtB/50 backdrop-blur-xl rounded-full border border-ash/30 shadow-inner overflow-x-auto no-scrollbar max-w-full">
     <div
       class="absolute h-[calc(100%-12px)] rounded-full transition-all duration-500 cubic-bezier(0.4, 0, 0.2, 1) z-0"
       :class="theme === 'green' ? 'bg-success/20 shadow-[0_0_15px_rgba(var(--color-success),0.3)]' : 'bg-primary/20 shadow-[0_0_15px_rgba(var(--color-primary),0.3)]'"

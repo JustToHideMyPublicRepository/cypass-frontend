@@ -18,7 +18,7 @@
               Nos modules
             </span>
 
-            <h2 class="font-extrabold text-BtW tracking-tight">
+            <h2 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-BtW tracking-tight">
               Une plateforme, <span class="font-handwritting text-primary">quatre boucliers</span>
             </h2>
             <p class="text-hsa mt-3 text-base md:text-lg max-w-2xl">
@@ -211,8 +211,12 @@ function onWheel(e: WheelEvent) {
     return
   }
 
-  // Intercept scroll to change module
-  e.preventDefault()
+  // Intercept scroll to change module only on desktop
+  if (window.innerWidth > 1024) {
+    e.preventDefault()
+  } else {
+    return // Let natural scroll happen on mobile/tablet
+  }
 
   if (wheelCooldown) return
   wheelCooldown = true

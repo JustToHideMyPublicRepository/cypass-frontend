@@ -3,7 +3,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       <div class="grid lg:grid-cols-2 gap-16 items-center">
         <!-- Texte -->
-        <div class="text-center lg:text-left space-y-6 lg:space-y-8 animate-fade-right">
+        <div class="flex flex-col items-center lg:items-start text-center lg:text-left space-y-6 lg:space-y-8 animate-fade-right">
           <div
             class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-panel border border-BtW shadow-lg backdrop-blur-md">
             <span class="relative flex h-2 w-2">
@@ -15,7 +15,7 @@
           </div>
 
           <h1
-            class="font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-textClr via-hsa to-BtW leading-tight">
+            class="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-textClr via-hsa to-BtW leading-[1.1] md:leading-tight">
             Votre bouclier <br class="hidden lg:block" />
             <span
               class="font-handwritting text-transparent bg-clip-text bg-gradient-to-r from-primary to-success relative">
@@ -29,7 +29,7 @@
             </span>
             pour
             <div
-              class="h-[1.5em] lg:h-[1.2em] relative overflow-hidden block w-full mt-2 lg:mt-4 text-[0.8em] md:text-[0.7em] lg:text-[0.65em] font-black">
+              class="h-[1.5em] lg:h-[1.2em] relative overflow-hidden block w-full mt-2 lg:mt-4 text-[0.8em] md:text-[0.7em] lg:text-[0.65em] font-black text-center lg:text-left">
               <span
                 class="font-handwritting text-transparent bg-clip-text bg-gradient-to-r from-secondary to-primary inline-block">
                 {{ currentText }}
@@ -77,7 +77,7 @@
           </div>
 
           <div
-            class="pt-10 grid grid-cols-2 lg:flex lg:flex-wrap items-center justify-center lg:justify-start gap-4 lg:gap-6 text-xs md:text-sm font-semibold text-hsa">
+            class="pt-10 flex flex-wrap items-center justify-center lg:justify-start gap-4 lg:gap-6 text-xs md:text-sm font-semibold text-hsa">
             <div v-for="feature in heroFeatures" :key="feature.label"
               class="flex items-center gap-2 bg-WtB/50 px-3 md:px-4 py-2 rounded-lg backdrop-blur-sm border border-ash/50">
               <component :is="feature.icon" class="w-5 h-5 text-primary" />
@@ -87,13 +87,13 @@
         </div>
 
         <!-- Composition de carte de verre -->
-        <div class="relative w-full perspective-1000 animate-fade-left mt-8 lg:mt-0">
+        <div class="relative w-full perspective-1000 animate-fade-left mt-8 lg:mt-0 flex justify-center lg:block overflow-hidden lg:overflow-visible">
           <div
             class="absolute -top-20 -right-20 w-64 h-64 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full blur-[80px] opacity-40 animate-pulse-slow">
           </div>
 
           <UiAppFrame type="browser" url="https://verify.cypass.bj/" :glass="true" rounded="rounded-3xl" padding="p-0"
-            class="w-full max-w-full lg:w-auto transform lg:translate-x-1/5 xl:translate-x-1/3 transition-transform duration-700 ease-out z-20 shadow-2xl mx-auto">
+            class="w-full max-w-[calc(100vw-32px)] lg:w-auto transform lg:translate-x-1/5 xl:translate-x-1/3 transition-transform duration-700 ease-out z-20 shadow-2xl mx-auto">
 
             <div
               class="bg-bgClr p-4 md:p-6 rounded-b-2xl h-auto md:h-[450px] relative overflow-hidden w-full lg:w-[500px] xl:w-[600px] max-w-full">
@@ -104,13 +104,13 @@
 
               <!-- Fake Verify UI -->
               <div
-                class="p-6 md:p-8 rounded-3xl bg-success/5 border border-success/20 relative z-10 shadow-lg text-left">
+                class="p-5 sm:p-8 rounded-3xl bg-success/5 border border-success/20 relative z-10 shadow-lg text-left">
                 <div class="absolute top-0 right-0 p-6 opacity-10">
-                  <IconRosetteDiscountCheck class="w-24 h-24 text-success" />
+                  <IconRosetteDiscountCheck class="w-16 h-16 md:w-24 md:h-24 text-success" />
                 </div>
                 <div class="flex items-center gap-2 md:gap-3 text-success mb-6 relative z-10">
-                  <IconRosetteDiscountCheck class="w-8 h-8" />
-                  <span class="text-lg md:text-xl font-black italic">DOCUMENT AUTHENTIQUE</span>
+                  <IconRosetteDiscountCheck class="w-6 h-6 md:w-8 md:h-8" />
+                  <span class="text-base md:text-xl font-black italic">DOCUMENT AUTHENTIQUE</span>
                 </div>
 
                 <div class="p-4 bg-primary/10 rounded-2xl border border-primary/20 mb-6">

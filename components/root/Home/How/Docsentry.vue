@@ -21,7 +21,7 @@
       <div ref="docSentryScroll"
         class="flex overflow-x-auto gap-6 md:gap-10 pb-12 px-4 md:px-12 snap-x snap-mandatory scroll-smooth overflow-y-visible no-scrollbar">
         <div v-for="(step, index) in docSentrySteps" :key="index"
-          class="flex-shrink-0 w-[280px] md:w-[350px] snap-center flex flex-col items-center text-center group/step animate-fade-up"
+          class="flex-shrink-0 w-[300px] sm:w-[320px] md:w-[350px] snap-center flex flex-col items-center text-center group/step animate-fade-up"
           :style="{ animationDelay: `${index * 100}ms` }">
 
           <!-- Top: Iframe Visual -->

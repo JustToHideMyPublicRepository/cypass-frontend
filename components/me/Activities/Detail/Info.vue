@@ -67,7 +67,6 @@ import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { getLogActionInfo, getLogTypeInfo } from '~/utils/logs'
 import { getSessionIcon as getSessionIconRaw, formatSessionLabel } from '~/utils/sessions'
-import type { LogEntry } from '~/types/profil'
 
 const props = defineProps<{
   log: any

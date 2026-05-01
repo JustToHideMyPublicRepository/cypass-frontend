@@ -184,6 +184,16 @@ export const ACTION_MAPPINGS: Record<string, { label: string, icon: any, color: 
     icon: IconFileCheck,
     color: 'text-success'
   },
+  'ENRICHED_DOCUMENT_UPLOADED': {
+    label: 'Certification enrichie réussie',
+    icon: IconFileCheck,
+    color: 'text-success'
+  },
+  'ENRICHED_UPLOAD_FAILED': {
+    label: 'Échec de certification enrichie',
+    icon: IconFileX,
+    color: 'text-danger'
+  },
 
   // ── VigiTech ──────────────────────────────────────────────
   'INCIDENT_CREATED': {
