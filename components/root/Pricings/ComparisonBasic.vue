@@ -10,8 +10,8 @@
 
       <div class="overflow-auto max-h-[65vh] rounded-xl ring-1 ring-ash/5">
         <table class="w-full text-left border-collapse relative">
-          <thead class="sticky top-0 z-20">
-            <tr class="border-b border-ash/20">
+          <thead class="sticky top-0 z-20 bg-ash backdrop-blur-md">
+            <tr class="border-b border-BtW">
               <th class="py-6 pr-4 text-[10px] font-black text-hsa uppercase tracking-[0.2em] w-[40%]">Solution</th>
               <th v-for="t in tiers" :key="t.name"
                 class="py-6 px-4 text-[10px] font-black text-center uppercase tracking-[0.2em]"
@@ -21,7 +21,8 @@
             </tr>
           </thead>
           <tbody class="divide-y divide-ash/5">
-            <tr v-for="row in comparison" :key="row.feature" class="group hover:bg-ash/5 transition-colors">
+            <tr v-for="row in comparison" :key="row.feature"
+              class="group hover:bg-ashAct/30 even:bg-ashAct/20 transition-colors">
               <td class="py-6 pr-4">
                 <div class="flex items-center gap-2">
                   <p class="text-sm font-bold text-BtW">{{ row.feature }}</p>

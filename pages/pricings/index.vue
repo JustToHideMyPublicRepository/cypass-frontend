@@ -11,9 +11,10 @@
     <!-- CONTENT -->
     <div class="transition-all duration-500 animate-in fade-in slide-in-from-bottom-4"
       style="animation-duration: 400ms;" :key="activeTab">
-      <RootPricingsGrid v-if="activeTab === 'basic'" :tiers="individualTiers" />
-      <RootPricingsGrid v-else-if="activeTab === 'extension'" :tiers="addonTiers" />
-      <RootPricingsApiGrid v-else-if="activeTab === 'api'" :tiers="apiTiers" />
+      <RootPricingsGridMain v-if="activeTab === 'basic'" :tiers="individualTiers" title="Offres basiques" />
+      <RootPricingsGridMain v-else-if="activeTab === 'extension'" :tiers="addonTiers"
+        title="Extensions & Services supplémentaires" />
+      <RootPricingsGridApi v-else-if="activeTab === 'api'" :tiers="apiTiers" />
     </div>
 
     <RootPricingsComparisonBasic v-if="activeTab === 'basic'" />

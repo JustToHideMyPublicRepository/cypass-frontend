@@ -1,11 +1,8 @@
 <template>
   <div class="max-w-7xl mx-auto mb-24 space-y-16">
-    <!-- Header/Introduction API -->
+    <!-- Header -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
-      <h2 class="text-3xl font-black text-BtW">Endpoints de l'API</h2>
-      <div class="flex items-center gap-3 bg-ash/30 px-5 py-2 rounded-full border border-ash/50 shadow-inner">
-        <span class="text-sm font-bold text-BtW/80">Afficher la facturation unitaire</span>
-      </div>
+      <h3 class="font-black mx-auto">Endpoints de l'API</h3>
     </div>
 
     <!-- Modeles / Tarifs de base -->
