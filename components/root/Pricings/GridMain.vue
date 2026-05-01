@@ -1,8 +1,8 @@
 <template>
   <div class="max-w-7xl mx-auto mb-24 space-y-16">
     <!-- Header -->
-    <div v-if="title" class="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
-      <h3 class="font-black mx-auto">{{ title }}</h3>
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
+      <h3 class="font-black mx-auto">{{ mainTitle }}</h3>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
@@ -69,15 +69,21 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { IconCheck } from '@tabler/icons-vue'
 import { useAuthStore } from '~/stores/back/user/auth'
 import { useSubscriptionStore } from '~/stores/back/user/subscription'
 
-defineProps<{
+const props = defineProps<{
   tiers: any[]
-  title?: string
 }>()
+
+const mainTitle = computed(() => {
+  const firstTier = props.tiers?.[0]
+  if (!firstTier) return ''
+  const basicSlugs = ['free', 'starter', 'business', 'entreprise']
+  return basicSlugs.includes(firstTier.slug) ? 'Offres basiques' : 'Extensions & Services supplémentaires'
+})
 
 const authStore = useAuthStore()
 const subscriptionStore = useSubscriptionStore()

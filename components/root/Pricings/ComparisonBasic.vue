@@ -12,9 +12,9 @@
         <table class="w-full text-left border-collapse relative">
           <thead class="sticky top-0 z-20 bg-ash backdrop-blur-md">
             <tr class="border-b border-BtW">
-              <th class="py-6 pr-4 text-[10px] font-black text-hsa uppercase tracking-[0.2em] w-[40%]">Solution</th>
+              <th class="py-6 px-8 text-[10px] font-black text-hsa uppercase tracking-[0.2em] w-[40%]">Solution</th>
               <th v-for="t in tiers" :key="t.name"
-                class="py-6 px-4 text-[10px] font-black text-center uppercase tracking-[0.2em]"
+                class="py-6 px-8 text-[10px] font-black text-center uppercase tracking-[0.2em]"
                 :class="t.featured ? 'text-primary' : 'text-hsa'">
                 {{ t.name }}
               </th>
@@ -23,25 +23,25 @@
           <tbody class="divide-y divide-ash/5">
             <tr v-for="row in comparison" :key="row.feature"
               class="group hover:bg-ashAct/30 even:bg-ashAct/20 transition-colors">
-              <td class="py-6 pr-4">
+              <td class="py-6 px-8">
                 <div class="flex items-center gap-2">
                   <p class="text-sm font-bold text-BtW">{{ row.feature }}</p>
                   <UiAppTooltip v-if="row.tooltip" :content="row.tooltip" />
                 </div>
               </td>
-              <td class="py-6 px-4 text-center">
+              <td class="py-6 px-8 text-center text-BtW">
                 <IconCircleCheck v-if="row.basic" class="w-5 h-5 text-primary/40 mx-auto" />
                 <span v-else class="text-hsa/30">—</span>
               </td>
-              <td class="py-6 px-4 text-center">
+              <td class="py-6 px-8 text-center text-BtW">
                 <IconCircleCheck v-if="row.starter" class="w-5 h-5 text-primary/70 mx-auto" />
                 <span v-else class="text-hsa/30">—</span>
               </td>
-              <td class="py-6 px-4 text-center">
+              <td class="py-6 px-8 text-center text-BtW">
                 <IconCircleCheck v-if="row.business" class="w-5 h-5 text-primary mx-auto" />
                 <span v-else class="text-hsa/30">—</span>
               </td>
-              <td class="py-6 pl-4 text-center">
+              <td class="py-6 px-8 text-center">
                 <IconCircleCheck v-if="row.ent" class="w-5 h-5 text-primary mx-auto" />
                 <span v-else class="text-hsa/30">—</span>
               </td>

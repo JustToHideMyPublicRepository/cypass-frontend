@@ -12,10 +12,10 @@
         <table class="w-full text-left border-collapse min-w-[600px] relative">
           <thead class="sticky top-0 z-20 bg-ash backdrop-blur-md">
             <tr class="border-b border-BtW">
-              <th class="py-6 pr-4 text-[10px] font-black text-hsa uppercase tracking-[0.2em] w-[40%]">SLA & Technique
+              <th class="py-6 px-8 text-[10px] font-black text-hsa uppercase tracking-[0.2em] w-[40%]">SLA & Technique
               </th>
               <th v-for="t in tiers" :key="t.name"
-                class="py-6 px-4 text-[10px] font-black text-center uppercase tracking-[0.2em]"
+                class="py-6 px-8 text-[10px] font-black text-center uppercase tracking-[0.2em]"
                 :class="t.featured ? 'text-secondary' : 'text-hsa'">
                 {{ t.name }}
               </th>
@@ -24,23 +24,23 @@
           <tbody class="divide-y divide-ash/5">
             <tr v-for="row in comparison" :key="row.feature"
               class="group hover:bg-ashAct/30 even:bg-ashAct/20 transition-colors">
-              <td class="py-6 pr-4">
+              <td class="py-6 px-8">
                 <div class="flex items-center gap-2">
                   <p class="text-sm font-bold text-BtW">{{ row.feature }}</p>
                   <UiAppTooltip v-if="row.tooltip" :content="row.tooltip" />
                 </div>
               </td>
-              <td class="py-6 px-4 text-center">
+              <td class="py-6 px-8 text-center text-BtW">
                 <span v-if="typeof row.free === 'string'" class="text-sm font-bold text-BtW">{{ row.free }}</span>
                 <IconCircleCheck v-else-if="row.free === true" class="w-5 h-5 text-secondary/40 mx-auto" />
                 <span v-else class="text-hsa/30">—</span>
               </td>
-              <td class="py-6 px-4 text-center">
+              <td class="py-6 px-8 text-center text-BtW">
                 <span v-if="typeof row.starter === 'string'" class="text-sm font-bold text-BtW">{{ row.starter }}</span>
                 <IconCircleCheck v-else-if="row.starter === true" class="w-5 h-5 text-secondary/70 mx-auto" />
                 <span v-else class="text-hsa/30">—</span>
               </td>
-              <td class="py-6 px-4 text-center">
+              <td class="py-6 px-8 text-center text-BtW">
                 <span v-if="typeof row.ent === 'string'" class="text-sm font-bold text-BtW">{{ row.ent }}</span>
                 <IconCircleCheck v-else-if="row.ent === true" class="w-5 h-5 text-secondary mx-auto" />
                 <span v-else class="text-hsa/30">—</span>
