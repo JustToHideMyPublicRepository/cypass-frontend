@@ -22,6 +22,13 @@
         </div>
       </button>
     </div>
+
+    <div class="flex flex-col sm:flex-row justify-end gap-3 pt-6 border-t border-ash/50 mt-6">
+      <UiBaseButton :disabled="!selectedCategory || loading" class="!rounded-2xl font-black tracking-widest shadow-xl"
+        @click="$emit('next')">
+        Continuer
+      </UiBaseButton>
+    </div>
   </div>
 </template>
 
@@ -34,5 +41,5 @@ defineProps<{
   loading: boolean
 }>()
 
-defineEmits(['select'])
+defineEmits(['select', 'next'])
 </script>

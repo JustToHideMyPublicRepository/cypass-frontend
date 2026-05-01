@@ -13,67 +13,30 @@
     </div>
 
     <!-- Step Indicator -->
-    <ModalDocsentryEnrichedAuthStepIndicator v-if="!uploadResult" :steps="steps" :current-step="currentStep" />
+    <ModalDocsentryEnrichedAuthStepIndicator v-if="!uploadResult" :steps="steps" :current-step="currentStep"
+      :is-step-accessible="isStepAccessible" @select-step="currentStep = $event" />
 
     <!-- Step 1: Category Selection -->
-    <div v-if="currentStep === 1 && !uploadResult">
-      <ModalDocsentryEnrichedAuthCategory :categories="publicStore.enrichmentCategories"
-        :selected-category="form.category" :loading="publicStore.loadingCategories" @select="selectCategory" />
-
-      <div class="flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t border-ash/50">
-        <UiBaseButton :disabled="!form.category || publicStore.loadingCategories" @click="currentStep = 2">
-          Continuer
-        </UiBaseButton>
-      </div>
-    </div>
+    <ModalDocsentryEnrichedAuthCategory v-if="currentStep === 1 && !uploadResult"
+      :categories="publicStore.enrichmentCategories" :selected-category="form.category"
+      :loading="publicStore.loadingCategories" @select="selectCategory" @next="currentStep = 2" />
 
     <!-- Step 2: File Selection -->
-    <div v-if="currentStep === 2" class="space-y-6">
-      <div class="space-y-4">
-        <ModalDocsentryAuthDropZone v-if="!form.file" @select-file="triggerFileSelect" />
-        <input type="file" ref="fileInput" class="hidden" accept=".pdf" @change="handleFileChange">
-        <ModalDocsentryAuthFilePreview v-if="form.file" :file="form.file" @remove="form.file = null" />
-      </div>
-
-      <div class="flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t border-ash/50">
-        <UiBaseButton variant="ghost" class="!rounded-2xl border-none font-bold" @click="currentStep = 1">
-          Retour
-        </UiBaseButton>
-        <UiBaseButton :disabled="!form.file" class="!rounded-2xl font-black tracking-widest shadow-xl"
-          @click="handleGoToExtraction">
-          Continuer
-        </UiBaseButton>
-      </div>
-    </div>
+    <ModalDocsentryEnrichedAuthFileUpload v-if="currentStep === 2" v-model:file="form.file" :category="form.category"
+      @back="currentStep = 1" @next="handleGoToExtraction" @error="handleFileError" />
 
     <!-- Step 3: Extraction -->
-    <div v-if="currentStep === 3" class="py-12 flex flex-col items-center justify-center space-y-6 animate-pulse">
-      <UiLogoLoader size="lg" />
-      <div class="text-center space-y-2">
-        <h4 class="text-lg font-black text-BtW">Analyse en cours</h4>
-        <p class="text-sm text-hsa font-medium">DocSentry extrait les métadonnées de votre document...</p>
-      </div>
-    </div>
+    <ModalDocsentryEnrichedAuthExtracting v-if="currentStep === 3" :category="form.category" />
 
     <!-- Step 4: Metadata -->
     <div v-if="currentStep === 4" class="space-y-6">
-      <ModalDocsentryEnrichedAuthMetadata :category="form.category" v-model="form.metadata" />
+      <ModalDocsentryEnrichedAuthMetadata :category="form.category" v-model="form.metadata" :loading="loading"
+        @back="currentStep = 2" @submit="handleSubmit" />
 
       <div v-if="store.error"
         class="p-4 rounded-xl bg-danger/10 border border-danger/20 flex items-center gap-3 text-danger">
         <IconAlertCircle class="w-5 h-5 shrink-0" />
         <p class="text-xs font-medium">{{ store.error }}</p>
-      </div>
-
-      <div class="flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t border-ash/50">
-        <UiBaseButton variant="ghost" class="!rounded-2xl border-none font-bold" :disabled="loading"
-          @click="currentStep = 2">
-          Fichier
-        </UiBaseButton>
-        <UiBaseButton :loading="loading" class="!rounded-2xl font-black tracking-widest shadow-xl"
-          @click="handleSubmit">
-          Lancer la certification
-        </UiBaseButton>
       </div>
     </div>
   </UiBaseModal>
@@ -100,7 +63,6 @@ const emit = defineEmits(['close', 'success', 'error'])
 const publicStore = usePublicDocsentryStore()
 const store = useUserDocsentryStore()
 const loading = ref(false)
-const fileInput = ref<HTMLInputElement | null>(null)
 
 const steps = [
   { id: 1, label: 'Catégorie' },
@@ -127,24 +89,36 @@ const errorFileName = ref('')
 const errorFileType = ref('')
 const errorFileSize = ref('')
 
-/**
- * Affiche la modale d'erreur personnalisée
- */
-const showError = (title: string, message: string, f: File) => {
-  fileErrorTitle.value = title
-  fileErrorMessage.value = message
-  errorFileName.value = f.name
-  errorFileType.value = f.name.split('.').pop()?.toUpperCase() || 'Inconnu'
-  errorFileSize.value = (f.size / 1024 / 1024).toFixed(2) + ' Mo'
+const isStepAccessible = (stepId: number): boolean => {
+  if (stepId === 1) return true
+  if (stepId === 2) return !!form.category
+  if (stepId === 3) return !!form.category && !!form.file
+  if (stepId === 4) return !!form.category && !!form.file
+  return false
+}
+
+const handleFileError = (err: any) => {
+  fileErrorTitle.value = err.title
+  fileErrorMessage.value = err.message
+  errorFileName.value = err.file.name
+  errorFileType.value = err.file.name.split('.').pop()?.toUpperCase() || 'Inconnu'
+  errorFileSize.value = (err.file.size / 1024 / 1024).toFixed(2) + ' Mo'
   showFileError.value = true
 }
 
 // Gestion des fichiers déposés via le DropZone global
 const onDroppedFile = (droppedFile: File) => {
   if (!loading.value && currentStep.value === 2) {
-    if (validateFile(droppedFile)) {
+    // Note: Validation is now partially handled in the sub-component, but we use a simpler one here for dropzone
+    if (droppedFile.type === 'application/pdf' && droppedFile.size <= 3 * 1024 * 1024) {
       form.file = droppedFile
       store.error = null
+    } else {
+      handleFileError({
+        title: droppedFile.type !== 'application/pdf' ? 'Format non supporté' : 'Fichier trop volumineux',
+        message: droppedFile.type !== 'application/pdf' ? 'PDF uniquement.' : 'Max 3 Mo.',
+        file: droppedFile
+      })
     }
   }
 }
@@ -168,45 +142,6 @@ const selectCategory = (cat: any) => {
   cat.fields.forEach((f: any) => {
     form.metadata[f.key] = ''
   })
-}
-
-const triggerFileSelect = () => fileInput.value?.click()
-
-const validateFile = (selectedFile: File): boolean => {
-  store.error = null
-
-  if (selectedFile.type !== 'application/pdf') {
-    showError(
-      'Format non supporté',
-      `Le fichier "${selectedFile.name}" n'est pas un PDF. Seuls les fichiers PDF sont acceptés pour la certification.`,
-      selectedFile
-    )
-    return false
-  }
-
-  if (selectedFile.size > 3 * 1024 * 1024) {
-    showError(
-      'Fichier trop volumineux',
-      `Le fichier fait ${(selectedFile.size / 1024 / 1024).toFixed(2)} Mo. La taille maximale autorisée est de 3 Mo.`,
-      selectedFile
-    )
-    return false
-  }
-
-  return true
-}
-
-const handleFileChange = (e: any) => {
-  const target = e.target as HTMLInputElement
-  if (target.files?.length) {
-    const selectedFile = target.files[0]
-    if (validateFile(selectedFile)) {
-      form.file = selectedFile
-    } else {
-      form.file = null
-      if (fileInput.value) fileInput.value.value = ''
-    }
-  }
 }
 
 const handleClose = () => {
