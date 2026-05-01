@@ -238,7 +238,7 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
         const formData = new FormData()
         formData.append('document', file)
         formData.append('document_category', category)
-        
+
         // Add metadata fields as metadata[key]
         Object.entries(metadata).forEach(([key, value]) => {
           if (value !== undefined && value !== null) {
@@ -261,6 +261,40 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
       } catch (err: any) {
         this.error = err.data?.message || 'Erreur lors de la certification enrichie'
         return false
+      } finally {
+        this.loading = false
+      }
+    },
+
+    // Extraire les métadonnées automatiquement
+    async extractMetadata(file: File, category: string) {
+      this.loading = true
+      this.error = null
+
+      try {
+        const formData = new FormData()
+        formData.append('document', file)
+        formData.append('document_category', category)
+
+        const response = await $fetch<{
+          success: boolean;
+          extracted: boolean;
+          confidence: string;
+          fields: Record<string, any>;
+          message: string;
+        }>('/api/user/docsentry/extract-metadata', {
+          method: 'POST',
+          body: formData
+        })
+
+        if (response.success && response.extracted) {
+          return response.fields
+        }
+
+        return null
+      } catch (err: any) {
+        console.error('Failed to extract metadata', err)
+        return null
       } finally {
         this.loading = false
       }

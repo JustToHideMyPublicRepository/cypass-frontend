@@ -3,15 +3,16 @@
     <!-- Result View -->
     <div v-if="uploadResult" class="max-h-[60vh] overflow-y-auto pr-2 no-scrollbar py-2">
       <ModalDocsentryEnrichedAuthResult :result="uploadResult" :category="form.category" :metadata="form.metadata" />
-      
+
       <div class="pt-6">
-        <UiBaseButton variant="primary" class="w-full !rounded-2xl font-black py-4 h-auto shadow-xl" @click="handleClose">
+        <UiBaseButton variant="primary" class="w-full !rounded-2xl font-black py-4 h-auto shadow-xl"
+          @click="handleClose">
           D'accord
         </UiBaseButton>
       </div>
     </div>
 
-    <!-- Step Indicator (Hidden if result) -->
+    <!-- Step Indicator -->
     <ModalDocsentryEnrichedAuthStepIndicator v-if="!uploadResult" :steps="steps" :current-step="currentStep" />
 
     <!-- Step 1: Category Selection -->
@@ -19,8 +20,9 @@
       <ModalDocsentryEnrichedAuthCategory :categories="publicStore.enrichmentCategories"
         :selected-category="form.category" :loading="publicStore.loadingCategories" @select="selectCategory" />
 
-      <div class="flex justify-end pt-4">
-        <UiBaseButton :disabled="!form.category || publicStore.loadingCategories" @click="currentStep = 2">Continuer
+      <div class="flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t border-ash/50">
+        <UiBaseButton :disabled="!form.category || publicStore.loadingCategories" @click="currentStep = 2">
+          Continuer
         </UiBaseButton>
       </div>
     </div>
@@ -33,14 +35,28 @@
         <ModalDocsentryAuthFilePreview v-if="form.file" :file="form.file" @remove="form.file = null" />
       </div>
 
-      <div class="flex justify-between pt-4">
-        <UiBaseButton variant="ghost" @click="currentStep = 1">Retour</UiBaseButton>
-        <UiBaseButton :disabled="!form.file" @click="currentStep = 3">Continuer</UiBaseButton>
+      <div class="flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t border-ash/50">
+        <UiBaseButton variant="ghost" class="!rounded-2xl border-none font-bold" @click="currentStep = 1">
+          Retour
+        </UiBaseButton>
+        <UiBaseButton :disabled="!form.file" class="!rounded-2xl font-black tracking-widest shadow-xl"
+          @click="handleGoToExtraction">
+          Continuer
+        </UiBaseButton>
       </div>
     </div>
 
-    <!-- Step 3: Metadata -->
-    <div v-if="currentStep === 3" class="space-y-6">
+    <!-- Step 3: Extraction -->
+    <div v-if="currentStep === 3" class="py-12 flex flex-col items-center justify-center space-y-6 animate-pulse">
+      <UiLogoLoader size="lg" />
+      <div class="text-center space-y-2">
+        <h4 class="text-lg font-black text-BtW">Analyse en cours</h4>
+        <p class="text-sm text-hsa font-medium">DocSentry extrait les métadonnées de votre document...</p>
+      </div>
+    </div>
+
+    <!-- Step 4: Metadata -->
+    <div v-if="currentStep === 4" class="space-y-6">
       <ModalDocsentryEnrichedAuthMetadata :category="form.category" v-model="form.metadata" />
 
       <div v-if="store.error"
@@ -49,9 +65,15 @@
         <p class="text-xs font-medium">{{ store.error }}</p>
       </div>
 
-      <div class="flex justify-between pt-4">
-        <UiBaseButton variant="ghost" :disabled="loading" @click="currentStep = 2">Retour</UiBaseButton>
-        <UiBaseButton :loading="loading" @click="handleSubmit">Lancer la certification</UiBaseButton>
+      <div class="flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t border-ash/50">
+        <UiBaseButton variant="ghost" class="!rounded-2xl border-none font-bold" :disabled="loading"
+          @click="currentStep = 2">
+          Fichier
+        </UiBaseButton>
+        <UiBaseButton :loading="loading" class="!rounded-2xl font-black tracking-widest shadow-xl"
+          @click="handleSubmit">
+          Lancer la certification
+        </UiBaseButton>
       </div>
     </div>
   </UiBaseModal>
@@ -83,7 +105,8 @@ const fileInput = ref<HTMLInputElement | null>(null)
 const steps = [
   { id: 1, label: 'Catégorie' },
   { id: 2, label: 'Fichier' },
-  { id: 3, label: 'Données' }
+  { id: 3, label: 'Extraction' },
+  { id: 4, label: 'Données' }
 ]
 
 const currentStep = ref(1)
@@ -196,7 +219,26 @@ const handleClose = () => {
     form.category = null
     form.file = null
     form.metadata = {}
+    store.error = null
   }, 300)
+}
+
+const handleGoToExtraction = async () => {
+  if (!form.file || !form.category) return
+  currentStep.value = 3
+
+  const extractedData = await store.extractMetadata(form.file, form.category.key)
+
+  if (extractedData) {
+    // Fusionner les données extraites avec les métadonnées existantes
+    Object.keys(form.metadata).forEach(key => {
+      if (extractedData[key]) {
+        form.metadata[key] = extractedData[key]
+      }
+    })
+  }
+
+  currentStep.value = 4
 }
 
 const handleSubmit = async () => {
