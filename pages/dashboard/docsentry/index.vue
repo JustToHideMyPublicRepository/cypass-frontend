@@ -36,7 +36,7 @@
 
 
     <!-- Choice Modal -->
-    <ModalDocsentryChoice :show="modals.choice" @close="modals.choice = false" @select="handleChoice" />
+    <ModalDocsentryAuthChoice :show="modals.choice" @close="modals.choice = false" @select="handleChoice" />
 
     <!-- Trust Card Modal -->
     <modalDocsentryInfoTrust :show="modals.trust" @close="modals.trust = false" />

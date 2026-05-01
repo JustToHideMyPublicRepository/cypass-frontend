@@ -53,7 +53,7 @@
 
     <ModalDocsentryEnrichedAuth :show="modals.enriched" @close="closeModals" @success="handleUploadSuccess" />
 
-    <ModalDocsentryChoice :show="modals.choice" @close="closeModals" @select="handleChoice" />
+    <ModalDocsentryAuthChoice :show="modals.choice" @close="closeModals" @select="handleChoice" />
   </div>
 </template>
 

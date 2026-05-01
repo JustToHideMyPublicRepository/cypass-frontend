@@ -10,11 +10,11 @@
       <ModalDocsentryAuthFilePreview v-if="file && !uploadResult" :file="file" @remove="file = null" />
 
       <!-- Résultat de l'authentification -->
-      <ModalDocsentryAuthResult v-if="uploadResult" ref="authResultRef" :result="uploadResult"
+      <ModalDocsentrySimpleAuthResult v-if="uploadResult" ref="authResultRef" :result="uploadResult"
         @update:loading="(val: boolean) => multiVersionLoading = val" />
 
       <!-- État de chargement (Progression) -->
-      <ModalDocsentryAuthLoading v-if="loading && !uploadResult" :active-steps="activeSteps" />
+      <ModalDocsentrySimpleAuthLoading v-if="loading && !uploadResult" :active-steps="activeSteps" />
 
       <!-- Message d'erreur -->
       <div v-if="error"
@@ -28,7 +28,7 @@
 
     <!-- Actions du pied de page -->
     <template #footer>
-      <ModalDocsentryAuthFooter :has-result="!!uploadResult" :loading="loading" :has-file="!!file"
+      <ModalDocsentrySimpleAuthFooter :has-result="!!uploadResult" :loading="loading" :has-file="!!file"
         :multi-version-loading="multiVersionLoading" @close="close" @upload="handleUpload" />
     </template>
   </UiBaseModal>
