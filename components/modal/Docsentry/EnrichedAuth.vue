@@ -19,7 +19,16 @@
 
     <!-- Step 1: Category Selection -->
     <div v-if="currentStep === 1" class="space-y-6 animate-fade-in">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div v-if="publicStore.loadingCategories" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div v-for="i in 4" :key="i" class="p-4 rounded-xl border-2 border-ash/20 bg-ash/5 flex items-start gap-3">
+          <UiAppSkeleton type="rect" width="40px" height="40px" class="rounded-lg" />
+          <div class="flex-1 space-y-2">
+            <UiAppSkeleton type="text" width="60%" />
+            <UiAppSkeleton type="text" width="40%" height="10px" />
+          </div>
+        </div>
+      </div>
+      <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <button v-for="cat in publicStore.enrichmentCategories" :key="cat.key" @click="selectCategory(cat)"
           class="p-4 rounded-xl border-2 transition-all text-left flex items-start gap-3 group"
           :class="form.category?.key === cat.key ? 'border-primary bg-primary/5' : 'border-ash bg-ash/20 hover:border-primary/30'">
@@ -35,7 +44,7 @@
         </button>
       </div>
       <div class="flex justify-end pt-4">
-        <UiBaseButton :disabled="!form.category" @click="currentStep = 2">Continuer</UiBaseButton>
+        <UiBaseButton :disabled="!form.category || publicStore.loadingCategories" @click="currentStep = 2">Continuer</UiBaseButton>
       </div>
     </div>
 
@@ -59,7 +68,13 @@
 
     <!-- Step 3: Metadata -->
     <div v-if="currentStep === 3" class="space-y-6 animate-fade-in">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[40vh] overflow-y-auto pr-2 custom-scrollbar">
+      <div v-if="!form.category" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div v-for="i in 6" :key="i" class="space-y-2">
+          <UiAppSkeleton type="text" width="40%" height="10px" class="ml-1" />
+          <UiAppSkeleton type="rect" height="44px" class="rounded-xl" />
+        </div>
+      </div>
+      <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[40vh] overflow-y-auto pr-2 custom-scrollbar">
         <div v-for="field in form.category?.fields" :key="field.key" class="space-y-1.5">
           <label class="text-[10px] font-bold text-hsa uppercase tracking-[0.15em] ml-1">
             {{ field.label }}

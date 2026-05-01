@@ -124,6 +124,7 @@ const handleUpload = async (file: File) => {
 
 const handleEnrichedSuccess = () => {
   toast.showToast('success', 'Certification Enrichie', 'Le document a été certifié avec toutes ses métadonnées.')
+  closeModals()
 }
 
 const handleVerify = async (file: File) => {

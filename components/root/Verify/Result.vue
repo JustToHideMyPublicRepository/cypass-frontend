@@ -7,9 +7,23 @@
         <IconRosetteDiscountCheck class="w-24 h-24 md:w-32 md:h-32 text-success" />
       </div>
 
-      <div class="flex items-center gap-2 md:gap-3 text-success mb-4 md:mb-6 relative z-10">
-        <IconRosetteDiscountCheck class="w-6 h-6 md:w-8 md:h-8" />
-        <span class="text-xl md:text-2xl font-black italic">DOCUMENT AUTHENTIQUE</span>
+      <div class="flex flex-col md:flex-row md:items-center gap-4 mb-6 relative z-10">
+        <div class="flex items-center gap-2 md:gap-3 text-success">
+          <IconRosetteDiscountCheck class="w-6 h-6 md:w-8 md:h-8" />
+          <span class="text-xl md:text-2xl font-black italic uppercase">Document Authentique</span>
+        </div>
+        
+        <!-- Mode de Certification Badge -->
+        <div :class="[
+          'px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border-2 inline-flex items-center gap-1.5 w-fit',
+          result.document?.certification_mode === 'enrichie' 
+            ? 'bg-primary/10 border-primary/20 text-primary' 
+            : 'bg-success/10 border-success/20 text-success'
+        ]">
+          <IconCertificate v-if="result.document?.certification_mode === 'enrichie'" class="w-3.5 h-3.5" />
+          <IconShieldCheck v-else class="w-3.5 h-3.5" />
+          Certification {{ result.document?.certification_mode === 'enrichie' ? 'Enrichie' : 'Simple' }}
+        </div>
       </div>
 
       <div class="space-y-6 relative z-10">
@@ -60,6 +74,21 @@
               <code class="font-code text-[10px] text-BtW/70 bg-WtB/50 px-2 py-0.5 rounded border border-ash/30">
                 {{ truncateHash(result.document.parent.hash) }}
               </code>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Métadonnées Enrichies (Si disponibles) -->
+        <div v-if="result.declared_metadata && result.declared_metadata.fields?.length" class="space-y-4">
+          <div class="flex items-center gap-2 text-primary px-1">
+            <IconListDetails class="w-5 h-5" />
+            <span class="text-xs font-black uppercase tracking-widest">Informations Certifiées ({{ result.declared_metadata.category_label || 'Enrichies' }})</span>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div v-for="field in result.declared_metadata.fields" :key="field.key" 
+              class="p-4 bg-primary/5 rounded-2xl border border-primary/10 space-y-1">
+              <p class="text-[10px] text-primary uppercase font-black">{{ field.label }}</p>
+              <p class="font-bold text-BtW">{{ field.value || '-' }}</p>
             </div>
           </div>
         </div>
@@ -130,7 +159,10 @@
 </template>
 
 <script setup lang="ts">
-import { IconRosetteDiscountCheck, IconShieldOff, IconDownload, IconFiles } from '@tabler/icons-vue'
+import { 
+  IconRosetteDiscountCheck, IconShieldOff, IconDownload, IconFiles, 
+  IconListDetails, IconCertificate, IconShieldCheck 
+} from '@tabler/icons-vue'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { useToastStore } from '~/stores/front/toast'

@@ -132,6 +132,7 @@ const handleUploadSuccess = async () => {
   toast.showToast('success', 'Certification Enrichie', 'Le document a été certifié avec toutes ses métadonnées.')
   await userDocsentryStore.fetchDocuments(5, 0)
   await userDocsentryStore.fetchTrend()
+  closeModals()
 }
 
 const handleVerify = async (file: File) => {

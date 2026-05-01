@@ -8,6 +8,7 @@ export const usePublicDocsentryStore = defineStore('publicDocsentry', {
     verificationResult: null as VerificationResult | null,
     publicKeyInfo: null as PublicKeyInfo | null,
     enrichmentCategories: [] as EnrichmentCategory[],
+    loadingCategories: false,
   }),
 
   actions: {
@@ -125,6 +126,7 @@ export const usePublicDocsentryStore = defineStore('publicDocsentry', {
 
     // Récupérer les catégories d'enrichissement
     async fetchEnrichmentCategories() {
+      this.loadingCategories = true
       try {
         const response = await $fetch<EnrichmentCategoriesResponse>('/api/public/docsentry/enrichieDoc-cat')
         if (response.success) {
@@ -132,6 +134,8 @@ export const usePublicDocsentryStore = defineStore('publicDocsentry', {
         }
       } catch (err) {
         console.error('Failed to fetch enrichment categories', err)
+      } finally {
+        this.loadingCategories = false
       }
     },
   }
