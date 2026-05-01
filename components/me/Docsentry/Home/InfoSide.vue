@@ -30,7 +30,7 @@
         </UiBaseButton>
       </div>
     </div>
-    
+
     <!-- Decorative element -->
     <div
       class="absolute -right-4 -bottom-4 w-24 h-24 bg-primary/10 blur-3xl rounded-full group-hover:bg-primary/20 transition-colors">

@@ -226,6 +226,44 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
       }
     },
 
+    // Certifier un document (Enrichie)
+    async uploadEnrichedDocument(file: File, category: string, metadata: Record<string, any>) {
+      this.loading = true
+      this.error = null
+      this.uploadResult = null
+
+      try {
+        const formData = new FormData()
+        formData.append('document', file)
+        formData.append('document_category', category)
+        
+        // Add metadata fields as metadata[key]
+        Object.entries(metadata).forEach(([key, value]) => {
+          if (value !== undefined && value !== null) {
+            formData.append(`metadata[${key}]`, String(value))
+          }
+        })
+
+        const response = await $fetch<{ success: boolean; message: string; data: UploadResult }>('/api/user/docsentry/certificate-enriched', {
+          method: 'POST',
+          body: formData
+        })
+
+        if (response.success) {
+          this.uploadResult = response.data
+          await this.fetchDocuments()
+          return true
+        }
+        this.error = response.message
+        return false
+      } catch (err: any) {
+        this.error = err.data?.message || 'Erreur lors de la certification enrichie'
+        return false
+      } finally {
+        this.loading = false
+      }
+    },
+
     // Calculer les tendances
     async fetchTrend() {
       try {

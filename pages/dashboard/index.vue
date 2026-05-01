@@ -31,7 +31,7 @@
 
     <!-- Quick Actions, Access Links & Trust Center Row -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <MeDashboardQuickActions @upload="modals.upload = true" @verify="modals.verify = true"
+      <MeDashboardQuickActions @upload="modals.choice = true" @verify="modals.verify = true"
         @create="modals.createIncident = true" />
       <MeDashboardAccessLinks />
 
@@ -39,8 +39,8 @@
     </div>
 
     <!-- Modals -->
-    <ModalDocsentryAuth :show="modals.upload" :loading="userDocsentryStore.loading" :error="userDocsentryStore.error"
-      :upload-result="userDocsentryStore.uploadResult" @upload="handleUpload"
+    <ModalDocsentrySimpleAuth :show="modals.upload" :loading="userDocsentryStore.loading"
+      :error="userDocsentryStore.error" :upload-result="userDocsentryStore.uploadResult" @upload="handleUpload"
       @update:error="(val) => userDocsentryStore.error = val" @error-clear="userDocsentryStore.error = null"
       @close="closeModals" />
 
@@ -50,6 +50,10 @@
 
     <ModalVigitechCreateIncident :show="modals.createIncident" @close="closeModals"
       @success="vigitechStore.fetchUserIncidents()" />
+
+    <ModalDocsentryEnrichedAuth :show="modals.enriched" @close="closeModals" @success="handleUploadSuccess" />
+
+    <ModalDocsentryChoice :show="modals.choice" @close="closeModals" @select="handleChoice" />
   </div>
 </template>
 
@@ -92,7 +96,9 @@ const hasThreatData = computed(() => {
 })
 
 const modals = reactive({
+  choice: false,
   upload: false,
+  enriched: false,
   verify: false,
   createIncident: false
 })
@@ -100,6 +106,15 @@ const modals = reactive({
 // Helper to determine doc status string for badge
 const getDocStatus = (doc: any) => {
   return doc.has_certificate ? 'Verified' : 'Pending'
+}
+
+const handleChoice = (type: 'simple' | 'enriched') => {
+  modals.choice = false
+  if (type === 'simple') {
+    modals.upload = true
+  } else {
+    modals.enriched = true
+  }
 }
 
 const handleUpload = async (file: File) => {
@@ -111,6 +126,12 @@ const handleUpload = async (file: File) => {
   } else {
     toast.showToast('error', 'Échec', userDocsentryStore.error || 'Une erreur est survenue.')
   }
+}
+
+const handleUploadSuccess = async () => {
+  toast.showToast('success', 'Certification Enrichie', 'Le document a été certifié avec toutes ses métadonnées.')
+  await userDocsentryStore.fetchDocuments(5, 0)
+  await userDocsentryStore.fetchTrend()
 }
 
 const handleVerify = async (file: File) => {
@@ -127,7 +148,9 @@ const handleVerify = async (file: File) => {
 }
 
 const closeModals = () => {
+  modals.choice = false
   modals.upload = false
+  modals.enriched = false
   modals.verify = false
   modals.createIncident = false
   userDocsentryStore.error = null

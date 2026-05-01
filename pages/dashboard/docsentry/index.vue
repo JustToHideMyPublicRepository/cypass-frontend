@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-6">
     <!-- Header Section -->
-    <MeDocsentryHomeHeader @upload="modals.upload = true" @verify="modals.verify = true" />
+    <MeDocsentryHomeHeader @upload="modals.choice = true" @verify="modals.verify = true" />
 
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
       <!-- Main Content: Document List -->
@@ -26,7 +26,7 @@
     </div>
 
     <!-- Modals -->
-    <ModalDocsentryAuth :show="modals.upload" :loading="store.loading" :error="store.error"
+    <ModalDocsentrySimpleAuth :show="modals.upload" :loading="store.loading" :error="store.error"
       :upload-result="store.uploadResult" @upload="handleUpload" @update:error="(val) => store.error = val"
       @error-clear="store.error = null" @close="closeModals" />
 
@@ -34,8 +34,15 @@
       :result="publicStore.verificationResult" @verify="handleVerify" @reset="publicStore.verificationResult = null"
       @close="closeModals" />
 
+
+    <!-- Choice Modal -->
+    <ModalDocsentryChoice :show="modals.choice" @close="modals.choice = false" @select="handleChoice" />
+
     <!-- Trust Card Modal -->
     <ModalDocsentryTrust :show="modals.trust" @close="modals.trust = false" />
+    <!-- Enriched Certification Modal -->
+    <ModalDocsentryEnrichedAuth :show="modals.enriched" @close="modals.enriched = false"
+      @success="handleEnrichedSuccess" />
 
     <!-- Enrich Categories Modal -->
     <ModalDocsentryEnrich :show="modals.enrich" @close="modals.enrich = false" />
@@ -62,7 +69,9 @@ const filters = ref({
 })
 
 const modals = reactive({
+  choice: false,
   upload: false,
+  enriched: false,
   verify: false,
   trust: false,
   enrich: false
@@ -95,6 +104,15 @@ const availableTypes = computed(() => {
   return Array.from(types).sort()
 })
 
+const handleChoice = (type: 'simple' | 'enriched') => {
+  modals.choice = false
+  if (type === 'simple') {
+    modals.upload = true
+  } else {
+    modals.enriched = true
+  }
+}
+
 const handleUpload = async (file: File) => {
   const success = await store.uploadDocument(file)
   if (success) {
@@ -102,6 +120,10 @@ const handleUpload = async (file: File) => {
   } else {
     toast.showToast('error', 'Échec', store.error || 'Une erreur est survenue.')
   }
+}
+
+const handleEnrichedSuccess = () => {
+  toast.showToast('success', 'Certification Enrichie', 'Le document a été certifié avec toutes ses métadonnées.')
 }
 
 const handleVerify = async (file: File) => {
@@ -118,7 +140,9 @@ const handleVerify = async (file: File) => {
 }
 
 const closeModals = () => {
+  modals.choice = false
   modals.upload = false
+  modals.enriched = false
   modals.verify = false
   modals.trust = false
   modals.enrich = false
