@@ -20,8 +20,8 @@
           :verified="store.documents.filter(d => d.has_certificate).length"
           :usage="Math.min(Math.round((store.pagination.total / 50) * 100), 100)" />
 
-        <!-- Trust Info Section -->
-        <MeDocsentryHomeTrustInfo @open-trust="modals.trust = true" />
+        <!-- Unified Info Section -->
+        <MeDocsentryHomeInfoSide @open-trust="modals.trust = true" @open-categories="modals.enrich = true" />
       </div>
     </div>
 
@@ -36,6 +36,9 @@
 
     <!-- Trust Card Modal -->
     <ModalDocsentryTrust :show="modals.trust" @close="modals.trust = false" />
+
+    <!-- Enrich Categories Modal -->
+    <ModalDocsentryEnrich :show="modals.enrich" @close="modals.enrich = false" />
   </div>
 </template>
 
@@ -60,7 +63,8 @@ const filters = ref({
 const modals = reactive({
   upload: false,
   verify: false,
-  trust: false
+  trust: false,
+  enrich: false
 })
 
 const resetFilters = () => {
@@ -115,6 +119,7 @@ const closeModals = () => {
   modals.upload = false
   modals.verify = false
   modals.trust = false
+  modals.enrich = false
   store.error = null
   store.uploadResult = null
   publicStore.error = null
@@ -150,6 +155,7 @@ watch([currentPage, filters], () => {
 onMounted(() => {
   store.fetchDocuments(limit, 0)
   publicStore.fetchPublicKey()
+  publicStore.fetchEnrichmentCategories()
 })
 
 useHead({

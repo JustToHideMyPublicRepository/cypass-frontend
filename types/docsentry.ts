@@ -110,3 +110,21 @@ export interface PublicKeyInfo {
   created_at: string
   issued_at: string
 }
+
+export interface EnrichmentField {
+  key: string
+  label: string
+  required: boolean
+  type: string
+}
+
+export interface EnrichmentCategory {
+  key: string
+  label: string
+  fields: EnrichmentField[]
+}
+
+export interface EnrichmentCategoriesResponse {
+  success: boolean
+  categories: EnrichmentCategory[]
+}

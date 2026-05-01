@@ -7,7 +7,7 @@
       </div>
       <h1 class="text-3xl md:text-4xl font-black text-BtW tracking-tight">
         VigiTech <span class="text-hsa font-medium">/</span>
-        <span class="bg-gradient-to-r from-danger to-indigo-500 bg-clip-text text-transparent">Incidents</span>
+        <span class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Incidents</span>
       </h1>
       <p class="text-hsa text-sm font-medium">Surveillez et signalez les incidents de sécurité en temps réel.</p>
     </div>

@@ -3,12 +3,12 @@
     <div class="space-y-1">
       <div class="flex items-center gap-2 mb-1">
         <div class="w-2 h-2 rounded-full bg-success animate-pulse"></div>
-        <span class="text-[10px] font-bold text-success uppercase tracking-widest">Connecté en tant que {{ role
-        }}</span>
+        <span class="text-[10px] font-bold text-success uppercase tracking-widest">
+          Connecté en tant que {{ role }}</span>
       </div>
       <h1 class="text-3xl md:text-4xl font-black text-BtW tracking-tight">
         {{ getDynamicGreeting() }}, <span
-          class="bg-gradient-to-r from-primary to-indigo-500 bg-clip-text text-transparent">{{ userName }}</span>
+          class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">{{ userName }}</span>
       </h1>
       <p class="text-hsa text-sm font-medium">CYPASS veille sur l'intégrité de vos actifs numériques.</p>
     </div>

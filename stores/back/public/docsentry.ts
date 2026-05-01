@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { type VerificationResult, type PublicKeyInfo } from '~/types/docsentry'
+import { type VerificationResult, type PublicKeyInfo, type EnrichmentCategory, type EnrichmentCategoriesResponse } from '~/types/docsentry'
 
 export const usePublicDocsentryStore = defineStore('publicDocsentry', {
   state: () => ({
@@ -7,6 +7,7 @@ export const usePublicDocsentryStore = defineStore('publicDocsentry', {
     error: null as string | null,
     verificationResult: null as VerificationResult | null,
     publicKeyInfo: null as PublicKeyInfo | null,
+    enrichmentCategories: [] as EnrichmentCategory[],
   }),
 
   actions: {
@@ -119,6 +120,18 @@ export const usePublicDocsentryStore = defineStore('publicDocsentry', {
         return false
       } finally {
         this.loading = false
+      }
+    },
+
+    // Récupérer les catégories d'enrichissement
+    async fetchEnrichmentCategories() {
+      try {
+        const response = await $fetch<EnrichmentCategoriesResponse>('/api/public/docsentry/enrichieDoc-cat')
+        if (response.success) {
+          this.enrichmentCategories = response.categories
+        }
+      } catch (err) {
+        console.error('Failed to fetch enrichment categories', err)
       }
     },
   }

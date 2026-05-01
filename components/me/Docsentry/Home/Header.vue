@@ -7,7 +7,7 @@
       </div>
       <h1 class="text-3xl md:text-4xl font-black text-BtW tracking-tight">
         DocSentry <span class="text-hsa font-medium">/</span>
-        <span class="bg-gradient-to-r from-primary to-indigo-500 bg-clip-text text-transparent">Certificats</span>
+        <span class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Certificats</span>
       </h1>
       <p class="text-hsa text-sm font-medium">Gérez et certifiez vos documents officiels en toute sécurité.</p>
     </div>

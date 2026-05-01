@@ -7,16 +7,19 @@
         v-model:pdfFile="pdfFile" v-model:qrFile="qrFile" :loading="loading" :result="result" :error="error"
         :activeSteps="activeSteps" @verify-hash="handleVerifyHash" @verify-file="handleVerifyFile" @reset="reset" />
 
-      <RootVerifyBenefits v-if="!result" />
+      <RootVerifyBenefits v-if="!result" @open-enrich="modals.enrich = true" />
     </div>
+
+    <!-- Modals -->
+    <ModalDocsentryEnrich :show="modals.enrich" @close="modals.enrich = false" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { useRoute } from 'nuxt/app'
-import { IconServer, IconLock, IconCertificate } from '@tabler/icons-vue'
 import { useVerify } from '~/composables/useVerify'
+import { usePublicDocsentryStore } from '~/stores/back/public/docsentry'
 
 definePageMeta({
   layout: 'guest'
@@ -31,6 +34,12 @@ useHead({
 })
 
 const route = useRoute()
+const publicStore = usePublicDocsentryStore()
+
+const modals = reactive({
+  enrich: false
+})
+
 const {
   verifyMode,
   pdfSubMode,
@@ -56,23 +65,6 @@ onMounted(() => {
       handleVerifyHash()
     }, 100)
   }
+  publicStore.fetchEnrichmentCategories()
 })
-
-const publicBenefits = [
-  {
-    icon: IconLock,
-    title: 'Confidentialité',
-    desc: 'Le document est analysé puis immédiatement supprimé de nos serveurs.'
-  },
-  {
-    icon: IconServer,
-    title: 'Infrastructures d\'État',
-    desc: 'Vérification effectuée sur les serveurs souverains du Bénin.'
-  },
-  {
-    icon: IconCertificate,
-    title: 'Preuve Légale',
-    desc: 'Validité juridique conforme aux normes de signature électronique.'
-  }
-]
 </script>
