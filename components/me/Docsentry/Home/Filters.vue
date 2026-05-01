@@ -1,6 +1,13 @@
 <template>
   <UiBaseCard title="Filtres & Recherche">
-    <div class="space-y-5">
+    <template #header>
+      <button @click="isCollapsed = !isCollapsed" class="p-1 hover:bg-ash rounded-lg transition-colors text-hsa"
+        :title="isCollapsed ? 'Déplier' : 'Replier'">
+        <IconChevronDown class="w-4 h-4 transition-transform duration-300" :class="{ 'rotate-180': !isCollapsed }" />
+      </button>
+    </template>
+
+    <div v-show="!isCollapsed" class="space-y-5 animate-fade-in">
       <!-- Search Input -->
       <div class="space-y-1.5">
         <label class="text-[10px] font-bold text-hsa uppercase tracking-[0.1em] ml-1">Nom du fichier</label>
@@ -26,15 +33,28 @@
         </select>
       </div>
 
-      <!-- Versions Filter -->
-      <div class="space-y-1.5">
-        <label class="text-[10px] font-bold text-hsa uppercase tracking-[0.1em] ml-1">Multiversions</label>
-        <select v-model="model.with_versions"
-          class="w-full h-10 px-3 rounded-xl border border-ash bg-ash/50 text-sm focus:ring-2 focus:ring-primary outline-none transition-all cursor-pointer appearance-none">
-          <option value="all">Tous</option>
-          <option value="yes">Avec versions</option>
-          <option value="no">Sans version</option>
-        </select>
+      <div class="grid grid-cols-2 gap-3">
+        <!-- Versions Filter -->
+        <div class="space-y-1.5">
+          <label class="text-[10px] font-bold text-hsa uppercase tracking-[0.1em] ml-1">Multiversion</label>
+          <select v-model="model.with_versions"
+            class="w-full h-10 px-3 rounded-xl border border-ash bg-ash/50 text-sm focus:ring-2 focus:ring-primary outline-none transition-all cursor-pointer appearance-none">
+            <option value="all">Tous</option>
+            <option value="yes">Oui</option>
+            <option value="no">Non</option>
+          </select>
+        </div>
+
+        <!-- Mode Filter -->
+        <div class="space-y-1.5">
+          <label class="text-[10px] font-bold text-hsa uppercase tracking-[0.1em] ml-1">Certification</label>
+          <select v-model="model.certification_mode"
+            class="w-full h-10 px-3 rounded-xl border border-ash bg-ash/50 text-sm focus:ring-2 focus:ring-primary outline-none transition-all cursor-pointer appearance-none">
+            <option value="all">Tous</option>
+            <option value="simple">Simple</option>
+            <option value="enrichie">Enrichie</option>
+          </select>
+        </div>
       </div>
 
       <!-- Advanced Dates -->
@@ -67,8 +87,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
-import { IconSearch, IconX } from '@tabler/icons-vue'
+import { ref, computed, watch, onMounted } from 'vue'
+import { IconSearch, IconX, IconChevronDown } from '@tabler/icons-vue'
 
 interface Filters {
   filename: string
@@ -76,6 +96,7 @@ interface Filters {
   date_start: string
   date_end: string
   with_versions: string
+  certification_mode: string
 }
 
 const props = defineProps<{
@@ -87,6 +108,18 @@ const emit = defineEmits(['reset'])
 const model = defineModel<Filters>({ required: true })
 
 const localFilename = ref(model.value.filename)
+const isCollapsed = ref(false)
+
+onMounted(() => {
+  const saved = localStorage.getItem('docsentry_filters_collapsed')
+  if (saved !== null) {
+    isCollapsed.value = JSON.parse(saved)
+  }
+})
+
+watch(isCollapsed, (newVal) => {
+  localStorage.setItem('docsentry_filters_collapsed', JSON.stringify(newVal))
+})
 
 watch(() => model.value.filename, (newVal) => {
   localFilename.value = newVal
@@ -101,6 +134,7 @@ const hasActiveFilters = computed(() => {
     model.value.file_type !== 'all' ||
     model.value.date_start !== '' ||
     model.value.date_end !== '' ||
-    model.value.with_versions !== 'all'
+    model.value.with_versions !== 'all' ||
+    model.value.certification_mode !== 'all'
 })
 </script>

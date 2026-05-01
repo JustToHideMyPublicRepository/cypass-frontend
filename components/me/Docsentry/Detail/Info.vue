@@ -3,15 +3,20 @@
     <div class="flex flex-col sm:flex-row sm:items-start justify-between mb-6 gap-4">
       <div class="flex items-center gap-4">
         <div class="p-3 rounded-xl shrink-0 transition-transform group-hover:scale-110"
-          :class="[getDocumentStyle(doc.has_versions).bgColor, getDocumentStyle(doc.has_versions).color]">
-          <component :is="getDocumentStyle(doc.has_versions).icon" class="w-8 h-8" />
+          :class="[getDocumentStyle(doc.has_versions, doc.certification_mode).bgColor, getDocumentStyle(doc.has_versions, doc.certification_mode).color]">
+          <component :is="getDocumentStyle(doc.has_versions, doc.certification_mode).icon" class="w-8 h-8" />
         </div>
         <div class="min-w-0 flex-1">
           <h2 class="text-xl font-bold text-BtW truncate">{{ doc.filename }}</h2>
           <p class="text-sm text-hsa truncate">ID: {{ doc.id }}</p>
         </div>
       </div>
-      <UiStatusBadge :status="isVerified ? 'Verified' : 'Pending'" class="shrink-0" />
+
+      <div class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border transition-all" :class="doc.certification_mode === 'enrichie'
+        ? 'bg-primary/10 text-primary border-primary/20 shadow-sm shadow-primary/10'
+        : 'bg-hsa/10 text-hsa border-hsa/20'">
+        Certification {{ doc.certification_mode }}
+      </div>
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">

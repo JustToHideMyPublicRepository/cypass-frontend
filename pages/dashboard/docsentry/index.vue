@@ -145,10 +145,13 @@ watch([currentPage, filters], () => {
   clearTimeout(debounceTimeout)
   debounceTimeout = setTimeout(() => {
     const offset = (currentPage.value - 1) * limit
-    const apiFilters = {
+    const apiFilters: any = {
       ...filters.value,
       date_start: filters.value.date_start ? filters.value.date_start.replace('T', ' ') + ':00' : '',
       date_end: filters.value.date_end ? filters.value.date_end.replace('T', ' ') + ':00' : ''
+    }
+    if (apiFilters.certification_mode === 'all') {
+      delete apiFilters.certification_mode
     }
     store.fetchDocuments(limit, offset, apiFilters)
   }, 300)

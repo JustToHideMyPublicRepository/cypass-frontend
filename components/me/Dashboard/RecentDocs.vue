@@ -19,9 +19,9 @@
         @click="router.push(`/dashboard/docsentry/${doc.id}`)">
         <div class="flex items-center gap-3 min-w-0">
           <div class="p-2 rounded-lg transition-colors"
-            :class="getDocumentStyle(doc.has_versions).bgColor">
-            <component :is="getDocumentStyle(doc.has_versions).icon" class="w-4 h-4"
-              :class="getDocumentStyle(doc.has_versions).color" />
+            :class="getDocumentStyle(doc.has_versions, doc.certification_mode).bgColor">
+            <component :is="getDocumentStyle(doc.has_versions, doc.certification_mode).icon" class="w-4 h-4"
+              :class="getDocumentStyle(doc.has_versions, doc.certification_mode).color" />
           </div>
           <div class="min-w-0">
             <h4 class="text-sm font-bold text-BtW truncate">{{ doc.filename }}</h4>

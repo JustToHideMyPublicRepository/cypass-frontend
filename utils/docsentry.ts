@@ -1,4 +1,4 @@
-import { IconFile, IconFiles } from '@tabler/icons-vue'
+import { IconFile, IconFiles, IconDatabaseEdit } from '@tabler/icons-vue'
 
 export interface Step {
   id: string
@@ -7,7 +7,14 @@ export interface Step {
   status: 'pending' | 'loading' | 'completed' | 'error'
 }
 
-export const getDocumentStyle = (hasVersions: boolean) => {
+export const getDocumentStyle = (hasVersions: boolean, mode?: 'simple' | 'enrichie') => {
+  if (mode === 'enrichie') {
+    return {
+      icon: IconDatabaseEdit,
+      color: 'text-primary',
+      bgColor: 'bg-primary/10'
+    }
+  }
   return {
     icon: hasVersions ? IconFiles : IconFile,
     color: hasVersions ? 'text-success' : 'text-primary',

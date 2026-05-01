@@ -24,8 +24,8 @@
             <td class="px-6 py-5">
               <div class="flex items-center gap-4">
                 <div class="w-10 h-10 flex items-center justify-center rounded-xl transition-transform"
-                  :class="[getDocumentStyle(doc.has_versions).bgColor, getDocumentStyle(doc.has_versions).color, !doc.has_versions ? 'group-hover:scale-110' : '']">
-                  <component :is="getDocumentStyle(doc.has_versions).icon" class="w-5 h-5" />
+                  :class="[getDocumentStyle(doc.has_versions, doc.certification_mode).bgColor, getDocumentStyle(doc.has_versions, doc.certification_mode).color, !doc.has_versions ? 'group-hover:scale-110' : '']">
+                  <component :is="getDocumentStyle(doc.has_versions, doc.certification_mode).icon" class="w-5 h-5" />
                 </div>
                 <div>
                   <NuxtLink :to="`/dashboard/docsentry/${doc.id}`"

@@ -37,11 +37,11 @@
 
     <!-- Multi-Version Generation History -->
     <MeDocsentryDetailGenerationHistory
-      v-if="multiVersionGenerationCount !== undefined && multiVersionGenerationCount > 0"
+      v-if="certificationMode === 'simple' && multiVersionGenerationCount !== undefined && multiVersionGenerationCount > 0"
       :generations="multiVersionGenerations || []" :count="multiVersionGenerationCount" />
 
     <!-- MultiVersion Generation Form -->
-    <UiBaseCard v-if="canGenerateVersions">
+    <UiBaseCard v-if="certificationMode === 'simple' && canGenerateVersions">
       <h3 class="font-bold text-BtW mb-4 flex items-center gap-2">
         <IconFiles class="w-5 h-5 text-primary" />
         Multiversions
@@ -89,6 +89,7 @@ const props = defineProps<{
   createdAt: string
   isZipDownloaded?: boolean
   certificateDownloadCount?: number
+  certificationMode?: 'simple' | 'enrichie'
   multiVersionGenerations?: MultiVersionGeneration[]
   multiVersionGenerationCount?: number
 }>()
