@@ -1,9 +1,7 @@
 <template>
   <div class="grid md:grid-cols-3 gap-6 md:gap-8 py-6 md:py-8 animate-fade-up" style="animation-delay: 200ms">
-    <div v-for="info in benefits" :key="info.title" 
-      class="space-y-2 text-center group"
-      :class="{ 'cursor-pointer': info.action }"
-      @click="info.action ? $emit(info.action) : null">
+    <div v-for="info in benefits" :key="info.title" class="space-y-2 text-center group"
+      :class="{ 'cursor-pointer': info.action }" @click="info.action ? $emit(info.action) : null">
       <div
         class="w-10 h-10 md:w-12 md:h-12 bg-ash rounded-xl md:rounded-2xl flex items-center justify-center mx-auto text-primary mb-3 md:mb-4 transition-all"
         :class="{ 'group-hover:bg-primary group-hover:text-WtB group-hover:shadow-lg group-hover:shadow-primary/20 ring-2 ring-transparent': info.action, 'ring-primary/20 bg-primary/5': info.action }">

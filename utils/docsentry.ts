@@ -1,4 +1,4 @@
-import { IconSchool, IconFileCertificate, IconClipboardText, IconFileText, IconFileDescription, IconCertificate, IconFileCheck, IconLayersIntersect } from '@tabler/icons-vue'
+import { IconSchool, IconFileCertificate, IconClipboardText, IconFileText, IconFileDescription, IconFilePower, IconFile, IconFiles } from '@tabler/icons-vue'
 
 /**
  * Interface représentant une étape du processus de vérification
@@ -21,22 +21,22 @@ export const getDocumentStyle = (hasVersions: boolean, mode: string) => {
     return {
       bgColor: 'bg-primary/5',
       color: 'text-primary',
-      icon: IconLayersIntersect
+      icon: IconFiles
     }
   }
 
   if (isEnriched) {
     return {
-      bgColor: 'bg-primary/10',
-      color: 'text-primary',
-      icon: IconCertificate
+      bgColor: 'bg-warning/10',
+      color: 'text-warning',
+      icon: IconFilePower
     }
   }
 
   return {
     bgColor: 'bg-success/10',
     color: 'text-success',
-    icon: IconFileCheck
+    icon: IconFile
   }
 }
 

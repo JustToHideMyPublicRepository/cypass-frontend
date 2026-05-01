@@ -19,7 +19,7 @@
       <div class="border-t border-WtB/10 pt-4 space-y-2">
         <h3 class="font-bold flex items-center gap-2 text-WtB text-[13px]">
           <IconDatabaseEdit class="w-4 h-4 text-primary" />
-          Certif. enrichie
+          Certification enrichie
         </h3>
         <p class="text-[11px] leading-relaxed text-WtB/80">
           Ajoutez des métadonnées pour une comparaison manuelle simplifiée lors de la vérification.
