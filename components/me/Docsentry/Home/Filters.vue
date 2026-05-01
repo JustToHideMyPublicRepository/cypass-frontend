@@ -46,7 +46,7 @@
         </div>
       </div>
 
-      <div class="grid grid-cols-2 gap-3">
+      <div class="grid gap-3" :class="model.certification_mode === 'enrichie' ? 'grid-cols-2' : 'grid-cols-1'">
         <!-- Mode Filter -->
         <div class="space-y-1.5">
           <label class="text-[10px] font-bold text-hsa uppercase tracking-[0.1em] ml-1">Certification</label>
@@ -58,12 +58,12 @@
           </select>
         </div>
 
-        <!-- Mode Filter -->
-        <div v-show="model.certification_mode === 'enrichie'" class="space-y-1.5 animate-slide-up">
+        <!-- Category Filter -->
+        <div v-if="model.certification_mode === 'enrichie'" class="space-y-1.5 animate-slide-up">
           <label class="text-[10px] font-bold text-hsa uppercase tracking-[0.1em] ml-1">Catégorie</label>
           <select v-model="model.document_category"
             class="w-full h-10 px-3 rounded-xl border border-ash bg-ash/50 text-sm focus:ring-2 focus:ring-primary outline-none transition-all cursor-pointer appearance-none">
-            <option value="all">Toutes les catégories</option>
+            <option value="all">Toutes</option>
             <option v-for="cat in categories" :key="cat.key" :value="cat.key">
               {{ cat.label }}
             </option>

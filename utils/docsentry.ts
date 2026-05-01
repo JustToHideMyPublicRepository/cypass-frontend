@@ -109,3 +109,36 @@ export const getDocCategoryIcon = (key: string) => {
       return IconFileDescription
   }
 }
+
+/**
+ * Traduit une clé de catégorie de document en français
+ */
+export const translateDocCategory = (key?: string | null) => {
+  if (!key) return '—'
+  const mapping: Record<string, string> = {
+    diplome: 'Diplôme',
+    attestation: 'Attestation',
+    certificat: 'Certificat',
+    releve_notes: 'Relevé de notes'
+  }
+  return mapping[key.toLowerCase()] || key
+}
+
+/**
+ * Traduit une clé de métadonnée enrichie en français
+ */
+export const translateEnrichedField = (key: string) => {
+  const mapping: Record<string, string> = {
+    holder_name: 'Détenteur',
+    institution: 'Établissement',
+    field_of_study: 'Filière',
+    academic_year: 'Année académique',
+    mention: 'Mention',
+    issue_date: 'Date d\'émission',
+    purpose: 'Objet',
+    issuing_body: 'Organisme émetteur',
+    certificate_type: 'Type de certificat',
+    level: 'Niveau / Classe'
+  }
+  return mapping[key.toLowerCase()] || key.replace(/_/g, ' ')
+}

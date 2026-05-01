@@ -22,7 +22,8 @@
           :versions="doc.versions || []" :loading="isFiltering" @copy="copyField" @update-filters="handleFilters" />
 
         <!-- Enriched Metadata -->
-        <MeDocsentryDetailEnriched v-if="doc.certification_mode === 'enrichie'" :metadata="doc.enriched_metadata" />
+        <MeDocsentryDetailEnriched v-if="doc.certification_mode === 'enrichie'" :metadata="doc.enriched_metadata"
+          :category="doc.document_category" />
 
         <!-- Cryptographic Proof -->
         <MeDocsentryDetailProof :doc="doc" :copied-fields="copiedFields" @copy="copyField" />
