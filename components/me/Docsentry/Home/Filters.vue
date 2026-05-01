@@ -111,14 +111,14 @@ const localFilename = ref(model.value.filename)
 const isCollapsed = ref(false)
 
 onMounted(() => {
-  const saved = localStorage.getItem('docsentry_filters_collapsed')
+  const saved = localStorage.getItem('cps_docsentry_filters')
   if (saved !== null) {
     isCollapsed.value = JSON.parse(saved)
   }
 })
 
 watch(isCollapsed, (newVal) => {
-  localStorage.setItem('docsentry_filters_collapsed', JSON.stringify(newVal))
+  localStorage.setItem('cps_docsentry_filters', JSON.stringify(newVal))
 })
 
 watch(() => model.value.filename, (newVal) => {

@@ -20,7 +20,8 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
         file_type: '',
         date_start: '',
         date_end: '',
-        with_versions: 'all'
+        with_versions: 'all',
+        certification_mode: 'all'
       }
     }
   }),
@@ -106,6 +107,7 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
         if (filters.date_start) query.date_start = filters.date_start
         if (filters.date_end) query.date_end = filters.date_end
         if (filters.with_versions && filters.with_versions !== 'all') query.with_versions = filters.with_versions
+        if (filters.certification_mode && filters.certification_mode !== 'all') query.certification_mode = filters.certification_mode
 
         const response = await $fetch<{
           success: boolean;
