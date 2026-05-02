@@ -99,7 +99,7 @@
     <ModalVigitechPreference :show="showSettingsModal" @close="showSettingsModal = false" />
 
     <UiConfirmModal :show="showDeleteConfirm" title="Supprimer l'incident"
-      message="Êtes-vous sûr de vouloir supprimer cet incident ? Cette action est irréversible."
+      message="Ce signalement sera déplacé en corbeille et supprimé définitivement après 7 jours."
       confirm-text="Supprimer" :loading="deleting" variant="danger" @cancel="showDeleteConfirm = false"
       @confirm="handleDelete" />
 
