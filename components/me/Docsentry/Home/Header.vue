@@ -22,11 +22,16 @@
         <IconShieldCheck class="w-4 h-4" />
         Vérifier
       </UiBaseButton>
+      <UiBaseButton variant="ghost" to="/dashboard/manage/archive"
+        class="!px-4 !py-2.5 !text-xs !uppercase !tracking-wider gap-2">
+        <IconArchive class="w-4 h-4" />
+        Archives
+      </UiBaseButton>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { IconPlus, IconShieldCheck } from '@tabler/icons-vue'
+import { IconPlus, IconShieldCheck, IconArchive } from '@tabler/icons-vue'
 defineEmits(['upload', 'verify'])
 </script>

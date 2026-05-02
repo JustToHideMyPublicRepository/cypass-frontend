@@ -7,7 +7,7 @@
       <!-- Main Content: Document List -->
       <div class="lg:col-span-3 space-y-6">
         <MeDocsentryHomeList :documents="filteredDocuments" :loading="store.loading" :current-page="currentPage"
-          :totalPages="totalPages" @next-page="handleNextPage" @prev-page="handlePrevPage" />
+          :totalPages="totalPages" @next-page="handleNextPage" @prev-page="handlePrevPage" @refresh="fetchDocuments" />
       </div>
 
       <!-- Sidebar: Filters & Info -->
@@ -167,21 +167,23 @@ const handlePrevPage = () => {
   }
 }
 
+const fetchDocuments = () => {
+  const offset = (currentPage.value - 1) * limit
+  const apiFilters: any = {
+    ...filters.value,
+    date_start: filters.value.date_start ? filters.value.date_start.replace('T', ' ') + ':00' : '',
+    date_end: filters.value.date_end ? filters.value.date_end.replace('T', ' ') + ':00' : ''
+  }
+  if (apiFilters.certification_mode === 'all') {
+    delete apiFilters.certification_mode
+  }
+  store.fetchDocuments(limit, offset, apiFilters)
+}
+
 let debounceTimeout: NodeJS.Timeout
 watch([currentPage, filters], () => {
   clearTimeout(debounceTimeout)
-  debounceTimeout = setTimeout(() => {
-    const offset = (currentPage.value - 1) * limit
-    const apiFilters: any = {
-      ...filters.value,
-      date_start: filters.value.date_start ? filters.value.date_start.replace('T', ' ') + ':00' : '',
-      date_end: filters.value.date_end ? filters.value.date_end.replace('T', ' ') + ':00' : ''
-    }
-    if (apiFilters.certification_mode === 'all') {
-      delete apiFilters.certification_mode
-    }
-    store.fetchDocuments(limit, offset, apiFilters)
-  }, 300)
+  debounceTimeout = setTimeout(fetchDocuments, 300)
 }, { deep: true })
 
 onMounted(() => {

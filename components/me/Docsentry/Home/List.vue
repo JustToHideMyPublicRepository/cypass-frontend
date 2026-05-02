@@ -69,10 +69,20 @@
                   title="Consulter">
                   <IconEye class="w-4 h-4" />
                 </NuxtLink>
-                <UiBaseButton @click="downloadCertificate(doc.id, doc.filename)" variant="ghost"
+                <UiBaseButton v-if="!isArchive" @click="downloadCertificate(doc.id, doc.filename)" variant="ghost"
                   class="!w-9 !h-9 !flex !items-center !justify-center !bg-ash/50 hover:!bg-success hover:!text-white !rounded-xl transition-all !p-0"
                   title="Certificat">
                   <IconDownload class="w-4 h-4" />
+                </UiBaseButton>
+                <UiBaseButton v-if="!isArchive" @click="archiveDocument(doc.id)" variant="ghost"
+                  class="!w-9 !h-9 !flex !items-center !justify-center !bg-ash/50 hover:!bg-warning hover:!text-white !rounded-xl transition-all !p-0"
+                  title="Archiver">
+                  <IconArchive class="w-4 h-4" />
+                </UiBaseButton>
+                <UiBaseButton v-if="isArchive" @click="unarchiveDocument(doc.id)" variant="ghost"
+                  class="!w-9 !h-9 !flex !items-center !justify-center !bg-ash/50 hover:!bg-primary hover:!text-white !rounded-xl transition-all !p-0"
+                  title="Désarchiver">
+                  <IconRotate class="w-4 h-4" />
                 </UiBaseButton>
               </div>
             </td>
@@ -91,7 +101,7 @@
 </template>
 
 <script setup lang="ts">
-import { IconDownload, IconEye, IconCopy, IconCheck, IconShare } from '@tabler/icons-vue'
+import { IconDownload, IconEye, IconCopy, IconCheck, IconShare, IconArchive, IconRotate } from '@tabler/icons-vue'
 import { ref } from 'vue'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
@@ -106,9 +116,10 @@ const props = defineProps<{
   loading: boolean
   currentPage: number
   totalPages: number
+  isArchive?: boolean
 }>()
 
-const emit = defineEmits(['next-page', 'prev-page'])
+const emit = defineEmits(['next-page', 'prev-page', 'refresh'])
 
 const toast = useToastStore()
 const userDocsentryStore = useUserDocsentryStore()
@@ -150,8 +161,20 @@ const handleContextMenu = (doc: Document, e: MouseEvent) => {
       label: 'Partager le lien',
       icon: IconShare,
       action: () => shareDocument(doc)
+    },
+    {
+      label: 'Archiver le document',
+      icon: IconArchive,
+      action: () => archiveDocument(doc.id),
+      hidden: props.isArchive
+    },
+    {
+      label: 'Désarchiver le document',
+      icon: IconRotate,
+      action: () => unarchiveDocument(doc.id),
+      hidden: !props.isArchive
     }
-  ]
+  ].filter(item => !item.hidden) as ContextMenuItem[]
 
   if (doc.has_certificate) {
     menuItems.push({
@@ -177,6 +200,26 @@ const downloadCertificate = async (id: string, filename: string) => {
   const success = await userDocsentryStore.downloadCertificate(id, filename)
   if (!success) {
     toast.showToast('error', 'Erreur', userDocsentryStore.error || 'Impossible de télécharger le certificat.')
+  }
+}
+
+const archiveDocument = async (id: string) => {
+  const success = await userDocsentryStore.archiveDocument(id)
+  if (success) {
+    toast.showToast('success', 'Archivé', 'Document déplacé vers les archives.')
+    emit('refresh')
+  } else {
+    toast.showToast('error', 'Erreur', userDocsentryStore.error || 'Impossible d’archiver le document.')
+  }
+}
+
+const unarchiveDocument = async (id: string) => {
+  const success = await userDocsentryStore.unarchiveDocument(id)
+  if (success) {
+    toast.showToast('success', 'Désarchivé', 'Document restauré avec succès.')
+    emit('refresh')
+  } else {
+    toast.showToast('error', 'Erreur', userDocsentryStore.error || 'Impossible de désarchiver le document.')
   }
 }
 

@@ -24,6 +24,13 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
         certification_mode: 'all',
         document_category: 'all'
       }
+    },
+    archivedDocuments: [] as Document[],
+    archivedPagination: {
+      total: 0,
+      limit: 20,
+      offset: 0,
+      has_more: false
     }
   }),
 
@@ -331,6 +338,83 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
         }
       } catch (err) {
         console.error('Failed to calculate document trend', err)
+      }
+    },
+
+    // Récupérer les documents archivés
+    async fetchArchivedDocuments(limit: number = 20, offset: number = 0) {
+      this.loading = true
+      try {
+        const response = await $fetch<{
+          success: boolean;
+          data: {
+            documents: Document[],
+            pagination: {
+              total: number,
+              limit: number,
+              offset: number,
+              has_more: boolean
+            }
+          }
+        }>('/api/user/docsentry/list-archived', {
+          query: { limit, offset }
+        })
+        if (response.success) {
+          this.archivedDocuments = response.data.documents
+          if (response.data.pagination) {
+            this.archivedPagination = response.data.pagination
+          }
+        }
+      } catch (err) {
+        console.error('Failed to fetch archived documents', err)
+      } finally {
+        this.loading = false
+      }
+    },
+
+    // Archiver un document
+    async archiveDocument(id: string) {
+      this.error = null
+      try {
+        const formData = new FormData()
+        formData.append('document_id', id)
+        const response = await $fetch<{ success: boolean; message: string }>('/api/user/docsentry/archive', {
+          method: 'POST',
+          body: formData
+        })
+        if (response.success) {
+          // Refresh main list
+          await this.fetchDocuments()
+          return true
+        }
+        this.error = response.message
+        return false
+      } catch (err: any) {
+        this.error = err.data?.message || 'Erreur lors de l’archivage du document'
+        return false
+      }
+    },
+
+    // Désarchiver un document
+    async unarchiveDocument(id: string) {
+      this.error = null
+      try {
+        const formData = new FormData()
+        formData.append('document_id', id)
+        const response = await $fetch<{ success: boolean; message: string }>('/api/user/docsentry/unarchive', {
+          method: 'POST',
+          body: formData
+        })
+        if (response.success) {
+          // Refresh archived list
+          await this.fetchArchivedDocuments()
+          return true
+        }
+        this.error = response.message
+        return false
+      } catch (err: any) {
+        this.error = err.data?.message || 'Erreur lors du désarchivage du document'
+        return false
       }
     },
   }
