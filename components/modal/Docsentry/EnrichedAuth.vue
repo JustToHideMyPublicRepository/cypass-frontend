@@ -12,31 +12,34 @@
       </div>
     </div>
 
-    <!-- Step Indicator -->
-    <ModalDocsentryEnrichedAuthStepIndicator v-if="!uploadResult" :steps="steps" :current-step="currentStep"
-      :is-step-accessible="isStepAccessible" @select-step="currentStep = $event" />
+    <!-- Steps View -->
+    <div v-else class="space-y-6">
+      <!-- Step Indicator -->
+      <ModalDocsentryEnrichedAuthStepIndicator :steps="steps" :current-step="currentStep"
+        :is-step-accessible="isStepAccessible" @select-step="currentStep = $event" />
 
-    <!-- Step 1: Category Selection -->
-    <ModalDocsentryEnrichedAuthCategory v-if="currentStep === 1 && !uploadResult"
-      :categories="publicStore.enrichmentCategories" :selected-category="form.category"
-      :loading="publicStore.loadingCategories" @select="selectCategory" @next="currentStep = 2" />
+      <!-- Step 1: Category Selection -->
+      <ModalDocsentryEnrichedAuthCategory v-if="currentStep === 1" :categories="publicStore.enrichmentCategories"
+        :selected-category="form.category" :loading="publicStore.loadingCategories" @select="selectCategory"
+        @next="currentStep = 2" />
 
-    <!-- Step 2: File Selection -->
-    <ModalDocsentryEnrichedAuthFileUpload v-if="currentStep === 2" v-model:file="form.file" :category="form.category"
-      @back="currentStep = 1" @next="handleGoToExtraction" @error="handleFileError" />
+      <!-- Step 2: File Selection -->
+      <ModalDocsentryEnrichedAuthFileUpload v-if="currentStep === 2" v-model:file="form.file" :category="form.category"
+        @back="currentStep = 1" @next="handleGoToExtraction" @error="handleFileError" />
 
-    <!-- Step 3: Extraction -->
-    <ModalDocsentryEnrichedAuthExtracting v-if="currentStep === 3" :category="form.category" />
+      <!-- Step 3: Extraction -->
+      <ModalDocsentryEnrichedAuthExtracting v-if="currentStep === 3" :category="form.category" />
 
-    <!-- Step 4: Metadata -->
-    <div v-if="currentStep === 4" class="space-y-6">
-      <ModalDocsentryEnrichedAuthMetadata :category="form.category" v-model="form.metadata" :loading="loading"
-        @back="currentStep = 2" @submit="handleSubmit" />
+      <!-- Step 4: Metadata -->
+      <div v-if="currentStep === 4" class="space-y-6">
+        <ModalDocsentryEnrichedAuthMetadata :category="form.category" v-model="form.metadata" :loading="loading"
+          @back="currentStep = 2" @submit="handleSubmit" />
 
-      <div v-if="store.error"
-        class="p-4 rounded-xl bg-danger/10 border border-danger/20 flex items-center gap-3 text-danger">
-        <IconAlertCircle class="w-5 h-5 shrink-0" />
-        <p class="text-xs font-medium">{{ store.error }}</p>
+        <div v-if="store.error"
+          class="p-4 rounded-xl bg-danger/10 border border-danger/20 flex items-center gap-3 text-danger">
+          <IconAlertCircle class="w-5 h-5 shrink-0" />
+          <p class="text-xs font-medium">{{ store.error }}</p>
+        </div>
       </div>
     </div>
   </UiBaseModal>

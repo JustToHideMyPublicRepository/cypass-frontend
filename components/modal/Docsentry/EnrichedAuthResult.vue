@@ -19,7 +19,8 @@
           </div>
           <div class="space-y-1">
             <span class="text-hsa font-bold tracking-widest uppercase text-[9px]">Catégorie</span>
-            <div class="font-bold text-primary flex items-center gap-2 bg-primary/5 px-2 py-1.5 rounded-lg border border-primary/10">
+            <div
+              class="font-bold text-primary flex items-center gap-2 bg-primary/5 px-2 py-1.5 rounded-lg border border-primary/10">
               <component :is="getDocCategoryIcon(category?.key)" class="w-3.5 h-3.5" />
               {{ category?.label }}
             </div>
@@ -27,7 +28,8 @@
         </div>
 
         <!-- Métadonnées certifiées -->
-        <div v-if="Object.keys(metadata).length > 0" class="space-y-3 p-4 bg-ash/20 rounded-2xl border border-ashAct/20">
+        <div v-if="Object.keys(metadata).length > 0"
+          class="space-y-3 p-4 bg-ash/20 rounded-2xl border border-ashAct/20">
           <span class="text-[9px] text-hsa font-black uppercase tracking-widest flex items-center gap-2">
             <IconDatabase class="w-3 h-3" />
             Métadonnées Certifiées
@@ -51,15 +53,17 @@
               <IconCheck v-else class="w-3.5 h-3.5 text-success" />
             </UiBaseButton>
           </div>
-          <div class="font-code text-BtW break-all bg-WtB/50 p-3 rounded-xl border border-ashAct/30 leading-relaxed shadow-sm">
+          <div
+            class="font-code text-BtW break-all bg-WtB/50 p-3 rounded-xl border border-ashAct/30 leading-relaxed shadow-sm">
             {{ result.doc_hash }}
           </div>
         </div>
 
         <!-- Preuve Cryptographique -->
         <div class="space-y-2 mt-2">
-          <p class="text-[9px] text-hsa font-black tracking-[0.2em] uppercase ml-1">Signature Numérique Souveraine</p>
-          <p class="font-code text-[9px] text-BtW break-all bg-WtB/50 p-4 rounded-2xl border border-ashAct/30 shadow-inner leading-relaxed">
+          <p class="text-[9px] text-hsa font-black tracking-[0.2em] uppercase ml-1">Signature Numérique</p>
+          <p
+            class="font-code text-[9px] text-BtW break-all bg-WtB/50 p-4 rounded-2xl border border-ashAct/30 shadow-inner leading-relaxed">
             {{ result.cryptographic_proof.digital_signature }}
           </p>
         </div>
