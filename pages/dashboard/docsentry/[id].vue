@@ -19,7 +19,8 @@
 
         <!-- Child Versions -->
         <MeDocsentryDetailVersions v-if="doc.certification_mode === 'simple' && doc.has_versions"
-          :versions="doc.versions || []" :loading="isFiltering" @copy="copyField" @update-filters="handleFilters" />
+          :versions="doc.versions || []" :loading="isFiltering" @copy="copyField" @update-filters="handleFilters"
+          @verify="redirectToVerifyVersion" @share="shareVersion" />
 
         <!-- Enriched Metadata -->
         <MeDocsentryDetailEnriched v-if="doc.certification_mode === 'enrichie'" :metadata="doc.enriched_metadata"
@@ -54,6 +55,7 @@ import { useRoute } from 'nuxt/app'
 import { IconAlertCircle } from '@tabler/icons-vue'
 import { useUserDocsentryStore } from '~/stores/back/user/docsentry'
 import { useToastStore } from '~/stores/front/toast'
+import type { DocumentVersion } from '~/types/docsentry'
 
 const route = useRoute()
 const userStore = useUserDocsentryStore()
@@ -121,6 +123,10 @@ const redirectToVerify = () => {
   navigateTo(`/verify?h=${doc.value.hash}`)
 }
 
+const redirectToVerifyVersion = (version: DocumentVersion) => {
+  navigateTo(`/verify?h=${version.hash}`)
+}
+
 const downloadCertificate = async () => {
   if (!doc.value) return
   const success = await userStore.downloadCertificate(doc.value.id, doc.value.filename)
@@ -150,6 +156,13 @@ const shareDocument = () => {
   shareUrl.value = `${window.location.origin}/verify?h=${doc.value.hash}`
   shareTitle.value = `Document CYPASS: ${doc.value.filename}`
   shareText.value = `Vérifiez l'authenticité de ce document certifié par CYPASS.`
+  showShareModal.value = true
+}
+
+const shareVersion = (version: DocumentVersion) => {
+  shareUrl.value = `${window.location.origin}/verify?h=${version.hash}`
+  shareTitle.value = `Document CYPASS : Version de ${version.recipient} pour ${doc.value?.filename}`
+  shareText.value = `Vérifiez l'authenticité de cette version personnalisée pour ${version.recipient}.`
   showShareModal.value = true
 }
 

@@ -51,7 +51,8 @@
 
       <div class="space-y-4" v-if="versions.length > 0">
         <div v-for="version in paginatedVersions" :key="version.id"
-          class="bg-ash/20 border border-ashAct/30 rounded-2xl p-4 hover:bg-ash/30 transition-all group">
+          @contextmenu.prevent="handleContextMenu(version, $event)"
+          class="bg-ash/20 border border-ashAct/30 rounded-2xl p-4 hover:bg-ash/30 transition-all group relative overflow-hidden">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div class="flex items-center gap-3">
               <div
@@ -60,7 +61,15 @@
               </div>
               <div>
                 <p class="font-bold text-BtW">{{ version.recipient }}</p>
-                <p class="text-[10px] text-hsa font-medium tracking-wider uppercase">Destinataire</p>
+                <div class="flex items-center gap-2">
+                  <p class="text-[10px] text-hsa font-medium tracking-wider uppercase">Destinataire</p>
+                  <span class="w-1 h-1 bg-ashAct rounded-full"></span>
+                  <button @click="verifyVersion(version)"
+                    class="text-[10px] text-primary hover:underline font-bold uppercase tracking-wider">Vérifier</button>
+                  <span class="w-1 h-1 bg-ashAct rounded-full"></span>
+                  <button @click="shareVersion(version)"
+                    class="text-[10px] text-primary hover:underline font-bold uppercase tracking-wider">Partager</button>
+                </div>
               </div>
             </div>
 
@@ -105,18 +114,23 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { IconFiles, IconUserCheck, IconCopy, IconCheck, IconSearch, IconChevronDown, IconLoader2 } from '@tabler/icons-vue'
+import { IconFiles, IconUserCheck, IconCopy, IconCheck, IconSearch, IconChevronDown, IconShare, IconShieldCheck } from '@tabler/icons-vue'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { type DocumentVersion } from '~/types/docsentry'
 import UiAppPagination from '~/components/ui/AppPagination.vue'
+import { useContextMenu, type ContextMenuItem } from '~/composables/useContextMenu'
+import { useToastStore } from '~/stores/front/toast'
 
 const props = defineProps<{
   versions: DocumentVersion[]
   loading?: boolean
 }>()
 
-const emit = defineEmits(['copy', 'update-filters'])
+const emit = defineEmits(['copy', 'update-filters', 'verify', 'share'])
+
+const { showMenu } = useContextMenu()
+const toast = useToastStore()
 
 const search = ref('')
 const sort = ref('recent')
@@ -142,6 +156,45 @@ const paginatedVersions = computed(() => {
 
 const handlePageChange = (direction: number) => {
   currentPage.value += direction
+}
+
+// Actions
+const verifyVersion = (version: DocumentVersion) => {
+  emit('verify', version)
+}
+
+const shareVersion = (version: DocumentVersion) => {
+  emit('share', version)
+}
+
+const handleContextMenu = (version: DocumentVersion, e: MouseEvent) => {
+  const menuItems: ContextMenuItem[] = [
+    {
+      label: 'Vérifier l\'authenticité',
+      icon: IconShieldCheck,
+      action: () => verifyVersion(version)
+    },
+    {
+      label: 'Partager le lien',
+      icon: IconShare,
+      action: () => shareVersion(version)
+    },
+    {
+      label: 'Copier le Hash',
+      icon: IconCopy,
+      action: () => handleCopy(version.hash, version.id)
+    }
+  ]
+
+  const menuMetadata = {
+    title: 'Version Personnalisée',
+    infos: [
+      { label: 'Destinataire', value: version.recipient },
+      { label: 'Signé le', value: formatDate(version.signed_at) }
+    ]
+  }
+
+  showMenu(e, menuItems, menuMetadata)
 }
 
 // Copy Feedback
