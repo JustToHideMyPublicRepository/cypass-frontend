@@ -383,8 +383,9 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
           body: formData
         })
         if (response.success) {
-          // Refresh main list
-          await this.fetchDocuments()
+          // Remove from local list for smooth UI
+          this.documents = this.documents.filter(d => d.id !== id)
+          if (this.pagination.total > 0) this.pagination.total--
           return true
         }
         this.error = response.message
@@ -406,8 +407,9 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
           body: formData
         })
         if (response.success) {
-          // Refresh archived list
-          await this.fetchArchivedDocuments()
+          // Remove from archived list for smooth UI
+          this.archivedDocuments = this.archivedDocuments.filter(d => d.id !== id)
+          if (this.archivedPagination.total > 0) this.archivedPagination.total--
           return true
         }
         this.error = response.message

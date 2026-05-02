@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
     if (body.incidents !== undefined) formData.append('incidents', String(body.incidents))
     if (body.profile !== undefined) formData.append('profile', String(body.profile))
 
-    const response: any = await $fetch(`${baseApi}/user/notification/settings_set`, {
+    const response: any = await $fetch(`${baseApi}/user/notification/setting_set`, {
       method: 'PATCH',
       headers: {
         'Authorization': `Bearer ${token}`,

@@ -9,6 +9,7 @@ export interface Document {
   filename: string
   hash: string
   created_at: string
+  archived_at?: string
   file_type: string
   type: string
   has_certificate: boolean

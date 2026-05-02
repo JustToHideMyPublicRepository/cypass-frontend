@@ -5,7 +5,7 @@
         <thead class="text-[10px] text-hsa uppercase bg-ash/30 border-b border-ash font-bold tracking-[0.2em]">
           <tr>
             <th class="px-6 py-4">Fichier</th>
-            <th class="px-6 py-4 text-center">Émission</th>
+            <th class="px-6 py-4 text-center">{{ isArchive ? 'Archivage' : 'Émission' }}</th>
             <th class="px-6 py-4">Digital Signature (Hash)</th>
             <th class="px-6 py-4 text-center">Statut</th>
             <th class="px-6 py-4 text-right">Actions</th>
@@ -40,8 +40,10 @@
             </td>
             <td class="px-6 py-5 text-center">
               <div class="inline-flex flex-col items-center">
-                <span class="text-BtW font-medium">{{ formatDate(doc.created_at).split(' ')[0] }}</span>
-                <span class="text-[10px] text-hsa uppercase">{{ formatDate(doc.created_at).split(' ').slice(1).join(' ')
+                <span class="text-BtW font-medium">{{ formatDate(isArchive ? doc.archived_at : doc.created_at).split(' ')[0]
+                }}</span>
+                <span class="text-[10px] text-hsa uppercase">{{ formatDate(isArchive ? doc.archived_at :
+                  doc.created_at).split(' ').slice(1).join(' ')
                 }}</span>
               </div>
             </td>
@@ -63,27 +65,32 @@
               <UiStatusBadge :status="doc.has_certificate ? 'Verified' : 'Pending'" />
             </td>
             <td class="px-6 py-5 text-right">
-              <div class="flex justify-end gap-2">
-                <NuxtLink :to="`/dashboard/docsentry/${doc.id}`"
-                  class="w-9 h-9 flex items-center justify-center bg-ash/50 hover:bg-primary hover:text-white rounded-xl transition-all"
-                  title="Consulter">
-                  <IconEye class="w-4 h-4" />
-                </NuxtLink>
-                <UiBaseButton v-if="!isArchive" @click="downloadCertificate(doc.id, doc.filename)" variant="ghost"
-                  class="!w-9 !h-9 !flex !items-center !justify-center !bg-ash/50 hover:!bg-success hover:!text-white !rounded-xl transition-all !p-0"
-                  title="Certificat">
-                  <IconDownload class="w-4 h-4" />
-                </UiBaseButton>
-                <UiBaseButton v-if="!isArchive" @click="archiveDocument(doc.id)" variant="ghost"
-                  class="!w-9 !h-9 !flex !items-center !justify-center !bg-ash/50 hover:!bg-warning hover:!text-white !rounded-xl transition-all !p-0"
-                  title="Archiver">
-                  <IconArchive class="w-4 h-4" />
-                </UiBaseButton>
-                <UiBaseButton v-if="isArchive" @click="unarchiveDocument(doc.id)" variant="ghost"
-                  class="!w-9 !h-9 !flex !items-center !justify-center !bg-ash/50 hover:!bg-primary hover:!text-white !rounded-xl transition-all !p-0"
-                  title="Désarchiver">
-                  <IconRotate class="w-4 h-4" />
-                </UiBaseButton>
+              <div class="flex justify-end gap-2 h-9 items-center">
+                <template v-if="localProcessingId === doc.id">
+                  <UiLogoLoader size="xs" />
+                </template>
+                <template v-else>
+                  <NuxtLink :to="`/dashboard/docsentry/${doc.id}`"
+                    class="w-9 h-9 flex items-center justify-center bg-ash/50 hover:bg-primary hover:text-white rounded-xl transition-all"
+                    title="Consulter">
+                    <IconEye class="w-4 h-4" />
+                  </NuxtLink>
+                  <UiBaseButton v-if="!isArchive" @click="downloadCertificate(doc.id, doc.filename)" variant="ghost"
+                    class="!w-9 !h-9 !flex !items-center !justify-center !bg-ash/50 hover:!bg-success hover:!text-white !rounded-xl transition-all !p-0"
+                    title="Certificat">
+                    <IconDownload class="w-4 h-4" />
+                  </UiBaseButton>
+                  <UiBaseButton v-if="!isArchive" @click="archiveDocument(doc.id)" variant="ghost"
+                    class="!w-9 !h-9 !flex !items-center !justify-center !bg-ash/50 hover:!bg-warning hover:!text-white !rounded-xl transition-all !p-0"
+                    title="Archiver">
+                    <IconArchive class="w-4 h-4" />
+                  </UiBaseButton>
+                  <UiBaseButton v-if="isArchive" @click="unarchiveDocument(doc.id)" variant="ghost"
+                    class="!w-9 !h-9 !flex !items-center !justify-center !bg-ash/50 hover:!bg-primary hover:!text-white !rounded-xl transition-all !p-0"
+                    title="Désarchiver">
+                    <IconRotate class="w-4 h-4" />
+                  </UiBaseButton>
+                </template>
               </div>
             </td>
           </tr>
@@ -130,6 +137,7 @@ const shareUrl = ref('')
 const shareTitle = ref('')
 const shareText = ref('')
 const copiedHashes = ref(new Set<string>())
+const localProcessingId = ref<string | null>(null)
 
 const copyHash = (hash: string, id: string) => {
   navigator.clipboard.writeText(hash)
@@ -204,20 +212,22 @@ const downloadCertificate = async (id: string, filename: string) => {
 }
 
 const archiveDocument = async (id: string) => {
+  localProcessingId.value = id
   const success = await userDocsentryStore.archiveDocument(id)
+  localProcessingId.value = null
   if (success) {
     toast.showToast('success', 'Archivé', 'Document déplacé vers les archives.')
-    emit('refresh')
   } else {
     toast.showToast('error', 'Erreur', userDocsentryStore.error || 'Impossible d’archiver le document.')
   }
 }
 
 const unarchiveDocument = async (id: string) => {
+  localProcessingId.value = id
   const success = await userDocsentryStore.unarchiveDocument(id)
+  localProcessingId.value = null
   if (success) {
     toast.showToast('success', 'Désarchivé', 'Document restauré avec succès.')
-    emit('refresh')
   } else {
     toast.showToast('error', 'Erreur', userDocsentryStore.error || 'Impossible de désarchiver le document.')
   }
