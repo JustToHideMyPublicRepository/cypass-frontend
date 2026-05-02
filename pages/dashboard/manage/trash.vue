@@ -7,13 +7,13 @@
         <p class="text-hsa text-sm">Gérez vos signalements supprimés. Ils seront définitivement effacés après 7 jours.
         </p>
       </div>
-      <div class="flex items-center gap-2">
+      <div class="flex flex-row md:flex-col md:items-end items-center gap-3">
         <UiBaseButton v-if="store.trashedIncidents.length" @click="confirmRestoreAll" :loading="restoringAll"
           variant="primary" size="sm">
           <IconRotate class="w-4 h-4 mr-2" /> Tout restaurer
         </UiBaseButton>
         <NuxtLink to="/dashboard/vigitech"
-          class="inline-flex items-center gap-2 text-primary hover:underline font-medium">
+          class="inline-flex items-center gap-2 text-primary hover:underline font-medium text-sm">
           <IconArrowLeft class="w-4 h-4" />
           Retour à la liste
         </NuxtLink>
@@ -21,13 +21,20 @@
     </div>
 
     <!-- Content -->
-    <div v-if="store.loading && !store.trashedIncidents.length" class="space-y-6">
-      <UiBaseCard v-for="i in 3" :key="i" class="animate-pulse">
-        <div class="h-24 bg-ash/10 rounded-xl"></div>
+    <div v-if="store.loading && !store.trashedIncidents.length" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <UiBaseCard v-for="i in 4" :key="i" class="p-4">
+        <div class="flex gap-4">
+          <UiAppSkeleton type="avatar" radius="12px" />
+          <div class="flex-1 space-y-2">
+            <UiAppSkeleton type="text" width="40%" height="8px" />
+            <UiAppSkeleton type="heading" width="80%" height="20px" />
+            <UiAppSkeleton type="text" :count="1" />
+          </div>
+        </div>
       </UiBaseCard>
     </div>
 
-    <div v-else-if="store.trashedIncidents.length" class="space-y-4">
+    <div v-else-if="store.trashedIncidents.length" class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <UiBaseCard v-for="incident in store.trashedIncidents" :key="incident.id"
         class="border-l-4 border-l-ash bg-ash/5 transition-all hover:shadow-lg">
         <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
@@ -62,8 +69,14 @@
           </div>
 
           <div class="flex shrink-0 gap-2 items-center">
-            <UiBaseButton @click="handleRestore(incident.id)" variant="secondary" size="sm" class="!px-3">
-              <IconRotate class="w-4 h-4 mr-2" /> Restaurer
+            <UiBaseButton @click="handleRestore(incident.id)" :disabled="!!localProcessingId" variant="secondary"
+              size="sm" class="!px-3 min-w-[110px]">
+              <template v-if="localProcessingId === incident.id">
+                <UiLogoLoader size="xs" class="mr-2" /> Restaurer...
+              </template>
+              <template v-else>
+                <IconRotate class="w-4 h-4 mr-2" /> Restaurer
+              </template>
             </UiBaseButton>
           </div>
         </div>
@@ -104,15 +117,18 @@ const store = useUserVigitechStore()
 const toast = useToastStore()
 
 const restoringAll = ref(false)
+const localProcessingId = ref<string | null>(null)
 const showRestoreConfirm = ref(false)
 
 const handleRestore = async (id: string) => {
+  localProcessingId.value = id
   const result = await store.restoreIncident(id)
   if (result.success) {
     toast.showToast('success', 'Incident restauré', 'L\'incident a été remis dans la liste principale.')
   } else {
     toast.showToast('error', 'Erreur', result.message || 'Impossible de restaurer l\'incident.')
   }
+  localProcessingId.value = null
 }
 
 const confirmRestoreAll = () => {
