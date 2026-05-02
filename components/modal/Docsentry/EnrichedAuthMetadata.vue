@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-6 animate-fade-in">
     <!-- Selected Category Reminder -->
-    <ModalDocsentryEnrichedAuthCategorySelected :category="category" />
+    <ModalDocsentryEnrichedAuthCatSelected :category="category" />
 
     <div v-if="!category" class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div v-for="i in 6" :key="i" class="space-y-2">
