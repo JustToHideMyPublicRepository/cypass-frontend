@@ -34,20 +34,17 @@
             Archiver le document
           </UiBaseButton>
           <template v-else>
-            <UiBaseButton @click="$emit('unarchive')" :disabled="loading"
-              class="w-full justify-start text-primary hover:bg-primary/10" variant="ghost">
-              <UiLogoLoader v-if="loading" size="xs" class="mr-2" />
-              <IconRotate v-else class="w-4 h-4 mr-2" />
-              Désarchiver le document
-            </UiBaseButton>
-
-            <!-- Archived Date Info -->
-            <div v-if="archivedAt" class="flex items-center gap-2 px-3 py-2 bg-ash/30 rounded-xl border border-ash/50">
-              <div class="w-1.5 h-1.5 rounded-full bg-warning"></div>
-              <p class="text-[10px] text-hsa font-medium uppercase tracking-wider">
-                Archivé le <span class="text-BtW font-bold">{{ formatDate(archivedAt) }}</span>
-              </p>
-            </div>
+            <UiAppTooltip class="block w-full" :content="archivedAt ? `Archivé le ${formatDate(archivedAt)}` : ''"
+              position="left" width-class="w-48">
+              <template #trigger>
+                <UiBaseButton @click="$emit('unarchive')" :disabled="loading"
+                  class="w-full justify-start text-primary hover:bg-primary/10" variant="ghost">
+                  <UiLogoLoader v-if="loading" size="xs" class="mr-2" />
+                  <IconRotate v-else class="w-4 h-4 mr-2" />
+                  Désarchiver le document
+                </UiBaseButton>
+              </template>
+            </UiAppTooltip>
           </template>
         </div>
       </div>
