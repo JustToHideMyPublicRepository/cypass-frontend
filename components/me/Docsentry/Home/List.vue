@@ -11,92 +11,89 @@
             <th class="px-6 py-4 text-right">Actions</th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-ash/50 relative">
-          <!-- Loading State -->
-          <MeDocsentryHomeListLoading v-if="loading" />
+        <tbody class="divide-y divide-ash/50">
+          <!-- Chargement initial uniquement -->
+          <MeDocsentryHomeListLoading v-if="initialLoading" />
 
-          <!-- Empty State -->
-          <MeDocsentryHomeListEmpty v-else-if="documents.length === 0" />
+          <!-- État vide -->
+          <MeDocsentryHomeListEmpty v-else-if="internalDocuments.length === 0" />
 
-          <!-- Data State -->
-          <TransitionGroup v-else name="list" tag="template">
-            <tr v-for="doc in documents" :key="doc.id" @contextmenu.prevent="handleContextMenu(doc, $event)"
-              class="group hover:bg-primary/[0.02] transition-colors">
-              <td class="px-6 py-5">
-                <div class="flex items-center gap-4">
-                  <div class="w-10 h-10 flex items-center justify-center rounded-xl transition-transform"
-                    :class="[getDocumentStyle(doc.has_versions, doc.certification_mode).bgColor, getDocumentStyle(doc.has_versions, doc.certification_mode).color, !doc.has_versions ? 'group-hover:scale-110' : '']">
-                    <component :is="getDocumentStyle(doc.has_versions, doc.certification_mode).icon" class="w-5 h-5" />
+          <!-- Liste de documents avec animation de sortie -->
+          <template v-else>
+            <TransitionGroup name="list">
+              <tr v-for="doc in internalDocuments" :key="doc.id"
+                @contextmenu.prevent="handleContextMenu(doc, $event)"
+                class="group hover:bg-primary/[0.02] transition-colors">
+                <td class="px-6 py-5">
+                  <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 flex items-center justify-center rounded-xl transition-transform"
+                      :class="[getDocumentStyle(doc.has_versions, doc.certification_mode).bgColor, getDocumentStyle(doc.has_versions, doc.certification_mode).color, !doc.has_versions ? 'group-hover:scale-110' : '']">
+                      <component :is="getDocumentStyle(doc.has_versions, doc.certification_mode).icon" class="w-5 h-5" />
+                    </div>
+                    <div>
+                      <NuxtLink :to="`/dashboard/docsentry/${doc.id}`"
+                        class="font-bold text-BtW hover:text-primary transition-colors block leading-tight">
+                        {{ doc.filename }}
+                      </NuxtLink>
+                      <span class="text-[10px] text-hsa font-medium uppercase tracking-wider block mt-0.5">
+                        {{ doc.id.split('-')[0] }}...
+                      </span>
+                    </div>
                   </div>
-                  <div>
-                    <NuxtLink :to="`/dashboard/docsentry/${doc.id}`"
-                      class="font-bold text-BtW hover:text-primary transition-colors block leading-tight">
-                      {{ doc.filename }}
-                    </NuxtLink>
-                    <span class="text-[10px] text-hsa font-medium uppercase tracking-wider block mt-0.5">
-                      {{ doc.id.split('-')[0] }}...
-                    </span>
+                </td>
+                <td class="px-6 py-5 text-center">
+                  <div class="inline-flex flex-col items-center">
+                    <span class="text-BtW font-medium">{{ getDisplayDate(doc).date }}</span>
+                    <span class="text-[10px] text-hsa uppercase">{{ getDisplayDate(doc).time }}</span>
                   </div>
-                </div>
-              </td>
-              <td class="px-6 py-5 text-center">
-                <div class="inline-flex flex-col items-center">
-                  <span class="text-BtW font-medium">{{ formatDate(isArchive ? doc.archived_at : doc.created_at).split('
-                    ')[0]
-                    }}</span>
-                  <span class="text-[10px] text-hsa uppercase">{{ formatDate(isArchive ? doc.archived_at :
-                    doc.created_at).split(' ').slice(1).join(' ')
-                  }}</span>
-                </div>
-              </td>
-              <td class="px-6 py-5">
-                <div class="flex items-center gap-3 bg-ash/40 p-2 rounded-lg border border-ash/50 max-w-[240px]">
-                  <code class="font-code text-[10px] text-hsa truncate flex-1 leading-none">
-          {{ doc.hash }}
-        </code>
-                  <div class="flex items-center gap-1 shrink-0 border-l border-BtW/20 pl-2 ml-1">
-                    <UiBaseButton @click="copyHash(doc.hash, doc.id)" variant="ghost"
-                      class="!p-1 hover:!text-primary transition-colors !h-auto !w-auto">
-                      <IconCopy v-if="!copiedHashes.has(doc.id)" class="w-3.5 h-3.5" />
-                      <IconCheck v-else class="w-3.5 h-3.5 text-success" />
-                    </UiBaseButton>
+                </td>
+                <td class="px-6 py-5">
+                  <div class="flex items-center gap-3 bg-ash/40 p-2 rounded-lg border border-ash/50 max-w-[240px]">
+                    <code class="font-code text-[10px] text-hsa truncate flex-1 leading-none">{{ doc.hash }}</code>
+                    <div class="flex items-center gap-1 shrink-0 border-l border-BtW/20 pl-2 ml-1">
+                      <UiBaseButton @click="copyHash(doc.hash, doc.id)" variant="ghost"
+                        class="!p-1 hover:!text-primary transition-colors !h-auto !w-auto">
+                        <IconCopy v-if="!copiedHashes.has(doc.id)" class="w-3.5 h-3.5" />
+                        <IconCheck v-else class="w-3.5 h-3.5 text-success" />
+                      </UiBaseButton>
+                    </div>
                   </div>
-                </div>
-              </td>
-              <td class="px-6 py-5 text-center">
-                <UiStatusBadge :status="doc.has_certificate ? 'Verified' : 'Pending'" />
-              </td>
-              <td class="px-6 py-5 text-right">
-                <div class="flex justify-end gap-2 h-9 items-center">
-                  <template v-if="localProcessingId === doc.id">
-                    <UiLogoLoader size="xs" />
-                  </template>
-                  <template v-else>
-                    <NuxtLink :to="`/dashboard/docsentry/${doc.id}`"
-                      class="w-9 h-9 flex items-center justify-center bg-ash/50 hover:bg-primary hover:text-white rounded-xl transition-all"
-                      title="Consulter">
-                      <IconEye class="w-4 h-4" />
-                    </NuxtLink>
-                    <UiBaseButton v-if="!isArchive" @click="downloadCertificate(doc.id, doc.filename)" variant="ghost"
-                      class="!w-9 !h-9 !flex !items-center !justify-center !bg-ash/50 hover:!bg-success hover:!text-white !rounded-xl transition-all !p-0"
-                      title="Certificat">
-                      <IconDownload class="w-4 h-4" />
-                    </UiBaseButton>
-                    <UiBaseButton v-if="!isArchive" @click="archiveDocument(doc.id)" variant="ghost"
-                      class="!w-9 !h-9 !flex !items-center !justify-center !bg-ash/50 hover:!bg-warning hover:!text-white !rounded-xl transition-all !p-0"
-                      title="Archiver">
-                      <IconArchive class="w-4 h-4" />
-                    </UiBaseButton>
-                    <UiBaseButton v-if="isArchive" @click="unarchiveDocument(doc.id)" variant="ghost"
-                      class="!w-9 !h-9 !flex !items-center !justify-center !bg-ash/50 hover:!bg-primary hover:!text-white !rounded-xl transition-all !p-0"
-                      title="Désarchiver">
-                      <IconRotate class="w-4 h-4" />
-                    </UiBaseButton>
-                  </template>
-                </div>
-              </td>
-            </tr>
-          </TransitionGroup>
+                </td>
+                <td class="px-6 py-5 text-center">
+                  <UiStatusBadge :status="doc.has_certificate ? 'Verified' : 'Pending'" />
+                </td>
+                <td class="px-6 py-5 text-right">
+                  <div class="flex justify-end gap-2 h-9 items-center">
+                    <template v-if="localProcessingId === doc.id">
+                      <UiLogoLoader size="xs" />
+                    </template>
+                    <template v-else>
+                      <NuxtLink :to="`/dashboard/docsentry/${doc.id}`"
+                        class="w-9 h-9 flex items-center justify-center bg-ash/50 hover:bg-primary hover:text-white rounded-xl transition-all"
+                        title="Consulter">
+                        <IconEye class="w-4 h-4" />
+                      </NuxtLink>
+                      <UiBaseButton v-if="!isArchive" @click="downloadCertificate(doc.id, doc.filename)" variant="ghost"
+                        class="!w-9 !h-9 !flex !items-center !justify-center !bg-ash/50 hover:!bg-success hover:!text-white !rounded-xl transition-all !p-0"
+                        title="Certificat">
+                        <IconDownload class="w-4 h-4" />
+                      </UiBaseButton>
+                      <UiBaseButton v-if="!isArchive" @click="archiveDocument(doc.id)" variant="ghost"
+                        class="!w-9 !h-9 !flex !items-center !justify-center !bg-ash/50 hover:!bg-warning hover:!text-white !rounded-xl transition-all !p-0"
+                        title="Archiver">
+                        <IconArchive class="w-4 h-4" />
+                      </UiBaseButton>
+                      <UiBaseButton v-if="isArchive" @click="unarchiveDocument(doc.id)" variant="ghost"
+                        class="!w-9 !h-9 !flex !items-center !justify-center !bg-ash/50 hover:!bg-primary hover:!text-white !rounded-xl transition-all !p-0"
+                        title="Désarchiver">
+                        <IconRotate class="w-4 h-4" />
+                      </UiBaseButton>
+                    </template>
+                  </div>
+                </td>
+              </tr>
+            </TransitionGroup>
+          </template>
         </tbody>
       </table>
     </div>
@@ -112,7 +109,7 @@
 
 <script setup lang="ts">
 import { IconDownload, IconEye, IconCopy, IconCheck, IconShare, IconArchive, IconRotate } from '@tabler/icons-vue'
-import { ref } from 'vue'
+import { ref, watch, computed } from 'vue'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import type { Document } from '~/types/docsentry'
@@ -141,6 +138,30 @@ const shareTitle = ref('')
 const shareText = ref('')
 const copiedHashes = ref(new Set<string>())
 const localProcessingId = ref<string | null>(null)
+
+// Suivi du chargement initial uniquement (premier affichage)
+const hasLoadedOnce = ref(false)
+const initialLoading = computed(() => props.loading && !hasLoadedOnce.value)
+
+// État local pour les mises à jour optimistes
+const internalDocuments = ref<Document[]>([])
+const isOptimisticUpdate = ref(false)
+
+watch(() => props.documents, (newDocs) => {
+  if (!isOptimisticUpdate.value) {
+    internalDocuments.value = [...newDocs]
+    if (newDocs.length > 0) {
+      hasLoadedOnce.value = true
+    }
+  }
+}, { immediate: true, deep: true })
+
+// Quand loading passe de true à false et qu'on a des données, marquer comme chargé
+watch(() => props.loading, (newVal, oldVal) => {
+  if (oldVal && !newVal && props.documents.length > 0) {
+    hasLoadedOnce.value = true
+  }
+})
 
 const copyHash = (hash: string, id: string) => {
   navigator.clipboard.writeText(hash)
@@ -216,28 +237,51 @@ const downloadCertificate = async (id: string, filename: string) => {
 
 const archiveDocument = async (id: string) => {
   localProcessingId.value = id
+  
   const success = await userDocsentryStore.archiveDocument(id)
-  localProcessingId.value = null
+  
   if (success) {
+    // Retrait de la ligne après succès
+    isOptimisticUpdate.value = true
+    internalDocuments.value = internalDocuments.value.filter(d => d.id !== id)
     toast.showToast('success', 'Archivé', 'Document déplacé vers les archives.')
+    isOptimisticUpdate.value = false
   } else {
-    toast.showToast('error', 'Erreur', userDocsentryStore.error || 'Impossible d’archiver le document.')
+    toast.showToast('error', 'Erreur', userDocsentryStore.error || 'Impossible d\'archiver le document.')
   }
+  
+  localProcessingId.value = null
 }
 
 const unarchiveDocument = async (id: string) => {
   localProcessingId.value = id
+  
   const success = await userDocsentryStore.unarchiveDocument(id)
-  localProcessingId.value = null
+  
   if (success) {
+    // Retrait de la ligne après succès
+    isOptimisticUpdate.value = true
+    internalDocuments.value = internalDocuments.value.filter(d => d.id !== id)
     toast.showToast('success', 'Désarchivé', 'Document restauré avec succès.')
+    isOptimisticUpdate.value = false
   } else {
     toast.showToast('error', 'Erreur', userDocsentryStore.error || 'Impossible de désarchiver le document.')
   }
+  
+  localProcessingId.value = null
 }
 
-const formatDate = (dateStr: string) => {
-  if (!dateStr) return '-'
+const getDisplayDate = (doc: Document) => {
+  const fullDate = formatDate(props.isArchive ? doc.archived_at : doc.created_at)
+  const parts = fullDate.split(' ')
+  return {
+    date: parts[0] || '-',
+    time: parts.slice(1).join(' ') || ''
+  }
+}
+
+const formatDate = (dateStr?: string) => {
+  if (!dateStr) return '- '
   try {
     return format(new Date(dateStr), 'dd MMM yyyy HH:mm', { locale: fr })
   } catch (e) {
@@ -247,25 +291,16 @@ const formatDate = (dateStr: string) => {
 </script>
 
 <style scoped>
-.list-enter-active,
 .list-leave-active {
-  transition: all 0.5s ease;
+  transition: all 0.4s ease;
 }
 
-.list-enter-from,
 .list-leave-to {
   opacity: 0;
   transform: translateX(30px);
 }
 
-/* Ensure leaving items are taken out of layout flow so that moving
-   animations can be calculated correctly. */
-.list-leave-active {
-  position: absolute;
-  width: 100%;
-}
-
 .list-move {
-  transition: transform 0.5s ease;
+  transition: transform 0.4s ease;
 }
 </style>
