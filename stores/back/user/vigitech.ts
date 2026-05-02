@@ -16,6 +16,7 @@ export const useUserVigitechStore = defineStore('userVigitech', {
       hasMore: true
     },
     loadingComments: false,
+    loadingTrash: false,
     loading: false,
     error: null as string | null
   }),
@@ -249,7 +250,7 @@ export const useUserVigitechStore = defineStore('userVigitech', {
 
     // Récupérer les incidents supprimés (Corbeille)
     async fetchTrashedIncidents() {
-      this.loading = true
+      this.loadingTrash = true
       this.error = null
       try {
         const response: any = await $fetch('/api/user/vigitech/trash-list')
@@ -261,7 +262,7 @@ export const useUserVigitechStore = defineStore('userVigitech', {
       } catch (err: any) {
         this.error = err.message
       } finally {
-        this.loading = false
+        this.loadingTrash = false
       }
     },
 

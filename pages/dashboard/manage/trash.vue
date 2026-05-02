@@ -3,7 +3,7 @@
     <!-- Header -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div>
-        <h1 class="text-2xl font-bold text-BtW">Corbeille des incidents</h1>
+        <h1 class="text-2xl font-bold text-BtW">Corbeille</h1>
         <p class="text-hsa text-sm">Gérez vos signalements supprimés. Ils seront définitivement effacés après 7 jours.
         </p>
       </div>
@@ -21,7 +21,7 @@
     </div>
 
     <!-- Content -->
-    <div v-if="store.loading && !store.trashedIncidents.length" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div v-if="store.loadingTrash && !store.trashedIncidents.length" class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <UiBaseCard v-for="i in 4" :key="i" class="p-4">
         <div class="flex gap-4">
           <UiAppSkeleton type="avatar" radius="12px" />
