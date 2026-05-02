@@ -26,21 +26,28 @@
           <IconShare class="w-4 h-4 mr-2" /> Partager le document
         </UiBaseButton>
 
-        <div class="pt-2 border-t border-ash/50 mt-2">
-          <template v-if="loading">
-             <div class="flex justify-center p-2">
-                <UiLogoLoader size="xs" />
-             </div>
-          </template>
+        <div class="pt-2 border-t border-ash/50 mt-2 space-y-3">
+          <UiBaseButton v-if="!isArchived" @click="$emit('archive')" :disabled="loading"
+            class="w-full justify-start text-warning hover:bg-warning/10" variant="ghost">
+            <UiLogoLoader v-if="loading" size="xs" class="mr-2" />
+            <IconArchive v-else class="w-4 h-4 mr-2" />
+            Archiver le document
+          </UiBaseButton>
           <template v-else>
-            <UiBaseButton v-if="!isArchived" @click="$emit('archive')"
-              class="w-full justify-start text-warning hover:bg-warning/10" variant="ghost">
-              <IconArchive class="w-4 h-4 mr-2" /> Archiver le document
+            <UiBaseButton @click="$emit('unarchive')" :disabled="loading"
+              class="w-full justify-start text-primary hover:bg-primary/10" variant="ghost">
+              <UiLogoLoader v-if="loading" size="xs" class="mr-2" />
+              <IconRotate v-else class="w-4 h-4 mr-2" />
+              Désarchiver le document
             </UiBaseButton>
-            <UiBaseButton v-else @click="$emit('unarchive')" class="w-full justify-start text-primary hover:bg-primary/10"
-              variant="ghost">
-              <IconRotate class="w-4 h-4 mr-2" /> Désarchiver le document
-            </UiBaseButton>
+
+            <!-- Archived Date Info -->
+            <div v-if="archivedAt" class="flex items-center gap-2 px-3 py-2 bg-ash/30 rounded-xl border border-ash/50">
+              <div class="w-1.5 h-1.5 rounded-full bg-warning"></div>
+              <p class="text-[10px] text-hsa font-medium uppercase tracking-wider">
+                Archivé le <span class="text-BtW font-bold">{{ formatDate(archivedAt) }}</span>
+              </p>
+            </div>
           </template>
         </div>
       </div>
@@ -97,7 +104,8 @@ import {
   IconZip, IconFiles, IconDownload, IconArchive, IconRotate
 } from '@tabler/icons-vue'
 import { computed } from 'vue'
-import { differenceInDays, parseISO } from 'date-fns'
+import { differenceInDays, parseISO, format } from 'date-fns'
+import { fr } from 'date-fns/locale'
 import type { MultiVersionGeneration } from '~/types/docsentry'
 
 const props = defineProps<{
@@ -107,6 +115,7 @@ const props = defineProps<{
   createdAt: string
   isArchived: boolean
   loading?: boolean
+  archivedAt?: string
   isZipDownloaded?: boolean
   certificateDownloadCount?: number
   certificationMode?: 'simple' | 'enrichie'
@@ -122,4 +131,13 @@ const canGenerateVersions = computed(() => {
   const createdDate = parseISO(props.createdAt)
   return differenceInDays(now, createdDate) < 7
 })
+
+const formatDate = (dateStr?: string) => {
+  if (!dateStr) return '-'
+  try {
+    return format(new Date(dateStr), 'dd MMMM yyyy HH:mm', { locale: fr })
+  } catch (e) {
+    return dateStr
+  }
+}
 </script>

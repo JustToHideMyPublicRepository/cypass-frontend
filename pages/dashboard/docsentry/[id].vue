@@ -34,7 +34,7 @@
       <div class="space-y-6">
         <MeDocsentryDetailSidebar :document-id="doc.id" :has-certificate="!!doc.availability?.certificate"
           :has-versions="doc.certification_mode === 'simple' && doc.has_versions" :created-at="doc.created_at"
-          :is-archived="doc.is_archived" :loading="isProcessingArchive"
+          :is-archived="doc.is_archived" :loading="isProcessingArchive" :archived-at="doc.archived_at"
           :is-zip-downloaded="doc.certification_mode === 'simple' && doc.is_zip_downloaded"
           :certificate-download-count="doc.certificate_download_count" :certification-mode="doc.certification_mode"
           :multi-version-generations="doc.certification_mode === 'simple' ? doc.multi_version_generations : []"
