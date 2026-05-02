@@ -16,7 +16,7 @@
           <MeDocsentryHomeListLoading v-if="initialLoading" />
 
           <!-- État vide -->
-          <MeDocsentryHomeListEmpty v-else-if="internalDocuments.length === 0" />
+          <MeDocsentryHomeListEmpty v-else-if="internalDocuments.length === 0" :is-archive="isArchive" />
 
           <!-- Liste de documents avec animation de sortie -->
           <template v-else>
