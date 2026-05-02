@@ -129,7 +129,7 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
               has_more: boolean
             }
           }
-        }>('/api/user/docsentry/list', {
+        }>('/api/user/docsentry/list-documents', {
           query
         })
         if (response.success) {

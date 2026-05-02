@@ -25,6 +25,24 @@
         <UiBaseButton @click="$emit('share')" class="w-full justify-start" variant="ghost">
           <IconShare class="w-4 h-4 mr-2" /> Partager le document
         </UiBaseButton>
+
+        <div class="pt-2 border-t border-ash/50 mt-2">
+          <template v-if="loading">
+             <div class="flex justify-center p-2">
+                <UiLogoLoader size="xs" />
+             </div>
+          </template>
+          <template v-else>
+            <UiBaseButton v-if="!isArchived" @click="$emit('archive')"
+              class="w-full justify-start text-warning hover:bg-warning/10" variant="ghost">
+              <IconArchive class="w-4 h-4 mr-2" /> Archiver le document
+            </UiBaseButton>
+            <UiBaseButton v-else @click="$emit('unarchive')" class="w-full justify-start text-primary hover:bg-primary/10"
+              variant="ghost">
+              <IconRotate class="w-4 h-4 mr-2" /> Désarchiver le document
+            </UiBaseButton>
+          </template>
+        </div>
       </div>
     </UiBaseCard>
 
@@ -76,7 +94,7 @@
 <script setup lang="ts">
 import {
   IconShieldCheck, IconCertificate, IconShare, IconFingerprint,
-  IconZip, IconFiles, IconDownload
+  IconZip, IconFiles, IconDownload, IconArchive, IconRotate
 } from '@tabler/icons-vue'
 import { computed } from 'vue'
 import { differenceInDays, parseISO } from 'date-fns'
@@ -87,6 +105,8 @@ const props = defineProps<{
   hasCertificate: boolean
   hasVersions: boolean
   createdAt: string
+  isArchived: boolean
+  loading?: boolean
   isZipDownloaded?: boolean
   certificateDownloadCount?: number
   certificationMode?: 'simple' | 'enrichie'
@@ -94,7 +114,7 @@ const props = defineProps<{
   multiVersionGenerationCount?: number
 }>()
 
-defineEmits(['verify', 'download', 'share', 'download-zip', 'update:loading', 'refresh-doc'])
+defineEmits(['verify', 'download', 'share', 'download-zip', 'update:loading', 'refresh-doc', 'archive', 'unarchive'])
 
 const canGenerateVersions = computed(() => {
   if (!props.createdAt) return false

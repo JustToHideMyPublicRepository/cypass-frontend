@@ -34,12 +34,13 @@
       <div class="space-y-6">
         <MeDocsentryDetailSidebar :document-id="doc.id" :has-certificate="!!doc.availability?.certificate"
           :has-versions="doc.certification_mode === 'simple' && doc.has_versions" :created-at="doc.created_at"
+          :is-archived="doc.is_archived" :loading="isProcessingArchive"
           :is-zip-downloaded="doc.certification_mode === 'simple' && doc.is_zip_downloaded"
           :certificate-download-count="doc.certificate_download_count" :certification-mode="doc.certification_mode"
           :multi-version-generations="doc.certification_mode === 'simple' ? doc.multi_version_generations : []"
           :multi-version-generation-count="doc.certification_mode === 'simple' ? doc.multi_version_generation_count : 0"
           @verify="redirectToVerify" @download="downloadCertificate" @download-zip="downloadZip" @share="shareDocument"
-          @refresh-doc="startPollingForVersions" />
+          @refresh-doc="startPollingForVersions" @archive="archiveDocument" @unarchive="unarchiveDocument" />
       </div>
     </div>
 
@@ -164,6 +165,40 @@ const shareVersion = (version: DocumentVersion) => {
   shareTitle.value = `Document CYPASS : Version de ${version.recipient} pour ${doc.value?.filename}`
   shareText.value = `Vérifiez l'authenticité de cette version personnalisée pour ${version.recipient}.`
   showShareModal.value = true
+}
+
+const isProcessingArchive = ref(false)
+
+const archiveDocument = async () => {
+  if (!doc.value) return
+  isProcessingArchive.value = true
+  const success = await userStore.archiveDocument(doc.value.id)
+  if (success) {
+    if (userStore.currentDocument) {
+      userStore.currentDocument.is_archived = true
+      userStore.currentDocument.archived_at = new Date().toISOString()
+    }
+    toast.showToast('success', 'Archivé', 'Document déplacé vers les archives.')
+  } else {
+    toast.showToast('error', 'Erreur', userStore.error || 'Impossible d’archiver le document.')
+  }
+  isProcessingArchive.value = false
+}
+
+const unarchiveDocument = async () => {
+  if (!doc.value) return
+  isProcessingArchive.value = true
+  const success = await userStore.unarchiveDocument(doc.value.id)
+  if (success) {
+    if (userStore.currentDocument) {
+      userStore.currentDocument.is_archived = false
+      userStore.currentDocument.archived_at = undefined
+    }
+    toast.showToast('success', 'Désarchivé', 'Document restauré avec succès.')
+  } else {
+    toast.showToast('error', 'Erreur', userStore.error || 'Impossible de désarchiver le document.')
+  }
+  isProcessingArchive.value = false
 }
 
 onMounted(() => {

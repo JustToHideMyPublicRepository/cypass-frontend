@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
 
   try {
     const query = getQuery(event)
-    const response: any = await $fetch(`${baseApi}/user/docsentry/list`, {
+    const response: any = await $fetch(`${baseApi}/user/docsentry/list_documents`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,

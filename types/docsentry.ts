@@ -52,6 +52,7 @@ export interface DocumentDetail extends Document {
     original_stored: boolean
   }
   is_zip_downloaded: boolean
+  is_archived: boolean
   certificate_download_count: number
   certification_mode: 'simple' | 'enrichie'
   document_category?: string | null
