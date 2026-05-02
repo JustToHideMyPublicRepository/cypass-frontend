@@ -22,12 +22,17 @@
         <IconMessage class="w-4 h-4" />
         Mes commentaires
       </UiBaseButton>
+      <UiBaseButton variant="ghost" to="/dashboard/manage/trash"
+        class="!px-4 !py-2.5 !text-xs !uppercase !tracking-wider gap-2 border border-ash/20 hover:border-danger/30 hover:bg-danger/5 text-hsa hover:text-danger">
+        <IconTrash class="w-4 h-4" />
+        Corbeille
+      </UiBaseButton>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { IconAlertCircle, IconMessage } from '@tabler/icons-vue'
+import { IconAlertCircle, IconMessage, IconTrash } from '@tabler/icons-vue'
 
 defineEmits(['create'])
 </script>

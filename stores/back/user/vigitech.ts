@@ -5,6 +5,7 @@ import { usePublicVigitechStore } from '../public/vigitech'
 export const useUserVigitechStore = defineStore('userVigitech', {
   state: () => ({
     userIncidents: [] as Incident[],
+    trashedIncidents: [] as Incident[],
     currentIncident: null as Incident | null,
     userComments: [] as Comment[],
     userCommentsTotal: 0,
@@ -243,6 +244,58 @@ export const useUserVigitechStore = defineStore('userVigitech', {
         return response
       } catch (err: any) {
         return { success: false, message: err.message }
+      }
+    },
+
+    // Récupérer les incidents supprimés (Corbeille)
+    async fetchTrashedIncidents() {
+      this.loading = true
+      this.error = null
+      try {
+        const response: any = await $fetch('/api/user/vigitech/trash-list')
+        if (response.success) {
+          this.trashedIncidents = response.data
+        } else {
+          this.error = response.message || 'Erreur lors de la récupération de la corbeille'
+        }
+      } catch (err: any) {
+        this.error = err.message
+      } finally {
+        this.loading = false
+      }
+    },
+
+    // Restaurer un incident
+    async restoreIncident(incidentId: string) {
+      try {
+        const response: any = await $fetch('/api/user/vigitech/trash-restore', {
+          method: 'POST',
+          body: { incident_id: incidentId, all: false }
+        })
+        if (response.success) {
+          this.trashedIncidents = this.trashedIncidents.filter(i => i.id !== incidentId)
+          await this.fetchUserIncidents()
+        }
+        return { success: response.success, message: response.message }
+      } catch (err: any) {
+        return { success: false, message: err.data?.message || err.message || 'Erreur lors de la restauration.' }
+      }
+    },
+
+    // Restaurer tous les incidents
+    async restoreAllIncidents() {
+      try {
+        const response: any = await $fetch('/api/user/vigitech/trash-restore', {
+          method: 'POST',
+          body: { incident_id: '', all: true }
+        })
+        if (response.success) {
+          this.trashedIncidents = []
+          await this.fetchUserIncidents()
+        }
+        return { success: response.success, message: response.message }
+      } catch (err: any) {
+        return { success: false, message: err.data?.message || err.message || 'Erreur lors de la restauration complète.' }
       }
     }
   }

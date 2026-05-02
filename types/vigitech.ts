@@ -18,6 +18,7 @@ export interface Incident {
   is_reported?: boolean | number
   created_at: string
   updated_at?: string | null
+  deleted_at?: string | null
   reporter_organization?: string | null
   pending_reports_count?: number
   views_count?: number
