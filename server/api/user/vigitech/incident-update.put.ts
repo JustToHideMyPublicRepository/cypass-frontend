@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const response = await $fetch(`${baseApi}/vigitech/update_incident`, {
+    const response = await $fetch(`${baseApi}/user/vigitech/incident_update`, {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${token}`,

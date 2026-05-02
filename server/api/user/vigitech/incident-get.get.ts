@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const response = await $fetch(`${baseApi}/vigitech/get_one_user/${id}`, {
+    const response = await $fetch(`${baseApi}/user/vigitech/incident_get/${id}`, {
       headers: {
         'Authorization': `Bearer ${token}`
       },

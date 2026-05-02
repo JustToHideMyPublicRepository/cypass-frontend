@@ -127,7 +127,7 @@ export const useUserVigitechStore = defineStore('userVigitech', {
           formData.append('evidence', payload.evidence)
         }
 
-        const response: any = await $fetch('/api/user/vigitech/incident-add', {
+        const response: any = await $fetch('/api/user/vigitech/incident-create', {
           method: 'POST',
           body: formData
         })
