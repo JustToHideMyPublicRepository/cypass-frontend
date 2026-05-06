@@ -1,5 +1,5 @@
 <template>
-  <section class="py-16 md:py-24 relative overflow-hidden bg-bgClr">
+  <section class="py-16 relative overflow-hidden bg-bgClr">
     <!-- Éléments d'arrière-plan -->
     <div
       class="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[length:32px_32px]">
@@ -17,9 +17,7 @@
           Comment ça marche ?
         </span>
         <h2 class="font-extrabold text-BtW tracking-tight">
-          Protection en <span
-            class="font-handwritting text-transparent bg-clip-text bg-gradient-to-r from-primary to-success">
-            temps réel </span>
+          Protection en <span class="font-handwritting text-primary">temps réel</span>
         </h2>
         <p class="text-hsa leading-relaxed">
           Un processus fluide, étape par étape, pour garantir votre sécurité numérique.
@@ -27,37 +25,53 @@
       </div>
 
       <!-- Sélecteur de Flux -->
-      <div class="max-w-4xl mx-auto mb-16 flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16">
-        <!-- Tab DocSentry -->
-        <button @click="activeTab = 'docsentry'"
-          class="group/tab flex items-center gap-5 transition-all duration-700 ease-out text-left"
-          :class="activeTab === 'docsentry' ? 'scale-100 opacity-100' : 'scale-90 opacity-40 hover:opacity-70'">
-          <div
-            class="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20 shadow-lg">
-            <IconFileCheck class="w-7 h-7" />
-          </div>
-          <div>
-            <h3 class="font-black text-BtW tracking-tighter text-xl">DocSentry</h3>
-            <p class="text-primary font-bold uppercase tracking-widest text-xs">Certification & Vérification</p>
-          </div>
-        </button>
+      <div class="max-w-4xl mx-auto mb-16">
+        <!-- Mobile : barre de tabs compacte -->
+        <div class="flex md:hidden border border-ash rounded-xl overflow-hidden mb-8 max-w-xs mx-auto">
+          <button @click="activeTab = 'docsentry'"
+            class="flex-1 flex items-center justify-center gap-2 py-3 px-4 transition-all duration-300 text-sm font-bold"
+            :class="activeTab === 'docsentry' ? 'bg-primary/10 text-primary border-r border-ash' : 'text-hsa border-r border-ash hover:bg-WtB/50'">
+            <IconFileCheck class="w-4 h-4 shrink-0" />
+            <span>DocSentry</span>
+          </button>
+          <button @click="activeTab = 'vigitech'"
+            class="flex-1 flex items-center justify-center gap-2 py-3 px-4 transition-all duration-300 text-sm font-bold"
+            :class="activeTab === 'vigitech' ? 'bg-secondary/10 text-secondary' : 'text-hsa hover:bg-WtB/50'">
+            <IconShieldCheck class="w-4 h-4 shrink-0" />
+            <span>VigiTech</span>
+          </button>
+        </div>
 
-        <!-- Divider -->
-        <div class="h-px w-20 bg-ash/30 md:hidden"></div>
+        <!-- Desktop : disposition originale -->
+        <div class="hidden md:flex items-center justify-center gap-16">
+          <!-- Tab DocSentry -->
+          <button @click="activeTab = 'docsentry'"
+            class="group/tab flex items-center gap-5 transition-all duration-700 ease-out text-left"
+            :class="activeTab === 'docsentry' ? 'scale-100 opacity-100' : 'scale-90 opacity-40 hover:opacity-70'">
+            <div
+              class="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20 shadow-lg">
+              <IconFileCheck class="w-7 h-7" />
+            </div>
+            <div>
+              <h3 class="font-black text-BtW tracking-tighter text-xl">DocSentry</h3>
+              <p class="text-primary font-bold uppercase tracking-widest text-xs">Certification &amp; Vérification</p>
+            </div>
+          </button>
 
-        <!-- Tab VigiTech -->
-        <button @click="activeTab = 'vigitech'"
-          class="group/tab flex items-center gap-5 transition-all duration-700 ease-out text-left"
-          :class="activeTab === 'vigitech' ? 'scale-100 opacity-100' : 'scale-90 opacity-40 hover:opacity-70'">
-          <div
-            class="w-14 h-14 rounded-2xl bg-secondary/10 flex items-center justify-center text-secondary border border-secondary/20 shadow-lg">
-            <IconShieldCheck class="w-7 h-7" />
-          </div>
-          <div>
-            <h3 class="font-black text-BtW tracking-tighter text-xl">VigiTech</h3>
-            <p class="text-secondary font-bold uppercase tracking-widest text-xs">Signalement & Veille</p>
-          </div>
-        </button>
+          <!-- Tab VigiTech -->
+          <button @click="activeTab = 'vigitech'"
+            class="group/tab flex items-center gap-5 transition-all duration-700 ease-out text-left"
+            :class="activeTab === 'vigitech' ? 'scale-100 opacity-100' : 'scale-90 opacity-40 hover:opacity-70'">
+            <div
+              class="w-14 h-14 rounded-2xl bg-secondary/10 flex items-center justify-center text-secondary border border-secondary/20 shadow-lg">
+              <IconShieldCheck class="w-7 h-7" />
+            </div>
+            <div>
+              <h3 class="font-black text-BtW tracking-tighter text-xl">VigiTech</h3>
+              <p class="text-secondary font-bold uppercase tracking-widest text-xs">Signalement &amp; Veille</p>
+            </div>
+          </button>
+        </div>
       </div>
 
       <!-- Contenu des Flux -->

@@ -11,23 +11,22 @@
     <!-- Section Header -->
     <div class="bg-bgClr/80 backdrop-blur-md z-30 border-b border-ash/30">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
-        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+        <div class="flex flex-col gap-4">
           <div>
             <span
               class="inline-block px-4 py-1.5 rounded-full border border-ash bg-WtB text-[10px] font-bold uppercase tracking-[0.2em] text-hsa mb-4">
               Nos modules
             </span>
-
-            <h2 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-BtW tracking-tight">
+            <h2 class="font-extrabold text-BtW tracking-tight">
               Une plateforme, <span class="font-handwritting text-primary">quatre boucliers</span>
             </h2>
-            <p class="text-hsa mt-3 text-base md:text-lg max-w-2xl">
+            <p class="text-hsa mt-3 max-w-2xl">
               Des outils souverains pour protéger, certifier et surveiller votre écosystème numérique.
             </p>
           </div>
 
-          <!-- Navigator -->
-          <div class="flex-shrink-0 md:pb-2">
+          <!-- Mobile Navigator (horizontal pills) -->
+          <div class="lg:hidden">
             <RootHomeFeaturesNavigator :items="featureServices.map(s => ({ title: s.title }))" :active="activeIndex"
               :theme="currentService.theme" @select="goTo" />
           </div>
@@ -35,10 +34,43 @@
       </div>
     </div>
 
-    <!-- Carousel Content -->
-    <div class="flex-1 flex items-center">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-10 md:py-16">
-        <div class="grid lg:grid-cols-2 gap-10 md:gap-16 items-center">
+    <!-- Main Content: Sidebar + Content -->
+    <div class="flex-1 flex items-stretch">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-10 md:py-16 flex gap-10 lg:gap-12">
+
+        <!-- Desktop Vertical Navigator Sidebar -->
+        <aside class="hidden lg:flex flex-col justify-center gap-1 w-52 xl:w-60 shrink-0">
+          <button v-for="(svc, i) in featureServices" :key="svc.id" @click="goTo(i)"
+            class="group flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all duration-300 relative"
+            :class="[
+              i === activeIndex
+                ? 'bg-WtB border border-ash/60 shadow-sm'
+                : 'hover:bg-WtB/50 border border-transparent'
+            ]">
+            <!-- Active indicator -->
+            <div class="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-6 rounded-full transition-all duration-300"
+              :class="[
+                i === activeIndex
+                  ? (currentService.theme === 'green' ? 'bg-success' : 'bg-primary')
+                  : 'bg-transparent'
+              ]" />
+            <div class="ml-2 flex-1 min-w-0">
+              <div class="text-sm font-bold truncate transition-colors duration-200" :class="[
+                i === activeIndex
+                  ? (currentService.theme === 'green' ? 'text-success' : 'text-primary')
+                  : 'text-hsa group-hover:text-BtW'
+              ]">{{ svc.title }}</div>
+              <div class="text-[10px] text-hsa/70 truncate font-medium mt-0.5">{{ svc.subtitle }}</div>
+            </div>
+            <!-- Progress dot for active -->
+            <div v-if="i === activeIndex && !isPaused" :key="'dot-' + activeIndex"
+              class="w-1.5 h-1.5 rounded-full shrink-0 animate-pulse"
+              :class="currentService.theme === 'green' ? 'bg-success' : 'bg-primary'" />
+          </button>
+        </aside>
+
+        <!-- Content Grid: Text + Visual -->
+        <div class="flex-1 grid lg:grid-cols-2 gap-10 md:gap-16 items-center">
 
           <!-- Text Column -->
           <div class="relative">
@@ -56,16 +88,16 @@
                   {{ currentService.status === 'available' ? currentService.badge : 'Bientôt Disponible' }}
                 </span>
 
-                <h3 class="text-3xl md:text-5xl font-bold leading-tight">
+                <h3 class="font-bold leading-tight">
                   {{ currentService.title }}<span
                     :class="currentService.theme === 'blue' ? 'text-primary' : 'text-success'">.</span>
                 </h3>
 
-                <h4 class="text-lg md:text-2xl text-hsa font-light">
+                <h4 class="text-hsa font-light">
                   {{ currentService.subtitle }}
                 </h4>
 
-                <p class="text-base md:text-lg text-hsa leading-relaxed">
+                <p class="text-hsa leading-relaxed">
                   {{ currentService.description }}
                 </p>
 
@@ -81,7 +113,7 @@
                     </div>
                     <div>
                       <h5 class="font-bold text-BtW">{{ feature.title }}</h5>
-                      <p class="text-sm text-hsa mt-1">{{ feature.desc }}</p>
+                      <p class="text-hsa mt-1">{{ feature.desc }}</p>
                     </div>
                   </div>
                 </div>

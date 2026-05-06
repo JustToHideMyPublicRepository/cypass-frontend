@@ -1,59 +1,76 @@
 <template>
-  <UiAppFrame type="terminal" title="root@secuscan:~" :glass="true"
-    class="transform-gpu transition-all duration-700 ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:scale-[1.04] hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(0,0,0,0.3)] shadow-[0_10px_30px_rgba(0,0,0,0.15)] group relative overflow-hidden">
-    
-    <!-- Effet Scanline -->
-    <div class="absolute inset-x-0 inset-y-10 bg-[linear-gradient(transparent_50%,rgba(0,0,0,0.05)_50%)] bg-[length:100%_4px] pointer-events-none z-20 opacity-50 dark:opacity-20"></div>
-    <div class="absolute top-10 left-0 w-full h-[3px] bg-success/40 blur-[1px] animate-scanline pointer-events-none z-20"></div>
-
+  <!-- SecuScan: Vulnerability Heatmap — structured, clinical, data-driven -->
+  <div class="relative rounded-3xl overflow-hidden border border-ash/40 shadow-2xl bg-bgClr group select-none">
+    <!-- Subtle grid -->
     <div
-      class="h-[300px] md:h-[350px] p-4 md:p-5 text-[10px] md:text-xs font-code space-y-2 overflow-hidden bg-[#0a0a0a] text-hsa relative z-10 shadow-[inset_0_0_40px_rgba(0,0,0,0.8)]">
-      <div class="flex gap-2">
-        <span class="text-success">➜</span>
-        <span class="text-primary">~</span>
-        <span>nmap -sV -p- target.gov.bj</span>
+      class="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[length:24px_24px] pointer-events-none" />
+
+    <!-- Header -->
+    <div
+      class="flex items-center justify-between px-5 py-3 border-b border-ash/30 bg-WtB/40 backdrop-blur-sm relative z-10">
+      <div class="flex items-center gap-2">
+        <IconScan class="w-4 h-4 text-warning" />
+        <span class="text-xs font-bold text-BtW uppercase tracking-widest">SecuScan</span>
       </div>
-      <div class="pl-4 text-hsa opacity-70">Lancement de Nmap 7.92 à {{ scanDate }} CET</div>
-      <div class="pl-4">Rapport de scan Nmap pour target.gov.bj (10.0.0.1)</div>
-      <div class="pl-4">L'hôte est actif (latence de 0.002s).</div>
-      <div class="pl-4 text-hsa opacity-70">Non affiché : 65532 ports tcp fermés (reset)</div>
-      <div class="pl-4 text-BtW font-bold uppercase tracking-tight">PORT ÉTAT SERVICE VERSION</div>
-      <div class="pl-4"><span class="text-success">80/tcp ouvert http</span> nginx 1.18.0</div>
-      <div class="pl-4"><span class="text-success">443/tcp ouvert ssl/https</span> nginx 1.18.0</div>
-      <div class="pl-4"><span class="text-warning">8080/tcp ouvert http-proxy</span> inconnu</div>
-      <br>
-      <div class="flex gap-2">
-        <span class="text-success">➜</span>
-        <span class="text-primary">~</span>
-        <span>vuln-scan --target 10.0.0.1 --deep</span>
-      </div>
-      <div class="pl-4 text-hsa opacity-70">[+] Initialisation de la base de données...</div>
-      <div class="pl-4 text-hsa opacity-70">[+] Vérification de CVE-2023-XXXX...</div>
-      <div class="pl-4 text-danger font-bold">[!] FAILLE POTENTIELLE DÉTECTÉE : Protocole SSL obsolète</div>
-      <div class="pl-4 text-success">Génération du rapport........... TERMINÉ</div>
-      <span class="animate-pulse">_</span>
+      <span class="text-[10px] font-code text-hsa/60">Rapport #SC-2026-047</span>
     </div>
-  </UiAppFrame>
+
+    <div class="p-5 space-y-4 relative z-10">
+      <!-- Global score -->
+      <div class="flex items-center gap-4 p-4 rounded-2xl border border-ash/30 bg-WtB/40">
+        <div class="relative w-16 h-16 shrink-0">
+          <svg viewBox="0 0 40 40" class="w-full h-full -rotate-90">
+            <circle cx="20" cy="20" r="16" fill="none" stroke="currentColor" stroke-width="4" class="text-ash/20" />
+            <circle cx="20" cy="20" r="16" fill="none" stroke="currentColor" stroke-width="4" stroke-dasharray="100.5"
+              stroke-dashoffset="21" stroke-linecap="round" class="text-success transition-all duration-700" />
+          </svg>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <span class="text-sm font-black text-success">79</span>
+          </div>
+        </div>
+        <div>
+          <div class="text-base font-black text-BtW">Score de Sécurité</div>
+          <div class="text-xs text-hsa mt-0.5">Bon · Améliorations possibles</div>
+          <div class="flex items-center gap-1 mt-1.5">
+            <IconTrendingUp class="w-3.5 h-3.5 text-success" />
+            <span class="text-[10px] text-success font-bold">+12 pts ce mois</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vulnerability breakdown -->
+      <div class="space-y-2.5">
+        <p class="text-[10px] font-bold uppercase tracking-widest text-hsa">Vulnérabilités par sévérité</p>
+        <div v-for="vuln in vulns" :key="vuln.label" class="flex items-center gap-3">
+          <div class="w-2 h-2 rounded-full shrink-0" :class="vuln.dot" />
+          <span class="text-xs text-hsa w-16 shrink-0">{{ vuln.label }}</span>
+          <div class="flex-1 h-2 rounded-full bg-ash/20 overflow-hidden">
+            <div class="h-full rounded-full transition-all duration-700" :class="vuln.bar"
+              :style="{ width: vuln.pct }" />
+          </div>
+          <span class="text-xs font-bold text-BtW w-6 text-right shrink-0">{{ vuln.count }}</span>
+        </div>
+      </div>
+
+      <!-- Top finding -->
+      <div class="rounded-xl border border-warning/30 bg-warning/5 p-3 flex items-start gap-2.5">
+        <IconAlertTriangle class="w-4 h-4 text-warning mt-0.5 shrink-0" />
+        <div>
+          <p class="text-xs font-bold text-warning">CVE-2024-3094 · Protocole obsolète</p>
+          <p class="text-[10px] text-hsa/80 mt-0.5">TLS 1.0 toujours actif sur le port 443 — mise à jour recommandée</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { getRandomPastDate } from '~/utils/date'
-import { format } from 'date-fns'
+import { IconAlertTriangle, IconTrendingUp, IconScan } from '@tabler/icons-vue'
 
-const scanDate = computed(() => {
-  const date = getRandomPastDate(5, 21)
-  return format(date, 'yyyy-MM-dd HH:mm')
-})
+const vulns = [
+  { label: 'Critique', dot: 'bg-danger', bar: 'bg-danger', pct: '5%', count: '1' },
+  { label: 'Élevée', dot: 'bg-warning', bar: 'bg-warning', pct: '15%', count: '3' },
+  { label: 'Moyenne', dot: 'bg-primary', bar: 'bg-primary', pct: '30%', count: '6' },
+  { label: 'Faible', dot: 'bg-success', bar: 'bg-success', pct: '50%', count: '11' },
+]
 </script>
-
-<style scoped>
-@keyframes scanline {
-  0% { transform: translateY(-10px); opacity: 0; }
-  10% { opacity: 1; }
-  90% { opacity: 1; }
-  100% { transform: translateY(340px); opacity: 0; }
-}
-.animate-scanline {
-  animation: scanline 4s linear infinite;
-}
-</style>

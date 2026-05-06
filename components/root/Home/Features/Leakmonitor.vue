@@ -1,57 +1,72 @@
 <template>
-  <UiAppFrame type="browser" url="https://monitor.cypass.bj/alerts"
-    class="w-full max-w-full transform-gpu transition-all duration-700 ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:scale-[1.04] md:hover:-rotate-1 hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(0,0,0,0.3)] shadow-[0_10px_30px_rgba(0,0,0,0.15)] group relative"
-    :glass="true" padding="p-1 md:p-4">
-    <!-- Glow Overlay sur toute la card -->
-    <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-transparent to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none rounded-2xl z-20"></div>
-    
-    <div class="h-[280px] md:h-[350px] bg-bgClr p-3 md:p-5 overflow-hidden relative rounded-b-xl md:rounded-xl">
-      <!-- Statistiques d'en-tête -->
-      <div class="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-3 mb-4">
-        <div class="bg-WtB p-2 md:p-3 rounded-lg shadow-sm border border-ash">
-          <div class="text-[9px] md:text-[10px] text-hsa uppercase tracking-tight">Fuites</div>
-          <div class="text-sm md:text-lg font-bold text-danger">0</div>
-        </div>
-        <div class="bg-WtB p-2 md:p-3 rounded-lg shadow-sm border border-ash">
-          <div class="text-[9px] md:text-[10px] text-hsa uppercase tracking-tight">Sources</div>
-          <div class="text-sm md:text-lg font-bold text-BtW">142</div>
-        </div>
-        <div
-          class="bg-WtB p-2 md:p-3 rounded-lg shadow-sm border border-ash col-span-2 md:col-span-1 flex md:block items-center justify-between">
-          <div class="text-[9px] md:text-[10px] text-hsa uppercase tracking-tight">Statut</div>
-          <div class="text-sm md:text-lg font-bold text-success uppercase">Actif</div>
-        </div>
-      </div>
+  <!-- LeakMonitor: Dark Web Monitor — terminal aesthetic, drip-feed data -->
+  <div class="relative rounded-3xl overflow-hidden border border-primary/20 shadow-2xl bg-[#080b14] group select-none">
+    <!-- Animated grid background -->
+    <div
+      class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(var(--color-primary),0.04)_1px,transparent_1px)] bg-[length:22px_22px] pointer-events-none" />
+    <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#080b14] pointer-events-none" />
 
-      <!-- Liste de fichiers -->
-      <div class="space-y-2.5 relative z-10">
-        <div v-for="i in 4" :key="i"
-          class="flex items-center gap-2 md:gap-3 p-2 md:p-3 bg-WtB rounded-xl border border-ash/40 shadow-sm hover:border-ash hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
-          <div :class="i === 1 ? 'bg-danger/10 text-danger' : 'bg-ash text-hsa'"
-            class="w-7 h-7 md:w-8 md:h-8 rounded flex items-center justify-center flex-shrink-0">
-            <IconFileReport class="w-4 h-4" />
-          </div>
-          <div class="flex-1 min-w-0">
-            <div class="text-[10px] md:text-xs font-bold truncate">CONFIDENTIEL_RAPPORT_{{
-              2023 + i
-            }}.pdf</div>
-            <div class="text-[8px] md:text-[10px] text-hsa truncate">Detecté sur Pastebin • Il y a {{ i * 5 }} min</div>
-          </div>
-          <div v-if="i === 1" class="px-1.5 py-0.5 bg-danger text-white text-[8px] md:text-[10px] font-bold rounded">
-            CRITIQUE
-          </div>
-          <div v-else class="px-1.5 py-0.5 bg-success/20 text-success text-[8px] md:text-[10px] font-bold rounded">
-            SECURISE</div>
-        </div>
+    <!-- Header -->
+    <div class="flex items-center justify-between px-5 py-3 border-b border-primary/15 bg-primary/5 relative z-10">
+      <div class="flex items-center gap-2">
+        <IconEye class="w-4 h-4 text-primary" />
+        <span class="text-xs font-bold text-primary uppercase tracking-widest font-code">LeakMonitor</span>
       </div>
-
-      <!-- Superposition de dégradé pour la profondeur -->
-      <div class="absolute bottom-0 left-0 right-0 h-10 bg-gradient-to-t from-bgClr to-transparent">
+      <div class="flex items-center gap-1.5">
+        <span class="w-1.5 h-1.5 rounded-full bg-primary animate-ping" />
+        <span class="text-[10px] text-primary/80 font-code">Veille active</span>
       </div>
     </div>
-  </UiAppFrame>
+
+    <!-- Terminal content -->
+    <div class="p-4 space-y-4 relative z-10">
+      <!-- Sources scanned -->
+      <div class="space-y-1.5">
+        <p class="text-[10px] text-primary/60 font-code uppercase tracking-widest mb-2">» Sources surveillées</p>
+        <div v-for="source in sources" :key="source.name" class="flex items-center gap-3">
+          <span class="text-[10px] text-hsa/50 font-code w-14 text-right shrink-0">{{ source.type }}</span>
+          <div class="flex-1 h-px bg-ash/20" />
+          <span class="text-[10px] font-code" :class="source.clean ? 'text-success' : 'text-danger'">
+            {{ source.clean ? '✓ RAS' : '⚠ FUITE' }}
+          </span>
+          <span class="text-[10px] text-hsa/40 font-code shrink-0">{{ source.name }}</span>
+        </div>
+      </div>
+
+      <!-- Alert box -->
+      <div class="rounded-2xl border border-danger/30 bg-danger/5 p-3.5">
+        <div class="flex items-center gap-2 mb-2">
+          <IconAlertOctagon class="w-4 h-4 text-danger shrink-0" />
+          <span class="text-xs font-bold text-danger">Fuite de données détectée</span>
+        </div>
+        <p class="text-[10px] font-code text-hsa/80">Fichier <span class="text-warning">credentials_bj_gov.zip</span>
+          trouvé sur <span class="text-danger">darkweb.onion</span></p>
+        <div class="mt-2 flex items-center gap-2">
+          <span
+            class="px-2 py-0.5 bg-danger/20 text-danger text-[9px] font-bold rounded uppercase border border-danger/20">Critique</span>
+          <span class="text-[9px] text-hsa/50 font-code">Il y a 3 min</span>
+        </div>
+      </div>
+
+      <!-- Score line -->
+      <div class="flex items-center gap-3">
+        <span class="text-[10px] text-hsa/60 font-code shrink-0">Score exposition</span>
+        <div class="flex-1 h-1.5 rounded-full bg-ash/20 overflow-hidden">
+          <div class="h-full w-[18%] bg-gradient-to-r from-success to-primary rounded-full" />
+        </div>
+        <span class="text-[10px] font-bold text-success font-code shrink-0">18 / 100</span>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { IconFileReport } from '@tabler/icons-vue'
+import { IconEye, IconAlertOctagon } from '@tabler/icons-vue'
+
+const sources = [
+  { type: 'Pastebin', name: 'paste.io', clean: true },
+  { type: 'Forum', name: 'breachforum', clean: false },
+  { type: 'Telegram', name: '@dataleak_bj', clean: true },
+  { type: 'GitHub', name: 'public repos', clean: true },
+]
 </script>

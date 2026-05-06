@@ -71,11 +71,11 @@
   }
 
   h4 {
-    @apply text-xl md:text-2xl leading-snug;
+    @apply text-base md:text-base leading-snug;
   }
 
   p {
-    @apply text-base md:text-lg leading-relaxed text-hsa;
+    @apply text-base leading-relaxed text-hsa;
   }
 
   /* Barre de défilement */

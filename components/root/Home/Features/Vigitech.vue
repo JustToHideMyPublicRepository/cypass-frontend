@@ -1,54 +1,70 @@
 <template>
-  <UiAppFrame type="card" class="transform-gpu transition-all duration-700 ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:scale-[1.04] hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(0,0,0,0.3)] shadow-[0_10px_30px_rgba(0,0,0,0.15)] group"
-    :glass="true">
-    <div class="relative h-[300px] md:h-[350px] overflow-hidden bg-WtB flex items-center justify-center">
-      <!-- Glow arrière-plan doux -->
-      <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(var(--color-success),0.05),transparent_80%)] opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
-      
-      <!-- Arrière-plan Radar -->
-      <div
-        class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(var(--color-success),0.5)_1px,transparent_1px)] opacity-20 bg-[length:20px_20px] md:bg-[length:24px_24px]">
+  <!-- VigiTech: Live Threat Feed — dark, urgent, data-rich -->
+  <div class="relative rounded-3xl overflow-hidden border border-ash/40 shadow-2xl bg-[#0d0d0f] group select-none">
+    <!-- Scanline overlay -->
+    <div
+      class="absolute inset-0 bg-[linear-gradient(transparent_50%,rgba(0,255,100,0.015)_50%)] bg-[length:100%_4px] pointer-events-none z-10 opacity-60" />
+
+    <!-- Header -->
+    <div
+      class="flex items-center justify-between px-5 py-3 border-b border-success/10 bg-success/5 backdrop-blur-sm relative z-20">
+      <div class="flex items-center gap-2">
+        <IconRadar2 class="w-4 h-4 text-success animate-spin-slow" />
+        <span class="text-xs font-bold text-success uppercase tracking-widest font-code">VigiTech · Radar</span>
       </div>
-      <div class="absolute inset-0 bg-gradient-to-b from-transparent via-WtB/70 to-WtB z-0"></div>
-
-      <!-- Cercles du Radar (adoucies) -->
-      <div class="absolute w-[300px] md:w-[400px] h-[300px] md:h-[400px] border border-success/10 rounded-full"></div>
-      <div class="absolute w-[220px] md:w-[300px] h-[220px] md:h-[300px] border border-success/15 rounded-full"></div>
-      <div
-        class="absolute w-[140px] md:w-[200px] h-[140px] md:h-[200px] border border-success/20 rounded-full animate-pulse blur-[1px]">
+      <div class="flex items-center gap-2">
+        <span
+          class="px-2 py-0.5 bg-danger/20 border border-danger/40 text-danger text-[10px] font-bold rounded uppercase">3
+          alertes</span>
       </div>
+    </div>
 
-      <!-- Ligne de Balayage (plus douce) -->
-      <div
-        class="absolute w-[140px] md:w-[200px] h-[140px] md:h-[200px] bg-gradient-to-tr from-transparent via-success/5 to-success/15 rounded-full animate-spin-slow origin-bottom-left"
-        style="transform-origin: center;"></div>
-
-      <!-- Points d'Alerte (plus brillants) -->
-      <div class="absolute top-[30%] left-[60%] w-2 md:w-3 h-2 md:h-3 bg-danger rounded-full animate-ping opacity-60"></div>
-      <div class="absolute top-[30%] left-[60%] w-2 md:w-3 h-2 md:h-3 bg-danger rounded-full shadow-[0_0_10px_rgba(var(--color-danger),0.8)]"></div>
-
-      <div class="absolute bottom-[40%] right-[30%] w-1.5 md:w-2 h-1.5 md:h-2 bg-warning rounded-full animate-pulse shadow-[0_0_8px_rgba(var(--color-warning),0.8)]">
-      </div>
-
-      <!-- Texte de Superposition -->
-      <div
-        class="absolute bottom-4 md:bottom-6 left-4 md:left-6 right-4 md:right-6 p-3 md:p-4 bg-bgClr/90 backdrop-blur-xl rounded-2xl border border-ash/40 shadow-xl transform translate-y-2 group-hover:translate-y-0 opacity-90 group-hover:opacity-100 transition-all duration-700 ease-out z-10">
-        <div class="flex items-center gap-3">
-          <IconRadar2 class="w-5 h-5 md:w-6 md:h-6 text-success animate-spin-slow" />
-          <div class="flex-1 min-w-0">
-            <div class="text-[10px] md:text-xs font-bold text-BtW uppercase tracking-wider truncate">Menace Détectée
-            </div>
-            <div class="text-[8px] md:text-[10px] text-hsa font-code truncate">IP: 192.168.X.X • Port Scan</div>
+    <!-- Threat items -->
+    <div class="p-4 space-y-2.5 relative z-20">
+      <div v-for="threat in threats" :key="threat.id"
+        class="flex items-start gap-3 p-3 rounded-xl border transition-all duration-300"
+        :class="threat.level === 'critique' ? 'border-danger/30 bg-danger/5' : threat.level === 'moyen' ? 'border-warning/20 bg-warning/5' : 'border-success/10 bg-success/5'">
+        <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+          :class="threat.level === 'critique' ? 'bg-danger/15 text-danger' : threat.level === 'moyen' ? 'bg-warning/15 text-warning' : 'bg-success/15 text-success'">
+          <component :is="threat.icon" class="w-4 h-4" />
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-2 mb-0.5">
+            <span class="text-xs font-bold text-white truncate">{{ threat.title }}</span>
+            <span class="px-1.5 py-0.5 rounded text-[9px] font-bold uppercase shrink-0"
+              :class="threat.level === 'critique' ? 'bg-danger/20 text-danger' : threat.level === 'moyen' ? 'bg-warning/20 text-warning' : 'bg-success/20 text-success'">
+              {{ threat.level }}
+            </span>
           </div>
-          <UiBaseButton variant="ghost"
-            class="!px-2 md:!px-3 !py-1 !bg-danger/10 !text-danger !text-[10px] md:!text-xs !font-bold !rounded hover:!bg-danger/20 transition-colors !h-auto !w-auto">
-            Bloquer</UiBaseButton>
+          <p class="text-[10px] text-hsa font-code">{{ threat.detail }}</p>
+        </div>
+        <span class="text-[9px] text-hsa/50 shrink-0 font-code">{{ threat.time }}</span>
+      </div>
+
+      <!-- Stats row -->
+      <div class="grid grid-cols-3 gap-2 pt-1">
+        <div v-for="stat in stats" :key="stat.label"
+          class="rounded-xl border border-ash/20 bg-white/3 p-2.5 text-center">
+          <div class="text-lg font-black" :class="stat.color">{{ stat.value }}</div>
+          <div class="text-[9px] text-hsa/60 uppercase tracking-wide font-code">{{ stat.label }}</div>
         </div>
       </div>
     </div>
-  </UiAppFrame>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { IconRadar2 } from '@tabler/icons-vue'
+import { IconAlertTriangle, IconBug, IconShieldCheck, IconRadar2 } from '@tabler/icons-vue'
+
+const threats = [
+  { id: 1, icon: IconAlertTriangle, title: 'Tentative d\'intrusion détectée', detail: 'IP: 185.220.X.X · Port 22 · SSH Brute-force', level: 'critique', time: '2 min' },
+  { id: 2, icon: IconBug, title: 'Injection SQL potentielle', detail: '/api/v1/users?id=1 OR 1=1--', level: 'moyen', time: '7 min' },
+  { id: 3, icon: IconShieldCheck, title: 'Trafic HTTPS normal', detail: '1,204 requêtes · 0 anomalie', level: 'bas', time: '12 min' },
+]
+
+const stats = [
+  { label: 'Incidents', value: '3', color: 'text-danger' },
+  { label: 'Analysés', value: '1.2k', color: 'text-BtW' },
+  { label: 'Bloqués', value: '98%', color: 'text-success' },
+]
 </script>
