@@ -4,15 +4,15 @@
 
       <div class="grid lg:grid-cols-2 gap-12 md:gap-16">
         <div class="animate-fade-right">
-          <h2 class="text-2xl md:text-4xl font-bold mb-6">Notre Histoire</h2>
+          <h2 class="mb-6">Notre histoire</h2>
           <div class="space-y-8 relative pl-6 md:pl-8 border-l-2 border-ash">
             <div v-for="event in timeline" :key="event.year" class="relative">
               <div
                 class="absolute -left-[33px] md:-left-[41px] top-0 w-4 h-4 md:w-5 md:h-5 rounded-full border-4 border-WtB bg-primary">
               </div>
-              <span class="text-primary font-bold text-sm block mb-1">{{ event.year }}</span>
-              <h3 class="font-bold text-base md:text-lg mb-2">{{ event.title }}</h3>
-              <p class="text-xs md:text-sm text-hsa leading-relaxed">{{ event.desc }}</p>
+              <span class="text-primary font-bold block mb-1">{{ event.year }}</span>
+              <h4 class="mb-2">{{ event.title }}</h4>
+              <p>{{ event.desc }}</p>
             </div>
           </div>
         </div>
@@ -24,12 +24,12 @@
               class="h-[300px] md:h-[400px] bg-slate-950 p-0 overflow-hidden font-code text-[10px] md:text-xs relative">
               <!-- En-tête du terminal -->
               <div class="flex items-center justify-between px-4 py-2 bg-slate-900 border-b border-slate-800">
-                <div class="text-slate-400">bash — 80x24</div>
+                <div class="text-ash">bash — 80x24</div>
               </div>
 
-              <div class="p-4 md:p-6 space-y-3 md:space-y-4 text-slate-300">
+              <div class="p-4 md:p-6 space-y-3 md:space-y-4 text-ash">
                 <div class="flex">
-                  <span class="text-green-400 mr-2">root@cypass:~$</span>
+                  <span class="text-success mr-2">root@cypass:~$</span>
                   <span class="typing-effect">./init_protocol.sh --verbose</span>
                 </div>
 

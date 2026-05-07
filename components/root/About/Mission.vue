@@ -6,20 +6,18 @@
         <!-- Contenu Texte -->
         <div class="space-y-6 md:space-y-8 animate-fade-right">
           <div>
-            <h2 class="text-2xl md:text-4xl font-bold mb-4">
-              Notre Mission
-            </h2>
+            <h2 class="mb-4">Notre mission</h2>
             <div class="h-1 w-20 bg-primary rounded-full"></div>
           </div>
 
-          <p class="text-base md:text-lg leading-relaxed">
+          <p>
             Dans un monde hyper-connecté, la donnée est devenue l'actif le plus précieux des nations et des
             entreprises. Notre mission est de construire une infrastructure souveraine, robuste et
             résiliente capable de protéger ces actifs contre les menaces émergentes.
           </p>
-          <p class="text-base md:text-lg leading-relaxed">
-            Nous démocratisons l'accès aux technologies de cybersécurité avancées (PKI, SOC, SIEM) pour
-            permettre à chaque PME, administration et citoyen béninois d'interagir numériquement en toute
+          <p>
+            Nous démocratisons l'accès aux technologies de cybersécurité avancées (PKI, SOC) pour permettre à chaque
+            PME, administration et citoyen béninois d'interagir numériquement en toute
             confiance.
           </p>
 
@@ -71,8 +69,8 @@
 
               <div
                 class="relative z-10 bg-slate-900/80 backdrop-blur-md p-4 md:p-6 rounded-2xl border border-slate-700/50 text-center shadow-2xl max-w-xs group-hover:border-primary/50 transition-colors">
-                <h3 class="text-lg md:text-xl font-bold text-white mb-2">Gardien du Numérique</h3>
-                <p class="text-slate-400 text-sm">Protection proactive des infrastructures critiques.</p>
+                <h3 class="text-white mb-2">Gardien du numérique</h3>
+                <p>Protection proactive des infrastructures critiques.</p>
               </div>
             </div>
           </UiAppFrame>

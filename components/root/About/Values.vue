@@ -3,10 +3,8 @@
     <!-- Contenu de la section Valeurs -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center max-w-3xl mx-auto mb-10 md:mb-16 animate-fade-up">
-        <h2 class="text-2xl md:text-4xl font-bold text-BtW mb-4">Nos valeurs fondatrices
-        </h2>
-        <p class="text-sm md:text-base text-hsa">Ce qui guide nos décisions et façonne notre technologie.
-        </p>
+        <h2 class="mb-4">Nos valeurs fondatrices</h2>
+        <p>Ce qui guide nos décisions et façonne notre technologie.</p>
       </div>
 
       <div class="grid md:grid-cols-3 gap-6 md:gap-8">
@@ -16,8 +14,8 @@
           <div class="w-12 h-12 md:w-14 md:h-14 rounded-xl flex items-center justify-center mb-6" :class="value.iconBg">
             <component :is="value.icon" class="w-6 h-6 md:w-7 md:h-7" :class="value.iconColor" />
           </div>
-          <h3 class="text-lg md:text-xl font-bold text-BtW mb-3">{{ value.title }}</h3>
-          <p class="text-sm md:text-base text-hsa leading-relaxed">{{ value.desc }}</p>
+          <h4 class="mb-3">{{ value.title }}</h4>
+          <p>{{ value.desc }}</p>
         </div>
       </div>
     </div>
@@ -40,15 +38,15 @@ const values = [
     title: 'Confiance',
     desc: 'La transparence est notre devise. Nos algorithmes sont auditables et nos certifications garantissent l\'intégrité de nos services.',
     icon: IconShieldCheck,
-    iconBg: 'bg-success/10',
-    iconColor: 'text-success'
+    iconBg: 'bg-secondary/10',
+    iconColor: 'text-secondary'
   },
   {
     title: 'Innovation',
     desc: 'Nous anticipons les menaces de demain en intégrant l\'IA et l\'automatisation au cœur de nos processus de défense.',
     icon: IconBulb,
-    iconBg: 'bg-purple-600/10',
-    iconColor: 'text-purple-600'
+    iconBg: 'bg-success/10',
+    iconColor: 'text-success'
   }
 ]
 </script>
