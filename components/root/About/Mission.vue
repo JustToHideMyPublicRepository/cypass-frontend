@@ -70,7 +70,7 @@
               <div
                 class="relative z-10 bg-slate-900/80 backdrop-blur-md p-4 md:p-6 rounded-2xl border border-slate-700/50 text-center shadow-2xl max-w-xs group-hover:border-primary/50 transition-colors">
                 <h3 class="text-white mb-2">Gardien du numérique</h3>
-                <p>Protection proactive des infrastructures critiques.</p>
+                <p class="text-white/50">Protection proactive des infrastructures critiques.</p>
               </div>
             </div>
           </UiAppFrame>
