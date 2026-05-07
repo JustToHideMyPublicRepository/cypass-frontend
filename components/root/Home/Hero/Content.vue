@@ -15,7 +15,7 @@
         numérique
       </span>
       pour
-      <div class="min-h-[1.8em] flex items-end">
+      <div class="flex items-end">
         <span class="font-handwritting text-primary">
           {{ currentText }}<span
             class="inline-block w-[3px] h-[0.85em] bg-primary animate-pulse align-middle ml-0.5"></span>
