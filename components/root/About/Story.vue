@@ -4,7 +4,7 @@
 
       <div class="grid lg:grid-cols-2 gap-12 md:gap-16">
         <div class="animate-fade-right">
-          <h2 class="mb-6">Notre histoire</h2>
+          <h3 class="mb-6">Notre histoire</h3>
           <div class="space-y-8 relative pl-6 md:pl-8 border-l-2 border-ash">
             <div v-for="event in timeline" :key="event.year" class="relative">
               <div
@@ -28,35 +28,36 @@
               </div>
 
               <div class="p-4 md:p-6 space-y-3 md:space-y-4 text-ash">
-                <div class="flex">
+                <div class="flex" ref="terminalRef">
                   <span class="text-success mr-2">root@cypass:~$</span>
-                  <span class="typing-effect">./init_protocol.sh --verbose</span>
+                  <span class="typing-effect" :class="{ 'animate': isVisible }"
+                    :style="{ '--width': '28ch', '--steps': 28 }">./init_protocol.sh --verbose</span>
                 </div>
 
                 <div class="space-y-2 pl-4 border-l border-slate-800 ml-1">
-                  <div class="text-slate-500">2025-04-15 09:00:00 [INFO] Inscription au Programme CyberIncub...</div>
+                  <div class="ash">2025-04-15 09:00:00 [INFO] Inscription au Programme CyberIncub...</div>
                   <div class="flex items-center gap-2">
-                    <span class="text-blue-400 text-[8px] md:text-xs">➜</span>
-                    <span>Lancement : <span class="text-yellow-300">Phase d'Accélération</span></span>
-                    <span class="text-green-500">[OK]</span>
+                    <span class="text-primary text-[8px] md:text-xs">➜</span>
+                    <span>Lancement : <span class="text-warning">Phase d'accélération</span></span>
+                    <span class="text-success">[OK]</span>
                   </div>
                   <div class="flex items-center gap-2">
-                    <span class="text-blue-400 text-[8px] md:text-xs">➜</span>
-                    <span>Établissement du SOC Communautaire </span>
+                    <span class="text-primary text-[8px] md:text-xs">➜</span>
+                    <span>Établissement du SOC communautaire </span>
                     <div class="w-12 md:w-16 h-1 bg-slate-800 rounded overflow-hidden">
                       <div class="h-full bg-green-500 w-full animate-pulse"></div>
                     </div>
                   </div>
-                  <div class="text-slate-500">2025-11-20 14:30:12 [INFO] Déploiement des modules de confiance terminé.
+                  <div class="text-ash">2025-11-20 14:30:12 [INFO] Déploiement des modules de confiance terminé.
                   </div>
 
                   <br />
                   <div class="flex">
-                    <span class="text-green-400 mr-2">root@cypass:~$</span>
+                    <span class="text-success mr-2">root@cypass:~$</span>
                     <span>tail -f /var/log/growth.log</span>
                   </div>
 
-                  <div class="text-purple-300">
+                  <div class="text-primary">
                     > Oct. 25: Sélection & Incubation Cyber [OK]<br />
                     > Nov. 25: Lancement MVP & Expansion [EN COURS]<br />
                     > 2026: Déploiement du MVP et une expansion [CONTINUE]
@@ -77,6 +78,24 @@
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted } from 'vue'
+
+const isVisible = ref(false)
+const terminalRef = ref<HTMLElement | null>(null)
+
+onMounted(() => {
+  const observer = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) {
+      isVisible.value = true
+      observer.disconnect()
+    }
+  }, { threshold: 0.5 })
+
+  if (terminalRef.value) {
+    observer.observe(terminalRef.value)
+  }
+})
+
 const timeline = [
   {
     year: 'Avril 2025',

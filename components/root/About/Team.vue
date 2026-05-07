@@ -5,9 +5,8 @@
 
       <div class="flex flex-col md:flex-row justify-between items-end mb-10 md:mb-12 gap-6 animate-fade-up">
         <div>
-          <h2 class="text-2xl md:text-4xl font-bold text-BtW mb-2">L'Équipe CYPASS</h2>
-          <p class="text-sm md:text-base text-hsa max-w-xl">Des experts passionnés par la sécurité et
-            déterminés à faire la différence.</p>
+          <h3 class="mb-2">L'Équipe CYPASS</h3>
+          <p class="max-w-xl">Des experts passionnés par la sécurité et déterminés à faire la différence.</p>
         </div>
       </div>
 
@@ -31,7 +30,7 @@
                   </div>
                 </div>
               </div>
-              <h3 class="font-bold text-lg">{{ member.name }}</h3>
+              <span class="font-bold">{{ member.name }}</span>
             </div>
           </UiAppFrame>
         </div>
