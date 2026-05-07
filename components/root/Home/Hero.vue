@@ -1,7 +1,9 @@
 <template>
   <section class="relative py-8 overflow-hidden lg:overflow-visible">
     <!-- Texture subtile (appliquée uniquement au Hero) -->
-    <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20viewBox=%220%200%20200%20200%22%20xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter%20id=%22noise%22%3E%3CfeTurbulence%20type=%22fractalNoise%22%20baseFrequency=%220.9%22%20numOctaves=%222%22%20stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect%20width=%22100%25%22%20height=%22100%25%22%20filter=%22url(%23noise)%22/%3E%3C/svg%3E')] opacity-[0.03] mix-blend-overlay pointer-events-none z-0"></div>
+    <div
+      class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20viewBox=%220%200%20200%20200%22%20xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter%20id=%22noise%22%3E%3CfeTurbulence%20type=%22fractalNoise%22%20baseFrequency=%220.9%22%20numOctaves=%222%22%20stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect%20width=%22100%25%22%20height=%22100%25%22%20filter=%22url(%23noise)%22/%3E%3C/svg%3E')] opacity-[0.03] mix-blend-overlay pointer-events-none z-0">
+    </div>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       <div class="grid lg:grid-cols-4 gap-6 items-center">
@@ -33,8 +35,7 @@
             Avec CYPASS,
             <NuxtLink to="/verify"
               class="font-bold hover:underline decoration-primary decoration-2 underline-offset-4 transition-all">
-              chaque
-              document</NuxtLink> émis devient une preuve,
+              chaque document</NuxtLink> émis devient une preuve,
             <NuxtLink to="/vigitech"
               class="font-bold hover:underline decoration-primary decoration-2 underline-offset-4 transition-all">chaque
               incident</NuxtLink> signalé devient une alerte et <span class="font-bold">chaque donnée sensible</span>
@@ -45,13 +46,13 @@
           <div class="space-y-4 pt-4 w-full md:max-w-fit mx-auto lg:mx-0">
             <!-- Boutons s-->
             <div class="grid grid-cols-2 sm:flex sm:flex-row gap-2 sm:gap-4 justify-center lg:justify-start">
-              <UiBaseButton :to="authStore.user ? '/dashboard/docsentry' : '/verify'" variant="secondary"
-                class="w-full sm:w-auto text-[11px] md:text-base px-1.5 md:px-8 py-2.5 md:py-3 font-bold flex items-center justify-center gap-1.5 text-center h-full">
+              <UiBaseButton :to="authStore.user ? '/dashboard/docsentry' : '/verify'" variant="accent"
+                class="w-full sm:w-auto flex items-center justify-center gap-1.5 text-center h-full">
                 <IconFileCheck class="w-4 h-4 md:w-5 md:h-5 shrink-0" />
                 <span class="leading-tight">{{ authStore.user ? 'Gestion documents' : 'Vérifier document' }}</span>
               </UiBaseButton>
-              <UiBaseButton :to="authStore.user ? '/dashboard/vigitech' : '/vigitech'" variant="accent"
-                class="w-full sm:w-auto text-[11px] md:text-base px-1.5 md:px-8 py-2.5 md:py-3 font-bold flex items-center justify-center gap-1.5 text-center h-full">
+              <UiBaseButton :to="authStore.user ? '/dashboard/vigitech' : '/vigitech'" variant="secondary"
+                class="w-full sm:w-auto flex items-center justify-center gap-1.5 text-center h-full">
                 <IconShieldCheck class="w-4 h-4 md:w-5 md:h-5 shrink-0" />
                 <span class="leading-tight">{{ authStore.user ? 'Gestion incidents' : 'Veille publique' }}</span>
               </UiBaseButton>

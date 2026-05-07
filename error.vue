@@ -18,7 +18,6 @@
 
     <!-- Content Container -->
     <div class="max-w-4xl w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
-
       <!-- Left side: Visual -->
       <div class="hidden lg:flex justify-center items-center">
         <div class="relative w-full aspect-square max-w-sm group">
@@ -30,10 +29,9 @@
             class="absolute inset-0 bg-WtB/10 backdrop-blur-md border border-ash/30 rounded-[4rem] -rotate-3 group-hover:-rotate-6 transition-transform duration-700 flex items-center justify-center">
             <div class="text-center">
               <div class="text-[10rem] font-black tracking-tighter text-BtW opacity-10 select-none leading-none">
-                {{ error?.statusCode || '404' }}
+                {{ error?.statusCode || 'Erreur' }}
               </div>
-              <component :is="errorIcon" class="w-32 h-32 text-primary -mt-16 mx-auto animate-bounce-slow"
-                stroke-width="1" />
+              <component :is="errorIcon" class="w-32 h-32 text-primary -mt-16 mx-auto" />
             </div>
           </div>
         </div>
@@ -43,29 +41,24 @@
       <div class="space-y-8 text-center lg:text-left">
         <div class="space-y-4">
           <div
-            class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold uppercase tracking-widest animate-fade-in">
-            <span class="relative flex h-2 w-2">
-              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-              <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
-            </span>
-            Incident Détecté
+            class="inline-flex px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold uppercase tracking-widest animate-fade-in">
+            Incident détecté
           </div>
-          <h1 class="text-5xl md:text-7xl font-black text-BtW tracking-tight leading-none">
+          <h2>
             {{ errorTitle }}
-          </h1>
-          <p class="text-xl text-hsa leading-relaxed max-w-lg mx-auto lg:mx-0">
+          </h2>
+          <p class="max-w-lg mx-auto lg:mx-0">
             {{ errorMessage }}
           </p>
         </div>
 
         <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-          <UiBaseButton @click="handleClearError" class="px-8 py-4 !rounded-2xl shadow-xl shadow-primary/20 flex gap-3">
+          <UiBaseButton variant="primary" @click="handleClearError" class="flex gap-3">
             <IconArrowLeft class="w-5 h-5 relative z-10" />
             <span class="relative z-10">Accueil</span>
           </UiBaseButton>
 
-          <UiBaseButton v-if="error?.statusCode !== 404" @click="handleRefresh" variant="secondary"
-            class="px-8 py-4 !bg-BtW !text-WtB !rounded-2xl hover:!opacity-90 flex gap-3">
+          <UiBaseButton variant="secondary" v-if="error?.statusCode !== 404" @click="handleRefresh" class="flex gap-3">
             <IconRefresh class="w-5 h-5" />
             Réessayer
           </UiBaseButton>
@@ -89,18 +82,15 @@
     </div>
 
     <!-- Footer decoration -->
-    <div
-      class="absolute bottom-8 text-[10px] font-black uppercase tracking-[0.5em] text-hsa opacity-20 pointer-events-none">
-      Infrastructure de Confiance CYPASS
+    <div class="absolute bottom-8 text-[10px] font-black tracking-[0.5em] text-hsa opacity-20 pointer-events-none">
+      Cyberplateform for Assurance Surveillance and Support
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import {
-  IconAlertTriangle, IconMoodSad, IconArrowLeft, IconRefresh, IconLock, IconBug, IconServer, IconClock
-} from '@tabler/icons-vue'
+import { IconAlertTriangle, IconMoodSad, IconArrowLeft, IconRefresh, IconLock, IconBug, IconServer, IconClock } from '@tabler/icons-vue'
 
 const props = defineProps({
   error: {
@@ -182,10 +172,6 @@ useHead({
   50% {
     transform: translateY(-20px);
   }
-}
-
-.animate-bounce-slow {
-  animation: bounce-slow 4s ease-in-out infinite;
 }
 
 @keyframes fade-in {
