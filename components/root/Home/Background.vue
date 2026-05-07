@@ -10,10 +10,5 @@
     <div
       class="absolute top-[40%] left-[30%] w-[40%] h-[40%] bg-purple-500/10 rounded-full blur-[100px] animate-pulse-slow">
     </div>
-
-    <!-- Superposition de motif de grille -->
-    <div
-      class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 dark:opacity-10 mix-blend-overlay">
-    </div>
   </div>
 </template>

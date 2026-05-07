@@ -6,7 +6,7 @@
       :class="customClass">
 
       <!-- Luminous Border Effect -->
-      <div class="luminous-border"></div>
+      <!-- <div class="luminous-border"></div> -->
 
       <div class="search-inner">
         <IconSearch
