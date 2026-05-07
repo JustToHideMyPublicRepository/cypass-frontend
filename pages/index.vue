@@ -1,7 +1,7 @@
 <template>
   <div class="relative overflow-x-hidden">
     <RootHomeBackground />
-    <RootHomeHero />
+    <RootHomeHeroBlock />
     <RootHomePartners />
     <RootHomeHowBlock />
     <RootHomeFeaturesBlock />
