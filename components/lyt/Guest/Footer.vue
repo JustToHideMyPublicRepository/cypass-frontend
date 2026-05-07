@@ -13,7 +13,7 @@
           <p> Built to protect, Designed to last </p>
           <div class="flex gap-3">
             <a v-for="social in socialLinks" :key="social" :href="getSocialLink(social)" target="_blank"
-              class="w-10 h-10 rounded-full bg-WtB border border-ash flex items-center justify-center hover:bg-primary hover:border-ash transition-all duration-300">
+              class="w-10 h-10 rounded-full bg-WtB border border-ash flex items-center justify-center hover:bg-primary hover:text-WtB hover:border-ash transition-all duration-300">
               <component :is="getSocialIcon(social)" class="w-5 h-5" />
             </a>
           </div>
