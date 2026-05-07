@@ -42,18 +42,18 @@
           </p>
 
           <!-- Boutons -->
-          <div class="space-y-4 pt-4 max-w-fit mx-auto lg:mx-0">
+          <div class="space-y-4 pt-4 w-full md:max-w-fit mx-auto lg:mx-0">
             <!-- Boutons s-->
-            <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+            <div class="grid grid-cols-2 sm:flex sm:flex-row gap-2 sm:gap-4 justify-center lg:justify-start">
               <UiBaseButton :to="authStore.user ? '/dashboard/docsentry' : '/verify'" variant="secondary"
-                class="w-full sm:w-auto text-sm md:text-base px-6 md:px-8 py-2.5 md:py-3 font-bold flex items-center justify-center gap-2">
-                <IconFileCheck class="w-4 h-4" />
-                {{ authStore.user ? 'Gestion des documents' : 'Vérifier un document' }}
+                class="w-full sm:w-auto text-[11px] md:text-base px-1.5 md:px-8 py-2.5 md:py-3 font-bold flex items-center justify-center gap-1.5 text-center h-full">
+                <IconFileCheck class="w-4 h-4 md:w-5 md:h-5 shrink-0" />
+                <span class="leading-tight">{{ authStore.user ? 'Gestion documents' : 'Vérifier document' }}</span>
               </UiBaseButton>
               <UiBaseButton :to="authStore.user ? '/dashboard/vigitech' : '/vigitech'" variant="accent"
-                class="w-full sm:w-auto text-sm md:text-base px-6 md:px-8 py-2.5 md:py-3 flex items-center justify-center gap-2">
-                <IconShieldCheck class="w-4 h-4" />
-                {{ authStore.user ? 'Gestion des incidents' : 'Veille communautaire' }}
+                class="w-full sm:w-auto text-[11px] md:text-base px-1.5 md:px-8 py-2.5 md:py-3 font-bold flex items-center justify-center gap-1.5 text-center h-full">
+                <IconShieldCheck class="w-4 h-4 md:w-5 md:h-5 shrink-0" />
+                <span class="leading-tight">{{ authStore.user ? 'Gestion incidents' : 'Veille publique' }}</span>
               </UiBaseButton>
             </div>
           </div>
