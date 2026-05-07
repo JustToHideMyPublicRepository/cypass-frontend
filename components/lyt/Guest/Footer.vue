@@ -4,18 +4,16 @@
       <div class="grid grid-cols-2 lg:grid-cols-6 gap-8 mb-16">
         <!-- Brand Column -->
         <div class="col-span-2 lg:col-span-2 space-y-6">
-          <NuxtLink to="/" class="flex items-center gap-2">
+          <div class="flex items-center gap-2">
             <div class="w-10 h-10 rounded-xl bg-WtB flex items-center justify-center shadow-lg overflow-hidden p-0.5">
               <img src="/img/logo.png" alt="Logo CYPASS" class="w-full h-full object-contain" />
             </div>
-            <span class="text-2xl font-bold text-BtW">CYPASS</span>
-          </NuxtLink>
-          <p class="text-hsa leading-relaxed text-sm">
-            Built to protect, Designed to last
-          </p>
+            <h4>CYPASS</h4>
+          </div>
+          <p> Built to protect, Designed to last </p>
           <div class="flex gap-3">
             <a v-for="social in socialLinks" :key="social" :href="getSocialLink(social)" target="_blank"
-              class="w-10 h-10 rounded-full bg-WtB border border-ash flex items-center justify-center text-hsa hover:text-WtB hover:bg-primary hover:border-ash transition-all duration-300">
+              class="w-10 h-10 rounded-full bg-WtB border border-ash flex items-center justify-center hover:bg-primary hover:border-ash transition-all duration-300">
               <component :is="getSocialIcon(social)" class="w-5 h-5" />
             </a>
           </div>
@@ -23,11 +21,11 @@
 
         <!-- Links Columns -->
         <div v-for="(group, index) in footerGroups" :key="index">
-          <h4 class="font-bold mb-6">{{ group.title }}</h4>
+          <h5 class="mb-6">{{ group.title }}</h5>
           <ul class="space-y-3">
             <li v-for="link in group.links" :key="link.label">
               <NuxtLink :to="link.path" v-tooltip="getLinkTooltip(link.path)"
-                class="text-hsa hover:text-primary transition-colors flex items-center gap-2 group">
+                class="hover:text-primary transition-colors gap-2 group">
                 {{ link.label }}
               </NuxtLink>
             </li>
@@ -46,7 +44,7 @@
           </div>
         </div>
         <div>
-          <h4 class="font-bold text-sm mb-0.5">Sécurité Certifiée</h4>
+          <h4 class="mb-0.5">Sécurité Certifiée</h4>
           <p class="text-xs text-hsa">
             Audité et validé par l'ASIN Bénin pour la conformité aux normes de sécurité nationales.</p>
         </div>
@@ -55,7 +53,7 @@
       <!-- Bottom Footer -->
       <div class="border-t border-ash pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
         <div class="flex flex-col md:flex-row items-center gap-2 md:gap-8">
-          <p class="text-sm text-hsa">
+          <p class="text-sm">
             &copy; {{ new Date().getFullYear() }} CYPASS. Tous droits réservés.
           </p>
         </div>
