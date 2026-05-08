@@ -2,10 +2,10 @@
   <div>
     <div v-if="categories.length > 0" class="grid md:grid-cols-2 lg:grid-cols-2 gap-6 md:gap-8 items-start">
       <div v-for="category in categories" :key="category.title" class="animate-fade-up">
-        <h2 class="flex items-center gap-2 md:gap-3 text-base md:text-lg font-bold mb-4 md:mb-6 text-BtW">
+        <h4 class="flex items-center gap-2 md:gap-3 mb-4">
           <span class="w-1.5 h-5 md:w-2 md:h-6 bg-primary rounded-full"></span>
           {{ category.title }}
-        </h2>
+        </h4>
 
         <div class="space-y-2.5 md:space-y-3">
           <div v-for="s in getVisibleItems(category)" :key="s.label"

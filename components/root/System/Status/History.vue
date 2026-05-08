@@ -31,8 +31,7 @@
               {{ getStatusInfo(history.type).label }}
             </span>
           </div>
-          <h4 class="group-hover:text-primary transition-colors">{{ history.title }}
-          </h4>
+          <h5 class="group-hover:text-primary transition-colors">{{ history.title }} </h5>
           <p>{{ history.description }}</p>
           <div class="flex items-center gap-2 text-[10px] font-bold"
             :class="getHistoryStatusInfo(history.status).colorClass">

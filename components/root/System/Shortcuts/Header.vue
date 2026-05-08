@@ -4,8 +4,8 @@
       class="inline-flex items-center justify-center w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-primary/10 text-primary mb-4 md:mb-6">
       <IconKeyboard class="w-8 h-8 md:w-10 md:h-10" />
     </div>
-    <h1 class="text-3xl md:text-4xl font-black tracking-tight mb-3 md:mb-4">Raccourcis Clavier</h1>
-    <p class="text-base md:text-lg text-hs">Naviguez plus rapidement sur CYPASS grâce à nos raccourcis.</p>
+    <h3 class="mb-3">Raccourcis clavier</h3>
+    <p>Naviguez plus rapidement sur CYPASS grâce à nos raccourcis.</p>
 
     <!-- Boutons modaux -->
     <div class="flex flex-wrap justify-center gap-3 mt-4 md:mt-6">

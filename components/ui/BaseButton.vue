@@ -40,7 +40,7 @@ const props = withDefaults(defineProps<{
 
 // Classes CSS basées sur les props
 const buttonClasses = computed(() => [
-  'btn text-base',
+  'btn text-xs md:text-sm',
   props.variant === 'primary' ? 'btn-primary' : '',
   props.variant === 'secondary' ? 'btn-secondary' : '',
   props.variant === 'accent' ? 'btn-accent' : '',
