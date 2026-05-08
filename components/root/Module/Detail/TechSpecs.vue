@@ -1,6 +1,6 @@
 <template>
   <div class="pt-6 md:pt-8 border-t border-ash">
-    <h3 class="text-xl font-bold mb-4 md:mb-6">Spécifications Techniques</h3>
+    <h5 class="mb-4">Spécifications techniques</h5>
     <div class="space-y-2 md:space-y-4">
       <div v-for="spec in specs" :key="spec.label"
         class="flex items-center justify-between py-2 md:py-3 border-b border-ash/50">

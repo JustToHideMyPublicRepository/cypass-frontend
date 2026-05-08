@@ -10,30 +10,25 @@
       Module {{ service.status === 'available' ? 'Actif' : 'En Développement' }}
     </div>
 
-    <h1 class="text-4xl md:text-7xl font-black leading-tight tracking-tight">
-      {{ service.title }}<span class="text-primary">.</span>
-    </h1>
+    <h2> {{ service.title }}<span class="text-primary">.</span> </h2>
 
-    <p class="text-lg md:text-2xl text-hsa leading-relaxed font-light">
-      {{ service.fullDescription }}
-    </p>
+    <p> {{ service.fullDescription }} </p>
 
     <div v-if="service.status === 'available'" class="flex flex-col sm:flex-row gap-3 md:gap-4 pt-4">
-      <UiBaseButton class="shadow-xl shadow-primary/20 w-full sm:w-auto">
+      <UiBaseButton variant="primary">
         Demander une démo
         <IconArrowRight class="w-5 h-5 ml-2" />
       </UiBaseButton>
-      <UiBaseButton variant="secondary" class="w-full sm:w-auto">
+      <UiBaseButton variant="secondary">
         <IconFileText class="w-5 h-5 mr-2" />
         Documentation API
       </UiBaseButton>
     </div>
     <div v-else class="pt-4">
-      <div
-        class="inline-flex items-center gap-3 px-6 py-3 rounded-xl bg-ash text-slate-500 font-bold border border-ash text-sm md:text-base">
+      <UiBaseButton variant="ghost" class="gap-3 opacity-50">
         <IconClock class="w-5 h-5" />
         Disponible prochainement
-      </div>
+      </UiBaseButton>
     </div>
   </div>
 </template>

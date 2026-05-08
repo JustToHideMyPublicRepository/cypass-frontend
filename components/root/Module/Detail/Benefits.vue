@@ -5,12 +5,13 @@
       :style="{ animationDelay: `${index * 100}ms` }">
       <div
         class="w-10 h-10 rounded-lg flex items-center justify-center mb-3 md:mb-4 transition-colors group-hover:scale-110 duration-300"
-        :class="theme === 'blue' ? 'bg-primary/10 text-primary' : 'bg-success/10 text-success'">
+        :class="theme === 'blue' ? 'bg-warning/10 text-warning' : 'bg-primary/10 text-primary'">
         <IconCheck class="w-5 h-5" />
       </div>
-      <h3 class="font-bold text-base md:text-lg mb-1 md:mb-2">{{ benefit.title }}</h3>
+      <h5 class="mb-1">{{ benefit.title }}</h5>
       <p class="text-hsa text-xs md:text-sm leading-relaxed">{{ benefit.qty }}</p>
-      <div v-if="benefit.desc" class="mt-3 inline-flex items-center px-2.5 py-1 rounded-md text-[11px] font-medium" :class="theme === 'blue' ? 'bg-primary/10 text-primary' : 'bg-success/10 text-success'">
+      <div v-if="benefit.desc" class="mt-3 inline-flex items-center px-2.5 py-1 rounded-md text-[11px] font-medium"
+        :class="theme === 'blue' ? 'bg-warning/10 text-warning' : 'bg-primary/10 text-primary'">
         {{ benefit.desc }}
       </div>
     </div>
