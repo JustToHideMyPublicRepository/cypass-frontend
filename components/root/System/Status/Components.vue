@@ -1,6 +1,6 @@
 <template>
   <div class="space-y-3 md:space-y-4 animate-fade-up" style="animation-delay: 100ms">
-    <h3 class="text-base md:text-lg font-bold pl-2">Composants</h3>
+    <h4 class="pl-2">Composants</h4>
 
     <div v-if="loading" class="space-y-3">
       <div v-for="i in 6" :key="i"
@@ -19,10 +19,12 @@
         <div class="flex items-center gap-2">
           <UiAppTooltip v-if="component.description" :content="component.description" :title="component.name"
             width-class="w-72" />
-          <span class="font-medium text-sm md:text-base">{{ component.name }}</span>
+          <h5>{{ component.name }}</h5>
         </div>
         <div class="flex items-center gap-2 md:gap-3 w-full sm:w-auto justify-between sm:justify-start">
-          <span class="text-xs font-bold" :class="component.statusColor">{{ component.statusLabel }}</span>
+          <span class="text-xs font-bold" :class="component.statusColor">
+            {{ component.statusLabel }}
+          </span>
           <div class="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full" :class="component.dotColor"
             :style="{ boxShadow: component.shadow }"></div>
         </div>

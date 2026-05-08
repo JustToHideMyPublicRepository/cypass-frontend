@@ -7,10 +7,8 @@
       <component :is="globalInfo?.icon || IconInfoCircle" class="w-6 h-6 md:w-8 md:h-8" />
     </div>
     <div class="flex-grow w-full">
-      <h2 class="text-xl md:text-2xl font-bold leading-tight">
-        {{ globalInfo?.message || 'Vérification de l\'état du système...' }}
-      </h2>
-      <p class="text-sm md:text-base text-hsa mt-1">
+      <h4> {{ globalInfo?.message || 'Vérification de l\'état du système...' }} </h4>
+      <p class="mt-1">
         Dernière mise à jour : {{ systemStore.lastUpdate || '...' }}
       </p>
     </div>

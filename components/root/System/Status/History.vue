@@ -2,7 +2,7 @@
   <div class="space-y-4 animate-fade-up" style="animation-delay: 200ms">
     <div class="space-y-4">
       <div class="flex items-center justify-between pl-2">
-        <h3 class="text-base md:text-lg font-bold">{{ dynamicTitle }}</h3>
+        <h5>{{ dynamicTitle }}</h5>
         <div class="flex items-center gap-1 bg-ashAct/50 p-1 rounded-lg">
           <button v-for="option in periodOptions" :key="option.value"
             @click="systemStore.fetchSystemHystory(option.value)"
@@ -31,9 +31,9 @@
               {{ getStatusInfo(history.type).label }}
             </span>
           </div>
-          <h4 class="font-bold text-sm md:text-base group-hover:text-primary transition-colors">{{ history.title }}
+          <h4 class="group-hover:text-primary transition-colors">{{ history.title }}
           </h4>
-          <p class="text-xs md:text-sm text-hsa leading-relaxed">{{ history.description }}</p>
+          <p>{{ history.description }}</p>
           <div class="flex items-center gap-2 text-[10px] font-bold"
             :class="getHistoryStatusInfo(history.status).colorClass">
             <component :is="getHistoryStatusInfo(history.status).icon" class="w-3 h-3" />
@@ -57,7 +57,7 @@
 
       <div v-else
         class="glass-panel p-6 md:p-8 rounded-xl md:rounded-2xl text-center py-8 md:py-12 border border-ash/50">
-        <p class="text-sm md:text-base text-hsa">{{ emptyStateMessage }}</p>
+        <p>{{ emptyStateMessage }}</p>
       </div>
     </template>
   </div>
