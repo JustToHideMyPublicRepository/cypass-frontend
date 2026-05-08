@@ -2,7 +2,7 @@
   <div class="max-w-7xl mx-auto mb-24 space-y-16">
     <!-- Header -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
-      <h3 class="font-black mx-auto">Endpoints de l'API</h3>
+      <h3 class="mx-auto">Endpoints de l'API</h3>
     </div>
 
     <!-- Modeles / Tarifs de base -->
@@ -21,41 +21,34 @@
             <span v-if="tier.subtitle" class="text-xs font-black uppercase tracking-widest px-3 py-1 rounded-full"
               :class="tier.featured ? 'bg-secondary text-WtB' : 'bg-ash/80 text-hsa'">{{ tier.subtitle }}</span>
           </div>
-          <h3 class="text-2xl font-black text-BtW">{{ tier.name }}</h3>
-          <p class="text-[28px] font-black text-BtW mt-2">{{ tier.price }}</p>
-          <p class="text-sm font-medium text-hsa mt-2 opacity-80 h-10">{{ tier.description }}</p>
+          <h5>{{ tier.name }}</h5>
+          <h4>{{ tier.price }}</h4>
+          <p class="text-xs mt-2 font-medium">{{ tier.description }}</p>
         </div>
 
         <div class="space-y-4 mb-8 flex-1">
+          <!-- Afficher les features -->
+          <ul class="space-y-4 pt-6">
+            <li v-for="feature in tier.features" :key="feature" class="flex items-start gap-3">
+              <IconCircleCheck class="w-5 h-5 text-secondary shrink-0 transition-transform group-hover:scale-110" />
+              <span class="text-sm leading-snug">{{ feature }}</span>
+            </li>
+          </ul>
+
           <!-- Si la tier a une tarification dégressive -->
-          <div v-if="tier.pricing && tier.pricing.length > 0">
-            <h4 class="text-xs font-black text-hsa uppercase tracking-widest mb-3 border-b border-ash/10 pb-2">
-              Tarification Dégressive</h4>
-            <div class="space-y-2">
-              <div v-for="(p, i) in tier.pricing" :key="i" class="flex items-center justify-between text-sm">
-                <span class="font-bold text-hsa">{{ p.range }}</span>
-                <span class="font-black text-BtW">{{ p.unitPrice }}</span>
+          <div v-if="tier.pricing && tier.pricing.length > 0"
+            class="mt-4 bg-primary/5 rounded-xl border border-primary/10 overflow-hidden">
+            <div class="px-4 py-2 bg-primary/10 border-b border-primary/10">
+              <h4 class="text-[10px] font-black text-primary uppercase tracking-widest">Tarification Dégressive</h4>
+            </div>
+            <div class="p-2 space-y-1">
+              <div v-for="(p, i) in tier.pricing" :key="i"
+                class="flex justify-between items-center px-3 py-1.5 text-xs rounded-lg hover:bg-primary/5 transition-colors">
+                <span class="font-medium text-hsa">{{ p.range }}</span>
+                <span class="font-bold text-BtW">{{ p.unitPrice }}</span>
               </div>
             </div>
           </div>
-
-          <!-- Afficher les features -->
-          <ul v-else class="space-y-3 font-medium text-hsa text-sm">
-            <li v-for="feature in tier.features" :key="feature" class="flex items-start gap-2">
-              <IconCircleCheck class="w-5 h-5 text-secondary shrink-0" />
-              <span>{{ feature }}</span>
-            </li>
-          </ul>
-        </div>
-
-        <div v-if="tier.pricing && tier.pricing.length > 0" class="mb-8 border-t border-ash/10 pt-4">
-          <h4 class="text-[10px] font-black text-hsa uppercase tracking-widest mb-3">Inclus dans l'offre</h4>
-          <ul class="space-y-2 font-medium text-hsa text-[13px]">
-            <li v-for="feature in tier.features" :key="feature" class="flex items-start gap-2">
-              <IconCircleCheck class="w-4 h-4 text-secondary/70 shrink-0 mt-0.5" />
-              <span>{{ feature }}</span>
-            </li>
-          </ul>
         </div>
 
         <div class="mt-auto pt-6 border-t border-ash/10">
@@ -70,7 +63,7 @@
 </template>
 
 <script setup lang="ts">
-import { IconCircleCheck, IconWebhook, IconUsers, IconDatabase, IconArrowRight } from '@tabler/icons-vue'
+import { IconCircleCheck } from '@tabler/icons-vue'
 import { apiTiers } from '~/utils/pricing'
 const tiers = apiTiers
 </script>

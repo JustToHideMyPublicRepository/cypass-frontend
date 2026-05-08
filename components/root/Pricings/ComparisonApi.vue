@@ -1,12 +1,12 @@
 <template>
   <div class="bg-ash/20 backdrop-blur-xl rounded-[4rem] border border-ash/50 overflow-hidden animate-fade-up">
     <div class="p-8 md:p-12">
-      <h2 class="text-2xl font-black text-BtW mb-10 flex items-center gap-4">
+      <h3 class="mb-10 flex items-center gap-4">
         <div class="w-10 h-10 rounded-2xl bg-secondary/10 flex items-center justify-center text-secondary">
           <IconCode class="w-6 h-6" />
         </div>
         Comparatif des offres API
-      </h2>
+      </h3>
 
       <div class="overflow-auto max-h-[65vh] rounded-xl ring-1 ring-ash/5">
         <table class="w-full text-left border-collapse min-w-[600px] relative">
