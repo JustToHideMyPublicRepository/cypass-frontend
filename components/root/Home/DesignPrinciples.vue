@@ -13,16 +13,11 @@
 
         <div class="relative z-10">
           <div class="max-w-3xl">
-            <span class="font-mono text-[10px] md:text-11px text-primary uppercase tracking-[0.2em] mb-4 block">
+            <span class="font-code text-[10px] text-primary uppercase tracking-[0.2em] mb-4 block">
               // Principes fondateurs
             </span>
-            <h2 class="text-3xl md:text-4xl lg:text-5xl font-black text-BtW leading-[1.1] mb-6">
-              Conçu pour protéger.<br />
-              <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-success">
-                Par architecture.
-              </span>
-            </h2>
-            <p class="text-hsa text-base md:text-lg lg:text-xl leading-relaxed max-w-2xl mb-12">
+            <h2 class="mb-4"> Conçu pour protéger.<br /> <span class="text-success">Par architecture.</span> </h2>
+            <p class="max-w-2xl mb-4">
               La sécurité et la confidentialité ne sont pas des options dans CYPASS ; elles sont intégrées dès la
               conception et à chaque couche du système.
             </p>
@@ -38,10 +33,10 @@
                   <IconShield class="w-6 h-6" />
                 </div>
                 <div>
-                  <span class="font-mono text-[10px] text-primary uppercase tracking-widest block mb-1">
+                  <span class="font-code text-[10px] text-primary uppercase tracking-widest block mb-1">
                     // Security by design
                   </span>
-                  <span class="text-lg font-bold text-BtW">Sécurité structurelle</span>
+                  <span class="font-bold">Sécurité structurelle</span>
                 </div>
               </div>
 
@@ -51,7 +46,7 @@
                     class="w-5 h-5 rounded-full bg-success/10 border border-success/30 flex items-center justify-center text-success flex-shrink-0 mt-0.5 group-hover/item:bg-success group-hover/item:text-white transition-all duration-300">
                     <IconCheck class="w-3 h-3 stroke-[3]" />
                   </div>
-                  <span class="text-sm md:text-base text-hsa leading-snug group-hover/item:text-BtW transition-colors">
+                  <span class="group-hover/item:text-BtW transition-colors">
                     {{ item }}
                   </span>
                 </li>
@@ -67,10 +62,10 @@
                   <IconEye class="w-6 h-6" />
                 </div>
                 <div>
-                  <span class="font-mono text-[10px] text-warning uppercase tracking-widest block mb-1">
+                  <span class="font-code text-[10px] text-warning uppercase tracking-widest block mb-1">
                     // Privacy by design
                   </span>
-                  <span class="text-lg font-bold text-BtW">Confidentialité native</span>
+                  <span class="font-bold">Confidentialité native</span>
                 </div>
               </div>
 
@@ -80,7 +75,7 @@
                     class="w-5 h-5 rounded-full bg-success/10 border border-success/30 flex items-center justify-center text-success flex-shrink-0 mt-0.5 group-hover/item:bg-success group-hover/item:text-white transition-all duration-300">
                     <IconCheck class="w-3 h-3 stroke-[3]" />
                   </div>
-                  <span class="text-sm md:text-base text-hsa leading-snug group-hover/item:text-BtW transition-colors">
+                  <span class="group-hover/item:text-BtW transition-colors">
                     {{ item }}
                   </span>
                 </li>
