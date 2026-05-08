@@ -45,12 +45,10 @@
           </div>
 
           <div class="relative z-10 flex-grow">
-            <h3 class="text-2xl md:text-3xl font-bold mb-2 md:mb-3 group-hover:text-primary transition-colors">
+            <h4 class="mb-2 group-hover:text-primary transition-colors">
               {{ service.title }}
-            </h3>
-            <p class="text-hsa leading-relaxed text-sm md:text-base mb-4 md:mb-6">
-              {{ service.description }}
-            </p>
+            </h4>
+            <p class="mb-4"> {{ service.description }} </p>
 
             <!-- Mini Specs / Fonctionnalités -->
             <div class="grid grid-cols-2 gap-2 md:gap-3 mb-4 md:mb-6">
@@ -65,20 +63,14 @@
 
           <!-- Action / Bientôt Disponible -->
           <div class="relative z-10 mt-auto pt-4 md:pt-6 border-t border-ash">
-            <UiBaseButton v-if="service.status === 'available'" :to="`/modules/${service.id}`" variant="ghost"
-              class="!w-full !py-2.5 md:!py-3 !rounded-xl !font-bold !text-xs md:!text-sm transition-all duration-300 group-hover:shadow-lg !flex !items-center !justify-center !gap-2 !h-auto"
-              :class="service.theme === 'blue'
-                ? '!bg-primary/10 !text-primary hover:!bg-primary hover:!text-white'
-                : '!bg-success/10 !text-success hover:!bg-success hover:!text-white'">
+            <UiBaseButton v-if="service.status === 'available'" :to="`/modules/${service.id}`" variant="accent">
               <span>Explorer le module</span>
               <IconArrowRight class="w-3.5 h-3.5 md:w-4 md:h-4" />
             </UiBaseButton>
-            <UiBaseButton v-else :to="`/modules/${service.id}`" variant="ghost"
-              class="!w-full !py-2.5 md:!py-3 !rounded-xl !bg-ash !text-slate-400 !font-bold !text-xs md:!text-sm !text-center !border border-ash hover:!bg-ashAct/10 hover:!text-hsa transition-colors !h-auto">
-              Bientôt Disponible
+            <UiBaseButton v-else :to="`/modules/${service.id}`" variant="ghost">
+              Bientôt disponible
             </UiBaseButton>
           </div>
-
         </div>
       </UiAppFrame>
     </div>

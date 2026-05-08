@@ -8,25 +8,11 @@
           <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
           <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
         </span>
-        <span class="text-[10px] md:text-xs font-bold uppercase tracking-widest text-hsa">Catalogue de Services
-          v2.0</span>
+        <span class="text-[10px] md:text-xs font-bold uppercase tracking-widest text-hsa">Catalogue de Services</span>
       </div>
 
-      <h1 class="text-4xl md:text-7xl font-black tracking-tighter leading-tight">
-        Solutions de
-        <br />
-        <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary via-success to-secondary relative">
-          Confiance Numérique
-          <svg class="absolute w-full h-3 -bottom-1 left-0 text-primary opacity-30 hidden md:block" viewBox="0 0 200 9"
-            fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M2.00025 6.99997C25.7509 9.37523 78.9113 9.81705 112.225 4.88566C145.539 -0.0457375 186.257 0.999738 198.001 2.99996"
-              stroke="currentColor" stroke-width="3" stroke-linecap="round" />
-          </svg>
-        </span>
-      </h1>
-      <p class="text-base md:text-xl text-hsa max-w-2xl mx-auto leading-relaxed font-light">
-        Une suite complète d'outils souverains pour sécuriser, certifier et surveiller votre écosystème numérique.
+      <h2> Solutions de <span class="text-primary font-handwritting">confiance numérique </span> </h2>
+      <p> Une suite complète d'outils souverains pour sécuriser, certifier et surveiller votre écosystème numérique.
       </p>
     </div>
 
@@ -35,8 +21,8 @@
       class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 py-6 md:py-8 border-y border-hsa/50 backdrop-blur-sm animate-fade-up"
       style="animation-delay: 100ms;">
       <div v-for="stat in stats" :key="stat.label" class="text-center">
-        <div class="text-2xl md:text-3xl font-bold mb-1">{{ stat.value }}</div>
-        <div class="text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-hsa/70">{{ stat.label }}</div>
+        <h3>{{ stat.value }}</h3>
+        <p>{{ stat.label }}</p>
       </div>
     </div>
   </div>

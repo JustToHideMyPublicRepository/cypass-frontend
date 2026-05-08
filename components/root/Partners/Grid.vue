@@ -13,10 +13,11 @@
             </template>
             <span v-else>{{ partner.initials || partner.name.charAt(0) }}</span>
           </div>
-          <h3 class="text-xl font-bold mb-2">{{ partner.name }}</h3>
-          <p class="text-sm text-hsa mb-6">{{ partner.role }}</p>
-          <UiBaseButton :href="partner.website" target="_blank" variant="secondary" class="text-xs px-4 py-2">Visiter le
-            site</UiBaseButton>
+          <h4 class="mb-2">{{ partner.name }}</h4>
+          <p class="mb-6">{{ partner.role }}</p>
+          <UiBaseButton :href="partner.website" target="_blank" variant="secondary" class="text-xs px-4 py-2">
+            Visiter le site
+          </UiBaseButton>
         </div>
       </UiAppFrame>
     </div>
