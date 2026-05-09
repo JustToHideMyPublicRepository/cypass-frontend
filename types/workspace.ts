@@ -1,5 +1,5 @@
 export type WorkspaceStatus = 'default' | 'active' | 'trashed' | 'archived'
-export type WorkspaceType = 'personal' | 'pme'
+export type WorkspaceType = 'personal' | 'pme' | 'institution' | 'cabinet' | 'other'
 export type WorkspaceRole = 'owner' | 'admin' | 'editor' | 'reader'
 
 export interface Workspace {
