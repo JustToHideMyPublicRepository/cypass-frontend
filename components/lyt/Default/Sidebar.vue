@@ -23,11 +23,17 @@
               <p class="text-sm font-semibold text-BtW truncate leading-tight">
                 {{ wsStore.activeWorkspace?.name || 'Workspace' }}
               </p>
-              <p class="text-[10px] text-hsa truncate">
-                {{ getWorkspaceTypeLabel(wsStore.activeWorkspace?.type) }}
-                <span v-if="wsStore.activeWorkspace?.role" class="text-primary/70">· {{ getWorkspaceRoleLabel(wsStore.activeWorkspace.role)
-                }}</span>
-              </p>
+              <div class="flex items-center gap-1.5 overflow-hidden">
+                <span class="flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-bold tracking-tight bg-ash/50 text-hsa border border-ash/20">
+                  <component :is="WORKSPACE_TYPE_CONFIG[wsStore.activeWorkspace?.type || 'personal'].icon" class="w-2.5 h-2.5" />
+                  {{ getWorkspaceTypeLabel(wsStore.activeWorkspace?.type) }}
+                </span>
+                <span v-if="wsStore.activeWorkspace?.role" 
+                  class="flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-bold tracking-tight bg-primary/10 text-primary border border-primary/20">
+                  <component :is="WORKSPACE_ROLE_CONFIG[wsStore.activeWorkspace.role].icon" class="w-2.5 h-2.5" />
+                  {{ getWorkspaceRoleLabel(wsStore.activeWorkspace.role) }}
+                </span>
+              </div>
             </div>
             <IconChevronDown v-if="!wsStore.isSwitcherOpen" class="w-4 h-4 text-hsa shrink-0 group-hover:text-BtW transition-colors" />
             <IconChevronUp v-else class="w-4 h-4 text-hsa shrink-0 group-hover:text-BtW transition-colors" />
@@ -67,10 +73,13 @@
             </div>
             <div class="min-w-0 flex-1">
               <p class="text-xs font-medium truncate">{{ ws.name }}</p>
-              <p class="text-[9px] opacity-60">{{ getWorkspaceTypeLabel(ws.type) }}
-                <span v-if="ws.members_count"> · {{ ws.members_count }} membre{{ ws.members_count > 1 ? 's' : ''
-                }}</span>
-              </p>
+              <div class="flex items-center gap-1.5 mt-0.5">
+                <span class="text-[9px] text-hsa/60 flex items-center gap-1">
+                  <component :is="WORKSPACE_TYPE_CONFIG[ws.type].icon" class="w-2.5 h-2.5" />
+                  {{ getWorkspaceTypeLabel(ws.type) }}
+                </span>
+                <span v-if="ws.members_count" class="text-[9px] text-hsa/40">· {{ ws.members_count }} membre{{ ws.members_count > 1 ? 's' : '' }}</span>
+              </div>
             </div>
             <!-- Active indicator -->
             <div v-if="ws.id === wsStore.activeWorkspaceId" class="w-1.5 h-1.5 rounded-full bg-primary shrink-0"></div>
@@ -193,7 +202,7 @@ import { getLinkTooltip } from '~/data/shortcuts'
 import { useProfilStore } from '~/stores/back/user/profil'
 import { useWorkspaceStore } from '~/stores/back/user/workspace'
 import { getPlanInfo, getPlanBadgeClass } from '~/utils/pricing'
-import { getWorkspaceLogoUrl, getWorkspaceRoleLabel, getWorkspaceTypeLabel } from '~/utils/workspace'
+import { getWorkspaceLogoUrl, getWorkspaceRoleLabel, getWorkspaceTypeLabel, WORKSPACE_TYPE_CONFIG, WORKSPACE_ROLE_CONFIG } from '~/utils/workspace'
 import type { Workspace } from '~/types/workspace'
 
 const authStore = useAuthStore()

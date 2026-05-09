@@ -25,8 +25,9 @@
     <!-- Modale de déconnexion -->
     <ModalGlobalLogout :show="profilStore.isLogoutModalOpen" @close="profilStore.closeLogoutModal()"
       @confirm="confirmLogout" />
+
     <!-- Modale de création de workspace -->
-    <LytDefaultWorkspaceModal />
+    <ModalWorkspace />
   </div>
 </template>
 
