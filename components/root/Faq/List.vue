@@ -5,10 +5,10 @@
       <div class="space-y-8 md:space-y-12">
         <div v-for="(category, catIndex) in categories" :key="catIndex" class="animate-fade-up"
           :style="{ animationDelay: `${200 + catIndex * 100}ms` }">
-          <h2 class="flex items-center gap-3 text-xl md:text-2xl font-bold mb-6 md:mb-8">
+          <h4 class="flex items-center gap-3 mb-6">
             <span class="w-8 h-1 bg-gradient-to-r from-primary to-transparent rounded-full"></span>
             {{ category.title }}
-          </h2>
+          </h4>
 
           <div class="space-y-3 md:space-y-4">
             <div v-for="(item, index) in category.items" :key="index"
