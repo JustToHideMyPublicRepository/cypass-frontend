@@ -13,14 +13,9 @@
           :class="{ 'justify-center': isCollapsed }"
           :title="isCollapsed ? (wsStore.activeWorkspace?.name || 'Workspaces') : ''">
           <!-- Workspace Avatar -->
-          <div
-            class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 text-sm font-bold shadow-sm transition-all duration-200"
-            :class="wsStore.activeWorkspace?.logo_url
-              ? 'bg-WtB border border-ash p-0.5'
-              : 'bg-gradient-to-br from-primary/80 to-secondary/80 text-white'">
-            <img v-if="wsStore.activeWorkspace?.logo_url" :src="wsStore.activeWorkspace.logo_url"
-              :alt="wsStore.activeWorkspace.name" class="w-full h-full object-cover rounded-md" />
-            <span v-else>{{ wsStore.workspaceInitial }}</span>
+          <div class="w-8 h-8 rounded-lg overflow-hidden shrink-0 shadow-sm transition-all duration-200 border border-ash">
+            <img :src="getWorkspaceLogoUrl(wsStore.activeWorkspace?.logo_url, wsStore.activeWorkspace?.name)"
+              :alt="wsStore.activeWorkspace?.name || 'Workspace'" class="w-full h-full object-cover" />
           </div>
           <!-- Name + Chevron -->
           <div v-show="!isCollapsed" class="flex items-center gap-1 min-w-0 flex-1">
@@ -28,13 +23,14 @@
               <p class="text-sm font-semibold text-BtW truncate leading-tight">
                 {{ wsStore.activeWorkspace?.name || 'Workspace' }}
               </p>
-              <p class="text-[10px] text-hsa truncate capitalize">
-                {{ wsStore.activeWorkspace?.type || '' }}
-                <span v-if="wsStore.activeWorkspace?.role" class="text-primary/70">· {{ wsStore.activeWorkspace.role
+              <p class="text-[10px] text-hsa truncate">
+                {{ getWorkspaceTypeLabel(wsStore.activeWorkspace?.type) }}
+                <span v-if="wsStore.activeWorkspace?.role" class="text-primary/70">· {{ getWorkspaceRoleLabel(wsStore.activeWorkspace.role)
                 }}</span>
               </p>
             </div>
-            <IconSelector class="w-4 h-4 text-hsa shrink-0 group-hover:text-BtW transition-colors" />
+            <IconChevronDown v-if="!wsStore.isSwitcherOpen" class="w-4 h-4 text-hsa shrink-0 group-hover:text-BtW transition-colors" />
+            <IconChevronUp v-else class="w-4 h-4 text-hsa shrink-0 group-hover:text-BtW transition-colors" />
           </div>
         </button>
 
@@ -66,15 +62,12 @@
               : 'text-hsa hover:bg-ash/50 hover:text-BtW'
           ]">
             <!-- Mini Avatar -->
-            <div class="w-6 h-6 rounded-md flex items-center justify-center shrink-0 text-[10px] font-bold" :class="ws.logo_url
-              ? 'bg-WtB border border-ash p-0.5'
-              : 'bg-gradient-to-br from-primary/60 to-secondary/60 text-white'">
-              <img v-if="ws.logo_url" :src="ws.logo_url" :alt="ws.name" class="w-full h-full object-cover rounded" />
-              <span v-else>{{ ws.name.charAt(0).toUpperCase() }}</span>
+            <div class="w-6 h-6 rounded-md overflow-hidden shrink-0 border border-ash/50">
+              <img :src="getWorkspaceLogoUrl(ws.logo_url, ws.name)" :alt="ws.name" class="w-full h-full object-cover" />
             </div>
             <div class="min-w-0 flex-1">
               <p class="text-xs font-medium truncate">{{ ws.name }}</p>
-              <p class="text-[9px] opacity-60 capitalize">{{ ws.type }}
+              <p class="text-[9px] opacity-60">{{ getWorkspaceTypeLabel(ws.type) }}
                 <span v-if="ws.members_count"> · {{ ws.members_count }} membre{{ ws.members_count > 1 ? 's' : ''
                 }}</span>
               </p>
@@ -194,12 +187,13 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useRoute } from 'nuxt/app'
-import { IconLayoutDashboard as IconDashboard, IconCalendar, IconLogout, IconChevronLeft, IconChevronRight, IconSelector, IconPlus } from '@tabler/icons-vue'
+import { IconLayoutDashboard as IconDashboard, IconCalendar, IconLogout, IconChevronLeft, IconChevronRight, IconChevronDown, IconChevronUp, IconPlus } from '@tabler/icons-vue'
 import { modules } from '@/data/modules'
 import { getLinkTooltip } from '~/data/shortcuts'
 import { useProfilStore } from '~/stores/back/user/profil'
 import { useWorkspaceStore } from '~/stores/back/user/workspace'
 import { getPlanInfo, getPlanBadgeClass } from '~/utils/pricing'
+import { getWorkspaceLogoUrl, getWorkspaceRoleLabel, getWorkspaceTypeLabel } from '~/utils/workspace'
 import type { Workspace } from '~/types/workspace'
 
 const authStore = useAuthStore()

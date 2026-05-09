@@ -1,10 +1,11 @@
-export type WorkspaceStatus = 'default' | 'active'
+export type WorkspaceStatus = 'default' | 'active' | 'trashed' | 'archived'
 export type WorkspaceType = 'personal' | 'pme'
-export type WorkspaceRole = 'owner' | 'admin' | 'member'
+export type WorkspaceRole = 'owner' | 'admin' | 'editor' | 'reader'
 
 export interface Workspace {
   id: string
   name: string
+  slug?: string
   status: WorkspaceStatus
   type: WorkspaceType
   logo_url: string | null
