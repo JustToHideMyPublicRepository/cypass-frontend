@@ -25,6 +25,8 @@
     <!-- Modale de déconnexion -->
     <ModalGlobalLogout :show="profilStore.isLogoutModalOpen" @close="profilStore.closeLogoutModal()"
       @confirm="confirmLogout" />
+    <!-- Modale de création de workspace -->
+    <LytDefaultWorkspaceModal />
   </div>
 </template>
 
@@ -32,12 +34,14 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useAuthStore } from '~/stores/back/user/auth'
 import { useProfilStore } from '~/stores/back/user/profil'
+import { useWorkspaceStore } from '~/stores/back/user/workspace'
 import { useToastStore } from '~/stores/front/toast'
 
 const isOpen = ref(false)
 const isCollapsed = ref(false)
 const authStore = useAuthStore()
 const profilStore = useProfilStore()
+const workspaceStore = useWorkspaceStore()
 const toastStore = useToastStore()
 
 onMounted(async () => {
@@ -48,6 +52,11 @@ onMounted(async () => {
 
   if (authStore.user && !profilStore.profile) {
     await profilStore.getProfile()
+  }
+
+  // Initialiser les workspaces
+  if (authStore.user && !workspaceStore.hasWorkspaces) {
+    await workspaceStore.initWorkspace()
   }
 })
 
