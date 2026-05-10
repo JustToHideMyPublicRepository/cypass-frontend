@@ -26,70 +26,71 @@
       </UiBaseCard>
     </div>
 
-    <div v-else-if="store.workspaces.length" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div v-else-if="store.workspaces.length" class="grid grid-cols-1 gap-4">
       <UiBaseCard v-for="ws in store.workspaces" :key="ws.id" 
-        class="group/ws transition-all hover:shadow-xl border-ash/30 bg-WtB overflow-hidden relative"
-        :class="{ 'ring-1 ring-primary/40 border-primary/20': ws.id === store.activeWorkspaceId }">
+        class="group/ws transition-all hover:shadow-lg border-ash/30 bg-WtB p-4 flex items-center justify-between gap-4 relative overflow-hidden"
+        :class="{ 'ring-1 ring-primary/40 !bg-primary/5': ws.id === store.activeWorkspaceId }">
         
         <!-- Active Indicator Tip -->
-        <div v-if="ws.id === store.activeWorkspaceId" class="absolute top-0 left-0 w-1 h-full bg-primary"></div>
+        <div v-if="ws.id === store.activeWorkspaceId" class="absolute left-0 top-0 bottom-0 w-1 bg-primary"></div>
 
-        <div class="p-5 space-y-4">
-          <!-- Header: Logo & Name -->
-          <div class="flex items-center gap-3 min-w-0">
-            <NuxtLink :to="`/dashboard/manage/workspace/${ws.id}`" class="w-11 h-11 rounded-xl overflow-hidden border border-ash bg-ash/10 shrink-0 shadow-sm block hover:ring-2 hover:ring-primary/20 transition-all">
-              <img :src="getWorkspaceLogoUrl(ws.logo_url, ws.name)" :alt="ws.name" class="w-full h-full object-cover" />
-            </NuxtLink>
-            <div class="min-w-0 flex-1">
-              <NuxtLink :to="`/dashboard/manage/workspace/${ws.id}`" class="text-sm font-black text-BtW truncate leading-tight hover:text-primary transition-colors block tracking-tight">
+        <div class="flex items-center gap-4 flex-1 min-w-0">
+          <!-- Logo -->
+          <NuxtLink :to="`/dashboard/manage/workspace/${ws.id}`" 
+            class="w-12 h-12 rounded-xl overflow-hidden border border-ash bg-ash/10 shrink-0 shadow-sm block hover:ring-2 hover:ring-primary/20 transition-all">
+            <img :src="getWorkspaceLogoUrl(ws.logo_url, ws.name)" :alt="ws.name" class="w-full h-full object-cover" />
+          </NuxtLink>
+
+          <!-- Info -->
+          <div class="min-w-0 flex-1">
+            <div class="flex items-center gap-2">
+              <NuxtLink :to="`/dashboard/manage/workspace/${ws.id}`" 
+                class="text-sm font-black text-BtW truncate leading-tight hover:text-primary transition-colors block tracking-tight">
                 {{ ws.name }}
               </NuxtLink>
-              <div v-if="ws.status === 'default'" class="flex items-center gap-1 mt-0.5">
-                <span class="text-[8px] font-black text-hsa uppercase tracking-widest bg-ash/20 px-1.2 py-0.2 rounded leading-none">Par défaut</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Attributes Line (Type, Role, Members) -->
-          <div class="flex flex-wrap items-center gap-2">
-            <!-- Type Badge -->
-            <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-lg bg-ash/10 border border-ash/20 text-[9px] font-bold text-hsa shadow-sm">
-              <component :is="WORKSPACE_TYPE_CONFIG[ws.type || 'personal'].icon" class="w-2.5 h-2.5 text-primary" />
-              {{ getWorkspaceTypeLabel(ws.type) }}
-            </span>
-
-            <!-- Role Badge -->
-            <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-lg bg-primary/5 border border-primary/10 text-[9px] font-bold text-primary shadow-sm uppercase tracking-wider">
-              <component :is="WORKSPACE_ROLE_CONFIG[ws.role || 'reader']?.icon" class="w-2.5 h-2.5" />
-              {{ getWorkspaceRoleLabel(ws.role) }}
-            </span>
-
-            <!-- Members Count -->
-            <span class="text-[9px] font-bold text-hsa/60 ml-auto whitespace-nowrap">
-              <IconUsers class="w-2.5 h-2.5 inline mr-1" />
-              {{ ws.members_count || 1 }} {{ (ws.members_count || 1) > 1 ? 'membres' : 'membre' }}
-            </span>
-          </div>
-
-          <!-- Actions (Inline) -->
-          <div class="flex items-center gap-2 pt-3 border-t border-ash/30">
-            <UiBaseButton @click="store.openModal(ws)" variant="ghost" size="xs" class="flex-1 !rounded-xl hover:!bg-primary/5 hover:text-primary !py-2 border border-ash/20 hover:border-primary/20 transition-all font-bold text-[10px]">
-              <IconEdit class="w-3 h-3 mr-1.5" /> Modifier
-            </UiBaseButton>
-            
-            <UiBaseButton v-if="!ws.is_default" @click="handleSetDefault(ws.id)" variant="ghost" size="xs" 
-              class="flex-1 !rounded-xl hover:!bg-warning/5 hover:text-warning !py-2 border border-ash/20 hover:border-warning/20 transition-all font-bold text-hsa text-[10px]">
-              <IconStar class="w-3 h-3 mr-1.5" /> Par défaut
-            </UiBaseButton>
-            <div v-else class="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-warning/5 border border-warning/20 text-warning font-black text-[10px] uppercase tracking-wider">
-               <IconStarFilled class="w-2.5 h-2.5" /> Défaut
+              <span v-if="ws.is_default" class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-warning/10 text-[9px] font-black text-warning uppercase tracking-widest border border-warning/20">
+                <IconStarFilled class="w-2.5 h-2.5" /> Par défaut
+              </span>
             </div>
 
-            <UiBaseButton v-if="ws.role === 'owner' && !ws.is_default" @click="confirmDelete(ws)" variant="ghost" size="xs" 
-              class="flex-1 !rounded-xl hover:!bg-danger/5 hover:text-danger !py-2 border border-ash/20 hover:border-danger/20 transition-all font-bold text-hsa text-[10px]">
-              <IconTrash class="w-3 h-3 mr-1.5" /> Supprimer
-            </UiBaseButton>
+            <div class="flex items-center gap-4 mt-2">
+              <span class="inline-flex items-center gap-1.5 text-[10px] font-bold text-hsa">
+                <component :is="WORKSPACE_TYPE_CONFIG[ws.type || 'personal'].icon" class="w-3.5 h-3.5 text-primary" />
+                {{ getWorkspaceTypeLabel(ws.type) }}
+              </span>
+
+              <span class="inline-flex items-center gap-1.5 text-[10px] font-bold text-primary uppercase tracking-wider">
+                <component :is="WORKSPACE_ROLE_CONFIG[ws.role || 'reader']?.icon" class="w-3.5 h-3.5" />
+                {{ getWorkspaceRoleLabel(ws.role) }}
+              </span>
+
+              <span class="inline-flex items-center gap-1.5 text-[10px] font-bold text-hsa/60 whitespace-nowrap">
+                <IconUsers class="w-3.5 h-3.5" />
+                {{ ws.members_count || 1 }}
+              </span>
+            </div>
           </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex items-center gap-2 shrink-0">
+          <UiBaseButton @click="store.openModal(ws)" variant="ghost" size="xs" 
+            class="!rounded-xl hover:!bg-primary/5 hover:text-primary !py-2 px-3 border border-ash/20 hover:border-primary/20 transition-all font-bold text-[10px]" title="Modifier">
+            <IconEdit class="w-4 h-4 md:mr-1.5" />
+            <span class="hidden md:inline">Modifier</span>
+          </UiBaseButton>
+          
+          <UiBaseButton v-if="!ws.is_default" @click="handleSetDefault(ws.id)" variant="ghost" size="xs" 
+            class="!rounded-xl hover:!bg-warning/5 hover:text-warning !py-2 px-3 border border-ash/20 hover:border-warning/20 transition-all font-bold text-hsa text-[10px]" title="Définir par défaut">
+            <IconStar class="w-4 h-4 md:mr-1.5" />
+            <span class="hidden md:inline">Par défaut</span>
+          </UiBaseButton>
+
+          <UiBaseButton v-if="ws.role === 'owner' && !ws.is_default" @click="confirmDelete(ws)" variant="ghost" size="xs" 
+            class="!rounded-xl hover:!bg-danger/5 hover:text-danger !py-2 px-3 border border-ash/20 hover:border-danger/20 transition-all font-bold text-hsa text-[10px]" title="Supprimer">
+            <IconTrash class="w-4 h-4 md:mr-1.5" />
+            <span class="hidden md:inline">Supprimer</span>
+          </UiBaseButton>
         </div>
       </UiBaseCard>
     </div>

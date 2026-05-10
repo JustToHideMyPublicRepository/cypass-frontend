@@ -1,5 +1,5 @@
 <template>
-  <div class="shrink-0 border-b border-ash bg-ash/10 transition-colors duration-300">
+  <div class="shrink-0 border-b border-ash transition-colors duration-300">
     <!-- Workspace Button -->
     <div class="h-16 flex items-center px-3 gap-2">
       <!-- Skeleton Loading State -->
@@ -36,6 +36,12 @@
                     class="w-2.5 h-2.5" />
                   {{ getWorkspaceTypeLabel(wsStore.activeWorkspace?.type) }}
                 </span>
+                <span v-if="wsStore.activeWorkspace?.role"
+                  class="flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-bold tracking-tight bg-primary/10 text-primary border border-primary/20">
+                  <component :is="WORKSPACE_ROLE_CONFIG[wsStore.activeWorkspace?.role || 'reader'].icon"
+                    class="w-2.5 h-2.5" />
+                  {{ getWorkspaceRoleLabel(wsStore.activeWorkspace?.role) }}
+                </span>
               </div>
             </div>
             <IconChevronDown v-if="!wsStore.isSwitcherOpen"
@@ -55,7 +61,7 @@
       enter-to-class="opacity-100 scale-y-100" leave-active-class="transition duration-150 ease-in origin-top"
       leave-from-class="opacity-100 scale-y-100" leave-to-class="opacity-0 scale-y-95">
       <div v-if="wsStore.isSwitcherOpen && !isCollapsed"
-        class="border-t border-ash bg-WtB px-3 py-2 space-y-1 max-h-64 overflow-y-auto no-scrollbar">
+        class="border-t border-ash bg-ashAct/10 px-3 py-2 space-y-1 max-h-64 overflow-y-auto no-scrollbar">
         <!-- Actions Grid (Top) -->
         <div class="grid grid-cols-2 gap-2 pb-2 mb-2 border-b border-ash/50">
           <button @click="wsStore.openModal()" title="Nouveau workspace"
