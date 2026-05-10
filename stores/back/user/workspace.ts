@@ -12,7 +12,8 @@ export const useWorkspaceStore = defineStore('workspace', {
     createLoading: false,
     error: null as string | null,
     message: null as string | null,
-    isCreateModalOpen: false,
+    isModalOpen: false,
+    editingWorkspace: null as Workspace | null,
     isSwitcherOpen: false
   }),
 
@@ -135,6 +136,80 @@ export const useWorkspaceStore = defineStore('workspace', {
       }
     },
 
+    // Mettre à jour un workspace
+    async updateWorkspace(id: string, payload: CreateWorkspacePayload) {
+      this.createLoading = true
+      this.error = null
+      this.message = null
+      try {
+        const formData = new FormData()
+        formData.append('name', payload.name)
+        formData.append('type', payload.type)
+        if (payload.logo) formData.append('logo', payload.logo)
+        if (payload.rccm) formData.append('rccm', payload.rccm)
+        if (payload.ifu) formData.append('ifu', payload.ifu)
+        if (payload.country) formData.append('country', payload.country)
+
+        const response = await $fetch<{ success: boolean; message: string; workspace: Workspace }>(`/api/user/workspace/update`, {
+          method: 'PUT',
+          query: { id },
+          body: formData
+        })
+
+        if (response.success) {
+          this.message = response.message
+          // Mettre à jour dans la liste
+          const index = this.workspaces.findIndex(w => w.id === id)
+          if (index !== -1) {
+            this.workspaces[index] = response.workspace
+          }
+          // Si c'est le workspace actif, mettre à jour la référence
+          if (this.activeWorkspace?.id === id) {
+            this.activeWorkspace = response.workspace
+          }
+          this.isModalOpen = false
+          this.editingWorkspace = null
+          return true
+        }
+        this.error = response.message
+        return false
+      } catch (err: any) {
+        this.error = err.data?.message || 'Erreur lors de la mise à jour du workspace'
+        return false
+      } finally {
+        this.createLoading = false
+      }
+    },
+
+    // Supprimer (archiver) un workspace
+    async deleteWorkspace(id: string) {
+      this.loading = true
+      this.error = null
+      try {
+        const response = await $fetch<{ success: boolean; message: string }>(`/api/user/workspace/delete`, {
+          method: 'DELETE',
+          query: { id }
+        })
+
+        if (response.success) {
+          this.message = response.message
+          // Retirer de la liste
+          this.workspaces = this.workspaces.filter(w => w.id !== id)
+          // Si c'était le workspace actif, basculer sur un autre
+          if (this.activeWorkspace?.id === id) {
+            this.initWorkspace()
+          }
+          return true
+        }
+        return false
+      } catch (err: any) {
+        this.error = err.data?.message || 'Erreur lors de la suppression du workspace'
+        return false
+      } finally {
+        this.loading = false
+      }
+    },
+
     // Ouvrir/fermer le switcher
     toggleSwitcher() {
       this.isSwitcherOpen = !this.isSwitcherOpen
@@ -144,14 +219,16 @@ export const useWorkspaceStore = defineStore('workspace', {
       this.isSwitcherOpen = false
     },
 
-    // Ouvrir/fermer la modale de création
-    openCreateModal() {
-      this.isCreateModalOpen = true
+    // Ouvrir/fermer la modale
+    openModal(workspace: Workspace | null = null) {
+      this.editingWorkspace = workspace
+      this.isModalOpen = true
       this.isSwitcherOpen = false
     },
 
-    closeCreateModal() {
-      this.isCreateModalOpen = false
+    closeModal() {
+      this.isModalOpen = false
+      this.editingWorkspace = null
       this.error = null
     }
   }

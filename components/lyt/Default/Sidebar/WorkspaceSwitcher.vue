@@ -20,7 +20,8 @@
             :class="{ 'justify-center': isCollapsed }"
             :title="isCollapsed ? (wsStore.activeWorkspace?.name || 'Workspaces') : ''">
             <!-- Workspace Avatar -->
-            <div class="w-8 h-8 rounded-lg overflow-hidden shrink-0 shadow-sm transition-all duration-200 border border-ash">
+            <div
+              class="w-8 h-8 rounded-lg overflow-hidden shrink-0 shadow-sm transition-all duration-200 border border-ash">
               <img :src="getWorkspaceLogoUrl(wsStore.activeWorkspace?.logo_url, wsStore.activeWorkspace?.name)"
                 :alt="wsStore.activeWorkspace?.name || 'Workspace'" class="w-full h-full object-cover" />
             </div>
@@ -60,10 +61,9 @@
     </div>
 
     <!-- Workspace Dropdown -->
-    <Transition enter-active-class="transition duration-200 ease-out origin-top"
-      enter-from-class="opacity-0 scale-y-95" enter-to-class="opacity-100 scale-y-100"
-      leave-active-class="transition duration-150 ease-in origin-top" leave-from-class="opacity-100 scale-y-100"
-      leave-to-class="opacity-0 scale-y-95">
+    <Transition enter-active-class="transition duration-200 ease-out origin-top" enter-from-class="opacity-0 scale-y-95"
+      enter-to-class="opacity-100 scale-y-100" leave-active-class="transition duration-150 ease-in origin-top"
+      leave-from-class="opacity-100 scale-y-100" leave-to-class="opacity-0 scale-y-95">
       <div v-if="wsStore.isSwitcherOpen && !isCollapsed"
         class="border-t border-ash bg-WtB px-3 py-2 space-y-1 max-h-64 overflow-y-auto no-scrollbar">
         <!-- Search -->
@@ -98,15 +98,23 @@
           <div v-if="ws.id === wsStore.activeWorkspaceId" class="w-1.5 h-1.5 rounded-full bg-primary shrink-0"></div>
         </button>
 
-        <!-- Divider + Create -->
-        <div class="border-t border-ash/50 pt-1.5 mt-1.5">
-          <button @click="wsStore.openCreateModal()"
+        <!-- Divider + Actions -->
+        <div class="border-t border-ash/50 pt-1.5 mt-1.5 space-y-1">
+          <button @click="wsStore.openModal()"
             class="flex items-center gap-2.5 w-full px-2.5 py-2 rounded-lg text-hsa hover:bg-primary/10 hover:text-primary transition-all duration-150">
             <div class="w-6 h-6 rounded-md border border-dashed border-current flex items-center justify-center">
               <IconPlus class="w-3.5 h-3.5" />
             </div>
             <span class="text-xs font-medium">Nouveau workspace</span>
           </button>
+
+          <NuxtLink to="/dashboard/manage/workspace" @click="wsStore.closeSwitcher()"
+            class="flex items-center gap-2.5 w-full px-2.5 py-2 rounded-lg text-hsa hover:bg-ash/50 hover:text-BtW transition-all duration-150">
+            <div class="w-6 h-6 rounded-md bg-ash/20 flex items-center justify-center">
+              <IconSettings class="w-3.5 h-3.5" />
+            </div>
+            <span class="text-xs font-medium">Gérer les workspaces</span>
+          </NuxtLink>
         </div>
       </div>
     </Transition>
@@ -120,7 +128,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { IconChevronDown, IconChevronUp, IconChevronLeft, IconPlus } from '@tabler/icons-vue'
+import { IconChevronDown, IconChevronUp, IconChevronLeft, IconPlus, IconSettings } from '@tabler/icons-vue'
 import { useWorkspaceStore } from '~/stores/back/user/workspace'
 import { getWorkspaceLogoUrl, getWorkspaceRoleLabel, getWorkspaceTypeLabel, WORKSPACE_TYPE_CONFIG, WORKSPACE_ROLE_CONFIG } from '~/utils/workspace'
 import type { Workspace } from '~/types/workspace'
