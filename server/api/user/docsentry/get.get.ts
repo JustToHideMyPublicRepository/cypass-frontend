@@ -17,6 +17,7 @@ export default defineEventHandler(async (event) => {
     const apiQuery: Record<string, any> = {}
     if (query.sort) apiQuery.sort = query.sort
     if (query.search) apiQuery.search = query.search
+    if (query.user_workspace_id) apiQuery.user_workspace_id = query.user_workspace_id
 
     const response: any = await $fetch(`${baseApi}/user/docsentry/get/${query.id}`, {
       method: 'GET',

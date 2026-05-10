@@ -20,7 +20,8 @@ export default defineEventHandler(async (event) => {
         'Authorization': `Bearer ${token}`,
         'accept': 'application/zip'
       },
-      responseType: 'blob'
+      responseType: 'blob',
+      query: getQuery(event)
     })
 
     return response

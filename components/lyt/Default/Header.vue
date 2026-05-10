@@ -118,6 +118,7 @@ const profilStore = useProfilStore()
 const route = useRoute()
 
 const isLinkActive = (path: string) => {
+  if (path === '/') return route.path === '/'
   return route.path === path || (path !== '/dashboard' && route.path.startsWith(path))
 }
 

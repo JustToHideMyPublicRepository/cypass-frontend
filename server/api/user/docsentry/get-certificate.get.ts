@@ -1,4 +1,4 @@
-import { defineEventHandler, getQuery, getCookie, createError } from 'h3'
+import { defineEventHandler, getQuery, getCookie, createError, appendHeader } from 'h3'
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig()
@@ -11,7 +11,8 @@ export default defineEventHandler(async (event) => {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`
-      }
+      },
+      query: getQuery(event)
     })
 
     const contentType = response.headers.get('content-type')

@@ -13,9 +13,7 @@ export default defineEventHandler(async (event) => {
         'Authorization': `Bearer ${token}`,
         'accept': 'application/json'
       },
-      query: {
-        ...query
-      }
+      query: getQuery(event)
     })
 
     return response
