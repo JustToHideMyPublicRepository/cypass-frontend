@@ -1,7 +1,7 @@
 <template>
   <div class="flex min-h-screen bg-bgClr transition-colors duration-300">
     <!-- Barre latérale -->
-    <LytDefaultSidebar :isOpen="isOpen" :isCollapsed="isCollapsed" @logout="handleLogout"
+    <LytDefaultSidebarMain :isOpen="isOpen" :isCollapsed="isCollapsed" @logout="handleLogout"
       @toggle-collapse="isCollapsed = !isCollapsed" @close="isOpen = false" />
 
     <!-- Superposition pour mobile -->

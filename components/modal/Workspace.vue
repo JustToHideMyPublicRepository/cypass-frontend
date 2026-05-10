@@ -8,71 +8,76 @@
           class="w-full px-4 py-3 rounded-xl bg-ash/30 border border-ash focus:border-primary focus:ring-1 focus:ring-primary/30 text-sm text-BtW placeholder:text-hsa/50 outline-none transition-all" />
       </div>
 
-      <!-- Type (dropdown/badge style) -->
-      <div class="space-y-1.5">
-        <label class="text-xs font-bold text-hsa uppercase tracking-wider">Type *</label>
-        <div class="relative group">
-          <div
-            class="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none transition-colors group-focus-within:text-primary">
-            <component :is="WORKSPACE_TYPE_CONFIG[form.type].icon" class="w-4 h-4 text-hsa" />
+      <!-- Type & Pays (Grid 2) -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Type -->
+        <div class="space-y-1.5">
+          <label class="text-xs font-bold text-hsa uppercase tracking-wider">Type *</label>
+          <div class="relative group">
+            <div
+              class="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none transition-colors group-focus-within:text-primary">
+              <component :is="WORKSPACE_TYPE_CONFIG[form.type].icon" class="w-4 h-4 text-hsa" />
+            </div>
+            <select v-model="form.type"
+              class="w-full pl-10 pr-10 py-3 rounded-xl bg-ash/30 border border-ash focus:border-primary focus:ring-1 focus:ring-primary/30 text-sm text-BtW outline-none transition-all appearance-none cursor-pointer">
+              <option v-for="opt in WORKSPACE_TYPE_OPTIONS" :key="opt.value" :value="opt.value">{{ opt.label }}</option>
+            </select>
+            <IconChevronDown class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-hsa pointer-events-none" />
           </div>
-          <select v-model="form.type"
-            class="w-full pl-10 pr-10 py-3 rounded-xl bg-ash/30 border border-ash focus:border-primary focus:ring-1 focus:ring-primary/30 text-sm text-BtW outline-none transition-all appearance-none cursor-pointer">
-            <option v-for="opt in WORKSPACE_TYPE_OPTIONS" :key="opt.value" :value="opt.value">{{ opt.label }}</option>
-          </select>
-          <IconChevronDown class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-hsa pointer-events-none" />
+        </div>
+
+        <!-- Pays (searchable select) -->
+        <div class="space-y-1.5">
+          <label class="text-xs font-bold text-hsa uppercase tracking-wider">Pays</label>
+          <div class="relative">
+            <div class="relative flex items-center">
+              <input v-model="countrySearch" type="text" :placeholder="form.country ? '' : 'Rechercher un pays...'"
+                @focus="showCountryDropdown = true" @blur="handleCountryBlur"
+                class="w-full px-4 py-3 rounded-xl bg-ash/30 border border-ash focus:border-primary focus:ring-1 focus:ring-primary/30 text-sm text-BtW placeholder:text-hsa/50 outline-none transition-all" />
+
+              <!-- Selected Country Indicator Overlay -->
+              <div v-if="form.country && !countrySearch"
+                class="absolute left-4 pointer-events-none text-sm text-BtW font-medium flex items-center gap-2">
+                <IconCheck class="w-3.5 h-3.5 text-success" />
+                {{ form.country }}
+              </div>
+
+              <IconMapPin class="absolute right-3 w-4 h-4 text-hsa pointer-events-none" />
+            </div>
+
+            <!-- Country Dropdown -->
+            <Transition enter-active-class="transition duration-150 ease-out" enter-from-class="opacity-0 -translate-y-1"
+              enter-to-class="opacity-100 translate-y-0" leave-active-class="transition duration-100 ease-in"
+              leave-from-class="opacity-100" leave-to-class="opacity-0">
+              <div v-if="showCountryDropdown && filteredCountries.length > 0"
+                class="absolute z-20 top-full left-0 right-0 mt-1 max-h-48 overflow-y-auto rounded-xl bg-WtB border border-ash shadow-2xl no-scrollbar">
+                <button v-for="c in filteredCountries" :key="c" type="button" @mousedown.prevent="selectCountry(c)"
+                  :class="['w-full text-left px-4 py-2.5 text-sm transition-colors border-b border-ash/10 last:border-0', c === form.country ? 'bg-primary/5 text-primary font-bold' : 'text-BtW hover:bg-ash/40']">
+                  {{ c }}
+                </button>
+              </div>
+            </Transition>
+          </div>
         </div>
       </div>
 
-      <!-- Pays (searchable select) -->
-      <div class="space-y-1.5">
-        <label class="text-xs font-bold text-hsa uppercase tracking-wider">Pays</label>
-        <div class="relative">
-          <div class="relative flex items-center">
-            <input v-model="countrySearch" type="text" :placeholder="form.country ? '' : 'Rechercher un pays...'"
-              @focus="showCountryDropdown = true" @blur="handleCountryBlur"
-              class="w-full px-4 py-3 rounded-xl bg-ash/30 border border-ash focus:border-primary focus:ring-1 focus:ring-primary/30 text-sm text-BtW placeholder:text-hsa/50 outline-none transition-all" />
-
-            <!-- Selected Country Indicator Overlay -->
-            <div v-if="form.country && !countrySearch"
-              class="absolute left-4 pointer-events-none text-sm text-BtW font-medium flex items-center gap-2">
-              <IconCheck class="w-3.5 h-3.5 text-success" />
-              {{ form.country }}
-            </div>
-
-            <IconMapPin class="absolute right-3 w-4 h-4 text-hsa pointer-events-none" />
-          </div>
-
-          <!-- Country Dropdown -->
-          <Transition enter-active-class="transition duration-150 ease-out" enter-from-class="opacity-0 -translate-y-1"
-            enter-to-class="opacity-100 translate-y-0" leave-active-class="transition duration-100 ease-in"
-            leave-from-class="opacity-100" leave-to-class="opacity-0">
-            <div v-if="showCountryDropdown && filteredCountries.length > 0"
-              class="absolute z-20 top-full left-0 right-0 mt-1 max-h-48 overflow-y-auto rounded-xl bg-WtB border border-ash shadow-2xl no-scrollbar">
-              <button v-for="c in filteredCountries" :key="c" type="button" @mousedown.prevent="selectCountry(c)"
-                :class="['w-full text-left px-4 py-2.5 text-sm transition-colors border-b border-ash/10 last:border-0', c === form.country ? 'bg-primary/5 text-primary font-bold' : 'text-BtW hover:bg-ash/40']">
-                {{ c }}
-              </button>
-            </div>
-          </Transition>
-        </div>
-      </div>
-
-      <!-- Champs PME (conditionnels) -->
+      <!-- Champs Professionnels (conditionnels) -->
       <Transition enter-active-class="transition duration-200 ease-out" enter-from-class="opacity-0 -translate-y-2"
         enter-to-class="opacity-100 translate-y-0" leave-active-class="transition duration-150 ease-in"
         leave-from-class="opacity-100 translate-y-0" leave-to-class="opacity-0 -translate-y-2">
-        <div v-if="form.type === 'pme'" class="space-y-4 p-4 rounded-xl bg-ash/10 border border-ash/50">
-          <p class="text-[10px] font-bold text-hsa uppercase tracking-wider">Informations entreprise (optionnel)</p>
-          <div class="space-y-1.5">
-            <label class="text-xs font-medium text-hsa">RCCM</label>
-            <input v-model="form.rccm" type="text" placeholder="Numéro RCCM"
-              class="w-full px-4 py-2.5 rounded-xl bg-ash/30 border border-ash focus:border-primary focus:ring-1 focus:ring-primary/30 text-sm text-BtW placeholder:text-hsa/50 outline-none transition-all" />
-          </div>
-          <div class="space-y-1.5">
-            <label class="text-xs font-medium text-hsa">IFU</label>
-            <input v-model="form.ifu" type="text" placeholder="Numéro IFU"
-              class="w-full px-4 py-2.5 rounded-xl bg-ash/30 border border-ash focus:border-primary focus:ring-1 focus:ring-primary/30 text-sm text-BtW placeholder:text-hsa/50 outline-none transition-all" />
+        <div v-if="form.type !== 'personal'" class="space-y-4 p-4 rounded-xl bg-ash/10 border border-ash/50">
+          <p class="text-[10px] font-bold text-hsa uppercase tracking-wider">Informations professionnelles (optionnel)</p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="space-y-1.5">
+              <label class="text-xs font-medium text-hsa">RCCM</label>
+              <input v-model="form.rccm" type="text" placeholder="Numéro RCCM"
+                class="w-full px-4 py-2.5 rounded-xl bg-ash/30 border border-ash focus:border-primary focus:ring-1 focus:ring-primary/30 text-sm text-BtW placeholder:text-hsa/50 outline-none transition-all" />
+            </div>
+            <div class="space-y-1.5">
+              <label class="text-xs font-medium text-hsa">IFU</label>
+              <input v-model="form.ifu" type="text" placeholder="Numéro IFU"
+                class="w-full px-4 py-2.5 rounded-xl bg-ash/30 border border-ash focus:border-primary focus:ring-1 focus:ring-primary/30 text-sm text-BtW placeholder:text-hsa/50 outline-none transition-all" />
+            </div>
           </div>
         </div>
       </Transition>
