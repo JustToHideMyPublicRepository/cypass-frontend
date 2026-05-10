@@ -11,7 +11,8 @@ export default defineEventHandler(async (event) => {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,
-        'accept': 'application/json'
+        'accept': 'application/json',
+        'Content-Type': 'application/json'
       },
       body
     })

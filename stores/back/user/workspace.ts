@@ -230,12 +230,9 @@ export const useWorkspaceStore = defineStore('workspace', {
     async setDefaultWorkspace(id: string) {
       this.error = null
       try {
-        const formData = new FormData()
-        formData.append('id', id)
-
         const response = await $fetch<{ success: boolean; message: string }>('/api/user/workspace/set-default', {
           method: 'POST',
-          body: formData
+          body: { id }
         })
 
         if (response.success) {
