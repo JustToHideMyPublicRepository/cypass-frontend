@@ -1,22 +1,13 @@
 <template>
   <header
     class="h-16 bg-WtB border-b border-ash flex items-center justify-between px-4 sm:px-6 lg:px-8 transition-colors duration-300">
-    <div class="flex items-center gap-2">
-      <!-- Sidebar Toggle (Desktop) -->
-      <button @click="$emit('toggle-collapse')" 
-        class="hidden md:flex p-2 rounded-xl text-hsa hover:text-BtW hover:bg-ash transition-all duration-200">
-        <IconChevronLeft :class="['w-5 h-5 transition-transform duration-300', isCollapsed ? 'rotate-180' : '']" />
+    <div class="flex items-center gap-2 md:hidden">
+      <button @click="$emit('toggle-menu')" class="p-2 -ml-2 text-hsa hover:text-BtW transition-colors">
+        <IconMenu2 class="w-6 h-6" />
       </button>
-
-      <!-- Mobile Menu Toggle -->
-      <div class="flex items-center md:hidden">
-        <button @click="$emit('toggle-menu')" class="p-2 -ml-2 text-hsa hover:text-BtW transition-colors">
-          <IconMenu2 class="w-6 h-6" />
-        </button>
-      </div>
     </div>
 
-    <UtilsGlobalSearchTrigger customClass="ml-2 md:ml-4" />
+    <UtilsGlobalSearchTrigger customClass="ml-2 md:ml-8" />
 
     <!-- Right actions -->
     <div class="flex items-center gap-4">
@@ -116,7 +107,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'nuxt/app'
-import { IconChevronDown, IconChevronLeft, IconUser, IconLock, IconSettings, IconHelp, IconDevices, IconLogout, IconKeyboard, IconActivity, IconMenu2, IconFlag } from '@tabler/icons-vue'
+import { IconChevronDown, IconUser, IconLock, IconSettings, IconHelp, IconDevices, IconLogout, IconKeyboard, IconActivity, IconMenu2, IconFlag } from '@tabler/icons-vue'
 import { useAuthStore } from '~/stores/back/user/auth'
 import { useProfilStore } from '~/stores/back/user/profil'
 import { getLinkTooltip } from '~/data/shortcuts'
@@ -149,10 +140,9 @@ const dropdownLinks = [
 
 defineProps<{
   user: any
-  isCollapsed: boolean
 }>()
 
-defineEmits(['toggle-menu', 'logout', 'toggle-collapse'])
+defineEmits(['toggle-menu', 'logout'])
 
 // Close dropdown on click outside
 const handleClickOutside = (event: MouseEvent) => {

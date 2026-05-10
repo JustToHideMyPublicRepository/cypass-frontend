@@ -45,8 +45,8 @@
         </button>
 
         <!-- Info Tooltip (Desktop & Expanded Only) -->
-        <UiAppTooltip v-if="!isCollapsed" :content="tooltipContent" :title="wsStore.activeWorkspace?.name" width-class="w-56"
-          position="bottom" class="shrink-0 mr-1" />
+        <UiAppTooltip v-if="!isCollapsed" :content="tooltipContent" :title="wsStore.activeWorkspace?.name"
+          width-class="w-56" position="bottom" class="shrink-0 mr-1" />
       </div>
     </div>
 
@@ -56,55 +56,49 @@
       leave-from-class="opacity-100 scale-y-100" leave-to-class="opacity-0 scale-y-95">
       <div v-if="wsStore.isSwitcherOpen && !isCollapsed"
         class="border-t border-ash bg-WtB px-3 py-2 space-y-1 max-h-64 overflow-y-auto no-scrollbar">
+        <!-- Actions Grid (Top) -->
+        <div class="grid grid-cols-2 gap-2 pb-2 mb-2 border-b border-ash/50">
+          <button @click="wsStore.openModal()" title="Nouveau workspace"
+            class="flex items-center justify-center p-2 rounded-lg text-primary bg-primary/5 hover:bg-primary/10 transition-all duration-150 border border-primary/20">
+            <IconPlus class="w-4 h-4" />
+          </button>
+          <NuxtLink to="/dashboard/manage/workspace" @click="wsStore.closeSwitcher()" title="Gérer les workspaces"
+            class="flex items-center justify-center p-2 rounded-lg text-hsa bg-ash/20 hover:bg-ash/50 transition-all duration-150 border border-ash">
+            <IconSettings class="w-4 h-4" />
+          </NuxtLink>
+        </div>
+
         <!-- Search -->
-        <div v-if="wsStore.workspaces.length > 4" class="pb-2">
+        <div v-if="wsStore.workspaces.length > 2" class="pb-2">
           <input v-model="wsSearch" type="text" placeholder="Rechercher..."
             class="w-full px-3 py-1.5 rounded-lg bg-ash/30 border border-ash text-xs text-BtW placeholder:text-hsa/50 outline-none focus:border-primary/40 transition-colors" />
         </div>
 
         <!-- Workspace List -->
-        <button v-for="ws in filteredWorkspaces" :key="ws.id" @click="selectWorkspace(ws)" :class="[
-          'flex items-center gap-2.5 w-full px-2.5 py-2 rounded-lg transition-all duration-150 text-left group/ws',
-          ws.id === wsStore.activeWorkspaceId
-            ? 'bg-primary/10 text-primary'
-            : 'text-hsa hover:bg-ash/50 hover:text-BtW'
-        ]">
-          <!-- Mini Avatar -->
-          <div class="w-6 h-6 rounded-md overflow-hidden shrink-0 border border-ash/50">
-            <img :src="getWorkspaceLogoUrl(ws.logo_url, ws.name)" :alt="ws.name" class="w-full h-full object-cover" />
-          </div>
-          <div class="min-w-0 flex-1">
-            <p class="text-xs font-medium truncate">{{ ws.name }}</p>
-            <div class="flex items-center gap-1.5 mt-0.5">
-              <span class="text-[9px] text-hsa/60 flex items-center gap-1">
-                <component :is="WORKSPACE_TYPE_CONFIG[ws.type].icon" class="w-2.5 h-2.5" />
-                {{ getWorkspaceTypeLabel(ws.type) }}
-              </span>
-              <span v-if="ws.members_count" class="text-[9px] text-hsa/40">· {{ ws.members_count }} membre{{
-                ws.members_count > 1 ? 's' : '' }}</span>
+        <div class="space-y-1">
+          <button v-for="ws in filteredWorkspaces" :key="ws.id" @click="selectWorkspace(ws)" :class="[
+            'flex items-center gap-2.5 w-full px-2.5 py-2 rounded-lg transition-all duration-150 text-left group/ws',
+            ws.id === wsStore.activeWorkspaceId
+              ? 'bg-primary/10 text-primary'
+              : 'text-hsa hover:bg-ash/50 hover:text-BtW'
+          ]">
+            <!-- Mini Avatar -->
+            <div class="w-6 h-6 rounded-md overflow-hidden shrink-0 border border-ash/50">
+              <img :src="getWorkspaceLogoUrl(ws.logo_url, ws.name)" :alt="ws.name" class="w-full h-full object-cover" />
             </div>
-          </div>
-          <!-- Active indicator -->
-          <div v-if="ws.id === wsStore.activeWorkspaceId" class="w-1.5 h-1.5 rounded-full bg-primary shrink-0"></div>
-        </button>
-
-        <!-- Divider + Actions -->
-        <div class="border-t border-ash/50 pt-1.5 mt-1.5 space-y-1">
-          <button @click="wsStore.openModal()"
-            class="flex items-center gap-2.5 w-full px-2.5 py-2 rounded-lg text-hsa hover:bg-primary/10 hover:text-primary transition-all duration-150">
-            <div class="w-6 h-6 rounded-md border border-dashed border-current flex items-center justify-center">
-              <IconPlus class="w-3.5 h-3.5" />
+            <div class="min-w-0 flex-1">
+              <p class="text-xs font-medium truncate">{{ ws.name }}</p>
+              <div class="flex items-center gap-1.5 mt-0.5">
+                <span class="text-[9px] text-hsa/60 flex items-center gap-1">
+                  <component :is="WORKSPACE_TYPE_CONFIG[ws.type].icon" class="w-2.5 h-2.5" />
+                  {{ getWorkspaceTypeLabel(ws.type) }}
+                </span>
+                <span v-if="ws.members_count" class="text-[9px] text-hsa/40">· {{ ws.members_count }} membre(s)</span>
+              </div>
             </div>
-            <span class="text-xs font-medium">Nouveau workspace</span>
+            <!-- Active indicator -->
+            <div v-if="ws.id === wsStore.activeWorkspaceId" class="w-1.5 h-1.5 rounded-full bg-primary shrink-0"></div>
           </button>
-
-          <NuxtLink to="/dashboard/manage/workspace" @click="wsStore.closeSwitcher()"
-            class="flex items-center gap-2.5 w-full px-2.5 py-2 rounded-lg text-hsa hover:bg-ash/50 hover:text-BtW transition-all duration-150">
-            <div class="w-6 h-6 rounded-md bg-ash/20 flex items-center justify-center">
-              <IconSettings class="w-3.5 h-3.5" />
-            </div>
-            <span class="text-xs font-medium">Gérer les workspaces</span>
-          </NuxtLink>
         </div>
       </div>
     </Transition>

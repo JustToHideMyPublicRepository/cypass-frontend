@@ -2,7 +2,7 @@
   <div class="flex min-h-screen bg-bgClr transition-colors duration-300">
     <!-- Barre latérale -->
     <LytDefaultSidebarMain :isOpen="isOpen" :isCollapsed="isCollapsed" @logout="handleLogout"
-      @close="isOpen = false" />
+      @toggle-collapse="isCollapsed = !isCollapsed" @close="isOpen = false" />
 
     <!-- Superposition pour mobile -->
     <div v-if="isOpen" @click="isOpen = false" class="fixed inset-0 bg-black/50 z-40 md:hidden animate-fade-in"></div>
@@ -10,8 +10,7 @@
     <!-- Zone de contenu principale -->
     <div class="flex-1 flex flex-col min-w-0 md:h-screen md:overflow-hidden transition-all duration-300">
       <!-- Barre supérieure -->
-      <LytDefaultHeader :user="user" :is-collapsed="isCollapsed" @toggle-menu="isOpen = !isOpen"
-        @toggle-collapse="isCollapsed = !isCollapsed" @logout="handleLogout" class="sticky top-0 z-30" />
+      <LytDefaultHeader :user="user" @toggle-menu="isOpen = !isOpen" @logout="handleLogout" class="sticky top-0 z-30" />
 
       <!-- Contenu de la page -->
       <main class="flex-1 md:overflow-y-auto p-4 sm:p-6 lg:p-8 no-scrollbar">

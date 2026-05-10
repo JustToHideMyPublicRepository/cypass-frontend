@@ -1,6 +1,6 @@
 <template>
   <UiBaseModal :show="workspaceStore.isModalOpen" :title="isEdit ? 'Modifier le workspace' : 'Nouveau workspace'"
-    maxWidth="2xl" @close="handleClose">
+    maxWidth="xl" @close="handleClose">
     <div class="space-y-5">
       <!-- Nom -->
       <div class="space-y-1.5">
@@ -45,9 +45,10 @@
               <IconMapPin class="absolute right-3 w-4 h-4 text-hsa pointer-events-none" />
             </div>
 
-            <Transition enter-active-class="transition duration-150 ease-out" enter-from-class="opacity-0 -translate-y-1"
-              enter-to-class="opacity-100 translate-y-0" leave-active-class="transition duration-100 ease-in"
-              leave-from-class="opacity-100" leave-to-class="opacity-0">
+            <Transition enter-active-class="transition duration-150 ease-out"
+              enter-from-class="opacity-0 -translate-y-1" enter-to-class="opacity-100 translate-y-0"
+              leave-active-class="transition duration-100 ease-in" leave-from-class="opacity-100"
+              leave-to-class="opacity-0">
               <div v-if="showCountryDropdown && filteredCountries.length > 0"
                 class="absolute z-20 top-full left-0 right-0 mt-1 max-h-48 overflow-y-auto rounded-xl bg-WtB border border-ash shadow-2xl no-scrollbar">
                 <button v-for="c in filteredCountries" :key="c" type="button" @mousedown.prevent="selectCountry(c)"
@@ -65,7 +66,8 @@
         enter-to-class="opacity-100 translate-y-0" leave-active-class="transition duration-150 ease-in"
         leave-from-class="opacity-100 translate-y-0" leave-to-class="opacity-0 -translate-y-2">
         <div v-if="form.type !== 'personal'" class="space-y-4 p-4 rounded-xl bg-ash/10 border border-ash/50">
-          <p class="text-[10px] font-bold text-hsa uppercase tracking-wider">Informations professionnelles (optionnel)</p>
+          <p class="text-[10px] font-bold text-hsa uppercase tracking-wider">Informations professionnelles (optionnel)
+          </p>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="space-y-1.5">
               <label class="text-xs font-medium text-hsa">RCCM</label>
@@ -86,13 +88,15 @@
         <label class="text-xs font-bold text-hsa uppercase tracking-wider">Logo (optionnel)</label>
         <p class="text-[9px] font-bold uppercase tracking-[0.15em] text-hsa/60">Formats: JPG, PNG, WebP • Max 2 Mo</p>
         <div class="relative group/logo mt-1">
-          <div v-if="previewUrl || currentLogoPath" class="flex items-center gap-4 p-3 rounded-xl border border-ash bg-ash/10">
+          <div v-if="previewUrl || currentLogoPath"
+            class="flex items-center gap-4 p-3 rounded-xl border border-ash bg-ash/10">
             <div class="w-14 h-14 rounded-xl overflow-hidden border-2 border-primary/20 shadow-sm shrink-0 bg-ash">
               <img :src="previewUrl || getWorkspaceLogoUrl(currentLogoPath)" alt="Aperçu logo"
                 class="w-full h-full object-cover" />
             </div>
             <div class="min-w-0 flex-1">
-              <p class="text-sm font-medium text-BtW truncate">{{ form.logo?.name || (isEdit ? 'Logo actuel' : '') }}</p>
+              <p class="text-sm font-medium text-BtW truncate">{{ form.logo?.name || (isEdit ? 'Logo actuel' : '') }}
+              </p>
               <p v-if="form.logo" class="text-[10px] text-hsa">{{ (form.logo.size / 1024).toFixed(0) }} KB</p>
             </div>
             <button type="button" @click="clearLogo"
