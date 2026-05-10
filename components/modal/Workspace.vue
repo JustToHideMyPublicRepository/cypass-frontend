@@ -1,7 +1,20 @@
 <template>
   <UiBaseModal :show="workspaceStore.isModalOpen" :title="isEdit ? 'Modifier le workspace' : 'Nouveau workspace'"
     maxWidth="xl" @close="handleClose">
-    <div class="space-y-5">
+    <div class="relative space-y-5">
+      <!-- Loading Overlay -->
+      <Transition enter-active-class="transition duration-300 ease-out" enter-from-class="opacity-0"
+        enter-to-class="opacity-100" leave-active-class="transition duration-200 ease-in" leave-from-class="opacity-100"
+        leave-to-class="opacity-0">
+        <div v-if="workspaceStore.createLoading"
+          class="absolute inset-0 z-50 flex flex-col items-center justify-center bg-WtB/80 backdrop-blur-sm rounded-2xl">
+          <IconLoader2 class="w-10 h-10 text-primary animate-spin" />
+          <p class="mt-4 text-xs font-bold uppercase tracking-widest text-primary animate-pulse">
+            {{ isEdit ? 'Mise à jour...' : 'Création...' }}
+          </p>
+        </div>
+      </Transition>
+
       <!-- Nom -->
       <div class="space-y-1.5">
         <label class="text-xs font-bold text-hsa uppercase tracking-wider">Nom du workspace *</label>
@@ -137,9 +150,9 @@
           Annuler
         </UiBaseButton>
         <UiBaseButton :disabled="!form.name || workspaceStore.createLoading" @click="handleSubmit"
+          :loading="workspaceStore.createLoading"
           class="flex-1 !py-2.5 !rounded-xl text-sm !bg-primary !text-WtB hover:!bg-secondary disabled:opacity-50 disabled:cursor-not-allowed">
-          <UiLogoLoader v-if="workspaceStore.createLoading" size="xs" container-class="text-WtB" />
-          <span v-else class="flex items-center justify-center gap-2">
+          <span class="flex items-center justify-center gap-2">
             {{ isEdit ? 'Mettre à jour' : 'Créer le workspace' }}
             <IconCheck v-if="!workspaceStore.createLoading && workspaceStore.message" class="w-4 h-4" />
           </span>
