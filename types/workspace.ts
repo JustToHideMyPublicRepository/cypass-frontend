@@ -17,6 +17,7 @@ export interface Workspace {
   members_count?: number
   can_certify?: boolean
   created_at: string
+  is_default?: boolean
 }
 
 export interface WorkspaceMember {

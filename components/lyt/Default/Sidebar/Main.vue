@@ -1,7 +1,7 @@
 <template>
   <aside :class="[
-    'fixed inset-y-0 left-0 z-50 bg-WtB border-r border-ash transform transition-all duration-300 ease-in-out md:static shrink-0 flex flex-col relative h-[100dvh] md:h-screen overflow-hidden md:overflow-visible',
-    isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0',
+    'fixed inset-y-0 left-0 z-50 bg-WtB border-r border-ash transform transition-all duration-300 ease-in-out md:translate-x-0 md:static shrink-0 flex flex-col h-[100dvh] md:h-screen overflow-hidden',
+    isOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full',
     isCollapsed ? 'w-20' : 'w-64'
   ]">
     <!-- Floating Toggle Button (Desktop) -->

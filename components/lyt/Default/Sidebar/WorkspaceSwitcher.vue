@@ -1,5 +1,5 @@
 <template>
-  <div class="shrink-0 border-b border-ash">
+  <div class="shrink-0 border-b border-ash bg-ash/10 transition-colors duration-300">
     <!-- Workspace Button -->
     <div class="h-16 flex items-center px-3 gap-2">
       <!-- Skeleton Loading State -->
@@ -96,8 +96,17 @@
                 <span v-if="ws.members_count" class="text-[9px] text-hsa/40">· {{ ws.members_count }} membre(s)</span>
               </div>
             </div>
-            <!-- Active indicator -->
-            <div v-if="ws.id === wsStore.activeWorkspaceId" class="w-1.5 h-1.5 rounded-full bg-primary shrink-0"></div>
+            <!-- Active indicator or Default toggle -->
+            <div class="flex items-center gap-1.5 shrink-0">
+              <button @click.stop="toggleDefault(ws.id)"
+                class="p-1 rounded-md transition-all hover:bg-primary/10 group/star"
+                :class="ws.is_default ? 'text-warning' : 'text-hsa/20 hover:text-warning/60'"
+                :title="ws.is_default ? 'Workspace par défaut' : 'Définir par défaut'">
+                <IconStarFilled v-if="ws.is_default" class="w-3 h-3" />
+                <IconStar v-else class="w-3 h-3" />
+              </button>
+              <div v-if="ws.id === wsStore.activeWorkspaceId" class="w-1.5 h-1.5 rounded-full bg-primary"></div>
+            </div>
           </button>
         </div>
       </div>
@@ -112,8 +121,9 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { IconChevronDown, IconChevronUp, IconChevronLeft, IconPlus, IconSettings } from '@tabler/icons-vue'
+import { IconChevronDown, IconChevronUp, IconChevronLeft, IconPlus, IconSettings, IconStar, IconStarFilled } from '@tabler/icons-vue'
 import { useWorkspaceStore } from '~/stores/back/user/workspace'
+import { useToastStore } from '~/stores/front/toast'
 import { getWorkspaceLogoUrl, getWorkspaceRoleLabel, getWorkspaceTypeLabel, WORKSPACE_TYPE_CONFIG, WORKSPACE_ROLE_CONFIG } from '~/utils/workspace'
 import type { Workspace } from '~/types/workspace'
 
@@ -125,8 +135,18 @@ defineProps<{
 const emit = defineEmits(['toggle-collapse'])
 
 const wsStore = useWorkspaceStore()
+const toast = useToastStore()
 const wsSearch = ref('')
 const router = useRouter()
+
+const toggleDefault = async (id: string) => {
+  const success = await wsStore.setDefaultWorkspace(id)
+  if (success) {
+    toast.showToast('success', 'Succès', 'Workspace par défaut mis à jour.')
+  } else {
+    toast.showToast('error', 'Erreur', wsStore.error || 'Impossible de définir le workspace par défaut.')
+  }
+}
 
 const filteredWorkspaces = computed(() => {
   if (!wsSearch.value) return wsStore.workspaces

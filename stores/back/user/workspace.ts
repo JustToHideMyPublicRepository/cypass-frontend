@@ -146,8 +146,8 @@ export const useWorkspaceStore = defineStore('workspace', {
         }
       }
 
-      // Par défaut : prendre le workspace "default" ou le premier
-      const defaultWs = this.workspaces.find(w => w.status === 'default')
+      // Par défaut : prendre le workspace "is_default" ou le premier
+      const defaultWs = this.workspaces.find(w => w.is_default)
       this.activeWorkspace = defaultWs || this.workspaces[0]
 
       if (import.meta.client && this.activeWorkspace) {
@@ -223,6 +223,37 @@ export const useWorkspaceStore = defineStore('workspace', {
         return false
       } catch (err: any) {
         this.error = err.data?.message || 'Erreur lors de la suppression du workspace'
+        return false
+      } finally {
+        this.loading = false
+      }
+    },
+
+    // Définir un workspace par défaut
+    async setDefaultWorkspace(id: string) {
+      this.loading = true
+      this.error = null
+      try {
+        const formData = new FormData()
+        formData.append('id', id)
+
+        const response = await $fetch<{ success: boolean; message: string }>('/api/user/workspace/set-default', {
+          method: 'POST',
+          body: formData
+        })
+
+        if (response.success) {
+          this.message = response.message
+          // Mettre à jour localement
+          this.workspaces = this.workspaces.map(w => ({
+            ...w,
+            is_default: w.id === id
+          }))
+          return true
+        }
+        return false
+      } catch (err: any) {
+        this.error = err.data?.message || 'Erreur lors de la définition du workspace par défaut'
         return false
       } finally {
         this.loading = false

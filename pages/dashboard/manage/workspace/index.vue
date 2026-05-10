@@ -76,7 +76,16 @@
             <UiBaseButton @click="store.openModal(ws)" variant="ghost" size="xs" class="flex-1 !rounded-xl hover:!bg-primary/5 hover:text-primary !py-2 border border-ash/20 hover:border-primary/20 transition-all font-bold text-[10px]">
               <IconEdit class="w-3 h-3 mr-1.5" /> Modifier
             </UiBaseButton>
-            <UiBaseButton v-if="ws.role === 'owner'" @click="confirmDelete(ws)" variant="ghost" size="xs" 
+            
+            <UiBaseButton v-if="!ws.is_default" @click="handleSetDefault(ws.id)" variant="ghost" size="xs" 
+              class="flex-1 !rounded-xl hover:!bg-warning/5 hover:text-warning !py-2 border border-ash/20 hover:border-warning/20 transition-all font-bold text-hsa text-[10px]">
+              <IconStar class="w-3 h-3 mr-1.5" /> Par défaut
+            </UiBaseButton>
+            <div v-else class="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-warning/5 border border-warning/20 text-warning font-black text-[10px] uppercase tracking-wider">
+               <IconStarFilled class="w-2.5 h-2.5" /> Défaut
+            </div>
+
+            <UiBaseButton v-if="ws.role === 'owner' && !ws.is_default" @click="confirmDelete(ws)" variant="ghost" size="xs" 
               class="flex-1 !rounded-xl hover:!bg-danger/5 hover:text-danger !py-2 border border-ash/20 hover:border-danger/20 transition-all font-bold text-hsa text-[10px]">
               <IconTrash class="w-3 h-3 mr-1.5" /> Supprimer
             </UiBaseButton>
@@ -117,7 +126,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { IconPlus, IconArrowLeft, IconEdit, IconTrash, IconCheck, IconAlertTriangle, IconUsers } from '@tabler/icons-vue'
+import { IconPlus, IconArrowLeft, IconEdit, IconTrash, IconCheck, IconAlertTriangle, IconUsers, IconStar, IconStarFilled } from '@tabler/icons-vue'
 import { useWorkspaceStore } from '~/stores/back/user/workspace'
 import { useToastStore } from '~/stores/front/toast'
 import { 
@@ -149,6 +158,15 @@ const handleDelete = async () => {
     toast.showToast('error', 'Erreur', store.error || 'Impossible de supprimer le workspace.')
   }
   deleting.value = false
+}
+
+const handleSetDefault = async (id: string) => {
+  const success = await store.setDefaultWorkspace(id)
+  if (success) {
+    toast.showToast('success', 'Workspace par défaut', 'Votre espace de travail par défaut a été mis à jour.')
+  } else {
+    toast.showToast('error', 'Erreur', store.error || 'Impossible de définir le workspace par défaut.')
+  }
 }
 
 onMounted(() => {

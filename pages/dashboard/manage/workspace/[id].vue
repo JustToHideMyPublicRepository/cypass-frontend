@@ -174,9 +174,17 @@
             </p>
             
             <UiBaseButton @click="store.setActiveWorkspace(workspace)" 
-              variant="primary" class="w-full !py-4 shadow-2xl shadow-primary/20 font-black !rounded-2xl transition-all transform hover:scale-[1.02] active:scale-95">
+              variant="primary" class="w-full !py-4 shadow-2xl shadow-primary/20 font-black !rounded-2xl transition-all transform hover:scale-[1.02] active:scale-95 mb-3">
               Activer maintenant
             </UiBaseButton>
+
+            <UiBaseButton v-if="!workspace.is_default" @click="handleSetDefault(workspace.id)"
+              variant="ghost" class="w-full !py-3 border border-warning/30 text-warning hover:bg-warning/5 font-bold !rounded-2xl transition-all">
+              <IconStar class="w-4 h-4 mr-2" /> Définir par défaut
+            </UiBaseButton>
+            <div v-else class="w-full py-3 flex items-center justify-center gap-2 bg-warning/5 border border-warning/20 rounded-2xl text-warning font-black text-xs uppercase tracking-widest">
+               <IconStarFilled class="w-4 h-4" /> Workspace par défaut
+            </div>
           </div>
 
           <!-- Members List Preview -->
@@ -234,7 +242,7 @@ import { useRoute } from 'vue-router'
 import { 
   IconArrowLeft, IconEdit, IconCheck, IconUsers, IconMapPin, IconCalendar,
   IconBuildingSkyscraper, IconFileText, IconFingerprint, IconClick, IconRocket,
-  IconUserPlus, IconAlertTriangle
+  IconUserPlus, IconAlertTriangle, IconStar, IconStarFilled
 } from '@tabler/icons-vue'
 import { useWorkspaceStore } from '~/stores/back/user/workspace'
 import { 
@@ -258,6 +266,13 @@ const fetchDetails = async () => {
   
   workspace.value = store.workspaces.find(w => w.id === id) || null
   loading.value = false
+}
+
+const handleSetDefault = async (id: string) => {
+  const success = await store.setDefaultWorkspace(id)
+  if (success) {
+    // Le store met déjà à jour la liste locale
+  }
 }
 
 // Sync with store updates
