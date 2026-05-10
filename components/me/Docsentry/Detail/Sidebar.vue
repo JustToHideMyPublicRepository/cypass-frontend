@@ -96,10 +96,7 @@
 </template>
 
 <script setup lang="ts">
-import {
-  IconShieldCheck, IconCertificate, IconShare, IconFingerprint,
-  IconZip, IconFiles, IconDownload, IconArchive, IconRotate
-} from '@tabler/icons-vue'
+import { IconShieldCheck, IconCertificate, IconShare, IconFingerprint, IconZip, IconFiles, IconDownload, IconArchive, IconRotate } from '@tabler/icons-vue'
 import { computed } from 'vue'
 import { differenceInDays, parseISO, format } from 'date-fns'
 import { fr } from 'date-fns/locale'

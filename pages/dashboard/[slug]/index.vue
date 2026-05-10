@@ -65,6 +65,7 @@ import { usePublicDocsentryStore } from '~/stores/back/public/docsentry'
 import { useNotificationsStore } from '~/stores/back/user/notifications'
 import { useActivitiesStore } from '~/stores/back/user/activities'
 import { useUserVigitechStore } from '~/stores/back/user/vigitech'
+import { useWorkspaceStore } from '~/stores/back/user/workspace'
 import { useToastStore } from '~/stores/front/toast'
 import { calculateSecurityScore, type SecurityScoreResult } from '~/utils/security'
 
@@ -208,6 +209,12 @@ const updateSecurityScore = () => {
 }
 
 onMounted(async () => {
+  const wsStore = useWorkspaceStore()
+  const route = useRoute()
+  if (!wsStore.activeWorkspaceId) {
+    await wsStore.initWorkspace(route.params.slug as string)
+  }
+
   const now = new Date()
   currentTime.value = `${format(now, 'dd/MM/yyyy')} à ${format(now, 'HH:mm')}`
 

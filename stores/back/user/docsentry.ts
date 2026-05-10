@@ -56,7 +56,15 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
         return true
       } catch (err: any) {
         this.error = 'Impossible de télécharger le certificat'
-        if (err.data instanceof Blob) {
+        if (err.response?._data instanceof Blob) {
+          try {
+            const text = await err.response._data.text()
+            const json = JSON.parse(text)
+            this.error = json.message || err.message || this.error
+          } catch (e) {
+            this.error = err.message || this.error
+          }
+        } else if (err.data instanceof Blob) {
           try {
             const text = await err.data.text()
             const json = JSON.parse(text)
@@ -92,7 +100,15 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
         return true
       } catch (err: any) {
         this.error = 'Impossible de télécharger l’archive ZIP'
-        if (err.data instanceof Blob) {
+        if (err.response?._data instanceof Blob) {
+          try {
+            const text = await err.response._data.text()
+            const json = JSON.parse(text)
+            this.error = json.message || err.message || this.error
+          } catch (e) {
+            this.error = err.message || this.error
+          }
+        } else if (err.data instanceof Blob) {
           try {
             const text = await err.data.text()
             const json = JSON.parse(text)

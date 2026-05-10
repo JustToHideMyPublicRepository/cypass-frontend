@@ -23,9 +23,34 @@ export default defineEventHandler(async (event) => {
 
     return response._data
   } catch (error: any) {
+    console.error('Download Certificate Proxy Error:', error)
+    let errorMessage = 'Erreur lors du téléchargement'
+    
+    try {
+      if (error.data) {
+        if (Buffer.isBuffer(error.data)) {
+          const json = JSON.parse(error.data.toString())
+          if (json.message) errorMessage = json.message
+        } else if (typeof error.data.text === 'function') {
+          const text = await error.data.text()
+          const json = JSON.parse(text)
+          if (json.message) errorMessage = json.message
+        } else if (error.data.message) {
+          errorMessage = error.data.message
+        }
+      } else if (error.response?._data) {
+        if (Buffer.isBuffer(error.response._data)) {
+          const json = JSON.parse(error.response._data.toString())
+          if (json.message) errorMessage = json.message
+        }
+      }
+    } catch (e) {
+      // safe fallback
+    }
+
     throw createError({
       statusCode: error.response?.status || 500,
-      message: error.data?.message || error.message || 'Erreur lors du téléchargement'
+      message: errorMessage
     })
   }
 })

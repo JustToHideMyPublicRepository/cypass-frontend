@@ -89,10 +89,6 @@ const copyField = (text: string, field: string) => {
 }
 
 const fetchDoc = async (background: boolean = false) => {
-  const wsStore = useWorkspaceStore()
-  if (!wsStore.activeWorkspaceId) {
-    await wsStore.initWorkspace(route.params.slug as string)
-  }
   await userStore.fetchDocumentById(docId, sort.value, search.value, background)
 }
 
@@ -206,7 +202,11 @@ const unarchiveDocument = async () => {
   isProcessingArchive.value = false
 }
 
-onMounted(() => {
+onMounted(async () => {
+  const wsStore = useWorkspaceStore()
+  if (!wsStore.activeWorkspaceId) {
+    await wsStore.initWorkspace(route.params.slug as string)
+  }
   fetchDoc()
 })
 

@@ -54,6 +54,7 @@
 import { ref, reactive, computed, onMounted, watch } from 'vue'
 import { useUserDocsentryStore } from '~/stores/back/user/docsentry'
 import { usePublicDocsentryStore } from '~/stores/back/public/docsentry'
+import { useWorkspaceStore } from '~/stores/back/user/workspace'
 import { useToastStore } from '~/stores/front/toast'
 
 const store = useUserDocsentryStore()
@@ -186,7 +187,12 @@ watch([currentPage, filters], () => {
   debounceTimeout = setTimeout(fetchDocuments, 300)
 }, { deep: true })
 
-onMounted(() => {
+onMounted(async () => {
+  const wsStore = useWorkspaceStore()
+  const route = useRoute()
+  if (!wsStore.activeWorkspaceId) {
+    await wsStore.initWorkspace(route.params.slug as string)
+  }
   store.fetchDocuments(limit, 0)
   publicStore.fetchPublicKey()
   publicStore.fetchEnrichmentCategories()
