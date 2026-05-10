@@ -113,8 +113,8 @@ const NavHeader = [
 // Auth Links
 const getAuthLinks = (forMobile: boolean) => {
   const wsStore = useWorkspaceStore()
-  const slug = wsStore.activeWorkspace?.slug
-  const dashboardPath = slug ? `/dashboard/${slug}` : '/dashboard'
+  const slug = wsStore.activeWorkspace?.slug || ''
+  const dashboardPath = `/dashboard/${slug}`
   
   const links = [
     { label: 'Tableau de bord', path: dashboardPath, type: 'link', mobile: true },

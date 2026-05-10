@@ -9,6 +9,10 @@
       </NuxtLink>
 
       <div v-if="workspace" class="flex items-center gap-3">
+        <button v-if="workspace.role === 'owner' && !workspace.is_default" @click="confirmDelete"
+          class="p-2 rounded-xl hover:bg-danger/10 text-hsa hover:text-danger transition-colors" title="Supprimer">
+          <IconTrash class="w-5 h-5" />
+        </button>
         <UiBaseButton @click="store.openModal(workspace)" variant="primary" size="sm"
           class="!rounded-xl shadow-lg shadow-primary/20">
           <IconEdit class="w-4 h-4 mr-2" /> Modifier le profil
@@ -272,6 +276,12 @@
         <UiBaseButton variant="primary" size="sm" class="!rounded-2xl px-10">Retour à la liste</UiBaseButton>
       </NuxtLink>
     </UiBaseCard>
+
+    <!-- Modal de confirmation de suppression -->
+    <UiConfirmModal :show="showDeleteConfirm" title="Supprimer le workspace"
+      :message="`Êtes-vous sûr de vouloir supprimer '${workspace?.name}' ? Les documents certifiés seront conservés mais rattachés à votre profil personnel.`"
+      confirm-text="Supprimer définitivement" variant="danger" :loading="deleting" @cancel="showDeleteConfirm = false"
+      @confirm="handleDelete" />
   </div>
 </template>
 
@@ -281,9 +291,10 @@ import { useRoute } from 'vue-router'
 import {
   IconArrowLeft, IconEdit, IconCheck, IconUsers, IconMapPin, IconCalendar,
   IconBuildingSkyscraper, IconFileText, IconFingerprint, IconClick, IconRocket,
-  IconUserPlus, IconAlertTriangle, IconStar, IconStarFilled
+  IconUserPlus, IconAlertTriangle, IconStar, IconStarFilled, IconTrash
 } from '@tabler/icons-vue'
 import { useWorkspaceStore } from '~/stores/back/user/workspace'
+import { useToastStore } from '~/stores/front/toast'
 import {
   getWorkspaceLogoUrl, getWorkspaceTypeLabel, getWorkspaceRoleLabel,
   WORKSPACE_TYPE_CONFIG, WORKSPACE_ROLE_CONFIG
@@ -292,8 +303,30 @@ import type { Workspace } from '~/types/workspace'
 
 const route = useRoute()
 const store = useWorkspaceStore()
+const toast = useToastStore()
 const loading = ref(true)
 const workspace = ref<Workspace | null>(null)
+
+const showDeleteConfirm = ref(false)
+const deleting = ref(false)
+
+const confirmDelete = () => {
+  showDeleteConfirm.value = true
+}
+
+const handleDelete = async () => {
+  if (!workspace.value) return
+  deleting.value = true
+  const success = await store.deleteWorkspace(workspace.value.id)
+  if (success) {
+    toast.showToast('success', 'Workspace supprimé', 'Le workspace a été archivé et supprimé de votre liste.')
+    showDeleteConfirm.value = false
+    await useRouter().push('/dashboard/manage/workspace')
+  } else {
+    toast.showToast('error', 'Erreur', store.error || 'Impossible de supprimer le workspace.')
+  }
+  deleting.value = false
+}
 
 const fetchDetails = async () => {
   loading.value = true

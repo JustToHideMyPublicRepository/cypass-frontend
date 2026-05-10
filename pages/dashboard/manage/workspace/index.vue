@@ -149,8 +149,10 @@ const handleSetDefault = async (id: string) => {
   }
 }
 
-onMounted(() => {
-  store.fetchWorkspaces()
+onMounted(async () => {
+  if (!store.workspaces.length) {
+    await store.fetchWorkspaces()
+  }
 })
 
 useHead({
