@@ -218,6 +218,8 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
       try {
         const formData = new FormData()
         formData.append('document_id', params.document_id)
+        const wsStore = useWorkspaceStore()
+        if (wsStore.activeWorkspaceId) formData.append('user_workspace_id', wsStore.activeWorkspaceId)
 
         if (params.recipients_csv) {
           formData.append('recipients_csv', params.recipients_csv)
@@ -393,6 +395,7 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
         const formData = new FormData()
         formData.append('document_id', id)
         const wsStore = useWorkspaceStore()
+        if (wsStore.activeWorkspaceId) formData.append('user_workspace_id', wsStore.activeWorkspaceId)
         const response = await $fetch<{ success: boolean; message: string }>('/api/user/docsentry/archive', {
           method: 'POST',
           query: { user_workspace_id: wsStore.activeWorkspaceId },
@@ -419,6 +422,7 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
         const formData = new FormData()
         formData.append('document_id', id)
         const wsStore = useWorkspaceStore()
+        if (wsStore.activeWorkspaceId) formData.append('user_workspace_id', wsStore.activeWorkspaceId)
         const response = await $fetch<{ success: boolean; message: string }>('/api/user/docsentry/unarchive', {
           method: 'POST',
           query: { user_workspace_id: wsStore.activeWorkspaceId },

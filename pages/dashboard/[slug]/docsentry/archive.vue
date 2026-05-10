@@ -6,7 +6,7 @@
         <h1 class="text-2xl font-bold text-BtW">Archives DocSentry</h1>
         <p class="text-hsa text-sm">Gérez vos documents archivés et restaurez-les si nécessaire.</p>
       </div>
-      <NuxtLink to="/dashboard/docsentry"
+      <NuxtLink :to="`/dashboard/${route.params.slug}/docsentry`"
         class="inline-flex items-center gap-2 text-primary hover:underline font-medium">
         <IconArrowLeft class="w-4 h-4" />
         Retour à la liste

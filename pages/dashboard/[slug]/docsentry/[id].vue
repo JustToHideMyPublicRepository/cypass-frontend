@@ -55,6 +55,7 @@ import { computed, onMounted, reactive, ref } from 'vue'
 import { useRoute } from 'nuxt/app'
 import { IconAlertCircle } from '@tabler/icons-vue'
 import { useUserDocsentryStore } from '~/stores/back/user/docsentry'
+import { useWorkspaceStore } from '~/stores/back/user/workspace'
 import { useToastStore } from '~/stores/front/toast'
 import type { DocumentVersion } from '~/types/docsentry'
 
@@ -88,6 +89,10 @@ const copyField = (text: string, field: string) => {
 }
 
 const fetchDoc = async (background: boolean = false) => {
+  const wsStore = useWorkspaceStore()
+  if (!wsStore.activeWorkspaceId) {
+    await wsStore.initWorkspace(route.params.slug as string)
+  }
   await userStore.fetchDocumentById(docId, sort.value, search.value, background)
 }
 

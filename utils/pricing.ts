@@ -64,7 +64,7 @@ export const pricingTiers = [
       'Vérification QR camera'
     ],
     cta: 'Démarrer gratuitement',
-    link: '/dashboard',
+    get link() { return (typeof window !== 'undefined' && window.location.pathname.startsWith('/dashboard/')) ? `/dashboard/${window.location.pathname.split('/')[2]}` : '/dashboard' },
     featured: false
   },
   {

@@ -28,7 +28,15 @@ export const dashboardShortcuts: Record<string, ShortcutEntry> = {
   docsentry: {
     keys: ['d', 'd'],
     label: 'Docsentry',
-    path: '/dashboard/docsentry',
+    get path() { 
+      if (typeof window !== 'undefined') {
+        const parts = window.location.pathname.split('/')
+        if (parts[1] === 'dashboard' && parts[2] && !['docsentry', 'manage', 'activities', 'profile', 'sessions', 'settings', 'vigitech'].includes(parts[2])) {
+          return `/dashboard/${parts[2]}/docsentry`
+        }
+      }
+      return '/dashboard'
+    },
     isGlobal: true,
     group: 'Dashboard',
     modifier: 'Shift'
@@ -92,7 +100,15 @@ export const dashboardShortcuts: Record<string, ShortcutEntry> = {
   dashboard_home: {
     keys: ['d', 'i'],
     label: 'Tableau de bord',
-    path: '/dashboard',
+    get path() { 
+      if (typeof window !== 'undefined') {
+        const parts = window.location.pathname.split('/')
+        if (parts[1] === 'dashboard' && parts[2] && !['docsentry', 'manage', 'activities', 'profile', 'sessions', 'settings', 'vigitech'].includes(parts[2])) {
+          return `/dashboard/${parts[2]}`
+        }
+      }
+      return '/dashboard'
+    },
     isGlobal: true,
     group: 'Dashboard',
     modifier: 'Shift'
