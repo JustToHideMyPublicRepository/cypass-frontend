@@ -69,7 +69,7 @@
             <IconPlus class="w-4 h-4" />
           </button>
           <NuxtLink to="/dashboard/manage/workspace" @click="wsStore.closeSwitcher()" title="Gérer les workspaces"
-            class="flex items-center justify-center p-2 rounded-lg text-hsa bg-ash/20 hover:bg-ash/50 transition-all duration-150 border border-ash">
+            class="flex items-center justify-center p-2 rounded-lg text-hsa bg-hsa/20 hover:bg-hsa/50 transition-all duration-150 border border-ash">
             <IconSettings class="w-4 h-4" />
           </NuxtLink>
         </div>
@@ -99,7 +99,7 @@
                   <component :is="WORKSPACE_TYPE_CONFIG[ws.type].icon" class="w-2.5 h-2.5" />
                   {{ getWorkspaceTypeLabel(ws.type) }}
                 </span>
-                <span v-if="ws.members_count" class="text-[9px] text-hsa/40">· {{ ws.members_count }} membre(s)</span>
+                <span v-if="ws.members_count" class="text-[9px]">· {{ ws.members_count }} membre(s)</span>
               </div>
             </div>
             <!-- Active indicator or Default toggle -->
@@ -127,7 +127,8 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { IconChevronDown, IconChevronUp, IconChevronLeft, IconPlus, IconSettings, IconStar, IconStarFilled } from '@tabler/icons-vue'
+import { useRoute } from 'vue-router'
+import { IconChevronDown, IconChevronUp, IconPlus, IconSettings, IconStar, IconStarFilled } from '@tabler/icons-vue'
 import { useWorkspaceStore } from '~/stores/back/user/workspace'
 import { useToastStore } from '~/stores/front/toast'
 import { getWorkspaceLogoUrl, getWorkspaceRoleLabel, getWorkspaceTypeLabel, WORKSPACE_TYPE_CONFIG, WORKSPACE_ROLE_CONFIG } from '~/utils/workspace'
@@ -160,10 +161,20 @@ const filteredWorkspaces = computed(() => {
   return wsStore.workspaces.filter(ws => ws.name.toLowerCase().includes(q))
 })
 
+const route = useRoute()
+
 const selectWorkspace = (ws: Workspace) => {
+  const oldSlug = wsStore.activeWorkspace?.slug
   wsStore.setActiveWorkspace(ws)
+
   if (ws.slug) {
-    router.push(`/dashboard/${ws.slug}`)
+    const currentPath = route.path
+    if (oldSlug && currentPath.includes(`/dashboard/${oldSlug}`)) {
+      const newPath = currentPath.replace(`/dashboard/${oldSlug}`, `/dashboard/${ws.slug}`)
+      router.push(newPath)
+    } else {
+      router.push(`/dashboard/${ws.slug}`)
+    }
   }
 }
 

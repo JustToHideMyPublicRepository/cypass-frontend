@@ -26,77 +26,59 @@
       </UiBaseCard>
     </div>
 
-    <div v-else-if="store.workspaces.length" class="grid grid-cols-1 gap-4">
-      <UiBaseCard v-for="ws in store.workspaces" :key="ws.id"
-        class="group/ws transition-all hover:shadow-lg border-ash/30 bg-WtB p-4 flex items-center justify-between gap-4 relative overflow-hidden"
+    <div v-else-if="store.workspaces.length" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <UiBaseCard v-for="ws in store.workspaces" :key="ws.id" 
+        class="group/ws transition-all hover:shadow-md border-ash/30 bg-WtB p-3 relative overflow-hidden"
         :class="{ 'ring-1 ring-primary/40 !bg-primary/5': ws.id === store.activeWorkspaceId }">
+        
+        <!-- Active Indicator -->
+        <div v-if="ws.id === store.activeWorkspaceId" class="absolute top-0 right-0 w-8 h-8">
+           <div class="absolute top-0 right-0 w-0 h-0 border-t-[32px] border-l-[32px] border-t-primary border-l-transparent opacity-10"></div>
+           <IconCheck class="absolute top-1 right-1 w-3 h-3 text-primary" />
+        </div>
 
-        <!-- Active Indicator Tip -->
-        <div v-if="ws.id === store.activeWorkspaceId" class="absolute left-0 top-0 bottom-0 w-1 bg-primary"></div>
-
-        <div class="flex items-center gap-4 flex-1 min-w-0">
+        <div class="flex items-center gap-3">
           <!-- Logo -->
-          <NuxtLink :to="`/dashboard/manage/workspace/${ws.id}`"
-            class="w-12 h-12 rounded-xl overflow-hidden border border-ash bg-ash/10 shrink-0 shadow-sm block hover:ring-2 hover:ring-primary/20 transition-all">
+          <NuxtLink :to="`/dashboard/manage/workspace/${ws.id}`" 
+            class="w-10 h-10 rounded-xl overflow-hidden border border-ash bg-ash/10 shrink-0 shadow-sm block hover:ring-2 hover:ring-primary/20 transition-all">
             <img :src="getWorkspaceLogoUrl(ws.logo_url, ws.name)" :alt="ws.name" class="w-full h-full object-cover" />
           </NuxtLink>
 
           <!-- Info -->
           <div class="min-w-0 flex-1">
-            <div class="flex items-center gap-2">
-              <NuxtLink :to="`/dashboard/manage/workspace/${ws.id}`"
-                class="text-sm font-black text-BtW truncate leading-tight hover:text-primary transition-colors block tracking-tight">
+            <div class="flex items-center gap-1.5 overflow-hidden">
+              <NuxtLink :to="`/dashboard/manage/workspace/${ws.id}`" 
+                class="text-xs font-bold text-BtW truncate leading-tight hover:text-primary transition-colors block tracking-tight">
                 {{ ws.name }}
               </NuxtLink>
-              <span v-if="ws.is_default"
-                class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-warning/10 text-[9px] font-black text-warning uppercase tracking-widest border border-warning/20">
-                <IconStarFilled class="w-2.5 h-2.5" /> Par défaut
-              </span>
+              <IconStarFilled v-if="ws.is_default" class="w-2.5 h-2.5 text-warning shrink-0" />
             </div>
 
-            <div class="flex items-center gap-4 mt-2">
-              <span class="inline-flex items-center gap-1.5 text-[10px] font-bold text-hsa">
-                <component :is="WORKSPACE_TYPE_CONFIG[ws.type || 'personal'].icon" class="w-3.5 h-3.5 text-primary" />
-                {{ getWorkspaceTypeLabel(ws.type) }}
+            <div class="flex items-center gap-2 mt-1">
+              <span class="inline-flex items-center gap-1 text-[9px] font-bold text-hsa uppercase tracking-tighter">
+                <component :is="WORKSPACE_TYPE_CONFIG[ws.type || 'personal'].icon" class="w-2.5 h-2.5 text-primary opacity-70" />
+                {{ getWorkspaceTypeLabel(ws.type).split(' ')[0] }}
               </span>
 
-              <span
-                class="inline-flex items-center gap-1.5 text-[10px] font-bold text-primary uppercase tracking-wider">
-                <component :is="WORKSPACE_ROLE_CONFIG[ws.role || 'reader']?.icon" class="w-3.5 h-3.5" />
-                {{ getWorkspaceRoleLabel(ws.role) }}
-              </span>
-
-              <span class="inline-flex items-center gap-1.5 text-[10px] font-bold text-hsa/60 whitespace-nowrap">
-                <IconUsers class="w-3.5 h-3.5" />
-                {{ ws.members_count || 1 }}
+              <span class="inline-flex items-center gap-1 text-[9px] font-bold text-primary/80 uppercase tracking-tighter">
+                <component :is="WORKSPACE_ROLE_CONFIG[ws.role || 'reader']?.icon" class="w-2.5 h-2.5" />
+                {{ getWorkspaceRoleLabel(ws.role).split(' ')[0] }}
               </span>
             </div>
           </div>
-        </div>
 
-        <!-- Actions -->
-        <div class="flex items-center gap-2 shrink-0">
-          <UiBaseButton @click="store.openModal(ws)" variant="ghost" size="xs"
-            class="!rounded-xl hover:!bg-primary/5 hover:text-primary !py-2 px-3 border border-ash/20 hover:border-primary/20 transition-all font-bold text-[10px]"
-            title="Modifier">
-            <IconEdit class="w-4 h-4 md:mr-1.5" />
-            <span class="hidden md:inline">Modifier</span>
-          </UiBaseButton>
-
-          <UiBaseButton v-if="!ws.is_default" @click="handleSetDefault(ws.id)" variant="ghost" size="xs"
-            class="!rounded-xl hover:!bg-warning/5 hover:text-warning !py-2 px-3 border border-ash/20 hover:border-warning/20 transition-all font-bold text-hsa text-[10px]"
-            title="Définir par défaut">
-            <IconStar class="w-4 h-4 md:mr-1.5" />
-            <span class="hidden md:inline">Par défaut</span>
-          </UiBaseButton>
-
-          <UiBaseButton v-if="ws.role === 'owner' && !ws.is_default" @click="confirmDelete(ws)" variant="ghost"
-            size="xs"
-            class="!rounded-xl hover:!bg-danger/5 hover:text-danger !py-2 px-3 border border-ash/20 hover:border-danger/20 transition-all font-bold text-hsa text-[10px]"
-            title="Supprimer">
-            <IconTrash class="w-4 h-4 md:mr-1.5" />
-            <span class="hidden md:inline">Supprimer</span>
-          </UiBaseButton>
+          <!-- Quick Actions -->
+          <div class="flex items-center gap-1 shrink-0">
+             <button @click="store.openModal(ws)" class="p-1.5 rounded-lg hover:bg-primary/10 text-hsa hover:text-primary transition-colors" title="Modifier">
+                <IconEdit class="w-3.5 h-3.5" />
+             </button>
+             <button v-if="!ws.is_default" @click="handleSetDefault(ws.id)" class="p-1.5 rounded-lg hover:bg-warning/10 text-hsa hover:text-warning transition-colors" title="Par défaut">
+                <IconStar class="w-3.5 h-3.5" />
+             </button>
+             <button v-if="ws.role === 'owner' && !ws.is_default" @click="confirmDelete(ws)" class="p-1.5 rounded-lg hover:bg-danger/10 text-hsa hover:text-danger transition-colors" title="Supprimer">
+                <IconTrash class="w-3.5 h-3.5" />
+             </button>
+          </div>
         </div>
       </UiBaseCard>
     </div>
@@ -174,6 +156,7 @@ onMounted(() => {
 useHead({
   title: 'Gérer les Workspaces',
   meta: [
+    { name: 'description', content: 'Gérez vos espaces de travail, vos membres et vos configurations.' },
     { name: 'robots', content: 'noindex, nofollow' }
   ]
 })

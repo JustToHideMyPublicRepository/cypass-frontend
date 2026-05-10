@@ -326,6 +326,10 @@ onMounted(() => {
 
 useHead({
   title: computed(() => `${workspace.value?.name || 'Workspace'}`),
+  meta: [
+    { name: 'description', content: 'Informations détaillées et configuration de l\'espace de travail.' },
+    { name: 'robots', content: 'noindex, nofollow' }
+  ]
 })
 </script>
 

@@ -55,6 +55,7 @@ onMounted(() => {
 useHead({
   title: computed(() => log.value ? `Détails Log #${log.value.id.slice(-6)}` : 'Détails du Log'),
   meta: [
+    { name: 'description', content: 'Détails de l\'activité système sélectionnée.' },
     { name: 'robots', content: 'noindex, nofollow' }
   ]
 })
