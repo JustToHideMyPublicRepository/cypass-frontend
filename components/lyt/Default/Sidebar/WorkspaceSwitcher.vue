@@ -13,7 +13,7 @@
 
       <!-- Active Workspace Trigger with Tooltip -->
       <UiAppTooltip v-else :content="tooltipContent" :title="wsStore.activeWorkspace?.name" width-class="w-56"
-        class="flex-1 min-w-0" :disabled="isCollapsed">
+        position="bottom" class="flex-1 min-w-0" :disabled="isCollapsed">
         <template #trigger>
           <button @click="handleSwitcherToggle"
             class="flex items-center gap-2.5 w-full px-2 py-2 rounded-xl hover:bg-ash/60 transition-all duration-200 group"
