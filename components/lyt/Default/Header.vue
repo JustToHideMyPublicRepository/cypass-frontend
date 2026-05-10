@@ -107,7 +107,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'nuxt/app'
-import { IconChevronDown, IconUser, IconLock, IconSettings, IconHelp, IconDevices, IconLogout, IconKeyboard, IconActivity, IconMenu2, IconFlag } from '@tabler/icons-vue'
+import { IconChevronDown, IconUser, IconLock, IconSettings, IconHelp, IconDevices, IconLogout, IconKeyboard, IconActivity, IconMenu2, IconFlag, IconHome } from '@tabler/icons-vue'
 import { useAuthStore } from '~/stores/back/user/auth'
 import { useProfilStore } from '~/stores/back/user/profil'
 import { getLinkTooltip } from '~/data/shortcuts'
@@ -128,6 +128,7 @@ const planBorderClass = computed(() => getPlanBorderClass(profilStore.profile?.p
 const planBadgeClass = computed(() => getPlanBadgeClass(profilStore.profile?.plan?.name))
 
 const dropdownLinks = [
+  { label: 'Accueil du site', path: '/', icon: IconHome },
   { label: 'Mon profil', path: '/dashboard/profile', icon: IconUser },
   { label: 'Sessions', path: '/dashboard/sessions', icon: IconDevices },
   { label: 'Journal d\'activité', path: '/dashboard/activities', icon: IconActivity },

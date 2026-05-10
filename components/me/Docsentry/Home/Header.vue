@@ -22,7 +22,7 @@
         <IconShieldCheck class="w-4 h-4" />
         Vérifier
       </UiBaseButton>
-      <UiBaseButton variant="ghost" to="/dashboard/manage/archive"
+      <UiBaseButton variant="ghost" :to="`/dashboard/${wsStore.activeWorkspace?.slug || ''}/docsentry/archive`"
         class="!px-4 !py-2.5 !text-xs !uppercase !tracking-wider gap-2">
         <IconArchive class="w-4 h-4" />
         Archives
@@ -33,5 +33,8 @@
 
 <script setup lang="ts">
 import { IconPlus, IconShieldCheck, IconArchive } from '@tabler/icons-vue'
+import { useWorkspaceStore } from '~/stores/back/user/workspace'
+
+const wsStore = useWorkspaceStore()
 defineEmits(['upload', 'verify'])
 </script>
