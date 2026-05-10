@@ -5,7 +5,7 @@
     </div>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-      <div class="grid lg:grid-cols-4 gap-6 items-center">
+      <div class="grid lg:grid-cols-5 gap-6 items-center">
         <RootHomeHeroContent />
         <RootHomeHeroVisual />
       </div>

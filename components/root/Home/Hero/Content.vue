@@ -11,9 +11,7 @@
 
     <h1>
       Votre bouclier
-      <span class="font-handwritting text-secondary relative">
-        numérique
-      </span>
+      <span class="font-handwritting text-secondary relative"> numérique </span> <br>
       pour
       <div class="flex items-end">
         <span class="font-handwritting text-primary">
@@ -38,8 +36,8 @@
     <div class="space-y-4 pt-4 w-full md:max-w-fit mx-auto lg:mx-0">
       <!-- Boutons s-->
       <div class="grid grid-cols-2 sm:flex sm:flex-row gap-2 sm:gap-4 justify-center lg:justify-start">
-        <UiBaseButton :to="authStore.user ? `/dashboard/${wsStore.activeWorkspace?.slug || ''}/docsentry` : '/verify'" variant="accent"
-          class="w-full sm:w-auto flex items-center justify-center gap-1.5 text-center h-full">
+        <UiBaseButton :to="authStore.user ? `/dashboard/${wsStore.activeWorkspace?.slug || ''}/docsentry` : '/verify'"
+          variant="accent" class="w-full sm:w-auto flex items-center justify-center gap-1.5 text-center h-full">
           <IconFileCheck class="w-4 h-4 md:w-5 md:h-5 shrink-0" />
           <span class="leading-tight">{{ authStore.user ? 'Gestion documents' : 'Vérifier document' }}</span>
         </UiBaseButton>

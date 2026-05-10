@@ -88,7 +88,7 @@
         <label class="text-xs font-bold text-hsa uppercase tracking-wider">Logo (optionnel)</label>
         <p class="text-[9px] font-bold uppercase tracking-[0.15em] text-hsa/60">Formats: JPG, PNG, WebP • Max 2 Mo</p>
         <div class="relative group/logo mt-1">
-          <div v-if="previewUrl || currentLogoPath"
+          <div v-if="previewUrl || (currentLogoPath && !form.delete_logo)"
             class="flex items-center gap-4 p-3 rounded-xl border border-ash bg-ash/10">
             <div class="w-14 h-14 rounded-xl overflow-hidden border-2 border-primary/20 shadow-sm shrink-0 bg-ash">
               <img :src="previewUrl || getWorkspaceLogoUrl(currentLogoPath)" alt="Aperçu logo"
@@ -100,8 +100,10 @@
               <p v-if="form.logo" class="text-[10px] text-hsa">{{ (form.logo.size / 1024).toFixed(0) }} KB</p>
             </div>
             <button type="button" @click="clearLogo"
-              class="p-1.5 rounded-lg hover:bg-danger/10 text-hsa hover:text-danger transition-colors">
-              <IconX class="w-4 h-4" />
+              class="p-1.5 rounded-lg hover:bg-danger/10 text-hsa hover:text-danger transition-colors"
+              :title="form.logo ? 'Vider' : 'Supprimer du serveur'">
+              <IconTrash v-if="isEdit && currentLogoPath && !form.logo" class="w-4 h-4" />
+              <IconX v-else class="w-4 h-4" />
             </button>
           </div>
 
@@ -136,8 +138,11 @@
         </UiBaseButton>
         <UiBaseButton :disabled="!form.name || workspaceStore.createLoading" @click="handleSubmit"
           class="flex-1 !py-2.5 !rounded-xl text-sm !bg-primary !text-WtB hover:!bg-secondary disabled:opacity-50 disabled:cursor-not-allowed">
-          <IconLoader2 v-if="workspaceStore.createLoading" class="w-4 h-4 animate-spin" />
-          <span v-else>{{ isEdit ? 'Mettre à jour' : 'Créer le workspace' }}</span>
+          <UiLogoLoader v-if="workspaceStore.createLoading" size="xs" container-class="text-WtB" />
+          <span v-else class="flex items-center justify-center gap-2">
+            {{ isEdit ? 'Mettre à jour' : 'Créer le workspace' }}
+            <IconCheck v-if="!workspaceStore.createLoading && workspaceStore.message" class="w-4 h-4" />
+          </span>
         </UiBaseButton>
       </div>
     </template>
@@ -146,7 +151,7 @@
 
 <script setup lang="ts">
 import { ref, reactive, computed, watch, onMounted } from 'vue'
-import { IconChevronDown, IconMapPin, IconFileUpload, IconLoader2, IconX, IconCheck } from '@tabler/icons-vue'
+import { IconChevronDown, IconMapPin, IconFileUpload, IconLoader2, IconX, IconCheck, IconTrash } from '@tabler/icons-vue'
 import { useWorkspaceStore } from '~/stores/back/user/workspace'
 import { WORKSPACE_TYPE_OPTIONS, WORKSPACE_TYPE_CONFIG, getWorkspaceLogoUrl } from '~/utils/workspace'
 import type { WorkspaceType } from '~/types/workspace'
@@ -162,7 +167,8 @@ const form = reactive({
   country: '',
   rccm: '',
   ifu: '',
-  logo: null as File | null
+  logo: null as File | null,
+  delete_logo: false
 })
 
 // Logo
@@ -194,8 +200,10 @@ const processFile = (file: File) => {
 }
 
 const clearLogo = () => {
+  if (isEdit.value && currentLogoPath.value && !form.logo) {
+    form.delete_logo = true
+  }
   form.logo = null
-  currentLogoPath.value = null
   fileError.value = null
   if (previewUrl.value) {
     URL.revokeObjectURL(previewUrl.value)
@@ -250,7 +258,8 @@ const handleSubmit = async () => {
     country: form.country || undefined,
     rccm: form.rccm || undefined,
     ifu: form.ifu || undefined,
-    logo: form.logo
+    logo: form.logo,
+    delete_logo: form.delete_logo
   }
 
   let success = false
@@ -271,6 +280,7 @@ const resetForm = () => {
   form.country = ''
   form.rccm = ''
   form.ifu = ''
+  form.delete_logo = false
   clearLogo()
   countrySearch.value = ''
 }

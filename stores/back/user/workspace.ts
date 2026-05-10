@@ -163,6 +163,7 @@ export const useWorkspaceStore = defineStore('workspace', {
         formData.append('name', payload.name)
         formData.append('type', payload.type)
         if (payload.logo) formData.append('logo', payload.logo)
+        if (payload.delete_logo) formData.append('delete_logo', 'true')
         if (payload.rccm) formData.append('rccm', payload.rccm)
         if (payload.ifu) formData.append('ifu', payload.ifu)
         if (payload.country) formData.append('country', payload.country)

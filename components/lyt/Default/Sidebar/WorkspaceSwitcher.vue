@@ -102,16 +102,16 @@
                 <span v-if="ws.members_count" class="text-[9px]">· {{ ws.members_count }} membre(s)</span>
               </div>
             </div>
-            <!-- Active indicator or Default toggle -->
             <div class="flex items-center gap-1.5 shrink-0">
-              <button @click.stop="toggleDefault(ws.id)"
-                class="p-1 rounded-md transition-all hover:bg-primary/10 group/star"
+              <UiLogoLoader v-if="switchingId === ws.id" size="xs" color="primary" />
+              <button v-else @click.stop="toggleDefault(ws.id)"
+                class="p-1.5 rounded-md transition-all hover:bg-primary/10 group/star"
                 :class="ws.is_default ? 'text-warning' : 'text-hsa/20 hover:text-warning/60'"
                 :title="ws.is_default ? 'Workspace par défaut' : 'Définir par défaut'">
                 <IconStarFilled v-if="ws.is_default" class="w-3 h-3" />
                 <IconStar v-else class="w-3 h-3" />
               </button>
-              <div v-if="ws.id === wsStore.activeWorkspaceId" class="w-1.5 h-1.5 rounded-full bg-primary"></div>
+              <div v-if="ws.id === wsStore.activeWorkspaceId && switchingId !== ws.id" class="w-1.5 h-1.5 rounded-full bg-primary"></div>
             </div>
           </button>
         </div>
@@ -162,20 +162,34 @@ const filteredWorkspaces = computed(() => {
 })
 
 const route = useRoute()
+const switchingId = ref<string | null>(null)
 
-const selectWorkspace = (ws: Workspace) => {
+const selectWorkspace = async (ws: Workspace) => {
+  if (ws.id === wsStore.activeWorkspaceId) return
+  
+  switchingId.value = ws.id
   const oldSlug = wsStore.activeWorkspace?.slug
+  
+  // Simulation d'un petit délai pour l'effet visuel comme demandé
+  await new Promise(resolve => setTimeout(resolve, 600))
+  
   wsStore.setActiveWorkspace(ws)
-
+  
   if (ws.slug) {
     const currentPath = route.path
     if (oldSlug && currentPath.includes(`/dashboard/${oldSlug}`)) {
       const newPath = currentPath.replace(`/dashboard/${oldSlug}`, `/dashboard/${ws.slug}`)
       router.push(newPath)
+    } else if (currentPath.startsWith('/dashboard')) {
+      // On est déjà sur le dashboard (ex: /dashboard/activities)
+      // On reste sur la page, le store a déjà été mis à jour
     } else {
       router.push(`/dashboard/${ws.slug}`)
     }
   }
+  
+  switchingId.value = null
+  wsStore.closeSwitcher()
 }
 
 const handleSwitcherToggle = () => {

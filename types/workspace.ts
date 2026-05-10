@@ -39,6 +39,7 @@ export interface CreateWorkspacePayload {
   name: string
   type: WorkspaceType
   logo?: File | null
+  delete_logo?: boolean
   rccm?: string
   ifu?: string
   country?: string

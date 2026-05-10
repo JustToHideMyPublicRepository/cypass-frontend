@@ -1,7 +1,7 @@
 <template>
   <!-- Iframe -->
   <div
-    class="relative w-full perspective-1000 animate-fade-left mt-8 lg:mt-0 flex justify-center lg:block overflow-visible lg:col-span-1">
+    class="relative w-full perspective-1000 animate-fade-left mt-8 lg:mt-0 flex justify-center lg:block overflow-visible lg:col-span-2">
     <div
       class="absolute -top-20 -right-20 w-64 h-64 bg-gradient-to-br from-primary to-secondary rounded-full blur-[80px] opacity-40 animate-pulse-slow">
     </div>
