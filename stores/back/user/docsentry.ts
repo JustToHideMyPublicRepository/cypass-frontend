@@ -346,7 +346,7 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
         const previousWeekEnd = endOfWeek(subWeeks(now, 1), { weekStartsOn: 1 })
 
         const wsStore = useWorkspaceStore()
-        const response = await $fetch<any>('/api/user/docsentry/list', {
+        const response = await $fetch<any>('/api/user/docsentry/list-documents', {
           query: { limit: 100, offset: 0, user_workspace_id: wsStore.activeWorkspaceId }
         })
 
