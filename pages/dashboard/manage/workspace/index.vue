@@ -30,61 +30,59 @@
       </UiBaseCard>
     </div>
 
-    <div v-else-if="store.workspaces.length" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div v-else-if="store.workspaces.length" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       <UiBaseCard v-for="ws in store.workspaces" :key="ws.id" 
-        class="group/ws transition-all hover:shadow-xl hover:-translate-y-1 bg-ash/5 border-ash/30"
-        :class="{ 'ring-2 ring-primary ring-offset-2 ring-offset-bgClr': ws.id === store.activeWorkspaceId }">
+        class="group/ws transition-all hover:shadow-xl border-ash/30 bg-WtB overflow-hidden relative"
+        :class="{ 'ring-1 ring-primary/40 border-primary/20': ws.id === store.activeWorkspaceId }">
+        
+        <!-- Active Indicator Tip -->
+        <div v-if="ws.id === store.activeWorkspaceId" class="absolute top-0 left-0 w-1 h-full bg-primary"></div>
+
         <div class="p-5 space-y-4">
-          <!-- Main Info -->
-          <div class="flex items-start justify-between gap-3">
-            <div class="flex items-center gap-3 min-w-0">
-              <div class="w-12 h-12 rounded-[1rem] overflow-hidden border border-ash bg-ash/10 shrink-0 shadow-sm">
-                <img :src="getWorkspaceLogoUrl(ws.logo_url, ws.name)" :alt="ws.name" class="w-full h-full object-cover" />
-              </div>
-              <div class="min-w-0">
-                <h3 class="text-base font-black text-BtW truncate leading-tight">{{ ws.name }}</h3>
-                <div class="flex items-center gap-2 mt-1">
-                  <span class="text-[10px] font-bold text-hsa/60 flex items-center gap-1">
-                    <component :is="WORKSPACE_TYPE_CONFIG[ws.type].icon" class="w-3 h-3" />
-                    {{ getWorkspaceTypeLabel(ws.type) }}
-                  </span>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Indicators -->
-            <div class="flex flex-col items-end gap-1.5 shrink-0">
-              <div v-if="ws.id === store.activeWorkspaceId" 
-                class="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[9px] font-black uppercase tracking-widest">
-                Actif
-              </div>
-              <div v-if="ws.status === 'default'"
-                class="px-2 py-0.5 rounded-full bg-ash/20 text-hsa text-[9px] font-black uppercase tracking-widest">
-                Par défaut
+          <!-- Header: Logo & Name -->
+          <div class="flex items-center gap-3 min-w-0">
+            <NuxtLink :to="`/dashboard/manage/workspace/${ws.id}`" class="w-11 h-11 rounded-xl overflow-hidden border border-ash bg-ash/10 shrink-0 shadow-sm block hover:ring-2 hover:ring-primary/20 transition-all">
+              <img :src="getWorkspaceLogoUrl(ws.logo_url, ws.name)" :alt="ws.name" class="w-full h-full object-cover" />
+            </NuxtLink>
+            <div class="min-w-0 flex-1">
+              <NuxtLink :to="`/dashboard/manage/workspace/${ws.id}`" class="text-sm font-black text-BtW truncate leading-tight hover:text-primary transition-colors block tracking-tight">
+                {{ ws.name }}
+              </NuxtLink>
+              <div v-if="ws.status === 'default'" class="flex items-center gap-1 mt-0.5">
+                <span class="text-[8px] font-black text-hsa uppercase tracking-widest bg-ash/20 px-1.2 py-0.2 rounded leading-none">Par défaut</span>
               </div>
             </div>
           </div>
 
-          <!-- Quick Stats / Info -->
-          <div class="grid grid-cols-2 gap-2 pt-2">
-            <div class="p-2 rounded-lg bg-ash/20 text-center">
-              <p class="text-[8px] font-black text-hsa uppercase tracking-[0.1em]">Membres</p>
-              <p class="text-sm font-bold text-BtW">{{ ws.members_count || 1 }}</p>
-            </div>
-            <div class="p-2 rounded-lg bg-ash/20 text-center">
-              <p class="text-[8px] font-black text-hsa uppercase tracking-[0.1em]">Rôle</p>
-              <p class="text-[10px] font-bold text-BtW truncate">{{ getWorkspaceRoleLabel(ws.role) }}</p>
-            </div>
+          <!-- Attributes Line (Type, Role, Members) -->
+          <div class="flex flex-wrap items-center gap-2">
+            <!-- Type Badge -->
+            <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-lg bg-ash/10 border border-ash/20 text-[9px] font-bold text-hsa shadow-sm">
+              <component :is="WORKSPACE_TYPE_CONFIG[ws.type || 'personal'].icon" class="w-2.5 h-2.5 text-primary" />
+              {{ getWorkspaceTypeLabel(ws.type) }}
+            </span>
+
+            <!-- Role Badge -->
+            <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-lg bg-primary/5 border border-primary/10 text-[9px] font-bold text-primary shadow-sm uppercase tracking-wider">
+              <component :is="WORKSPACE_ROLE_CONFIG[ws.role || 'reader']?.icon" class="w-2.5 h-2.5" />
+              {{ getWorkspaceRoleLabel(ws.role) }}
+            </span>
+
+            <!-- Members Count -->
+            <span class="text-[9px] font-bold text-hsa/60 ml-auto whitespace-nowrap">
+              <IconUsers class="w-2.5 h-2.5 inline mr-1" />
+              {{ ws.members_count || 1 }} {{ (ws.members_count || 1) > 1 ? 'membres' : 'membre' }}
+            </span>
           </div>
 
-          <!-- Actions -->
-          <div class="flex items-center gap-2 pt-2 border-t border-ash/50 opacity-0 group-hover/ws:opacity-100 transition-opacity translate-y-1 group-hover/ws:translate-y-0 duration-300">
-            <UiBaseButton @click="store.openModal(ws)" variant="ghost" size="xs" class="flex-1 !rounded-lg hover:!bg-primary/10 hover:text-primary !py-1.5">
-              <IconEdit class="w-4 h-4 mr-1.5" /> Modifier
+          <!-- Actions (Inline) -->
+          <div class="flex items-center gap-2 pt-3 border-t border-ash/30">
+            <UiBaseButton @click="store.openModal(ws)" variant="ghost" size="xs" class="flex-1 !rounded-xl hover:!bg-primary/5 hover:text-primary !py-2 border border-ash/20 hover:border-primary/20 transition-all font-bold text-[10px]">
+              <IconEdit class="w-3 h-3 mr-1.5" /> Modifier
             </UiBaseButton>
             <UiBaseButton v-if="ws.role === 'owner'" @click="confirmDelete(ws)" variant="ghost" size="xs" 
-              class="flex-1 !rounded-lg hover:!bg-danger/10 hover:text-danger !py-1.5 border-none">
-              <IconTrash class="w-4 h-4 mr-1.5" /> Supprimer
+              class="flex-1 !rounded-xl hover:!bg-danger/5 hover:text-danger !py-2 border border-ash/20 hover:border-danger/20 transition-all font-bold text-hsa text-[10px]">
+              <IconTrash class="w-3 h-3 mr-1.5" /> Supprimer
             </UiBaseButton>
           </div>
         </div>
@@ -123,10 +121,13 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { IconPlus, IconArrowLeft, IconEdit, IconTrash, IconCheck, IconAlertTriangle } from '@tabler/icons-vue'
+import { IconPlus, IconArrowLeft, IconEdit, IconTrash, IconCheck, IconAlertTriangle, IconUsers } from '@tabler/icons-vue'
 import { useWorkspaceStore } from '~/stores/back/user/workspace'
 import { useToastStore } from '~/stores/front/toast'
-import { getWorkspaceLogoUrl, getWorkspaceTypeLabel, getWorkspaceRoleLabel, WORKSPACE_TYPE_CONFIG } from '~/utils/workspace'
+import { 
+  getWorkspaceLogoUrl, getWorkspaceTypeLabel, getWorkspaceRoleLabel, 
+  WORKSPACE_TYPE_CONFIG, WORKSPACE_ROLE_CONFIG 
+} from '~/utils/workspace'
 import type { Workspace } from '~/types/workspace'
 
 const store = useWorkspaceStore()

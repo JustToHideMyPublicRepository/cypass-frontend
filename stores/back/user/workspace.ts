@@ -87,7 +87,7 @@ export const useWorkspaceStore = defineStore('workspace', {
           this.message = response.message
           this.workspaces.push(response.workspace)
           this.setActiveWorkspace(response.workspace)
-          this.isCreateModalOpen = false
+          this.isModalOpen = false
           return true
         }
         this.error = response.message
