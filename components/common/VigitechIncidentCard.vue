@@ -128,7 +128,7 @@
 </template>
 
 <script setup lang="ts">
-import { IconMapPin, IconClock, IconAlertCircle, IconLock, IconShare, IconChevronRight, IconEye, IconFlag, IconEdit, IconMessage, IconTrash, IconPaperclip } from '@tabler/icons-vue'
+import { IconMapPin, IconClock, IconAlertCircle, IconLock, IconShare, IconEye, IconFlag, IconEdit, IconMessage, IconTrash, IconPaperclip } from '@tabler/icons-vue'
 import type { Incident } from '~/types/vigitech'
 import { decodeHtmlEntities } from '~/utils/format'
 import { formatRelativeTime, isSignificantDifference, formatTimeDiff } from '~/utils/date'

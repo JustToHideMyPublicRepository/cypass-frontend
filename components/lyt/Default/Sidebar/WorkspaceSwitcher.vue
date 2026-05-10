@@ -147,7 +147,10 @@ const wsSearch = ref('')
 const router = useRouter()
 
 const toggleDefault = async (id: string) => {
+  switchingId.value = id
   const success = await wsStore.setDefaultWorkspace(id)
+  switchingId.value = null
+  
   if (success) {
     toast.showToast('success', 'Succès', 'Workspace par défaut mis à jour.')
   } else {

@@ -11,14 +11,13 @@
 
     <h1>
       Votre bouclier
-      <span class="font-handwritting text-secondary relative"> numérique </span> <br>
+      <span class="font-handwritting text-secondary relative"> numérique </span>
+      <br class="hidden md:block">
       pour
-      <div class="flex items-end">
-        <span class="font-handwritting text-primary">
-          {{ currentText }}<span
-            class="inline-block w-[3px] h-[0.85em] bg-primary animate-pulse align-middle ml-0.5"></span>
-        </span>
-      </div>
+      <span class="font-handwritting text-primary ml-2">
+        {{ currentText }}<span
+          class="inline-block w-[2px] md:w-[3px] h-[0.85em] bg-primary animate-pulse align-middle ml-0.5"></span>
+      </span>
     </h1>
 
     <p class="max-w-2xl mx-auto lg:mx-0 leading-relaxed">
@@ -36,12 +35,12 @@
     <div class="space-y-4 pt-4 w-full md:max-w-fit mx-auto lg:mx-0">
       <!-- Boutons s-->
       <div class="grid grid-cols-2 sm:flex sm:flex-row gap-2 sm:gap-4 justify-center lg:justify-start">
-        <UiBaseButton :to="authStore.user ? `/dashboard/${wsStore.activeWorkspace?.slug || ''}/docsentry` : '/verify'"
-          variant="accent" class="w-full sm:w-auto flex items-center justify-center gap-1.5 text-center h-full">
+        <UiBaseButton :to="dashboardUrl" variant="accent"
+          class="w-full sm:w-auto flex items-center justify-center gap-1.5 text-center h-full">
           <IconFileCheck class="w-4 h-4 md:w-5 md:h-5 shrink-0" />
           <span class="leading-tight">{{ authStore.user ? 'Gestion documents' : 'Vérifier document' }}</span>
         </UiBaseButton>
-        <UiBaseButton :to="authStore.user ? '/dashboard/vigitech' : '/vigitech'" variant="secondary"
+        <UiBaseButton :to="authStore.user ? dashboardVigitechUrl : '/vigitech'" variant="secondary"
           class="w-full sm:w-auto flex items-center justify-center gap-1.5 text-center h-full">
           <IconShieldCheck class="w-4 h-4 md:w-5 md:h-5 shrink-0" />
           <span class="leading-tight">{{ authStore.user ? 'Gestion incidents' : 'Veille publique' }}</span>
@@ -68,6 +67,17 @@ import { useWorkspaceStore } from '~/stores/back/user/workspace'
 
 const authStore = useAuthStore()
 const wsStore = useWorkspaceStore()
+
+const dashboardUrl = computed(() => {
+  if (!authStore.user) return '/verify'
+  const slug = wsStore.activeWorkspace?.slug
+  return slug ? `/dashboard/${slug}/docsentry` : '/dashboard'
+})
+
+const dashboardVigitechUrl = computed(() => {
+  const slug = wsStore.activeWorkspace?.slug
+  return slug ? `/dashboard/${slug}/vigitech` : '/dashboard/vigitech'
+})
 
 const heroFeatures = [
   { label: 'Souveraineté', icon: markRaw(IconWorld) },
