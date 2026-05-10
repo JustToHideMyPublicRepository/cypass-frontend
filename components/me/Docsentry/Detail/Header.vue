@@ -1,10 +1,6 @@
 <template>
   <div class="space-y-6">
-    <UiAppBreadcrumbs :items="[
-      { label: 'Tableau de bord', path: '/dashboard' },
-      { label: 'DocSentry', path: '/dashboard/docsentry' },
-      { label: filename || 'Détails' }
-    ]" />
+    <UiAppBreadcrumbs :items="breadcrumbItems" />
 
     <div class="flex items-center gap-4">
       <h1 class="text-2xl font-bold text-BtW">Détails du document</h1>
@@ -13,7 +9,19 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
+import { computed } from 'vue'
+import { useWorkspaceStore } from '~/stores/back/user/workspace'
+
+const props = defineProps<{
   filename?: string
 }>()
+
+const wsStore = useWorkspaceStore()
+const slug = computed(() => wsStore.activeWorkspace?.slug || '')
+
+const breadcrumbItems = computed(() => [
+  { label: 'Tableau de bord', path: `/dashboard/${slug.value}` },
+  { label: 'DocSentry', path: `/dashboard/${slug.value}/docsentry` },
+  { label: props.filename || 'Détails' }
+])
 </script>

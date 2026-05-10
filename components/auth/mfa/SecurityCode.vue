@@ -76,6 +76,7 @@
 import { ref, computed } from 'vue'
 import { IconCheck } from '@tabler/icons-vue'
 import { useAuthStore } from '~/stores/back/user/auth'
+import { useWorkspaceStore } from '~/stores/back/user/workspace'
 import { useToastStore } from '~/stores/front/toast'
 
 const authStore = useAuthStore()
@@ -141,9 +142,11 @@ const startCountdown = () => {
 }
 
 // Nouvelle méthode pour gérer les données de retour
-const handleFinalize = () => {
+const handleFinalize = async () => {
   if (timerInterval) clearInterval(timerInterval)
-  window.location.href = '/dashboard'
+  const wsStore = useWorkspaceStore()
+  await wsStore.initWorkspace()
+  window.location.href = `/dashboard/${wsStore.activeWorkspace?.slug || ''}`
 }
 
 const resetSelection = () => {

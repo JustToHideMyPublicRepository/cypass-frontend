@@ -1,4 +1,5 @@
 import { useAuthStore } from '~/stores/back/user/auth'
+import { useWorkspaceStore } from '~/stores/back/user/workspace'
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
   const auth = useAuthStore()
@@ -15,6 +16,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
   // Si l'utilisateur est connecté
   if (auth.user && to.path.startsWith('/auth')) {
-    return navigateTo('/dashboard')
+    const wsStore = useWorkspaceStore()
+    return navigateTo(`/dashboard/${wsStore.activeWorkspace?.slug || ''}`)
   }
 })

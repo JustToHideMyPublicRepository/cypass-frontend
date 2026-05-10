@@ -29,6 +29,7 @@
 import { ref, onMounted } from 'vue'
 import { IconAlertCircle } from '@tabler/icons-vue'
 import { useAuthStore } from '~/stores/back/user/auth'
+import { useWorkspaceStore } from '~/stores/back/user/workspace'
 import { useToastStore } from '~/stores/front/toast'
 
 definePageMeta({
@@ -56,7 +57,9 @@ const verify = async () => {
 
   if (success) {
     toastStore.showToast('success', 'Connecté', 'Authentification par lien magique réussie.')
-    navigateTo('/dashboard')
+    const wsStore = useWorkspaceStore()
+    await wsStore.initWorkspace()
+    navigateTo(`/dashboard/${wsStore.activeWorkspace?.slug || ''}`)
   } else {
     error.value = authStore.error || "Ce lien a expiré ou a déjà été utilisé."
     loading.value = false

@@ -261,6 +261,7 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
           }
         })
 
+        const wsStore = useWorkspaceStore()
         const response = await $fetch<{ success: boolean; message: string; data: UploadResult }>('/api/user/docsentry/certificate-enriched', {
           method: 'POST',
           query: { user_workspace_id: wsStore.activeWorkspaceId },
@@ -292,6 +293,7 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
         formData.append('document', file)
         formData.append('document_category', category)
 
+        const wsStore = useWorkspaceStore()
         const response = await $fetch<{
           success: boolean;
           extracted: boolean;

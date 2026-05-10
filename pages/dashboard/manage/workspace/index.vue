@@ -10,10 +10,6 @@
         <UiBaseButton @click="store.openModal()" variant="primary" size="sm">
           <IconPlus class="w-4 h-4 mr-2" /> Nouveau workspace
         </UiBaseButton>
-        <NuxtLink to="/dashboard" class="inline-flex items-center gap-2 text-hsa hover:text-primary transition-colors font-medium text-sm">
-          <IconArrowLeft class="w-4 h-4" />
-          Retour
-        </NuxtLink>
       </div>
     </div>
 

@@ -46,6 +46,7 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import { useAuthStore } from '~/stores/back/user/auth'
+import { useWorkspaceStore } from '~/stores/back/user/workspace'
 import { useToastStore } from '~/stores/front/toast'
 
 const authStore = useAuthStore()
@@ -132,7 +133,9 @@ const verify = async (code: string) => {
 
   if (success) {
     toastStore.showToast('success', 'Connecté', 'Authentification réussie.')
-    navigateTo('/dashboard')
+    const wsStore = useWorkspaceStore()
+    await wsStore.initWorkspace()
+    navigateTo(`/dashboard/${wsStore.activeWorkspace?.slug || ''}`)
   } else {
     toastStore.showToast('error', 'Échec', authStore.error || 'Code invalide.')
     digits.value = Array(codeLength.value).fill('')

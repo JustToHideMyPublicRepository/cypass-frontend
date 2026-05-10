@@ -53,7 +53,7 @@
           </UiBaseButton>
         </template>
         <template v-else>
-          <UiBaseButton to="/dashboard" variant="primary" class="w-full sm:w-auto px-6 py-2.5">
+          <UiBaseButton :to="`/dashboard/${wsStore.activeWorkspace?.slug || ''}`" variant="primary" class="w-full sm:w-auto px-6 py-2.5">
             Retour au Tableau de Bord
           </UiBaseButton>
         </template>
@@ -76,6 +76,7 @@ import { useRoute } from 'vue-router'
 import { modules } from '@/data/modules'
 import { IconRocket } from '@tabler/icons-vue'
 import { useAuthStore } from '~/stores/back/user/auth'
+import { useWorkspaceStore } from '~/stores/back/user/workspace'
 
 definePageMeta({
   layout: false
@@ -83,6 +84,7 @@ definePageMeta({
 
 const route = useRoute()
 const authStore = useAuthStore()
+const wsStore = useWorkspaceStore()
 const serviceId = computed(() => route.query.service as string)
 
 const currentService = computed(() => modules.find(s => s.id === serviceId.value))

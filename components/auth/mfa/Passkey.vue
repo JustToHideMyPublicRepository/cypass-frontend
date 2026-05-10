@@ -39,6 +39,7 @@
 import { ref, onMounted } from 'vue'
 import { IconFingerprint, IconPasswordFingerprint, IconAlertCircle } from '@tabler/icons-vue'
 import { useAuthStore } from '~/stores/back/user/auth'
+import { useWorkspaceStore } from '~/stores/back/user/workspace'
 import { useToastStore } from '~/stores/front/toast'
 import { prepareAssertionOptions, prepareAssertionResponse } from '~/utils/webauthn'
 
@@ -72,7 +73,9 @@ const handlePasskeyLogin = async () => {
 
     if (success) {
       toastStore.showToast('success', 'Connecté', 'Authentification passkey réussie.')
-      window.location.href = '/dashboard'
+      const wsStore = useWorkspaceStore()
+      await wsStore.initWorkspace()
+      window.location.href = `/dashboard/${wsStore.activeWorkspace?.slug || ''}`
     } else {
       throw new Error(authStore.error || 'La validation de votre Passkey a échoué.')
     }

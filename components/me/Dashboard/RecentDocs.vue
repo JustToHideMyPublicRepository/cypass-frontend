@@ -2,7 +2,7 @@
   <UiBaseCard title="Derniers documents" subtitle="Derniers documents certifiés">
     <template #header>
       <UiBaseButton variant="secondary" size="sm" class="!px-2 !py-1 !text-[10px]"
-        @click="router.push('/dashboard/docsentry')">Gérer</UiBaseButton>
+        @click="navigateToList">Gérer</UiBaseButton>
     </template>
     <div class="space-y-1">
       <!-- Loading State -->
@@ -16,7 +16,7 @@
       <!-- Documents List -->
       <div v-for="doc in documents" :key="doc.id"
         class="flex items-center justify-between p-3 rounded-xl hover:bg-ash/50 transition-all cursor-pointer group"
-        @click="router.push(`/dashboard/docsentry/${doc.id}`)">
+        @click="navigateToDetail(doc.id)">
         <div class="flex items-center gap-3 min-w-0">
           <div class="p-2 rounded-lg transition-colors"
             :class="getDocumentStyle(doc.has_versions, doc.certification_mode).bgColor">
@@ -35,9 +35,12 @@
 </template>
 
 <script setup lang="ts">
+import { useRouter } from 'vue-router'
 import { getDocumentStyle } from '~/utils/docsentry'
+import { useWorkspaceStore } from '~/stores/back/user/workspace'
 
 const router = useRouter()
+const wsStore = useWorkspaceStore()
 
 defineProps<{
   documents: any[]
@@ -45,4 +48,14 @@ defineProps<{
   formatTime: (ts: string) => string
   getDocStatus: (doc: any) => string
 }>()
+
+const navigateToList = () => {
+  const slug = wsStore.activeWorkspace?.slug || ''
+  router.push(`/dashboard/${slug}/docsentry`)
+}
+
+const navigateToDetail = (docId: string) => {
+  const slug = wsStore.activeWorkspace?.slug || ''
+  router.push(`/dashboard/${slug}/docsentry/${docId}`)
+}
 </script>

@@ -62,7 +62,7 @@
             <p class="text-xs text-hsa leading-relaxed">
               {{ getDocumentMessage(notification.type) }}
             </p>
-            <NuxtLink to="/dashboard/docsentry"
+            <NuxtLink :to="`/dashboard/${wsStore.activeWorkspace?.slug || ''}/docsentry`"
               class="inline-block mt-2 text-[10px] font-black uppercase text-primary hover:underline">
               Consulter mon coffre-fort
             </NuxtLink>
@@ -103,6 +103,7 @@
 <script setup lang="ts">
 import { IconCalendar, IconTrash, IconShieldExclamation, IconFileText, IconUser } from '@tabler/icons-vue'
 import { useNotificationStyles } from '~/composables/useNotificationStyles'
+import { useWorkspaceStore } from '~/stores/back/user/workspace'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 
@@ -112,6 +113,7 @@ const props = defineProps<{
 
 defineEmits(['delete'])
 
+const wsStore = useWorkspaceStore()
 const {
   getTypeIcon, getTypeStyles, getCategory, getCategoryLabel,
   getSecurityMessage, getDocumentMessage, getProfileMessage

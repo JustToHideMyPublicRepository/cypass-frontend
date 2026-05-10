@@ -38,7 +38,7 @@
     <div class="space-y-4 pt-4 w-full md:max-w-fit mx-auto lg:mx-0">
       <!-- Boutons s-->
       <div class="grid grid-cols-2 sm:flex sm:flex-row gap-2 sm:gap-4 justify-center lg:justify-start">
-        <UiBaseButton :to="authStore.user ? '/dashboard/docsentry' : '/verify'" variant="accent"
+        <UiBaseButton :to="authStore.user ? `/dashboard/${wsStore.activeWorkspace?.slug || ''}/docsentry` : '/verify'" variant="accent"
           class="w-full sm:w-auto flex items-center justify-center gap-1.5 text-center h-full">
           <IconFileCheck class="w-4 h-4 md:w-5 md:h-5 shrink-0" />
           <span class="leading-tight">{{ authStore.user ? 'Gestion documents' : 'Vérifier document' }}</span>
@@ -66,8 +66,10 @@
 import { ref, onMounted, onUnmounted, markRaw } from 'vue'
 import { IconLockBolt, IconShieldCheck, IconAccessible, IconFileCheck, IconRosetteDiscountCheck, IconWorld } from '@tabler/icons-vue'
 import { useAuthStore } from '~/stores/back/user/auth'
+import { useWorkspaceStore } from '~/stores/back/user/workspace'
 
 const authStore = useAuthStore()
+const wsStore = useWorkspaceStore()
 
 const heroFeatures = [
   { label: 'Souveraineté', icon: markRaw(IconWorld) },

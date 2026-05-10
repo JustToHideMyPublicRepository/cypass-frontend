@@ -1,7 +1,20 @@
+<script setup lang="ts">
+import { computed } from 'vue'
+import { IconArrowLeft } from '@tabler/icons-vue'
+import { useWorkspaceStore } from '~/stores/back/user/workspace'
+
+defineProps<{
+  title?: string
+}>()
+
+const wsStore = useWorkspaceStore()
+const slug = computed(() => wsStore.activeWorkspace?.slug || '')
+</script>
+
 <template>
   <div class="space-y-6">
     <UiAppBreadcrumbs :items="[
-      { label: 'Tableau de bord', path: '/dashboard' },
+      { label: 'Tableau de bord', path: `/dashboard/${slug}` },
       { label: 'Notifications', path: '/dashboard/notification' },
       { label: title || 'Détail' }
     ]" />
@@ -14,11 +27,3 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-import { IconArrowLeft } from '@tabler/icons-vue'
-
-defineProps<{
-  title?: string
-}>()
-</script>

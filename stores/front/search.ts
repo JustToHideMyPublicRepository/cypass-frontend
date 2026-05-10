@@ -4,6 +4,7 @@ import { useUserDocsentryStore } from '../back/user/docsentry'
 import { useUserVigitechStore } from '../back/user/vigitech'
 import { useActivitiesStore } from '../back/user/activities'
 import { usePublicVigitechStore } from '../back/public/vigitech'
+import { useWorkspaceStore } from '../back/user/workspace'
 import { shortcutsData } from '@/data/shortcuts'
 import { faqCategories } from '@/data/faq'
 import { supportData } from '@/data/support'
@@ -146,6 +147,8 @@ export const useSearchStore = defineStore('search', {
         const isAuthenticated = !!authStore.user
         const vigitechStore = useUserVigitechStore()
         const publicVigitechStore = usePublicVigitechStore()
+        const wsStore = useWorkspaceStore()
+        const slug = wsStore.activeWorkspace?.slug || ''
 
         // Proactive fetching (ONLY if authenticated or for public data if empty)
         const fetchPromises = []
@@ -183,11 +186,15 @@ export const useSearchStore = defineStore('search', {
             const hasPath = !!entry.path
             const isShortcut = !hasPath && !!entry.keys
 
+            let dynamicPath = entry.path
+            if (dynamicPath === '/dashboard/docsentry') dynamicPath = `/dashboard/${slug}/docsentry`
+            else if (dynamicPath === '/dashboard') dynamicPath = `/dashboard/${slug}`
+
             searchResults.push({
               id: `nav-${id}`,
               title: entry.label,
               description: entry.group || 'Navigation',
-              path: entry.path,
+              path: dynamicPath,
               type: hasPath ? 'navigation' : 'shortcuts',
               category: hasPath ? 'Page' : 'Raccourcis',
               isShortcut
@@ -204,7 +211,7 @@ export const useSearchStore = defineStore('search', {
                 id: `doc-${doc.id}`,
                 title: doc.filename,
                 description: `Document ${(doc.file_type || '').toUpperCase()}`,
-                path: `/dashboard/docsentry/${doc.id}`,
+                path: `/dashboard/${slug}/docsentry/${doc.id}`,
                 type: 'docsentry',
                 category: 'Gestion document'
               })

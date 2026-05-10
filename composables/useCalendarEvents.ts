@@ -3,6 +3,7 @@ import { useUserDocsentryStore } from '~/stores/back/user/docsentry'
 import { useUserVigitechStore } from '~/stores/back/user/vigitech'
 import { useActivitiesStore } from '~/stores/back/user/activities'
 import { useAuthStore } from '~/stores/back/user/auth'
+import { useWorkspaceStore } from '~/stores/back/user/workspace'
 import { format, startOfMonth, endOfMonth } from 'date-fns'
 import { getCalendarFilterConfig } from '~/utils/calendar'
 import { getLogActionInfo } from '~/utils/logs'
@@ -100,6 +101,9 @@ export const useCalendarEvents = () => {
 
     // 1. Docsentry Documents
     if (userDocsentryStore.documents) {
+      const wsStore = useWorkspaceStore()
+      const slug = wsStore.activeWorkspace?.slug || ''
+      
       userDocsentryStore.documents.forEach(doc => {
         events.push({
           id: `doc-${doc.id}`,
@@ -109,7 +113,7 @@ export const useCalendarEvents = () => {
           type: 'docsentry',
           color: getCalendarFilterConfig('docsentry')?.classes.text || 'text-primary',
           bgColor: getCalendarFilterConfig('docsentry')?.classes.bgLight || 'bg-primary/10',
-          url: '/dashboard/docsentry'
+          url: `/dashboard/${slug}/docsentry`
         })
       })
     }

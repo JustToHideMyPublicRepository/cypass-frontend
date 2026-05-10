@@ -91,6 +91,7 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import { IconMenu2, IconX } from '@tabler/icons-vue'
 import { useAuthStore } from '~/stores/back/user/auth'
 import { useProfilStore } from '~/stores/back/user/profil'
+import { useWorkspaceStore } from '~/stores/back/user/workspace'
 import { getLinkTooltip } from '~/data/shortcuts'
 import { useToastStore } from '~/stores/front/toast'
 
@@ -111,8 +112,11 @@ const NavHeader = [
 
 // Auth Links
 const getAuthLinks = (forMobile: boolean) => {
+  const wsStore = useWorkspaceStore()
+  const slug = wsStore.activeWorkspace?.slug || ''
+  
   const links = [
-    { label: 'Tableau de bord', path: '/dashboard', type: 'link', mobile: true },
+    { label: 'Tableau de bord', path: `/dashboard/${slug}`, type: 'link', mobile: true },
     { label: 'Mon profil', path: '/dashboard/profile', type: 'link', mobile: false },
     { label: 'Mes sessions', path: '/dashboard/sessions', type: 'link', mobile: false },
     { label: "Mes activités", path: '/dashboard/activities', type: 'link', mobile: false },

@@ -18,30 +18,38 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
+import { useWorkspaceStore } from '~/stores/back/user/workspace'
 import {
-  IconFiles, IconSettings, IconDevices, IconChevronRight, IconAlertTriangle, IconRefresh, IconHistory, IconShieldPlus, IconBell, IconCalendar, IconUserCircle
+  IconFiles, IconSettings, IconDevices, IconChevronRight, IconAlertTriangle, IconRefresh, IconHistory, IconShieldPlus, IconBell, IconCalendar, IconUserCircle, IconLayoutDashboard
 } from '@tabler/icons-vue'
 
-const ALL_LINKS = [
-  { label: 'Evenements', path: '/dashboard/calendar', icon: IconCalendar },
-  { label: 'Mes documents', path: '/dashboard/docsentry', icon: IconFiles },
-  { label: 'Notifications', path: '/dashboard/notification', icon: IconBell },
-  { label: 'Mes alertes', path: '/dashboard/vigitech', icon: IconAlertTriangle },
-  { label: 'Logs système', path: '/dashboard/activities', icon: IconHistory },
-  { label: 'Profil', path: '/dashboard/profile', icon: IconUserCircle },
-  { label: 'Paramètres', path: '/dashboard/settings', icon: IconSettings },
-  { label: 'Sessions actives', path: '/dashboard/sessions', icon: IconDevices },
-  { label: 'Sécurité', path: '/dashboard/profile#security', icon: IconShieldPlus }
-]
+const wsStore = useWorkspaceStore()
+
+const ALL_LINKS = computed(() => {
+  const slug = wsStore.activeWorkspace?.slug || ''
+  return [
+    { label: 'Vue d\'ensemble', path: `/dashboard/${slug}`, icon: IconLayoutDashboard },
+    { label: 'Evenements', path: '/dashboard/calendar', icon: IconCalendar },
+    { label: 'Mes documents', path: `/dashboard/${slug}/docsentry`, icon: IconFiles },
+    { label: 'Notifications', path: '/dashboard/notification', icon: IconBell },
+    { label: 'Mes alertes', path: '/dashboard/vigitech', icon: IconAlertTriangle },
+    { label: 'Logs système', path: '/dashboard/activities', icon: IconHistory },
+    { label: 'Profil', path: '/dashboard/profile', icon: IconUserCircle },
+    { label: 'Paramètres', path: '/dashboard/settings', icon: IconSettings },
+    { label: 'Sessions actives', path: '/dashboard/sessions', icon: IconDevices },
+    { label: 'Sécurité', path: '/dashboard/profile#security', icon: IconShieldPlus }
+  ]
+})
 
 const displayedLinks = ref<any[]>([])
 
 const refreshLinks = () => {
   const stats = JSON.parse(localStorage.getItem('cypass_action_stats') || '{}')
+  const baseLinks = ALL_LINKS.value
 
   // 1. Sort by count descending
-  const sorted = [...ALL_LINKS].sort((a, b) => {
+  const sorted = [...baseLinks].sort((a, b) => {
     const countA = stats[a.path] || 0
     const countB = stats[b.path] || 0
     return countB - countA

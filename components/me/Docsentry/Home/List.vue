@@ -31,7 +31,7 @@
                       <component :is="getDocumentStyle(doc.has_versions, doc.certification_mode).icon" class="w-5 h-5" />
                     </div>
                     <div>
-                      <NuxtLink :to="`/dashboard/docsentry/${doc.id}`"
+                      <NuxtLink :to="`/dashboard/${wsSlug}/docsentry/${doc.id}`"
                         class="font-bold text-BtW hover:text-primary transition-colors block leading-tight">
                         {{ doc.filename }}
                       </NuxtLink>
@@ -68,7 +68,7 @@
                       <UiLogoLoader size="xs" />
                     </template>
                     <template v-else>
-                      <NuxtLink :to="`/dashboard/docsentry/${doc.id}`"
+                      <NuxtLink :to="`/dashboard/${wsSlug}/docsentry/${doc.id}`"
                         class="w-9 h-9 flex items-center justify-center bg-ash/50 hover:bg-primary hover:text-white rounded-xl transition-all"
                         title="Consulter">
                         <IconEye class="w-4 h-4" />
@@ -116,6 +116,7 @@ import type { Document } from '~/types/docsentry'
 import { getDocumentStyle } from '~/utils/docsentry'
 import { useToastStore } from '~/stores/front/toast'
 import { useUserDocsentryStore } from '~/stores/back/user/docsentry'
+import { useWorkspaceStore } from '~/stores/back/user/workspace'
 import { useContextMenu, type ContextMenuItem } from '~/composables/useContextMenu'
 
 const props = defineProps<{
@@ -130,7 +131,10 @@ const emit = defineEmits(['next-page', 'prev-page', 'refresh'])
 
 const toast = useToastStore()
 const userDocsentryStore = useUserDocsentryStore()
+const wsStore = useWorkspaceStore()
 const { showMenu } = useContextMenu()
+
+const wsSlug = computed(() => wsStore.activeWorkspace?.slug || '')
 
 const showShareModal = ref(false)
 const shareUrl = ref('')
@@ -182,7 +186,7 @@ const handleContextMenu = (doc: Document, e: MouseEvent) => {
     {
       label: 'Consulter les détails',
       icon: IconEye,
-      action: () => navigateTo(`/dashboard/docsentry/${doc.id}`)
+      action: () => navigateTo(`/dashboard/${wsSlug.value}/docsentry/${doc.id}`)
     },
     {
       label: 'Copier le Hash',

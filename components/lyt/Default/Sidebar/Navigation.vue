@@ -2,7 +2,7 @@
   <div class="flex-1 overflow-y-auto px-3 py-6 space-y-8 scrollbar-hide">
     <!-- Main Links -->
     <nav class="space-y-1.5">
-      <NuxtLink v-for="link in mainLinks" :key="link.path" :to="link.path" class="nav-link" @click="$emit('close')"
+      <NuxtLink v-for="link in mainLinks" :key="link.path" :to="link.path" class="nav-link" @click="$emit('close'); wsStore.closeSwitcher()"
         v-tooltip="getLinkTooltip(link.path)" :class="{
           'justify-center px-0': isCollapsed,
           'active': isLinkActive(link.path)
@@ -19,7 +19,7 @@
       <div v-show="isCollapsed" class="border-t border-ash mx-2"></div>
       <nav class="space-y-1.5">
         <NuxtLink v-for="service in activeModules" :key="service.id" :to="getModulePath(service.id)" class="nav-link"
-          @click="$emit('close')" v-tooltip="getLinkTooltip(getModulePath(service.id))" :class="{
+          @click="$emit('close'); wsStore.closeSwitcher()" v-tooltip="getLinkTooltip(getModulePath(service.id))" :class="{
             'justify-center px-0': isCollapsed,
             'active': isLinkActive(getModulePath(service.id))
           }" :title="isCollapsed ? service.title : ''">
