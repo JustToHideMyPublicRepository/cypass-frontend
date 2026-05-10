@@ -89,6 +89,7 @@ import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { IconEye, IconEyeOff, IconMail, IconLock } from '@tabler/icons-vue'
 import { useAuthStore } from '~/stores/back/user/auth'
+import { useWorkspaceStore } from '~/stores/back/user/workspace'
 import { useToastStore } from '~/stores/front/toast'
 import { getUserAvatarUrl } from '~/utils/user'
 
@@ -128,7 +129,12 @@ const handleLogin = async () => {
 
   if (result.success) {
     toastStore.showToast('success', 'Bienvenue', authStore.message || 'Connexion réussie !')
-    const redirectPath = route.query.redirect as string || '/dashboard'
+
+    // Initialiser les workspaces pour redirection dynamique
+    const wsStore = useWorkspaceStore()
+    await wsStore.initWorkspace()
+
+    const redirectPath = route.query.redirect as string || `/dashboard/${wsStore.activeWorkspace?.slug || ''}`
     navigateTo(redirectPath)
   } else {
     toastStore.showToast('error', 'Erreur de connexion', authStore.error || "Identifiants invalides.")

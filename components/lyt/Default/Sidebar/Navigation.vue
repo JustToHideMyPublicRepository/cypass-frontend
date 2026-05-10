@@ -18,10 +18,10 @@
         Modules actifs</div>
       <div v-show="isCollapsed" class="border-t border-ash mx-2"></div>
       <nav class="space-y-1.5">
-        <NuxtLink v-for="service in activeModules" :key="service.id" :to="`/dashboard/${service.id}`" class="nav-link"
-          @click="$emit('close')" v-tooltip="getLinkTooltip('/dashboard/' + service.id)" :class="{
+        <NuxtLink v-for="service in activeModules" :key="service.id" :to="getModulePath(service.id)" class="nav-link"
+          @click="$emit('close')" v-tooltip="getLinkTooltip(getModulePath(service.id))" :class="{
             'justify-center px-0': isCollapsed,
-            'active': isLinkActive(`/dashboard/${service.id}`)
+            'active': isLinkActive(getModulePath(service.id))
           }" :title="isCollapsed ? service.title : ''">
           <component :is="service.icon" class="w-5 h-5 icon" />
           <span v-show="!isCollapsed" class="truncate">{{ service.title }}</span>
@@ -57,6 +57,7 @@ import { useRoute } from 'nuxt/app'
 import { IconLayoutDashboard as IconDashboard, IconCalendar } from '@tabler/icons-vue'
 import { modules } from '@/data/modules'
 import { getLinkTooltip } from '~/data/shortcuts'
+import { useWorkspaceStore } from '~/stores/back/user/workspace'
 
 defineProps<{
   isCollapsed: boolean
@@ -65,18 +66,34 @@ defineProps<{
 defineEmits(['close'])
 
 const route = useRoute()
+const wsStore = useWorkspaceStore()
 
-const mainLinks = [
-  { label: 'Vue d\'ensemble', path: '/dashboard', icon: IconDashboard },
-  { label: 'Calendrier', path: '/dashboard/calendar', icon: IconCalendar }
-]
+const mainLinks = computed(() => {
+  const slug = wsStore.activeWorkspace?.slug || ''
+  return [
+    { label: 'Vue d\'ensemble', path: `/dashboard/${slug}`, icon: IconDashboard },
+    { label: 'Calendrier', path: '/dashboard/calendar', icon: IconCalendar }
+  ]
+})
 
 const activeModules = computed(() => modules.filter(s => s.status === 'available'))
 const comingSoonModules = computed(() => modules.filter(s => s.status !== 'available'))
 
+const getModulePath = (moduleId: string) => {
+  const slug = wsStore.activeWorkspace?.slug || ''
+  // Only docsentry is moved for now as per user request
+  if (moduleId === 'docsentry') {
+    return `/dashboard/${slug}/docsentry`
+  }
+  return `/dashboard/${moduleId}`
+}
+
 const isLinkActive = (path: string) => {
-  if (path === '/dashboard') return route.path === '/dashboard'
-  return route.path === path || route.path.startsWith(path + '/')
+  // exact match for overview
+  if (wsStore.activeWorkspace?.slug && path === `/dashboard/${wsStore.activeWorkspace.slug}`) {
+    return route.path === path
+  }
+  return route.path === path || (path !== '/dashboard' && route.path.startsWith(path + '/'))
 }
 </script>
 

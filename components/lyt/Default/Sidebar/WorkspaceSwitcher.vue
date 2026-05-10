@@ -126,6 +126,7 @@ const emit = defineEmits(['toggle-collapse'])
 
 const wsStore = useWorkspaceStore()
 const wsSearch = ref('')
+const router = useRouter()
 
 const filteredWorkspaces = computed(() => {
   if (!wsSearch.value) return wsStore.workspaces
@@ -135,6 +136,9 @@ const filteredWorkspaces = computed(() => {
 
 const selectWorkspace = (ws: Workspace) => {
   wsStore.setActiveWorkspace(ws)
+  if (ws.slug) {
+    router.push(`/dashboard/${ws.slug}`)
+  }
 }
 
 const handleSwitcherToggle = () => {

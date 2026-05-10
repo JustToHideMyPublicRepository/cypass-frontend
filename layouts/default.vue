@@ -57,7 +57,8 @@ onMounted(async () => {
 
   // Initialiser les workspaces
   if (authStore.user && !workspaceStore.hasWorkspaces) {
-    await workspaceStore.initWorkspace()
+    const route = useRoute()
+    await workspaceStore.initWorkspace(route.params.slug as string)
   }
 })
 

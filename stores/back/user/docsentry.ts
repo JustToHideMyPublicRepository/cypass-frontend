@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { startOfWeek, endOfWeek, subWeeks, isWithinInterval } from 'date-fns'
 import { type Document, type DocumentDetail, type UploadResult } from '~/types/docsentry'
+import { useWorkspaceStore } from '~/stores/back/user/workspace'
 
 export const useUserDocsentryStore = defineStore('userDocsentry', {
   state: () => ({
@@ -38,9 +39,10 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
     // Télécharger certificat
     async downloadCertificate(id: string, filename: string) {
       this.error = null
+      const wsStore = useWorkspaceStore()
       try {
         const response = await $fetch('/api/user/docsentry/get-certificate', {
-          query: { id },
+          query: { id, user_workspace_id: wsStore.activeWorkspaceId },
           responseType: 'blob'
         })
         const url = window.URL.createObjectURL(response as Blob)
@@ -73,9 +75,10 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
     // Télécharger l'archive ZIP
     async downloadZip(id: string, filename: string) {
       this.error = null
+      const wsStore = useWorkspaceStore()
       try {
         const response = await $fetch('/api/user/docsentry/download-zip', {
-          query: { id },
+          query: { id, user_workspace_id: wsStore.activeWorkspaceId },
           responseType: 'blob'
         })
         const url = window.URL.createObjectURL(response as Blob)
@@ -108,8 +111,9 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
     // Récupérer les documents
     async fetchDocuments(limit: number = 20, offset: number = 0, filters: any = {}) {
       this.loading = true
+      const wsStore = useWorkspaceStore()
       try {
-        const query: any = { limit, offset }
+        const query: any = { limit, offset, user_workspace_id: wsStore.activeWorkspaceId }
         if (filters.filename) query.filename = filters.filename
         if (filters.file_type && filters.file_type !== 'all') query.file_type = filters.file_type
         if (filters.date_start) query.date_start = filters.date_start
@@ -152,8 +156,9 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
     async fetchDocumentById(id: string, sort?: string, search?: string, background: boolean = false) {
       if (!background) this.loading = true
       this.error = null
+      const wsStore = useWorkspaceStore()
       try {
-        const query: any = { id }
+        const query: any = { id, user_workspace_id: wsStore.activeWorkspaceId }
         if (sort) query.sort = sort
         if (search) query.search = search
         const response = await $fetch<{ success: boolean; data: DocumentDetail }>('/api/user/docsentry/get', {
@@ -178,12 +183,15 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
       this.error = null
       this.uploadResult = null
 
+      const wsStore = useWorkspaceStore()
       try {
         const formData = new FormData()
         formData.append('document', file)
+        if (wsStore.activeWorkspaceId) formData.append('user_workspace_id', wsStore.activeWorkspaceId)
 
         const response = await $fetch<{ success: boolean; message: string; data: UploadResult }>('/api/user/docsentry/certificate-simple', {
           method: 'POST',
+          query: { user_workspace_id: wsStore.activeWorkspaceId },
           body: formData
         })
 
@@ -255,6 +263,7 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
 
         const response = await $fetch<{ success: boolean; message: string; data: UploadResult }>('/api/user/docsentry/certificate-enriched', {
           method: 'POST',
+          query: { user_workspace_id: wsStore.activeWorkspaceId },
           body: formData
         })
 
@@ -291,6 +300,7 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
           message: string;
         }>('/api/user/docsentry/extract-metadata', {
           method: 'POST',
+          query: { user_workspace_id: wsStore.activeWorkspaceId },
           body: formData
         })
 
@@ -315,8 +325,9 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
         const previousWeekStart = startOfWeek(subWeeks(now, 1), { weekStartsOn: 1 })
         const previousWeekEnd = endOfWeek(subWeeks(now, 1), { weekStartsOn: 1 })
 
+        const wsStore = useWorkspaceStore()
         const response = await $fetch<any>('/api/user/docsentry/list', {
-          query: { limit: 100, offset: 0 }
+          query: { limit: 100, offset: 0, user_workspace_id: wsStore.activeWorkspaceId }
         })
 
         const docs = response?.data?.documents || []
@@ -345,6 +356,7 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
     async fetchArchivedDocuments(limit: number = 20, offset: number = 0) {
       this.loading = true
       try {
+        const wsStore = useWorkspaceStore()
         const response = await $fetch<{
           success: boolean;
           data: {
@@ -357,7 +369,7 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
             }
           }
         }>('/api/user/docsentry/list-archived', {
-          query: { limit, offset }
+          query: { limit, offset, user_workspace_id: wsStore.activeWorkspaceId }
         })
         if (response.success) {
           this.archivedDocuments = response.data.documents
@@ -378,8 +390,10 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
       try {
         const formData = new FormData()
         formData.append('document_id', id)
+        const wsStore = useWorkspaceStore()
         const response = await $fetch<{ success: boolean; message: string }>('/api/user/docsentry/archive', {
           method: 'POST',
+          query: { user_workspace_id: wsStore.activeWorkspaceId },
           body: formData
         })
         if (response.success) {
@@ -402,8 +416,10 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
       try {
         const formData = new FormData()
         formData.append('document_id', id)
+        const wsStore = useWorkspaceStore()
         const response = await $fetch<{ success: boolean; message: string }>('/api/user/docsentry/unarchive', {
           method: 'POST',
+          query: { user_workspace_id: wsStore.activeWorkspaceId },
           body: formData
         })
         if (response.success) {

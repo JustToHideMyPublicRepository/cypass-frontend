@@ -109,13 +109,32 @@ export const useWorkspaceStore = defineStore('workspace', {
       }
     },
 
+    // Définir le workspace actif via son slug
+    setActiveWorkspaceBySlug(slug: string) {
+      const found = this.workspaces.find(w => w.slug === slug)
+      if (found) {
+        this.setActiveWorkspace(found)
+        return true
+      }
+      return false
+    },
+
     // Initialisation au montage du layout
-    async initWorkspace() {
+    async initWorkspace(slugFromRoute?: string) {
       await this.fetchWorkspaces()
 
       if (this.workspaces.length === 0) return
 
-      // Restaurer depuis localStorage
+      // Priorité 1 : Slug venant de l'URL
+      if (slugFromRoute) {
+        const found = this.workspaces.find(w => w.slug === slugFromRoute)
+        if (found) {
+          this.setActiveWorkspace(found)
+          return
+        }
+      }
+
+      // Priorité 2 : Restaurer depuis localStorage
       if (import.meta.client) {
         const savedId = localStorage.getItem(ACTIVE_WS_KEY)
         if (savedId) {
