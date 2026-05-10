@@ -1,5 +1,5 @@
 <template>
-  <div class="flex min-h-screen bg-bgClr transition-colors duration-300">
+  <div class="flex min-h-screen md:h-screen md:overflow-hidden bg-bgClr transition-colors duration-300">
     <!-- Barre latérale -->
     <LytDefaultSidebarMain :isOpen="isOpen" :isCollapsed="isCollapsed" @logout="handleLogout"
       @toggle-collapse="isCollapsed = !isCollapsed" @close="isOpen = false" />

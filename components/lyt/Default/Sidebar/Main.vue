@@ -1,6 +1,6 @@
 <template>
   <aside :class="[
-    'fixed inset-y-0 left-0 z-50 bg-WtB border-r border-ash transform transition-all duration-300 ease-in-out md:static shrink-0 flex flex-col relative',
+    'fixed inset-y-0 left-0 z-50 bg-WtB border-r border-ash transform transition-all duration-300 ease-in-out md:static shrink-0 flex flex-col relative md:h-screen',
     isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0',
     isCollapsed ? 'w-20' : 'w-64'
   ]">
