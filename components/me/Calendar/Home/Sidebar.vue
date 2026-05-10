@@ -95,7 +95,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { IconChevronLeft, IconChevronRight, IconCheck, IconCalendarSearch, IconInfoCircle } from '@tabler/icons-vue'
+import { IconChevronLeft, IconChevronRight, IconCheck, IconCalendarSearch } from '@tabler/icons-vue'
 import type { EventType, CalendarEvent } from '~/composables/useCalendarEvents'
 import { CALENDAR_FILTERS as AVAILABLE_FILTERS } from '~/utils/calendar'
 

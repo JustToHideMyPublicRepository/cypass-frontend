@@ -5,8 +5,7 @@
     isCollapsed ? 'w-20' : 'w-64'
   ]">
     <!-- Workspace Switcher Header -->
-    <LytDefaultSidebarWorkspaceSwitcher :is-collapsed="isCollapsed" :loading="wsStore.loading"
-      @toggle-collapse="$emit('toggle-collapse')" />
+    <LytDefaultSidebarWorkspaceSwitcher :is-collapsed="isCollapsed" :loading="wsStore.loading" />
 
     <!-- Scrollable Navigation -->
     <LytDefaultSidebarNavigation :is-collapsed="isCollapsed" @close="$emit('close')" />
@@ -26,5 +25,5 @@ defineProps<{
   isCollapsed: boolean
 }>()
 
-defineEmits(['logout', 'toggle-collapse', 'close'])
+defineEmits(['logout', 'close'])
 </script>

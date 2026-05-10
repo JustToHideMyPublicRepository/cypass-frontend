@@ -11,53 +11,43 @@
         </div>
       </div>
 
-      <!-- Active Workspace Trigger with Tooltip -->
-      <UiAppTooltip v-else :content="tooltipContent" :title="wsStore.activeWorkspace?.name" width-class="w-56"
-        position="bottom" class="flex-1 min-w-0" :disabled="isCollapsed">
-        <template #trigger>
-          <button @click="handleSwitcherToggle"
-            class="flex items-center gap-2.5 w-full px-2 py-2 rounded-xl hover:bg-ash/60 transition-all duration-200 group"
-            :class="{ 'justify-center': isCollapsed }"
-            :title="isCollapsed ? (wsStore.activeWorkspace?.name || 'Workspaces') : ''">
-            <!-- Workspace Avatar -->
-            <div
-              class="w-8 h-8 rounded-lg overflow-hidden shrink-0 shadow-sm transition-all duration-200 border border-ash">
-              <img :src="getWorkspaceLogoUrl(wsStore.activeWorkspace?.logo_url, wsStore.activeWorkspace?.name)"
-                :alt="wsStore.activeWorkspace?.name || 'Workspace'" class="w-full h-full object-cover" />
-            </div>
-            <!-- Name + Chevron -->
-            <div v-show="!isCollapsed" class="flex items-center gap-1 min-w-0 flex-1">
-              <div class="min-w-0 flex-1 text-left">
-                <p class="text-sm font-semibold text-BtW truncate leading-tight">
-                  {{ wsStore.activeWorkspace?.name || 'Workspace' }}
-                </p>
-                <div class="flex items-center gap-1.5 overflow-hidden">
-                  <span
-                    class="flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-bold tracking-tight bg-ash/50 text-hsa border border-ash/20">
-                    <component :is="WORKSPACE_TYPE_CONFIG[wsStore.activeWorkspace?.type || 'personal'].icon"
-                      class="w-2.5 h-2.5" />
-                    {{ getWorkspaceTypeLabel(wsStore.activeWorkspace?.type) }}
-                  </span>
-                  <span v-if="wsStore.activeWorkspace?.role"
-                    class="flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-bold tracking-tight bg-primary/10 text-primary border border-primary/20">
-                    <component :is="WORKSPACE_ROLE_CONFIG[wsStore.activeWorkspace.role].icon" class="w-2.5 h-2.5" />
-                    {{ getWorkspaceRoleLabel(wsStore.activeWorkspace.role) }}
-                  </span>
-                </div>
+      <!-- Active Workspace Trigger & Info Tooltip -->
+      <div v-else class="flex-1 flex items-center gap-2 min-w-0">
+        <button @click="handleSwitcherToggle"
+          class="flex flex-1 items-center gap-2.5 px-2 py-2 rounded-xl hover:bg-ash/60 transition-all duration-200 group min-w-0"
+          :class="{ 'justify-center': isCollapsed }"
+          :title="isCollapsed ? (wsStore.activeWorkspace?.name || 'Workspaces') : ''">
+          <!-- Workspace Avatar -->
+          <div
+            class="w-8 h-8 rounded-lg overflow-hidden shrink-0 shadow-sm transition-all duration-200 border border-ash">
+            <img :src="getWorkspaceLogoUrl(wsStore.activeWorkspace?.logo_url, wsStore.activeWorkspace?.name)"
+              :alt="wsStore.activeWorkspace?.name || 'Workspace'" class="w-full h-full object-cover" />
+          </div>
+          <!-- Name + Chevron -->
+          <div v-show="!isCollapsed" class="flex items-center gap-1.5 min-w-0 flex-1">
+            <div class="min-w-0 flex-1 text-left">
+              <p class="text-sm font-semibold text-BtW truncate leading-tight">
+                {{ wsStore.activeWorkspace?.name || 'Workspace' }}
+              </p>
+              <div class="flex items-center gap-1.5">
+                <span
+                  class="flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-bold tracking-tight bg-ash/50 text-hsa border border-ash/20">
+                  <component :is="WORKSPACE_TYPE_CONFIG[wsStore.activeWorkspace?.type || 'personal'].icon"
+                    class="w-2.5 h-2.5" />
+                  {{ getWorkspaceTypeLabel(wsStore.activeWorkspace?.type) }}
+                </span>
               </div>
-              <IconChevronDown v-if="!wsStore.isSwitcherOpen"
-                class="w-4 h-4 text-hsa shrink-0 group-hover:text-BtW transition-colors" />
-              <IconChevronUp v-else class="w-4 h-4 text-hsa shrink-0 group-hover:text-BtW transition-colors" />
             </div>
-          </button>
-        </template>
-      </UiAppTooltip>
+            <IconChevronDown v-if="!wsStore.isSwitcherOpen"
+              class="w-4 h-4 text-hsa shrink-0 group-hover:text-BtW transition-colors" />
+            <IconChevronUp v-else class="w-4 h-4 text-hsa shrink-0 group-hover:text-BtW transition-colors" />
+          </div>
+        </button>
 
-      <!-- Desktop Collapse Toggle -->
-      <button @click="$emit('toggle-collapse')"
-        class="hidden md:flex p-1.5 rounded-lg hover:bg-ash text-hsa hover:text-BtW transition-colors shrink-0">
-        <IconChevronLeft :class="['w-5 h-5 transition-transform duration-300', isCollapsed ? 'rotate-180' : '']" />
-      </button>
+        <!-- Info Tooltip (Desktop & Expanded Only) -->
+        <UiAppTooltip v-if="!isCollapsed" :content="tooltipContent" :title="wsStore.activeWorkspace?.name" width-class="w-56"
+          position="bottom" class="shrink-0 mr-1" />
+      </div>
     </div>
 
     <!-- Workspace Dropdown -->
