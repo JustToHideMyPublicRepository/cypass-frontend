@@ -2,19 +2,6 @@
   <UiBaseModal :show="workspaceStore.isModalOpen" :title="isEdit ? 'Modifier le workspace' : 'Nouveau workspace'"
     maxWidth="xl" @close="handleClose">
     <div class="relative space-y-5">
-      <!-- Loading Overlay -->
-      <Transition enter-active-class="transition duration-300 ease-out" enter-from-class="opacity-0"
-        enter-to-class="opacity-100" leave-active-class="transition duration-200 ease-in" leave-from-class="opacity-100"
-        leave-to-class="opacity-0">
-        <div v-if="workspaceStore.createLoading"
-          class="absolute inset-0 z-50 flex flex-col items-center justify-center bg-WtB/80 backdrop-blur-sm rounded-2xl">
-          <IconLoader2 class="w-10 h-10 text-primary animate-spin" />
-          <p class="mt-4 text-xs font-bold uppercase tracking-widest text-primary animate-pulse">
-            {{ isEdit ? 'Mise à jour...' : 'Création...' }}
-          </p>
-        </div>
-      </Transition>
-
       <!-- Nom -->
       <div class="space-y-1.5">
         <label class="text-xs font-bold text-hsa uppercase tracking-wider">Nom du workspace *</label>

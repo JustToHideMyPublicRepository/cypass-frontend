@@ -66,6 +66,7 @@ export const useWorkspaceStore = defineStore('workspace', {
 
     // Créer un workspace
     async createWorkspace(payload: CreateWorkspacePayload) {
+      this.createLoading = true
       this.error = null
       this.message = null
       try {
@@ -156,6 +157,7 @@ export const useWorkspaceStore = defineStore('workspace', {
 
     // Mettre à jour un workspace
     async updateWorkspace(id: string, payload: CreateWorkspacePayload) {
+      this.createLoading = true
       this.error = null
       this.message = null
       try {
@@ -201,6 +203,7 @@ export const useWorkspaceStore = defineStore('workspace', {
 
     // Supprimer (archiver) un workspace
     async deleteWorkspace(id: string) {
+      this.loading = true
       this.error = null
       try {
         const response = await $fetch<{ success: boolean; message: string }>(`/api/user/workspace/delete`, {
@@ -229,6 +232,7 @@ export const useWorkspaceStore = defineStore('workspace', {
 
     // Définir un workspace par défaut
     async setDefaultWorkspace(id: string) {
+      this.loading = true
       this.error = null
       try {
         const response = await $fetch<{ success: boolean; message: string }>('/api/user/workspace/set-default', {
