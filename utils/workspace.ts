@@ -143,5 +143,5 @@ export const getWorkspaceLogoUrl = (
   }
 
   const seed = workspaceName?.trim() || 'Workspace'
-  return `https://api.dicebear.com/9.x/shapes/svg?seed=${encodeURIComponent(seed)}`
+  return `https://api.dicebear.com/9.x/icons/svg?seed=${encodeURIComponent(seed)}`
 }

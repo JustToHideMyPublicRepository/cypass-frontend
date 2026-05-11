@@ -20,7 +20,7 @@ definePageMeta({
 })
 
 useHead({
-  title: 'Souveraineté numérique & sécurité',
+  title: 'Votre bouclier numérique pour sécuriser vos actifs numériques',
   meta: [
     { name: 'description', content: 'CYPASS : La plateforme nationale souveraine pour la certification, la signature électronique et la confiance numérique au Bénin.' },
     { name: 'robots', content: 'index, follow' }

@@ -23,7 +23,7 @@ export default defineNuxtConfig({
     manifest: {
       name: 'CYPASS',
       short_name: 'CYPASS',
-      description: 'Souveraineté numérique & sécurité',
+      description: 'Votre bouclier numérique pour sécuriser vos actifs numériques',
       theme_color: '#020617',
       background_color: '#020617',
       display: 'standalone',
@@ -134,7 +134,7 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      title: 'Souveraineté numérique & sécurité',
+      title: 'Votre bouclier numérique pour sécuriser vos actifs numériques.',
       htmlAttrs: { lang: 'fr' },
       meta: [
         { charset: 'utf-8' },

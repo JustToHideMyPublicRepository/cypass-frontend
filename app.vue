@@ -67,11 +67,11 @@ const heroImagePath = "https://images.unsplash.com/photo-1550751827-4bd374c3f58b
 const baseUrl = "https://cypass.bj";
 
 useSeoMeta({
-  title: 'Souveraineté Numérique & Sécurité',
+  title: 'Votre bouclier numérique pour sécuriser vos actifs numériques',
   titleTemplate: (titleChunk) => {
-    return titleChunk ? `${titleChunk} | CYPASS` : 'CYPASS - Souveraineté Numérique & Sécurité';
+    return titleChunk ? `${titleChunk} | CYPASS` : 'CYPASS - Votre bouclier numérique pour sécuriser vos actifs numériques';
   },
-  ogTitle: 'CYPASS - Souveraineté Numérique & Sécurité',
+  ogTitle: 'CYPASS - Votre bouclier numérique pour sécuriser vos actifs numériques',
   description: 'L\'infrastructure de confiance protégeant l\'écosystème numérique du Bénin. Certification, veille & audit en temps réel.',
   ogDescription: 'L\'infrastructure de confiance protégeant l\'écosystème numérique du Bénin. Certification, Veille & Audit en temps réel.',
   ogImage: heroImagePath,
