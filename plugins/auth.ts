@@ -7,8 +7,15 @@ export default defineNuxtPlugin(async (nuxtApp) => {
     await auth.verifyToken()
   }
 
-  // If authenticated, pre-fetch profile to sync avatar globally
-  if (auth.user && !profil.profile) {
-    await profil.getProfile()
+  if (auth.user) {
+    const workspace = useWorkspaceStore()
+    if (!workspace.activeWorkspace) {
+      // Ensure workspace store is initialized
+      await workspace.initWorkspace()
+    }
+
+    if (!profil.profile) {
+      await profil.getProfile()
+    }
   }
 })
