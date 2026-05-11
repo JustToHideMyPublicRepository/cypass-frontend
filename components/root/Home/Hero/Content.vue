@@ -36,16 +36,14 @@
       <!-- Boutons s-->
       <div class="grid grid-cols-2 sm:flex sm:flex-row gap-2 sm:gap-4 justify-center lg:justify-start">
         <UiBaseButton :to="dashboardUrl" variant="accent"
-          :loading="!!(authStore.user && !wsStore.activeWorkspace)"
           class="w-full sm:w-auto flex items-center justify-center gap-1.5 text-center h-full">
           <IconFileCheck class="w-4 h-4 md:w-5 md:h-5 shrink-0" />
-          <span class="leading-tight">{{ (authStore.user || wsStore.activeWorkspace) ? 'Gestion documents' : 'Vérifier document' }}</span>
+          <span class="leading-tight">{{ wsStore.activeWorkspace ? 'Gestion documents' : 'Vérifier document' }}</span>
         </UiBaseButton>
         <UiBaseButton to="/dashboard/vigitech" variant="secondary"
-          :loading="!!(authStore.user && !wsStore.activeWorkspace)"
           class="w-full sm:w-auto flex items-center justify-center gap-1.5 text-center h-full">
           <IconShieldCheck class="w-4 h-4 md:w-5 md:h-5 shrink-0" />
-          <span class="leading-tight">{{ (authStore.user || wsStore.activeWorkspace) ? 'Gestion incidents' : 'Veille publique' }}</span>
+          <span class="leading-tight">{{ authStore.user ? 'Gestion incidents' : 'Veille publique' }}</span>
         </UiBaseButton>
       </div>
     </div>
@@ -71,9 +69,8 @@ const authStore = useAuthStore()
 const wsStore = useWorkspaceStore()
 
 const dashboardUrl = computed(() => {
-  if (!authStore.user) return '/verify'
-  const slug = wsStore.activeWorkspace?.slug || ''
-  return `/dashboard/${slug}/docsentry`
+  if (!wsStore.activeWorkspace) return '/verify'
+  return `/dashboard/${wsStore.activeWorkspace.slug}/docsentry`
 })
 
 

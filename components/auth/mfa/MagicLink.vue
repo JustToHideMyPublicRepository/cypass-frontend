@@ -25,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { IconMailFast } from '@tabler/icons-vue'
 import { useAuthStore } from '~/stores/back/user/auth'
 import { useToastStore } from '~/stores/front/toast'
@@ -51,8 +51,4 @@ const resetSelection = () => {
     authStore.mfaSession.active_method = null
   }
 }
-
-onMounted(() => {
-  handleMagicLink()
-})
 </script>
