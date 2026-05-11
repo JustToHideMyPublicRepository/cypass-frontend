@@ -39,23 +39,26 @@
         </div>
       </div>
 
-      <!-- Champ Organisation (Liste déroulante de visualisation) -->
+      <!-- Champ Organisation (Sélecteur de Workspace) -->
       <div class="space-y-3">
-        <label class="text-[10px] font-black uppercase tracking-[0.2em] text-hsa ml-1">Mes Organisations / Espaces</label>
+        <label class="text-[10px] font-black uppercase tracking-[0.2em] text-hsa ml-1">Mon Organisation / Espace</label>
         <div class="relative group">
           <div class="absolute left-4 top-1/2 -translate-y-1/2 text-hsa pointer-events-none">
             <IconBuilding class="w-5 h-5" />
           </div>
-          <select class="input pl-12 pr-10 appearance-none w-full cursor-pointer bg-ash/5 text-sm font-bold border-ash/20 hover:border-primary/50 transition-colors"
-            :value="form.organization_name && form.organization_name.length > 0 ? form.organization_name[0] : ''"
-            title="Vos organisations sont synchronisées automatiquement">
-            <option v-if="!form.organization_name || form.organization_name.length === 0" value="">Aucune organisation rattachée</option>
-            <option v-else v-for="ws in form.organization_name" :key="ws" :value="ws">{{ ws }}</option>
+          <select v-model="form.organization_name"
+            class="input pl-12 pr-10 appearance-none w-full cursor-pointer bg-ash/5 text-sm font-bold border-ash/20 hover:border-primary/50 transition-colors"
+            title="Choisissez votre organisation principale parmi vos espaces">
+            <option value="">Aucune organisation rattachée</option>
+            <option v-for="ws in initialData.workspaces" :key="ws" :value="ws">{{ ws }}</option>
           </select>
           <div class="absolute right-4 top-1/2 -translate-y-1/2 text-hsa pointer-events-none">
             <IconChevronDown class="w-4 h-4" />
           </div>
         </div>
+        <p class="text-[10px] text-hsa/60 italic ml-1">
+          Sélectionnez un espace de travail à utiliser comme organisation principale.
+        </p>
       </div>
 
       <!-- Footer des actions -->
@@ -84,7 +87,8 @@ const props = defineProps<{
   initialData: {
     first_name: string
     last_name: string
-    organization_name: string[]
+    organization_name: string | null
+    workspaces: string[]
   }
 }>()
 
@@ -94,7 +98,7 @@ const emit = defineEmits(['close', 'submit'])
 const form = reactive({
   first_name: '',
   last_name: '',
-  organization_name: [] as string[]
+  organization_name: '' as string
 })
 
 /**
@@ -102,7 +106,8 @@ const form = reactive({
  */
 const isDirty = computed(() => {
   return form.first_name !== props.initialData.first_name ||
-    form.last_name !== props.initialData.last_name
+    form.last_name !== props.initialData.last_name ||
+    form.organization_name !== (props.initialData.organization_name || '')
 })
 
 /**
@@ -111,16 +116,7 @@ const isDirty = computed(() => {
 const syncForm = () => {
   form.first_name = props.initialData.first_name || ''
   form.last_name = props.initialData.last_name || ''
-
-  const rawOrg = props.initialData.organization_name
-  if (Array.isArray(rawOrg)) {
-    form.organization_name = rawOrg
-  } else if (typeof rawOrg === 'string' && (rawOrg as string).trim() !== '' && (rawOrg as string) !== '-' && (rawOrg as string) !== 'N/A') {
-    // Cas de transition ou anciennes données : on transforme la chaîne en tableau
-    form.organization_name = (rawOrg as string).includes(',') ? (rawOrg as string).split(',').map((s: string) => s.trim()) : [(rawOrg as string)]
-  } else {
-    form.organization_name = []
-  }
+  form.organization_name = props.initialData.organization_name || ''
 }
 
 // Resynchronisation lors de l'ouverture de la modale

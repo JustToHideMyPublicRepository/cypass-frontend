@@ -42,11 +42,12 @@ const profilStore = useProfilStore()
 
 const user = computed(() => authStore.user)
 
-let form = reactive({
+const form = reactive({
   first_name: '',
   last_name: '',
   email: '',
-  organization_name: ''
+  organization_name: '',
+  workspaces: [] as string[]
 })
 
 const syncFormWithProfile = () => {
@@ -55,6 +56,7 @@ const syncFormWithProfile = () => {
     form.last_name = profilStore.profile.last_name
     form.email = profilStore.profile.email
     form.organization_name = profilStore.profile.organization_name || '-'
+    form.workspaces = profilStore.profile.workspaces || []
   }
 }
 
