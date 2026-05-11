@@ -18,9 +18,9 @@
           :class="{ 'justify-center': isCollapsed }"
           :title="isCollapsed ? (wsStore.activeWorkspace?.name || 'Workspaces') : ''">
           <!-- Workspace Avatar -->
-          <div
+          <div :key="wsStore.activeWorkspace?.id"
             class="w-8 h-8 rounded-lg overflow-hidden shrink-0 shadow-sm transition-all duration-200 border border-ash">
-            <img :src="getWorkspaceLogoUrl(wsStore.activeWorkspace?.logo_url, wsStore.activeWorkspace?.name)"
+            <img :src="activeWorkspaceLogo"
               :alt="wsStore.activeWorkspace?.name || 'Workspace'" class="w-full h-full object-cover" />
           </div>
           <!-- Name + Chevron -->
@@ -198,6 +198,10 @@ const selectWorkspace = async (ws: Workspace) => {
 const handleSwitcherToggle = () => {
   wsStore.toggleSwitcher()
 }
+
+const activeWorkspaceLogo = computed(() => {
+  return getWorkspaceLogoUrl(wsStore.activeWorkspace?.logo_url, wsStore.activeWorkspace?.name)
+})
 
 const tooltipContent = computed(() => {
   const ws = wsStore.activeWorkspace
