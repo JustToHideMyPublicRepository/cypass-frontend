@@ -9,10 +9,10 @@
       </NuxtLink>
 
       <div v-if="workspace" class="flex items-center gap-3">
-        <button v-if="workspace.role === 'owner' && !workspace.is_default" @click="confirmDelete"
-          class="p-2 rounded-xl hover:bg-danger/10 text-hsa hover:text-danger transition-colors" title="Supprimer">
-          <IconTrash class="w-5 h-5" />
-        </button>
+        <UiBaseButton v-if="workspace.role === 'owner' && !workspace.is_default" @click="confirmDelete" variant="danger"
+          size="sm">
+          <IconTrash class="w-4 h-4 mr-2" /> Supprimer le workspace
+        </UiBaseButton>
         <UiBaseButton @click="store.openModal(workspace)" variant="primary" size="sm"
           class="!rounded-xl shadow-lg shadow-primary/20">
           <IconEdit class="w-4 h-4 mr-2" /> Modifier le profil
@@ -120,7 +120,8 @@
               </div>
               <p class="text-[10px] font-black text-hsa uppercase tracking-[0.25em] mb-1">Création</p>
               <h3 class="text-lg font-black text-BtW">{{ new Date(workspace.created_at).toLocaleDateString(undefined, {
-                month: 'long', year: 'numeric' }) }}</h3>
+                month: 'long', year: 'numeric'
+              }) }}</h3>
             </div>
           </div>
 
@@ -156,7 +157,7 @@
                   <div class="flex flex-col gap-1">
                     <span class="text-[10px] font-black text-hsa uppercase tracking-widest">Enregistré le</span>
                     <span class="text-sm font-bold text-BtW">{{ new Date(workspace.created_at).toLocaleString()
-                      }}</span>
+                    }}</span>
                   </div>
                 </div>
 

@@ -70,13 +70,13 @@ const wsStore = useWorkspaceStore()
 
 const dashboardUrl = computed(() => {
   if (!authStore.user) return '/verify'
-  const slug = wsStore.activeWorkspace?.slug
-  return slug ? `/dashboard/${slug}/docsentry` : '/dashboard'
+  const slug = wsStore.activeWorkspace?.slug || ''
+  return `/dashboard/${slug}/docsentry`
 })
 
 const dashboardVigitechUrl = computed(() => {
-  const slug = wsStore.activeWorkspace?.slug
-  return slug ? `/dashboard/${slug}/vigitech` : '/dashboard/vigitech'
+  const slug = wsStore.activeWorkspace?.slug || ''
+  return `/dashboard/${slug}/vigitech`
 })
 
 const heroFeatures = [

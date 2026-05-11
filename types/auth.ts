@@ -5,7 +5,7 @@ export interface User {
   email: string
   first_name: string
   last_name: string
-  organization: string | null
+  organization: string | string[] | null
   avatar_url: string | null
   role: string
   mfa_enabled: boolean
@@ -25,7 +25,7 @@ export interface AccountHint {
   email: string
   email_hash: string
   avatar_url: string | null
-  organization: string | null
+  organization: string | string[] | null
 }
 
 export interface AuthState {

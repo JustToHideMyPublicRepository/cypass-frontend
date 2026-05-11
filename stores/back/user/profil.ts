@@ -56,7 +56,7 @@ export const useProfilStore = defineStore('profil', {
     },
 
     // Mise à jour des informations personnelles
-    async updateProfile(data: { first_name?: string; last_name?: string; organization_name?: string }) {
+    async updateProfile(data: { first_name?: string; last_name?: string; organization_name?: string | string[] }) {
       this.loading = true
       this.error = null
       try {

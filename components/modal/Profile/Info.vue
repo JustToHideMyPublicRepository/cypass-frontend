@@ -39,16 +39,22 @@
         </div>
       </div>
 
-      <!-- Champ Organisation -->
-      <div class="space-y-2">
-        <label class="text-[10px] font-black uppercase tracking-[0.2em] text-hsa ml-1">Organisation / Entreprise</label>
+      <!-- Champ Organisation (Liste déroulante de visualisation) -->
+      <div class="space-y-3">
+        <label class="text-[10px] font-black uppercase tracking-[0.2em] text-hsa ml-1">Mes Organisations / Espaces</label>
         <div class="relative group">
-          <div
-            class="absolute left-4 top-1/2 -translate-y-1/2 text-hsa group-focus-within:text-primary transition-colors">
+          <div class="absolute left-4 top-1/2 -translate-y-1/2 text-hsa pointer-events-none">
             <IconBuilding class="w-5 h-5" />
           </div>
-          <input v-model="form.organization_name" type="text" class="input pl-12"
-            placeholder="Nom de votre organisation (ex: Ministère de...)" :disabled="isLoading" />
+          <select class="input pl-12 pr-10 appearance-none w-full cursor-pointer bg-ash/5 text-sm font-bold border-ash/20 hover:border-primary/50 transition-colors"
+            :value="form.organization_name && form.organization_name.length > 0 ? form.organization_name[0] : ''"
+            title="Vos organisations sont synchronisées automatiquement">
+            <option v-if="!form.organization_name || form.organization_name.length === 0" value="">Aucune organisation rattachée</option>
+            <option v-else v-for="ws in form.organization_name" :key="ws" :value="ws">{{ ws }}</option>
+          </select>
+          <div class="absolute right-4 top-1/2 -translate-y-1/2 text-hsa pointer-events-none">
+            <IconChevronDown class="w-4 h-4" />
+          </div>
         </div>
       </div>
 
@@ -69,7 +75,7 @@
 
 <script setup lang="ts">
 import { reactive, watch, computed } from 'vue'
-import { IconUserCircle, IconUserSquareRounded, IconBuilding, IconUserCheck } from '@tabler/icons-vue'
+import { IconUserCircle, IconUserSquareRounded, IconBuilding, IconUserCheck, IconChevronDown } from '@tabler/icons-vue'
 
 // Propriétés de la modale ProfileInfo
 const props = defineProps<{
@@ -78,7 +84,7 @@ const props = defineProps<{
   initialData: {
     first_name: string
     last_name: string
-    organization_name: string
+    organization_name: string[]
   }
 }>()
 
@@ -88,7 +94,7 @@ const emit = defineEmits(['close', 'submit'])
 const form = reactive({
   first_name: '',
   last_name: '',
-  organization_name: ''
+  organization_name: [] as string[]
 })
 
 /**
@@ -96,8 +102,7 @@ const form = reactive({
  */
 const isDirty = computed(() => {
   return form.first_name !== props.initialData.first_name ||
-    form.last_name !== props.initialData.last_name ||
-    form.organization_name !== props.initialData.organization_name
+    form.last_name !== props.initialData.last_name
 })
 
 /**
@@ -106,8 +111,16 @@ const isDirty = computed(() => {
 const syncForm = () => {
   form.first_name = props.initialData.first_name || ''
   form.last_name = props.initialData.last_name || ''
-  // Nettoie les valeurs placeholder type '-' ou 'N/A'
-  form.organization_name = (props.initialData.organization_name === '-' || props.initialData.organization_name === 'N/A') ? '' : (props.initialData.organization_name || '')
+
+  const rawOrg = props.initialData.organization_name
+  if (Array.isArray(rawOrg)) {
+    form.organization_name = rawOrg
+  } else if (typeof rawOrg === 'string' && (rawOrg as string).trim() !== '' && (rawOrg as string) !== '-' && (rawOrg as string) !== 'N/A') {
+    // Cas de transition ou anciennes données : on transforme la chaîne en tableau
+    form.organization_name = (rawOrg as string).includes(',') ? (rawOrg as string).split(',').map((s: string) => s.trim()) : [(rawOrg as string)]
+  } else {
+    form.organization_name = []
+  }
 }
 
 // Resynchronisation lors de l'ouverture de la modale

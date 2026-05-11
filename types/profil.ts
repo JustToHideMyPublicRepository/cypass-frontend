@@ -22,7 +22,7 @@ export interface UserProfile {
   email: string
   first_name: string
   last_name: string
-  organization_name: string | null
+  organization_name: string | string[] | null
   avatar_url: string | null
   role: string
   status: 'pending' | 'active' | 'pending_delete' | 'deleted' | 'suspended'

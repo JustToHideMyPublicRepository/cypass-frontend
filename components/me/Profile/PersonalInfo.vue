@@ -75,7 +75,14 @@
                 <div v-if="loading" class="mt-1">
                   <UiAppSkeleton type="text" width="70%" height="1rem" bg="bg-ashAct" />
                 </div>
-                <p v-else class="font-bold text-BtW truncate">{{ modelValue.organization_name || '-' }}</p>
+                <p v-else class="font-bold text-BtW truncate">
+                  <span v-if="Array.isArray(modelValue.organization_name) && modelValue.organization_name.length > 0">
+                    {{ modelValue.organization_name.join(', ') }}
+                  </span>
+                  <span v-else>
+                    {{ typeof modelValue.organization_name === 'string' ? modelValue.organization_name : '-' }}
+                  </span>
+                </p>
               </div>
             </div>
           </div>
@@ -107,7 +114,7 @@ defineProps<{
     first_name: string
     last_name: string
     email: string
-    organization_name: string
+    organization_name: string | string[] | null
   }
   emailVerified: boolean
   loading?: boolean
@@ -121,8 +128,8 @@ const showInfoModal = ref(false)
 const handleInfoUpdate = async (data: any) => {
   const success = await profilStore.updateProfile({
     first_name: data.first_name,
-    last_name: data.last_name,
-    organization_name: data.organization_name
+    last_name: data.last_name
+    // On ne renvoie pas organization_name car c'est désormais géré dynamiquement côté backend en fonction des workspaces.
   })
   if (success) {
     toastStore.showToast('success', 'Profil mis à jour', profilStore.message || 'Vos informations ont été enregistrées.')
