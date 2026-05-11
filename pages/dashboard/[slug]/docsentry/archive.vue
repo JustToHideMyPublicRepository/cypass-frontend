@@ -30,6 +30,7 @@ import { IconArrowLeft } from '@tabler/icons-vue'
 import { useUserDocsentryStore } from '~/stores/back/user/docsentry'
 
 const store = useUserDocsentryStore()
+const route = useRoute()
 
 const currentPage = ref(1)
 const limit = 10
