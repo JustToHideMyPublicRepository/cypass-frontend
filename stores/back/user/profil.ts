@@ -56,7 +56,7 @@ export const useProfilStore = defineStore('profil', {
     },
 
     // Mise à jour des informations personnelles
-    async updateProfile(data: { first_name?: string; last_name?: string; organization_name?: string | string[] }) {
+    async updateProfile(data: { first_name?: string; last_name?: string; organization_name?: string | null }) {
       this.loading = true
       this.error = null
       try {
@@ -73,7 +73,7 @@ export const useProfilStore = defineStore('profil', {
           if (authStore.user) {
             if (data.first_name) authStore.user.first_name = data.first_name
             if (data.last_name) authStore.user.last_name = data.last_name
-            if (data.organization_name) authStore.user.organization = data.organization_name
+            if (data.organization_name !== undefined) authStore.user.organization = data.organization_name
           }
           return true
         }
