@@ -7,16 +7,17 @@
       </button>
     </div>
 
+    <!-- Home Link -->
+    <NuxtLink to="/"
+      class="hidden md:flex w-8 h-8 rounded-full border border-ash items-center justify-center text-hsa hover:bg-ash/20 hover:text-BtW transition-all duration-200 shadow-sm"
+      title="Accueil du site">
+      <IconHome class="w-4 h-4" />
+    </NuxtLink>
+
     <UtilsGlobalSearchTrigger customClass="ml-2 md:ml-8" />
 
     <!-- Right actions -->
     <div class="flex items-center gap-4">
-      <NuxtLink to="/"
-        class="hidden md:flex w-8 h-8 rounded-full border border-ash items-center justify-center text-hsa hover:bg-ash/20 hover:text-BtW transition-all duration-200 shadow-sm"
-        title="Accueil du site">
-        <IconHome class="w-4 h-4" />
-      </NuxtLink>
-
       <ClientOnly>
         <UiThemeToggle />
         <ModalGlobalNotification />
