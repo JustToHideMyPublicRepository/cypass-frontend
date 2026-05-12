@@ -11,7 +11,7 @@
         </div>
 
         <template v-else-if="filteredIncidents.length">
-          <CommonVigitechIncidentCard v-for="incident in filteredIncidents" :key="incident.id" :incident="incident"
+          <SharedVigitechIncidentCard v-for="incident in filteredIncidents" :key="incident.id" :incident="incident"
             showFooter :detailUrl="`/dashboard/vigitech/${incident.id}`" @edit="openEditModal"
             @delete="confirmDelete" />
         </template>

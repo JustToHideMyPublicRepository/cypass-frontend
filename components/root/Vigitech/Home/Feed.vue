@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-6">
     <div class="space-y-4">
-      <CommonVigitechIncidentCard v-for="incident in incidents" :key="incident.id" :incident="incident"
+      <SharedVigitechIncidentCard v-for="incident in incidents" :key="incident.id" :incident="incident"
         :detailUrl="`/vigitech/${incident.id}`" @report="$emit('report', incident.id)" />
     </div>
 
