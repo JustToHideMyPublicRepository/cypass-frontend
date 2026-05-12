@@ -54,9 +54,6 @@
                 <UiStatusBadge :status="incident.threat_level === 'critical' ? 'High' : 'Medium'">
                   {{ mapThreatLevel(incident.threat_level) }}
                 </UiStatusBadge>
-                <div v-if="incident.deleted_at" class="text-[10px] font-bold text-danger uppercase tracking-wider">
-                  Supprimé {{ formatRelativeTime(incident.deleted_at) }}
-                </div>
               </div>
 
               <h3 class="text-base font-black text-BtW truncate">
@@ -69,8 +66,7 @@
           </div>
 
           <div class="flex shrink-0 gap-2 items-center">
-            <UiBaseButton @click="handleRestore(incident.id)" :disabled="!!localProcessingId" variant="secondary"
-              size="sm" class="!px-3 min-w-[110px]">
+            <UiBaseButton @click="handleRestore(incident.id)" :disabled="!!localProcessingId" variant="secondary">
               <template v-if="localProcessingId === incident.id">
                 <UiLogoLoader size="xs" class="mr-2" /> Restaurer...
               </template>
@@ -78,6 +74,18 @@
                 <IconRotate class="w-4 h-4 mr-2" /> Restaurer
               </template>
             </UiBaseButton>
+          </div>
+        </div>
+
+        <div v-if="incident.deleted_at"
+          class="mt-4 pt-4 border-t border-ash/50 flex flex-wrap items-center justify-between gap-4">
+          <div class="flex items-center gap-4 text-[10px] font-black tracking-widest uppercase">
+            <div class="text-danger flex items-center gap-1.5">
+              <IconTrash class="w-3 h-3" /> Supprimé le {{ formatShortDate(incident.deleted_at) }}
+            </div>
+            <div v-if="incident.scheduled_deletion_at" class="text-orange-500 flex items-center gap-1.5">
+              <IconClock class="w-3 h-3" /> Expire dans: {{ getCountdown(incident.scheduled_deletion_at) }}
+            </div>
           </div>
         </div>
       </UiBaseCard>
@@ -111,7 +119,7 @@ import { IconTrash, IconRotate, IconTrashOff, IconArrowLeft } from '@tabler/icon
 import { useUserVigitechStore } from '~/stores/back/user/vigitech'
 import { useToastStore } from '~/stores/front/toast'
 import { mapIncidentType, mapThreatLevel } from '~/utils/vigitech'
-import { formatRelativeTime } from '~/utils/date'
+import { formatRelativeTime, formatShortDate } from '~/utils/date'
 
 const store = useUserVigitechStore()
 const toast = useToastStore()
@@ -119,6 +127,30 @@ const toast = useToastStore()
 const restoringAll = ref(false)
 const localProcessingId = ref<string | null>(null)
 const showRestoreConfirm = ref(false)
+
+const now = ref(new Date())
+let timer: any = null
+
+const getCountdown = (scheduledAt: string) => {
+  if (!scheduledAt) return ''
+  // Handle space between date and time
+  const dateStr = scheduledAt.replace(' ', 'T')
+  const diff = new Date(dateStr).getTime() - now.value.getTime()
+  if (diff <= 0) return 'Expiré'
+
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24))
+  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
+  const seconds = Math.floor((diff % (1000 * 60)) / 1000)
+
+  const parts = []
+  if (days > 0) parts.push(`${days}j`)
+  if (hours > 0 || days > 0) parts.push(`${hours}h`)
+  if (minutes > 0 || hours > 0 || days > 0) parts.push(`${minutes}m`)
+  parts.push(`${seconds}s`)
+
+  return parts.join(' ')
+}
 
 const handleRestore = async (id: string) => {
   localProcessingId.value = id
@@ -149,6 +181,13 @@ const handleRestoreAll = async () => {
 
 onMounted(() => {
   store.fetchTrashedIncidents()
+  timer = setInterval(() => {
+    now.value = new Date()
+  }, 1000)
+})
+
+onUnmounted(() => {
+  if (timer) clearInterval(timer)
 })
 
 useHead({

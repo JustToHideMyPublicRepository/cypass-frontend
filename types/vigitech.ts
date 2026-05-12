@@ -19,6 +19,7 @@ export interface Incident {
   created_at: string
   updated_at?: string | null
   deleted_at?: string | null
+  scheduled_deletion_at?: string | null
   reporter_organization?: string | null
   pending_reports_count?: number
   views_count?: number
