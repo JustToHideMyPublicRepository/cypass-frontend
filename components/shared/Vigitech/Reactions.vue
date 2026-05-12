@@ -1,36 +1,76 @@
 <template>
-  <div class="flex flex-wrap items-center gap-3">
-    <button v-for="rtype in reactionTypes" :key="rtype" @click="handleReact(rtype)" :disabled="loadingType === rtype"
-      class="group relative flex items-center gap-2 px-3 py-2 rounded-2xl border transition-all duration-300" :class="[
-        hasReacted(rtype)
-          ? 'bg-primary/10 border-primary/20 text-primary scale-105'
-          : 'bg-ash/5 border-ash/20 text-hsa hover:bg-ash/10 hover:border-ash/30'
-      ]">
-      <span class="text-lg group-hover:scale-125 transition-transform duration-300 transform origin-center"
-        :class="{ 'opacity-50': loadingType === rtype }">
-        {{ getReactionEmoji(rtype) }}
-      </span>
+  <div class="flex items-center gap-4 relative">
+    <!-- Main Action Button -->
+    <div class="relative group" @mouseenter="isHovered = true" @mouseleave="isHovered = false">
+      <button @click="handleMainClick" :disabled="isLoading"
+        class="flex items-center gap-2 px-4 py-2 rounded-2xl transition-all duration-300 border border-transparent"
+        :class="[
+          myReaction
+            ? 'text-primary bg-primary/5 hover:bg-primary/10'
+            : 'text-hsa hover:bg-ash/10 hover:text-BtW'
+        ]">
+        <IconLoader2 v-if="isLoading" class="w-5 h-5 animate-spin" />
+        <template v-else>
+          <span v-if="myReaction" class="text-xl leading-none scale-110">{{ getReactionEmoji(myReaction.type) }}</span>
+          <IconThumbUp v-else class="w-5 h-5" />
+        </template>
+        <span class="text-sm font-black tracking-wide" :class="[myReaction ? 'text-primary' : '']">
+          {{ myReaction ? getReactionLabel(myReaction.type) : 'Réagir' }}
+        </span>
+      </button>
 
-      <!-- Loading Spinner -->
-      <IconLoader2 v-if="loadingType === rtype" class="w-3.5 h-3.5 animate-spin absolute top-2 left-3" />
-
-      <span class="text-xs font-black tracking-widest">{{ getCount(rtype) }}</span>
-
-      <!-- Tooltip -->
+      <!-- Hover Tooltip -->
       <div
-        class="absolute -top-10 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-WtB border border-ashAct rounded-xl shadow-xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10">
-        <span class="text-[10px] font-black uppercase tracking-widest text-BtW">{{ getReactionLabel(rtype) }}</span>
+        class="absolute -top-14 left-0 flex items-center gap-1.5 p-1 bg-BtW border border-ashAct rounded-[2rem] shadow-xl transition-all duration-300 z-20 origin-bottom-left"
+        :class="[
+          isHovered || popupKeepOpen
+            ? 'opacity-100 scale-100 translate-y-0 visible pointer-events-auto'
+            : 'opacity-0 scale-90 translate-y-2 invisible pointer-events-none'
+        ]" @mouseenter="popupKeepOpen = true" @mouseleave="popupKeepOpen = false">
+        <button v-for="rtype in reactionTypes" :key="rtype" @click.stop="handleReact(rtype)" :disabled="isLoading"
+          class="relative w-10 h-10 rounded-full flex items-center justify-center hover:bg-ash/10 transition-transform duration-200 hover:scale-125 focus:outline-none focus:scale-125 group/emoji">
+          <span class="text-2xl leading-none">{{ getReactionEmoji(rtype) }}</span>
+
+          <!-- Emoji specific tooltip -->
+          <div
+            class="absolute -top-8 left-1/2 -translate-x-1/2 px-2.5 py-1 bg-black/80 text-white rounded-xl text-[10px] font-black uppercase tracking-widest opacity-0 group-hover/emoji:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+            {{ getReactionLabel(rtype) }}
+          </div>
+        </button>
       </div>
-    </button>
+    </div>
+
+    <!-- Reactions Summary -->
+    <div v-if="totalCount > 0" @click="showListModal = true"
+      class="flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-ash/10 cursor-pointer transition-colors">
+
+      <!-- Top 3 Emojis Stacked -->
+      <div class="flex items-center -space-x-1.5">
+        <div v-for="(rtype, index) in topReactions" :key="rtype"
+          class="w-6 h-6 rounded-full bg-WtB border border-ashAct flex items-center justify-center shadow-sm z-10"
+          :style="{ zIndex: 10 - index }">
+          <span class="text-[12px] leading-none">{{ getReactionEmoji(rtype) }}</span>
+        </div>
+      </div>
+
+      <!-- Total Count -->
+      <span class="text-sm font-bold text-hsa hover:text-BtW transition-colors">
+        {{ totalCount }}
+      </span>
+    </div>
+
+    <!-- Modal List -->
+    <ModalVigitechReactionsList :show="showListModal" :reactions="incident.reactions_details"
+      @close="showListModal = false" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { IconLoader2 } from '@tabler/icons-vue'
+import { IconThumbUp, IconLoader2 } from '@tabler/icons-vue'
 import { reactionTypes, getReactionEmoji, getReactionLabel } from '~/utils/vigitech'
 import { useAuthStore } from '~/stores/back/user/auth'
 import { useUserVigitechStore } from '~/stores/back/user/vigitech'
-import type { ReactionType } from '~/types/vigitech'
+import type { ReactionType, ReactionDetail } from '~/types/vigitech'
 
 const props = defineProps<{
   incident: any
@@ -40,49 +80,55 @@ const emit = defineEmits(['login-required'])
 
 const authStore = useAuthStore()
 const userVigitechStore = useUserVigitechStore()
-const loadingType = ref<string | null>(null)
+const isLoading = ref(false)
 
-// We don't have the user's specific current active reaction from the API in the incident object directly
-// usually, backend returns if current user reacted. Since we just have reactions_summary, we'll track locally if they toggle
-// In a full impl, backend should return `user_reaction_type` in the incident details.
-// For now, we rely on the toggle behavior: if they click, we toggle the state and assume they added/removed it.
-// To make it robust without modifying backend immediately, we just show counts and let them toggle.
-const activeLocalReaction = ref<string | null>(null)
+const isHovered = ref(false)
+const popupKeepOpen = ref(false)
+const showListModal = ref(false)
 
-const getCount = (type: string) => {
-  if (!props.incident?.reactions_summary) return 0
-  return props.incident.reactions_summary[type as ReactionType] || 0
-}
+const myReaction = computed<ReactionDetail | undefined>(() => {
+  if (!authStore.user || !props.incident?.reactions_details) return undefined
+  return props.incident.reactions_details.find((r: ReactionDetail) => r.user_id === authStore.user?.id)
+})
 
-const hasReacted = (type: string) => {
-  return activeLocalReaction.value === type
+const topReactions = computed<ReactionType[]>(() => {
+  if (!props.incident?.reactions_summary) return []
+  const summary = props.incident.reactions_summary as Partial<Record<ReactionType, number>>
+  return Object.entries(summary)
+    .filter(([_, count]) => (count as number) > 0)
+    .sort((a, b) => (b[1] as number) - (a[1] as number))
+    .slice(0, 3)
+    .map(entry => entry[0] as ReactionType)
+})
+
+const totalCount = computed(() => {
+  return props.incident?.reactions_count || 0
+})
+
+const handleMainClick = async () => {
+  if (myReaction.value) {
+    // Already reacted -> Toggle off
+    await handleReact(myReaction.value.type)
+  } else {
+    // Not reacted -> Default to 'like'
+    await handleReact('like')
+  }
 }
 
 const handleReact = async (type: string) => {
   if (!authStore.user) {
-    // Show login modal or alert
     emit('login-required')
     return
   }
 
-  if (loadingType.value) return
+  if (isLoading.value) return
 
-  loadingType.value = type
+  isLoading.value = true
+  popupKeepOpen.value = false // Close tooltip immediately
 
   const result = await userVigitechStore.reactToIncident(props.incident.id, type)
+  // Store action updates public/user stores, reactivity handles the rest
 
-  if (result.success) {
-    if (result.data?.type) {
-      // They added it
-      activeLocalReaction.value = result.data.type
-    } else {
-      // They toggled it off or replaced it (if result data has different structure)
-      // Usually toggle off is inferred if data is different or success message says "removed"
-      // Assuming result.data contains the new reaction record if added, or null if removed
-      activeLocalReaction.value = result.data?.type || null
-    }
-  }
-
-  loadingType.value = null
+  isLoading.value = false
 }
 </script>
