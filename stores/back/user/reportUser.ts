@@ -151,5 +151,58 @@ export const useReportUserStore = defineStore('reportUser', {
         this.loading = false
       }
     },
+
+    // Mettre à jour un signalement
+    async updateReport(reportId: string, reason: string, details: string) {
+      this.loading = true
+      this.error = null
+      try {
+        const response: any = await $fetch('/api/user/report-user/update-sent', {
+          method: 'PUT',
+          body: { report_id: reportId, reason, details }
+        })
+        if (response.success) {
+          this.message = response.message
+          // Update local list
+          const idx = this.sentReportsList.findIndex(r => r.id === reportId)
+          if (idx !== -1) {
+            this.sentReportsList[idx] = { ...this.sentReportsList[idx], reason, details }
+          }
+          return true
+        }
+        this.error = response.message
+        return false
+      } catch (err: any) {
+        this.error = err.data?.message || 'Erreur lors de la mise à jour'
+        return false
+      } finally {
+        this.loading = false
+      }
+    },
+
+    // Supprimer un signalement
+    async deleteReport(reportId: string) {
+      this.loading = true
+      this.error = null
+      try {
+        const response: any = await $fetch('/api/user/report-user/delete-sent', {
+          method: 'DELETE',
+          body: { report_id: reportId }
+        })
+        if (response.success) {
+          this.message = response.message
+          this.sentReportsList = this.sentReportsList.filter(r => r.id !== reportId)
+          this.sentPagination.total = Math.max(0, this.sentPagination.total - 1)
+          return true
+        }
+        this.error = response.message
+        return false
+      } catch (err: any) {
+        this.error = err.data?.message || 'Erreur lors de la suppression'
+        return false
+      } finally {
+        this.loading = false
+      }
+    }
   }
 })

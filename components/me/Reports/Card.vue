@@ -56,8 +56,8 @@
         </div>
 
         <div class="flex items-center justify-between pt-1 gap-2">
-          <div v-if="isWithin24h && reportType === 'incident' && mode === 'sent'" class="flex items-center gap-2">
-            <button @click="$emit('edit', report)"
+          <div v-if="mode === 'sent'" class="flex items-center gap-2">
+            <button v-if="isWithin2h" @click="$emit('edit', report)"
               class="p-2 rounded-xl bg-primary/5 text-primary hover:bg-primary/10 transition-colors" title="Modifier">
               <IconPencil class="w-3.5 h-3.5" />
             </button>
@@ -97,7 +97,7 @@ const props = defineProps<{
 
 const emit = defineEmits(['view-details', 'edit', 'delete'])
 
-const isWithin24h = computed(() => {
+const isWithin2h = computed(() => {
   if (!props.report.created_at) return false
   const diff = differenceInHours(new Date(), new Date(props.report.created_at))
   return diff < 24

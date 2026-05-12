@@ -1,5 +1,5 @@
 <template>
-  <UiBaseModal :show="show" maxWidth="lg" title="Signaler cet utilisateur" @close="$emit('close')">
+  <UiBaseModal :show="show" maxWidth="lg" :title="title" @close="$emit('close')">
     <div class="space-y-6 py-2 animate-fade-in">
       <!-- Contexte -->
       <div
@@ -52,7 +52,7 @@
           <UiBaseButton type="submit"
             class="flex-1 !rounded-2xl font-black tracking-widest shadow-xl px-10 !bg-danger hover:!bg-danger/90"
             :loading="loading" :disabled="!form.reason || !form.details.trim()">
-            Signaler
+            {{ isEditMode ? 'Enregistrer' : 'Signaler' }}
           </UiBaseButton>
         </div>
       </form>
@@ -70,7 +70,11 @@ import { userReportReasons } from '~/utils/vigitech'
 const props = defineProps<{
   show: boolean
   targetId: string
+  report?: any
 }>()
+
+const isEditMode = computed(() => !!props.report)
+const title = computed(() => isEditMode.value ? 'Modifier le signalement' : 'Signaler cet utilisateur')
 
 const emit = defineEmits(['close', 'success'])
 const store = useUserVigitechStore()
@@ -84,6 +88,17 @@ const form = reactive({
   details: ''
 })
 
+// Pré-remplissage en mode édition
+watch(() => props.show, (isVisible) => {
+  if (isVisible && props.report) {
+    form.reason = props.report.reason || ''
+    form.details = props.report.details || ''
+  } else if (!isVisible) {
+    form.reason = ''
+    form.details = ''
+  }
+})
+
 /**
  * Envoie le signalement
  */
@@ -92,16 +107,21 @@ const handleSubmit = async () => {
   loading.value = true
 
   try {
-    const success = await reportUserStore.reportUser(props.targetId, form.reason, form.details)
+    let success = false
+    if (isEditMode.value && props.report) {
+      success = await reportUserStore.updateReport(props.report.id, form.reason, form.details)
+    } else {
+      success = await reportUserStore.reportUser(props.targetId, form.reason, form.details)
+    }
 
     if (success) {
-      toast.showToast('success', 'Signalement envoyé', reportUserStore.message || 'Votre signalement a été transmis.')
+      toast.showToast('success', isEditMode.value ? 'Signalement mis à jour' : 'Signalement envoyé', reportUserStore.message || 'Action effectuée avec succès.')
       form.reason = ''
       form.details = ''
       emit('success')
       emit('close')
     } else {
-      toast.showToast('error', 'Erreur', reportUserStore.error || 'Impossible d\'envoyer le signalement.')
+      toast.showToast('error', 'Erreur', reportUserStore.error || 'Impossible d\'effectuer l\'action.')
     }
   } catch (err: any) {
     toast.showToast('error', 'Erreur', err.data?.message || err.message || 'Une erreur est survenue.')

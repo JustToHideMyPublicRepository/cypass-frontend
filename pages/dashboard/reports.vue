@@ -43,11 +43,15 @@
     <ModalReportAddIncident :show="showEditModal" :incident-id="selectedEditReport?.incident_id || ''"
       :report="selectedEditReport" @close="showEditModal = false" @success="fetchData" />
 
+    <!-- Modale de Modification (Utilisateur) -->
+    <ModalReportAddUser :show="showEditUserModal" :target-id="selectedEditReport?.reported_user_id || ''"
+      :report="selectedEditReport" @close="showEditUserModal = false" @success="fetchData" />
+
     <!-- Modale de Confirmation de Suppression -->
     <UiConfirmModal :show="showConfirmDelete" title="Supprimer le signalement"
       message="Êtes-vous sûr de vouloir supprimer ce signalement ? Cette action est irréversible."
       confirm-text="Supprimer" cancel-text="Annuler" variant="danger" :loading="isDeleting"
-      @close="showConfirmDelete = false" @confirm="handleConfirmDelete" />
+      @cancel="showConfirmDelete = false" @confirm="handleConfirmDelete" />
   </div>
 </template>
 
@@ -75,6 +79,7 @@ const showDetail = ref(false)
 const selectedReport = ref<any>(null)
 
 const showEditModal = ref(false)
+const showEditUserModal = ref(false)
 const selectedEditReport = ref<any>(null)
 const loadingMore = ref(false)
 
@@ -120,7 +125,11 @@ const handleViewDetails = async (report: any) => {
 
 const handleEditReport = (report: any) => {
   selectedEditReport.value = report
-  showEditModal.value = true
+  if (reportType.value === 'user') {
+    showEditUserModal.value = true
+  } else {
+    showEditModal.value = true
+  }
 }
 
 const handleDeleteReport = (report: any) => {
@@ -133,12 +142,12 @@ const handleConfirmDelete = async () => {
   isDeleting.value = true
 
   try {
-    const success = await reportIncidentStore.deleteReport(reportToDelete.value.id)
+    const success = await currentStore.value.deleteReport(reportToDelete.value.id)
     if (success) {
       toast.showToast('success', 'Succès', 'Signalement supprimé avec succès.')
       showConfirmDelete.value = false
     } else {
-      toast.showToast('error', 'Erreur', reportIncidentStore.error || 'Impossible de supprimer le signalement.')
+      toast.showToast('error', 'Erreur', currentStore.value.error || 'Impossible de supprimer le signalement.')
     }
   } catch (err: any) {
     toast.showToast('error', 'Erreur', 'Une erreur est survenue lors de la suppression.')
