@@ -22,6 +22,12 @@
             <div class="glass-panel p-8 md:p-12 rounded-[3.5rem] border border-ashAct space-y-8 shadow-xl">
               <RootVigitechDetailHeader :incident="incident" />
               <RootVigitechDetailContent :incident="incident" />
+              
+              <!-- Reactions Component -->
+              <div class="px-2">
+                <SharedVigitechReactions :incident="incident" @login-required="requireLogin" />
+              </div>
+
               <RootVigitechDetailComments :incident-id="incident.id" :comments="store.comments"
                 :loading="store.loadingComments" :comments-count="incident.comments_count" />
             </div>
@@ -40,6 +46,7 @@
 <script setup lang="ts">
 import { usePublicVigitechStore } from '~/stores/back/public/vigitech'
 import { useVigiPrefStore } from '~/stores/front/vigiPref'
+import { useToastStore } from '~/stores/front/toast'
 import { decodeHtmlEntities } from '~/utils/format'
 
 definePageMeta({
@@ -49,8 +56,14 @@ definePageMeta({
 const route = useRoute()
 const store = usePublicVigitechStore()
 const vigiPrefStore = useVigiPrefStore()
+const toast = useToastStore()
 
 const incident = computed(() => store.currentIncident)
+
+const requireLogin = () => {
+  toast.showToast('info', 'Connexion requise', 'Vous devez être connecté pour réagir à une alerte.')
+  navigateTo('/login')
+}
 
 const fetchData = () => {
   const id = route.params.id as string

@@ -83,3 +83,44 @@ export const userReportReasons = [
   { value: 'spam', label: 'Spam' },
   { value: 'other', label: 'Autre' }
 ]
+
+/**
+ * Emojis associés à chaque type de réaction
+ */
+export const REACTION_EMOJIS: Record<string, string> = {
+  love: '❤️',
+  like: '👍',
+  wow: '😮',
+  dislike: '👎',
+  sad: '😢'
+}
+
+/**
+ * Labels français pour chaque type de réaction
+ */
+export const REACTION_LABELS: Record<string, string> = {
+  love: 'J\'adore',
+  like: 'J\'aime',
+  wow: 'Wow',
+  dislike: 'Je n\'aime pas',
+  sad: 'Triste'
+}
+
+/**
+ * Liste ordonnée des types de réactions pour l'itération
+ */
+export const reactionTypes = ['love', 'like', 'wow', 'dislike', 'sad'] as const
+
+/**
+ * Retourne l'emoji pour un type de réaction
+ */
+export const getReactionEmoji = (type: string): string => {
+  return REACTION_EMOJIS[type] || '👍'
+}
+
+/**
+ * Retourne le label français pour un type de réaction
+ */
+export const getReactionLabel = (type: string): string => {
+  return REACTION_LABELS[type] || type
+}

@@ -1,6 +1,19 @@
 export type IncidentType = 'phishing' | 'ransomware' | 'fake_profile' | 'harassment' | 'other'
 export type ThreatLevel = 'low' | 'medium' | 'critical'
 export type IncidentStatus = 'validated' | 'rejected' | 'blocked'
+export type ReactionType = 'love' | 'like' | 'wow' | 'dislike' | 'sad'
+
+export type ReactionSummary = Partial<Record<ReactionType, number>>
+
+export interface Reaction {
+  id: string
+  user_id: string
+  reactable_id: string
+  reactable_type: string
+  type: ReactionType
+  created_at: string
+  updated_at: string
+}
 
 export interface Incident {
   id: string
@@ -24,6 +37,8 @@ export interface Incident {
   pending_reports_count?: number
   views_count?: number
   comments_count?: number
+  reactions_count?: number
+  reactions_summary?: ReactionSummary
   author_first_name?: string | null
   author_last_name?: string | null
   author_is_reported?: boolean | number

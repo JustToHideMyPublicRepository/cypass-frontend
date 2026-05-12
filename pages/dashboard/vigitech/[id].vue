@@ -18,6 +18,10 @@
         <UiBaseCard class="!rounded-[2.5rem] overflow-hidden">
           <MeVigitechDetailHeader :incident="incident" />
           <MeVigitechDetailContent :incident="incident" />
+          <!-- Reactions Component -->
+          <div class="px-6 md:px-8 pb-8 pt-4">
+            <SharedVigitechReactions :incident="incident" />
+          </div>
         </UiBaseCard>
 
         <!-- Comments Section -->

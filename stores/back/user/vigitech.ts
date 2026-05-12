@@ -248,6 +248,28 @@ export const useUserVigitechStore = defineStore('userVigitech', {
       }
     },
 
+    // Réagir à un incident
+    async reactToIncident(incidentId: string, type: string) {
+      try {
+        const response: any = await $fetch('/api/user/vigitech/incident-react', {
+          method: 'POST',
+          body: { incident_id: incidentId, type }
+        })
+        
+        if (response.success) {
+          // If we are currently viewing this incident, fetch it again to update reactions_summary
+          if (this.currentIncident && this.currentIncident.id === incidentId) {
+            await this.fetchUserIncidentById(incidentId)
+          }
+          await usePublicVigitechStore().fetchPublicIncidentById(incidentId)
+        }
+        
+        return { success: response.success, message: response.message, data: response.data }
+      } catch (err: any) {
+        return { success: false, message: err.data?.message || err.message || 'Erreur lors de la réaction.' }
+      }
+    },
+
     // Récupérer les incidents supprimés (Corbeille)
     async fetchTrashedIncidents() {
       this.loadingTrash = true
