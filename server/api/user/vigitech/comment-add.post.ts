@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
   const body = await readBody(event)
 
   try {
-    const response = await $fetch(`${baseApi}/vigitech/add_comment`, {
+    const response = await $fetch(`${baseApi}/user/vigitech/comment_add`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,
