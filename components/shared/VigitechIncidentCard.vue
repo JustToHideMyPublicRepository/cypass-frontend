@@ -64,6 +64,9 @@
             <span v-if="incident.views_count != null" class="flex items-center gap-1">
               <IconEye class="w-3 h-3" /> {{ incident.views_count }}
             </span>
+            <span v-if="incident.reactions_count != null" class="flex items-center gap-1">
+              <IconThumbUp class="w-3 h-3" /> {{ incident.reactions_count }}
+            </span>
             <span v-if="incident.comments_count != null" class="flex items-center gap-1">
               <IconMessage class="w-3 h-3" /> {{ incident.comments_count }}
             </span>
@@ -128,7 +131,7 @@
 </template>
 
 <script setup lang="ts">
-import { IconMapPin, IconClock, IconAlertCircle, IconLock, IconShare, IconEye, IconFlag, IconEdit, IconMessage, IconTrash, IconPaperclip } from '@tabler/icons-vue'
+import { IconMapPin, IconClock, IconAlertCircle, IconLock, IconShare, IconEye, IconFlag, IconEdit, IconMessage, IconTrash, IconPaperclip, IconThumbUp } from '@tabler/icons-vue'
 import type { Incident } from '~/types/vigitech'
 import { decodeHtmlEntities } from '~/utils/format'
 import { formatRelativeTime, isSignificantDifference, formatTimeDiff } from '~/utils/date'

@@ -15,6 +15,14 @@ export interface Reaction {
   updated_at: string
 }
 
+export interface ReactionDetail {
+  type: ReactionType
+  user_id: string
+  first_name?: string | null
+  last_name?: string | null
+  avatar_url?: string | null
+}
+
 export interface Incident {
   id: string
   user_id?: string
@@ -39,6 +47,7 @@ export interface Incident {
   comments_count?: number
   reactions_count?: number
   reactions_summary?: ReactionSummary
+  reactions_details?: ReactionDetail[]
   author_first_name?: string | null
   author_last_name?: string | null
   author_is_reported?: boolean | number
