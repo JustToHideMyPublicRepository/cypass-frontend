@@ -25,7 +25,7 @@
         </UiBaseCard>
 
         <!-- Comments Section -->
-        <MeVigitechDetailComments :incidentId="incident.id" :comments="publicVigitechStore.comments"
+        <meVigitechDetailCommentsBlock :incidentId="incident.id" :comments="publicVigitechStore.comments"
           :loading="publicVigitechStore.loadingComments" />
       </div>
 

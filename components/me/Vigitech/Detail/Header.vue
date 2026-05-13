@@ -1,5 +1,5 @@
 <template>
-  <div v-if="incident" class="p-6 md:p-8 space-y-6">
+  <div v-if="incident" class="p-4 space-y-6">
     <!-- Détails -->
     <div class="flex flex-wrap items-center gap-3">
       <UiStatusBadge
@@ -25,11 +25,9 @@
       </div>
     </div>
 
-    <h2 class="text-2xl md:text-3xl font-black text-BtW leading-tight">
-      {{ decodeHtmlEntities(incident.title) }}
-    </h2>
+    <h4>{{ decodeHtmlEntities(incident.title) }}</h4>
 
-    <div class="flex flex-wrap items-center gap-6 text-sm text-hsa">
+    <div class="flex flex-wrap items-center gap-6 text-sm">
       <div v-if="incident.location" class="flex items-center gap-2">
         <IconMapPin class="w-4 h-4 text-primary" /> {{ decodeHtmlEntities(incident.location) }}
       </div>

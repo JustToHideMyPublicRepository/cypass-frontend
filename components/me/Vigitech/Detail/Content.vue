@@ -2,9 +2,9 @@
   <div class="space-y-6">
     <div class="h-px bg-ash/50"></div>
 
-    <div class="space-y-4 px-6 md:px-8 pb-8">
-      <h3 class="text-xs font-black text-hsa uppercase tracking-[0.2em]">Description détaillée</h3>
-      <p class="text-BtW leading-relaxed whitespace-pre-wrap">{{ decodeHtmlEntities(incident.description) }}</p>
+    <div class="space-y-4 px-6 pb-4">
+      <h5>Description détaillée</h5>
+      <p>{{ decodeHtmlEntities(incident.description) }}</p>
     </div>
 
     <!-- Evidence Section with Toggle -->
