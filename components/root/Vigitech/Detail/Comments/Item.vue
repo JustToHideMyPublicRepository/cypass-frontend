@@ -139,7 +139,7 @@
       <!-- Replies List -->
       <div v-if="showReplies && comment.replies?.length" class="mt-4 space-y-4 border-l-2 border-hsa pl-4">
         <RootVigitechDetailCommentsReplyItem v-for="reply in comment.replies" :key="reply.id" :reply="reply"
-          :is-owner="isOwner(reply)" :can-edit="canEditComment(reply)" :is-editing="editingCommentId === reply.id"
+          :is-owner="checkIsOwner(reply)" :can-edit="checkCanEdit(reply)" :is-editing="editingCommentId === reply.id"
           :edit-content="editCommentContent" @update:edit-content="$emit('update:editContent', $event)"
           :saving="savingComment" :reacting-to-id="reactingToId" :reacting-type="reactingType"
           @edit="$emit('edit', reply)" @delete="$emit('delete', reply.id, comment.id)"
@@ -222,14 +222,14 @@ const getReactionCount = (type: string) => {
   return (props.comment.reactions_summary as any)[type] || 0
 }
 
-const isOwner = (comment: any) => {
+const checkIsOwner = (comment: any) => {
   if (!authStore.user) return false
   const userId = comment.user_id || comment.author_id
-  return String(userId) === String(authStore.user.id)
+  return !!(userId && String(userId) === String(authStore.user.id))
 }
 
-const canEditComment = (comment: any) => {
-  if (!isOwner(comment)) return false
+const checkCanEdit = (comment: any) => {
+  if (!checkIsOwner(comment)) return false
   const createdAt = new Date(comment.created_at).getTime()
   const now = Date.now()
   const hoursDiff = (now - createdAt) / (1000 * 60 * 60)

@@ -31,7 +31,7 @@
 
         <RootVigitechDetailCommentsList v-else :comments="comments" :has-more="commentsPagination.hasMore"
           :loading-more="loadingMore" :editing-comment-id="editingCommentId"
-          v-model:edit-comment-content="editCommentContent" :saving-comment="savingComment"
+          v-model:edit-content="editCommentContent" :saving-comment="savingComment"
           :expanded-comments="expandedComments" :reacting-to-id="reactingToId" :reacting-type="reactingType"
           :show-replies="showReplies" :loading-replies="loadingReplies" :user="authStore.user"
           :replying-to-id="replyingToId" v-model:reply-content="replyContent" :sending-reply="sendingReply"

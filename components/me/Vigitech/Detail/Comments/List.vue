@@ -1,8 +1,8 @@
 <template>
   <div v-if="comments.length" class="space-y-3">
     <div v-for="comment in comments" :key="comment.id">
-      <meVigitechDetailCommentsItem :comment="comment" :is-owner="isOwner(comment)" :can-edit="canEditComment(comment)"
-        :is-editing="editingCommentId === comment.id" :edit-content="editCommentContent"
+      <meVigitechDetailCommentsItem :comment="comment" :is-owner="checkIsOwner(comment)" :can-edit="checkCanEdit(comment)"
+        :is-editing="editingCommentId === comment.id" :edit-content="editContent"
         @update:edit-content="$emit('update:editContent', $event)" :saving="savingComment"
         :expanded="!!expandedComments[comment.id]" :reacting-to-id="reactingToId" :reacting-type="reactingType"
         :show-replies="!!showReplies[comment.id]" :loading-replies="!!loadingReplies[comment.id]"
@@ -39,7 +39,7 @@ const props = defineProps<{
   hasMore: boolean
   loadingMore: boolean
   editingCommentId: string | null
-  editCommentContent: string
+  editContent: string
   savingComment: boolean
   expandedComments: Record<string, boolean>
   reactingToId: string | null
@@ -63,12 +63,12 @@ defineEmits<{
   (e: 'load-more'): void
 }>()
 
-const isOwner = (comment: any) => {
+const checkIsOwner = (comment: any) => {
   return !!(authStore.user && comment.user_id === authStore.user.id)
 }
 
-const canEditComment = (comment: any) => {
-  if (!isOwner(comment)) return false
+const checkCanEdit = (comment: any) => {
+  if (!checkIsOwner(comment)) return false
   const createdAt = new Date(comment.created_at).getTime()
   const now = Date.now()
   const hoursDiff = (now - createdAt) / (1000 * 60 * 60)

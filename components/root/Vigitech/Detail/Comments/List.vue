@@ -1,14 +1,14 @@
 <template>
   <div v-if="comments.length" class="space-y-6">
     <div v-for="comment in comments" :key="comment.id">
-      <RootVigitechDetailCommentsItem :comment="comment" :is-owner="isOwner(comment)"
-        :can-edit="canEditComment(comment)" :is-editing="editingCommentId === comment.id"
-        :edit-content="editCommentContent" @update:edit-content="$emit('update:editContent', $event)"
+      <RootVigitechDetailCommentsItem :comment="comment" :is-owner="checkIsOwner(comment)"
+        :can-edit="checkCanEdit(comment)" :is-editing="editingCommentId === comment.id"
+        :edit-content="editContent" @update:edit-content="$emit('update:editContent', $event)"
         :saving="savingComment" :expanded="!!expandedComments[comment.id]" :reacting-to-id="reactingToId"
         :reacting-type="reactingType" :show-replies="!!showReplies[comment.id]"
         :loading-replies="!!loadingReplies[comment.id]" :user="user" :is-replying="replyingToId === comment.id"
         :reply-content="replyContent" @update:reply-content="$emit('update:replyContent', $event)"
-        :sending-reply="sendingReply" :editing-comment-id="editingCommentId" :edit-comment-content="editCommentContent"
+        :sending-reply="sendingReply" :editing-comment-id="editingCommentId" :edit-comment-content="editContent"
         :saving-comment="savingComment" @edit="$emit('edit', $event)" @delete="(id: string, pId?: string) => $emit('delete', id, pId)"
         @cancel-edit="$emit('cancel-edit')" @save-edit="(c: Comment, pId?: string) => $emit('save-edit', c, pId)"
         @toggle-expand="$emit('toggle-expand', comment.id)"
@@ -49,7 +49,7 @@ const props = defineProps<{
   hasMore: boolean
   loadingMore: boolean
   editingCommentId: string | null
-  editCommentContent: string
+  editContent: string
   savingComment: boolean
   expandedComments: Record<string, boolean>
   reactingToId: string | null
@@ -81,14 +81,14 @@ defineEmits<{
   (e: 'load-more'): void
 }>()
 
-const isOwner = (comment: any) => {
+const checkIsOwner = (comment: any) => {
   if (!authStore.user) return false
   const userId = comment.user_id || comment.author_id
   return !!(userId && String(userId) === String(authStore.user.id))
 }
 
-const canEditComment = (comment: any) => {
-  if (!isOwner(comment)) return false
+const checkCanEdit = (comment: any) => {
+  if (!checkIsOwner(comment)) return false
   const createdAt = new Date(comment.created_at).getTime()
   const now = Date.now()
   const hoursDiff = (now - createdAt) / (1000 * 60 * 60)
