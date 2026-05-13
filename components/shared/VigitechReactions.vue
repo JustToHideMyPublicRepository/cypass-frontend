@@ -1,7 +1,7 @@
 <template>
   <div class="flex items-center gap-4 relative">
     <!-- Main Action Button -->
-    <div v-if="authStore.user" class="relative group" @mouseenter="isHovered = true" @mouseleave="isHovered = false">
+    <div v-if="authStore.user" class="relative group" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave">
       <button @click="handleMainClick" :disabled="isLoading"
         class="flex items-center gap-2 px-4 py-2 rounded-2xl transition-all duration-300 border border-transparent"
         :class="[
@@ -29,7 +29,7 @@
           isHovered || popupKeepOpen
             ? 'opacity-100 scale-100 translate-y-0 visible pointer-events-auto'
             : 'opacity-0 scale-90 translate-y-2 invisible pointer-events-none'
-        ]" @mouseenter="popupKeepOpen = true" @mouseleave="popupKeepOpen = false">
+        ]" @mouseenter="handlePopupEnter" @mouseleave="handlePopupLeave">
         <button v-for="rtype in reactionTypes" :key="rtype" @click.stop="handleReact(rtype)" :disabled="isLoading"
           class="relative w-10 h-10 rounded-full flex items-center justify-center hover:bg-ash/10 transition-transform duration-200 hover:scale-125 focus:outline-none focus:scale-125 group/emoji">
           <span class="text-2xl leading-none" :class="{ 'grayscale opacity-50': isLoading }">{{ getReactionEmoji(rtype)
@@ -89,6 +89,31 @@ const isLoading = ref(false)
 const isHovered = ref(false)
 const popupKeepOpen = ref(false)
 const showListModal = ref(false)
+
+let hoverTimeout: any = null
+
+const handleMouseEnter = () => {
+  if (hoverTimeout) clearTimeout(hoverTimeout)
+  isHovered.value = true
+}
+
+const handleMouseLeave = () => {
+  hoverTimeout = setTimeout(() => {
+    if (!popupKeepOpen.value) {
+      isHovered.value = false
+    }
+  }, 300) // 300ms delay to move cursor
+}
+
+const handlePopupEnter = () => {
+  if (hoverTimeout) clearTimeout(hoverTimeout)
+  popupKeepOpen.value = true
+}
+
+const handlePopupLeave = () => {
+  popupKeepOpen.value = false
+  handleMouseLeave()
+}
 
 const getReactionColor = (type: string) => {
   switch (type) {

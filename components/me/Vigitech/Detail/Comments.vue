@@ -85,15 +85,52 @@
                 {{ expandedComments[comment.id] ? 'Réduire' : 'Lire plus' }}
               </button>
 
-              <!-- Replies Action -->
-              <div v-if="comment.replies_count && comment.replies_count > 0" class="pt-1">
-                <button @click="toggleReplies(comment)"
-                  class="text-[10px] font-black text-primary hover:text-primary/80 transition-all flex items-center gap-1.5">
-                  <IconMessageCircle class="w-3.5 h-3.5" />
-                  {{ showReplies[comment.id] ? 'Masquer' : 'Voir' }}
-                  {{ comment.replies_count === 1 ? 'la réponse' : `${comment.replies_count} réponses` }}
-                  <IconLoader2 v-if="loadingReplies[comment.id]" class="w-3 h-3 animate-spin ml-1" />
+              <!-- Reactions & Replies Action Row -->
+              <div class="flex items-center gap-4 pt-1">
+                <!-- Reactions -->
+                <div class="flex items-center gap-1 bg-ash/5 rounded-lg px-1 py-0.5">
+                  <button @click="handleCommentReact(comment, 'like')" :disabled="reactingToId === comment.id"
+                    class="p-1 rounded-md flex items-center gap-1 transition-all"
+                    :class="[hasMyReaction(comment, 'like') ? 'text-success bg-success/10' : 'text-hsa hover:bg-ash/10 hover:text-BtW']">
+                    <div v-if="reactingToId === comment.id"
+                      class="w-3 h-3 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
+                    <template v-else>
+                      <IconThumbUp class="w-3 h-3" :class="{ 'fill-current': hasMyReaction(comment, 'like') }" />
+                      <span v-if="getReactionCount(comment, 'like')" class="text-[8px] font-black">{{
+                        getReactionCount(comment, 'like') }}</span>
+                    </template>
+                  </button>
+                  <div class="w-px h-2 bg-ash/20"></div>
+                  <button @click="handleCommentReact(comment, 'dislike')" :disabled="reactingToId === comment.id"
+                    class="p-1 rounded-md flex items-center gap-1 transition-all"
+                    :class="[hasMyReaction(comment, 'dislike') ? 'text-danger bg-danger/10' : 'text-hsa hover:bg-ash/10 hover:text-BtW']">
+                    <div v-if="reactingToId === comment.id"
+                      class="w-3 h-3 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
+                    <template v-else>
+                      <IconThumbDown class="w-3 h-3" :class="{ 'fill-current': hasMyReaction(comment, 'dislike') }" />
+                      <span v-if="getReactionCount(comment, 'dislike')" class="text-[8px] font-black">{{
+                        getReactionCount(comment, 'dislike') }}</span>
+                    </template>
+                  </button>
+                </div>
+
+                <button v-if="comment.reactions_count && comment.reactions_count > 0" @click="openReactionList(comment)"
+                  class="p-1.5 rounded-lg text-primary hover:bg-primary/10 transition-colors" title="Voir les réactions">
+                  <IconMoodHeart class="w-4 h-4" />
                 </button>
+
+                <div class="w-px h-3 bg-ash/30"></div>
+
+                <!-- Replies Action -->
+                <div v-if="comment.replies_count && comment.replies_count > 0">
+                  <button @click="toggleReplies(comment)"
+                    class="text-[10px] font-black text-primary hover:text-primary/80 transition-all flex items-center gap-1.5">
+                    <IconMessageCircle class="w-3.5 h-3.5" />
+                    {{ showReplies[comment.id] ? 'Masquer' : 'Voir' }}
+                    {{ comment.replies_count === 1 ? 'la réponse' : `${comment.replies_count} réponses` }}
+                    <IconLoader2 v-if="loadingReplies[comment.id]" class="w-3 h-3 animate-spin ml-1" />
+                  </button>
+                </div>
               </div>
 
               <!-- Replies List -->
@@ -113,10 +150,45 @@
                     <span class="text-[8px] text-hsa font-bold shrink-0">{{ formatDate(reply.created_at) }}</span>
                   </div>
                   <p class="text-[11px] text-BtW/80 leading-relaxed break-words">{{ reply.content }}</p>
+                  <!-- Reply Reactions -->
+                  <div class="flex items-center gap-2 mt-1">
+                    <div class="flex items-center gap-1 bg-ash/5 rounded-lg w-fit px-1 py-0.5">
+                      <button @click="handleCommentReact(reply, 'like', comment.id)" :disabled="reactingToId === reply.id"
+                        class="p-1 rounded-md flex items-center gap-1 transition-all"
+                        :class="[hasMyReaction(reply, 'like') ? 'text-success bg-success/10' : 'text-hsa hover:bg-ash/10 hover:text-BtW']">
+                        <div v-if="reactingToId === reply.id"
+                          class="w-2.5 h-2.5 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
+                        <template v-else>
+                          <IconThumbUp class="w-2.5 h-2.5" :class="{ 'fill-current': hasMyReaction(reply, 'like') }" />
+                          <span v-if="getReactionCount(reply, 'like')" class="text-[8px] font-black">{{
+                            getReactionCount(reply, 'like') }}</span>
+                        </template>
+                      </button>
+                      <div class="w-px h-2 bg-ash/20"></div>
+                      <button @click="handleCommentReact(reply, 'dislike', comment.id)"
+                        :disabled="reactingToId === reply.id" class="p-1 rounded-md flex items-center gap-1 transition-all"
+                        :class="[hasMyReaction(reply, 'dislike') ? 'text-danger bg-danger/10' : 'text-hsa hover:bg-ash/10 hover:text-BtW']">
+                        <div v-if="reactingToId === reply.id"
+                          class="w-2.5 h-2.5 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
+                        <template v-else>
+                          <IconThumbDown class="w-2.5 h-2.5" :class="{ 'fill-current': hasMyReaction(reply, 'dislike') }" />
+                          <span v-if="getReactionCount(reply, 'dislike')" class="text-[8px] font-black">{{
+                            getReactionCount(reply, 'dislike') }}</span>
+                        </template>
+                      </button>
+                    </div>
+                    <button v-if="reply.reactions_count && reply.reactions_count > 0" @click="openReactionList(reply)"
+                      class="p-1 rounded-lg text-primary hover:bg-primary/10 transition-colors" title="Voir les réactions">
+                      <IconMoodHeart class="w-3.5 h-3.5" />
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+
+          <ModalVigitechReactionsList :show="showReactionModal" :reactions="selectedReactionsForModal"
+            @close="showReactionModal = false" />
 
           <!-- Load More Button -->
           <div v-if="commentsPagination.hasMore" class="pt-4 flex justify-center">
@@ -145,7 +217,7 @@
 </template>
 
 <script setup lang="ts">
-import { IconMessage, IconChevronUp, IconChevronDown, IconEdit, IconTrash, IconPlus, IconMessageCircle, IconLoader2 } from '@tabler/icons-vue'
+import { IconMessage, IconChevronUp, IconChevronDown, IconEdit, IconTrash, IconPlus, IconMessageCircle, IconLoader2, IconThumbUp, IconThumbDown, IconMoodHeart } from '@tabler/icons-vue'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { getUserAvatarUrl } from '~/utils/user'
@@ -189,8 +261,45 @@ const expandedComments = ref<Record<string, boolean>>({})
 const loadingReplies = ref<Record<string, boolean>>({})
 const showReplies = ref<Record<string, boolean>>({})
 
+// Reactions state
+const reactingToId = ref<string | null>(null)
+const showReactionModal = ref(false)
+const selectedReactionsForModal = ref<any[]>([])
+
+const openReactionList = (comment: Comment) => {
+  selectedReactionsForModal.value = comment.reactions_details || []
+  showReactionModal.value = true
+}
+
 const toggleExpand = (id: string) => {
   expandedComments.value[id] = !expandedComments.value[id]
+}
+
+const hasMyReaction = (comment: Comment, type: string) => {
+  if (!authStore.user || !comment.reactions_details) return false
+  return comment.reactions_details.some(r => r.user_id === authStore.user?.id && r.type === type)
+}
+
+const getReactionCount = (comment: Comment, type: string) => {
+  if (!comment.reactions_summary) return 0
+  return (comment.reactions_summary as any)[type] || 0
+}
+
+const handleCommentReact = async (comment: Comment, type: string, parentId?: string) => {
+  if (!authStore.user) {
+    toast.showToast('warning', 'Authentification requise', 'Veuillez vous connecter pour réagir.')
+    return
+  }
+
+  if (reactingToId.value) return
+  reactingToId.value = comment.id
+
+  const res = await store.reactToComment(comment.id, type, props.incidentId, parentId)
+  if (!res.success) {
+    toast.showToast('error', 'Erreur', res.message || 'Impossible de réagir au commentaire.')
+  }
+
+  reactingToId.value = null
 }
 
 const handleFetchReplies = async (parentId: string) => {

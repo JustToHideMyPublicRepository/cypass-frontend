@@ -177,5 +177,27 @@ export const usePublicVigitechStore = defineStore('publicVigitech', {
         console.warn('Erreur chargement stats globales:', err.message)
       }
     },
+
+    // Mettre à jour les réactions d'un commentaire localement pour éviter le rechargement complet
+    updateCommentReactionLocally(commentId: string, reactionsSummary: any, reactionsDetails: any[], reactionsCount: number, parentId?: string) {
+      if (parentId) {
+        const parent = this.comments.find(c => c.id === parentId)
+        if (parent && parent.replies) {
+          const reply = parent.replies.find(r => r.id === commentId)
+          if (reply) {
+            reply.reactions_summary = reactionsSummary
+            reply.reactions_details = reactionsDetails
+            reply.reactions_count = reactionsCount
+          }
+        }
+      } else {
+        const comment = this.comments.find(c => c.id === commentId)
+        if (comment) {
+          comment.reactions_summary = reactionsSummary
+          comment.reactions_details = reactionsDetails
+          comment.reactions_count = reactionsCount
+        }
+      }
+    }
   }
 })

@@ -278,6 +278,40 @@ export const useUserVigitechStore = defineStore('userVigitech', {
       }
     },
 
+    // Réagir à un commentaire
+    async reactToComment(commentId: string, type: string, incidentId: string, parentId?: string) {
+      try {
+        const response: any = await $fetch('/api/user/vigitech/comment-react', {
+          method: 'POST',
+          body: { comment_id: commentId, type }
+        })
+
+        if (response.success) {
+          const publicStore = usePublicVigitechStore()
+          // Update the comment in the local state instead of re-fetching everything
+          if (response.data) {
+            publicStore.updateCommentReactionLocally(
+              commentId,
+              response.data.reactions_summary,
+              response.data.reactions_details,
+              response.data.reactions_count,
+              parentId
+            )
+          } else {
+            // Fallback to fetch if data not provided in response
+            if (parentId) {
+              await publicStore.fetchReplies(incidentId, parentId)
+            } else {
+              await publicStore.fetchComments(incidentId)
+            }
+          }
+        }
+        return { success: response.success, message: response.message, data: response.data }
+      } catch (err: any) {
+        return { success: false, message: err.data?.message || err.message || 'Erreur lors de la réaction.' }
+      }
+    },
+
     // Récupérer les incidents supprimés (Corbeille)
     async fetchTrashedIncidents() {
       this.loadingTrash = true
