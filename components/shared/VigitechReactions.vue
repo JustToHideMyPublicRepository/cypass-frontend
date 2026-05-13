@@ -1,20 +1,23 @@
 <template>
   <div class="flex items-center gap-4 relative">
     <!-- Main Action Button -->
-    <div class="relative group" @mouseenter="isHovered = true" @mouseleave="isHovered = false">
+    <div v-if="authStore.user" class="relative group" @mouseenter="isHovered = true" @mouseleave="isHovered = false">
       <button @click="handleMainClick" :disabled="isLoading"
         class="flex items-center gap-2 px-4 py-2 rounded-2xl transition-all duration-300 border border-transparent"
         :class="[
-          myReaction
-            ? 'text-primary bg-primary/5 hover:bg-primary/10'
-            : 'text-hsa hover:bg-ash/10 hover:text-BtW'
+          isLoading
+            ? 'opacity-50 cursor-not-allowed grayscale'
+            : myReaction
+              ? getReactionColor(myReaction.type)
+              : 'text-hsa hover:bg-ash/10 hover:text-BtW'
         ]">
-        <IconLoader2 v-if="isLoading" class="w-5 h-5 animate-spin" />
+        <UiLogoLoader v-if="isLoading" class="w-5 h-5 !text-current" />
         <template v-else>
           <span v-if="myReaction" class="text-xl leading-none scale-110">{{ getReactionEmoji(myReaction.type) }}</span>
           <IconThumbUp v-else class="w-5 h-5" />
         </template>
-        <span class="text-sm font-black tracking-wide" :class="[myReaction ? 'text-primary' : '']">
+        <span class="text-sm font-black tracking-wide"
+          :class="[myReaction ? getReactionTextColorOnly(myReaction.type) : '']">
           {{ myReaction ? getReactionLabel(myReaction.type) : 'Réagir' }}
         </span>
       </button>
@@ -29,7 +32,8 @@
         ]" @mouseenter="popupKeepOpen = true" @mouseleave="popupKeepOpen = false">
         <button v-for="rtype in reactionTypes" :key="rtype" @click.stop="handleReact(rtype)" :disabled="isLoading"
           class="relative w-10 h-10 rounded-full flex items-center justify-center hover:bg-ash/10 transition-transform duration-200 hover:scale-125 focus:outline-none focus:scale-125 group/emoji">
-          <span class="text-2xl leading-none">{{ getReactionEmoji(rtype) }}</span>
+          <span class="text-2xl leading-none" :class="{ 'grayscale opacity-50': isLoading }">{{ getReactionEmoji(rtype)
+          }}</span>
 
           <!-- Emoji specific tooltip -->
           <div
@@ -66,7 +70,7 @@
 </template>
 
 <script setup lang="ts">
-import { IconThumbUp, IconLoader2 } from '@tabler/icons-vue'
+import { IconThumbUp } from '@tabler/icons-vue'
 import { reactionTypes, getReactionEmoji, getReactionLabel } from '~/utils/vigitech'
 import { useAuthStore } from '~/stores/back/user/auth'
 import { useUserVigitechStore } from '~/stores/back/user/vigitech'
@@ -85,6 +89,28 @@ const isLoading = ref(false)
 const isHovered = ref(false)
 const popupKeepOpen = ref(false)
 const showListModal = ref(false)
+
+const getReactionColor = (type: string) => {
+  switch (type) {
+    case 'love': return 'text-danger bg-danger/5 hover:bg-danger/10'
+    case 'like': return 'text-success bg-success/5 hover:bg-success/10'
+    case 'wow': return 'text-primary bg-primary/5 hover:bg-primary/10'
+    case 'sad': return 'text-warning bg-warning/5 hover:bg-warning/10'
+    case 'dislike': return 'text-hsa bg-hsa/5 hover:bg-hsa/10'
+    default: return 'text-primary bg-primary/5 hover:bg-primary/10'
+  }
+}
+
+const getReactionTextColorOnly = (type: string) => {
+  switch (type) {
+    case 'love': return 'text-danger'
+    case 'like': return 'text-success'
+    case 'wow': return 'text-primary'
+    case 'sad': return 'text-warning'
+    case 'dislike': return 'text-hsa'
+    default: return 'text-primary'
+  }
+}
 
 const myReaction = computed<ReactionDetail | undefined>(() => {
   if (!authStore.user || !props.incident?.reactions_details) return undefined
@@ -107,10 +133,8 @@ const totalCount = computed(() => {
 
 const handleMainClick = async () => {
   if (myReaction.value) {
-    // Already reacted -> Toggle off
     await handleReact(myReaction.value.type)
   } else {
-    // Not reacted -> Default to 'like'
     await handleReact('like')
   }
 }
@@ -124,10 +148,9 @@ const handleReact = async (type: string) => {
   if (isLoading.value) return
 
   isLoading.value = true
-  popupKeepOpen.value = false // Close tooltip immediately
+  popupKeepOpen.value = false
 
-  const result = await userVigitechStore.reactToIncident(props.incident.id, type)
-  // Store action updates public/user stores, reactivity handles the rest
+  await userVigitechStore.reactToIncident(props.incident.id, type)
 
   isLoading.value = false
 }
