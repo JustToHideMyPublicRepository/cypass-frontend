@@ -98,15 +98,13 @@
                   <NuxtLink :to="`/user/${comment.user_id}`"
                     class="text-sm font-black text-BtW hover:text-primary transition-colors flex items-center gap-1.5 truncate">
                     {{ [comment.first_name, comment.last_name].filter(Boolean).join(' ') || 'Utilisateur' }}
-                    <IconRosetteDiscountCheck v-if="comment.is_verified || comment.reporter_organization"
-                      class="w-3.5 h-3.5 text-primary shrink-0" />
                   </NuxtLink>
                   <p
                     class="text-[10px] text-hsa font-bold uppercase tracking-tighter opacity-70 flex items-center gap-2">
                     {{ formatDate(comment.created_at) }}
                     <span v-if="comment.organization_name"
-                      class="hidden sm:inline bg-primary/10 text-primary px-1.5 py-0.5 rounded-full lowercase">{{
-                        comment.organization_name }}</span>
+                      class="hidden sm:inline bg-primary/10 text-primary px-1.5 py-0.5 rounded-full lowercase">
+                      {{ comment.organization_name }}</span>
                   </p>
                 </div>
 
@@ -155,30 +153,30 @@
                   <component :is="expandedComments[comment.id] ? IconChevronUp : IconChevronDown" class="w-3 h-3" />
                   {{ expandedComments[comment.id] ? 'Réduire' : 'Lire plus' }}
                 </button>
-              </div>              <!-- Reply Action Row -->
+              </div> <!-- Reply Action Row -->
               <div class="flex items-center gap-4 pt-1">
                 <!-- Reactions -->
                 <div class="flex items-center gap-1 bg-ash/5 rounded-xl px-1 py-0.5">
                   <button @click="handleCommentReact(comment, 'like')" :disabled="reactingToId === comment.id"
-                    class="p-1.5 rounded-lg flex items-center gap-1 transition-all"
-                    :class="[hasMyReaction(comment, 'like') ? 'text-success bg-success/10' : 'text-hsa hover:bg-ash/10 hover:text-BtW']">
-                    <UiLogoLoader v-if="reactingToId === comment.id" size="xs" color="currentColor" />
-                    <template v-else>
-                      <IconThumbUp class="w-3.5 h-3.5" :class="{ 'fill-current': hasMyReaction(comment, 'like') }" />
-                      <span v-if="getReactionCount(comment, 'like')" class="text-[10px] font-black">{{
-                        getReactionCount(comment, 'like') }}</span>
-                    </template>
+                    class="p-1.5 rounded-lg flex items-center gap-1.5 transition-all min-w-[32px] justify-center"
+                    :class="[hasMyReaction(comment, 'like') ? 'text-success bg-success/10' : 'text-hsa hover:bg-ash/10 hover:text-BtW', { 'opacity-40 grayscale': reactingToId === comment.id && reactingType !== 'like' }]">
+                    <UiLogoLoader v-if="reactingToId === comment.id && reactingType === 'like'" size="xs"
+                      color="currentColor" />
+                    <IconThumbUp v-else class="w-3.5 h-3.5"
+                      :class="{ 'fill-current': hasMyReaction(comment, 'like') }" />
+                    <span v-show="getReactionCount(comment, 'like') > 0" class="text-[10px] font-black">{{
+                      getReactionCount(comment, 'like') }}</span>
                   </button>
                   <div class="w-px h-3 bg-ash/20"></div>
                   <button @click="handleCommentReact(comment, 'dislike')" :disabled="reactingToId === comment.id"
-                    class="p-1.5 rounded-lg flex items-center gap-1 transition-all"
-                    :class="[hasMyReaction(comment, 'dislike') ? 'text-danger bg-danger/10' : 'text-hsa hover:bg-ash/10 hover:text-BtW']">
-                    <UiLogoLoader v-if="reactingToId === comment.id" size="xs" color="currentColor" />
-                    <template v-else>
-                      <IconThumbDown class="w-3.5 h-3.5" :class="{ 'fill-current': hasMyReaction(comment, 'dislike') }" />
-                      <span v-if="getReactionCount(comment, 'dislike')" class="text-[10px] font-black">{{
-                        getReactionCount(comment, 'dislike') }}</span>
-                    </template>
+                    class="p-1.5 rounded-lg flex items-center gap-1.5 transition-all min-w-[32px] justify-center"
+                    :class="[hasMyReaction(comment, 'dislike') ? 'text-danger bg-danger/10' : 'text-hsa hover:bg-ash/10 hover:text-BtW', { 'opacity-40 grayscale': reactingToId === comment.id && reactingType !== 'dislike' }]">
+                    <UiLogoLoader v-if="reactingToId === comment.id && reactingType === 'dislike'" size="xs"
+                      color="currentColor" />
+                    <IconThumbDown v-else class="w-3.5 h-3.5"
+                      :class="{ 'fill-current': hasMyReaction(comment, 'dislike') }" />
+                    <span v-show="getReactionCount(comment, 'dislike') > 0" class="text-[10px] font-black">{{
+                      getReactionCount(comment, 'dislike') }}</span>
                   </button>
                 </div>
 
@@ -234,8 +232,6 @@
                       <NuxtLink :to="`/user/${reply.user_id}`"
                         class="text-xs font-black text-BtW hover:text-primary transition-colors flex items-center gap-1 truncate">
                         {{ [reply.first_name, reply.last_name].filter(Boolean).join(' ') || 'Utilisateur' }}
-                        <IconRosetteDiscountCheck v-if="reply.is_verified || reply.organization_name"
-                          class="w-3 h-3 text-primary shrink-0" />
                       </NuxtLink>
 
                       <!-- Reply Actions -->
@@ -267,7 +263,8 @@
                           class="!px-2 !py-1 !rounded-lg !text-[9px]">Annuler</UiBaseButton>
                         <UiBaseButton variant="primary" size="sm" @click="saveEditComment(reply, comment.id)"
                           :disabled="!editCommentContent.trim() || savingComment"
-                          class="!px-2 !py-1 !rounded-lg !text-[9px]">Enregistrer</UiBaseButton>
+                          class="!px-2 !py-1 !rounded-lg !text-[9px]">
+                          Enregistrer</UiBaseButton>
                       </div>
                     </div>
                     <div v-else class="space-y-2">
@@ -278,31 +275,32 @@
                         <div class="flex items-center gap-1 bg-ash/5 rounded-xl w-fit px-1 py-0.5">
                           <button @click="handleCommentReact(reply, 'like', comment.id)"
                             :disabled="reactingToId === reply.id"
-                            class="p-1 rounded-lg flex items-center gap-1 transition-all"
-                            :class="[hasMyReaction(reply, 'like') ? 'text-success bg-success/10' : 'text-hsa hover:bg-ash/10 hover:text-BtW']">
-                            <UiLogoLoader v-if="reactingToId === reply.id" size="xs" color="currentColor" />
-                            <template v-else>
-                              <IconThumbUp class="w-3 h-3" :class="{ 'fill-current': hasMyReaction(reply, 'like') }" />
-                              <span v-if="getReactionCount(reply, 'like')" class="text-[9px] font-black">{{
-                                getReactionCount(reply, 'like') }}</span>
-                            </template>
+                            class="p-1 rounded-lg flex items-center gap-1.5 transition-all min-w-[28px] justify-center"
+                            :class="[hasMyReaction(reply, 'like') ? 'text-success bg-success/10' : 'text-hsa hover:bg-ash/10 hover:text-BtW', { 'opacity-40 grayscale': reactingToId === reply.id && reactingType !== 'like' }]">
+                            <UiLogoLoader v-if="reactingToId === reply.id && reactingType === 'like'" size="xs"
+                              color="currentColor" />
+                            <IconThumbUp v-else class="w-3 h-3"
+                              :class="{ 'fill-current': hasMyReaction(reply, 'like') }" />
+                            <span v-show="getReactionCount(reply, 'like') > 0" class="text-[9px] font-black">{{
+                              getReactionCount(reply, 'like') }}</span>
                           </button>
                           <div class="w-px h-2 bg-ash/20"></div>
                           <button @click="handleCommentReact(reply, 'dislike', comment.id)"
                             :disabled="reactingToId === reply.id"
-                            class="p-1 rounded-lg flex items-center gap-1 transition-all"
-                            :class="[hasMyReaction(reply, 'dislike') ? 'text-danger bg-danger/10' : 'text-hsa hover:bg-ash/10 hover:text-BtW']">
-                            <UiLogoLoader v-if="reactingToId === reply.id" size="xs" color="currentColor" />
-                            <template v-else>
-                              <IconThumbDown class="w-3 h-3"
-                                :class="{ 'fill-current': hasMyReaction(reply, 'dislike') }" />
-                              <span v-if="getReactionCount(reply, 'dislike')" class="text-[9px] font-black">{{
-                                getReactionCount(reply, 'dislike') }}</span>
-                            </template>
+                            class="p-1 rounded-lg flex items-center gap-1.5 transition-all min-w-[28px] justify-center"
+                            :class="[hasMyReaction(reply, 'dislike') ? 'text-danger bg-danger/10' : 'text-hsa hover:bg-ash/10 hover:text-BtW', { 'opacity-40 grayscale': reactingToId === reply.id && reactingType !== 'dislike' }]">
+                            <UiLogoLoader v-if="reactingToId === reply.id && reactingType === 'dislike'" size="xs"
+                              color="currentColor" />
+                            <IconThumbDown v-else class="w-3 h-3"
+                              :class="{ 'fill-current': hasMyReaction(reply, 'dislike') }" />
+                            <span v-show="getReactionCount(reply, 'dislike') > 0" class="text-[9px] font-black">{{
+                              getReactionCount(reply, 'dislike') }}</span>
                           </button>
                         </div>
-                        <button v-if="reply.reactions_count && reply.reactions_count > 0" @click="openReactionList(reply)"
-                          class="p-1.5 rounded-lg text-primary hover:bg-primary/10 transition-colors" title="Voir qui...">
+                        <button v-if="reply.reactions_count && reply.reactions_count > 0"
+                          @click="openReactionList(reply)"
+                          class="p-1.5 rounded-lg text-primary hover:bg-primary/10 transition-colors"
+                          title="Voir qui...">
                           <IconMoodHeart class="w-4 h-4" />
                         </button>
                       </div>
@@ -347,11 +345,8 @@
 </template>
 
 <script setup lang="ts">
-import {
-  IconMessage, IconChevronUp, IconChevronDown, IconSend, IconEdit, IconTrash,
-  IconLock, IconRosetteDiscountCheck, IconCornerUpLeft, IconMessageCircle, IconLoader2, IconX,
-  IconThumbUp, IconThumbDown, IconMoodHeart
-} from '@tabler/icons-vue'
+import { IconMessage, IconChevronUp, IconChevronDown, IconSend, IconEdit, IconTrash, IconLock, IconCornerUpLeft, IconMessageCircle, IconLoader2, IconX, IconThumbUp, IconThumbDown, IconMoodHeart
+ } from '@tabler/icons-vue'
 import { useAuthStore } from '~/stores/back/user/auth'
 import { useUserVigitechStore } from '~/stores/back/user/vigitech'
 import { usePublicVigitechStore } from '~/stores/back/public/vigitech'
@@ -399,6 +394,7 @@ const showReplies = ref<Record<string, boolean>>({})
 
 // Reactions state
 const reactingToId = ref<string | null>(null)
+const reactingType = ref<string | null>(null)
 const showReactionModal = ref(false)
 const selectedReactionsForModal = ref<any[]>([])
 
@@ -445,6 +441,7 @@ const handleCommentReact = async (comment: Comment, type: string, parentId?: str
 
   if (reactingToId.value) return
   reactingToId.value = comment.id
+  reactingType.value = type
 
   const res = await userVigitechStore.reactToComment(comment.id, type, props.incidentId, parentId)
   if (!res.success) {
@@ -452,6 +449,7 @@ const handleCommentReact = async (comment: Comment, type: string, parentId?: str
   }
 
   reactingToId.value = null
+  reactingType.value = null
 }
 
 const startReply = (comment: Comment) => {

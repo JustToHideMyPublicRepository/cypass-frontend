@@ -288,22 +288,11 @@ export const useUserVigitechStore = defineStore('userVigitech', {
 
         if (response.success) {
           const publicStore = usePublicVigitechStore()
-          // Update the comment in the local state instead of re-fetching everything
-          if (response.data) {
-            publicStore.updateCommentReactionLocally(
-              commentId,
-              response.data.reactions_summary,
-              response.data.reactions_details,
-              response.data.reactions_count,
-              parentId
-            )
+          // Re-fetch to get updated reactions_summary and reactions_count
+          if (parentId) {
+            await publicStore.fetchReplies(incidentId, parentId)
           } else {
-            // Fallback to fetch if data not provided in response
-            if (parentId) {
-              await publicStore.fetchReplies(incidentId, parentId)
-            } else {
-              await publicStore.fetchComments(incidentId)
-            }
+            await publicStore.syncSingleComment(commentId)
           }
         }
         return { success: response.success, message: response.message, data: response.data }

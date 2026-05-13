@@ -87,10 +87,20 @@ export const usePublicVigitechStore = defineStore('publicVigitech', {
         })
 
         if (response.success) {
+          const replies = response.data || []
+          const total = response.total || replies.length
+
+          // Update centralized state if the parent exists
+          const parent = this.comments.find(c => c.id === parentId)
+          if (parent) {
+            parent.replies = replies
+            parent.replies_count = total
+          }
+
           return {
             success: true,
-            data: response.data || [],
-            total: response.total || (response.data || []).length
+            data: replies,
+            total
           }
         }
         return { success: false, data: [] }
@@ -175,6 +185,29 @@ export const usePublicVigitechStore = defineStore('publicVigitech', {
         }
       } catch (err: any) {
         console.warn('Erreur chargement stats globales:', err.message)
+      }
+    },
+
+    // Synchroniser un seul commentaire (par ex après une réaction)
+    async syncSingleComment(commentId: string) {
+      try {
+        const response: any = await $fetch('/api/user/vigitech/comment-get', {
+          query: { id: commentId }
+        })
+
+        if (response.success && response.data) {
+          const newComment = response.data
+          const idx = this.comments.findIndex(c => c.id === commentId)
+          if (idx !== -1) {
+            // Update the comment in place to keep reactivity smooth
+            this.comments[idx] = { ...this.comments[idx], ...newComment }
+            return true
+          }
+        }
+        return false
+      } catch (err: any) {
+        console.warn('Erreur synchronisation commentaire:', err.message)
+        return false
       }
     },
 
