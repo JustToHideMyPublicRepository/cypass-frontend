@@ -72,6 +72,8 @@ export interface Comment {
   reactions_count?: number
   reactions_summary?: any | null
   replies?: Comment[]
+  is_verified?: boolean | number
+  reporter_organization?: string | null
 }
 
 export interface CreateIncidentRequest {

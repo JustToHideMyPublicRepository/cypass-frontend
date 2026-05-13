@@ -1,17 +1,25 @@
 <template>
   <UiBaseCard class="!rounded-[2.5rem] overflow-hidden">
     <div class="p-6 md:p-8 space-y-5">
-      <button @click="showComments = !showComments"
-        class="w-full flex items-center justify-between hover:text-primary transition-all duration-300">
-        <h3 class="text-xs font-black text-hsa uppercase tracking-[0.2em] flex items-center gap-2">
-          <IconMessage class="w-4 h-4 text-primary" /> Commentaires
-          <span v-if="commentsCount || comments.length"
-            class="ml-1 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-black">
-            {{ commentsCount ?? comments.length }}
-          </span>
-        </h3>
-        <component :is="showComments ? IconChevronUp : IconChevronDown" class="w-4 h-4 text-hsa transition-transform" />
-      </button>
+      <div class="flex items-center justify-between gap-4">
+        <button @click="showComments = !showComments"
+          class="flex-1 flex items-center justify-between hover:text-primary transition-all duration-300">
+          <h3 class="text-xs font-black text-hsa uppercase tracking-[0.2em] flex items-center gap-2">
+            <IconMessage class="w-4 h-4 text-primary" /> Commentaires
+            <span v-if="commentsCount || comments.length"
+              class="ml-1 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-black">
+              {{ commentsCount ?? comments.length }}
+            </span>
+          </h3>
+          <component :is="showComments ? IconChevronUp : IconChevronDown"
+            class="w-4 h-4 text-hsa transition-transform" />
+        </button>
+        <NuxtLink :to="`/vigitech/${incidentId}#comments`"
+          class="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-primary/10 text-primary hover:bg-primary hover:text-WtB transition-all text-[10px] font-black uppercase tracking-wider">
+          <IconPlus class="w-3.5 h-3.5" />
+          Commenter
+        </NuxtLink>
+      </div>
 
       <template v-if="showComments">
         <div v-if="loading" class="space-y-3">
@@ -21,27 +29,27 @@
         <div v-else-if="commentsCount || comments.length" class="space-y-3">
           <div v-for="comment in comments" :key="comment.id"
             class="p-4 rounded-xl bg-ash/5 border border-ash/30 space-y-1.5 hover:border-ash/50 transition-colors">
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-2">
-                <div class="w-6 h-6 rounded-full overflow-hidden border border-ash/20 bg-ash/10">
+            <div class="flex items-center justify-between gap-3">
+              <div class="flex items-center gap-2 min-w-0">
+                <div class="shrink-0 w-6 h-6 rounded-full overflow-hidden border border-ash/20 bg-ash/10">
                   <img :src="getAvatar(comment)" class="w-full h-full object-cover" />
                 </div>
                 <NuxtLink :to="`/user/${comment.user_id}`"
-                  class="text-[11px] font-black text-BtW hover:text-primary hover:underline transition-colors">
+                  class="text-[11px] font-black text-BtW hover:text-primary hover:underline transition-colors truncate">
                   {{ [comment.first_name, comment.last_name].filter(Boolean).join(' ') || 'Utilisateur' }}
                 </NuxtLink>
               </div>
-              <div class="flex items-center gap-2">
-                <span class="text-[10px] text-hsa font-bold">{{ formatDate(comment.created_at) }}</span>
+              <div class="flex items-center gap-2 shrink-0">
+                <span class="text-[9px] text-hsa font-bold">{{ formatDate(comment.created_at) }}</span>
                 <button v-if="canEditComment(comment)" @click="startEditComment(comment)"
                   class="p-1 rounded-lg hover:bg-primary/10 text-hsa hover:text-primary transition-colors"
                   title="Modifier">
-                  <IconEdit class="w-3.5 h-3.5" />
+                  <IconEdit class="w-3 h-3" />
                 </button>
                 <button v-if="isOwner(comment)" @click="confirmDeleteComment(comment.id)"
                   class="p-1 rounded-lg hover:bg-danger/10 text-hsa hover:text-danger transition-colors"
                   title="Supprimer">
-                  <IconTrash class="w-3.5 h-3.5" />
+                  <IconTrash class="w-3 h-3" />
                 </button>
               </div>
             </div>
@@ -62,11 +70,11 @@
                 </UiBaseButton>
                 <UiBaseButton variant="primary" size="sm" @click="saveEditComment(comment)"
                   :disabled="!editCommentContent.trim() || savingComment" class="!rounded-lg !text-[9px]">
-                  {{ savingComment ? 'Enregistrement...' : 'Enregistrer' }}
+                  {{ savingComment ? 'Envoi...' : 'Enregistrer' }}
                 </UiBaseButton>
               </div>
             </div>
-            <div v-else class="pl-8 space-y-1">
+            <div v-else class="pl-8 space-y-2">
               <p class="text-xs text-BtW leading-relaxed break-words">
                 {{ (comment.content.length > 200 && !expandedComments[comment.id]) ?
                   comment.content.slice(0, 200) + '...' : comment.content }}
@@ -76,6 +84,37 @@
                 <component :is="expandedComments[comment.id] ? IconChevronUp : IconChevronDown" class="w-3 h-3" />
                 {{ expandedComments[comment.id] ? 'Réduire' : 'Lire plus' }}
               </button>
+
+              <!-- Dashboard Replies Action -->
+              <div v-if="comment.replies_count && comment.replies_count > 0" class="pt-1">
+                <button @click="toggleReplies(comment)"
+                  class="text-[10px] font-black text-primary hover:text-primary/80 transition-all flex items-center gap-1.5">
+                  <IconMessageCircle class="w-3.5 h-3.5" />
+                  {{ showReplies[comment.id] ? 'Masquer' : 'Voir' }}
+                  {{ comment.replies_count === 1 ? 'la réponse' : `${comment.replies_count} réponses` }}
+                  <IconLoader2 v-if="loadingReplies[comment.id]" class="w-3 h-3 animate-spin ml-1" />
+                </button>
+              </div>
+
+              <!-- Dashboard Replies List -->
+              <div v-if="showReplies[comment.id] && comment.replies?.length"
+                class="mt-3 space-y-3 border-l-2 border-ash/20 pl-3">
+                <div v-for="reply in comment.replies" :key="reply.id" class="space-y-1">
+                  <div class="flex items-center justify-between gap-2">
+                    <div class="flex items-center gap-1.5 min-w-0">
+                      <div class="shrink-0 w-4 h-4 rounded-full overflow-hidden bg-ash/10 border border-ash/20">
+                        <img :src="getAvatar(reply)" class="w-full h-full object-cover text-[4px]" />
+                      </div>
+                      <NuxtLink :to="`/user/${reply.user_id}`"
+                        class="text-[9px] font-black text-BtW truncate hover:text-primary transition-colors">
+                        {{ [reply.first_name, reply.last_name].filter(Boolean).join(' ') }}
+                      </NuxtLink>
+                    </div>
+                    <span class="text-[8px] text-hsa font-bold shrink-0">{{ formatDate(reply.created_at) }}</span>
+                  </div>
+                  <p class="text-[11px] text-BtW/80 leading-relaxed break-words">{{ reply.content }}</p>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -106,7 +145,7 @@
 </template>
 
 <script setup lang="ts">
-import { IconMessage, IconChevronUp, IconChevronDown, IconEdit, IconTrash } from '@tabler/icons-vue'
+import { IconMessage, IconChevronUp, IconChevronDown, IconEdit, IconTrash, IconPlus, IconMessageCircle, IconLoader2 } from '@tabler/icons-vue'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { getUserAvatarUrl } from '~/utils/user'
@@ -115,10 +154,11 @@ import { useAuthStore } from '~/stores/back/user/auth'
 import { useUserVigitechStore } from '~/stores/back/user/vigitech'
 import { usePublicVigitechStore } from '~/stores/back/public/vigitech'
 import { useToastStore } from '~/stores/front/toast'
+import type { Comment } from '~/types/vigitech'
 
 const props = defineProps<{
   incidentId: string
-  comments: any[]
+  comments: Comment[]
   loading: boolean
   commentsCount?: number
 }>()
@@ -145,8 +185,36 @@ const deletingComment = ref(false)
 const loadingMore = ref(false)
 const expandedComments = ref<Record<string, boolean>>({})
 
+// Replies state for dashboard
+const loadingReplies = ref<Record<string, boolean>>({})
+const showReplies = ref<Record<string, boolean>>({})
+
 const toggleExpand = (id: string) => {
   expandedComments.value[id] = !expandedComments.value[id]
+}
+
+const handleFetchReplies = async (parentId: string) => {
+  loadingReplies.value[parentId] = true
+  const res = await publicVigitechStore.fetchReplies(props.incidentId, parentId)
+  if (res.success) {
+    const parent = props.comments.find(c => c.id === parentId)
+    if (parent) {
+      parent.replies = res.data
+      parent.replies_count = res.total
+    }
+  }
+  loadingReplies.value[parentId] = false
+}
+
+const toggleReplies = async (comment: Comment) => {
+  if (showReplies.value[comment.id]) {
+    showReplies.value[comment.id] = false
+  } else {
+    if (!comment.replies || comment.replies.length === 0) {
+      await handleFetchReplies(comment.id)
+    }
+    showReplies.value[comment.id] = true
+  }
 }
 
 const commentsPagination = computed(() => publicVigitechStore.commentsPagination)

@@ -157,24 +157,27 @@
                   <IconCornerUpLeft class="w-3.5 h-3.5" />
                   Répondre
                 </button>
-                <button v-if="comment.replies_count > 0" @click="toggleReplies(comment)"
+                <button v-if="comment.replies_count && comment.replies_count > 0" @click="toggleReplies(comment)"
                   class="text-[11px] font-black tracking-widest text-primary hover:text-primary/80 transition-colors flex items-center gap-1">
                   <IconMessageCircle class="w-3.5 h-3.5" />
-                  {{ showReplies[comment.id] ? 'Masquer' : 'Voir' }} les {{ comment.replies_count }} réponse(s)
+                  {{ showReplies[comment.id] ? 'Masquer' : 'Voir' }}
+                  {{ comment.replies_count === 1 ? 'la réponse' : `les ${comment.replies_count} réponses` }}
                   <IconLoader2 v-if="loadingReplies[comment.id]" class="w-3 h-3 animate-spin ml-1" />
                 </button>
               </div>
 
               <!-- Reply Input Box -->
               <div v-if="replyingToId === comment.id" class="mt-4 flex gap-3">
-                <textarea v-model="replyContent" rows="2" maxlength="500"
-                  placeholder="Écrire une réponse..."
+                <textarea v-model="replyContent" rows="2" maxlength="500" placeholder="Écrire une réponse..."
                   class="flex-1 p-3 rounded-xl bg-WtB border border-ash/50 text-sm font-bold outline-none focus:ring-2 focus:ring-primary transition-all resize-none shadow-sm"></textarea>
                 <div class="flex flex-col gap-2 justify-end">
-                  <UiBaseButton variant="primary" size="sm" @click="handleSendReply(comment)" :disabled="!replyContent.trim() || sendingReply" class="!px-3 !py-2 !rounded-xl">
-                    <IconSend class="w-4 h-4" />
+                  <UiBaseButton variant="primary" size="sm" @click="handleSendReply(comment)"
+                    :disabled="!replyContent.trim() || sendingReply" class="!px-3 !py-2 !rounded-xl">
+                    <UiLogoLoader v-if="sendingReply" size="xs" color="currentColor" />
+                    <IconSend v-else class="w-4 h-4" />
                   </UiBaseButton>
-                  <UiBaseButton variant="ghost" size="sm" @click="replyingToId = null" class="!px-3 !py-2 !rounded-xl text-hsa">
+                  <UiBaseButton variant="ghost" size="sm" @click="replyingToId = null"
+                    class="!px-3 !py-2 !rounded-xl text-hsa">
                     <IconX class="w-4 h-4" />
                   </UiBaseButton>
                 </div>
