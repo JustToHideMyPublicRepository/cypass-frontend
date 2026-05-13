@@ -22,13 +22,13 @@
             <div class="glass-panel p-8 md:p-12 rounded-[3.5rem] border border-ashAct space-y-8 shadow-xl">
               <RootVigitechDetailHeader :incident="incident" />
               <RootVigitechDetailContent :incident="incident" />
-              
+
               <!-- Reactions Component -->
               <div class="px-2">
                 <SharedVigitechReactions :incident="incident" @login-required="requireLogin" />
               </div>
 
-              <RootVigitechDetailComments :incident-id="incident.id" :comments="store.comments"
+              <RootVigitechDetailCommentsBlock :incident-id="incident.id" :comments="store.comments"
                 :loading="store.loadingComments" :comments-count="incident.comments_count" />
             </div>
           </div>

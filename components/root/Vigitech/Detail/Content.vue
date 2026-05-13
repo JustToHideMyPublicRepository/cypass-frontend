@@ -1,12 +1,10 @@
 <template>
-  <div class="space-y-8">
+  <div class="space-y-6">
     <div class="h-px bg-ashAct/50"></div>
 
     <div class="space-y-6">
-      <h3 class="text-xs font-black text-hsa uppercase tracking-[0.3em]">Détail de l'incident</h3>
-      <p class="text-lg md:text-xl text-BtW leading-relaxed whitespace-pre-wrap">
-        {{ decodeHtmlEntities(incident.description) }}
-      </p>
+      <h5>Détail de l'incident</h5>
+      <p> {{ decodeHtmlEntities(incident.description) }} </p>
     </div>
 
     <!-- Evidence Section with Toggle -->

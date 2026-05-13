@@ -1,5 +1,5 @@
 <template>
-  <div v-if="incident" class="space-y-6">
+  <div v-if="incident" class="space-y-4">
     <div class="flex flex-wrap items-center gap-3">
       <UiStatusBadge
         :status="incident.threat_level === 'critical' ? 'High' : incident.threat_level === 'medium' ? 'Medium' : 'Low'">
@@ -23,11 +23,9 @@
       </div>
     </div>
 
-    <h1 class="text-3xl md:text-5xl font-black text-BtW leading-tight tracking-tighter">
-      {{ decodeHtmlEntities(incident.title) }}
-    </h1>
+    <h4> {{ decodeHtmlEntities(incident.title) }} </h4>
 
-    <div class="flex flex-wrap items-center gap-8 text-sm md:text-base text-hsa">
+    <div class="flex flex-wrap items-center gap-8 text-sm">
       <div v-if="incident.location" class="flex items-center gap-2.5">
         <IconMapPin class="w-5 h-5 text-primary" /> {{ decodeHtmlEntities(incident.location) }}
       </div>
