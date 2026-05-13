@@ -92,8 +92,8 @@
                   <button @click="handleCommentReact(comment, 'like')" :disabled="reactingToId === comment.id"
                     class="p-1 rounded-md flex items-center gap-1.5 transition-all min-w-[30px] justify-center"
                     :class="[hasMyReaction(comment, 'like') ? 'text-success bg-success/10' : 'text-hsa hover:bg-ash/10 hover:text-BtW', { 'opacity-40 grayscale': reactingToId === comment.id && reactingType !== 'like' }]">
-                    <div v-if="reactingToId === comment.id && reactingType === 'like'"
-                      class="w-3 h-3 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
+                    <UiLogoLoader v-if="reactingToId === comment.id && reactingType === 'like'" size="xs"
+                      color="currentColor" />
                     <IconThumbUp v-else class="w-3 h-3" :class="{ 'fill-current': hasMyReaction(comment, 'like') }" />
                     <span v-show="getReactionCount(comment, 'like') > 0" class="text-[8px] font-black">{{
                       getReactionCount(comment, 'like') }}</span>
@@ -102,8 +102,8 @@
                   <button @click="handleCommentReact(comment, 'dislike')" :disabled="reactingToId === comment.id"
                     class="p-1 rounded-md flex items-center gap-1.5 transition-all min-w-[30px] justify-center"
                     :class="[hasMyReaction(comment, 'dislike') ? 'text-danger bg-danger/10' : 'text-hsa hover:bg-ash/10 hover:text-BtW', { 'opacity-40 grayscale': reactingToId === comment.id && reactingType !== 'dislike' }]">
-                    <div v-if="reactingToId === comment.id && reactingType === 'dislike'"
-                      class="w-3 h-3 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
+                    <UiLogoLoader v-if="reactingToId === comment.id && reactingType === 'dislike'" size="xs"
+                      color="currentColor" />
                     <IconThumbDown v-else class="w-3 h-3"
                       :class="{ 'fill-current': hasMyReaction(comment, 'dislike') }" />
                     <span v-show="getReactionCount(comment, 'dislike') > 0" class="text-[8px] font-black">{{
@@ -126,7 +126,7 @@
                     <IconMessageCircle class="w-3.5 h-3.5" />
                     {{ showReplies[comment.id] ? 'Masquer' : 'Voir' }}
                     {{ comment.replies_count === 1 ? 'la réponse' : `${comment.replies_count} réponses` }}
-                    <IconLoader2 v-if="loadingReplies[comment.id]" class="w-3 h-3 animate-spin ml-1" />
+                    <UiLogoLoader v-if="loadingReplies[comment.id]" size="xs" color="currentColor" class="ml-1" />
                   </button>
                 </div>
               </div>
@@ -155,9 +155,8 @@
                         :disabled="reactingToId === reply.id"
                         class="p-1 rounded-md flex items-center gap-1.5 transition-all min-w-[28px] justify-center"
                         :class="[hasMyReaction(reply, 'like') ? 'text-success bg-success/10' : 'text-hsa hover:bg-ash/10 hover:text-BtW', { 'opacity-40 grayscale': reactingToId === reply.id && reactingType !== 'like' }]">
-                        <div v-if="reactingToId === reply.id && reactingType === 'like'"
-                          class="w-2.5 h-2.5 border-2 border-current border-t-transparent rounded-full animate-spin">
-                        </div>
+                        <UiLogoLoader v-if="reactingToId === reply.id && reactingType === 'like'" size="xs"
+                          color="currentColor" />
                         <IconThumbUp v-else class="w-2.5 h-2.5"
                           :class="{ 'fill-current': hasMyReaction(reply, 'like') }" />
                         <span v-show="getReactionCount(reply, 'like') > 0" class="text-[8px] font-black">{{
@@ -168,9 +167,8 @@
                         :disabled="reactingToId === reply.id"
                         class="p-1 rounded-md flex items-center gap-1.5 transition-all min-w-[28px] justify-center"
                         :class="[hasMyReaction(reply, 'dislike') ? 'text-danger bg-danger/10' : 'text-hsa hover:bg-ash/10 hover:text-BtW', { 'opacity-40 grayscale': reactingToId === reply.id && reactingType !== 'dislike' }]">
-                        <div v-if="reactingToId === reply.id && reactingType === 'dislike'"
-                          class="w-2.5 h-2.5 border-2 border-current border-t-transparent rounded-full animate-spin">
-                        </div>
+                        <UiLogoLoader v-if="reactingToId === reply.id && reactingType === 'dislike'" size="xs"
+                          color="currentColor" />
                         <IconThumbDown v-else class="w-2.5 h-2.5"
                           :class="{ 'fill-current': hasMyReaction(reply, 'dislike') }" />
                         <span v-show="getReactionCount(reply, 'dislike') > 0" class="text-[8px] font-black">{{
@@ -196,7 +194,7 @@
             <button @click="handleLoadMore" :disabled="loadingMore"
               class="text-[10px] font-black uppercase tracking-widest text-hsa hover:text-primary transition-colors flex items-center gap-2">
               <IconChevronDown v-if="!loadingMore" class="w-3.5 h-3.5" />
-              <div v-else class="w-3 h-3 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+              <UiLogoLoader v-else size="xs" color="currentColor" />
               {{ loadingMore ? 'Chargement...' : 'Voir plus' }}
             </button>
           </div>
