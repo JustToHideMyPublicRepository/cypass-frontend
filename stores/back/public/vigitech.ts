@@ -231,6 +231,11 @@ export const usePublicVigitechStore = defineStore('publicVigitech', {
           comment.reactions_count = reactionsCount
         }
       }
+    },
+
+    addCommentLocally(comment: Comment) {
+      this.comments = [comment, ...this.comments]
+      this.commentsPagination.total++
     }
   }
 })

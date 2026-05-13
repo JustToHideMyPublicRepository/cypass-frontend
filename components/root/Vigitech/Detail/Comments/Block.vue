@@ -1,22 +1,17 @@
 <template>
   <div
-    class="relative bg-ash/20 backdrop-blur-3xl p-8 md:p-12 rounded-[3.5rem] border border-ash/40 shadow-2xl overflow-hidden group">
-    <!-- Ambient backgrounds for premium feel -->
-    <div
-      class="absolute -top-24 -right-24 w-64 h-64 bg-primary/5 rounded-full blur-[80px] group-hover:bg-primary/10 transition-colors duration-700">
-    </div>
-
+    class="relative bg-ashAct/20 backdrop-blur-3xl p-8 md:p-12 rounded-[3.5rem] border border-hsa/40 shadow-2xl overflow-hidden group">
     <!-- Header Section -->
     <RootVigitechDetailCommentsHead :count="commentsCount ?? comments.length" :show="showComments"
       @toggle="showComments = !showComments" />
 
     <Transition name="fade-slide">
-      <div v-if="showComments" class="relative space-y-8">
+      <div v-if="showComments" class="relative space-y-6">
         <!-- Add Comment Form -->
         <RootVigitechDetailCommentsForm v-model="newComment" :loading="submittingComment" :user="authStore.user"
           @submit="handleAddComment" />
 
-        <div class="h-px bg-gradient-to-r from-transparent via-ash/30 to-transparent"></div>
+        <div class="h-px bg-hsa/20"></div>
 
         <!-- Comments List -->
         <div v-if="loading" class="space-y-6">
@@ -30,15 +25,15 @@
         </div>
 
         <RootVigitechDetailCommentsList v-else :comments="comments" :has-more="commentsPagination.hasMore"
-          :loading-more="loadingMore" :editing-comment-id="editingCommentId"
-          v-model:edit-content="editCommentContent" :saving-comment="savingComment"
-          :expanded-comments="expandedComments" :reacting-to-id="reactingToId" :reacting-type="reactingType"
-          :show-replies="showReplies" :loading-replies="loadingReplies" :user="authStore.user"
-          :replying-to-id="replyingToId" v-model:reply-content="replyContent" :sending-reply="sendingReply"
-          @edit="startEditComment" @delete="confirmDeleteComment" @cancel-edit="cancelEditComment"
-          @save-edit="saveEditComment" @toggle-expand="toggleExpand" @react="handleCommentReact"
-          @show-reactions="openReactionList" @start-reply="startReply" @send-reply="handleSendReply"
-          @cancel-reply="replyingToId = null" @toggle-replies="toggleReplies" @load-more="handleLoadMore" />
+          :loading-more="loadingMore" :editing-comment-id="editingCommentId" v-model:edit-content="editCommentContent"
+          :saving-comment="savingComment" :expanded-comments="expandedComments" :reacting-to-id="reactingToId"
+          :reacting-type="reactingType" :show-replies="showReplies" :loading-replies="loadingReplies"
+          :user="authStore.user" :replying-to-id="replyingToId" v-model:reply-content="replyContent"
+          :sending-reply="sendingReply" @edit="startEditComment" @delete="confirmDeleteComment"
+          @cancel-edit="cancelEditComment" @save-edit="saveEditComment" @toggle-expand="toggleExpand"
+          @react="handleCommentReact" @show-reactions="openReactionList" @start-reply="startReply"
+          @send-reply="handleSendReply" @cancel-reply="replyingToId = null" @toggle-replies="toggleReplies"
+          @load-more="handleLoadMore" />
 
         <!-- Add Modal at the end of comments list -->
         <ModalVigitechReactionsList :show="showReactionModal" :reactions="selectedReactionsForModal"

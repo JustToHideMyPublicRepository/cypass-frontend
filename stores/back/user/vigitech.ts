@@ -23,7 +23,7 @@ export const useUserVigitechStore = defineStore('userVigitech', {
 
   actions: {
     // Ajouter un commentaire (ou une réponse)
-    async addComment(incidentId: string, content: string, parentId?: string) {
+    async addComment(incidentId: string, content: string, parentId?: string, skipFetch: boolean = false) {
       try {
         const bodyParam: any = { incident_id: incidentId, content }
         if (parentId) {
@@ -35,8 +35,8 @@ export const useUserVigitechStore = defineStore('userVigitech', {
           body: bodyParam
         })
         if (response.success) {
-          // Si top-level, on recharge la liste principale
-          if (!parentId) {
+          // Si top-level, on recharge la liste principale (sauf si skipFetch est vrai)
+          if (!parentId && !skipFetch) {
             await usePublicVigitechStore().fetchComments(incidentId)
           }
           return { success: true, message: response.message, data: response.data }
