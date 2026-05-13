@@ -85,7 +85,7 @@
                 {{ expandedComments[comment.id] ? 'Réduire' : 'Lire plus' }}
               </button>
 
-              <!-- Dashboard Replies Action -->
+              <!-- Replies Action -->
               <div v-if="comment.replies_count && comment.replies_count > 0" class="pt-1">
                 <button @click="toggleReplies(comment)"
                   class="text-[10px] font-black text-primary hover:text-primary/80 transition-all flex items-center gap-1.5">
@@ -96,9 +96,9 @@
                 </button>
               </div>
 
-              <!-- Dashboard Replies List -->
+              <!-- Replies List -->
               <div v-if="showReplies[comment.id] && comment.replies?.length"
-                class="mt-3 space-y-3 border-l-2 border-ash/20 pl-3">
+                class="mt-3 space-y-3 border-l-2 border-ash pl-4">
                 <div v-for="reply in comment.replies" :key="reply.id" class="space-y-1">
                   <div class="flex items-center justify-between gap-2">
                     <div class="flex items-center gap-1.5 min-w-0">

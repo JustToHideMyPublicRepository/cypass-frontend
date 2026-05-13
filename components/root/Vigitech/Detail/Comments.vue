@@ -59,7 +59,8 @@
               <IconLock class="w-6 h-6" />
             </div>
             <p class="text-sm text-hsa font-bold">
-              <NuxtLink to="/auth/login" class="text-primary hover:underline underline-offset-4">Connectez-vous</NuxtLink>
+              <NuxtLink to="/auth/login" class="text-primary hover:underline underline-offset-4">Connectez-vous
+              </NuxtLink>
               pour participer à la discussion.
             </p>
           </div>
@@ -97,11 +98,15 @@
                   <NuxtLink :to="`/user/${comment.user_id}`"
                     class="text-sm font-black text-BtW hover:text-primary transition-colors flex items-center gap-1.5 truncate">
                     {{ [comment.first_name, comment.last_name].filter(Boolean).join(' ') || 'Utilisateur' }}
-                    <IconRosetteDiscountCheck v-if="comment.is_verified || comment.reporter_organization" class="w-3.5 h-3.5 text-primary shrink-0" />
+                    <IconRosetteDiscountCheck v-if="comment.is_verified || comment.reporter_organization"
+                      class="w-3.5 h-3.5 text-primary shrink-0" />
                   </NuxtLink>
-                  <p class="text-[10px] text-hsa font-bold uppercase tracking-tighter opacity-70 flex items-center gap-2">
+                  <p
+                    class="text-[10px] text-hsa font-bold uppercase tracking-tighter opacity-70 flex items-center gap-2">
                     {{ formatDate(comment.created_at) }}
-                    <span v-if="comment.organization_name" class="hidden sm:inline bg-primary/10 text-primary px-1.5 py-0.5 rounded-full lowercase">{{ comment.organization_name }}</span>
+                    <span v-if="comment.organization_name"
+                      class="hidden sm:inline bg-primary/10 text-primary px-1.5 py-0.5 rounded-full lowercase">{{
+                        comment.organization_name }}</span>
                   </p>
                 </div>
 
@@ -132,7 +137,8 @@
                   </div>
                 </div>
                 <div class="flex gap-2 justify-end">
-                  <UiBaseButton variant="ghost" size="sm" @click="cancelEditComment" class="!rounded-xl !text-[10px]">Annuler</UiBaseButton>
+                  <UiBaseButton variant="ghost" size="sm" @click="cancelEditComment" class="!rounded-xl !text-[10px]">
+                    Annuler</UiBaseButton>
                   <UiBaseButton variant="primary" size="sm" @click="saveEditComment(comment)"
                     :disabled="!editCommentContent.trim() || savingComment" class="!rounded-xl !text-[10px]">
                     {{ savingComment ? 'Envoi...' : 'Enregistrer' }}
@@ -141,7 +147,8 @@
               </div>
               <!-- Normal content display -->
               <div v-else class="relative space-y-2">
-                <p class="text-sm text-BtW/90 leading-relaxed break-words whitespace-pre-wrap">{{ (comment.content.length > 200 && !expandedComments[comment.id]) ?
+                <p class="text-sm text-BtW/90 leading-relaxed break-words whitespace-pre-wrap">{{
+                  (comment.content.length > 200 && !expandedComments[comment.id]) ?
                     comment.content.slice(0, 200) + '...' : comment.content }}</p>
                 <button v-if="comment.content.length > 200" @click="toggleExpand(comment.id)"
                   class="text-[10px] font-black uppercase tracking-widest text-primary hover:text-primary/80 mt-1 flex items-center gap-1 transition-colors">
@@ -184,7 +191,8 @@
               </div>
 
               <!-- Replies List -->
-              <div v-if="showReplies[comment.id] && comment.replies?.length" class="mt-4 space-y-4 border-l-2 border-ash/30 pl-4 md:pl-6 ml-2 md:ml-0">
+              <div v-if="showReplies[comment.id] && comment.replies?.length"
+                class="mt-4 space-y-4 border-l-2 border-hsa pl-4">
                 <div v-for="reply in comment.replies" :key="reply.id" class="group/reply relative flex gap-3">
                   <div class="shrink-0">
                     <div class="w-8 h-8 rounded-xl overflow-hidden border border-WtB shadow-sm bg-ash/20">
@@ -193,37 +201,48 @@
                   </div>
                   <div class="flex-1 min-w-0 space-y-1">
                     <div class="flex items-center justify-between gap-2">
-                       <NuxtLink :to="`/user/${reply.user_id}`" class="text-xs font-black text-BtW hover:text-primary transition-colors flex items-center gap-1 truncate">
+                      <NuxtLink :to="`/user/${reply.user_id}`"
+                        class="text-xs font-black text-BtW hover:text-primary transition-colors flex items-center gap-1 truncate">
                         {{ [reply.first_name, reply.last_name].filter(Boolean).join(' ') || 'Utilisateur' }}
-                        <IconRosetteDiscountCheck v-if="reply.is_verified || reply.organization_name" class="w-3 h-3 text-primary shrink-0" />
+                        <IconRosetteDiscountCheck v-if="reply.is_verified || reply.organization_name"
+                          class="w-3 h-3 text-primary shrink-0" />
                       </NuxtLink>
-                      
+
                       <!-- Reply Actions -->
-                      <div class="flex items-center gap-1 opacity-100 sm:opacity-0 sm:group-hover/reply:opacity-100 transition-opacity">
-                         <button v-if="canEditComment(reply)" @click="startEditComment(reply)" class="p-1 rounded bg-WtB border border-ash/30 hover:bg-primary/10 hover:text-primary text-hsa" title="Modifier">
+                      <div
+                        class="flex items-center gap-1 opacity-100 sm:opacity-0 sm:group-hover/reply:opacity-100 transition-opacity">
+                        <button v-if="canEditComment(reply)" @click="startEditComment(reply)"
+                          class="p-1 rounded bg-WtB border border-ash/30 hover:bg-primary/10 hover:text-primary text-hsa"
+                          title="Modifier">
                           <IconEdit class="w-3 h-3" />
                         </button>
-                        <button v-if="isOwner(reply)" @click="confirmDeleteComment(reply.id, comment.id)" class="p-1 rounded bg-WtB border border-ash/30 hover:bg-danger/10 hover:text-danger text-hsa" title="Supprimer">
+                        <button v-if="isOwner(reply)" @click="confirmDeleteComment(reply.id, comment.id)"
+                          class="p-1 rounded bg-WtB border border-ash/30 hover:bg-danger/10 hover:text-danger text-hsa"
+                          title="Supprimer">
                           <IconTrash class="w-3 h-3" />
                         </button>
                       </div>
                     </div>
-                    
+
                     <p class="text-[9px] text-hsa font-bold uppercase tracking-tighter opacity-70">
                       {{ formatDate(reply.created_at) }}
                     </p>
 
                     <!-- Reply Inline Edit -->
                     <div v-if="editingCommentId === reply.id" class="mt-2 space-y-2">
-                       <textarea v-model="editCommentContent" rows="2" maxlength="500"
+                      <textarea v-model="editCommentContent" rows="2" maxlength="500"
                         class="w-full p-2.5 rounded-xl bg-WtB border border-ash/50 text-xs font-bold outline-none focus:ring-1 focus:ring-primary transition-all resize-none shadow-inner" />
                       <div class="flex gap-2 justify-end">
-                        <UiBaseButton variant="ghost" size="sm" @click="cancelEditComment" class="!px-2 !py-1 !rounded-lg !text-[9px]">Annuler</UiBaseButton>
-                        <UiBaseButton variant="primary" size="sm" @click="saveEditComment(reply, comment.id)" :disabled="!editCommentContent.trim() || savingComment" class="!px-2 !py-1 !rounded-lg !text-[9px]">Enregistrer</UiBaseButton>
+                        <UiBaseButton variant="ghost" size="sm" @click="cancelEditComment"
+                          class="!px-2 !py-1 !rounded-lg !text-[9px]">Annuler</UiBaseButton>
+                        <UiBaseButton variant="primary" size="sm" @click="saveEditComment(reply, comment.id)"
+                          :disabled="!editCommentContent.trim() || savingComment"
+                          class="!px-2 !py-1 !rounded-lg !text-[9px]">Enregistrer</UiBaseButton>
                       </div>
                     </div>
                     <div v-else>
-                      <p class="text-xs text-BtW/80 leading-relaxed whitespace-pre-wrap break-words">{{ reply.content }}</p>
+                      <p class="text-xs text-BtW/80 leading-relaxed whitespace-pre-wrap break-words">{{ reply.content }}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -331,7 +350,7 @@ const formatDate = (dateStr: string) => {
 }
 
 const startReply = (comment: Comment) => {
-  if(replyingToId.value === comment.id) {
+  if (replyingToId.value === comment.id) {
     replyingToId.value = null
   } else {
     replyingToId.value = comment.id
@@ -342,9 +361,9 @@ const startReply = (comment: Comment) => {
 const handleFetchReplies = async (parentId: string) => {
   loadingReplies.value[parentId] = true
   const res = await publicVigitechStore.fetchReplies(props.incidentId, parentId)
-  if(res.success) {
+  if (res.success) {
     const parent = props.comments.find(c => c.id === parentId)
-    if(parent) {
+    if (parent) {
       parent.replies = res.data
       parent.replies_count = res.total
     }
@@ -353,11 +372,11 @@ const handleFetchReplies = async (parentId: string) => {
 }
 
 const toggleReplies = async (comment: Comment) => {
-  if(showReplies.value[comment.id]) {
+  if (showReplies.value[comment.id]) {
     showReplies.value[comment.id] = false
   } else {
     // Si pas encore de réponses ou si on veut forcer le rechargement
-    if(!comment.replies || comment.replies.length === 0) {
+    if (!comment.replies || comment.replies.length === 0) {
       await handleFetchReplies(comment.id)
     }
     showReplies.value[comment.id] = true
@@ -367,9 +386,9 @@ const toggleReplies = async (comment: Comment) => {
 const handleSendReply = async (parentComment: Comment) => {
   if (!replyContent.value.trim() || sendingReply.value) return
   sendingReply.value = true
-  
+
   const result = await userVigitechStore.addComment(props.incidentId, replyContent.value.trim(), parentComment.id)
-  
+
   if (result.success) {
     replyContent.value = ''
     replyingToId.value = null
@@ -392,13 +411,13 @@ const confirmDeleteComment = (id: string, parentId?: string) => {
 const handleDeleteComment = async () => {
   if (!commentIdToDelete.value) return
   deletingComment.value = true
-  
+
   // si parentIdOfDeletion n'est pas def, c'est un top level comment, qui rafraichira tout via le store
   const result = await userVigitechStore.deleteComment(commentIdToDelete.value, parentIdOfDeletion.value ? undefined : props.incidentId)
-  
+
   if (result.success) {
     toast.showToast('success', 'Commentaire supprimé', result.message || 'Le commentaire a été supprimé.')
-    
+
     // Refresh reply list if it was a nested comment
     if (parentIdOfDeletion.value) {
       await handleFetchReplies(parentIdOfDeletion.value)
@@ -406,7 +425,7 @@ const handleDeleteComment = async () => {
   } else {
     toast.showToast('error', 'Erreur', result.message || 'Impossible de supprimer le commentaire.')
   }
-  
+
   deletingComment.value = false
   showDeleteConfirm.value = false
   commentIdToDelete.value = null
@@ -444,18 +463,18 @@ const cancelEditComment = () => {
 const saveEditComment = async (comment: any, parentId?: string) => {
   if (!editCommentContent.value.trim()) return
   savingComment.value = true
-  
+
   // Pour refetch: si parentId -> fetchReplies, sinon si top level -> fetchComments (fait par le store)
   const isTopLevel = !parentId && !comment.parent_id
-  
+
   const result = await userVigitechStore.updateComment(comment.id, editCommentContent.value.trim(), isTopLevel ? props.incidentId : undefined)
   if (result.success) {
     toast.showToast('success', 'Commentaire modifié', result.message || 'Votre commentaire a été mis à jour.')
     editingCommentId.value = null
     editCommentContent.value = ''
-    
+
     // refetch manually if it is a reply
-    if(!isTopLevel) {
+    if (!isTopLevel) {
       await handleFetchReplies(parentId || comment.parent_id)
     }
   } else {
