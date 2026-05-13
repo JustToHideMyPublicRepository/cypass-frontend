@@ -345,8 +345,9 @@
 </template>
 
 <script setup lang="ts">
-import { IconMessage, IconChevronUp, IconChevronDown, IconSend, IconEdit, IconTrash, IconLock, IconCornerUpLeft, IconMessageCircle, IconLoader2, IconX, IconThumbUp, IconThumbDown, IconMoodHeart
- } from '@tabler/icons-vue'
+import {
+  IconMessage, IconChevronUp, IconChevronDown, IconSend, IconEdit, IconTrash, IconLock, IconCornerUpLeft, IconMessageCircle, IconLoader2, IconX, IconThumbUp, IconThumbDown, IconMoodHeart
+} from '@tabler/icons-vue'
 import { useAuthStore } from '~/stores/back/user/auth'
 import { useUserVigitechStore } from '~/stores/back/user/vigitech'
 import { usePublicVigitechStore } from '~/stores/back/public/vigitech'

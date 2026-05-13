@@ -86,7 +86,8 @@
               </button>
 
               <!-- Reactions & Replies Action Row -->
-              <div class="flex items-center gap-4 pt-1">                <!-- Reactions -->
+              <div class="flex items-center gap-4 pt-1">
+                <!-- Reactions -->
                 <div class="flex items-center gap-1 bg-ash/5 rounded-lg px-1 py-0.5">
                   <button @click="handleCommentReact(comment, 'like')" :disabled="reactingToId === comment.id"
                     class="p-1 rounded-md flex items-center gap-1.5 transition-all min-w-[30px] justify-center"
@@ -103,11 +104,12 @@
                     :class="[hasMyReaction(comment, 'dislike') ? 'text-danger bg-danger/10' : 'text-hsa hover:bg-ash/10 hover:text-BtW', { 'opacity-40 grayscale': reactingToId === comment.id && reactingType !== 'dislike' }]">
                     <div v-if="reactingToId === comment.id && reactingType === 'dislike'"
                       class="w-3 h-3 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
-                    <IconThumbDown v-else class="w-3 h-3" :class="{ 'fill-current': hasMyReaction(comment, 'dislike') }" />
+                    <IconThumbDown v-else class="w-3 h-3"
+                      :class="{ 'fill-current': hasMyReaction(comment, 'dislike') }" />
                     <span v-show="getReactionCount(comment, 'dislike') > 0" class="text-[8px] font-black">{{
                       getReactionCount(comment, 'dislike') }}</span>
                   </button>
-                </div>>
+                </div>
 
                 <button v-if="comment.reactions_count && comment.reactions_count > 0" @click="openReactionList(comment)"
                   class="p-1.5 rounded-lg text-primary hover:bg-primary/10 transition-colors"
@@ -154,8 +156,10 @@
                         class="p-1 rounded-md flex items-center gap-1.5 transition-all min-w-[28px] justify-center"
                         :class="[hasMyReaction(reply, 'like') ? 'text-success bg-success/10' : 'text-hsa hover:bg-ash/10 hover:text-BtW', { 'opacity-40 grayscale': reactingToId === reply.id && reactingType !== 'like' }]">
                         <div v-if="reactingToId === reply.id && reactingType === 'like'"
-                          class="w-2.5 h-2.5 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
-                        <IconThumbUp v-else class="w-2.5 h-2.5" :class="{ 'fill-current': hasMyReaction(reply, 'like') }" />
+                          class="w-2.5 h-2.5 border-2 border-current border-t-transparent rounded-full animate-spin">
+                        </div>
+                        <IconThumbUp v-else class="w-2.5 h-2.5"
+                          :class="{ 'fill-current': hasMyReaction(reply, 'like') }" />
                         <span v-show="getReactionCount(reply, 'like') > 0" class="text-[8px] font-black">{{
                           getReactionCount(reply, 'like') }}</span>
                       </button>
@@ -165,7 +169,8 @@
                         class="p-1 rounded-md flex items-center gap-1.5 transition-all min-w-[28px] justify-center"
                         :class="[hasMyReaction(reply, 'dislike') ? 'text-danger bg-danger/10' : 'text-hsa hover:bg-ash/10 hover:text-BtW', { 'opacity-40 grayscale': reactingToId === reply.id && reactingType !== 'dislike' }]">
                         <div v-if="reactingToId === reply.id && reactingType === 'dislike'"
-                          class="w-2.5 h-2.5 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
+                          class="w-2.5 h-2.5 border-2 border-current border-t-transparent rounded-full animate-spin">
+                        </div>
                         <IconThumbDown v-else class="w-2.5 h-2.5"
                           :class="{ 'fill-current': hasMyReaction(reply, 'dislike') }" />
                         <span v-show="getReactionCount(reply, 'dislike') > 0" class="text-[8px] font-black">{{
