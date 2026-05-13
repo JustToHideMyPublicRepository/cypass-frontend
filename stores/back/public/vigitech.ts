@@ -74,6 +74,32 @@ export const usePublicVigitechStore = defineStore('publicVigitech', {
       }
     },
 
+    // Récuperer les réponses d'un commentaire
+    async fetchReplies(incidentId: string, parentId: string, offset: number = 0, limit: number = 10) {
+      try {
+        const response: any = await $fetch('/api/public/vigitech/comment-list', {
+          params: {
+            incident_id: incidentId,
+            parent_id: parentId,
+            limit,
+            offset
+          }
+        })
+
+        if (response.success) {
+          return {
+            success: true,
+            data: response.data || [],
+            total: response.total || (response.data || []).length
+          }
+        }
+        return { success: false, data: [] }
+      } catch (err: any) {
+        console.warn('Erreur chargement réponses:', err.message)
+        return { success: false, data: [] }
+      }
+    },
+
     // Récupérer un incident public par son id  
     async fetchPublicIncidentById(id: string) {
       this.loading = true

@@ -58,6 +58,7 @@ export interface Incident {
 export interface Comment {
   id: string
   incident_id: string
+  parent_id?: string | null
   user_id: string
   content: string
   created_at: string
@@ -67,6 +68,10 @@ export interface Comment {
   organization_name?: string | null
   avatar_url?: string | null
   incident_title?: string | null
+  replies_count?: number
+  reactions_count?: number
+  reactions_summary?: any | null
+  replies?: Comment[]
 }
 
 export interface CreateIncidentRequest {

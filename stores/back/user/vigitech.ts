@@ -22,16 +22,24 @@ export const useUserVigitechStore = defineStore('userVigitech', {
   }),
 
   actions: {
-    // Ajouter un commentaire
-    async addComment(incidentId: string, content: string) {
+    // Ajouter un commentaire (ou une réponse)
+    async addComment(incidentId: string, content: string, parentId?: string) {
       try {
+        const bodyParam: any = { incident_id: incidentId, content }
+        if (parentId) {
+          bodyParam.parent_id = parentId
+        }
+
         const response: any = await $fetch('/api/user/vigitech/comment-add', {
           method: 'POST',
-          body: { incident_id: incidentId, content }
+          body: bodyParam
         })
         if (response.success) {
-          await usePublicVigitechStore().fetchComments(incidentId)
-          return { success: true, message: response.message }
+          // Si top-level, on recharge la liste principale
+          if (!parentId) {
+            await usePublicVigitechStore().fetchComments(incidentId)
+          }
+          return { success: true, message: response.message, data: response.data }
         }
         return { success: false, message: response.message || 'Impossible de publier le commentaire.' }
       } catch (err: any) {
