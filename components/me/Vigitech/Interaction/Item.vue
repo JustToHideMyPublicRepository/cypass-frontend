@@ -1,123 +1,163 @@
 <template>
-  <div
-    class="group relative bg-ash/40 backdrop-blur-3xl p-6 rounded-[2.5rem] border border-ash/30 hover:border-primary/40 hover:bg-ash/60 hover:shadow-[0_20px_60px_rgba(var(--primary-rgb),0.1)] transition-all duration-700 overflow-hidden flex flex-col h-full">
+  <UiBaseCard
+    class="group transition-all hover:shadow-md border-ash/30 bg-WtB p-3 relative overflow-hidden h-full flex flex-col justify-center min-h-[100px]">
 
-    <!-- Premium Animated Glow Gradient -->
-    <div
-      class="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(var(--primary-rgb),0.1),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-1000">
-    </div>
+    <div class="relative flex-1">
+      <!-- Normal View -->
+      <div v-if="!isEditing" class="flex items-center gap-3">
+        <!-- Icon -->
+        <div
+          :class="['w-10 h-10 flex items-center justify-center rounded-xl shrink-0 transition-all duration-500 transform group-hover:rotate-6 shadow-sm', config.bgClass, config.textClass]">
+          <span v-if="!isComment" class="text-xl leading-none">{{ config.emoji }}</span>
+          <IconMessage v-else class="w-5 h-5" />
+        </div>
 
-    <div class="relative flex-1 flex flex-col justify-between">
-      <div class="flex items-start justify-between gap-4">
-        <div class="flex-1 min-w-0">
-          <div class="flex items-center gap-3 mb-3">
-            <div :class="['w-10 h-10 flex items-center justify-center rounded-2xl transition-all duration-500 transform group-hover:rotate-12', reactionConfig.bgClass, reactionConfig.textClass]">
-              <component :is="reactionConfig.icon" class="w-5 h-5" />
-            </div>
-            <div>
-              <p class="text-[10px] font-black uppercase tracking-widest text-hsa leading-none mb-1">
-                A réagi avec <span :class="reactionConfig.textClass">{{ reactionConfig.label }}</span>
-              </p>
-              <p class="text-[11px] font-bold text-BtW opacity-60">
-                {{ relativeTime }}
-              </p>
-            </div>
+        <!-- Info -->
+        <div class="min-w-0 flex-1">
+          <div class="flex items-center gap-1.5 overflow-hidden">
+            <p class="text-[10px] font-black truncate">
+              {{ config.headerPrefix }}
+              <span v-if="config.typeLabel" :class="config.textClass">
+                {{ config.typeLabel }}
+              </span>
+            </p>
           </div>
 
-          <h3 class="text-sm font-black text-BtW tracking-tight leading-snug line-clamp-2 min-h-[2.5em] group-hover:text-primary transition-colors">
-            "{{ reaction.target_title || 'Sans titre' }}"
-          </h3>
+          <h5 class="text-xs block font-bold text-BtW tracking-tight mt-1 truncate">
+            {{ displayTitle || 'Sans titre' }}
+          </h5>
+
+          <!-- Meta -->
+          <div class="flex items-center gap-2 mt-1.5">
+            <span class="inline-flex items-center gap-1 text-[9px] font-bold text-hsa/60 uppercase tracking-tighter">
+              <IconClock class="w-2.5 h-2.5" />
+              {{ relativeTime }}
+            </span>
+            <span class="inline-flex items-center gap-1 text-[9px] font-black text-primary/80 uppercase tracking-tighter">
+              <component :is="isComment ? IconMessage : IconCircleCheck" class="w-2.5 h-2.5" />
+              {{ categoryLabel }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex items-center gap-1 shrink-0">
+          <!-- Edit/Delete for My Comments tab -->
+          <template v-if="isComment">
+            <button v-if="canEdit" @click="$emit('edit', item)"
+              class="p-2 rounded-lg hover:bg-primary/10 text-hsa hover:text-primary transition-colors" title="Modifier">
+              <IconEdit class="w-3.5 h-3.5" />
+            </button>
+            <button @click="$emit('delete', item.id)"
+              class="p-2 rounded-lg hover:bg-danger/10 text-hsa hover:text-danger transition-colors" title="Supprimer">
+              <IconTrash class="w-3.5 h-3.5" />
+            </button>
+          </template>
+
+          <!-- Remove Reaction Button -->
+          <button v-else @click="$emit('remove-reaction', item)" :disabled="loading"
+            class="p-2 rounded-lg hover:bg-danger/10 text-hsa hover:text-danger transition-colors group/remove disabled:opacity-50"
+            title="Retirer la réaction">
+            <div class="relative w-4 h-4 flex items-center justify-center">
+              <UiLogoLoader v-if="loading" size="xs" />
+              <IconMoodOff v-else class="w-3.5 h-3.5 group-hover/remove:scale-110 transition-transform" />
+            </div>
+          </button>
+
+          <NuxtLink :to="targetUrl"
+            class="p-2 rounded-lg bg-primary/5 text-primary hover:bg-primary hover:text-WtB transition-all" title="Voir">
+            <IconExternalLink class="w-3.5 h-3.5" />
+          </NuxtLink>
         </div>
       </div>
 
-      <div class="mt-6 pt-4 border-t border-ash/10 flex items-center justify-between">
-        <div class="flex items-center gap-2">
-           <div class="px-3 py-1 rounded-full bg-ash/20 border border-ash/20 text-[9px] font-black uppercase tracking-widest text-hsa">
-            {{ isComment ? 'Commentaire' : 'Incident' }}
-          </div>
+      <!-- Editing Mode -->
+      <div v-else class="space-y-3 animate-fade-in py-1">
+        <textarea v-model="localEditContent" rows="3"
+          class="w-full p-3 rounded-xl bg-ash/5 border border-ashAct text-xs font-bold text-BtW outline-none focus:border-primary/40 transition-all resize-none shadow-inner"
+          placeholder="Modifier votre commentaire..." />
+        <div class="flex gap-2 justify-end">
+          <UiBaseButton variant="ghost" size="sm" @click="$emit('cancel')" class="!h-8 !px-3 !text-[10px] uppercase font-black tracking-widest bg-ash/10 hover:bg-ash/20">
+            Annuler
+          </UiBaseButton>
+          <UiBaseButton variant="primary" size="sm" @click="$emit('save', localEditContent)"
+            :disabled="!localEditContent.trim() || saving" class="!h-8 !px-4 !text-[10px] uppercase font-black tracking-widest shadow-lg shadow-primary/20">
+            {{ saving ? '...' : 'Sauvegarder' }}
+          </UiBaseButton>
         </div>
-
-        <NuxtLink :to="targetUrl" class="flex items-center gap-2 group/btn">
-          <span class="text-[10px] font-black uppercase tracking-widest text-hsa group-hover/btn:text-primary transition-colors">Voir</span>
-          <div class="w-8 h-8 flex items-center justify-center rounded-xl bg-primary/5 text-primary group-hover/btn:bg-primary group-hover/btn:text-white transition-all transform group-hover/btn:translate-x-1">
-             <IconArrowRight class="w-4 h-4" />
-          </div>
-        </NuxtLink>
       </div>
     </div>
-  </div>
+  </UiBaseCard>
 </template>
 
 <script setup lang="ts">
-import { 
-  IconThumbUp, 
-  IconHeart, 
-  IconMoodSurprised, 
-  IconThumbDown, 
-  IconMoodSad,
-  IconArrowRight
-} from '@tabler/icons-vue'
+import { IconExternalLink, IconMessage, IconClock, IconCircleCheck, IconMoodOff, IconEdit, IconTrash } from '@tabler/icons-vue'
 import { formatRelativeTime } from '~/utils/date'
-import type { UserReaction, ReactionType } from '~/types/vigitech'
+import { getReactionEmoji, getReactionLabel, getReactionColor, getReactionTextColorOnly } from '~/utils/vigitech'
+import { computed, ref, watch } from 'vue'
 
 const props = defineProps<{
-  reaction: UserReaction
+  item: any
+  type: 'reaction' | 'comment'
+  loading?: boolean
+  isEditing?: boolean
+  saving?: boolean
+  editContent?: string
 }>()
 
-const isComment = computed(() => props.reaction.target_type === 'comment')
+const emit = defineEmits(['remove-reaction', 'edit', 'delete', 'save', 'cancel'])
+
+const isComment = computed(() => props.type === 'comment')
+const localEditContent = ref(props.editContent || '')
+
+watch(() => props.editContent, (val) => {
+  localEditContent.value = val || ''
+})
+
+const categoryLabel = computed(() => {
+  if (isComment.value) return 'Commentaire'
+  return props.item.target_type === 'comment' ? 'Commentaire' : 'Incident'
+})
+
+const displayTitle = computed(() => {
+  if (isComment.value) return props.item.content
+  return props.item.target_title
+})
 
 const targetUrl = computed(() => {
-  if (isComment.value) {
-    // We might need the incident_id to go to the correct comment location, 
-    // but the API sample only gives target_id. Assuming target_id is incident_id for simplicity or we need to handle it.
-    // If target_type is comment, target_id is comment id. 
-    // Let's assume we can go to /vigitech/ID where ID is the incident. 
-    // If we only have comment id, we might need more info. 
-    // For now, let's just go to the target_id if it's an incident or handle it.
-    // Actually, usually comments are displayed inside incidents.
-    return `/vigitech/${props.reaction.target_id}` 
-  }
-  return `/vigitech/${props.reaction.target_id}`
+  const id = props.item.incident_id || props.item.target_id
+  return `/vigitech/${id}`
 })
 
 const relativeTime = computed(() => {
-  return formatRelativeTime(props.reaction.created_at)
+  return formatRelativeTime(props.item.created_at)
 })
 
-const reactionConfigs: Record<ReactionType, any> = {
-  like: {
-    icon: IconThumbUp,
-    label: 'J\'aime',
-    bgClass: 'bg-blue-500/10',
-    textClass: 'text-blue-500'
-  },
-  love: {
-    icon: IconHeart,
-    label: 'J\'adore',
-    bgClass: 'bg-pink-500/10',
-    textClass: 'text-pink-500'
-  },
-  wow: {
-    icon: IconMoodSurprised,
-    label: 'Génial',
-    bgClass: 'bg-yellow-500/10',
-    textClass: 'text-yellow-500'
-  },
-  dislike: {
-    icon: IconThumbDown,
-    label: 'Je n\'aime pas',
-    bgClass: 'bg-orange-500/10',
-    textClass: 'text-orange-500'
-  },
-  sad: {
-    icon: IconMoodSad,
-    label: 'Triste',
-    bgClass: 'bg-purple-500/10',
-    textClass: 'text-purple-500'
-  }
-}
+const canEdit = computed(() => {
+  if (!isComment.value) return false
+  const createdAt = new Date(props.item.created_at).getTime()
+  const now = Date.now()
+  const hoursDiff = (now - createdAt) / (1000 * 60 * 60)
+  return hoursDiff <= 24
+})
 
-const reactionConfig = computed(() => {
-  return reactionConfigs[props.reaction.type] || reactionConfigs.like
+const config = computed(() => {
+  if (isComment.value) {
+    return {
+      headerPrefix: 'A ajouté un',
+      typeLabel: 'commentaire',
+      bgClass: 'bg-primary/10',
+      textClass: 'text-primary'
+    }
+  }
+
+  const type = props.item.type
+  return {
+    emoji: getReactionEmoji(type),
+    headerPrefix: 'A réagi avec',
+    typeLabel: getReactionLabel(type),
+    bgClass: getReactionColor(type).split(' ').find(c => c.startsWith('bg-')) || 'bg-primary/5',
+    textClass: getReactionTextColorOnly(type)
+  }
 })
 </script>

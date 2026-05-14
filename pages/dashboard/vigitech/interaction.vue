@@ -30,7 +30,7 @@
       <!-- Interactions Grid -->
       <template v-else-if="displayItems.length">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in-up">
-          <MeVigitechInteractionInteractionItem v-for="item in displayItems" :key="item.id" :item="item"
+          <MeVigitechInteractionItem v-for="item in displayItems" :key="item.id" :item="item"
             :type="targetType === 'my_comments' ? 'comment' : 'reaction'" :loading="removalLoadingId === item.id"
             :isEditing="editingId === item.id" :saving="savingComment" :editContent="editCommentContent"
             @remove-reaction="handleRemoveReaction" @edit="handleStartEdit" @cancel="handleCancelEdit"
