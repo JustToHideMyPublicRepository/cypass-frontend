@@ -12,8 +12,8 @@
         :availableTypes="availableReactionTypes" 
       />
       
-      <div v-if="userReactions.length" class="px-4 py-2 rounded-xl bg-ash/20 border border-ash/30 text-[10px] font-black uppercase tracking-widest text-hsa h-fit">
-        {{ userReactions.length }} résultat{{ userReactions.length > 1 ? 's' : '' }}
+      <div v-if="displayItems.length" class="px-4 py-2 rounded-xl bg-ash/20 border border-ash/30 text-[10px] font-black uppercase tracking-widest text-hsa h-fit">
+        {{ displayItems.length }} résultat{{ displayItems.length > 1 ? 's' : '' }}
       </div>
     </div>
 
@@ -23,10 +23,15 @@
         <UiAppSkeleton v-for="i in 6" :key="i" height="200px" radius="2.5rem" />
       </div>
 
-      <!-- Reactions Grid -->
-      <template v-else-if="userReactions.length">
+      <!-- Interactions Grid -->
+      <template v-else-if="displayItems.length">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in-up">
-          <MeVigitechReactionsItem v-for="reaction in userReactions" :key="reaction.id" :reaction="reaction" />
+          <MeVigitechReactionsInteractionItem 
+            v-for="item in displayItems" 
+            :key="item.id" 
+            :item="item" 
+            :type="targetType === 'my_comments' ? 'comment' : 'reaction'" 
+          />
         </div>
       </template>
 
@@ -46,7 +51,12 @@ const loading = ref(true)
 const targetType = ref('')
 const reactionType = ref('')
 
-const userReactions = computed(() => store.userReactions)
+const displayItems = computed(() => {
+  if (targetType.value === 'my_comments') {
+    return store.userComments
+  }
+  return store.userReactions
+})
 
 const availableReactionTypes = computed<ReactionType[]>(() => {
   if (targetType.value === 'comment') {
@@ -57,20 +67,25 @@ const availableReactionTypes = computed<ReactionType[]>(() => {
 
 const fetchData = async () => {
   loading.value = true
-  const params: any = {}
-  if (targetType.value) params.target_type = targetType.value
-  if (reactionType.value) params.type = reactionType.value
-  
   try {
-    await store.fetchUserReactions(params)
+    if (targetType.value === 'my_comments') {
+      await store.fetchUserComments()
+    } else {
+      const params: any = {}
+      if (targetType.value) params.target_type = targetType.value
+      if (reactionType.value) params.type = reactionType.value
+      await store.fetchUserReactions(params)
+    }
   } finally {
     loading.value = false
   }
 }
 
-// Reset reaction type if it's no longer available for the current target type
+// Reset reaction type if it's no longer available for the current target type or if target is comments
 watch(targetType, (newTarget) => {
-  if (newTarget === 'comment' && !['like', 'dislike'].includes(reactionType.value)) {
+  if (newTarget === 'my_comments') {
+    reactionType.value = ''
+  } else if (newTarget === 'comment' && !['like', 'dislike'].includes(reactionType.value)) {
     reactionType.value = ''
   }
   fetchData()

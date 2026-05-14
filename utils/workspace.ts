@@ -1,4 +1,4 @@
-import { IconSticker2, IconUser, IconBuilding, IconHome, IconBriefcase, IconCircle, IconCrown, IconShield, IconEdit, IconEye, IconCircleCheck, IconTrash, IconArchive } from '@tabler/icons-vue'
+import { IconSticker2, IconUser, IconBuilding, IconHome, IconBriefcase, IconFrame, IconCrown, IconShield, IconEdit, IconEye, IconCircleCheck, IconTrash, IconArchive } from '@tabler/icons-vue'
 import type { WorkspaceRole, WorkspaceStatus, WorkspaceType } from '~/types/workspace'
 
 /**
@@ -31,7 +31,7 @@ export const WORKSPACE_TYPE_CONFIG = {
   },
   other: {
     label: 'Autre',
-    icon: IconCircle,
+    icon: IconFrame,
     color: 'text-hsa',
     bg: 'bg-hsa/10'
   }
