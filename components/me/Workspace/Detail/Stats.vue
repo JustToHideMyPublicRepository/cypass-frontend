@@ -1,12 +1,17 @@
 <template>
   <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-    <div v-for="stat in stats" :key="stat.label" class="p-6 rounded-[2rem] bg-WtB border border-ash/30 shadow-sm flex items-center gap-5">
-      <div class="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 border transition-colors" :class="stat.color">
-        <component :is="stat.icon" class="w-6 h-6" />
-      </div>
-      <div class="min-w-0">
-        <p class="text-[10px] font-black text-hsa uppercase tracking-widest mb-0.5">{{ stat.label }}</p>
-        <h4 class="truncate font-black">{{ stat.value }}</h4>
+    <div v-for="item in state" :key="item.label" class="p-6 rounded-[2rem] bg-WtB border border-ash shadow-sm">
+      <div class="flex items-start gap-4">
+        <div :class="[
+          'w-12 h-12 rounded-2xl flex items-center justify-center border shrink-0',
+          item.iconBg, item.iconColor, item.iconBorder
+        ]">
+          <component :is="item.icon" class="w-6 h-6" />
+        </div>
+        <div class="min-w-0">
+          <p>{{ item.label }}</p>
+          <h5 class="truncate">{{ item.value }}</h5>
+        </div>
       </div>
     </div>
   </div>
@@ -19,28 +24,47 @@ import type { Workspace } from '~/types/workspace'
 
 const props = defineProps<{
   workspace: Workspace
+  membersCount?: number
 }>()
 
-const stats = computed(() => [
-  {
-    label: 'Membres',
-    value: props.workspace.members_count || 1,
-    icon: IconUsers,
-    color: 'bg-primary/5 text-primary border-primary/10'
-  },
-  {
-    label: 'Pays',
-    value: props.workspace.country || 'N/A',
-    icon: IconMapPin,
-    color: 'bg-secondary/5 text-secondary border-secondary/10'
-  },
-  {
-    label: 'Création',
-    value: props.workspace.created_at ? new Date(props.workspace.created_at).toLocaleDateString(undefined, {
-      month: 'long', year: 'numeric'
-    }) : '...',
-    icon: IconCalendar,
-    color: 'bg-warning/5 text-warning border-warning/10'
+const state = computed(() => {
+  const items = [
+    {
+      icon: IconUsers,
+      label: 'Membres',
+      value: String(props.membersCount ?? props.workspace.members_count ?? 1),
+      iconBg: 'bg-primary/5',
+      iconColor: 'text-primary',
+      iconBorder: 'border-primary/10'
+    }
+  ]
+
+  if (props.workspace.country) {
+    items.push({
+      icon: IconMapPin,
+      label: 'Pays',
+      value: props.workspace.country,
+      iconBg: 'bg-secondary/5',
+      iconColor: 'text-secondary',
+      iconBorder: 'border-secondary/10'
+    })
   }
-].filter(s => s.value !== 'N/A'))
+
+  const dateStr = props.workspace.created_at
+  const date = dateStr ? new Date(dateStr) : null
+  const formattedDate = date && !isNaN(date.getTime())
+    ? date.toLocaleDateString(undefined, { month: 'long', year: 'numeric' })
+    : '—'
+
+  items.push({
+    icon: IconCalendar,
+    label: 'Création',
+    value: formattedDate,
+    iconBg: 'bg-warning/5',
+    iconColor: 'text-warning',
+    iconBorder: 'border-warning/10'
+  })
+
+  return items
+})
 </script>

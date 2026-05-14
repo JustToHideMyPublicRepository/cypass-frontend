@@ -20,8 +20,8 @@
           <!-- Workspace Avatar -->
           <div :key="wsStore.activeWorkspace?.id"
             class="w-8 h-8 rounded-lg overflow-hidden shrink-0 shadow-sm transition-all duration-200 border border-ash">
-            <img :src="activeWorkspaceLogo"
-              :alt="wsStore.activeWorkspace?.name || 'Workspace'" class="w-full h-full object-cover" />
+            <img :src="activeWorkspaceLogo" :alt="wsStore.activeWorkspace?.name || 'Workspace'"
+              class="w-full h-full object-cover" />
           </div>
           <!-- Name + Chevron -->
           <div v-show="!isCollapsed" class="flex items-center gap-1.5 min-w-0 flex-1">
@@ -99,7 +99,10 @@
                   <component :is="WORKSPACE_TYPE_CONFIG[ws.type].icon" class="w-2.5 h-2.5" />
                   {{ getWorkspaceTypeLabel(ws.type) }}
                 </span>
-                <span v-if="ws.members_count" class="text-[9px]">· {{ ws.members_count }} membre(s)</span>
+                <span class="text-[9px] text-hsa/60">|</span>
+                <span v-if="ws.members_count" class="text-[9px]">
+                  {{ ws.members_count }} {{ ws.members_count > 1 ? 'membres' : 'membre' }}
+                </span>
               </div>
             </div>
             <div class="flex items-center gap-1.5 shrink-0">
@@ -111,7 +114,8 @@
                 <IconStarFilled v-if="ws.is_default" class="w-3 h-3" />
                 <IconStar v-else class="w-3 h-3" />
               </button>
-              <div v-if="ws.id === wsStore.activeWorkspaceId && switchingId !== ws.id" class="w-1.5 h-1.5 rounded-full bg-primary"></div>
+              <div v-if="ws.id === wsStore.activeWorkspaceId && switchingId !== ws.id"
+                class="w-1.5 h-1.5 rounded-full bg-primary"></div>
             </div>
           </button>
         </div>
@@ -150,7 +154,7 @@ const toggleDefault = async (id: string) => {
   switchingId.value = id
   const success = await wsStore.setDefaultWorkspace(id)
   switchingId.value = null
-  
+
   if (success) {
     toast.showToast('success', 'Succès', 'Workspace par défaut mis à jour.')
   } else {
@@ -169,28 +173,23 @@ const switchingId = ref<string | null>(null)
 
 const selectWorkspace = async (ws: Workspace) => {
   if (ws.id === wsStore.activeWorkspaceId) return
-  
+
   switchingId.value = ws.id
   const oldSlug = wsStore.activeWorkspace?.slug
-  
-  // Simulation d'un petit délai pour l'effet visuel comme demandé
-  await new Promise(resolve => setTimeout(resolve, 600))
-  
+
   wsStore.setActiveWorkspace(ws)
-  
+
   if (ws.slug) {
     const currentPath = route.path
     if (oldSlug && currentPath.includes(`/dashboard/${oldSlug}`)) {
       const newPath = currentPath.replace(`/dashboard/${oldSlug}`, `/dashboard/${ws.slug}`)
       router.push(newPath)
     } else if (currentPath.startsWith('/dashboard')) {
-      // On est déjà sur le dashboard (ex: /dashboard/activities)
-      // On reste sur la page, le store a déjà été mis à jour
     } else {
       router.push(`/dashboard/${ws.slug}`)
     }
   }
-  
+
   switchingId.value = null
   wsStore.closeSwitcher()
 }

@@ -1,5 +1,5 @@
 <template>
-  <UiBaseCard class="p-10 border-ash/30 relative overflow-hidden group/legal rounded-[2.5rem]">
+  <UiBaseCard class="p-10 border-ash/30 relative overflow-hidden rounded-[2.5rem]">
     <div class="relative space-y-8">
       <div class="flex items-center gap-4 pb-6 border-b border-ash/10">
         <div class="p-3 bg-ash/10 rounded-2xl">
@@ -17,15 +17,13 @@
             <span class="text-[10px] font-black text-hsa uppercase tracking-widest flex items-center gap-2">
               <IconFingerprint class="w-3.5 h-3.5" /> ID Systémique
             </span>
-            <div
-              class="group/id flex items-center justify-between bg-ash/5 border border-ash/10 p-3 rounded-2xl hover:bg-ash/10 transition-all">
+            <div class="flex items-center justify-between bg-ash/5 border border-ash/10 p-3 rounded-2xl">
               <code class="text-xs font-mono text-BtW select-all">{{ workspace.id }}</code>
             </div>
           </div>
           <div class="flex flex-col gap-1">
             <span class="text-[10px] font-black text-hsa uppercase tracking-widest">Enregistré le</span>
-            <span class="text-sm font-bold text-BtW">
-              {{ new Date(workspace.created_at).toLocaleString() }}</span>
+            <span class="text-sm font-bold text-BtW">{{ formattedCreatedAt }}</span>
           </div>
         </div>
 
@@ -53,10 +51,18 @@
 </template>
 
 <script setup lang="ts">
-import { IconBuildingSkyscraper, IconFingerprint, IconClick, IconFileText } from '@tabler/icons-vue'
+import { computed } from 'vue'
+import { IconBuildingSkyscraper, IconFingerprint, IconFileText } from '@tabler/icons-vue'
 import type { Workspace } from '~/types/workspace'
 
-defineProps<{
+const props = defineProps<{
   workspace: Workspace
 }>()
+
+const formattedCreatedAt = computed(() => {
+  const dateStr = props.workspace.created_at
+  if (!dateStr) return '—'
+  const date = new Date(dateStr)
+  return isNaN(date.getTime()) ? '—' : date.toLocaleString()
+})
 </script>
