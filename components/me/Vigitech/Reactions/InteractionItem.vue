@@ -3,10 +3,11 @@
     class="group transition-all hover:shadow-md border-ash/30 bg-WtB p-3 relative overflow-hidden h-full flex flex-col justify-center">
 
     <div class="flex items-center gap-3">
-      <!-- Icon with themed background -->
+      <!-- Icon -->
       <div
         :class="['w-10 h-10 flex items-center justify-center rounded-xl shrink-0 transition-all duration-500 transform group-hover:rotate-6 shadow-sm', config.bgClass, config.textClass]">
-        <component :is="config.icon" class="w-5 h-5" />
+        <span v-if="!isComment" class="text-xl leading-none">{{ config.emoji }}</span>
+        <IconMessage v-else class="w-5 h-5" />
       </div>
 
       <!-- Info -->
@@ -20,7 +21,7 @@
           </p>
         </div>
 
-        <h5 class="text-xs block tracking-tight mt-1">
+        <h5 class="text-xs block tracking-tight mt-1 truncate">
           {{ displayTitle || 'Sans titre' }}
         </h5>
 
@@ -39,12 +40,25 @@
 
       <!-- Actions -->
       <div class="flex items-center gap-1 shrink-0">
+        <!-- Edit/Delete for My Comments tab -->
+        <template v-if="isComment">
+          <button @click="$emit('edit', item)"
+            class="p-2 rounded-lg hover:bg-primary/10 text-hsa hover:text-primary transition-colors" title="Modifier">
+            <IconEdit class="w-3.5 h-3.5" />
+          </button>
+          <button @click="$emit('delete', item.id)"
+            class="p-2 rounded-lg hover:bg-danger/10 text-hsa hover:text-danger transition-colors" title="Supprimer">
+            <IconTrash class="w-3.5 h-3.5" />
+          </button>
+        </template>
+
         <!-- Remove Reaction Button -->
-        <button v-if="!isComment" @click="$emit('removeReaction', item)"
-          class="p-2 rounded-lg hover:bg-danger/10 text-hsa hover:text-danger transition-colors group/remove"
+        <button v-else @click="$emit('remove-reaction', item)" :disabled="loading"
+          class="p-2 rounded-lg hover:bg-danger/10 text-hsa hover:text-danger transition-colors group/remove disabled:opacity-50"
           title="Retirer la réaction">
           <div class="relative w-4 h-4 flex items-center justify-center">
-            <IconMoodOff class="w-3.5 h-3.5 group-hover/remove:scale-110 transition-transform" />
+            <UiLogoLoader v-if="loading" size="xs" />
+            <IconMoodOff v-else class="w-3.5 h-3.5 group-hover/remove:scale-110 transition-transform" />
           </div>
         </button>
 
@@ -58,16 +72,18 @@
 </template>
 
 <script setup lang="ts">
-import { IconThumbUp, IconHeart, IconMoodSurprised, IconThumbDown, IconMoodSad, IconExternalLink, IconMessage, IconClock, IconCircleCheck, IconMoodOff } from '@tabler/icons-vue'
+import { IconExternalLink, IconMessage, IconClock, IconCircleCheck, IconMoodOff, IconEdit, IconTrash } from '@tabler/icons-vue'
 import { formatRelativeTime } from '~/utils/date'
+import { getReactionEmoji, getReactionLabel, getReactionColor, getReactionTextColorOnly } from '~/utils/vigitech'
 import { computed } from 'vue'
 
 const props = defineProps<{
   item: any
   type: 'reaction' | 'comment'
+  loading?: boolean
 }>()
 
-defineEmits(['removeReaction'])
+defineEmits(['remove-reaction', 'edit', 'delete'])
 
 const isComment = computed(() => props.type === 'comment')
 
@@ -82,62 +98,31 @@ const displayTitle = computed(() => {
 })
 
 const targetUrl = computed(() => {
-  if (isComment.value) return `/vigitech/${props.item.incident_id}`
-  return `/vigitech/${props.item.target_id}`
+  // Always point to the parent incident
+  return `/vigitech/${props.item.incident_id || props.item.target_id}`
 })
 
 const relativeTime = computed(() => {
   return formatRelativeTime(props.item.created_at)
 })
 
-const reactionConfigs: any = {
-  like: {
-    icon: IconThumbUp,
-    label: 'J\'aime',
-    bgClass: 'bg-primary/10',
-    textClass: 'text-primary'
-  },
-  love: {
-    icon: IconHeart,
-    label: 'J\'adore',
-    bgClass: 'bg-pink-500/10',
-    textClass: 'text-pink-500'
-  },
-  wow: {
-    icon: IconMoodSurprised,
-    label: 'Génial',
-    bgClass: 'bg-yellow-500/10',
-    textClass: 'text-yellow-500'
-  },
-  dislike: {
-    icon: IconThumbDown,
-    label: 'Bof',
-    bgClass: 'bg-orange-500/10',
-    textClass: 'text-orange-500'
-  },
-  sad: {
-    icon: IconMoodSad,
-    label: 'Triste',
-    bgClass: 'bg-purple-500/10',
-    textClass: 'text-purple-500'
-  }
-}
-
 const config = computed(() => {
   if (isComment.value) {
     return {
-      icon: IconMessage,
       headerPrefix: 'A ajouté un',
       typeLabel: 'commentaire',
       bgClass: 'bg-primary/10',
       textClass: 'text-primary'
     }
   }
-  const rConfig = reactionConfigs[props.item.type] || reactionConfigs.like
+
+  const type = props.item.type
   return {
-    ...rConfig,
+    emoji: getReactionEmoji(type),
     headerPrefix: 'A réagi avec',
-    typeLabel: rConfig.label
+    typeLabel: getReactionLabel(type),
+    bgClass: getReactionColor(type).split(' ').find(c => c.startsWith('bg-')) || 'bg-primary/5',
+    textClass: getReactionTextColorOnly(type)
   }
 })
 </script>
