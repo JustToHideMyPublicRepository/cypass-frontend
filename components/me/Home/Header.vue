@@ -9,11 +9,17 @@
     <p>
       Veuillez sélectionner l'espace de travail que vous souhaitez utiliser pour cette session.
     </p>
+
+    <div class="pt-2">
+      <UiBaseButton to="/dashboard/manage/workspace" variant="ghost" size="sm">
+        <IconSettings class="w-4 h-4 mr-2" /> Gérer mes workspaces
+      </UiBaseButton>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { IconHome } from '@tabler/icons-vue'
+import { IconHome, IconSettings } from '@tabler/icons-vue'
 
 defineProps<{
   userName?: string

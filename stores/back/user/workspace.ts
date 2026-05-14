@@ -9,6 +9,7 @@ export const useWorkspaceStore = defineStore('workspace', {
     activeWorkspace: null as Workspace | null,
     currentDetail: null as WorkspaceDetail | null,
     loading: false,
+    detailLoading: false,
     createLoading: false,
     error: null as string | null,
     message: null as string | null,
@@ -43,7 +44,7 @@ export const useWorkspaceStore = defineStore('workspace', {
 
     // Récupérer un workspace par ID
     async fetchWorkspaceById(id: string) {
-      this.loading = true
+      this.detailLoading = true;
       this.error = null
       try {
         const headers = import.meta.server ? useRequestHeaders(['cookie']) as any : {}
@@ -63,7 +64,7 @@ export const useWorkspaceStore = defineStore('workspace', {
         this.error = err.data?.message || 'Erreur lors de la récupération du workspace'
         return false
       } finally {
-        this.loading = false
+        this.detailLoading = false
       }
     },
 
@@ -239,7 +240,6 @@ export const useWorkspaceStore = defineStore('workspace', {
 
     // Définir un workspace par défaut
     async setDefaultWorkspace(id: string) {
-      this.loading = true
       this.error = null
       try {
         const response = await $fetch<{ success: boolean; message: string }>('/api/user/workspace/set-default', {
@@ -261,7 +261,6 @@ export const useWorkspaceStore = defineStore('workspace', {
         this.error = err.data?.message || 'Erreur lors de la définition du workspace par défaut'
         return false
       } finally {
-        this.loading = false
       }
     },
 

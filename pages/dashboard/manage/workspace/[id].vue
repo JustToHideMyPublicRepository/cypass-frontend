@@ -16,17 +16,8 @@
         <!-- Main Content -->
         <div class="lg:col-span-2 space-y-8">
           <!-- Active Status Badge -->
-          <div v-if="workspace.id === store.activeWorkspaceId"
-            class="flex items-center gap-4 p-4 rounded-3xl bg-primary/5 border border-primary/20">
-            <div
-              class="w-10 h-10 rounded-2xl bg-primary text-WtB flex items-center justify-center shadow-lg shadow-primary/20">
-              <IconCheck class="w-6 h-6" />
-            </div>
-            <div>
-              <h5>Espace Actuel</h5>
-              <p>Vous travaillez actuellement dans cet espace de travail.</p>
-            </div>
-          </div>
+          <MeWorkspaceDetailStatusBadge :workspace="workspace" :is-active="workspace.id === store.activeWorkspaceId"
+            @activate="store.setActiveWorkspace" />
 
           <!-- Stats Cards -->
           <MeWorkspaceDetailStats :workspace="workspace" :members-count="members.length" />
@@ -35,9 +26,6 @@
         </div>
 
         <div class="space-y-8">
-          <MeWorkspaceDetailActions :workspace="workspace" :is-active="workspace.id === store.activeWorkspaceId"
-            :default-loading="defaultLoading" @activate="store.setActiveWorkspace" @setDefault="handleSetDefault" />
-
           <MeWorkspaceDetailMembers :workspace="workspace" :members="members" />
         </div>
       </div>

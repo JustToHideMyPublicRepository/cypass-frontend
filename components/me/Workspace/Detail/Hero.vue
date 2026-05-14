@@ -24,10 +24,12 @@
                 class="w-3.5 h-3.5 inline mr-1.5" />
               {{ getWorkspaceRoleLabel(workspace.role) }}
             </span>
-            <span v-if="workspace.members_count"
-              class="px-3 py-1 rounded-xl bg-ash/20 backdrop-blur-md text-[10px] font-bold text-hsa border border-ash/30 uppercase tracking-widest">
-              <IconUsers class="w-3.5 h-3.5 inline mr-1.5" />
-              {{ workspace.members_count }} {{ workspace.members_count > 1 ? 'membres' : 'membre' }}
+            <span
+              class="px-3 py-1 rounded-xl bg-ash/20 backdrop-blur-md text-[10px] font-bold border border-ash/30 uppercase tracking-widest"
+              :class="WORKSPACE_STATUS_CONFIG[workspace.status || 'active'].color">
+              <component :is="WORKSPACE_STATUS_CONFIG[workspace.status || 'active'].icon"
+                class="w-3.5 h-3.5 inline mr-1.5" />
+              {{ getWorkspaceStatusLabel(workspace.status) }}
             </span>
           </div>
         </div>
@@ -37,8 +39,7 @@
 </template>
 
 <script setup lang="ts">
-import { IconUsers } from '@tabler/icons-vue'
-import { getWorkspaceLogoUrl, getWorkspaceTypeLabel, getWorkspaceRoleLabel, WORKSPACE_TYPE_CONFIG, WORKSPACE_ROLE_CONFIG } from '~/utils/workspace'
+import { getWorkspaceLogoUrl, getWorkspaceTypeLabel, getWorkspaceRoleLabel, getWorkspaceStatusLabel, WORKSPACE_TYPE_CONFIG, WORKSPACE_ROLE_CONFIG, WORKSPACE_STATUS_CONFIG } from '~/utils/workspace'
 import type { Workspace } from '~/types/workspace'
 
 defineProps<{

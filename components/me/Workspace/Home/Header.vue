@@ -6,6 +6,9 @@
     </div>
 
     <div class="flex items-center gap-3">
+      <UiBaseButton to="/dashboard" variant="ghost" size="sm">
+        <IconHome class="w-4 h-4 mr-2" /> Retour au Dashboard
+      </UiBaseButton>
       <UiBaseButton @click="$emit('create')" variant="primary" size="sm">
         <IconPlus class="w-4 h-4 mr-2" /> Nouveau workspace
       </UiBaseButton>
@@ -14,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import { IconPlus } from '@tabler/icons-vue'
+import { IconPlus, IconHome } from '@tabler/icons-vue'
 
 defineEmits(['create'])
 </script>
