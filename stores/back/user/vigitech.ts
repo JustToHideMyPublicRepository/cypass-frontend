@@ -11,6 +11,7 @@ export const useUserVigitechStore = defineStore('userVigitech', {
     userCommentsTotal: 0,
     userReactions: [] as UserReaction[],
     userReactionsTotal: 0,
+    userReactionsSummary: {} as Record<string, number>,
     userCommentsPagination: {
       total: 0,
       limit: 10,
@@ -372,9 +373,10 @@ export const useUserVigitechStore = defineStore('userVigitech', {
           headers,
           params
         })
-        if (response.success) {
-          this.userReactions = response.data
-          this.userReactionsTotal = response.data.length
+        if (response.success && response.data) {
+          this.userReactions = response.data.reactions || []
+          this.userReactionsTotal = response.data.total || this.userReactions.length
+          this.userReactionsSummary = response.data.reactions_summary || {}
         } else {
           this.error = response.message || 'Erreur lors de la récupération de vos réactions'
         }
