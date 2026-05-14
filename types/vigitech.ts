@@ -26,6 +26,7 @@ export interface ReactionDetail {
 export interface UserReaction {
   id: string
   type: ReactionType
+  incident_id?: string
   target_id: string
   target_type: 'comment' | 'incident'
   target_title: string

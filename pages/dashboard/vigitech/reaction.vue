@@ -4,14 +4,16 @@
 
     <div v-show="targetType !== 'my_comments'"
       class="flex flex-col md:flex-row md:items-center justify-between gap-6 animate-fade-in">
-      <MeVigitechReactionsTabs v-model="reactionType" :availableTypes="availableReactionTypes" :summary="store.userReactionsSummary" />
+      <MeVigitechReactionsTabs v-model="reactionType" :availableTypes="availableReactionTypes"
+        :summary="store.userReactionsSummary" />
 
-      <div class="px-4 py-2 rounded-xl bg-ash/20 border border-ash/30 text-[10px] font-black uppercase tracking-widest text-hsa h-fit min-w-[120px]">
+      <div
+        class="px-4 py-2 rounded-xl bg-ash/20 border border-ash/30 text-[10px] font-black uppercase tracking-widest text-hsa h-fit min-w-[120px]">
         <template v-if="loading">
           <UiAppSkeleton width="60px" height="12px" radius="1rem" />
         </template>
-        <template v-else-if="displayItems.length">
-          {{ displayItems.length }} résultat{{ displayItems.length > 1 ? 's' : '' }}
+        <template v-else-if="resultTotal > 0">
+          {{ resultTotal }} résultat{{ resultTotal > 1 ? 's' : '' }}
         </template>
         <template v-else>
           Aucun résultat
@@ -30,23 +32,15 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in-up">
           <MeVigitechReactionsInteractionItem v-for="item in displayItems" :key="item.id" :item="item"
             :type="targetType === 'my_comments' ? 'comment' : 'reaction'" :loading="removalLoadingId === item.id"
-            @remove-reaction="handleRemoveReaction" @edit="handleStartEdit" @delete="handleConfirmDelete" />
+            :isEditing="editingId === item.id" :saving="savingComment" :editContent="editCommentContent"
+            @remove-reaction="handleRemoveReaction" @edit="handleStartEdit" @cancel="handleCancelEdit"
+            @save="handleSaveEdit" @delete="handleConfirmDelete" />
         </div>
       </template>
 
       <!-- Empty State -->
       <MeVigitechReactionsEmpty v-else class="animate-fade-in" />
     </div>
-
-    <!-- Edit Comment Modal -->
-    <UiConfirmModal :show="showEditModal" title="Modifier le commentaire" message="" confirm-text="Sauvegarder"
-      :loading="savingComment" @cancel="showEditModal = false" @confirm="handleSaveEdit">
-      <div class="mt-4">
-        <textarea v-model="editCommentContent" rows="4"
-          class="w-full p-4 rounded-2xl bg-ash/5 border border-ashAct text-sm font-bold text-BtW outline-none focus:ring-2 focus:ring-primary/20 transition-all resize-none shadow-inner"
-          placeholder="Votre commentaire..." />
-      </div>
-    </UiConfirmModal>
 
     <!-- Delete Confirm Modal -->
     <UiConfirmModal :show="showDeleteConfirm" title="Supprimer le commentaire"
@@ -69,9 +63,8 @@ const reactionType = ref('')
 const removalLoadingId = ref<string | null>(null)
 
 // Actions state
-const showEditModal = ref(false)
 const showDeleteConfirm = ref(false)
-const editingComment = ref<any>(null)
+const editingId = ref<string | null>(null)
 const editCommentContent = ref('')
 const savingComment = ref(false)
 const deletingComment = ref(false)
@@ -82,6 +75,13 @@ const displayItems = computed(() => {
     return store.userComments
   }
   return store.userReactions
+})
+
+const resultTotal = computed(() => {
+  if (targetType.value === 'my_comments') {
+    return store.userCommentsTotal
+  }
+  return store.userReactionsTotal
 })
 
 const availableReactionTypes = computed<ReactionType[]>(() => {
@@ -139,22 +139,30 @@ const handleRemoveReaction = async (item: any) => {
   }
 }
 
-// Edit/Delete handlers for My Comments
+// Inline Edit logic
 const handleStartEdit = (item: any) => {
-  editingComment.value = item
+  editingId.value = item.id
   editCommentContent.value = item.content
-  showEditModal.value = true
 }
 
-const handleSaveEdit = async () => {
-  if (!editCommentContent.value.trim() || !editingComment.value) return
+const handleCancelEdit = () => {
+  editingId.value = null
+  editCommentContent.value = ''
+}
+
+const handleSaveEdit = async (content: string) => {
+  if (!content.trim() || !editingId.value) return
   savingComment.value = true
+
+  const item = store.userComments.find(i => i.id === editingId.value)
+  if (!item) return
+
   try {
-    const res = await store.updateComment(editingComment.value.id, editCommentContent.value.trim(), editingComment.value.incident_id)
+    const res = await store.updateComment(editingId.value, content.trim(), item.incident_id)
     if (res.success) {
       toast.showToast('success', 'Commentaire modifié', 'Votre commentaire a été mis à jour.')
-      showEditModal.value = false
-      await fetchData()
+      item.content = content.trim() // Update local ref
+      handleCancelEdit()
     } else {
       toast.showToast('error', 'Erreur', res.message || 'Impossible de modifier le commentaire.')
     }

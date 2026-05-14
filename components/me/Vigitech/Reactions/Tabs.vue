@@ -41,33 +41,36 @@ const props = defineProps<{
 
 const emit = defineEmits(['update:modelValue'])
 
-const STORAGE_KEY = 'cps_vigitech_reaction_tab'
+const STORAGE_KEY = 'cps_vigitech_reaction_filters'
 const EXPIRY_MS = 300000 // 5 minutes
 
 const updateValue = (value: string) => {
   emit('update:modelValue', value)
 }
 
-// Memory logic following the pattern in
+// Persist to localStorage following activities/index.vue logic
 watch(() => props.modelValue, (newVal) => {
   if (import.meta.client) {
-    sessionStorage.setItem(STORAGE_KEY, JSON.stringify({ data: newVal, timestamp: Date.now() }))
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ data: newVal, timestamp: Date.now() }))
   }
 })
 
 onMounted(() => {
   if (import.meta.client) {
-    const saved = sessionStorage.getItem(STORAGE_KEY)
+    const saved = localStorage.getItem(STORAGE_KEY)
     if (saved) {
       try {
         const { data, timestamp } = JSON.parse(saved)
         if (Date.now() - timestamp < EXPIRY_MS) {
-          emit('update:modelValue', data)
+          // Only emit if value is still valid and different from default
+          if (data && data !== props.modelValue) {
+            emit('update:modelValue', data)
+          }
         } else {
-          sessionStorage.removeItem(STORAGE_KEY)
+          localStorage.removeItem(STORAGE_KEY)
         }
       } catch (e) {
-        sessionStorage.removeItem(STORAGE_KEY)
+        localStorage.removeItem(STORAGE_KEY)
       }
     }
   }
