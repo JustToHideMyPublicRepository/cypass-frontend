@@ -136,7 +136,6 @@ const planBorderClass = computed(() => getPlanBorderClass(profilStore.profile?.p
 const planBadgeClass = computed(() => getPlanBadgeClass(profilStore.profile?.plan?.name))
 
 const dropdownLinks = [
-  { label: 'Accueil du site', path: '/', icon: IconHome },
   { label: 'Mon profil', path: '/dashboard/profile', icon: IconUser },
   { label: 'Sessions', path: '/dashboard/sessions', icon: IconDevices },
   { label: 'Journal d\'activité', path: '/dashboard/activities', icon: IconActivity },
