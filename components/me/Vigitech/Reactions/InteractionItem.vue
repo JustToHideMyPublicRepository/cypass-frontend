@@ -42,7 +42,7 @@
       <div class="flex items-center gap-1 shrink-0">
         <!-- Edit/Delete for My Comments tab -->
         <template v-if="isComment">
-          <button @click="$emit('edit', item)"
+          <button v-if="canEdit" @click="$emit('edit', item)"
             class="p-2 rounded-lg hover:bg-primary/10 text-hsa hover:text-primary transition-colors" title="Modifier">
             <IconEdit class="w-3.5 h-3.5" />
           </button>
@@ -98,12 +98,20 @@ const displayTitle = computed(() => {
 })
 
 const targetUrl = computed(() => {
-  // Always point to the parent incident
-  return `/vigitech/${props.item.incident_id || props.item.target_id}`
+  const id = props.item.incident_id || props.item.target_id
+  return `/vigitech/${id}`
 })
 
 const relativeTime = computed(() => {
   return formatRelativeTime(props.item.created_at)
+})
+
+const canEdit = computed(() => {
+  if (!isComment.value) return false
+  const createdAt = new Date(props.item.created_at).getTime()
+  const now = Date.now()
+  const hoursDiff = (now - createdAt) / (1000 * 60 * 60)
+  return hoursDiff <= 24
 })
 
 const config = computed(() => {

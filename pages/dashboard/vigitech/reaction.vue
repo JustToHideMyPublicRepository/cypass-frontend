@@ -4,11 +4,18 @@
 
     <div v-show="targetType !== 'my_comments'"
       class="flex flex-col md:flex-row md:items-center justify-between gap-6 animate-fade-in">
-      <MeVigitechReactionsTabs v-model="reactionType" :availableTypes="availableReactionTypes" />
+      <MeVigitechReactionsTabs v-model="reactionType" :availableTypes="availableReactionTypes" :summary="store.userReactionsSummary" />
 
-      <div v-if="displayItems.length"
-        class="px-4 py-2 rounded-xl bg-ash/20 border border-ash/30 text-[10px] font-black uppercase tracking-widest text-hsa h-fit">
-        {{ displayItems.length }} résultat{{ displayItems.length > 1 ? 's' : '' }}
+      <div class="px-4 py-2 rounded-xl bg-ash/20 border border-ash/30 text-[10px] font-black uppercase tracking-widest text-hsa h-fit min-w-[120px]">
+        <template v-if="loading">
+          <UiAppSkeleton width="60px" height="12px" radius="1rem" />
+        </template>
+        <template v-else-if="displayItems.length">
+          {{ displayItems.length }} résultat{{ displayItems.length > 1 ? 's' : '' }}
+        </template>
+        <template v-else>
+          Aucun résultat
+        </template>
       </div>
     </div>
 
