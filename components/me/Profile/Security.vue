@@ -39,12 +39,12 @@
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-3">
             <div>
-              <h3 class="font-bold text-BtW flex items-center gap-2">
+              <h4>
                 Double authentification (2FA)
                 <UiAppTooltip v-if="mfaDisabledUntil"
                   :content="`Votre MFA est suspendu. Son statut sera automatiquement mis à jour le <b>${formatDate(mfaDisabledUntil)}</b>.`"
                   title="Suspension temporaire" icon-class="text-warning opacity-100" />
-              </h3>
+              </h4>
               <p class="text-sm text-hsa">
                 <template v-if="mfaDisabledUntil">
                   <span class="text-warning font-medium">Suspendu jusqu'au {{ formatDate(mfaDisabledUntil) }}</span>

@@ -1,8 +1,8 @@
 <template>
   <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
     <div class="space-y-1">
-      <h1 class="text-2xl md:text-3xl font-black text-BtW tracking-tight uppercase">Mon profil</h1>
-      <p class="text-hsa text-sm font-medium">Gérez vos informations personnelles et de sécurité.</p>
+      <h3>Mon profil</h3>
+      <p>Gérez vos informations personnelles et de sécurité.</p>
     </div>
     <div class="flex">
       <NuxtLink v-if="user?.id" :to="`/user/${user.id}`" class="w-full sm:w-auto">
