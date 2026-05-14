@@ -5,8 +5,8 @@
         <IconArrowLeft class="w-6 h-6" />
       </NuxtLink>
       <div>
-        <h1 class="text-2xl font-black text-BtW tracking-tight">Mes réactions</h1>
-        <p class="text-hsa font-bold text-sm mt-0.5">Historique de vos interactions sur VigiTech</p>
+        <h4>Mes interactions</h4>
+        <p>Historique de vos interactions sur VigiTech</p>
       </div>
     </div>
 
