@@ -157,7 +157,7 @@
                   <div class="flex flex-col gap-1">
                     <span class="text-[10px] font-black text-hsa uppercase tracking-widest">Enregistré le</span>
                     <span class="text-sm font-bold text-BtW">{{ new Date(workspace.created_at).toLocaleString()
-                    }}</span>
+                      }}</span>
                   </div>
                 </div>
 
@@ -343,9 +343,7 @@ const fetchDetails = async () => {
 
 const handleSetDefault = async (id: string) => {
   const success = await store.setDefaultWorkspace(id)
-  if (success) {
-    // Le store met déjà à jour la liste locale
-  }
+  if (success) { }
 }
 
 // Sync with store updates
@@ -366,26 +364,3 @@ useHead({
   ]
 })
 </script>
-
-<style scoped>
-.animate-fade-in {
-  animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-::selection {
-  background: rgba(var(--primary-rgb), 0.1);
-  color: var(--primary);
-}
-</style>
