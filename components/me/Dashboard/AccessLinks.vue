@@ -27,11 +27,11 @@ import {
 const wsStore = useWorkspaceStore()
 
 const ALL_LINKS = computed(() => {
-  const slug = wsStore.activeWorkspace?.slug || ''
+  const slug = wsStore.activeWorkspace?.slug
   return [
-    { label: 'Vue d\'ensemble', path: `/dashboard/${slug}`, icon: IconLayoutDashboard },
+    { label: 'Vue d\'ensemble', path: slug ? `/dashboard/${slug}` : '/dashboard', icon: IconLayoutDashboard },
     { label: 'Evenements', path: '/dashboard/calendar', icon: IconCalendar },
-    { label: 'Mes documents', path: `/dashboard/${slug}/docsentry`, icon: IconFiles },
+    { label: 'Mes documents', path: slug ? `/dashboard/${slug}/docsentry` : '/dashboard', icon: IconFiles },
     { label: 'Notifications', path: '/dashboard/notification', icon: IconBell },
     { label: 'Mes alertes', path: '/dashboard/vigitech', icon: IconAlertTriangle },
     { label: 'Logs système', path: '/dashboard/activities', icon: IconHistory },

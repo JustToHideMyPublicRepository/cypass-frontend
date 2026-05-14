@@ -69,9 +69,13 @@ const route = useRoute()
 const wsStore = useWorkspaceStore()
 
 const mainLinks = computed(() => {
-  const slug = wsStore.activeWorkspace?.slug || ''
+  const slug = wsStore.activeWorkspace?.slug
   return [
-    { label: 'Vue d\'ensemble', path: `/dashboard/${slug}`, icon: IconDashboard },
+    { 
+      label: 'Vue d\'ensemble', 
+      path: slug ? `/dashboard/${slug}` : '/dashboard', 
+      icon: IconDashboard 
+    },
     { label: 'Calendrier', path: '/dashboard/calendar', icon: IconCalendar }
   ]
 })
@@ -80,9 +84,9 @@ const activeModules = computed(() => modules.filter(s => s.status === 'available
 const comingSoonModules = computed(() => modules.filter(s => s.status !== 'available'))
 
 const getModulePath = (moduleId: string) => {
-  const slug = wsStore.activeWorkspace?.slug || ''
+  const slug = wsStore.activeWorkspace?.slug
   // Only docsentry is moved for now as per user request
-  if (moduleId === 'docsentry') {
+  if (moduleId === 'docsentry' && slug) {
     return `/dashboard/${slug}/docsentry`
   }
   return `/dashboard/${moduleId}`
