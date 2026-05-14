@@ -17,10 +17,10 @@
         <IconAlertCircle class="w-4 h-4" />
         Signaler un Incident
       </UiBaseButton>
-      <UiBaseButton variant="secondary" to="/dashboard/vigitech/comments"
+      <UiBaseButton variant="secondary" to="/dashboard/vigitech/interaction"
         class="!px-4 !py-2.5 !text-xs !uppercase !tracking-wider gap-2">
         <IconMessage class="w-4 h-4" />
-        Mes commentaires
+        Mes interactions
       </UiBaseButton>
       <UiBaseButton variant="ghost" to="/dashboard/manage/trash"
         class="!px-4 !py-2.5 !text-xs !uppercase !tracking-wider gap-2 border border-ash/20 hover:border-danger/30 hover:bg-danger/5 text-hsa hover:text-danger">

@@ -17,10 +17,10 @@ export const dashboardShortcuts: Record<string, ShortcutEntry> = {
     group: 'Dashboard',
     modifier: 'Shift'
   },
-  vigitech_comment: {
+  vigitech_interaction: {
     keys: ['d', 'm'],
-    label: 'Commentaires',
-    path: '/dashboard/vigitech/comments',
+    label: 'Interactions',
+    path: '/dashboard/vigitech/interaction',
     isGlobal: true,
     group: 'Dashboard',
     modifier: 'Shift'
@@ -28,7 +28,7 @@ export const dashboardShortcuts: Record<string, ShortcutEntry> = {
   docsentry: {
     keys: ['d', 'd'],
     label: 'Docsentry',
-    get path() { 
+    get path() {
       if (typeof window !== 'undefined') {
         const parts = window.location.pathname.split('/')
         if (parts[1] === 'dashboard' && parts[2] && !['docsentry', 'manage', 'activities', 'profile', 'sessions', 'settings', 'vigitech'].includes(parts[2])) {
@@ -100,7 +100,7 @@ export const dashboardShortcuts: Record<string, ShortcutEntry> = {
   dashboard_home: {
     keys: ['d', 'i'],
     label: 'Tableau de bord',
-    get path() { 
+    get path() {
       if (typeof window !== 'undefined') {
         const parts = window.location.pathname.split('/')
         if (parts[1] === 'dashboard' && parts[2] && !['docsentry', 'manage', 'activities', 'profile', 'sessions', 'settings', 'vigitech'].includes(parts[2])) {
