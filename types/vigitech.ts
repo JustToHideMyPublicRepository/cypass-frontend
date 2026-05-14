@@ -23,6 +23,15 @@ export interface ReactionDetail {
   avatar_url?: string | null
 }
 
+export interface UserReaction {
+  id: string
+  type: ReactionType
+  target_id: string
+  target_type: 'comment' | 'incident'
+  target_title: string
+  created_at: string
+}
+
 export interface Incident {
   id: string
   user_id?: string

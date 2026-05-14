@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { Incident, Comment, CreateIncidentRequest } from '~/types/vigitech'
+import type { Incident, Comment, CreateIncidentRequest, UserReaction } from '~/types/vigitech'
 import { usePublicVigitechStore } from '../public/vigitech'
 
 export const useUserVigitechStore = defineStore('userVigitech', {
@@ -9,6 +9,8 @@ export const useUserVigitechStore = defineStore('userVigitech', {
     currentIncident: null as Incident | null,
     userComments: [] as Comment[],
     userCommentsTotal: 0,
+    userReactions: [] as UserReaction[],
+    userReactionsTotal: 0,
     userCommentsPagination: {
       total: 0,
       limit: 10,
@@ -350,6 +352,27 @@ export const useUserVigitechStore = defineStore('userVigitech', {
         return { success: response.success, message: response.message }
       } catch (err: any) {
         return { success: false, message: err.data?.message || err.message || 'Erreur lors de la restauration complète.' }
+      }
+    },
+
+    // Récupérer les réactions de l'utilisateur
+    async fetchUserReactions(params: any = {}) {
+      this.loading = true
+      this.error = null
+      try {
+        const response: any = await $fetch('/api/user/vigitech/incident-myReactions', {
+          params
+        })
+        if (response.success) {
+          this.userReactions = response.data
+          this.userReactionsTotal = response.data.length
+        } else {
+          this.error = response.message || 'Erreur lors de la récupération de vos réactions'
+        }
+      } catch (err: any) {
+        this.error = err.message
+      } finally {
+        this.loading = false
       }
     }
   }
