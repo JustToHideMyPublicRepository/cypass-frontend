@@ -1,10 +1,10 @@
 <template>
   <div class="space-y-8">
-    <MeVigitechReactionsHeader v-model:targetType="targetType" :loading="loading" @refresh="fetchData" />
+    <MeVigitechInteractionHeader v-model:targetType="targetType" :loading="loading" @refresh="fetchData" />
 
     <div v-show="targetType !== 'my_comments'"
       class="flex flex-col md:flex-row md:items-center justify-between gap-6 animate-fade-in">
-      <MeVigitechReactionsTabs v-model="reactionType" :availableTypes="availableReactionTypes"
+      <MeVigitechInteractionTabs v-model="reactionType" :availableTypes="availableReactionTypes"
         :summary="store.userReactionsSummary" />
 
       <div
@@ -30,7 +30,7 @@
       <!-- Interactions Grid -->
       <template v-else-if="displayItems.length">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in-up">
-          <MeVigitechReactionsInteractionItem v-for="item in displayItems" :key="item.id" :item="item"
+          <MeVigitechInteractionInteractionItem v-for="item in displayItems" :key="item.id" :item="item"
             :type="targetType === 'my_comments' ? 'comment' : 'reaction'" :loading="removalLoadingId === item.id"
             :isEditing="editingId === item.id" :saving="savingComment" :editContent="editCommentContent"
             @remove-reaction="handleRemoveReaction" @edit="handleStartEdit" @cancel="handleCancelEdit"
@@ -39,7 +39,7 @@
       </template>
 
       <!-- Empty State -->
-      <MeVigitechReactionsEmpty v-else class="animate-fade-in" />
+      <MeVigitechInteractionEmpty v-else class="animate-fade-in" />
     </div>
 
     <!-- Delete Confirm Modal -->
@@ -164,12 +164,12 @@ const handleSaveEdit = async (content: string) => {
     const res = await store.updateComment(editingId.value, content.trim(), item.incident_id)
     if (res.success) {
       toast.showToast('success', 'Commentaire modifié', 'Votre commentaire a été mis à jour.')
-      
+
       // Force array mutation to trigger deep reactivity in computed properties
       const newComments = [...store.userComments]
       newComments[commentIndex] = { ...item, content: content.trim() }
       store.userComments = newComments
-      
+
       handleCancelEdit()
     } else {
       toast.showToast('error', 'Erreur', res.message || 'Impossible de modifier le commentaire.')
