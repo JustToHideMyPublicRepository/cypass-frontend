@@ -1,10 +1,8 @@
 <template>
   <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
     <div>
-      <h1 class="text-2xl font-bold text-BtW">Historique d'activité</h1>
-      <p class="text-hsa font-medium">
-        Suivi en temps réel pour <span class="text-primary font-bold">{{ userEmail || 'votre compte' }}</span>
-      </p>
+      <h3>Historique d'activité</h3>
+      <p>Suivi en temps réel de vos activités</p>
     </div>
 
     <div class="flex flex-wrap items-center gap-2 sm:gap-3">

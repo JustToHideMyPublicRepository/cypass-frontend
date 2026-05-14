@@ -13,16 +13,16 @@
     <div v-else-if="!logs || logs.length === 0"
       class="text-center py-20 bg-ash/10 rounded-2xl border-2 border-dashed border-ashAct">
       <IconHistory class="w-16 h-16 mx-auto mb-4 opacity-10 text-hsa" />
-      <p class="text-hsa font-bold">Aucune activité enregistrée pour cette sélection.</p>
+      <p>Aucune activité enregistrée pour cette sélection.</p>
       <p class="text-xs text-hsa mt-2 opacity-60">Essayez de modifier vos filtres ou de changer la date.</p>
     </div>
 
     <div v-else class="space-y-8">
       <div v-for="(logGroup, date) in groupedLogs" :key="date" class="space-y-4">
-        <h2 class="text-[10px] font-black uppercase tracking-[0.3em] text-hsa opacity-40 flex items-center gap-4">
+        <span class="text-[10px] font-black uppercase tracking-[0.3em] text-hsa opacity-40 flex items-center gap-4">
           {{ formatFullDate(date) }}
           <div class="h-px bg-ashAct flex-grow"></div>
-        </h2>
+        </span>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <UiBaseCard v-for="log in logGroup" :key="log.id" @click="router.push(`/dashboard/activities/${log.id}`)"
@@ -35,10 +35,10 @@
 
               <div class="flex-grow min-w-0">
                 <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 mb-1">
-                  <h3 class="font-bold text-BtW truncate">
+                  <h5 class="truncate">
                     {{ (log.action_label && log.action_label !== log.action_type) ? log.action_label :
                       getLogActionInfo(log.action_type).label }}
-                  </h3>
+                  </h5>
                 </div>
 
                 <div class="flex flex-wrap items-center gap-x-3 gap-y-2 sm:gap-x-6 sm:gap-y-1">

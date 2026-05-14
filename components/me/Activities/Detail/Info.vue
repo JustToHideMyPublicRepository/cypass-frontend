@@ -5,7 +5,7 @@
         <component :is="actionIcon" class="w-6 h-6" />
       </div>
       <div>
-        <h3 class="font-bold text-BtW text-lg leading-tight mb-1">{{ log.action_label || logInfo.label }}</h3>
+        <h5 class="font-bold text-BtW text-lg leading-tight mb-1">{{ log.action_label || logInfo.label }}</h5>
         <span v-if="log.status !== 'success'"
           class="px-2 py-0.5 text-[10px] bg-danger text-white rounded-full font-black uppercase inline-block mt-1">
           {{ getLogActionInfo(log.action_type).label }}

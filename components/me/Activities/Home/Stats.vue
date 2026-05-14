@@ -72,10 +72,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import {
-  IconActivity, IconCircleCheck, IconAlertCircle,
-  IconFileUpload, IconShieldLock
-} from '@tabler/icons-vue'
+import { IconActivity, IconCircleCheck, IconAlertCircle, IconFileUpload, IconShieldLock } from '@tabler/icons-vue'
 import { format, isSameDay } from 'date-fns'
 import { fr } from 'date-fns/locale'
 
