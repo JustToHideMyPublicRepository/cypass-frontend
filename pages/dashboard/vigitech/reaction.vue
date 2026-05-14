@@ -154,14 +154,21 @@ const handleSaveEdit = async (content: string) => {
   if (!content.trim() || !editingId.value) return
   savingComment.value = true
 
-  const item = store.userComments.find(i => i.id === editingId.value)
-  if (!item) return
+  const commentIndex = store.userComments.findIndex(i => i.id === editingId.value)
+  if (commentIndex === -1) return
+
+  const item = store.userComments[commentIndex]
 
   try {
     const res = await store.updateComment(editingId.value, content.trim(), item.incident_id)
     if (res.success) {
       toast.showToast('success', 'Commentaire modifié', 'Votre commentaire a été mis à jour.')
-      item.content = content.trim() // Update local ref
+      
+      // Force array mutation to trigger deep reactivity in computed properties
+      const newComments = [...store.userComments]
+      newComments[commentIndex] = { ...item, content: content.trim() }
+      store.userComments = newComments
+      
       handleCancelEdit()
     } else {
       toast.showToast('error', 'Erreur', res.message || 'Impossible de modifier le commentaire.')

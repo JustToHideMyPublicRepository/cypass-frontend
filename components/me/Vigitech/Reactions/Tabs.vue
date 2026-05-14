@@ -48,16 +48,16 @@ const updateValue = (value: string) => {
   emit('update:modelValue', value)
 }
 
-// Persist to localStorage following activities/index.vue logic
+// Persist to sessionStorage following activities/index.vue logic
 watch(() => props.modelValue, (newVal) => {
   if (import.meta.client) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ data: newVal, timestamp: Date.now() }))
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify({ data: newVal, timestamp: Date.now() }))
   }
 })
 
 onMounted(() => {
   if (import.meta.client) {
-    const saved = localStorage.getItem(STORAGE_KEY)
+    const saved = sessionStorage.getItem(STORAGE_KEY)
     if (saved) {
       try {
         const { data, timestamp } = JSON.parse(saved)
@@ -67,10 +67,10 @@ onMounted(() => {
             emit('update:modelValue', data)
           }
         } else {
-          localStorage.removeItem(STORAGE_KEY)
+          sessionStorage.removeItem(STORAGE_KEY)
         }
       } catch (e) {
-        localStorage.removeItem(STORAGE_KEY)
+        sessionStorage.removeItem(STORAGE_KEY)
       }
     }
   }
