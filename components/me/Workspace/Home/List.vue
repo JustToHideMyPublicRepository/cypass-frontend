@@ -67,9 +67,10 @@
               <IconEdit class="w-3.5 h-3.5" />
             </button>
             <button v-if="!ws.is_default" @click="$emit('setDefault', ws.id)"
-              class="p-1.5 rounded-lg hover:bg-warning/10 text-hsa hover:text-warning transition-colors"
-              title="Par défaut">
-              <IconStar class="w-3.5 h-3.5" />
+              class="p-1.5 rounded-lg hover:bg-warning/10 text-hsa hover:text-warning transition-all flex items-center justify-center"
+              :title="defaultLoadingId === ws.id ? 'Traitement...' : 'Par défaut'" :disabled="defaultLoadingId === ws.id">
+              <UiLogoLoader v-if="defaultLoadingId === ws.id" size="xs" />
+              <IconStar v-else class="w-3.5 h-3.5" />
             </button>
             <button v-if="ws.role === 'owner' && !ws.is_default" @click="$emit('delete', ws)"
               class="p-1.5 rounded-lg hover:bg-danger/10 text-hsa hover:text-danger transition-colors"
@@ -92,6 +93,7 @@ defineProps<{
   workspaces: Workspace[]
   activeWorkspaceId?: string | null
   loading: boolean
+  defaultLoadingId?: string | null
 }>()
 
 defineEmits(['edit', 'setDefault', 'delete'])

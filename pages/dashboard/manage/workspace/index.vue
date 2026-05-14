@@ -5,8 +5,8 @@
 
     <!-- Workspace List (Loading + Grid) -->
     <MeWorkspaceHomeList v-if="store.loading || store.workspaces.length" :workspaces="store.workspaces"
-      :active-workspace-id="store.activeWorkspaceId" :loading="store.loading" @edit="store.openModal"
-      @setDefault="handleSetDefault" @delete="confirmDelete" />
+      :active-workspace-id="store.activeWorkspaceId" :loading="store.loading" :default-loading-id="defaultLoadingId"
+      @edit="store.openModal" @setDefault="handleSetDefault" @delete="confirmDelete" />
 
     <!-- Empty State -->
     <MeWorkspaceHomeEmpty v-else @create="store.openModal()" />
@@ -31,6 +31,7 @@ const toast = useToastStore()
 const showDeleteConfirm = ref(false)
 const workspaceToDelete = ref<Workspace | null>(null)
 const deleting = ref(false)
+const defaultLoadingId = ref<string | null>(null)
 
 const confirmDelete = (ws: Workspace) => {
   workspaceToDelete.value = ws
@@ -51,12 +52,14 @@ const handleDelete = async () => {
 }
 
 const handleSetDefault = async (id: string) => {
+  defaultLoadingId.value = id
   const success = await store.setDefaultWorkspace(id)
   if (success) {
     toast.showToast('success', 'Workspace par défaut', 'Votre espace de travail par défaut a été mis à jour.')
   } else {
     toast.showToast('error', 'Erreur', store.error || 'Impossible de définir le workspace par défaut.')
   }
+  defaultLoadingId.value = null
 }
 
 onMounted(async () => {

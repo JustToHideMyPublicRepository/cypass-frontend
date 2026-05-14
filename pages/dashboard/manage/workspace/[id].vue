@@ -15,10 +15,6 @@
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <!-- Main Content -->
         <div class="lg:col-span-2 space-y-8">
-          <!-- Active Status Badge -->
-          <MeWorkspaceDetailStatusBadge :workspace="workspace" :is-active="workspace.id === store.activeWorkspaceId"
-            @activate="store.setActiveWorkspace" />
-
           <!-- Stats Cards -->
           <MeWorkspaceDetailStats :workspace="workspace" :members-count="members.length" />
 
@@ -26,6 +22,11 @@
         </div>
 
         <div class="space-y-8">
+          <!-- Status & Actions -->
+          <MeWorkspaceDetailStatusBadge :workspace="workspace" :is-active="workspace.id === store.activeWorkspaceId"
+            :default-loading="defaultLoading" @activate="store.setActiveWorkspace" @setDefault="handleSetDefault" />
+
+          <!-- Members -->
           <MeWorkspaceDetailMembers :workspace="workspace" :members="members" />
         </div>
       </div>
@@ -45,7 +46,6 @@
 <script setup lang="ts">
 import { ref, onMounted, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { IconCheck } from '@tabler/icons-vue'
 import { useWorkspaceStore } from '~/stores/back/user/workspace'
 import { useToastStore } from '~/stores/front/toast'
 import type { Workspace, WorkspaceMember } from '~/types/workspace'
@@ -80,7 +80,6 @@ const handleDelete = async () => {
 }
 
 const fetchDetails = async () => {
-  loading.value = true
   const id = route.params.id as string
 
   const success = await store.fetchWorkspaceById(id)
