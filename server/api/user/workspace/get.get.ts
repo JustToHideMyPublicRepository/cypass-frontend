@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const response: any = await $fetch(`${baseApi}/user/workspace/${query.id}`, {
+    const response: any = await $fetch(`${baseApi}/user/workspace/get/${query.id}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,

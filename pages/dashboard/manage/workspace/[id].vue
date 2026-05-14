@@ -29,14 +29,14 @@
           </div>
 
           <!-- Stats Cards -->
-          <MeWorkspaceDetailStats :workspace="workspace" />
+          <MeWorkspaceDetailStats :workspace="workspace" :members-count="members.length" />
 
           <MeWorkspaceDetailInfo :workspace="workspace" />
         </div>
 
         <div class="space-y-8">
           <MeWorkspaceDetailActions :workspace="workspace" :is-active="workspace.id === store.activeWorkspaceId"
-            @activate="store.setActiveWorkspace" @setDefault="handleSetDefault" />
+            :default-loading="defaultLoading" @activate="store.setActiveWorkspace" @setDefault="handleSetDefault" />
 
           <MeWorkspaceDetailMembers :workspace="workspace" :members="members" />
         </div>
@@ -60,17 +60,18 @@ import { useRoute } from 'vue-router'
 import { IconCheck } from '@tabler/icons-vue'
 import { useWorkspaceStore } from '~/stores/back/user/workspace'
 import { useToastStore } from '~/stores/front/toast'
-import type { Workspace } from '~/types/workspace'
+import type { Workspace, WorkspaceMember } from '~/types/workspace'
 
 const route = useRoute()
 const store = useWorkspaceStore()
 const toast = useToastStore()
 const loading = ref(true)
-const workspace = computed(() => store.currentDetail?.workspace || null)
-const members = computed(() => store.currentDetail?.members || [])
+const workspace = ref<Workspace | null>(null)
+const members = ref<WorkspaceMember[]>([])
 
 const showDeleteConfirm = ref(false)
 const deleting = ref(false)
+const defaultLoading = ref(false)
 
 const confirmDelete = () => {
   showDeleteConfirm.value = true
@@ -93,16 +94,34 @@ const handleDelete = async () => {
 const fetchDetails = async () => {
   loading.value = true
   const id = route.params.id as string
-  await store.fetchWorkspaceById(id)
+
+  const success = await store.fetchWorkspaceById(id)
+  if (success && store.currentDetail) {
+    workspace.value = store.currentDetail.workspace
+    members.value = store.currentDetail.members
+  } else {
+    workspace.value = null
+    members.value = []
+  }
   loading.value = false
 }
 
 const handleSetDefault = async (id: string) => {
+  defaultLoading.value = true
   const success = await store.setDefaultWorkspace(id)
   if (success) {
-    toast.showToast('success', 'Succès', 'Workspace défini par défaut')
+    await fetchDetails()
   }
+  defaultLoading.value = false
 }
+
+// Sync with store updates (after workspace edit via modal)
+watch(() => store.currentDetail, (detail) => {
+  if (detail) {
+    workspace.value = detail.workspace
+    members.value = detail.members
+  }
+}, { deep: true })
 
 onMounted(() => {
   fetchDetails()

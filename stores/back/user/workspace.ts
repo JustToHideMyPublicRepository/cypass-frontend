@@ -190,6 +190,10 @@ export const useWorkspaceStore = defineStore('workspace', {
           if (this.activeWorkspace?.id === id) {
             this.activeWorkspace = response.workspace
           }
+          // Mettre à jour le détail courant
+          if (this.currentDetail?.workspace.id === id) {
+            this.currentDetail.workspace = response.workspace
+          }
           this.isModalOpen = false
           this.editingWorkspace = null
           return true

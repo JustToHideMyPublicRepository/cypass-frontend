@@ -13,7 +13,6 @@ export interface Workspace {
   ifu?: string | null
   country: string | null
   role?: WorkspaceRole
-  my_role?: WorkspaceRole
   members_count?: number
   can_certify?: boolean
   created_at: string
