@@ -78,8 +78,8 @@
           <button @click="$emit('react', 'like', comment.id)" :disabled="reactingToId === comment.id"
             class="p-1.5 rounded-lg flex items-center gap-1.5 transition-all min-w-[32px] justify-center"
             :class="[hasMyReaction('like') ? 'text-success bg-success/10' : 'text-hsa hover:bg-ash/10 hover:text-BtW', { 'opacity-40 grayscale': reactingToId === comment.id && reactingType !== 'like' }]">
-            <UiLogoLoader v-if="reactingToId === comment.id && reactingType === 'like'" size="xs"
-              color="currentColor" />
+            <IconLoader2 v-if="reactingToId === comment.id && reactingType === 'like'" 
+              class="w-3.5 h-3.5 animate-spin" />
             <IconThumbUp v-else class="w-3.5 h-3.5" :class="{ 'fill-current': hasMyReaction('like') }" />
             <span v-show="getReactionCount('like') > 0" class="text-[10px] font-black">{{
               getReactionCount('like') }}</span>
@@ -88,8 +88,8 @@
           <button @click="$emit('react', 'dislike', comment.id)" :disabled="reactingToId === comment.id"
             class="p-1.5 rounded-lg flex items-center gap-1.5 transition-all min-w-[32px] justify-center"
             :class="[hasMyReaction('dislike') ? 'text-danger bg-danger/10' : 'text-hsa hover:bg-ash/10 hover:text-BtW', { 'opacity-40 grayscale': reactingToId === comment.id && reactingType !== 'dislike' }]">
-            <UiLogoLoader v-if="reactingToId === comment.id && reactingType === 'dislike'" size="xs"
-              color="currentColor" />
+            <IconLoader2 v-if="reactingToId === comment.id && reactingType === 'dislike'" 
+              class="w-3.5 h-3.5 animate-spin" />
             <IconThumbDown v-else class="w-3.5 h-3.5" :class="{ 'fill-current': hasMyReaction('dislike') }" />
             <span v-show="getReactionCount('dislike') > 0" class="text-[10px] font-black">{{
               getReactionCount('dislike') }}</span>
@@ -126,7 +126,7 @@
         <div class="flex flex-col gap-2 justify-end">
           <UiBaseButton variant="primary" size="sm" @click="$emit('send-reply')"
             :disabled="!replyContent.trim() || sendingReply" class="!px-3 !py-2 !rounded-xl">
-            <UiLogoLoader v-if="sendingReply" size="xs" color="currentColor" />
+            <IconLoader2 v-if="sendingReply" class="w-4 h-4 animate-spin" />
             <IconSend v-else class="w-4 h-4" />
           </UiBaseButton>
           <UiBaseButton variant="ghost" size="sm" @click="$emit('cancel-reply')"

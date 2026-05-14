@@ -256,11 +256,14 @@ const saveEditComment = async (comment: any, parentId?: string) => {
 const handleAddComment = async () => {
   if (!newComment.value.trim()) return
   submittingComment.value = true
-  const result = await userVigitechStore.addComment(props.incidentId, newComment.value.trim())
-  if (result.success) {
+  // Pass true to skipFetch to avoid full reload
+  const result = await userVigitechStore.addComment(props.incidentId, newComment.value.trim(), undefined, true)
+  if (result.success && result.data) {
     newComment.value = ''
     toast.showToast('success', 'Commentaire ajouté', result.message || 'Votre commentaire a été publié.')
-  } else {
+    // Add locally to the public store
+    publicVigitechStore.addCommentLocally(result.data as Comment)
+  } else if (!result.success) {
     toast.showToast('error', 'Erreur', result.message || 'Impossible de publier le commentaire.')
   }
   submittingComment.value = false
