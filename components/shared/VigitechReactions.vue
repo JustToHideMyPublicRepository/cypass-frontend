@@ -71,7 +71,7 @@
 
 <script setup lang="ts">
 import { IconThumbUp } from '@tabler/icons-vue'
-import { reactionTypes, getReactionEmoji, getReactionLabel } from '~/utils/vigitech'
+import { reactionTypes, getReactionEmoji, getReactionLabel, getReactionColor, getReactionTextColorOnly } from '~/utils/vigitech'
 import { useAuthStore } from '~/stores/back/user/auth'
 import { useUserVigitechStore } from '~/stores/back/user/vigitech'
 import type { ReactionType, ReactionDetail } from '~/types/vigitech'
@@ -113,28 +113,6 @@ const handlePopupEnter = () => {
 const handlePopupLeave = () => {
   popupKeepOpen.value = false
   handleMouseLeave()
-}
-
-const getReactionColor = (type: string) => {
-  switch (type) {
-    case 'love': return 'text-danger bg-danger/5 hover:bg-danger/10'
-    case 'like': return 'text-success bg-success/5 hover:bg-success/10'
-    case 'wow': return 'text-primary bg-primary/5 hover:bg-primary/10'
-    case 'sad': return 'text-warning bg-warning/5 hover:bg-warning/10'
-    case 'dislike': return 'text-hsa bg-hsa/5 hover:bg-hsa/10'
-    default: return 'text-primary bg-primary/5 hover:bg-primary/10'
-  }
-}
-
-const getReactionTextColorOnly = (type: string) => {
-  switch (type) {
-    case 'love': return 'text-danger'
-    case 'like': return 'text-success'
-    case 'wow': return 'text-primary'
-    case 'sad': return 'text-warning'
-    case 'dislike': return 'text-hsa'
-    default: return 'text-primary'
-  }
 }
 
 const myReaction = computed<ReactionDetail | undefined>(() => {
