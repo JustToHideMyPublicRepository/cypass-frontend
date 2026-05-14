@@ -1,18 +1,12 @@
 <template>
   <div class="space-y-8">
-    <MeVigitechReactionsHeader 
-      v-model:targetType="targetType" 
-      :loading="loading" 
-      @refresh="fetchData" 
-    />
+    <MeVigitechReactionsHeader v-model:targetType="targetType" :loading="loading" @refresh="fetchData" />
 
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 animate-fade-in">
-      <MeVigitechReactionsTabs 
-        v-model="reactionType" 
-        :availableTypes="availableReactionTypes" 
-      />
-      
-      <div v-if="displayItems.length" class="px-4 py-2 rounded-xl bg-ash/20 border border-ash/30 text-[10px] font-black uppercase tracking-widest text-hsa h-fit">
+      <MeVigitechReactionsTabs v-model="reactionType" :availableTypes="availableReactionTypes" />
+
+      <div v-if="displayItems.length"
+        class="px-4 py-2 rounded-xl bg-ash/20 border border-ash/30 text-[10px] font-black uppercase tracking-widest text-hsa h-fit">
         {{ displayItems.length }} résultat{{ displayItems.length > 1 ? 's' : '' }}
       </div>
     </div>
@@ -26,12 +20,8 @@
       <!-- Interactions Grid -->
       <template v-else-if="displayItems.length">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in-up">
-          <MeVigitechReactionsInteractionItem 
-            v-for="item in displayItems" 
-            :key="item.id" 
-            :item="item" 
-            :type="targetType === 'my_comments' ? 'comment' : 'reaction'" 
-          />
+          <MeVigitechReactionsInteractionItem v-for="item in displayItems" :key="item.id" :item="item"
+            :type="targetType === 'my_comments' ? 'comment' : 'reaction'" />
         </div>
       </template>
 
