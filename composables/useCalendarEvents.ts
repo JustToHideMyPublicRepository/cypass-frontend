@@ -103,7 +103,7 @@ export const useCalendarEvents = () => {
     if (userDocsentryStore.documents) {
       const wsStore = useWorkspaceStore()
       const slug = wsStore.activeWorkspace?.slug || ''
-      
+
       userDocsentryStore.documents.forEach(doc => {
         events.push({
           id: `doc-${doc.id}`,
@@ -145,7 +145,7 @@ export const useCalendarEvents = () => {
           type: 'comment',
           color: getCalendarFilterConfig('comment')?.classes.text || 'text-warning',
           bgColor: getCalendarFilterConfig('comment')?.classes.bgLight || 'bg-warning/10',
-          url: `/dashboard/vigitech/comments`,
+          url: `/dashboard/vigitech/interaction?type=my_comments`,
           rawItem: comment
         })
       })

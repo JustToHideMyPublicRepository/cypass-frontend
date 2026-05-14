@@ -20,7 +20,7 @@ export const dashboardShortcuts: Record<string, ShortcutEntry> = {
   vigitech_interaction: {
     keys: ['d', 'm'],
     label: 'Interactions',
-    path: '/dashboard/vigitech/interaction',
+    path: '/dashboard/vigitech/interaction?type=my_comments',
     isGlobal: true,
     group: 'Dashboard',
     modifier: 'Shift'

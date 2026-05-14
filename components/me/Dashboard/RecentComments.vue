@@ -2,7 +2,7 @@
   <UiBaseCard title="Commentaires récents" subtitle="Réponses sur les incidents">
     <template #header>
       <UiBaseButton variant="secondary" size="sm" class="!px-2 !py-1 !text-[10px]"
-        @click="router.push('/dashboard/vigitech/comments')">Tout</UiBaseButton>
+        @click="router.push('/dashboard/vigitech/interaction?type=my_comments')">Tout</UiBaseButton>
     </template>
     <div class="space-y-4">
       <div v-if="loading && !comments.length" class="py-10">
