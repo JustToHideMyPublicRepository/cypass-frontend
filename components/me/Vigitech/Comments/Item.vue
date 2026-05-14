@@ -1,116 +1,79 @@
 <template>
-  <div @contextmenu.prevent="handleContextMenu"
-    class="group relative bg-ash/40 backdrop-blur-3xl p-7 md:p-8 rounded-[3rem] border border-ash/30 hover:border-primary/40 hover:bg-ash/60 hover:shadow-[0_40px_100px_rgba(var(--primary-rgb),0.15)] transition-all duration-700 overflow-hidden flex flex-col h-full ring-1 ring-primary/0 hover:ring-primary/20">
+  <UiBaseCard
+    class="group transition-all hover:shadow-md border-ash/30 bg-WtB p-3 relative overflow-hidden h-full flex flex-col justify-center">
 
-    <!-- Premium Animated Glow Gradient -->
-    <div
-      class="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(var(--primary-rgb),0.15),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-1000">
-    </div>
-
-    <!-- Background Decoration -->
-    <div
-      class="absolute -right-10 -top-10 w-40 h-40 bg-primary/5 rounded-full blur-3xl group-hover:bg-primary/10 transition-colors duration-700">
-    </div>
-
-    <div class="relative flex-1 space-y-6">
-      <!-- Normal view with quote style -->
-      <div v-if="!isEditing" class="h-full flex flex-col">
-        <div class="flex flex-col md:flex-row items-start justify-between gap-6">
-          <div class="flex-1 min-w-0">
-            <div class="relative">
-              <IconQuote class="absolute -top-4 -left-6 w-12 h-12 text-primary/10 -z-0" />
-              <p class="relative z-10 text-BtW leading-relaxed transition-opacity tracking-tight break-words">
-                {{ isTruncated ? truncatedContent : comment.content }}
-                <button v-if="isTruncated" @click="$emit('show-detail', comment.id)"
-                  class="inline-flex items-center gap-1.5 text-primary hover:text-primary/80 transition-colors text-xs uppercase tracking-widest ml-2 bg-primary/5 px-3 py-1 rounded-full border border-primary/20 hover:border-primary/40">
-                  <IconEye class="w-3.5 h-3.5" />
-                  Voir plus
-                </button>
-              </p>
-            </div>
-          </div>
-
-          <!-- Stylized Actions - Side by Side (Always Visible) -->
-          <div class="flex flex-row items-center gap-2 shrink-0 transition-all duration-500">
-            <button v-if="canEdit" @click="$emit('edit')"
-              class="w-11 h-11 flex items-center justify-center rounded-2xl bg-primary/10 border border-primary/60 hover:bg-primary text-primary hover:text-WtB hover:border-primary transition-all active:scale-90 shadow-sm"
-              title="Modifier">
-              <IconEdit class="w-4 h-4" />
-            </button>
-            <button @click="$emit('delete', comment.id)"
-              class="w-11 h-11 flex items-center justify-center rounded-2xl bg-danger/10 border border-danger/60 hover:bg-danger text-danger hover:text-WtB hover:border-danger transition-all active:scale-90 shadow-sm"
-              title="Supprimer">
-              <IconTrash class="w-4 h-4" />
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Enhanced Editing Field -->
-      <div v-else class="space-y-4 animate-fade-in">
-        <div class="relative group/field">
-          <textarea v-model="editContentLocal" rows="3"
-            class="w-full p-5 rounded-[2rem] bg-ash/80 border border-ash/50 text-[14px] font-bold text-BtW outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary/40 transition-all resize-none shadow-inner" />
+    <div class="relative flex-1">
+      <!-- Normal view -->
+      <div v-if="!isEditing" class="flex items-center gap-3">
+        <!-- Avatar / Icon -->
+        <div class="relative shrink-0">
           <div
-            class="absolute bottom-4 right-4 text-[10px] font-black text-hsa opacity-50 uppercase tracking-widest pointer-events-none">
-            En édition
-          </div>
-        </div>
-        <div class="flex gap-3 justify-end">
-          <UiBaseButton variant="ghost" size="sm" @click="$emit('cancel')"
-            class="!rounded-2xl !px-6 !text-[11px] !font-black uppercase tracking-[0.2em] border border-ash/20 hover:!bg-ash/10 transition-all">
-            Annuler
-          </UiBaseButton>
-          <UiBaseButton variant="primary" size="sm" @click="$emit('save', editContentLocal)"
-            :disabled="!editContentLocal.trim() || saving"
-            class="!rounded-2xl !px-8 !text-[11px] !font-black uppercase tracking-[0.2em] shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all">
-            {{ saving ? 'Sync...' : 'Sauvegarder' }}
-          </UiBaseButton>
-        </div>
-      </div>
-    </div>
-
-    <!-- Refined Footer -->
-    <div class="relative mt-8 pt-6 border-t border-ash/10 flex items-center justify-between">
-      <NuxtLink :to="`/vigitech/${comment.incident_id}`" class="flex items-center gap-3 group/link max-w-[65%]">
-        <div
-          class="w-10 h-10 flex items-center justify-center rounded-2xl bg-primary/5 text-primary group-hover/link:bg-primary group-hover/link:text-WtB shadow-inner transition-all duration-500 transform group-hover/link:-rotate-6">
-          <IconExternalLink class="w-4 h-4" />
-        </div>
-        <div class="min-w-0">
-          <p
-            class="text-[9px] font-black text-hsa uppercase tracking-[0.2em] leading-none mb-1 group-hover/link:text-primary transition-colors">
-            Incident lié</p>
-          <p
-            class="text-[10px] font-black text-BtW truncate group-hover/link:translate-x-1 transition-transform opacity-70 group-hover/link:opacity-100 italic">
-            #{{ incidentTitle }}
-          </p>
-        </div>
-      </NuxtLink>
-
-      <div class="flex items-center gap-4 shrink-0">
-        <div class="hidden sm:block text-right">
-          <p class="text-[11px] text-BtW font-black leading-tight">{{ relativeTime }}</p>
-        </div>
-        <div class="relative">
-          <div
-            class="w-9 h-9 md:w-11 md:h-11 rounded-2xl overflow-hidden border-2 border-ash/20 shadow-xl bg-ash/40 shrink-0 transform group-hover:scale-110 transition-transform duration-500">
+            class="w-10 h-10 rounded-xl overflow-hidden border border-ash bg-ash/10 shadow-sm group-hover:rotate-3 transition-transform duration-500">
             <img :src="avatarUrl" class="w-full h-full object-cover" />
           </div>
           <div
-            class="absolute -bottom-1 -right-1 w-4 h-4 bg-primary rounded-full border-2 border-[#13151a] shadow-sm flex items-center justify-center">
-            <div class="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></div>
+            class="absolute -bottom-1 -right-1 w-4 h-4 bg-primary rounded-full border-2 border-WtB shadow-sm flex items-center justify-center">
+            <div class="w-1.5 h-1.5 bg-white rounded-full"></div>
           </div>
+        </div>
+
+        <!-- Content -->
+        <div class="min-w-0 flex-1">
+          <div class="flex items-center gap-1.5 overflow-hidden">
+            <p class="text-xs font-bold text-BtW truncate leading-tight tracking-tight">
+              "{{ comment.content }}"
+            </p>
+          </div>
+
+          <div class="flex items-center gap-2 mt-1">
+            <NuxtLink :to="`/vigitech/${comment.incident_id}`"
+              class="inline-flex items-center gap-1 text-[9px] font-bold text-primary uppercase tracking-tighter hover:underline">
+              <IconExternalLink class="w-2.5 h-2.5" />
+              #{{ incidentTitle }}
+            </NuxtLink>
+
+            <span class="inline-flex items-center gap-1 text-[9px] font-bold text-hsa/60 uppercase tracking-tighter">
+              <IconClock class="w-2.5 h-2.5" />
+              {{ relativeTime }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="flex items-center gap-1 shrink-0">
+          <button v-if="canEdit" @click="$emit('edit')"
+            class="p-2 rounded-lg hover:bg-primary/10 text-hsa hover:text-primary transition-colors" title="Modifier">
+            <IconEdit class="w-3.5 h-3.5" />
+          </button>
+          <button @click="$emit('delete', comment.id)"
+            class="p-2 rounded-lg hover:bg-danger/10 text-hsa hover:text-danger transition-colors" title="Supprimer">
+            <IconTrash class="w-3.5 h-3.5" />
+          </button>
+        </div>
+      </div>
+
+      <!-- Editing mode -->
+      <div v-else class="space-y-3 animate-fade-in">
+        <textarea v-model="editContentLocal" rows="2"
+          class="w-full p-3 rounded-xl bg-ash/5 border border-ash/20 text-xs font-bold text-BtW outline-none focus:border-primary/40 transition-all resize-none" />
+        <div class="flex gap-2 justify-end">
+          <UiBaseButton variant="ghost" size="sm" @click="$emit('cancel')" class="!h-8 !px-3 !text-[10px]">
+            Annuler
+          </UiBaseButton>
+          <UiBaseButton variant="primary" size="sm" @click="$emit('save', editContentLocal)"
+            :disabled="!editContentLocal.trim() || saving" class="!h-8 !px-4 !text-[10px]">
+            {{ saving ? '...' : 'Sauver' }}
+          </UiBaseButton>
         </div>
       </div>
     </div>
-  </div>
+  </UiBaseCard>
 </template>
 
 <script setup lang="ts">
-import { IconEdit, IconExternalLink, IconTrash, IconQuote, IconEye } from '@tabler/icons-vue'
+import { IconEdit, IconExternalLink, IconTrash, IconClock } from '@tabler/icons-vue'
 import { formatRelativeTime } from '~/utils/date'
-import { useContextMenu, type ContextMenuItem } from '~/composables/useContextMenu'
+import { ref, computed, watch } from 'vue'
 
 const props = defineProps<{
   comment: any
@@ -124,58 +87,12 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits(['edit', 'cancel', 'save', 'delete', 'show-detail'])
-const { showMenu } = useContextMenu()
 
 const editContentLocal = ref(props.editContent)
 
 const relativeTime = computed(() => {
   return formatRelativeTime(props.comment.created_at)
 })
-
-const isTruncated = computed(() => {
-  return props.comment.content.length > 200
-})
-
-const truncatedContent = computed(() => {
-  return props.comment.content.slice(0, 200) + '...'
-})
-
-const handleContextMenu = (e: MouseEvent) => {
-  if (props.isEditing) return
-
-  const menuItems: ContextMenuItem[] = [
-    {
-      label: 'Accéder à l\'incident',
-      icon: IconExternalLink,
-      action: () => navigateTo(`/vigitech/${props.comment.incident_id}`)
-    }
-  ]
-
-  if (props.canEdit) {
-    menuItems.push({
-      label: 'Modifier le commentaire',
-      icon: IconEdit,
-      action: () => emit('edit')
-    })
-  }
-
-  menuItems.push({
-    label: 'Supprimer le commentaire',
-    icon: IconTrash,
-    variant: 'danger',
-    action: () => emit('delete', props.comment.id)
-  })
-
-  const menuMetadata = {
-    title: 'Mon commentaire',
-    infos: [
-      { label: 'Publié le', value: props.formattedDate },
-      { label: 'ID Incident', value: props.comment.incident_id.split('-')[0] }
-    ]
-  }
-
-  showMenu(e, menuItems, menuMetadata)
-}
 
 watch(() => props.editContent, (val) => {
   editContentLocal.value = val

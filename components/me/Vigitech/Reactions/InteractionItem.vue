@@ -1,75 +1,79 @@
 <template>
-  <div
-    class="group relative bg-ash/40 backdrop-blur-3xl p-6 rounded-[2.5rem] border border-ash/30 hover:border-primary/40 hover:bg-ash/60 hover:shadow-[0_20px_60px_rgba(var(--primary-rgb),0.1)] transition-all duration-700 overflow-hidden flex flex-col h-full">
+  <UiBaseCard
+    class="group transition-all hover:shadow-md border-ash/30 bg-WtB p-3 relative overflow-hidden h-full flex flex-col justify-center">
 
-    <!-- Premium Animated Glow Gradient -->
-    <div
-      class="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(var(--primary-rgb),0.1),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-1000">
-    </div>
+    <div class="flex items-center gap-3">
+      <!-- Icon with themed background -->
+      <div
+        :class="['w-10 h-10 flex items-center justify-center rounded-xl shrink-0 transition-all duration-500 transform group-hover:rotate-6 shadow-sm', config.bgClass, config.textClass]">
+        <component :is="config.icon" class="w-5 h-5" />
+      </div>
 
-    <div class="relative flex-1 flex flex-col justify-between">
-      <div class="flex items-start justify-between gap-4">
-        <div class="flex-1 min-w-0">
-          <div class="flex items-center gap-3 mb-3">
-            <div :class="['w-10 h-10 flex items-center justify-center rounded-2xl transition-all duration-500 transform group-hover:rotate-12', config.bgClass, config.textClass]">
-              <component :is="config.icon" class="w-5 h-5" />
-            </div>
-            <div>
-              <p class="text-[10px] font-black uppercase tracking-widest text-hsa leading-none mb-1">
-                {{ config.headerPrefix }} <span v-if="config.typeLabel" :class="config.textClass">{{ config.typeLabel }}</span>
-              </p>
-              <p class="text-[11px] font-bold text-BtW opacity-60">
-                {{ relativeTime }}
-              </p>
-            </div>
-          </div>
+      <!-- Info -->
+      <div class="min-w-0 flex-1">
+        <div class="flex items-center gap-1.5 overflow-hidden">
+          <p class="text-[10px] font-black truncate">
+            {{ config.headerPrefix }}
+            <span v-if="config.typeLabel" :class="config.textClass">
+              {{ config.typeLabel }}
+            </span>
+          </p>
+        </div>
 
-          <h3 class="text-sm font-black text-BtW tracking-tight leading-snug line-clamp-2 min-h-[2.5em] group-hover:text-primary transition-colors">
-            "{{ displayTitle || 'Sans titre' }}"
-          </h3>
+        <h5 class="text-xs block tracking-tight mt-1">
+          {{ displayTitle || 'Sans titre' }}
+        </h5>
+
+        <!-- Meta -->
+        <div class="flex items-center gap-2 mt-1.5">
+          <span class="inline-flex items-center gap-1 text-[9px] font-bold text-hsa/60 uppercase tracking-tighter">
+            <IconClock class="w-2.5 h-2.5" />
+            {{ relativeTime }}
+          </span>
+          <span class="inline-flex items-center gap-1 text-[9px] font-black text-primary/80 uppercase tracking-tighter">
+            <component :is="isComment ? IconMessage : IconCircleCheck" class="w-2.5 h-2.5" />
+            {{ categoryLabel }}
+          </span>
         </div>
       </div>
 
-      <div class="mt-6 pt-4 border-t border-ash/10 flex items-center justify-between">
-        <div class="flex items-center gap-2">
-           <div class="px-3 py-1 rounded-full bg-ash/20 border border-ash/20 text-[9px] font-black uppercase tracking-widest text-hsa">
-            {{ categoryLabel }}
+      <!-- Actions -->
+      <div class="flex items-center gap-1 shrink-0">
+        <!-- Remove Reaction Button -->
+        <button v-if="!isComment" @click="$emit('removeReaction', item)"
+          class="p-2 rounded-lg hover:bg-danger/10 text-hsa hover:text-danger transition-colors group/remove"
+          title="Retirer la réaction">
+          <div class="relative w-4 h-4 flex items-center justify-center">
+            <IconMoodOff class="w-3.5 h-3.5 group-hover/remove:scale-110 transition-transform" />
           </div>
-        </div>
+        </button>
 
-        <NuxtLink :to="targetUrl" class="flex items-center gap-2 group/btn">
-          <span class="text-[10px] font-black uppercase tracking-widest text-hsa group-hover/btn:text-primary transition-colors">Voir</span>
-          <div class="w-8 h-8 flex items-center justify-center rounded-xl bg-primary/5 text-primary group-hover/btn:bg-primary group-hover/btn:text-white transition-all transform group-hover/btn:translate-x-1">
-             <IconArrowRight class="w-4 h-4" />
-          </div>
+        <NuxtLink :to="targetUrl"
+          class="p-2 rounded-lg bg-primary/5 text-primary hover:bg-primary hover:text-WtB transition-all" title="Voir">
+          <IconExternalLink class="w-3.5 h-3.5" />
         </NuxtLink>
       </div>
     </div>
-  </div>
+  </UiBaseCard>
 </template>
 
 <script setup lang="ts">
-import { 
-  IconThumbUp, 
-  IconHeart, 
-  IconMoodSurprised, 
-  IconThumbDown, 
-  IconMoodSad,
-  IconArrowRight,
-  IconMessage
-} from '@tabler/icons-vue'
+import { IconThumbUp, IconHeart, IconMoodSurprised, IconThumbDown, IconMoodSad, IconExternalLink, IconMessage, IconClock, IconCircleCheck, IconMoodOff } from '@tabler/icons-vue'
 import { formatRelativeTime } from '~/utils/date'
+import { computed } from 'vue'
 
 const props = defineProps<{
   item: any
   type: 'reaction' | 'comment'
 }>()
 
+defineEmits(['removeReaction'])
+
 const isComment = computed(() => props.type === 'comment')
 
 const categoryLabel = computed(() => {
   if (isComment.value) return 'Commentaire'
-  return props.item.target_type === 'comment' ? 'Réaction sur commentaire' : 'Réaction sur incident'
+  return props.item.target_type === 'comment' ? 'Commentaire' : 'Incident'
 })
 
 const displayTitle = computed(() => {
@@ -90,8 +94,8 @@ const reactionConfigs: any = {
   like: {
     icon: IconThumbUp,
     label: 'J\'aime',
-    bgClass: 'bg-blue-500/10',
-    textClass: 'text-blue-500'
+    bgClass: 'bg-primary/10',
+    textClass: 'text-primary'
   },
   love: {
     icon: IconHeart,
@@ -107,7 +111,7 @@ const reactionConfigs: any = {
   },
   dislike: {
     icon: IconThumbDown,
-    label: 'Je n\'aime pas',
+    label: 'Bof',
     bgClass: 'bg-orange-500/10',
     textClass: 'text-orange-500'
   },
@@ -123,8 +127,8 @@ const config = computed(() => {
   if (isComment.value) {
     return {
       icon: IconMessage,
-      headerPrefix: 'A publié un',
-      typeLabel: 'Commentaire',
+      headerPrefix: 'A ajouté un',
+      typeLabel: 'commentaire',
       bgClass: 'bg-primary/10',
       textClass: 'text-primary'
     }

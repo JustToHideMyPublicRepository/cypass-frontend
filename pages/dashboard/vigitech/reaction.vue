@@ -21,7 +21,7 @@
       <template v-else-if="displayItems.length">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in-up">
           <MeVigitechReactionsInteractionItem v-for="item in displayItems" :key="item.id" :item="item"
-            :type="targetType === 'my_comments' ? 'comment' : 'reaction'" />
+            :type="targetType === 'my_comments' ? 'comment' : 'reaction'" @remove-reaction="handleRemoveReaction" />
         </div>
       </template>
 
@@ -33,6 +33,7 @@
 
 <script setup lang="ts">
 import { useUserVigitechStore } from '~/stores/back/user/vigitech'
+import { useToastStore } from '~/stores/front/toast'
 import type { ReactionType } from '~/types/vigitech'
 
 const store = useUserVigitechStore()
@@ -40,6 +41,34 @@ const store = useUserVigitechStore()
 const loading = ref(true)
 const targetType = ref('')
 const reactionType = ref('')
+const toast = useToastStore()
+
+const handleRemoveReaction = async (item: any) => {
+  const isCommentTarget = item.target_type === 'comment'
+  let success = false
+  let message = ''
+
+  try {
+    if (isCommentTarget) {
+      const res = await store.reactToComment(item.target_id, item.type, item.incident_id || '')
+      success = res.success
+      message = res.message || ''
+    } else {
+      const res = await store.reactToIncident(item.target_id, item.type)
+      success = res.success
+      message = res.message || ''
+    }
+
+    if (success) {
+      toast.showToast('success', 'Réaction retirée', 'Votre réaction a été supprimée avec succès.')
+      await fetchData()
+    } else {
+      toast.showToast('error', 'Erreur', message || 'Impossible de retirer la réaction.')
+    }
+  } catch (err: any) {
+    toast.showToast('error', 'Erreur', 'Une erreur est survenue.')
+  }
+}
 
 const displayItems = computed(() => {
   if (targetType.value === 'my_comments') {
