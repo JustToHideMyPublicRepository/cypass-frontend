@@ -38,7 +38,7 @@
           <MeWorkspaceDetailActions :workspace="workspace" :is-active="workspace.id === store.activeWorkspaceId"
             @activate="store.setActiveWorkspace" @setDefault="handleSetDefault" />
 
-          <MeWorkspaceDetailMembers :workspace="workspace" />
+          <MeWorkspaceDetailMembers :workspace="workspace" :members="members" />
         </div>
       </div>
     </div>
@@ -66,7 +66,8 @@ const route = useRoute()
 const store = useWorkspaceStore()
 const toast = useToastStore()
 const loading = ref(true)
-const workspace = ref<Workspace | null>(null)
+const workspace = computed(() => store.currentDetail?.workspace || null)
+const members = computed(() => store.currentDetail?.members || [])
 
 const showDeleteConfirm = ref(false)
 const deleting = ref(false)
@@ -92,25 +93,16 @@ const handleDelete = async () => {
 const fetchDetails = async () => {
   loading.value = true
   const id = route.params.id as string
-
-  if (!store.workspaces.length) {
-    await store.fetchWorkspaces()
-  }
-
-  workspace.value = store.workspaces.find(w => w.id === id) || null
+  await store.fetchWorkspaceById(id)
   loading.value = false
 }
 
 const handleSetDefault = async (id: string) => {
   const success = await store.setDefaultWorkspace(id)
-  if (success) { }
+  if (success) {
+    toast.showToast('success', 'Succès', 'Workspace défini par défaut')
+  }
 }
-
-// Sync with store updates
-watch(() => store.workspaces, () => {
-  const id = route.params.id as string
-  workspace.value = store.workspaces.find(w => w.id === id) || null
-}, { deep: true })
 
 onMounted(() => {
   fetchDetails()
