@@ -17,7 +17,7 @@
         <IconAlertCircle class="w-4 h-4" />
         Signaler un Incident
       </UiBaseButton>
-      <UiBaseButton variant="secondary" to="/dashboard/vigitech/interaction?type=my_comments"
+      <UiBaseButton variant="secondary" to="/dashboard/vigitech/interaction"
         class="!px-4 !py-2.5 !text-xs !uppercase !tracking-wider gap-2">
         <IconMessage class="w-4 h-4" />
         Mes interactions
