@@ -162,7 +162,8 @@ export const useProfilStore = defineStore('profil', {
     async fetchNewsletterSettings() {
       this.newsletterLoading = true
       try {
-        const response = await $fetch<{ success: boolean; data: NewsletterSettings }>('/api/user/profile/newsletter-get')
+        const headers = import.meta.server ? useRequestHeaders(['cookie']) as any : {}
+        const response = await $fetch<{ success: boolean; data: NewsletterSettings }>('/api/user/profile/newsletter-get', { headers })
         if (response.success) {
           if (this.profile) {
             this.profile.newsletter_settings = response.data

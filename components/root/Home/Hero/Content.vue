@@ -69,7 +69,7 @@ const authStore = useAuthStore()
 const wsStore = useWorkspaceStore()
 
 const dashboardUrl = computed(() => {
-  if (!wsStore.activeWorkspace) return '/verify'
+  if (!wsStore.activeWorkspace || !wsStore.activeWorkspace.slug) return '/verify'
   return `/dashboard/${wsStore.activeWorkspace.slug}/docsentry`
 })
 

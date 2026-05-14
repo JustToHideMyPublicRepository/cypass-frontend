@@ -17,7 +17,8 @@ export const usePublicDocsentryStore = defineStore('publicDocsentry', {
     async fetchPublicKey() {
       this.loadingPublicKeyInfo = true
       try {
-        const response = await $fetch<PublicKeyInfo>('/api/public/docsentry/public-key')
+        const headers = import.meta.server ? useRequestHeaders(['cookie']) as any : {}
+        const response = await $fetch<PublicKeyInfo>('/api/public/docsentry/public-key', { headers })
         if (response.success) {
           this.publicKeyInfo = response
         }
@@ -132,7 +133,8 @@ export const usePublicDocsentryStore = defineStore('publicDocsentry', {
     async fetchEnrichmentCategories() {
       this.loadingCategories = true
       try {
-        const response = await $fetch<EnrichmentCategoriesResponse>('/api/public/docsentry/enrichieDoc-cat')
+        const headers = import.meta.server ? useRequestHeaders(['cookie']) as any : {}
+        const response = await $fetch<EnrichmentCategoriesResponse>('/api/public/docsentry/enrichieDoc-cat', { headers })
         if (response.success) {
           this.enrichmentCategories = response.categories
         }

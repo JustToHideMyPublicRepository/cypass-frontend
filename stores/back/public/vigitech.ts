@@ -35,7 +35,9 @@ export const usePublicVigitechStore = defineStore('publicVigitech', {
         const limit = this.commentsPagination.limit
         const offset = append ? this.commentsPagination.offset : 0
 
+        const headers = import.meta.server ? useRequestHeaders(['cookie']) as any : {}
         const response: any = await $fetch('/api/public/vigitech/comment-list', {
+          headers,
           params: {
             incident_id: incidentId,
             limit,
@@ -77,7 +79,9 @@ export const usePublicVigitechStore = defineStore('publicVigitech', {
     // Récuperer les réponses d'un commentaire
     async fetchReplies(incidentId: string, parentId: string, offset: number = 0, limit: number = 10) {
       try {
+        const headers = import.meta.server ? useRequestHeaders(['cookie']) as any : {}
         const response: any = await $fetch('/api/public/vigitech/comment-list', {
+          headers,
           params: {
             incident_id: incidentId,
             parent_id: parentId,
@@ -115,7 +119,9 @@ export const usePublicVigitechStore = defineStore('publicVigitech', {
       this.loading = true
       this.error = null
       try {
+        const headers = import.meta.server ? useRequestHeaders(['cookie']) as any : {}
         const response: any = await $fetch('/api/public/vigitech/incident-get', {
+          headers,
           query: { id }
         })
         if (response.success) {
@@ -140,7 +146,8 @@ export const usePublicVigitechStore = defineStore('publicVigitech', {
           offset: params.offset || this.publicPagination.offset,
           ...params
         }
-        const response: any = await $fetch('/api/public/vigitech/incident-list', { params: query })
+        const headers = import.meta.server ? useRequestHeaders(['cookie']) as any : {}
+        const response: any = await $fetch('/api/public/vigitech/incident-list', { headers, params: query })
         if (response.success) {
           this.publicIncidents = response.data
           // Accurate total calculation if not provided by backend
@@ -169,8 +176,10 @@ export const usePublicVigitechStore = defineStore('publicVigitech', {
 
     async fetchGlobalStats() {
       try {
+        const headers = import.meta.server ? useRequestHeaders(['cookie']) as any : {}
         // In a real app, this should be a dedicated /stats endpoint
         const response: any = await $fetch('/api/public/vigitech/incident-list', {
+          headers,
           params: { limit: 1000, offset: 0 }
         })
         if (response.success && response.data) {

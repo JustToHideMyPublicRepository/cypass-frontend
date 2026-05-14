@@ -77,7 +77,9 @@ export const useUserVigitechStore = defineStore('userVigitech', {
         const limit = this.userCommentsPagination.limit
         const offset = append ? this.userCommentsPagination.offset : 0
 
+        const headers = import.meta.server ? useRequestHeaders(['cookie']) as any : {}
         const response: any = await $fetch('/api/user/vigitech/comment-list', {
+          headers,
           params: { limit, offset }
         })
 
@@ -181,7 +183,9 @@ export const useUserVigitechStore = defineStore('userVigitech', {
       this.loading = true
       this.error = null
       try {
+        const headers = import.meta.server ? useRequestHeaders(['cookie']) as any : {}
         const response: any = await $fetch(`/api/user/vigitech/incident-get`, {
+          headers,
           query: { id }
         })
         if (response.success) {
@@ -201,7 +205,9 @@ export const useUserVigitechStore = defineStore('userVigitech', {
       this.loading = true
       this.error = null
       try {
+        const headers = import.meta.server ? useRequestHeaders(['cookie']) as any : {}
         const response: any = await $fetch('/api/user/vigitech/incident-list', {
+          headers,
           params
         })
         if (response.success) {
@@ -308,7 +314,8 @@ export const useUserVigitechStore = defineStore('userVigitech', {
       this.loadingTrash = true
       this.error = null
       try {
-        const response: any = await $fetch('/api/user/vigitech/trash-list')
+        const headers = import.meta.server ? useRequestHeaders(['cookie']) as any : {}
+        const response: any = await $fetch('/api/user/vigitech/trash-list', { headers })
         if (response.success) {
           this.trashedIncidents = response.data
         } else {
@@ -360,7 +367,9 @@ export const useUserVigitechStore = defineStore('userVigitech', {
       this.loading = true
       this.error = null
       try {
+        const headers = import.meta.server ? useRequestHeaders(['cookie']) as any : {}
         const response: any = await $fetch('/api/user/vigitech/incident-myReactions', {
+          headers,
           params
         })
         if (response.success) {

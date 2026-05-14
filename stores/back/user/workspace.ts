@@ -28,7 +28,8 @@ export const useWorkspaceStore = defineStore('workspace', {
       this.loading = true
       this.error = null
       try {
-        const response = await $fetch<{ success: boolean; workspaces: Workspace[] }>('/api/user/workspace/list')
+        const headers = import.meta.server ? useRequestHeaders(['cookie']) as any : {}
+        const response = await $fetch<{ success: boolean; workspaces: Workspace[] }>('/api/user/workspace/list', { headers })
         if (response.success) {
           this.workspaces = response.workspaces
         }
@@ -45,7 +46,9 @@ export const useWorkspaceStore = defineStore('workspace', {
       this.loading = true
       this.error = null
       try {
+        const headers = import.meta.server ? useRequestHeaders(['cookie']) as any : {}
         const response = await $fetch<{ success: boolean; workspace: Workspace; members: WorkspaceMember[] }>('/api/user/workspace/get', {
+          headers,
           query: { id }
         })
         if (response.success) {

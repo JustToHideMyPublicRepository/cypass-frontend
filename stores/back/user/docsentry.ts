@@ -138,6 +138,7 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
         if (filters.certification_mode && filters.certification_mode !== 'all') query.certification_mode = filters.certification_mode
         if (filters.document_category && filters.document_category !== 'all') query.document_category = filters.document_category
 
+        const headers = import.meta.server ? useRequestHeaders(['cookie']) as any : {}
         const response = await $fetch<{
           success: boolean;
           data: {
@@ -150,6 +151,7 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
             }
           }
         }>('/api/user/docsentry/list-documents', {
+          headers,
           query
         })
         if (response.success) {
@@ -177,7 +179,9 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
         const query: any = { id, user_workspace_id: wsStore.activeWorkspaceId }
         if (sort) query.sort = sort
         if (search) query.search = search
+        const headers = import.meta.server ? useRequestHeaders(['cookie']) as any : {}
         const response = await $fetch<{ success: boolean; data: DocumentDetail }>('/api/user/docsentry/get', {
+          headers,
           query
         })
         if (response.success) {
@@ -346,7 +350,9 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
         const previousWeekEnd = endOfWeek(subWeeks(now, 1), { weekStartsOn: 1 })
 
         const wsStore = useWorkspaceStore()
+        const headers = import.meta.server ? useRequestHeaders(['cookie']) as any : {}
         const response = await $fetch<any>('/api/user/docsentry/list-documents', {
+          headers,
           query: { limit: 100, offset: 0, user_workspace_id: wsStore.activeWorkspaceId }
         })
 
@@ -377,6 +383,7 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
       this.loading = true
       try {
         const wsStore = useWorkspaceStore()
+        const headers = import.meta.server ? useRequestHeaders(['cookie']) as any : {}
         const response = await $fetch<{
           success: boolean;
           data: {
@@ -389,6 +396,7 @@ export const useUserDocsentryStore = defineStore('userDocsentry', {
             }
           }
         }>('/api/user/docsentry/list-archived', {
+          headers,
           query: { limit, offset, user_workspace_id: wsStore.activeWorkspaceId }
         })
         if (response.success) {
