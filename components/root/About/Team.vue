@@ -80,6 +80,27 @@ const socialIcons: Record<string, any> = {
 // Membres de l'équipe
 const team = [
   {
+    name: "Charmaine YEBADOKPO",
+    role: "Responsable Sécurité (CISO)",
+    image: getTeamImageUrl("CharmaineYebadokpo.png"),
+    delay: 200,
+    quote: "Anticiper les menaces pour garantir la résilience de vos systèmes.",
+    socials: [
+      { name: 'LinkedIn', url: getLinkedinUrl("charmaine-a-yebadokpo-586aba1b2") },
+      { name: 'Facebook', url: getFacebookUrl("yeb.charme") },
+    ]
+  },
+  {
+    name: "Christelle AKIOLA",
+    role: "Développeuse front-end",
+    image: getTeamImageUrl("ChristelleAkiola.png"),
+    delay: 300,
+    quote: "Allier esthétique moderne, performance et sécurité de l'interface.",
+    socials: [
+      { name: 'Facebook', url: getFacebookUrl("naomie.abiodoun") },
+    ]
+  },
+  {
     name: "Steve Aster AFOVO",
     role: "Responsable Recherche & Développement (R&D)",
     image: getTeamImageUrl("SteveAsterAfovo.png"),
@@ -103,17 +124,7 @@ const team = [
       { name: 'X', url: getXUrl("elisee_atonde") },
     ]
   },
-  {
-    name: "Charmaine YEBADOKPO",
-    role: "Responsable Sécurité (CISO)",
-    image: getTeamImageUrl("CharmaineYebadokpo.png"),
-    delay: 200,
-    quote: "Anticiper les menaces pour garantir la résilience de vos systèmes.",
-    socials: [
-      { name: 'LinkedIn', url: getLinkedinUrl("charmaine-a-yebadokpo-586aba1b2") },
-      { name: 'Facebook', url: getFacebookUrl("yeb.charme") },
-    ]
-  },
+
   {
     name: "Maurice Codjo",
     role: "Product Owner & Dev FullStack",
@@ -125,15 +136,6 @@ const team = [
       { name: 'Facebook', url: getFacebookUrl("profile.php?id=100070643959821") }
     ]
   },
-  {
-    name: "Christelle AKIOLA",
-    role: "Développeuse front-end",
-    image: getTeamImageUrl("ChristelleAkiola.png"),
-    delay: 300,
-    quote: "Allier esthétique moderne, performance et sécurité de l'interface.",
-    socials: [
-      { name: 'Facebook', url: getFacebookUrl("naomie.abiodoun") },
-    ]
-  },
+
 ]
 </script>
