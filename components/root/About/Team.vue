@@ -10,7 +10,7 @@
         </div>
       </div>
 
-      <div class="grid md:grid-cols-2 lg:grid-cols-5 gap-6">
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div v-for="member in team" :key="member.name" class="group relative animate-fade-up"
           :style="{ animationDelay: `${member.delay}ms` }">
           <UiAppFrame type="card" :title="member.role" :glass="true" class="h-full">
