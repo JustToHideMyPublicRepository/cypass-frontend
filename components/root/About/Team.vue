@@ -49,7 +49,7 @@
                     <div class="flex gap-1.5 ml-auto shrink-0">
                       <a v-for="(social, sIdx) in member.socials" :key="social.name" :href="social.url" target="_blank"
                         rel="noopener noreferrer"
-                        class="p-2 bg-ashAct hover:bg-ash text-textClr hover:text-primary rounded-xl backdrop-blur-md transition-all duration-300 text-slate-300 border border-white/5 hover:scale-110 flex items-center justify-center"
+                        class="p-2 bg-ashAct hover:bg-ash text-textClr hover:text-primary rounded-xl backdrop-blur-md transition-all duration-300 border border-hsa/5 hover:scale-110 flex items-center justify-center"
                         :title="social.name" :style="{ transitionDelay: `${sIdx * 50}ms` }">
                         <component :is="socialIcons[social.name]" class="w-3.5 h-3.5" />
                       </a>
@@ -60,7 +60,7 @@
                 <!-- Details -->
                 <div class="px-1 flex flex-col justify-between flex-grow">
                   <div class="mb-3">
-                    <h4 class="text-lg font-bold text-white group-hover:text-primary transition-colors duration-300">
+                    <h4 class="text-lg font-bold group-hover:text-primary transition-colors duration-300">
                       {{ member.name }}
                     </h4>
                   </div>
