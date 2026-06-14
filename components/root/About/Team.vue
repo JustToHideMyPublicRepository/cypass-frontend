@@ -66,7 +66,7 @@
                   </div>
                   <div>
                     <span
-                      class="inline-block px-3 py-1 text-[10px] font-bold text-primary bg-primary/10 border border-primary/20 rounded-lg uppercase tracking-wider">
+                      class="inline-block px-3 py-1 text-[10px] font-bold group-hover:text-primary bg-hsa/10 group-hover:bg-primary/10 border border-hsa/20 group-hover:border-primary/20 rounded-lg uppercase tracking-wider">
                       {{ member.role }}
                     </span>
                   </div>
