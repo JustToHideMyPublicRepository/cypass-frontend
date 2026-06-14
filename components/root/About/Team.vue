@@ -18,12 +18,7 @@
           idx === 4 ? 'md:col-span-2 lg:col-span-2 md:max-w-md md:mx-auto w-full' : ''
         ]" :style="{ animationDelay: `${member.delay}ms` }">
 
-          <!-- Cyber Glowing Background -->
-          <div
-            class="absolute -inset-px rounded-3xl bg-gradient-to-r from-primary/30 to-secondary/30 opacity-0 group-hover:opacity-100 blur-xl transition-all duration-500 -z-10">
-          </div>
-
-          <!-- UiAppFrame Container -->
+          <!-- Container -->
           <UiAppFrame type="card" :title="member.role" :glass="true"
             class="h-full hover:scale-[1.01] transition-all duration-300" padding="p-5">
             <!-- Card Content -->
