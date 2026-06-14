@@ -1,38 +1,97 @@
 <template>
-  <section class="py-12 md:py-20 relative overflow-hidden">
-    <!-- Contenu de la section Équipe -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <section class="py-126 md:py-24 relative overflow-hidden bg-slate-950/20">
+    <!-- Decorative Ambient Glows -->
+    <div
+      class="absolute top-1/4 left-1/10 w-72 md:w-96 h-72 md:h-96 bg-primary/10 rounded-full blur-3xl pointer-events-none -z-10 animate-pulse-slow">
+    </div>
+    <div
+      class="absolute bottom-1/4 right-1/10 w-72 md:w-96 h-72 md:h-96 bg-secondary/15 rounded-full blur-3xl pointer-events-none -z-10 animate-pulse-slower">
+    </div>
 
-      <div class="flex flex-col md:flex-row justify-between items-end mb-10 md:mb-12 gap-6 animate-fade-up">
-        <div>
-          <h3 class="mb-2">L'Équipe CYPASS</h3>
-          <p class="max-w-xl">Des experts passionnés par la sécurité et déterminés à faire la différence.</p>
-        </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <!-- Section Header -->
+      <div class="flex flex-col items-center text-center mb-16 md:mb-20 animate-fade-up">
+        <span class="badge badge-primary mb-4">L'Équipe CYPASS</span>
+        <h2
+          class="text-3xl md:text-5xl font-extrabold mb-4 bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
+          Des experts dévoués à votre sécurité
+        </h2>
+        <p class="max-w-2xl text-slate-400">
+          Une synergie de talents passionnés par la protection de vos actifs numériques et déterminés à façonner un
+          cyberespace de confiance.
+        </p>
       </div>
 
-      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div v-for="member in team" :key="member.name" class="group relative animate-fade-up"
-          :style="{ animationDelay: `${member.delay}ms` }">
-          <UiAppFrame type="card" :title="member.role" :glass="true" class="h-full">
-            <div class="p-4 relative">
-              <div class="aspect-[4/5] rounded-xl overflow-hidden mb-4 relative">
-                <img :src="member.image" :alt="member.name"
-                  class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 transform group-hover:scale-110" />
+      <!-- Team Grid (Asymmetrical Layout for 5 members) -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 max-w-6xl mx-auto">
+        <div v-for="(member, idx) in team" :key="member.name" class="group relative animate-fade-up" :class="[
+          idx < 2 ? 'lg:col-span-3 col-span-1' : 'lg:col-span-2 col-span-1',
+          idx === 4 ? 'md:col-span-2 lg:col-span-2 md:max-w-md md:mx-auto w-full' : ''
+        ]" :style="{ animationDelay: `${member.delay}ms` }">
+
+          <!-- Cyber Glowing Background -->
+          <div
+            class="absolute -inset-px rounded-3xl bg-gradient-to-r from-primary/30 to-secondary/30 opacity-0 group-hover:opacity-100 blur-xl transition-all duration-500 -z-10">
+          </div>
+
+          <!-- Card Container -->
+          <div
+            class="relative h-full rounded-3xl p-[1px] bg-gradient-to-b from-white/10 to-white/5 hover:from-primary/40 hover:to-secondary/40 transition-all duration-500 shadow-xl">
+            <div
+              class="bg-slate-900/80 backdrop-blur-xl rounded-[23px] p-6 h-full flex flex-col justify-between overflow-hidden relative border border-white/5">
+
+              <!-- Card Content -->
+              <div class="flex flex-col h-full justify-between">
+                <!-- Image Container -->
                 <div
-                  class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                  <div class="flex gap-2">
-                    <a v-for="social in member.socials" :key="social.name" :href="social.url" target="_blank"
-                      rel="noopener noreferrer"
-                      class="p-2 bg-white/20 hover:bg-white/40 rounded-full backdrop-blur-sm transition-colors text-white"
-                      :title="social.name">
-                      <component :is="socialIcons[social.name]" class="w-4 h-4" />
-                    </a>
+                  class="aspect-[4/5] rounded-2xl overflow-hidden mb-6 relative group-hover:shadow-lg group-hover:shadow-primary/5 transition-all duration-500">
+                  <img :src="member.image" :alt="member.name"
+                    class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 ease-out transform group-hover:scale-105" />
+
+                  <!-- Subtle vignette overlay -->
+                  <div
+                    class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-500">
+                  </div>
+
+                  <!-- Quote and Socials on Image Overlay -->
+                  <div class="absolute bottom-4 left-4 right-4 flex justify-between items-end">
+                    <!-- Quote (revealed on hover) -->
+                    <p
+                      class="text-[11px] text-slate-200 italic max-w-[75%] line-clamp-3 leading-snug pr-2 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-500">
+                      "{{ member.quote }}"
+                    </p>
+
+                    <!-- Socials -->
+                    <div class="flex gap-1.5 ml-auto shrink-0">
+                      <a v-for="(social, sIdx) in member.socials" :key="social.name" :href="social.url" target="_blank"
+                        rel="noopener noreferrer"
+                        class="p-2 bg-slate-950/80 hover:bg-primary hover:text-slate-950 rounded-xl backdrop-blur-md transition-all duration-300 text-slate-300 border border-white/5 hover:scale-110 flex items-center justify-center"
+                        :title="social.name" :style="{ transitionDelay: `${sIdx * 50}ms` }">
+                        <component :is="socialIcons[social.name]" class="w-3.5 h-3.5" />
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Details -->
+                <div class="px-1 flex flex-col justify-between flex-grow">
+                  <div class="mb-3">
+                    <h4 class="text-lg font-bold text-white group-hover:text-primary transition-colors duration-300">
+                      {{ member.name }}
+                    </h4>
+                  </div>
+                  <div>
+                    <span
+                      class="inline-block px-3 py-1 text-[10px] font-bold text-primary bg-primary/10 border border-primary/20 rounded-lg uppercase tracking-wider">
+                      {{ member.role }}
+                    </span>
                   </div>
                 </div>
               </div>
-              <span class="font-bold">{{ member.name }}</span>
+
             </div>
-          </UiAppFrame>
+          </div>
+
         </div>
       </div>
     </div>
@@ -56,6 +115,7 @@ const team = [
     role: "Responsable Recherche & Développement (R&D)",
     image: getTeamImageUrl("SteveAsterAfovo.png"),
     delay: 0,
+    quote: "Innover aujourd'hui pour concevoir les remparts de demain.",
     socials: [
       { name: 'LinkedIn', url: getLinkedinUrl("SteveAsterAfovo") },
       { name: 'Facebook', url: getFacebookUrl("SteveAsterAfovo1") },
@@ -67,6 +127,7 @@ const team = [
     role: "Responsable Technique (CTO)",
     image: getTeamImageUrl("EliseeAtonde.png"),
     delay: 100,
+    quote: "La robustesse technique est la fondation de la confiance numérique.",
     socials: [
       { name: 'LinkedIn', url: getLinkedinUrl("elisée-atonde-7b189a1bb") },
       { name: 'Facebook', url: getFacebookUrl("profile.php?id=100072329951064") },
@@ -78,6 +139,7 @@ const team = [
     role: "Responsable Sécurité (CISO)",
     image: getTeamImageUrl("CharmaineYebadokpo.png"),
     delay: 200,
+    quote: "Anticiper les menaces pour garantir la résilience de vos systèmes.",
     socials: [
       { name: 'LinkedIn', url: getLinkedinUrl("charmaine-a-yebadokpo-586aba1b2") },
       { name: 'Facebook', url: getFacebookUrl("yeb.charme") },
@@ -85,9 +147,10 @@ const team = [
   },
   {
     name: "Christelle AKIOLA",
-    role: "Développeuse fronten-end",
+    role: "Développeuse front-end",
     image: getTeamImageUrl("ChristelleAkiola.png"),
     delay: 300,
+    quote: "Allier esthétique moderne, performance et sécurité de l'interface.",
     socials: [
       { name: 'Facebook', url: getFacebookUrl("naomie.abiodoun") },
     ]
@@ -97,6 +160,7 @@ const team = [
     role: "Product Owner & Dev FullStack",
     image: getTeamImageUrl("MauriceCodjo.png"),
     delay: 400,
+    quote: "Traduire les besoins métiers en fonctionnalités intuitives et sécurisées.",
     socials: [
       { name: 'LinkedIn', url: getLinkedinUrl("maurice-codjo-6a82b82a3/") },
       { name: 'Facebook', url: getFacebookUrl("profile.php?id=100070643959821") }
