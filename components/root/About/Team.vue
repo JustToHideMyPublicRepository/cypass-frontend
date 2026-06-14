@@ -1,12 +1,15 @@
 <template>
   <section class="py-12 md:py-20 relative overflow-hidden bg-bgClr">
+    <!-- Decorative Ambient Glows -->
+    <div class="absolute top-1/4 left-1/10 w-72 md:w-96 h-72 md:h-96 bg-primary/10 rounded-full blur-3xl pointer-events-none -z-10 animate-pulse-slow"></div>
+    <div class="absolute bottom-1/4 right-1/10 w-72 md:w-96 h-72 md:h-96 bg-secondary/15 rounded-full blur-3xl pointer-events-none -z-10 animate-pulse-slower"></div>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       <!-- Section Header -->
-      <div class="flex flex-col items-center text-center mb-8 animate-fade-up">
+      <div class="flex flex-col items-center text-center mb-12 animate-fade-up">
         <span class="badge badge-primary mb-4">L'Équipe CYPASS</span>
         <h3>Des experts dévoués à votre sécurité</h3>
-        <p>
+        <p class="max-w-2xl mt-2 text-hsa">
           Une synergie de talents passionnés par la protection de vos actifs numériques et déterminés à façonner un
           cyberespace de confiance.
         </p>
@@ -19,61 +22,57 @@
           idx === 4 ? 'md:col-span-2 lg:col-span-2 md:max-w-md md:mx-auto w-full' : ''
         ]" :style="{ animationDelay: `${member.delay}ms` }">
 
-          <!-- Card Container -->
-          <div
-            class="relative h-full rounded-3xl p-[1px] bg-ashAct hover:bg-hsa/50 transition-all duration-500 shadow-xl">
-            <div
-              class="bg-ash backdrop-blur-xl rounded-[23px] p-6 h-full flex flex-col justify-between overflow-hidden relative">
+          <!-- Cyber Glowing Background -->
+          <div class="absolute -inset-px rounded-3xl bg-gradient-to-r from-primary/30 to-secondary/30 opacity-0 group-hover:opacity-100 blur-xl transition-all duration-500 -z-10"></div>
 
-              <!-- Card Content -->
-              <div class="flex flex-col h-full justify-between">
-                <!-- Image Container -->
+          <!-- UiAppFrame Container -->
+          <UiAppFrame
+            type="card"
+            :title="member.role"
+            :glass="true"
+            class="h-full hover:scale-[1.01] transition-all duration-300"
+            padding="p-5"
+          >
+            <!-- Card Content -->
+            <div class="flex flex-col h-full justify-between">
+              <!-- Image Container -->
+              <div
+                class="aspect-[4/5] rounded-2xl overflow-hidden mb-6 relative group-hover:shadow-lg group-hover:shadow-primary/5 transition-all duration-500">
+                <img :src="member.image" :alt="member.name"
+                  class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 ease-out transform group-hover:scale-105" />
+
+                <!-- Subtle vignette overlay -->
                 <div
-                  class="aspect-[4/5] rounded-2xl overflow-hidden mb-6 relative group-hover:shadow-lg group-hover:shadow-primary/5 transition-all duration-500">
-                  <img :src="member.image" :alt="member.name"
-                    class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 ease-out transform group-hover:scale-105" />
-
-                  <!-- Subtle vignette overlay -->
-                  <div
-                    class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-500">
-                  </div>
-
-                  <!-- Quote and Socials -->
-                  <div class="absolute bottom-4 left-4 right-4 flex justify-between items-end">
-                    <p
-                      class="text-White font-handwritting max-w-[75%] line-clamp-3 pr-2 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-500">
-                      "{{ member.quote }}"
-                    </p>
-
-                    <!-- Socials -->
-                    <div class="flex gap-1.5 ml-auto shrink-0">
-                      <a v-for="(social, sIdx) in member.socials" :key="social.name" :href="social.url" target="_blank"
-                        rel="noopener noreferrer"
-                        class="p-2 bg-ashAct hover:bg-ash text-textClr hover:text-primary rounded-xl backdrop-blur-md transition-all duration-300 border border-hsa/5 hover:scale-110 flex items-center justify-center"
-                        :title="social.name" :style="{ transitionDelay: `${sIdx * 50}ms` }">
-                        <component :is="socialIcons[social.name]" class="w-3.5 h-3.5" />
-                      </a>
-                    </div>
-                  </div>
+                  class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-500">
                 </div>
 
-                <!-- Details -->
-                <div class="px-1 flex flex-col justify-between flex-grow">
-                  <div class="mb-3">
-                    <h4 class="text-lg font-bold group-hover:text-primary transition-colors duration-300">
-                      {{ member.name }}
-                    </h4>
-                  </div>
-                  <div>
-                    <span
-                      class="inline-block px-3 py-1 text-[10px] font-bold group-hover:text-primary bg-hsa/10 group-hover:bg-primary/10 border border-hsa/20 group-hover:border-primary/20 rounded-lg uppercase tracking-wider">
-                      {{ member.role }}
-                    </span>
+                <!-- Quote and Socials -->
+                <div class="absolute bottom-4 left-4 right-4 flex justify-between items-end">
+                  <p
+                    class="text-white font-handwritting text-[12px] max-w-[75%] line-clamp-3 pr-2 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-500">
+                    "{{ member.quote }}"
+                  </p>
+
+                  <!-- Socials -->
+                  <div class="flex gap-1.5 ml-auto shrink-0">
+                    <a v-for="(social, sIdx) in member.socials" :key="social.name" :href="social.url" target="_blank"
+                      rel="noopener noreferrer"
+                      class="p-2 bg-slate-950/80 hover:bg-primary hover:text-slate-950 rounded-xl backdrop-blur-md transition-all duration-300 border border-white/5 hover:scale-110 flex items-center justify-center text-slate-300"
+                      :title="social.name" :style="{ transitionDelay: `${sIdx * 50}ms` }">
+                      <component :is="socialIcons[social.name]" class="w-3.5 h-3.5" />
+                    </a>
                   </div>
                 </div>
               </div>
+
+              <!-- Details -->
+              <div class="px-1 flex flex-col justify-between flex-grow">
+                <h4 class="text-lg font-bold group-hover:text-primary transition-colors duration-300">
+                  {{ member.name }}
+                </h4>
+              </div>
             </div>
-          </div>
+          </UiAppFrame>
         </div>
       </div>
     </div>
