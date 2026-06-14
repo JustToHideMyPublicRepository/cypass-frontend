@@ -63,7 +63,7 @@ const team = [
     socials: [
       { name: 'LinkedIn', url: `${lkBase}/SteveAsterAfovo` },
       { name: 'Facebook', url: `${fbBase}/SteveAsterAfovo1` },
-      { name: 'X', url: `${xBase}/SteveAsterAfovo` }
+      { name: 'X', url: `${xBase}/SteveAsterAfovo` },
     ]
   },
   {
@@ -74,7 +74,7 @@ const team = [
     socials: [
       { name: 'LinkedIn', url: `${lkBase}/elisée-atonde-7b189a1bb` },
       { name: 'Facebook', url: `${fbBase}/profile.php?id=100072329951064` },
-      { name: 'X', url: `${xBase}/elisee_atonde` }
+      { name: 'X', url: `${xBase}/elisee_atonde` },
     ]
   },
   {
@@ -84,7 +84,7 @@ const team = [
     delay: 200,
     socials: [
       { name: 'LinkedIn', url: `${lkBase}/charmaine-a-yebadokpo-586aba1b2` },
-      { name: 'Facebook', url: `${fbBase}/yeb.charme` }
+      { name: 'Facebook', url: `${fbBase}/yeb.charme` },
     ]
   },
   {
@@ -93,7 +93,17 @@ const team = [
     image: `${imgBase}/ChristelleAkiola.png`,
     delay: 300,
     socials: [
-      { name: 'Facebook', url: `${fbBase}/naomie.abiodoun` }
+      { name: 'Facebook', url: `${fbBase}/naomie.abiodoun` },
+    ]
+  },
+  {
+    name: "Maurice Codjo",
+    role: "Product Owner & Dev FullStack",
+    image: `${imgBase}/MauriceCodjo.png`,
+    delay: 400,
+    socials: [
+      { name: 'LinkedIn', url: `${lkBase}/maurice-codjo-6a82b82a3/` },
+      { name: 'Facebook', url: `${fbBase}/profile.php?id=100070643959821` }
     ]
   },
 ]
