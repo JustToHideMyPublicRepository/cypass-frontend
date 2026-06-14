@@ -1,5 +1,5 @@
 <template>
-  <section class="py-12 md:py-20 relative overflow-hidden">
+  <section class="py-12 md:py-20 relative overflow-hidden bg-bgClr">
     <!-- Decorative Ambient Glows -->
     <div
       class="absolute top-1/4 left-1/10 w-72 md:w-96 h-72 md:h-96 bg-primary/10 rounded-full blur-3xl pointer-events-none -z-10 animate-pulse-slow">
@@ -12,7 +12,7 @@
       <!-- Section Header -->
       <div class="flex flex-col items-center text-center mb-16 md:mb-20 animate-fade-up">
         <span class="badge badge-primary mb-4">L'Équipe CYPASS</span>
-        <h3 class="mb-4"> Des experts dévoués à votre sécurité </h3>
+        <h3>Des experts dévoués à votre sécurité</h3>
         <p class="max-w-2xl text-slate-400">
           Une synergie de talents passionnés par la protection de vos actifs numériques et déterminés à façonner un
           cyberespace de confiance.
