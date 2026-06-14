@@ -6,7 +6,7 @@ export const X_BASE = 'https://X.com'
 
 // Helper function to resolve team member image URLs
 export function getTeamImageUrl(filename: string): string {
-  return `${IMG_BASE}/${filename}`
+  return `${IMG_BASE}/Team/${filename}`
 }
 
 // Helper functions for social links
