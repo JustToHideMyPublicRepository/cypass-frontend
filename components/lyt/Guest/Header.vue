@@ -7,12 +7,23 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
         <div class="flex justify-between items-center h-full">
           <!-- Logo -->
-          <NuxtLink to="/" class="flex items-center group">
-            <img
-              :src="logoUrl"
-              alt="Logo CYPASS"
-              class="h-8 w-auto object-contain transition-all duration-300"
-            />
+          <NuxtLink to="/" class="flex items-center group h-8">
+            <Transition
+              mode="out-in"
+              enter-active-class="transition-all duration-300 ease-out"
+              enter-from-class="opacity-0 translate-y-1 scale-95"
+              enter-to-class="opacity-100 translate-y-0 scale-100"
+              leave-active-class="transition-all duration-200 ease-in"
+              leave-from-class="opacity-100 translate-y-0 scale-100"
+              leave-to-class="opacity-0 -translate-y-1 scale-95"
+            >
+              <img
+                :key="logoUrl"
+                :src="logoUrl"
+                alt="Logo CYPASS"
+                class="h-8 w-auto object-contain"
+              />
+            </Transition>
           </NuxtLink>
 
           <!-- Search -->
