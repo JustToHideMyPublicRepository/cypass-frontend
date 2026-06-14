@@ -1,9 +1,5 @@
 <template>
   <section class="py-12 md:py-20 relative overflow-hidden bg-bgClr">
-    <!-- Decorative Ambient Glows -->
-    <div class="absolute top-1/4 left-1/10 w-72 md:w-96 h-72 md:h-96 bg-primary/10 rounded-full blur-3xl pointer-events-none -z-10 animate-pulse-slow"></div>
-    <div class="absolute bottom-1/4 right-1/10 w-72 md:w-96 h-72 md:h-96 bg-secondary/15 rounded-full blur-3xl pointer-events-none -z-10 animate-pulse-slower"></div>
-
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       <!-- Section Header -->
       <div class="flex flex-col items-center text-center mb-12 animate-fade-up">
@@ -23,16 +19,13 @@
         ]" :style="{ animationDelay: `${member.delay}ms` }">
 
           <!-- Cyber Glowing Background -->
-          <div class="absolute -inset-px rounded-3xl bg-gradient-to-r from-primary/30 to-secondary/30 opacity-0 group-hover:opacity-100 blur-xl transition-all duration-500 -z-10"></div>
+          <div
+            class="absolute -inset-px rounded-3xl bg-gradient-to-r from-primary/30 to-secondary/30 opacity-0 group-hover:opacity-100 blur-xl transition-all duration-500 -z-10">
+          </div>
 
           <!-- UiAppFrame Container -->
-          <UiAppFrame
-            type="card"
-            :title="member.role"
-            :glass="true"
-            class="h-full hover:scale-[1.01] transition-all duration-300"
-            padding="p-5"
-          >
+          <UiAppFrame type="card" :title="member.role" :glass="true"
+            class="h-full hover:scale-[1.01] transition-all duration-300" padding="p-5">
             <!-- Card Content -->
             <div class="flex flex-col h-full justify-between">
               <!-- Image Container -->
