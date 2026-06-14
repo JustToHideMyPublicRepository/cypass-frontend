@@ -1,5 +1,6 @@
 // Base URLs
 export const IMG_BASE = 'https://cdn.jsdelivr.net/gh/JustToHideMyPublicRepository/Files/Images'
+export const LOGO_BASE = `${IMG_BASE}/Logos`
 export const LK_BASE = 'https://www.linkedin.com/in'
 export const FB_BASE = 'https://www.facebook.com'
 export const X_BASE = 'https://X.com'
