@@ -4,11 +4,8 @@
       <div class="grid grid-cols-2 lg:grid-cols-6 gap-8 mb-16">
         <!-- Brand Column -->
         <div class="col-span-2 lg:col-span-2 space-y-6">
-          <div class="flex items-center gap-2">
-            <div class="w-10 h-10 rounded-xl bg-WtB flex items-center justify-center shadow-lg overflow-hidden p-0.5">
-              <img src="/img/logo.png" alt="Logo CYPASS" class="w-full h-full object-contain" />
-            </div>
-            <h4>CYPASS</h4>
+          <div class="flex items-center">
+            <img :src="logoUrl" alt="Logo CYPASS" class="h-10 w-auto object-contain" />
           </div>
           <p> Built to protect, Designed to last </p>
           <div class="flex gap-3">
@@ -83,9 +80,17 @@
   </footer>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { IconBrandX, IconBrandLinkedin, IconBrandFacebook, IconShieldCheck, IconGlobe, IconMail } from '@tabler/icons-vue'
 import { getLinkTooltip } from '~/data/shortcuts'
+import { LOGOS } from '~/utils/links'
+
+const colorMode = useColorMode()
+const isDark = computed(() => colorMode.value === 'dark')
+
+const logoUrl = computed(() => {
+  return isDark.value ? LOGOS.desktopWhite : LOGOS.desktopColor
+})
 
 const showNewsletterModal = ref(false)
 const socialLinks = ['linkedin', 'twitter', 'facebook']
