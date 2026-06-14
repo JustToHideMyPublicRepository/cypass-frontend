@@ -45,15 +45,15 @@
                 <div v-for="i in 400" :key="i" class="border-[0.5px] border-slate-700/30"></div>
               </div>
 
-              <div class="relative z-10 w-32 md:w-48 h-32 md:h-48 mb-6">
+              <div class="relative z-10 w-full max-w-[10rem] md:max-w-[12rem] aspect-square mb-6 mx-auto">
                 <!-- Animation de Cercles Concentriques -->
                 <div class="absolute inset-0 rounded-full border border-primary/30 animate-[spin_10s_linear_infinite]">
                 </div>
                 <div
-                  class="absolute inset-4 rounded-full border border-primary/50 border-t-transparent animate-[spin_3s_linear_infinite_reverse]">
+                  class="absolute inset-[8%] rounded-full border border-primary/50 border-t-transparent animate-[spin_3s_linear_infinite_reverse]">
                 </div>
                 <div
-                  class="absolute inset-8 rounded-full border-2 border-primary/80 border-b-transparent animate-[spin_5s_linear_infinite]">
+                  class="absolute inset-[16%] rounded-full border-2 border-primary/80 border-b-transparent animate-[spin_5s_linear_infinite]">
                 </div>
 
                 <!-- Bouclier Central -->
