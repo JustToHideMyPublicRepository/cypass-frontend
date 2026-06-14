@@ -7,7 +7,7 @@
         <NuxtLink to="/" class="inline-flex items-center gap-3 group">
           <div class="w-10 h-10 rounded-xl p-0.5 shadow-sm border border-ash/50 bg-WtB">
             <div class="w-full h-full bg-white rounded-[10px] flex items-center justify-center p-1">
-              <img src="/img/logo.png" alt="Cypass Logo" class="w-full h-full object-contain" />
+              <img :src="logoUrl" alt="Cypass Logo" class="w-full h-full object-contain" />
             </div>
           </div>
           <span
@@ -28,3 +28,16 @@
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import { computed } from 'vue'
+import { LOGOS } from '~/utils/links'
+
+const colorMode = useColorMode()
+const isDark = computed(() => colorMode.value === 'dark')
+
+const logoUrl = computed(() => {
+  return isDark.value ? LOGOS.mobileWhite : LOGOS.mobileColor
+})
+</script>
+
