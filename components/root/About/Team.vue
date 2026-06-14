@@ -20,8 +20,7 @@
         ]" :style="{ animationDelay: `${member.delay}ms` }">
 
           <!-- Card Container -->
-          <div
-            class="relative h-full rounded-3xl p-[1px] bg-ashAct hover:bg-BtW/20 transition-all duration-500 shadow-xl">
+          <div class="relative h-full rounded-3xl p-[1px] bg-ashAct hover:bg-ash transition-all duration-500 shadow-xl">
             <div
               class="bg-ash backdrop-blur-xl rounded-[23px] p-6 h-full flex flex-col justify-between overflow-hidden relative">
 
