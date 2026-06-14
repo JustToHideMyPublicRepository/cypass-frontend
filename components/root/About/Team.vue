@@ -49,7 +49,7 @@
                     <div class="flex gap-1.5 ml-auto shrink-0">
                       <a v-for="(social, sIdx) in member.socials" :key="social.name" :href="social.url" target="_blank"
                         rel="noopener noreferrer"
-                        class="p-2 bg-ash hover:bg-ashAct hover:text-slate-950 rounded-xl backdrop-blur-md transition-all duration-300 text-slate-300 border border-white/5 hover:scale-110 flex items-center justify-center"
+                        class="p-2 bg-ashAct hover:bg-ash text-textClr hover:text-BtW rounded-xl backdrop-blur-md transition-all duration-300 text-slate-300 border border-white/5 hover:scale-110 flex items-center justify-center"
                         :title="social.name" :style="{ transitionDelay: `${sIdx * 50}ms` }">
                         <component :is="socialIcons[social.name]" class="w-3.5 h-3.5" />
                       </a>
