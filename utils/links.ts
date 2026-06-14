@@ -24,11 +24,11 @@ export function getXUrl(username: string): string {
 
 // External Logos links
 export const LOGOS = {
-  mobileColor: 'https://cdn.jsdelivr.net/gh/JustToHideMyPublicRepository/Files/Images/logos/CYPASS-MC.png', // version mobile couleur du logo
-  mobileWhite: 'https://cdn.jsdelivr.net/gh/JustToHideMyPublicRepository/Files/Images/logos/CYPASS-MW.png', // version mobile blanc du logo
-  desktopColor: 'https://cdn.jsdelivr.net/gh/JustToHideMyPublicRepository/Files/Images/logos/CYPASS-DC.png', // version desktop couleur
-  desktopWhite: 'https://cdn.jsdelivr.net/gh/JustToHideMyPublicRepository/Files/Images/logos/CYPASS-DW.png', // version desktop blanc
-  minimalistColor: 'https://cdn.jsdelivr.net/gh/JustToHideMyPublicRepository/Files/Images/logos/CYPASS-MinimC.png', // version minimaliste couleur
-  minimalistWhite: 'https://cdn.jsdelivr.net/gh/JustToHideMyPublicRepository/Files/Images/logos/CYPASS-MinimW.png', // version minimaliste blanc
+  mobileColor: `${IMG_BASE}/logos/CYPASS-MC.png`,
+  mobileWhite: `${IMG_BASE}/logos/CYPASS-MW.png`,
+  desktopColor: `${IMG_BASE}/logos/CYPASS-DC.png`,
+  desktopWhite: `${IMG_BASE}/logos/CYPASS-DW.png`,
+  minimalistColor: `${IMG_BASE}/logos/CYPASS-MinimC.png`,
+  minimalistWhite: `${IMG_BASE}/logos/CYPASS-MinimW.png`,
   logo3D: 'https://cdn.jsdelivr.net/gh/JustToHideMyPublicRepository/Files/Images/logos/CYPASS-3D.png', // version 3D
 } as const
