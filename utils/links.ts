@@ -25,11 +25,11 @@ export function getXUrl(username: string): string {
 
 // External Logos links
 export const LOGOS = {
-  mobileColor: `${IMG_BASE}/logos/CYPASS-MC.png`,
-  mobileWhite: `${IMG_BASE}/logos/CYPASS-MW.png`,
-  desktopColor: `${IMG_BASE}/logos/CYPASS-DC.png`,
-  desktopWhite: `${IMG_BASE}/logos/CYPASS-DW.png`,
-  minimalistColor: `${IMG_BASE}/logos/CYPASS-MinimC.png`,
-  minimalistWhite: `${IMG_BASE}/logos/CYPASS-MinimW.png`,
-  logo3D: `${IMG_BASE}/logos/CYPASS-3D.png`,
+  mobileColor: `${LOGO_BASE}/CYPASS-MC.png`,
+  mobileWhite: `${LOGO_BASE}/CYPASS-MW.png`,
+  desktopColor: `${LOGO_BASE}/CYPASS-DC.png`,
+  desktopWhite: `${LOGO_BASE}/CYPASS-DW.png`,
+  minimalistColor: `${LOGO_BASE}/CYPASS-MinimC.png`,
+  minimalistWhite: `${LOGO_BASE}/CYPASS-MinimW.png`,
+  logo3D: `${LOGO_BASE}/CYPASS-3D.png`,
 } as const
