@@ -41,7 +41,7 @@
                   <!-- Quote and Socials -->
                   <div class="absolute bottom-4 left-4 right-4 flex justify-between items-end">
                     <p
-                      class="text-WtB font-handwritting max-w-[75%] line-clamp-3 pr-2 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-500">
+                      class="text-White font-handwritting max-w-[75%] line-clamp-3 pr-2 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-500">
                       "{{ member.quote }}"
                     </p>
 
