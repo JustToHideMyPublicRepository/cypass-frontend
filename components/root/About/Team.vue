@@ -41,6 +41,7 @@
 
 <script setup lang="ts">
 import { IconBrandLinkedin, IconBrandX, IconBrandFacebook } from '@tabler/icons-vue'
+import { getTeamImageUrl, getLinkedinUrl, getFacebookUrl, getXUrl } from '~/utils/links'
 
 const socialIcons: Record<string, any> = {
   LinkedIn: IconBrandLinkedin,
@@ -48,62 +49,57 @@ const socialIcons: Record<string, any> = {
   X: IconBrandX
 }
 
-const imgBase = "https://cdn.jsdelivr.net/gh/JustToHideMyPublicRepository/Files/Images"
-const lkBase = "https://www.linkedin.com/in"
-const fbBase = "https://www.facebook.com"
-const xBase = "https://X.com"
-
 // Membres de l'équipe
 const team = [
   {
     name: "Steve Aster AFOVO",
     role: "Responsable Recherche & Développement (R&D)",
-    image: `${imgBase}/SteveAsterAfovo.png`,
+    image: getTeamImageUrl("SteveAsterAfovo.png"),
     delay: 0,
     socials: [
-      { name: 'LinkedIn', url: `${lkBase}/SteveAsterAfovo` },
-      { name: 'Facebook', url: `${fbBase}/SteveAsterAfovo1` },
-      { name: 'X', url: `${xBase}/SteveAsterAfovo` },
+      { name: 'LinkedIn', url: getLinkedinUrl("SteveAsterAfovo") },
+      { name: 'Facebook', url: getFacebookUrl("SteveAsterAfovo1") },
+      { name: 'X', url: getXUrl("SteveAsterAfovo") },
     ]
   },
   {
     name: "Elisée ATONDE",
     role: "Responsable Technique (CTO)",
-    image: `${imgBase}/EliseeAtonde.png`,
+    image: getTeamImageUrl("EliseeAtonde.png"),
     delay: 100,
     socials: [
-      { name: 'LinkedIn', url: `${lkBase}/elisée-atonde-7b189a1bb` },
-      { name: 'Facebook', url: `${fbBase}/profile.php?id=100072329951064` },
-      { name: 'X', url: `${xBase}/elisee_atonde` },
+      { name: 'LinkedIn', url: getLinkedinUrl("elisée-atonde-7b189a1bb") },
+      { name: 'Facebook', url: getFacebookUrl("profile.php?id=100072329951064") },
+      { name: 'X', url: getXUrl("elisee_atonde") },
     ]
   },
   {
     name: "Charmaine YEBADOKPO",
     role: "Responsable Sécurité (CISO)",
-    image: `${imgBase}/CharmaineYebadokpo.png`,
+    image: getTeamImageUrl("CharmaineYebadokpo.png"),
     delay: 200,
     socials: [
-      { name: 'LinkedIn', url: `${lkBase}/charmaine-a-yebadokpo-586aba1b2` },
-      { name: 'Facebook', url: `${fbBase}/yeb.charme` },
+      { name: 'LinkedIn', url: getLinkedinUrl("charmaine-a-yebadokpo-586aba1b2") },
+      { name: 'Facebook', url: getFacebookUrl("yeb.charme") },
     ]
   },
   {
     name: "Christelle AKIOLA",
     role: "Développeuse fronten-end",
-    image: `${imgBase}/ChristelleAkiola.png`,
+    image: getTeamImageUrl("ChristelleAkiola.png"),
     delay: 300,
     socials: [
-      { name: 'Facebook', url: `${fbBase}/naomie.abiodoun` },
+      { name: 'Facebook', url: getFacebookUrl("naomie.abiodoun") },
     ]
   },
   {
     name: "Maurice Codjo",
     role: "Product Owner & Dev FullStack",
-    image: `${imgBase}/MauriceCodjo.png`,
+    image: getTeamImageUrl("MauriceCodjo.png"),
     delay: 400,
     socials: [
-      { name: 'LinkedIn', url: `${lkBase}/maurice-codjo-6a82b82a3/` },
-      { name: 'Facebook', url: `${fbBase}/profile.php?id=100070643959821` }
+      { name: 'LinkedIn', url: getLinkedinUrl("maurice-codjo-6a82b82a3/") },
+      { name: 'Facebook', url: getFacebookUrl("profile.php?id=100070643959821") }
     ]
   },
 ]

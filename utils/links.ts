@@ -31,5 +31,4 @@ export const LOGOS = {
   minimalistColor: `${IMG_BASE}/logos/CYPASS-MinimC.png`,
   minimalistWhite: `${IMG_BASE}/logos/CYPASS-MinimW.png`,
   logo3D: `${IMG_BASE}/logos/CYPASS-3D.png`,
-  logo3sD: 'https://cdn.jsdelivr.net/gh/JustToHideMyPublicRepository/Files/Images/logos/CYPASS-3D.png', // version 3D
 } as const
