@@ -101,18 +101,6 @@ const team = [
     ]
   },
   {
-    name: "Steve Aster AFOVO",
-    role: "Responsable Recherche & Développement (R&D)",
-    image: getTeamImageUrl("SteveAsterAfovo.png"),
-    delay: 0,
-    quote: "Innover aujourd'hui pour concevoir les remparts de demain.",
-    socials: [
-      { name: 'LinkedIn', url: getLinkedinUrl("SteveAsterAfovo") },
-      { name: 'Facebook', url: getFacebookUrl("SteveAsterAfovo1") },
-      { name: 'X', url: getXUrl("SteveAsterAfovo") },
-    ]
-  },
-  {
     name: "Elisée ATONDE",
     role: "Responsable Technique (CTO)",
     image: getTeamImageUrl("EliseeAtonde.png"),
@@ -136,6 +124,19 @@ const team = [
       { name: 'Facebook', url: getFacebookUrl("profile.php?id=100070643959821") }
     ]
   },
+  {
+    name: "Steve Aster AFOVO",
+    role: "Responsable Recherche & Développement (R&D)",
+    image: getTeamImageUrl("SteveAsterAfovo.png"),
+    delay: 0,
+    quote: "Innover aujourd'hui pour concevoir les remparts de demain.",
+    socials: [
+      { name: 'LinkedIn', url: getLinkedinUrl("SteveAsterAfovo") },
+      { name: 'Facebook', url: getFacebookUrl("SteveAsterAfovo1") },
+      { name: 'X', url: getXUrl("SteveAsterAfovo") },
+    ]
+  },
+
 
 ]
 </script>
