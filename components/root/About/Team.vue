@@ -13,13 +13,13 @@
       <div class="flex flex-col items-center text-center mb-16 md:mb-20 animate-fade-up">
         <span class="badge badge-primary mb-4">L'Équipe CYPASS</span>
         <h3>Des experts dévoués à votre sécurité</h3>
-        <p class="max-w-2xl text-slate-400">
+        <p>
           Une synergie de talents passionnés par la protection de vos actifs numériques et déterminés à façonner un
           cyberespace de confiance.
         </p>
       </div>
 
-      <!-- Team Grid (Asymmetrical Layout for 5 members) -->
+      <!-- Team Grid -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 max-w-6xl mx-auto">
         <div v-for="(member, idx) in team" :key="member.name" class="group relative animate-fade-up" :class="[
           idx < 2 ? 'lg:col-span-3 col-span-1' : 'lg:col-span-2 col-span-1',
