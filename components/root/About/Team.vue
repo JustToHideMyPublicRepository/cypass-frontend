@@ -19,16 +19,11 @@
           idx === 4 ? 'md:col-span-2 lg:col-span-2 md:max-w-md md:mx-auto w-full' : ''
         ]" :style="{ animationDelay: `${member.delay}ms` }">
 
-          <!-- Cyber Glowing Background -->
-          <div
-            class="absolute -inset-px rounded-3xl bg-gradient-to-r from-primary/30 to-secondary/30 opacity-0 group-hover:opacity-100 blur-xl transition-all duration-500 -z-10">
-          </div>
-
           <!-- Card Container -->
           <div
             class="relative h-full rounded-3xl p-[1px] bg-gradient-to-b from-white/10 to-white/5 hover:from-primary/40 hover:to-secondary/40 transition-all duration-500 shadow-xl">
             <div
-              class="bg-slate-900/80 backdrop-blur-xl rounded-[23px] p-6 h-full flex flex-col justify-between overflow-hidden relative border border-white/5">
+              class="bg-BtW backdrop-blur-xl rounded-[23px] p-6 h-full flex flex-col justify-between overflow-hidden relative border border-white/5">
 
               <!-- Card Content -->
               <div class="flex flex-col h-full justify-between">
