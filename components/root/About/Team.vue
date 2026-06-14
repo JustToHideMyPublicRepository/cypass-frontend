@@ -38,11 +38,10 @@
                     class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-500">
                   </div>
 
-                  <!-- Quote and Socials on Image Overlay -->
+                  <!-- Quote and Socials -->
                   <div class="absolute bottom-4 left-4 right-4 flex justify-between items-end">
-                    <!-- Quote (revealed on hover) -->
                     <p
-                      class="text-[11px] text-slate-200 italic max-w-[75%] line-clamp-3 leading-snug pr-2 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-500">
+                      class="text-WtB font-handwritting max-w-[75%] line-clamp-3 leading-snug pr-2 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-500">
                       "{{ member.quote }}"
                     </p>
 
