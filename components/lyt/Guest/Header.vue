@@ -10,12 +10,12 @@
           <NuxtLink to="/" class="flex items-center group h-8">
             <Transition
               mode="out-in"
-              enter-active-class="transition-all duration-300 ease-out"
-              enter-from-class="opacity-0 translate-y-1 scale-95"
-              enter-to-class="opacity-100 translate-y-0 scale-100"
-              leave-active-class="transition-all duration-200 ease-in"
-              leave-from-class="opacity-100 translate-y-0 scale-100"
-              leave-to-class="opacity-0 -translate-y-1 scale-95"
+              enter-active-class="transition-all duration-500 delay-100 ease-out"
+              enter-from-class="opacity-0 translate-x-6 scale-95"
+              enter-to-class="opacity-100 translate-x-0 scale-100"
+              leave-active-class="transition-all duration-300 ease-in"
+              leave-from-class="opacity-100 translate-x-0 scale-100"
+              leave-to-class="opacity-0 -translate-x-6 scale-95"
             >
               <img
                 :key="logoUrl"
