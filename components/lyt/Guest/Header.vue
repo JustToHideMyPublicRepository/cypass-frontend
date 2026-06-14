@@ -7,17 +7,12 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
         <div class="flex justify-between items-center h-full">
           <!-- Logo -->
-          <NuxtLink to="/" class="flex items-center gap-2 group">
-            <div class="relative w-9 h-9">
-              <div
-                class="relative w-full h-full rounded-lg bg-white flex items-center justify-center overflow-hidden p-0.5">
-                <img src="/img/logo.png" alt="Logo CYPASS" class="w-full h-full object-contain" />
-              </div>
-            </div>
-            <span class="text-xl font-bold tracking-tight group-hover:text-BtW transition-all duration-300"
-              :class="scrolled ? 'opacity-0 max-w-0 pointer-events-none' : 'opacity-100 max-w-[200px] ml-2'">
-              CYPASS
-            </span>
+          <NuxtLink to="/" class="flex items-center group">
+            <img
+              :src="logoUrl"
+              alt="Logo CYPASS"
+              class="h-8 w-auto object-contain transition-all duration-300"
+            />
           </NuxtLink>
 
           <!-- Search -->
@@ -87,13 +82,25 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { IconMenu2, IconX } from '@tabler/icons-vue'
 import { useAuthStore } from '~/stores/back/user/auth'
 import { useProfilStore } from '~/stores/back/user/profil'
 import { useWorkspaceStore } from '~/stores/back/user/workspace'
 import { getLinkTooltip } from '~/data/shortcuts'
 import { useToastStore } from '~/stores/front/toast'
+import { LOGOS } from '~/utils/links'
+
+const colorMode = useColorMode()
+const isDark = computed(() => colorMode.value === 'dark')
+
+const logoUrl = computed(() => {
+  if (scrolled.value) {
+    return isDark.value ? LOGOS.mobileWhite : LOGOS.mobileColor
+  } else {
+    return isDark.value ? LOGOS.desktopWhite : LOGOS.desktopColor
+  }
+})
 
 const route = useRoute()
 
