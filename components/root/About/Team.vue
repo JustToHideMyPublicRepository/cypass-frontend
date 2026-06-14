@@ -112,7 +112,6 @@ const team = [
       { name: 'X', url: getXUrl("elisee_atonde") },
     ]
   },
-
   {
     name: "Maurice Codjo",
     role: "Product Owner & Dev FullStack",
@@ -136,7 +135,5 @@ const team = [
       { name: 'X', url: getXUrl("SteveAsterAfovo") },
     ]
   },
-
-
 ]
 </script>
