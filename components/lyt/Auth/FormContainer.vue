@@ -5,11 +5,7 @@
       <!-- Logo et Lien vers l'Accueil -->
       <div class="mb-8 md:mb-10 animate-fade-down">
         <NuxtLink to="/" class="inline-flex items-center gap-3 group">
-          <div class="w-10 h-10 rounded-xl p-0.5 shadow-sm border border-ash/50 bg-WtB">
-            <div class="w-full h-full bg-white rounded-[10px] flex items-center justify-center p-1">
-              <img :src="logoUrl" alt="Cypass Logo" class="w-full h-full object-contain" />
-            </div>
-          </div>
+          <img :src="logoUrl" alt="Cypass Logo" class="h-10 w-auto object-contain" />
           <span
             class="text-2xl font-black tracking-tight text-BtW group-hover:text-primary transition-colors">CYPASS</span>
         </NuxtLink>
