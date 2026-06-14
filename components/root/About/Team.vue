@@ -3,7 +3,7 @@
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       <!-- Section Header -->
-      <div class="flex flex-col items-center text-center mb-4 animate-fade-up">
+      <div class="flex flex-col items-center text-center mb-8 animate-fade-up">
         <span class="badge badge-primary mb-4">L'Équipe CYPASS</span>
         <h3>Des experts dévoués à votre sécurité</h3>
         <p>
