@@ -21,9 +21,9 @@
 
           <!-- Card Container -->
           <div
-            class="relative h-full rounded-3xl p-[1px] bg-gradient-to-b from-white/10 to-white/5 hover:from-primary/40 hover:to-secondary/40 transition-all duration-500 shadow-xl">
+            class="relative h-full rounded-3xl p-[1px] bg-ash hover:from-primary/40 hover:to-secondary/40 transition-all duration-500 shadow-xl">
             <div
-              class="bg-BtW backdrop-blur-xl rounded-[23px] p-6 h-full flex flex-col justify-between overflow-hidden relative border border-white/5">
+              class="bg-ash backdrop-blur-xl rounded-[23px] p-6 h-full flex flex-col justify-between overflow-hidden relative border border-white/5">
 
               <!-- Card Content -->
               <div class="flex flex-col h-full justify-between">
