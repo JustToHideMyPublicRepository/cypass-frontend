@@ -55,9 +55,9 @@
 
               <!-- Details -->
               <div class="px-1 flex flex-col justify-between flex-grow">
-                <h4 class="group-hover:text-primary transition-colors duration-300">
+                <h5 class="group-hover:text-primary transition-colors duration-300">
                   {{ member.name }}
-                </h4>
+                </h5>
               </div>
             </div>
           </UiAppFrame>
