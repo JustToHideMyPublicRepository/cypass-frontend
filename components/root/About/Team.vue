@@ -143,16 +143,6 @@ const team = [
     ]
   },
   {
-    name: "Christelle AKIOLA",
-    role: "Développeuse front-end",
-    image: getTeamImageUrl("ChristelleAkiola.png"),
-    delay: 300,
-    quote: "Allier esthétique moderne, performance et sécurité de l'interface.",
-    socials: [
-      { name: 'Facebook', url: getFacebookUrl("naomie.abiodoun") },
-    ]
-  },
-  {
     name: "Maurice Codjo",
     role: "Product Owner & Dev FullStack",
     image: getTeamImageUrl("MauriceCodjo.png"),
@@ -161,6 +151,16 @@ const team = [
     socials: [
       { name: 'LinkedIn', url: getLinkedinUrl("maurice-codjo-6a82b82a3/") },
       { name: 'Facebook', url: getFacebookUrl("profile.php?id=100070643959821") }
+    ]
+  },
+  {
+    name: "Christelle AKIOLA",
+    role: "Développeuse front-end",
+    image: getTeamImageUrl("ChristelleAkiola.png"),
+    delay: 300,
+    quote: "Allier esthétique moderne, performance et sécurité de l'interface.",
+    socials: [
+      { name: 'Facebook', url: getFacebookUrl("naomie.abiodoun") },
     ]
   },
 ]
