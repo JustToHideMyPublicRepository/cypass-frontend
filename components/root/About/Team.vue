@@ -41,7 +41,7 @@
                   <!-- Quote and Socials -->
                   <div class="absolute bottom-4 left-4 right-4 flex justify-between items-end">
                     <p
-                      class="text-WtB font-handwritting max-w-[75%] line-clamp-3 leading-snug pr-2 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-500">
+                      class="text-WtB font-handwritting max-w-[75%] line-clamp-3 pr-2 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-500">
                       "{{ member.quote }}"
                     </p>
 
@@ -49,7 +49,7 @@
                     <div class="flex gap-1.5 ml-auto shrink-0">
                       <a v-for="(social, sIdx) in member.socials" :key="social.name" :href="social.url" target="_blank"
                         rel="noopener noreferrer"
-                        class="p-2 bg-slate-950/80 hover:bg-primary hover:text-slate-950 rounded-xl backdrop-blur-md transition-all duration-300 text-slate-300 border border-white/5 hover:scale-110 flex items-center justify-center"
+                        class="p-2 bg-ash hover:bg-hsa hover:text-slate-950 rounded-xl backdrop-blur-md transition-all duration-300 text-slate-300 border border-white/5 hover:scale-110 flex items-center justify-center"
                         :title="social.name" :style="{ transitionDelay: `${sIdx * 50}ms` }">
                         <component :is="socialIcons[social.name]" class="w-3.5 h-3.5" />
                       </a>
