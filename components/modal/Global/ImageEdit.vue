@@ -265,21 +265,33 @@ const resetCrop = () => {
 // ─── Resize crop box (keep centered, constrained within image) ───────────────
 const resizeCrop = (delta: number) => {
   const isRect = props.cropShape === 'rectangle'
-  let newW = Math.max(minCropSize.value, Math.min(cropBoxW.value + delta, maxCropSize.value))
-  let newH = isRect ? Math.round(newW * (9 / 16)) : newW
+  const isFixed = props.cropShape === 'circle' || props.cropShape === 'square' || isRect
+  const aspectRatio = isRect ? (16 / 9) : 1
 
-  // Constrain within image bounds
-  newW = Math.min(newW, imgRenderW.value)
-  newH = isRect ? Math.min(newH, imgRenderH.value) : Math.min(newH, imgRenderH.value)
-  if (!isRect) newW = newH = Math.min(newW, newH) // Keep square
+  if (isFixed) {
+    const maxW = Math.min(maxCropSize.value, imgRenderW.value, imgRenderH.value * aspectRatio)
+    const newW = Math.max(minCropSize.value, Math.min(cropBoxW.value + delta, maxW))
+    const newH = newW / aspectRatio
 
-  const cx = cropBoxX.value + cropBoxW.value / 2
-  const cy = cropBoxY.value + cropBoxH.value / 2
+    const cx = cropBoxX.value + cropBoxW.value / 2
+    const cy = cropBoxY.value + cropBoxH.value / 2
 
-  cropBoxW.value = newW
-  cropBoxH.value = newH
-  cropBoxX.value = Math.max(imgOffsetX.value, Math.min(cx - newW / 2, imgOffsetX.value + imgRenderW.value - newW))
-  cropBoxY.value = Math.max(imgOffsetY.value, Math.min(cy - newH / 2, imgOffsetY.value + imgRenderH.value - newH))
+    cropBoxW.value = Math.round(newW)
+    cropBoxH.value = Math.round(newH)
+    cropBoxX.value = Math.round(Math.max(imgOffsetX.value, Math.min(cx - newW / 2, imgOffsetX.value + imgRenderW.value - newW)))
+    cropBoxY.value = Math.round(Math.max(imgOffsetY.value, Math.min(cy - newH / 2, imgOffsetY.value + imgRenderH.value - newH)))
+  } else {
+    const newW = Math.max(minCropSize.value, Math.min(cropBoxW.value + delta, imgRenderW.value))
+    const newH = Math.max(minCropSize.value, Math.min(cropBoxH.value + (delta * (cropBoxH.value / cropBoxW.value)), imgRenderH.value))
+
+    const cx = cropBoxX.value + cropBoxW.value / 2
+    const cy = cropBoxY.value + cropBoxH.value / 2
+
+    cropBoxW.value = Math.round(newW)
+    cropBoxH.value = Math.round(newH)
+    cropBoxX.value = Math.round(Math.max(imgOffsetX.value, Math.min(cx - newW / 2, imgOffsetX.value + imgRenderW.value - newW)))
+    cropBoxY.value = Math.round(Math.max(imgOffsetY.value, Math.min(cy - newH / 2, imgOffsetY.value + imgRenderH.value - newH)))
+  }
 }
 
 const onCropWheel = (e: WheelEvent) => {
@@ -318,7 +330,8 @@ const onMove = (e: MouseEvent | TouchEvent) => {
   const { x: ox, y: oy, w: ow, h: oh } = dragStartBox.value
   const minSize = props.cropShape === 'circle' || props.cropShape === 'square' ? minCropSize.value : 45
   const isRect = props.cropShape === 'rectangle'
-  const isFixed = props.cropShape === 'circle' || props.cropShape === 'square' || props.cropShape === 'rectangle'
+  const isFixed = props.cropShape === 'circle' || props.cropShape === 'square' || isRect
+  const aspectRatio = isRect ? (16 / 9) : 1
 
   const imgLeft = imgOffsetX.value
   const imgTop = imgOffsetY.value
@@ -326,8 +339,8 @@ const onMove = (e: MouseEvent | TouchEvent) => {
   const imgBottom = imgOffsetY.value + imgRenderH.value
 
   if (dragMode.value === 'move') {
-    cropBoxX.value = Math.max(imgLeft, Math.min(ox + dx, imgRight - cropBoxW.value))
-    cropBoxY.value = Math.max(imgTop, Math.min(oy + dy, imgBottom - cropBoxH.value))
+    cropBoxX.value = Math.round(Math.max(imgLeft, Math.min(ox + dx, imgRight - cropBoxW.value)))
+    cropBoxY.value = Math.round(Math.max(imgTop, Math.min(oy + dy, imgBottom - cropBoxH.value)))
     return
   }
 
@@ -336,40 +349,53 @@ const onMove = (e: MouseEvent | TouchEvent) => {
 
   let newX = ox, newY = oy, newW = ow, newH = oh
 
-  if (dragMode.value === 'nw') {
-    newX = Math.max(imgLeft, Math.min(ox + dx, x2 - minSize))
-    newY = Math.max(imgTop, Math.min(oy + dy, y2 - minSize))
-    newW = x2 - newX
-    newH = isFixed ? newW : y2 - newY
-    if (isRect) newH = Math.round(newW * 9 / 16)
-    newY = y2 - newH
-  } else if (dragMode.value === 'ne') {
-    newY = Math.max(imgTop, Math.min(oy + dy, y2 - minSize))
-    newW = Math.max(minSize, Math.min(ow + dx, imgRight - ox))
-    newH = isFixed ? newW : y2 - newY
-    if (isRect) newH = Math.round(newW * 9 / 16)
-    newY = y2 - newH
-  } else if (dragMode.value === 'sw') {
-    newX = Math.max(imgLeft, Math.min(ox + dx, x2 - minSize))
-    newW = x2 - newX
-    newH = isFixed ? newW : Math.max(minSize, Math.min(oh + dy, imgBottom - oy))
-    if (isRect) newH = Math.round(newW * 9 / 16)
-  } else if (dragMode.value === 'se') {
-    newW = Math.max(minSize, Math.min(ow + dx, imgRight - ox))
-    newH = isFixed ? newW : Math.max(minSize, Math.min(oh + dy, imgBottom - oy))
-    if (isRect) newH = Math.round(newW * 9 / 16)
+  if (isFixed) {
+    if (dragMode.value === 'se') {
+      const maxW = Math.min(imgRight - ox, (imgBottom - oy) * aspectRatio)
+      newW = Math.max(minSize, Math.min(ow + dx, maxW))
+      newH = newW / aspectRatio
+    } else if (dragMode.value === 'sw') {
+      const maxW = Math.min(x2 - imgLeft, (imgBottom - oy) * aspectRatio)
+      newW = Math.max(minSize, Math.min(ow - dx, maxW))
+      newH = newW / aspectRatio
+      newX = x2 - newW
+    } else if (dragMode.value === 'ne') {
+      const maxW = Math.min(imgRight - ox, (y2 - imgTop) * aspectRatio)
+      newW = Math.max(minSize, Math.min(ow + dx, maxW))
+      newH = newW / aspectRatio
+      newY = y2 - newH
+    } else if (dragMode.value === 'nw') {
+      const maxW = Math.min(x2 - imgLeft, (y2 - imgTop) * aspectRatio)
+      newW = Math.max(minSize, Math.min(ow - dx, maxW))
+      newH = newW / aspectRatio
+      newX = x2 - newW
+      newY = y2 - newH
+    }
+  } else {
+    // Manual / unlock aspect ratio resize
+    if (dragMode.value === 'se') {
+      newW = Math.max(minSize, Math.min(ow + dx, imgRight - ox))
+      newH = Math.max(minSize, Math.min(oh + dy, imgBottom - oy))
+    } else if (dragMode.value === 'sw') {
+      newX = Math.max(imgLeft, Math.min(ox + dx, x2 - minSize))
+      newW = x2 - newX
+      newH = Math.max(minSize, Math.min(oh + dy, imgBottom - oy))
+    } else if (dragMode.value === 'ne') {
+      newY = Math.max(imgTop, Math.min(oy + dy, y2 - minSize))
+      newH = y2 - newY
+      newW = Math.max(minSize, Math.min(ow + dx, imgRight - ox))
+    } else if (dragMode.value === 'nw') {
+      newX = Math.max(imgLeft, Math.min(ox + dx, x2 - minSize))
+      newW = x2 - newX
+      newY = Math.max(imgTop, Math.min(oy + dy, y2 - minSize))
+      newH = y2 - newY
+    }
   }
 
-  // Constrain to image area
-  if (newX + newW > imgRight) newW = imgRight - newX
-  if (newY + newH > imgBottom) newH = imgBottom - newY
-  if (newX < imgLeft) { newW -= (imgLeft - newX); newX = imgLeft }
-  if (newY < imgTop) { newH -= (imgTop - newY); newY = imgTop }
-
-  cropBoxX.value = newX
-  cropBoxY.value = newY
-  cropBoxW.value = newW
-  cropBoxH.value = newH
+  cropBoxX.value = Math.round(newX)
+  cropBoxY.value = Math.round(newY)
+  cropBoxW.value = Math.round(newW)
+  cropBoxH.value = Math.round(newH)
 }
 
 const onEnd = () => {
