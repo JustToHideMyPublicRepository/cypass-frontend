@@ -46,23 +46,17 @@
 
         <!-- Tool buttons -->
         <div class="flex justify-center gap-3">
-          <UiBaseButton @click="rotate(90)" variant="ghost"
-            class="!px-3.5 !py-2 hover:!bg-primary/10 hover:!text-primary transition-colors !rounded-xl !h-auto text-xs font-semibold"
-            title="Pivoter de 90° vers la droite">
+          <UiBaseButton @click="rotate(90)" variant="secondary" class="" title="Pivoter de 90° vers la droite">
             <IconRotateClockwise2 class="w-4 h-4 mr-1.5" />
             Pivoter
           </UiBaseButton>
 
-          <UiBaseButton @click="reset" variant="accent"
-            class="!px-3.5 !py-2 hover:!bg-primary/10 hover:!text-primary transition-colors !rounded-xl !h-auto text-xs font-semibold"
-            title="Réinitialiser les transformations">
+          <UiBaseButton @click="reset" variant="ghost" class="" title="Réinitialiser les transformations">
             <IconRefresh class="w-4 h-4 mr-1.5" />
             Réinitialiser
           </UiBaseButton>
 
-          <UiBaseButton @click="$emit('change-file')" variant="primary"
-            class="!px-3.5 !py-2 hover:!bg-primary/10 hover:!text-primary transition-colors !rounded-xl !h-auto text-xs font-semibold"
-            title="Sélectionner une autre image">
+          <UiBaseButton @click="$emit('change-file')" variant="accent" class="" title="Sélectionner une autre image">
             <IconCamera class="w-4 h-4 mr-1.5" />
             Autre photo
           </UiBaseButton>
