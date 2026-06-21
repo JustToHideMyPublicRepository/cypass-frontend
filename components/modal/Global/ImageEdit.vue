@@ -70,7 +70,7 @@
       </div>
 
       <!-- Action Footer -->
-      <div class="pt-6 flex flex-col sm:flex-row justify-end gap-3 border-t border-ash/20">
+      <div class="pt-2 flex flex-col sm:flex-row justify-end gap-3 border-t border-ash/20">
         <UiBaseButton variant="ghost" @click="$emit('close')" class="!rounded-2xl border-none font-bold">
           Annuler
         </UiBaseButton>
