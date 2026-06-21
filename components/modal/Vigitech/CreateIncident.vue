@@ -159,7 +159,7 @@
   </UiBaseModal>
 
   <!-- Cropper Modal -->
-  <ModalGlobalImageEdit :show="showCropModal" :image-file="selectedImageFile" crop-shape="square"
+  <ModalGlobalImageEdit :show="showCropModal" :image-file="selectedImageFile" crop-shape="manual"
     @close="showCropModal = false" @submit="handleCroppedEvidence" @change-file="triggerFileUpload" />
 
   <!-- Modal d'erreur -->
