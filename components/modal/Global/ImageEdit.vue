@@ -53,14 +53,14 @@
             Pivoter
           </UiBaseButton>
 
-          <UiBaseButton @click="reset" variant="ghost"
+          <UiBaseButton @click="reset" variant="accent"
             class="!px-3.5 !py-2 hover:!bg-primary/10 hover:!text-primary transition-colors !rounded-xl !h-auto text-xs font-semibold"
             title="Réinitialiser les transformations">
             <IconRefresh class="w-4 h-4 mr-1.5" />
             Réinitialiser
           </UiBaseButton>
 
-          <UiBaseButton @click="$emit('change-file')" variant="ghost"
+          <UiBaseButton @click="$emit('change-file')" variant="primary"
             class="!px-3.5 !py-2 hover:!bg-primary/10 hover:!text-primary transition-colors !rounded-xl !h-auto text-xs font-semibold"
             title="Sélectionner une autre image">
             <IconCamera class="w-4 h-4 mr-1.5" />
