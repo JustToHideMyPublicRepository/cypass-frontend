@@ -158,15 +158,9 @@
     </div>
   </UiBaseModal>
 
-  <!-- Reusable Cropper Modal -->
-  <ModalGlobalImageEdit
-    :show="showCropModal"
-    :image-file="selectedImageFile"
-    crop-shape="square"
-    @close="showCropModal = false"
-    @submit="handleCroppedEvidence"
-    @change-file="triggerFileUpload"
-  />
+  <!-- Cropper Modal -->
+  <ModalGlobalImageEdit :show="showCropModal" :image-file="selectedImageFile" crop-shape="square"
+    @close="showCropModal = false" @submit="handleCroppedEvidence" @change-file="triggerFileUpload" />
 
   <!-- Modal d'erreur -->
   <ModalGlobalFileError :show="showFileError" :title="fileErrorTitle" :message="fileErrorMessage"
