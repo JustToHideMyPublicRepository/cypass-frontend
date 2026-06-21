@@ -110,7 +110,7 @@
   <!-- Input file always in DOM -->
   <input type="file" ref="fileInput" class="hidden" accept="image/*" @change="handleFileChange" />
 
-  <!-- Reusable Cropper Modal -->
+  <!-- Cropper Modal -->
   <ModalGlobalImageEdit :show="showCropModal" :image-file="selectedFile" crop-shape="circle" @close="cancelCrop"
     @submit="handleCroppedImage" @change-file="triggerFileInput" />
 
@@ -127,9 +127,7 @@
 
 <script setup lang="ts">
 import { ref, watch, computed, onUnmounted } from 'vue'
-import {
-  IconPhoto, IconLoader2, IconCamera, IconCheck, IconFileUpload, IconChevronRight, IconTrash
-} from '@tabler/icons-vue'
+import { IconPhoto, IconLoader2, IconCamera, IconCheck, IconFileUpload, IconChevronRight, IconTrash } from '@tabler/icons-vue'
 import { useGlobalDropZone } from '~/composables/useDropZone'
 
 // Configuration des fichiers
