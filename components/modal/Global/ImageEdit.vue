@@ -1,193 +1,132 @@
 <template>
   <UiBaseModal :show="show" :title="title" maxWidth="lg" @close="$emit('close')">
-    <div class="space-y-6 py-2">
+    <div class="space-y-4 py-2">
+
       <!-- Interactive Viewport -->
-      <div
-        class="relative mx-auto bg-neutral-950 overflow-hidden rounded-2xl border border-ash select-none flex items-center justify-center shadow-inner"
-        :style="containerStyle"
-        @mousemove="onGlobalMove"
-        @mouseup="onGlobalEnd"
-        @mouseleave="onGlobalEnd"
-        @touchmove="onGlobalMove"
-        @touchend="onGlobalEnd"
-        @touchcancel="onGlobalEnd"
-      >
-        <!-- Interactive Image Drag Area for Fixed Modes -->
-        <div
-          v-if="cropShape !== 'manual'"
-          class="absolute inset-0 cursor-move active:cursor-grabbing flex items-center justify-center"
-          @mousedown="startDrag"
-          @touchstart="startDrag"
-          @wheel.prevent="handleWheel"
-        >
-          <img
-            v-if="previewUrl"
-            ref="cropImage"
-            :src="previewUrl"
-            alt="Aperçu à recadrer"
-            class="max-w-none object-contain select-none pointer-events-none transition-transform duration-75 ease-out"
-            :style="imageStyle"
-            @load="onImageLoad"
-          />
-        </div>
+      <div ref="viewportEl"
+        class="relative mx-auto bg-neutral-950 overflow-hidden rounded-2xl border border-ash/50 shadow-inner select-none"
+        :style="{ width: `${containerSize}px`, height: `${containerSize}px` }" @mousemove="onMove" @mouseup="onEnd"
+        @mouseleave="onEnd" @touchmove.prevent="onMove" @touchend="onEnd" @touchcancel="onEnd">
+        <!-- The Image: static, fills the container, object-contain -->
+        <img v-if="previewUrl" ref="cropImage" :src="previewUrl" alt="Image à recadrer"
+          class="absolute inset-0 w-full h-full object-contain select-none pointer-events-none"
+          :style="{ transform: `rotate(${rotation}deg)` }" @load="onImageLoad" />
 
-        <!-- Static Image Area for Manual Mode -->
-        <img
-          v-else-if="previewUrl"
-          ref="cropImage"
-          :src="previewUrl"
-          alt="Aperçu à recadrer"
-          class="object-contain select-none pointer-events-none"
-          :style="{
-            transform: `rotate(${rotation}deg)`,
-            width: (rotation === 90 || rotation === 270) ? `${containerH}px` : `${containerW}px`,
-            height: (rotation === 90 || rotation === 270) ? `${containerW}px` : `${containerH}px`
-          }"
-          @load="onImageLoad"
-        />
+        <!-- Dimmed mask: 4 semi-transparent rects surrounding the crop box -->
+        <template v-if="imageLoaded">
+          <!-- top -->
+          <div class="absolute left-0 right-0 top-0 bg-black/60 pointer-events-none"
+            :style="{ height: `${cropBoxY}px` }"></div>
+          <!-- bottom -->
+          <div class="absolute left-0 right-0 bg-black/60 pointer-events-none"
+            :style="{ top: `${cropBoxY + cropBoxH}px`, bottom: 0 }"></div>
+          <!-- left -->
+          <div class="absolute bg-black/60 pointer-events-none"
+            :style="{ top: `${cropBoxY}px`, height: `${cropBoxH}px`, left: 0, width: `${cropBoxX}px` }"></div>
+          <!-- right -->
+          <div class="absolute bg-black/60 pointer-events-none"
+            :style="{ top: `${cropBoxY}px`, height: `${cropBoxH}px`, left: `${cropBoxX + cropBoxW}px`, right: 0 }">
+          </div>
+        </template>
 
-        <!-- Pure CSS Overlay Mask for Fixed Modes (Circle, Square, Rectangle) -->
-        <div
-          v-if="cropShape !== 'manual'"
-          class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none border-[999px] border-neutral-950/60 z-10"
-          :class="{
-            'rounded-full': cropShape === 'circle',
-            'rounded-none': cropShape === 'square' || cropShape === 'rectangle'
-          }"
-          :style="{
-            width: `${cropW}px`,
-            height: `${cropH}px`
-          }"
-        ></div>
-
-        <!-- Dashed crop boundaries for Fixed Modes -->
-        <div
-          v-if="cropShape !== 'manual'"
-          class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none border border-dashed border-white/50 z-20"
-          :class="{
-            'rounded-full': cropShape === 'circle',
-            'rounded-none': cropShape === 'square' || cropShape === 'rectangle'
-          }"
-          :style="{
-            width: `${cropW}px`,
-            height: `${cropH}px`
-          }"
-        ></div>
-
-        <!-- Interactive Resizable/Draggable Crop Box for Manual Mode -->
-        <div v-if="cropShape === 'manual'" class="absolute inset-0 z-20 pointer-events-none">
-          <!-- Crop Selection Box -->
-          <div
-            class="absolute border-2 border-primary bg-black/10 pointer-events-auto cursor-move"
-            :style="{
-              left: `${boxX}px`,
-              top: `${boxY}px`,
-              width: `${boxW}px`,
-              height: `${boxH}px`,
-              touchAction: 'none'
-            }"
-            @mousedown="onHandleStart($event, 'move')"
-            @touchstart="onHandleStart($event, 'move')"
-          >
-            <!-- 4 Corner Handles -->
-            <div
-              class="absolute -top-1.5 -left-1.5 w-3 h-3 bg-primary rounded-full cursor-nwse-resize border border-white"
-              style="touch-action: none;"
-              @mousedown="onHandleStart($event, 'nw')"
-              @touchstart="onHandleStart($event, 'nw')"
-            ></div>
-            <div
-              class="absolute -top-1.5 -right-1.5 w-3 h-3 bg-primary rounded-full cursor-nesw-resize border border-white"
-              style="touch-action: none;"
-              @mousedown="onHandleStart($event, 'ne')"
-              @touchstart="onHandleStart($event, 'ne')"
-            ></div>
-            <div
-              class="absolute -bottom-1.5 -left-1.5 w-3 h-3 bg-primary rounded-full cursor-nesw-resize border border-white"
-              style="touch-action: none;"
-              @mousedown="onHandleStart($event, 'sw')"
-              @touchstart="onHandleStart($event, 'sw')"
-            ></div>
-            <div
-              class="absolute -bottom-1.5 -right-1.5 w-3 h-3 bg-primary rounded-full cursor-nwse-resize border border-white"
-              style="touch-action: none;"
-              @mousedown="onHandleStart($event, 'se')"
-              @touchstart="onHandleStart($event, 'se')"
-            ></div>
+        <!-- Crop Zone Overlay -->
+        <div v-if="imageLoaded" class="absolute border-2 border-primary shadow-lg cursor-move"
+          :class="cropShape === 'circle' ? 'rounded-full' : 'rounded-sm'" :style="{
+            left: `${cropBoxX}px`,
+            top: `${cropBoxY}px`,
+            width: `${cropBoxW}px`,
+            height: `${cropBoxH}px`,
+            touchAction: 'none',
+            boxShadow: '0 0 0 1px rgba(255,255,255,0.25) inset'
+          }" @mousedown="onCropStart($event, 'move')" @touchstart="onCropStart($event, 'move')"
+          @wheel.prevent="onCropWheel">
+          <!-- Rule-of-thirds grid lines -->
+          <div class="absolute inset-0 pointer-events-none opacity-40">
+            <div class="absolute left-1/3 top-0 bottom-0 border-l border-white/30"></div>
+            <div class="absolute right-1/3 top-0 bottom-0 border-l border-white/30"></div>
+            <div class="absolute top-1/3 left-0 right-0 border-t border-white/30"></div>
+            <div class="absolute bottom-1/3 left-0 right-0 border-t border-white/30"></div>
           </div>
 
-          <!-- Dimmed mask overlays surrounding the crop selection box -->
-          <div class="absolute bg-black/60 left-0 top-0 right-0" :style="{ height: `${boxY}px` }"></div>
-          <div class="absolute bg-black/60 left-0 bottom-0 right-0" :style="{ top: `${boxY + boxH}px` }"></div>
-          <div class="absolute bg-black/60 left-0 animate-fade-in" :style="{ top: `${boxY}px`, height: `${boxH}px`, width: `${boxX}px` }"></div>
-          <div class="absolute bg-black/60 right-0 animate-fade-in" :style="{ top: `${boxY}px`, height: `${boxH}px`, left: `${boxX + boxW}px` }"></div>
+          <!-- Corner handles (shown only for non-circle or for manual) -->
+          <template v-if="cropShape !== 'circle'">
+            <div v-for="handle in handles" :key="handle.dir"
+              class="absolute w-4 h-4 bg-primary border-2 border-white rounded-sm z-10 hover:scale-110 transition-transform"
+              :class="handle.cursor" :style="handle.style" @mousedown.stop="onCropStart($event, handle.dir)"
+              @touchstart.stop="onCropStart($event, handle.dir)"></div>
+          </template>
+
+          <!-- For circle: single bottom-right scale handle -->
+          <div v-else
+            class="absolute -bottom-2 -right-2 w-5 h-5 bg-primary border-2 border-white rounded-full z-10 cursor-nwse-resize"
+            @mousedown.stop="onCropStart($event, 'se')" @touchstart.stop="onCropStart($event, 'se')"></div>
+        </div>
+
+        <!-- Loading spinner -->
+        <div v-if="!imageLoaded && previewUrl" class="absolute inset-0 flex items-center justify-center">
+          <IconLoader2 class="w-8 h-8 animate-spin text-primary" />
+        </div>
+
+        <!-- Hint top-right -->
+        <div v-if="imageLoaded" class="absolute top-2 right-2 pointer-events-none z-20">
+          <span
+            class="text-[9px] text-white/50 font-bold uppercase tracking-wider bg-black/30 px-2 py-0.5 rounded-full">
+            {{ cropShape !== 'circle' ? 'Molette = zoom' : 'Glisser = déplacer' }}
+          </span>
         </div>
       </div>
 
-      <!-- Adjustment Tools (Zoom, Rotation, Reset) -->
-      <div class="space-y-4">
-        <!-- Zoom Slider (Hidden in Manual Mode) -->
+      <!-- Adjustment Tools -->
+      <div class="space-y-3">
+        <!-- Crop size slider (hidden in manual mode) -->
         <div v-if="cropShape !== 'manual'" class="flex items-center gap-3 bg-ash/30 px-4 py-2.5 rounded-2xl">
-          <UiBaseButton
-            @click="zoomOut"
-            variant="ghost"
-            class="!p-1.5 hover:!bg-primary/10 !rounded-lg hover:!text-primary transition-colors !h-auto !w-auto"
-            title="Dézoomer"
-          >
+          <button class="p-1.5 rounded-lg hover:bg-primary/10 hover:text-primary transition-colors"
+            title="Réduire le cadre" @click="resizeCrop(-20)">
             <IconZoomOut class="w-4 h-4" />
-          </UiBaseButton>
-          
-          <input
-            type="range"
-            min="1"
-            max="4"
-            step="0.01"
-            v-model.number="scale"
-            class="flex-1 accent-primary h-1 bg-ashAct/20 rounded-lg appearance-none cursor-pointer"
-          />
+          </button>
 
-          <UiBaseButton
-            @click="zoomIn"
-            variant="ghost"
-            class="!p-1.5 hover:!bg-primary/10 !rounded-lg hover:!text-primary transition-colors !h-auto !w-auto"
-            title="Zoomer"
-          >
+          <input type="range" :min="minCropSize" :max="maxCropSize" step="1" :value="cropBoxW"
+            class="flex-1 accent-primary h-1 rounded-lg appearance-none cursor-pointer" @input="onSliderInput" />
+
+          <button class="p-1.5 rounded-lg hover:bg-primary/10 hover:text-primary transition-colors"
+            title="Agrandir le cadre" @click="resizeCrop(20)">
             <IconZoomIn class="w-4 h-4" />
-          </UiBaseButton>
-          
+          </button>
+
           <span class="text-[11px] font-code font-bold text-primary min-w-[2.5rem] text-right">
-            {{ Math.round(scale * 100) }}%
+            {{ Math.round((cropBoxW / maxCropSize) * 100) }}%
           </span>
         </div>
 
         <!-- Tool buttons -->
         <div class="flex justify-center gap-3">
           <UiBaseButton @click="rotate(90)" variant="ghost" class="!px-3.5 !py-2 !rounded-xl !h-auto text-xs"
-            title="Pivoter de 90° vers la droite">
+            title="Pivoter de 90°">
             <IconRotateClockwise2 class="w-4 h-4 mr-1.5" />
             Pivoter
           </UiBaseButton>
 
-          <UiBaseButton @click="reset" variant="ghost" class="!px-3.5 !py-2 !rounded-xl !h-auto text-xs"
-            title="Réinitialiser les transformations">
+          <UiBaseButton @click="resetCrop" variant="ghost" class="!px-3.5 !py-2 !rounded-xl !h-auto text-xs"
+            title="Réinitialiser">
             <IconRefresh class="w-4 h-4 mr-1.5" />
             Réinitialiser
           </UiBaseButton>
 
           <UiBaseButton @click="$emit('change-file')" variant="accent" class="!px-3.5 !py-2 !rounded-xl !h-auto text-xs"
-            title="Sélectionner une autre image">
+            title="Changer de photo">
             <IconCamera class="w-4 h-4 mr-1.5" />
             Autre photo
           </UiBaseButton>
         </div>
       </div>
 
-      <!-- Action Footer -->
+      <!-- Footer -->
       <div class="pt-2 flex flex-col sm:flex-row justify-end gap-3 border-t border-ash/20">
         <UiBaseButton variant="ghost" @click="$emit('close')" class="!rounded-2xl border-none font-bold">
           Annuler
         </UiBaseButton>
-        <UiBaseButton variant="primary" @click="submitCrop" class="!rounded-2xl font-black tracking-widest shadow-xl px-10">
+        <UiBaseButton variant="primary" @click="submitCrop"
+          class="!rounded-2xl font-black tracking-widest shadow-xl px-10" :disabled="!imageLoaded">
           Enregistrer
         </UiBaseButton>
       </div>
@@ -197,7 +136,7 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, onUnmounted } from 'vue'
-import { IconCamera, IconZoomIn, IconZoomOut, IconRotateClockwise2, IconRefresh } from '@tabler/icons-vue'
+import { IconCamera, IconZoomIn, IconZoomOut, IconRotateClockwise2, IconRefresh, IconLoader2 } from '@tabler/icons-vue'
 
 const props = withDefaults(defineProps<{
   show: boolean
@@ -211,366 +150,275 @@ const emit = defineEmits(['close', 'submit', 'change-file'])
 
 const title = computed(() => {
   if (props.cropShape === 'circle') return 'Ajuster la photo de profil'
-  if (props.cropShape === 'manual') return 'Recadrer manuellement l\'image'
+  if (props.cropShape === 'manual') return 'Recadrer manuellement'
+  if (props.cropShape === 'rectangle') return 'Recadrer (16:9)'
   return 'Recadrer l\'image'
 })
 
+// ─── Container & Image State ────────────────────────────────────────────────
+const containerSize = 384
 const previewUrl = ref('')
-
-// Transformations & dragging state
-const scale = ref(1)
-const rotation = ref(0)
-const translateX = ref(0)
-const translateY = ref(0)
-const isDragging = ref(false)
-const startX = ref(0)
-const startY = ref(0)
-
-// Image specifications
 const cropImage = ref<HTMLImageElement | null>(null)
-const naturalWidth = ref(0)
-const naturalHeight = ref(0)
-const uiImgW = ref(0)
-const uiImgH = ref(0)
+const viewportEl = ref<HTMLElement | null>(null)
+const imageLoaded = ref(false)
+const rotation = ref(0)
 
-// Container sizing (especially dynamic for manual cropping)
-const containerW = ref(384)
-const containerH = ref(384)
+// Natural image dimensions
+const naturalW = ref(0)
+const naturalH = ref(0)
 
-// Manual crop box specifications
-const boxX = ref(0)
-const boxY = ref(0)
-const boxW = ref(0)
-const boxH = ref(0)
+// Rendered image bounds within the container (accounting for object-contain letterboxing)
+const imgRenderW = ref(0)
+const imgRenderH = ref(0)
+const imgOffsetX = ref(0)
+const imgOffsetY = ref(0)
 
-const dragMode = ref<'move' | 'nw' | 'ne' | 'sw' | 'se' | null>(null)
-const dragStartBox = ref({ x: 0, y: 0, w: 0, h: 0 })
+// ─── Crop Box State ─────────────────────────────────────────────────────────
+const cropBoxX = ref(0)
+const cropBoxY = ref(0)
+const cropBoxW = ref(0)
+const cropBoxH = ref(0)
+
+// ─── Drag State ─────────────────────────────────────────────────────────────
+type DragMode = 'move' | 'nw' | 'ne' | 'sw' | 'se' | null
+const dragMode = ref<DragMode>(null)
 const dragStartPointer = ref({ x: 0, y: 0 })
+const dragStartBox = ref({ x: 0, y: 0, w: 0, h: 0 })
 
-// Cutout dimensions for fixed cropping shape
-const cropW = computed(() => {
-  if (props.cropShape === 'rectangle') return 320
-  return 250
+// ─── Crop Size Constraints ───────────────────────────────────────────────────
+const minCropSize = computed(() => Math.min(imgRenderW.value, imgRenderH.value) * 0.2)
+const maxCropSize = computed(() => {
+  if (props.cropShape === 'rectangle') {
+    return Math.min(imgRenderW.value, imgRenderH.value / (9 / 16))
+  }
+  return Math.min(imgRenderW.value, imgRenderH.value)
 })
 
-const cropH = computed(() => {
-  if (props.cropShape === 'rectangle') return 180
-  return 250
-})
+// ─── Corner Handles ──────────────────────────────────────────────────────────
+const handles = computed(() => [
+  { dir: 'nw' as const, cursor: 'cursor-nwse-resize', style: 'top: -8px; left: -8px;' },
+  { dir: 'ne' as const, cursor: 'cursor-nesw-resize', style: 'top: -8px; right: -8px;' },
+  { dir: 'sw' as const, cursor: 'cursor-nesw-resize', style: 'bottom: -8px; left: -8px;' },
+  { dir: 'se' as const, cursor: 'cursor-nwse-resize', style: 'bottom: -8px; right: -8px;' },
+])
 
-// Container dimensions style
-const containerStyle = computed(() => {
-  if (props.cropShape === 'manual') {
-    return {
-      width: `${containerW.value}px`,
-      height: `${containerH.value}px`
-    }
-  }
-  return {
-    width: '100%',
-    maxWidth: '384px',
-    height: '384px'
-  }
-})
-
-// Dynamic style for the preview image in fixed modes
-const imageStyle = computed(() => ({
-  transform: `translate(${translateX.value}px, ${translateY.value}px) rotate(${rotation.value}deg) scale(${scale.value})`,
-  width: uiImgW.value ? `${uiImgW.value}px` : 'auto',
-  height: uiImgH.value ? `${uiImgH.value}px` : 'auto'
-}))
-
-const zoomIn = () => {
-  scale.value = Math.min(scale.value + 0.1, 4)
-}
-
-const zoomOut = () => {
-  scale.value = Math.max(scale.value - 0.1, 1)
-}
-
-const handleWheel = (e: WheelEvent) => {
-  if (e.deltaY < 0) zoomIn()
-  else zoomOut()
-}
-
-const rotate = (deg: number) => {
-  rotation.value = (rotation.value + deg) % 360
-  if (props.cropShape === 'manual') {
-    computeContainerDimensions()
-  }
-}
-
-const reset = () => {
-  scale.value = 1
-  rotation.value = 0
-  translateX.value = 0
-  translateY.value = 0
-}
-
-const getCoordinates = (e: MouseEvent | TouchEvent) => {
-  if ('touches' in e && e.touches.length > 0) {
-    return { x: e.touches[0].clientX, y: e.touches[0].clientY }
-  }
-  const mouseEv = e as MouseEvent
-  return { x: mouseEv.clientX, y: mouseEv.clientY }
-}
-
-const startDrag = (e: MouseEvent | TouchEvent) => {
-  isDragging.value = true
-  const coords = getCoordinates(e)
-  startX.value = coords.x - translateX.value
-  startY.value = coords.y - translateY.value
-}
-
-// Global Move Handler (delegates between Manual selection and Fixed zoom dragging)
-const onGlobalMove = (e: MouseEvent | TouchEvent) => {
-  const pointer = getCoordinates(e)
-
-  if (props.cropShape === 'manual') {
-    if (!dragMode.value) return
-    const dx = pointer.x - dragStartPointer.value.x
-    const dy = pointer.y - dragStartPointer.value.y
-
-    if (dragMode.value === 'move') {
-      let newX = dragStartBox.value.x + dx
-      let newY = dragStartBox.value.y + dy
-
-      newX = Math.max(0, Math.min(newX, containerW.value - boxW.value))
-      newY = Math.max(0, Math.min(newY, containerH.value - boxH.value))
-
-      boxX.value = newX
-      boxY.value = newY
-    } else {
-      const minSize = 45
-      const currentBoxX = dragStartBox.value.x
-      const currentBoxY = dragStartBox.value.y
-      const currentBoxW = dragStartBox.value.w
-      const currentBoxH = dragStartBox.value.h
-
-      if (dragMode.value === 'nw') {
-        const x2 = currentBoxX + currentBoxW
-        const y2 = currentBoxY + currentBoxH
-        let desiredX = currentBoxX + dx
-        let desiredY = currentBoxY + dy
-
-        desiredX = Math.max(0, Math.min(desiredX, x2 - minSize))
-        desiredY = Math.max(0, Math.min(desiredY, y2 - minSize))
-
-        boxX.value = desiredX
-        boxY.value = desiredY
-        boxW.value = x2 - desiredX
-        boxH.value = y2 - desiredY
-      } else if (dragMode.value === 'ne') {
-        const y2 = currentBoxY + currentBoxH
-        let desiredY = currentBoxY + dy
-        desiredY = Math.max(0, Math.min(desiredY, y2 - minSize))
-
-        let desiredW = currentBoxW + dx
-        desiredW = Math.max(minSize, Math.min(desiredW, containerW.value - currentBoxX))
-
-        boxY.value = desiredY
-        boxH.value = y2 - desiredY
-        boxW.value = desiredW
-      } else if (dragMode.value === 'sw') {
-        const x2 = currentBoxX + currentBoxW
-        let desiredX = currentBoxX + dx
-        desiredX = Math.max(0, Math.min(desiredX, x2 - minSize))
-
-        let desiredH = currentBoxH + dy
-        desiredH = Math.max(minSize, Math.min(desiredH, containerH.value - currentBoxY))
-
-        boxX.value = desiredX
-        boxW.value = x2 - desiredX
-        boxH.value = desiredH
-      } else if (dragMode.value === 'se') {
-        let desiredW = currentBoxW + dx
-        let desiredH = currentBoxH + dy
-
-        desiredW = Math.max(minSize, Math.min(desiredW, containerW.value - currentBoxX))
-        desiredH = Math.max(minSize, Math.min(desiredH, containerH.value - currentBoxY))
-
-        boxW.value = desiredW
-        boxH.value = desiredH
-      }
-    }
-  } else {
-    if (!isDragging.value) return
-    translateX.value = pointer.x - startX.value
-    translateY.value = pointer.y - startY.value
-  }
-}
-
-const onGlobalEnd = () => {
-  if (props.cropShape === 'manual') {
-    dragMode.value = null
-  } else {
-    isDragging.value = false
-  }
-}
-
-const onHandleStart = (e: MouseEvent | TouchEvent, mode: 'move' | 'nw' | 'ne' | 'sw' | 'se') => {
-  e.stopPropagation()
-  e.preventDefault()
-  dragMode.value = mode
-  const pointer = getCoordinates(e)
-  dragStartPointer.value = { x: pointer.x, y: pointer.y }
-  dragStartBox.value = { x: boxX.value, y: boxY.value, w: boxW.value, h: boxH.value }
-}
-
-// Compute container dimensions dynamically to fit image ratio in manual cropping
-const computeContainerDimensions = () => {
+// ─── Compute image rendered area within container ────────────────────────────
+const computeImageBounds = () => {
   const isSwapped = rotation.value === 90 || rotation.value === 270
-  const w = isSwapped ? naturalHeight.value : naturalWidth.value
-  const h = isSwapped ? naturalWidth.value : naturalHeight.value
+  const srcW = isSwapped ? naturalH.value : naturalW.value
+  const srcH = isSwapped ? naturalW.value : naturalH.value
 
-  const ratio = w / h
-  const maxSize = 384
-
+  const ratio = srcW / srcH
   if (ratio > 1) {
-    containerW.value = maxSize
-    containerH.value = Math.round(maxSize / ratio)
+    imgRenderW.value = containerSize
+    imgRenderH.value = containerSize / ratio
   } else {
-    containerH.value = maxSize
-    containerW.value = Math.round(maxSize * ratio)
+    imgRenderH.value = containerSize
+    imgRenderW.value = containerSize * ratio
+  }
+  imgOffsetX.value = (containerSize - imgRenderW.value) / 2
+  imgOffsetY.value = (containerSize - imgRenderH.value) / 2
+}
+
+// ─── Initialize crop box (centered, 75% of image render area) ───────────────
+const initCropBox = () => {
+  const initSize = Math.round(Math.min(imgRenderW.value, imgRenderH.value) * 0.75)
+
+  if (props.cropShape === 'rectangle') {
+    cropBoxW.value = Math.min(imgRenderW.value, initSize)
+    cropBoxH.value = Math.round(cropBoxW.value * (9 / 16))
+  } else if (props.cropShape === 'manual') {
+    cropBoxW.value = Math.round(imgRenderW.value * 0.75)
+    cropBoxH.value = Math.round(imgRenderH.value * 0.75)
+  } else {
+    cropBoxW.value = initSize
+    cropBoxH.value = initSize
   }
 
-  boxX.value = Math.round(containerW.value * 0.1)
-  boxY.value = Math.round(containerH.value * 0.1)
-  boxW.value = Math.round(containerW.value * 0.8)
-  boxH.value = Math.round(containerH.value * 0.8)
+  cropBoxX.value = imgOffsetX.value + (imgRenderW.value - cropBoxW.value) / 2
+  cropBoxY.value = imgOffsetY.value + (imgRenderH.value - cropBoxH.value) / 2
 }
 
 const onImageLoad = (e: Event) => {
   const img = e.target as HTMLImageElement
-  naturalWidth.value = img.naturalWidth
-  naturalHeight.value = img.naturalHeight
-
-  if (props.cropShape === 'manual') {
-    computeContainerDimensions()
-  } else {
-    const ratio = img.naturalWidth / img.naturalHeight
-    const targetRatio = cropW.value / cropH.value
-
-    if (ratio > targetRatio) {
-      uiImgH.value = cropH.value
-      uiImgW.value = cropH.value * ratio
-    } else {
-      uiImgW.value = cropW.value
-      uiImgH.value = cropW.value / ratio
-    }
-
-    containerW.value = 384
-    containerH.value = 384
-    reset()
-  }
+  naturalW.value = img.naturalWidth
+  naturalH.value = img.naturalHeight
+  imageLoaded.value = true
+  computeImageBounds()
+  initCropBox()
 }
 
-watch(() => props.show, (newVal) => {
-  if (!newVal) {
-    reset()
-    if (previewUrl.value) {
-      URL.revokeObjectURL(previewUrl.value)
-      previewUrl.value = ''
-    }
-  } else if (props.imageFile) {
-    if (previewUrl.value) URL.revokeObjectURL(previewUrl.value)
-    previewUrl.value = URL.createObjectURL(props.imageFile)
-  }
-}, { immediate: true })
+// ─── Rotation ────────────────────────────────────────────────────────────────
+const rotate = (deg: number) => {
+  rotation.value = (rotation.value + deg) % 360
+  computeImageBounds()
+  initCropBox()
+}
 
-watch(() => props.imageFile, (newFile) => {
-  if (props.show && newFile) {
-    if (previewUrl.value) URL.revokeObjectURL(previewUrl.value)
-    previewUrl.value = URL.createObjectURL(newFile)
-  }
-})
+// ─── Reset ───────────────────────────────────────────────────────────────────
+const resetCrop = () => {
+  rotation.value = 0
+  computeImageBounds()
+  initCropBox()
+}
 
-onUnmounted(() => {
-  if (previewUrl.value) {
-    URL.revokeObjectURL(previewUrl.value)
-  }
-})
+// ─── Resize crop box (keep centered, constrained within image) ───────────────
+const resizeCrop = (delta: number) => {
+  const isRect = props.cropShape === 'rectangle'
+  let newW = Math.max(minCropSize.value, Math.min(cropBoxW.value + delta, maxCropSize.value))
+  let newH = isRect ? Math.round(newW * (9 / 16)) : newW
 
+  // Constrain within image bounds
+  newW = Math.min(newW, imgRenderW.value)
+  newH = isRect ? Math.min(newH, imgRenderH.value) : Math.min(newH, imgRenderH.value)
+  if (!isRect) newW = newH = Math.min(newW, newH) // Keep square
+
+  const cx = cropBoxX.value + cropBoxW.value / 2
+  const cy = cropBoxY.value + cropBoxH.value / 2
+
+  cropBoxW.value = newW
+  cropBoxH.value = newH
+  cropBoxX.value = Math.max(imgOffsetX.value, Math.min(cx - newW / 2, imgOffsetX.value + imgRenderW.value - newW))
+  cropBoxY.value = Math.max(imgOffsetY.value, Math.min(cy - newH / 2, imgOffsetY.value + imgRenderH.value - newH))
+}
+
+const onCropWheel = (e: WheelEvent) => {
+  resizeCrop(e.deltaY < 0 ? 15 : -15)
+}
+
+const onSliderInput = (e: Event) => {
+  const val = parseInt((e.target as HTMLInputElement).value, 10)
+  const delta = val - cropBoxW.value
+  resizeCrop(delta)
+}
+
+// ─── Pointer helpers ─────────────────────────────────────────────────────────
+const getPointer = (e: MouseEvent | TouchEvent) => {
+  if ('touches' in e && e.touches.length > 0) {
+    return { x: e.touches[0].clientX, y: e.touches[0].clientY }
+  }
+  return { x: (e as MouseEvent).clientX, y: (e as MouseEvent).clientY }
+}
+
+// ─── Drag start ──────────────────────────────────────────────────────────────
+const onCropStart = (e: MouseEvent | TouchEvent, mode: NonNullable<DragMode>) => {
+  e.preventDefault()
+  dragMode.value = mode
+  const p = getPointer(e)
+  dragStartPointer.value = { x: p.x, y: p.y }
+  dragStartBox.value = { x: cropBoxX.value, y: cropBoxY.value, w: cropBoxW.value, h: cropBoxH.value }
+}
+
+// ─── Drag move ───────────────────────────────────────────────────────────────
+const onMove = (e: MouseEvent | TouchEvent) => {
+  if (!dragMode.value) return
+  const p = getPointer(e)
+  const dx = p.x - dragStartPointer.value.x
+  const dy = p.y - dragStartPointer.value.y
+  const { x: ox, y: oy, w: ow, h: oh } = dragStartBox.value
+  const minSize = props.cropShape === 'circle' || props.cropShape === 'square' ? minCropSize.value : 45
+  const isRect = props.cropShape === 'rectangle'
+  const isFixed = props.cropShape === 'circle' || props.cropShape === 'square' || props.cropShape === 'rectangle'
+
+  const imgLeft = imgOffsetX.value
+  const imgTop = imgOffsetY.value
+  const imgRight = imgOffsetX.value + imgRenderW.value
+  const imgBottom = imgOffsetY.value + imgRenderH.value
+
+  if (dragMode.value === 'move') {
+    cropBoxX.value = Math.max(imgLeft, Math.min(ox + dx, imgRight - cropBoxW.value))
+    cropBoxY.value = Math.max(imgTop, Math.min(oy + dy, imgBottom - cropBoxH.value))
+    return
+  }
+
+  const x2 = ox + ow
+  const y2 = oy + oh
+
+  let newX = ox, newY = oy, newW = ow, newH = oh
+
+  if (dragMode.value === 'nw') {
+    newX = Math.max(imgLeft, Math.min(ox + dx, x2 - minSize))
+    newY = Math.max(imgTop, Math.min(oy + dy, y2 - minSize))
+    newW = x2 - newX
+    newH = isFixed ? newW : y2 - newY
+    if (isRect) newH = Math.round(newW * 9 / 16)
+    newY = y2 - newH
+  } else if (dragMode.value === 'ne') {
+    newY = Math.max(imgTop, Math.min(oy + dy, y2 - minSize))
+    newW = Math.max(minSize, Math.min(ow + dx, imgRight - ox))
+    newH = isFixed ? newW : y2 - newY
+    if (isRect) newH = Math.round(newW * 9 / 16)
+    newY = y2 - newH
+  } else if (dragMode.value === 'sw') {
+    newX = Math.max(imgLeft, Math.min(ox + dx, x2 - minSize))
+    newW = x2 - newX
+    newH = isFixed ? newW : Math.max(minSize, Math.min(oh + dy, imgBottom - oy))
+    if (isRect) newH = Math.round(newW * 9 / 16)
+  } else if (dragMode.value === 'se') {
+    newW = Math.max(minSize, Math.min(ow + dx, imgRight - ox))
+    newH = isFixed ? newW : Math.max(minSize, Math.min(oh + dy, imgBottom - oy))
+    if (isRect) newH = Math.round(newW * 9 / 16)
+  }
+
+  // Constrain to image area
+  if (newX + newW > imgRight) newW = imgRight - newX
+  if (newY + newH > imgBottom) newH = imgBottom - newY
+  if (newX < imgLeft) { newW -= (imgLeft - newX); newX = imgLeft }
+  if (newY < imgTop) { newH -= (imgTop - newY); newY = imgTop }
+
+  cropBoxX.value = newX
+  cropBoxY.value = newY
+  cropBoxW.value = newW
+  cropBoxH.value = newH
+}
+
+const onEnd = () => {
+  dragMode.value = null
+}
+
+// ─── Canvas export ───────────────────────────────────────────────────────────
 const submitCrop = () => {
-  if (!props.imageFile || !cropImage.value) return
+  if (!props.imageFile || !cropImage.value || !imageLoaded.value) return
 
   const fileType = props.imageFile.type || 'image/jpeg'
   const canvas = document.createElement('canvas')
+  const ctx = canvas.getContext('2d')
+  if (!ctx) return
 
-  if (props.cropShape === 'manual') {
-    const isSwapped = rotation.value === 90 || rotation.value === 270
-    const naturalW = isSwapped ? naturalHeight.value : naturalWidth.value
-    const naturalH = isSwapped ? naturalWidth.value : naturalHeight.value
-    const scaleFactor = naturalW / containerW.value
+  const isSwapped = rotation.value === 90 || rotation.value === 270
+  const srcW = isSwapped ? naturalH.value : naturalW.value
+  const srcH = isSwapped ? naturalW.value : naturalH.value
 
-    const canvasA = document.createElement('canvas')
-    canvasA.width = naturalW
-    canvasA.height = naturalH
-    const ctxA = canvasA.getContext('2d')
-    if (!ctxA) return
+  // Scale from rendered image coords to natural image coords
+  const scaleX = srcW / imgRenderW.value
+  const scaleY = srcH / imgRenderH.value
 
-    if (fileType === 'image/jpeg') {
-      ctxA.fillStyle = '#ffffff'
-      ctxA.fillRect(0, 0, naturalW, naturalH)
-    }
+  // Map crop box to natural image coordinates (subtract letterbox offset)
+  const natCropX = (cropBoxX.value - imgOffsetX.value) * scaleX
+  const natCropY = (cropBoxY.value - imgOffsetY.value) * scaleY
+  const natCropW = cropBoxW.value * scaleX
+  const natCropH = cropBoxH.value * scaleY
 
-    ctxA.translate(naturalW / 2, naturalH / 2)
-    ctxA.rotate((rotation.value * Math.PI) / 180)
-    ctxA.drawImage(
-      cropImage.value,
-      -naturalWidth.value / 2,
-      -naturalHeight.value / 2,
-      naturalWidth.value,
-      naturalHeight.value
-    )
+  canvas.width = Math.round(natCropW)
+  canvas.height = Math.round(natCropH)
 
-    const finalW = Math.round(boxW.value * scaleFactor)
-    const finalH = Math.round(boxH.value * scaleFactor)
-
-    canvas.width = finalW
-    canvas.height = finalH
-    const ctx = canvas.getContext('2d')
-    if (!ctx) return
-
-    ctx.drawImage(
-      canvasA,
-      Math.round(boxX.value * scaleFactor),
-      Math.round(boxY.value * scaleFactor),
-      finalW,
-      finalH,
-      0,
-      0,
-      finalW,
-      finalH
-    )
-  } else {
-    const canvasW = props.cropShape === 'rectangle' ? 480 : 400
-    const canvasH = props.cropShape === 'rectangle' ? 270 : 400
-    canvas.width = canvasW
-    canvas.height = canvasH
-    const ctx = canvas.getContext('2d')
-    if (!ctx) return
-
-    if (fileType === 'image/jpeg') {
-      ctx.fillStyle = '#ffffff'
-      ctx.fillRect(0, 0, canvasW, canvasH)
-    }
-
-    const scaleRatio = canvasW / cropW.value
-
-    ctx.translate(canvasW / 2, canvasH / 2)
-    ctx.translate(translateX.value * scaleRatio, translateY.value * scaleRatio)
-    ctx.rotate((rotation.value * Math.PI) / 180)
-    ctx.scale(scale.value * scaleRatio, scale.value * scaleRatio)
-
-    ctx.drawImage(
-      cropImage.value,
-      -uiImgW.value / 2,
-      -uiImgH.value / 2,
-      uiImgW.value,
-      uiImgH.value
-    )
+  if (fileType === 'image/jpeg') {
+    ctx.fillStyle = '#ffffff'
+    ctx.fillRect(0, 0, canvas.width, canvas.height)
   }
+
+  // Apply rotation on an offscreen canvas, then extract crop region
+  const offscreen = document.createElement('canvas')
+  offscreen.width = srcW
+  offscreen.height = srcH
+  const offCtx = offscreen.getContext('2d')
+  if (!offCtx) return
+
+  offCtx.translate(srcW / 2, srcH / 2)
+  offCtx.rotate((rotation.value * Math.PI) / 180)
+  offCtx.drawImage(cropImage.value, -naturalW.value / 2, -naturalH.value / 2, naturalW.value, naturalH.value)
+
+  ctx.drawImage(offscreen, natCropX, natCropY, natCropW, natCropH, 0, 0, canvas.width, canvas.height)
 
   canvas.toBlob((blob) => {
     if (!blob) return
@@ -579,6 +427,31 @@ const submitCrop = () => {
       lastModified: Date.now()
     })
     emit('submit', croppedFile)
-  }, fileType, 0.9)
+  }, fileType, 0.92)
 }
+
+// ─── Object URL lifecycle ────────────────────────────────────────────────────
+watch(() => props.show, (val) => {
+  if (!val) {
+    imageLoaded.value = false
+    rotation.value = 0
+    if (previewUrl.value) { URL.revokeObjectURL(previewUrl.value); previewUrl.value = '' }
+  } else if (props.imageFile) {
+    if (previewUrl.value) URL.revokeObjectURL(previewUrl.value)
+    previewUrl.value = URL.createObjectURL(props.imageFile)
+    imageLoaded.value = false
+  }
+}, { immediate: true })
+
+watch(() => props.imageFile, (newFile) => {
+  if (props.show && newFile) {
+    if (previewUrl.value) URL.revokeObjectURL(previewUrl.value)
+    previewUrl.value = URL.createObjectURL(newFile)
+    imageLoaded.value = false
+  }
+})
+
+onUnmounted(() => {
+  if (previewUrl.value) URL.revokeObjectURL(previewUrl.value)
+})
 </script>
