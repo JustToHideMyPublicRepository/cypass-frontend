@@ -85,9 +85,7 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, onUnmounted } from 'vue'
-import {
-  IconPhoto, IconCamera, IconZoomIn, IconZoomOut, IconRotateClockwise2, IconRefresh
-} from '@tabler/icons-vue'
+import { IconCamera, IconZoomIn, IconZoomOut, IconRotateClockwise2, IconRefresh } from '@tabler/icons-vue'
 
 const props = withDefaults(defineProps<{
   show: boolean
