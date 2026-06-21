@@ -46,13 +46,14 @@
 
         <!-- Tool buttons -->
         <div class="flex justify-center gap-3">
-          <UiBaseButton @click="rotate(90)" variant="ghost" class="!px-3.5 !py-2 "
+          <UiBaseButton @click="rotate(90)" variant="ghost" class="!px-3.5 !py-2 !rounded-xl !h-auto text-xs"
             title="Pivoter de 90° vers la droite">
             <IconRotateClockwise2 class="w-4 h-4 mr-1.5" />
             Pivoter
           </UiBaseButton>
 
-          <UiBaseButton @click="reset" variant="ghost" class="" title="Réinitialiser les transformations">
+          <UiBaseButton @click="reset" variant="ghost" class="!px-3.5 !py-2 !rounded-xl !h-auto text-xs"
+            title="Réinitialiser les transformations">
             <IconRefresh class="w-4 h-4 mr-1.5" />
             Réinitialiser
           </UiBaseButton>
