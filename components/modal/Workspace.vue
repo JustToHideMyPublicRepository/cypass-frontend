@@ -116,7 +116,8 @@
               <p class="text-sm font-medium text-BtW">Cliquez ou glissez-déposez</p>
               <p class="text-[10px] text-hsa">JPG, PNG, WebP — 2 Mo max</p>
             </div>
-            <input type="file" accept="image/jpeg,image/png,image/webp" @change="handleFile" class="hidden" />
+            <input ref="logoInput" type="file" accept="image/jpeg,image/png,image/webp" @change="handleFile"
+              class="hidden" />
           </label>
         </div>
       </div>
@@ -147,6 +148,10 @@
       </div>
     </template>
   </UiBaseModal>
+
+  <!-- Logo Crop Modal -->
+  <ModalGlobalImageEdit :show="showCropModal" :image-file="selectedLogoFile" crop-shape="square"
+    @close="showCropModal = false" @submit="handleCroppedLogo" @change-file="logoInput?.click()" />
 </template>
 
 <script setup lang="ts">
@@ -177,6 +182,9 @@ const MAX_SIZE = 2 * 1024 * 1024
 const previewUrl = ref<string | null>(null)
 const currentLogoPath = ref<string | null>(null)
 const fileError = ref<string | null>(null)
+const selectedLogoFile = ref<File | null>(null)
+const showCropModal = ref(false)
+const logoInput = ref<HTMLInputElement | null>(null)
 
 const handleFile = (e: Event) => {
   const input = e.target as HTMLInputElement
@@ -194,9 +202,15 @@ const processFile = (file: File) => {
     fileError.value = `Image trop lourde (${(file.size / 1024 / 1024).toFixed(2)} Mo). Maximum : 2 Mo.`
     return
   }
-  form.logo = file
+  selectedLogoFile.value = file
+  showCropModal.value = true
+}
+
+const handleCroppedLogo = (croppedFile: File) => {
+  form.logo = croppedFile
   if (previewUrl.value) URL.revokeObjectURL(previewUrl.value)
-  previewUrl.value = URL.createObjectURL(file)
+  previewUrl.value = URL.createObjectURL(croppedFile)
+  showCropModal.value = false
 }
 
 const clearLogo = () => {
@@ -204,6 +218,8 @@ const clearLogo = () => {
     form.delete_logo = true
   }
   form.logo = null
+  selectedLogoFile.value = null
+  showCropModal.value = false
   fileError.value = null
   if (previewUrl.value) {
     URL.revokeObjectURL(previewUrl.value)
@@ -281,6 +297,8 @@ const resetForm = () => {
   form.rccm = ''
   form.ifu = ''
   form.delete_logo = false
+  selectedLogoFile.value = null
+  showCropModal.value = false
   clearLogo()
   countrySearch.value = ''
 }
