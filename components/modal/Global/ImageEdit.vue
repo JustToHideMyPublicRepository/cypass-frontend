@@ -46,7 +46,8 @@
 
         <!-- Tool buttons -->
         <div class="flex justify-center gap-3">
-          <UiBaseButton @click="rotate(90)" variant="secondary" class="" title="Pivoter de 90° vers la droite">
+          <UiBaseButton @click="rotate(90)" variant="ghost" class="!px-3.5 !py-2 "
+            title="Pivoter de 90° vers la droite">
             <IconRotateClockwise2 class="w-4 h-4 mr-1.5" />
             Pivoter
           </UiBaseButton>
@@ -56,7 +57,8 @@
             Réinitialiser
           </UiBaseButton>
 
-          <UiBaseButton @click="$emit('change-file')" variant="accent" class="" title="Sélectionner une autre image">
+          <UiBaseButton @click="$emit('change-file')" variant="accent" class="!px-3.5 !py-2 !rounded-xl !h-auto text-xs"
+            title="Sélectionner une autre image">
             <IconCamera class="w-4 h-4 mr-1.5" />
             Autre photo
           </UiBaseButton>
