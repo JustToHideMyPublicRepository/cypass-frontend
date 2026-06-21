@@ -158,6 +158,16 @@
     </div>
   </UiBaseModal>
 
+  <!-- Reusable Cropper Modal -->
+  <ModalGlobalImageEdit
+    :show="showCropModal"
+    :image-file="selectedImageFile"
+    crop-shape="square"
+    @close="showCropModal = false"
+    @submit="handleCroppedEvidence"
+    @change-file="triggerFileUpload"
+  />
+
   <!-- Modal d'erreur -->
   <ModalGlobalFileError :show="showFileError" :title="fileErrorTitle" :message="fileErrorMessage"
     :file-name="errorFileName" :file-type="errorFileType" :file-size="errorFileSize"
@@ -198,6 +208,8 @@ const form = ref<CreateIncidentRequest>({
 const fileInput = ref<HTMLInputElement | null>(null)
 const previewUrl = ref<string>('')
 const isOver = ref(false)
+const selectedImageFile = ref<File | null>(null)
+const showCropModal = ref(false)
 
 // Gestion des fichiers et validation
 const isImage = computed(() => form.value.evidence?.type.startsWith('image/'))
@@ -261,13 +273,22 @@ const processFile = (file: File) => {
     return
   }
 
-  form.value.evidence = file
-  if (previewUrl.value) URL.revokeObjectURL(previewUrl.value)
   if (file.type.startsWith('image/')) {
-    previewUrl.value = URL.createObjectURL(file)
+    selectedImageFile.value = file
+    showCropModal.value = true
   } else {
+    // PDF
+    form.value.evidence = file
+    if (previewUrl.value) URL.revokeObjectURL(previewUrl.value)
     previewUrl.value = ''
   }
+}
+
+const handleCroppedEvidence = (croppedFile: File) => {
+  form.value.evidence = croppedFile
+  if (previewUrl.value) URL.revokeObjectURL(previewUrl.value)
+  previewUrl.value = URL.createObjectURL(croppedFile)
+  showCropModal.value = false
 }
 
 const closeModal = () => {
@@ -333,6 +354,8 @@ const resetForm = () => {
     location: '',
     evidence: null
   }
+  selectedImageFile.value = null
+  showCropModal.value = false
   if (previewUrl.value) URL.revokeObjectURL(previewUrl.value)
   previewUrl.value = ''
 }
@@ -356,6 +379,8 @@ watch(() => props.show, (isVisible) => {
     }
   } else {
     disable(onDroppedFile)
+    selectedImageFile.value = null
+    showCropModal.value = false
   }
 })
 
